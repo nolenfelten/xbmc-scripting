@@ -227,22 +227,31 @@ class GUI( xbmcgui.Window ):
     def exitScript(self):
         self.close()
     
-    def showGenreList( self, glist ):
-        print 'showGenreList'
-        self.controls['Genre List']['control'].setVisible( glist )
-        self.controls['Trailer List']['control'].setVisible( not glist )
+    def showList( self, glist ):
+        print 'showGenreList', glist
+        self.controls['Exclusives List']['control'].setVisible( glist == 0 )
+        self.controls['Newest List']['control'].setVisible( glist == 1)
+        self.controls['Featured HD List']['control'].setVisible( glist == 2)
+        self.controls['Genre List']['control'].setVisible( glist == 3)
+        self.controls['Trailer List']['control'].setVisible( glist == 4)
     
     def onControl( self, control ):
         try:
-            if ( control == self.controls['Genre Button']['control'] ):
-                self.showGenreList( True )
+            if ( control == self.controls['Exclusives Button']['control'] ):
+                self.showList( 0 )
+            elif ( control == self.controls['Newest Button']['control'] ):
+                self.showList( 1 )
+            elif ( control == self.controls['Featured HD Button']['control'] ):
+                self.showList( 2 )
+            elif ( control == self.controls['Genre Button']['control'] ):
+                self.showList( 3 )
             elif ( control == self.controls['Genre List']['control'] ):
                 selection = control.getSelectedItem()
                 if selection:
                     genre = selection.getLabel()
                     url = self.genre_list[genre]
                     self.showTrailers( genre, url )
-                    self.showGenreList( False )
+                    self.showList( 4 )
                     self.setFocus(self.controls['Trailer List']['control'])
             elif ( control == self.controls['Trailer List']['control'] ):
                 selection = control.getSelectedItem()
