@@ -212,7 +212,7 @@ class GUI( xbmcgui.Window ):
             # get the info url (this url will not be saved after we are done here)
             movie_info_url = self.trailer_list[title]
             # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
-            title2, thumbnail, description, urls = self.trailers.getTrailerInfo( movie_info_url )
+            title2, thumbnail, description, urls = self.trailers.get_trailer_info( movie_info_url )
             # download the actual thumbnail to the local filesystem (or get the cached filename)
             thumbnail = fetcher.urlretrieve( thumbnail )
             if not thumbnail:
@@ -222,7 +222,7 @@ class GUI( xbmcgui.Window ):
             # { title: [ thumbnail, description, url ] }
             self.trailer_list[title] = [ thumbnail, description, urls[0] ]
             # if the user pushed cancel, we end retrieval here
-            if dialog.iscancelled():
+            if dialog.iscanceled():
                 break
             # update the progress dialog
             position += 1
