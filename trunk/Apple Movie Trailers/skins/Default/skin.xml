@@ -1,0 +1,213 @@
+<window>
+
+	<id>1156</id>
+	<allowoverlay>no</allowoverlay>
+	<defaultcontrol always="false">10</defaultcontrol>
+	<resolution>PAL</resolution>
+
+	<controls>
+
+		<control>
+			<description>background image</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>720</width>
+			<height>576</height>
+			<texture>background.png</texture>
+		</control>
+
+		<control>
+			<description>xbox media center label</description>
+			<type>label</type>
+			<id>1</id>
+			<posx>200</posx>
+			<posy>50</posy>
+			<width>250</width>
+			<height>35</height>
+			<align>right</align>
+			<label>apple.com</label>
+			<font>special12</font>
+		</control>
+
+		<control>
+			<description>description label</description>
+			<type>label</type>
+			<id>1</id>
+			<posx>207</posx>
+			<posy>50</posy>
+			<width>250</width>
+			<height>35</height>
+			<align>left</align>
+			<label>Apple Movie Trailers</label>
+			<font>special13</font>
+		</control>
+
+		<control>
+			<description>Exclusives Button</description>
+			<type>button</type>
+			<id>10</id>
+			<label>Exclusives</label>
+			<posx>50</posx>
+			<posy>120</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>20</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Newest Button</description>
+			<type>button</type>
+			<id>20</id>
+			<label>Newest</label>
+			<posx>50</posx>
+			<posy>157</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Featured HD Button</description>
+			<type>button</type>
+			<id>30</id>
+			<label>Featured HD</label>
+			<posx>50</posx>
+			<posy>194</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>20</onup>
+			<ondown>50</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Genre Button</description>
+			<type>button</type>
+			<id>50</id>
+			<label>Genre</label>
+			<posx>50</posx>
+			<posy>268</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>30</onup>
+			<ondown>10</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Genre List</description>
+			<type>listcontrol</type>
+			<id>100</id>
+			<height>300</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>100</onup>
+			<ondown>100</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer List</description>
+			<type>listcontrol</type>
+			<id>110</id>
+			<height>300</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>110</onup>
+			<ondown>110</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Exclusives List</description>
+			<type>listcontrol</type>
+			<id>120</id>
+			<height>300</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>120</onup>
+			<ondown>120</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<visible>false</visible>
+		</control>
+		
+		<control>
+			<description>Newest List</description>
+			<type>listcontrol</type>
+			<id>130</id>
+			<height>300</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>130</onup>
+			<ondown>130</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<visible>false</visible>
+		</control>
+		
+		<control>
+			<description>Featured HD List</description>
+			<type>listcontrol</type>
+			<id>140</id>
+			<height>300</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>140</onup>
+			<ondown>140</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<visible>false</visible>
+		</control>
+		
+		<control>
+			<description>Trailer Thumbnail</description>
+			<type>image</type>
+			<id>200</id>
+			<posx>211</posx>
+			<posy>440</posy>
+			<width>100</width>
+			<height>100</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+		</control>
+
+		<control>
+			<description>Trailer Info</description>
+			<type>textbox</type>
+			<id>210</id>
+			<posx>320</posx>
+			<posy>440</posy>
+			<width>336</width>
+			<height>100</height>
+			<font>font13</font>
+			<include>controldefaults</include>
+		</control>
+
+	</controls>
+
+</window>
