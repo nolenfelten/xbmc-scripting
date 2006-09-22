@@ -12,7 +12,7 @@ def append_ns( text ):
     return '/'.join( result )
 ns = append_ns
 
-fetcher = cachedhttp.CachedHTTPWithProgress()
+fetcher = cachedhttp.CachedHTTP()
 
 class Trailers:
     def __init__( self ):
