@@ -13,6 +13,7 @@ def append_ns( text ):
 ns = append_ns
 
 fetcher = cachedhttp.CachedHTTP()
+fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
 
 class Trailers:
     def __init__( self ):
@@ -185,7 +186,7 @@ class GUI( xbmcgui.Window ):
         thumbnail, description, url = self.trailer_list[title]
         if url:
             selected_video = self.trailers.get_video( url )
-            filename = fetcher.urlretrieve( selected_video )
+            filename = fetcher_with_dialog.urlretrieve( selected_video )
             self.createConf( filename )
             if filename:
                 xbmc.Player().play( filename )
@@ -205,10 +206,14 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer List']['control'].reset()
         self.trailer_list = self.trailers.get_trailer_dict( genre, url )
         dialog = xbmcgui.DialogProgress()
-        dialog.create( 'Fetching movie information..', 'Please wait a moment.' )
+        header = 'Fetching movie information..'
+        line1 = 'Please wait a moment.'
+        dialog.create( header, line1 )
         dialog.update( 0 ) # hide the progress bar until it's needed
         position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
+        percentage = 0
         for title in self.trailer_list: # fill the information first
+            dialog.update( percentage, header, line1, 'Fetching: ' + title )
             # get the info url (this url will not be saved after we are done here)
             movie_info_url = self.trailer_list[title]
             # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
