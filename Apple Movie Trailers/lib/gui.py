@@ -226,7 +226,7 @@ class GUI( xbmcgui.Window ):
                 break
             # update the progress dialog
             position += 1
-            percentage = 100 / ( len( self.trailer_list ) * position )
+            percentage = len( self.trailer_list ) / position
             dialog.update( percentage )
         for title in self.trailer_list: # now fill the list control
             l = xbmcgui.ListItem( title )
