@@ -131,3 +131,7 @@ class Trailers:
         genre_list.sort()
         return genre_list
 
+    def get_special_genre_list( self ):
+        genre_list = self.genres['special'].items()
+        genre_list.sort()
+        return genre_list
