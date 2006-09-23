@@ -68,8 +68,9 @@ class Trailers:
             if url2[0] != '/':
                 continue
             if url2 in trailer_dict.keys():
-                title = element.getiterator( ns('B') )[0].text
+                title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
                 trailer_dict[url2] = title
+                print title
                 continue
             trailer_dict.update( { url2: title } )
         #return trailer_dict
@@ -82,9 +83,9 @@ class Trailers:
         url = self.BASEURL + url
         element = fetcher.urlopen( url )
         element = ET.fromstring( element )
-        title = element.getiterator( ns('b') )[0].text
+        title = element.getiterator( ns('b') )[0].text.encode( 'ascii', 'ignore' )
         thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
-        description = element.getiterator( ns('SetFontStyle') )[2].text.strip()
+        description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
         urls = list()
         for each in element.getiterator( ns('GotoURL') ):
             url = each.get( 'url' )
@@ -145,7 +146,7 @@ class GUI( xbmcgui.Window ):
 
     def setupGUI(self):
         import guibuilder
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' )
+        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
         self.skinPath = os.path.join( skinPath, self.getSkin( skinPath ) )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'skin.xml' ), self.imagePath, useDescAsKey=True, debug=False )
@@ -219,7 +220,7 @@ class GUI( xbmcgui.Window ):
             position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
             percentage = 0
             for title in self.trailer_list: # fill the information first
-                dialog.update( percentage, header, line1, 'Fetching: ' + repr( title ) )
+                dialog.update( percentage, header, line1, 'Fetching: ' + title )
                 # get the info url (this url will not be saved after we are done here)
                 movie_info_url = self.trailer_list[title]
                 # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
