@@ -110,7 +110,7 @@ class GUI( xbmcgui.Window ):
                     break
                 # update the progress dialog
                 position += 1
-                percentage = 100 / abs( len( self.trailer_list ) / position )
+                percentage = int( float( position ) / len( self.trailer_list ) * 100 )
                 dialog.update( percentage )
         titles = self.trailer_list.keys()
         titles.sort()
