@@ -1,137 +1,10 @@
-import threading, time, sys, os
+import sys, os
 import xbmc, xbmcgui
 import cachedhttp_mod as cachedhttp
-import elementtree.ElementTree as ET
-
-def append_ns( text ):
-    BASENS = '{http://www.apple.com/itms/}'
-    result = list()
-    for each in text.split( '/' ):
-        result += [ BASENS + each ]
-    return '/'.join( result )
-ns = append_ns
+import trailers
 
 fetcher = cachedhttp.CachedHTTP()
 fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
-
-class Trailers:
-    def __init__( self ):
-        self.BASEURL = 'http://www.apple.com'
-        self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
-        self.genres = dict()
-
-    def update_genre_list( self ):
-        base_xml = fetcher.urlopen( self.BASEXML )
-        base_xml = ET.fromstring( base_xml )
-
-        self.genres = {
-            'special': dict(),
-            'standard': dict(),
-        }
-        elements = base_xml.getiterator( ns('GotoURL') )
-        for each in elements:
-            url = each.get( 'url' )
-            name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
-            if '/moviesxml/g' in url:
-                self.genres['standard'].update( { name: url } )
-
-        view_matrix = {
-            'view1': 'Exclusives',
-            'view2': 'Newest',
-        }
-        elements = base_xml.getiterator( ns('Include') )
-        for each in elements:
-            url = each.get( 'url' )
-            for view in view_matrix:
-                if view in url:
-                    url = '/moviesxml/h/' + url
-                    self.genres['special'].update( { view_matrix[view]: url } )    
-
-    def get_trailer_dict( self, genre, url ):
-        url = self.BASEURL + url
-        #print url
-        element = fetcher.urlopen( url )
-        if '<Document' not in element:
-            element = '<Document>' + element + '</Document>'
-        element = ET.fromstring( element )
-        elements = element.getiterator( ns('GotoURL') )
-        trailer_dict = dict()
-        for element in elements:
-            url2 = element.get( 'url' )
-            title = None
-            if 'index_1' in url2:
-                continue
-            if '/moviesxml/g' in url2:
-                continue
-            if url2[0] != '/':
-                continue
-            if url2 in trailer_dict.keys():
-                title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
-                trailer_dict[url2] = title
-                print title
-                continue
-            trailer_dict.update( { url2: title } )
-        reordered_dict = dict()
-        for key in trailer_dict:
-            reordered_dict.update( { trailer_dict[key]: key } )
-        return reordered_dict
-
-    def get_trailer_info( self, url ):
-        xbmc.log( 'getting info for ' + url )
-        url = self.BASEURL + url
-        element = fetcher.urlopen( url )
-        element = ET.fromstring( element )
-        title = element.getiterator( ns('b') )[0].text.encode( 'ascii', 'ignore' )
-        thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
-        description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
-        urls = list()
-        for each in element.getiterator( ns('GotoURL') ):
-            url = each.get( 'url' )
-            if 'index_1' in url:
-                continue
-            if '/moviesxml/g' in url:
-                continue
-            if url[0] != '/':
-                continue
-            if url in urls:
-                continue
-            urls += [ url ]
-        xbmc.log( 'done.' )
-        return [ title, thumbnail, description, urls ]
-
-    def get_video( self, url ):
-        url = self.BASEURL + url
-        element = fetcher.urlopen( url )
-        element = ET.fromstring( element )
-        trailer_urls = list()
-        for each in element.getiterator( ns('string') ):
-            text = each.text
-            if text == None:
-                continue
-            if 'http' not in text:
-                continue
-            if 'movies.apple.com' not in text:
-                continue
-            if text[-3:] == 'm4v':
-                continue
-            if text in trailer_urls:
-                continue
-            trailer_urls += [ text ]
-        try:
-            dialog = xbmcgui.Dialog()
-            trailer_url_filenames = list()
-            for each in trailer_urls:
-                trailer_url_filenames += [ os.path.split( each )[1] ]
-            selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
-            selection = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
-            return selection
-        except:
-            return None
-
-    def get_genre_list( self ):
-        genre_list = self.genres['standard'].items()
-        genre_list.sort()
-        return genre_list
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -140,7 +13,7 @@ class GUI( xbmcgui.Window ):
         else:
             self.initVariables()
             self.setupConstants()
-            self.trailers = Trailers()
+            self.trailers = trailers.Trailers()
             self.showCategories()
 
     def setupGUI(self):
