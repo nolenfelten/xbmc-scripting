@@ -120,7 +120,10 @@ class Trailers:
             trailer_urls += [ text ]
         try:
             dialog = xbmcgui.Dialog()
-            selection = dialog.select( 'Choose a trailer to view:', trailer_urls )
+            trailer_url_filenames = list()
+            for each in trailer_urls:
+                trailer_url_filenames += [ os.path.split( each )[1] ]
+            selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
             selection = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
             return selection
         except:
@@ -220,7 +223,7 @@ class GUI( xbmcgui.Window ):
             position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
             percentage = 0
             for title in self.trailer_list: # fill the information first
-                dialog.update( percentage, header, line1, 'Fetching: ' + title )
+                dialog.update( percentage, line1, 'Fetching: ' + title )
                 # get the info url (this url will not be saved after we are done here)
                 movie_info_url = self.trailer_list[title]
                 # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
