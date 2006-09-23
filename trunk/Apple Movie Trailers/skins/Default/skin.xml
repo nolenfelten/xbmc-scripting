@@ -144,10 +144,14 @@
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
 
+		<!-- start of list controls -->
+		
 		<control>
-			<description>Genre List</description>
+			<description>Exclusives List</description>
 			<type>listcontrol</type>
 			<id>100</id>
+			<width>270</width>
+			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -155,12 +159,12 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<onleft>10</onleft>
-			<onright>10</onright>
+			<onright>210</onright>
 			<visible>false</visible>
 		</control>
-
+		
 		<control>
-			<description>Trailer List</description>
+			<description>Newest List</description>
 			<type>listcontrol</type>
 			<id>110</id>
 			<width>270</width>
@@ -175,9 +179,10 @@
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
-
+		
+		<!--
 		<control>
-			<description>Exclusives List</description>
+			<description>Featured HD List</description>
 			<type>listcontrol</type>
 			<id>120</id>
 			<width>270</width>
@@ -188,17 +193,16 @@
 			<textxoff>3</textxoff>
 			<onup>120</onup>
 			<ondown>120</ondown>
-			<onleft>10</onleft>
+			<onleft>30</onleft>
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
-		
+		-->
+
 		<control>
-			<description>Newest List</description>
+			<description>Genre List</description>
 			<type>listcontrol</type>
 			<id>130</id>
-			<width>270</width>
-			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -206,13 +210,12 @@
 			<onup>130</onup>
 			<ondown>130</ondown>
 			<onleft>10</onleft>
-			<onright>210</onright>
+			<onright>10</onright>
 			<visible>false</visible>
 		</control>
-		
-		<!--
+
 		<control>
-			<description>Featured HD List</description>
+			<description>Trailer List</description>
 			<type>listcontrol</type>
 			<id>140</id>
 			<width>270</width>
@@ -223,11 +226,12 @@
 			<textxoff>3</textxoff>
 			<onup>140</onup>
 			<ondown>140</ondown>
-			<onleft>10</onleft>
+			<onleft>50</onleft>
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
-		-->
+
+		<!-- start of the info controls -->
 		
 		<control>
 			<description>Trailer Thumbnail</description>
@@ -239,7 +243,8 @@
 			<height>250</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
-			<visible>!Control.IsVisible(100)</visible>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
 		</control>
 
 		<control>
@@ -252,7 +257,8 @@
 			<align>left</align>
 			<label>Movie Title Goes Here</label>
 			<font>special13</font>
-			<visible>!Control.IsVisible(100)</visible>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
 		</control>
 
 		<control>
@@ -269,7 +275,8 @@
 			<onleft>100</onleft>
 			<onright>10</onright>
 			<include>controldefaults</include>
-			<visible>!Control.IsVisible(100)</visible>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
 		</control>
 
 	</controls>
