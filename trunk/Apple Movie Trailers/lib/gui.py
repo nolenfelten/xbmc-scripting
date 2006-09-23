@@ -130,10 +130,7 @@ class Trailers:
             return None
 
     def get_genre_list( self ):
-        genre_list = dict()
-        for each in self.genres:
-            genre_list.update( self.genres[each] )
-        genre_list = genre_list.items()
+        genre_list = self.genres['standard'].items()
         genre_list.sort()
         return genre_list
 
