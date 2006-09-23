@@ -49,7 +49,6 @@ class Trailers:
 
     def get_trailer_dict( self, genre, url ):
         url = self.BASEURL + url
-        #print url
         element = fetcher.urlopen( url )
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
@@ -68,7 +67,6 @@ class Trailers:
             if url2 in trailer_dict.keys():
                 title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
                 trailer_dict[url2] = title
-                print title
                 continue
             trailer_dict.update( { url2: title } )
         reordered_dict = dict()
