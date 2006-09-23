@@ -38,7 +38,6 @@ class Trailers:
         view_matrix = {
             'view1': 'Exclusives',
             'view2': 'Newest',
-            'view3': 'Featured HD',
         }
         elements = base_xml.getiterator( ns('Include') )
         for each in elements:
@@ -266,7 +265,7 @@ class GUI( xbmcgui.Window ):
         self.currentList = clist
         self.controls['Exclusives List']['control'].setVisible( clist == 0 )
         self.controls['Newest List']['control'].setVisible( clist == 1)
-        self.controls['Featured HD List']['control'].setVisible( clist == 2)
+        # self.controls['Featured HD List']['control'].setVisible( clist == 2)
         self.controls['Genre List']['control'].setVisible( clist == 3)
         self.controls['Trailer List']['control'].setVisible( clist == 4)
         self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
@@ -279,8 +278,8 @@ class GUI( xbmcgui.Window ):
                 self.showList( 0 )
             elif ( control == self.controls['Newest Button']['control'] ):
                 self.showList( 1 )
-            elif ( control == self.controls['Featured HD Button']['control'] ):
-                self.showList( 2 )
+            # elif ( control == self.controls['Featured HD Button']['control'] ):
+                # self.showList( 2 )
             elif ( control == self.controls['Genre Button']['control'] ):
                 self.showList( 3 )
             elif ( control == self.controls['Genre List']['control'] ):
