@@ -206,11 +206,9 @@ class GUI( xbmcgui.Window ):
                 self.showList( 'Genre List' )
             elif ( control == self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
-            elif ( 
-                control == self.controls['Exclusives List']['control'] or
-                control == self.controls['Newest List']['control'] or
-                control == self.controls['Trailer List']['control']
-                ):
+            elif ( control == self.controls['Exclusives List']['control'] or\
+                control == self.controls['Newest List']['control'] or\
+                control == self.controls['Trailer List']['control'] ):
                 self.getTrailer( control.getSelectedItem() )
         except:
             print 'ERROR: in onControl'
