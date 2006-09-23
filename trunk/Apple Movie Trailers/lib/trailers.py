@@ -158,7 +158,12 @@ class Trailers:
         genre_list_caps.sort()
         return genre_list_caps
 
-    def get_special_genre_list( self ):
-        genre_list = self.genres['special'].items()
-        genre_list.sort()
-        return genre_list
+    def get_exclusives_dict( self ):
+        url = self.genres['special']['Exclusives']
+        edict = self.get_trailer_dict( 'Exclusives', url )
+        return edict
+
+    def get_newest_dict( self ):
+        url = self.genres['special']['Newest']
+        edict = self.get_trailer_dict( 'Newest', url )
+        return edict
