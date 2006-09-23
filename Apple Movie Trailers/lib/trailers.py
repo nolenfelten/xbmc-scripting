@@ -128,8 +128,24 @@ class Trailers:
 
     def get_genre_list( self ):
         genre_list = self.genres['standard'].items()
-        genre_list.sort()
-        return genre_list
+        # smart capitalization of the genre titles
+        genre_list_caps = list()
+        for genre, url in genre_list:
+            genre_caps = list()
+            for word in genre.split():
+                # only prevent capitalization of these words if they aren't the leading word in the genre name
+                # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
+                if word != genre[0]:
+                    if word == 'and':
+                        continue
+                    if word == 'of':
+                        continue
+                    if word == 'a':
+                        continue
+                genre_caps += [ word.capitalize() ]
+            genre_list_caps += [ ( ' '.join( genre_caps ), url ) ]
+        genre_list_caps.sort()
+        return genre_list_caps
 
     def get_special_genre_list( self ):
         genre_list = self.genres['special'].items()
