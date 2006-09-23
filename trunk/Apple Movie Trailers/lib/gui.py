@@ -205,35 +205,38 @@ class GUI( xbmcgui.Window ):
     def showTrailers ( self, genre, url ):
         self.controls['Trailer List']['control'].reset()
         self.trailer_list = self.trailers.get_trailer_dict( genre, url )
-        dialog = xbmcgui.DialogProgress()
-        header = 'Fetching movie information..'
-        line1 = 'Please wait a moment.'
-        dialog.create( header, line1 )
-        dialog.update( 0 ) # hide the progress bar until it's needed
-        position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
-        percentage = 0
-        for title in self.trailer_list: # fill the information first
-            dialog.update( percentage, header, line1, 'Fetching: ' + title )
-            # get the info url (this url will not be saved after we are done here)
-            movie_info_url = self.trailer_list[title]
-            # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
-            title2, thumbnail, description, urls = self.trailers.get_trailer_info( movie_info_url )
-            # download the actual thumbnail to the local filesystem (or get the cached filename)
-            thumbnail = fetcher.urlretrieve( thumbnail )
-            if not thumbnail:
-                # default if the actual thumbnail couldn't be found for some reason
-                thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
-            # save all this info to the trailer list under this title
-            # { title: [ thumbnail, description, url ] }
-            self.trailer_list[title] = [ thumbnail, description, urls[0] ]
-            # if the user pushed cancel, we end retrieval here
-            if dialog.iscanceled():
-                break
-            # update the progress dialog
-            position += 1
-            percentage = 100 / ( len( self.trailer_list ) / position )
-            dialog.update( percentage )
-        for title in self.trailer_list: # now fill the list control
+        if type( self.trailer_list.values()[0] ) == str:
+            dialog = xbmcgui.DialogProgress()
+            header = 'Fetching movie information..'
+            line1 = 'Please wait a moment.'
+            dialog.create( header, line1 )
+            dialog.update( 0 ) # hide the progress bar until it's needed
+            position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
+            percentage = 0
+            for title in self.trailer_list: # fill the information first
+                dialog.update( percentage, header, line1, 'Fetching: ' + repr( title ) )
+                # get the info url (this url will not be saved after we are done here)
+                movie_info_url = self.trailer_list[title]
+                # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
+                title2, thumbnail, description, urls = self.trailers.get_trailer_info( movie_info_url )
+                # download the actual thumbnail to the local filesystem (or get the cached filename)
+                thumbnail = fetcher.urlretrieve( thumbnail )
+                if not thumbnail:
+                    # default if the actual thumbnail couldn't be found for some reason
+                    thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
+                # save all this info to the trailer list under this title
+                # { title: [ thumbnail, description, url ] }
+                self.trailer_list[title] = [ thumbnail, description, urls[0] ]
+                # if the user pushed cancel, we end retrieval here
+                if dialog.iscanceled():
+                    break
+                # update the progress dialog
+                position += 1
+                percentage = 100 / abs( len( self.trailer_list ) / position )
+                dialog.update( percentage )
+        titles = self.trailer_list.keys()
+        titles.sort()
+        for title in titles: # now fill the list control
             l = xbmcgui.ListItem( title )
             self.controls['Trailer List']['control'].addItem( l )
         dialog.close()
