@@ -1,6 +1,5 @@
 import threading, time, sys, os
 import xbmc, xbmcgui
-import debug
 import cachedhttp_mod as cachedhttp
 import elementtree.ElementTree as ET
 
@@ -73,13 +72,13 @@ class Trailers:
                 print title
                 continue
             trailer_dict.update( { url2: title } )
-        #return trailer_dict
         reordered_dict = dict()
         for key in trailer_dict:
             reordered_dict.update( { trailer_dict[key]: key } )
         return reordered_dict
 
     def get_trailer_info( self, url ):
+        xbmc.log( 'getting info for ' + url )
         url = self.BASEURL + url
         element = fetcher.urlopen( url )
         element = ET.fromstring( element )
@@ -98,6 +97,7 @@ class Trailers:
             if url in urls:
                 continue
             urls += [ url ]
+        xbmc.log( 'done.' )
         return [ title, thumbnail, description, urls ]
 
     def get_video( self, url ):
@@ -156,7 +156,7 @@ class GUI( xbmcgui.Window ):
 
     def getSkin( self, skinPath ):
         try:
-            f = open(os.path.join( skinPath, 'currentskin.txt' ))
+            f = open( os.path.join( skinPath, 'currentskin.txt' ) )
             skin = f.read()
             f.close()
         except:
@@ -298,8 +298,8 @@ class GUI( xbmcgui.Window ):
                 selection = control.getSelectedItem()
                 title = selection.getLabel()
                 self.showVideo( title )
-        except: print 'ERROR: onControl'
-            #debug.printDebug( debug.error, 'onControl' )
+        except:
+            print 'ERROR: onControl'
 
     def onAction( self, action ):
         buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
@@ -310,12 +310,8 @@ class GUI( xbmcgui.Window ):
             if ( control == self.controls['Trailer List']['control'] ):
                 try:
                     selection = control.getSelectedItem()
-                    #print 'Selected:', selection
                     if selection != None:
                         title = selection.getLabel()
-                    #    print 'Title:', title
                         self.showTrailerInfo( title )
-                    else:
-                        print 'no goddamn selection?'
-                except: print 'ERROR: onAction'
-                    #debug.printDebug( debug.error, 'onAction' )
+                except:
+                    print 'ERROR: onAction'
