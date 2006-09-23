@@ -46,7 +46,7 @@
 			<description>Category Label</description>
 			<type>label</type>
 			<id>5</id>
-			<posx>670</posx>
+			<posx>650</posx>
 			<posy>63</posy>
 			<width>250</width>
 			<height>35</height>
@@ -88,7 +88,7 @@
 			<posy>120</posy>
 			<onleft>100</onleft>
 			<onright>100</onright>
-			<onup>50</onup>
+			<onup>75</onup>
 			<ondown>20</ondown>
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
@@ -139,6 +139,23 @@
 			<onright>100</onright>
 			<!-- <onup>30</onup> -->
 			<onup>20</onup>
+			<ondown>75</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Settings Button</description>
+			<type>button</type>
+			<id>75</id>
+			<label>Settings</label>
+			<posx>50</posx>
+			<!-- <posy>268</posy> -->
+			<posy>305</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<!-- <onup>30</onup> -->
+			<onup>50</onup>
 			<ondown>10</ondown>
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
