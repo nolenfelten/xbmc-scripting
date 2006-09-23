@@ -81,7 +81,14 @@ class Trailers:
         element = ET.fromstring( element )
         title = element.getiterator( ns('b') )[0].text.encode( 'ascii', 'ignore' )
         thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
-        description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
+        description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
+        description = description.strip()
+        # remove any linefeeds so we can wrap properly to the text control this is displayed in
+        description = description.replace( '\r\n', ' ' )
+        description = description.replace( '\r', ' ' )
+        description = description.replace( '\n', ' ' )
+        if not description or len( description ) is 0:
+            description = 'No description could be retrieved for this title.'
         urls = list()
         for each in element.getiterator( ns('GotoURL') ):
             url = each.get( 'url' )
