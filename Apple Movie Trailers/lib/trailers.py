@@ -19,8 +19,17 @@ class Trailers:
         self.BASEURL = 'http://www.apple.com'
         self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
         self.genres = dict()
+        self.__update_genre_list__()
 
-    def update_genre_list( self ):
+    def __update_genre_list__( self ):
+        dialog = xbmcgui.DialogProgress()
+        dialog_header = 'Fetching category and genre information..'
+        dialog_line1 = 'Please wait a moment.'
+        dialog_errorline = ''
+        dialog_percentage = 0
+        dialog.create( dialog_header, dialog_line1 )
+        dialog.update( dialog_percentage )
+
         base_xml = fetcher.urlopen( self.BASEXML )
         base_xml = ET.fromstring( base_xml )
 
@@ -32,6 +41,24 @@ class Trailers:
         for each in elements:
             url = each.get( 'url' )
             name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
+            genre_caps = list()
+            # smart capitalization of the genre name
+            for word in name.split():
+                # only prevent capitalization of these words if they aren't the leading word in the genre name
+                # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
+                cap = True
+                if word != name[0]:
+                    if word == 'and':
+                        cap = False
+                    if word == 'of':
+                        cap = False
+                    if word == 'a':
+                        cap = False
+                if cap:
+                    genre_caps += [ word.capitalize() ]
+                else:
+                    genre_caps += [ word ]
+            name = ' '.join( genre_caps )
             if '/moviesxml/g' in url:
                 self.genres['standard'].update( { name: url } )
 
@@ -40,15 +67,54 @@ class Trailers:
             'view2': 'Newest',
         }
         elements = base_xml.getiterator( ns('Include') )
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': url,
+        #           'Newest': url,
+        #       }
+        #       'standard': {
+        #       }
+        #   }
         for each in elements:
             url = each.get( 'url' )
             for view in view_matrix:
                 if view in url:
                     url = '/moviesxml/h/' + url
                     self.genres['special'].update( { view_matrix[view]: url } )    
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': category_url,
+        #           'Newest': category_url,
+        #       }
+        #       'standard': {
+        #           genre: {
+        #               movie_title: movie_url
+        #           }
+        #           ...
+        #       }
+        #   }
+        pos = 0
+        for each in self.genres['standard']:
+            try:
+                dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
+                self.genres['standard'][each] = self.__update_trailer_dict__( each )
+            except:
+                dialog_errorline = 'Error retrieving information for one or more genres.'
+            pos += 1
+            dialog_percentage = int( float( pos ) / len( self.genres['standard'] ) * 100 )
 
-    def get_trailer_dict( self, genre, url ):
-        url = self.BASEURL + url
+        dialog.close()
+
+    def get_trailer_dict( self, genre ):
+        return self.genres['standard'][genre]
+
+    def __update_trailer_dict__( self, genre ):
+        """
+            return a dict with movie titles and urls for the given genre
+        """
+        url = self.BASEURL + self.genres['standard'][genre]
         element = fetcher.urlopen( url )
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
@@ -134,36 +200,16 @@ class Trailers:
             return None
 
     def get_genre_list( self ):
-        genre_list = self.genres['standard'].items()
-        # smart capitalization of the genre titles
-        genre_list_caps = list()
-        for genre, url in genre_list:
-            genre_caps = list()
-            for word in genre.split():
-                # only prevent capitalization of these words if they aren't the leading word in the genre name
-                # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
-                cap = True
-                if word != genre[0]:
-                    if word == 'and':
-                        cap = False
-                    if word == 'of':
-                        cap = False
-                    if word == 'a':
-                        cap = False
-                if cap:
-                    genre_caps += [ word.capitalize() ]
-                else:
-                    genre_caps += [ word ]
-            genre_list_caps += [ ( ' '.join( genre_caps ), url ) ]
-        genre_list_caps.sort()
-        return genre_list_caps
+        genre_list = self.genres['standard'].keys()
+        genre_list.sort()
+        return genre_list
 
     def get_exclusives_dict( self ):
         url = self.genres['special']['Exclusives']
-        edict = self.get_trailer_dict( 'Exclusives', url )
+        edict = self.get_trailer_dict( 'Exclusives' )
         return edict
 
     def get_newest_dict( self ):
         url = self.genres['special']['Newest']
-        edict = self.get_trailer_dict( 'Newest', url )
+        edict = self.get_trailer_dict( 'Newest' )
         return edict

@@ -1,7 +1,6 @@
-import sys, os
 import xbmc, xbmcgui
+import sys, os
 import cachedhttp_mod as cachedhttp
-import trailers
 
 fetcher = cachedhttp.CachedHTTP()
 fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
@@ -13,6 +12,7 @@ class GUI( xbmcgui.Window ):
         else:
             self.initVariables()
             self.setupConstants()
+            import trailers
             self.trailers = trailers.Trailers()
             self.showCategories()
 
@@ -82,9 +82,9 @@ class GUI( xbmcgui.Window ):
             if description:
                 self.controls['Trailer Info']['control'].setText( description )
 
-    def showTrailers ( self, genre, url ):
+    def showTrailers ( self, genre ):
         self.controls['Trailer List']['control'].reset()
-        self.trailer_list = self.trailers.get_trailer_dict( genre, url )
+        self.trailer_list = self.trailers.get_trailer_dict( genre )
         if type( self.trailer_list.values()[0] ) == str:
             dialog = xbmcgui.DialogProgress()
             header = 'Fetching movie information..'
@@ -126,15 +126,11 @@ class GUI( xbmcgui.Window ):
         dialog.close()
     
     def showCategories( self ):
-        self.genre_list = {}
         self.controls['Genre List']['control'].reset()
-        self.trailers.update_genre_list()
         self.genres = self.trailers.get_genre_list()
-        count = 0
-        for genre, url in self.genres:
+        for genre in self.genres:
             l = xbmcgui.ListItem( genre )
             self.controls['Genre List']['control'].addItem( l )
-            self.genre_list[genre] = url
     
     def exitScript(self):
         self.close()
@@ -181,9 +177,7 @@ class GUI( xbmcgui.Window ):
         
     def getTrailerGenre( self, choice ):
         genre = choice.getLabel()
-        url = self.genre_list[genre]
-        print url, genre
-        self.showTrailers( genre, url )
+        self.showTrailers( genre )
         self.showList( 'Trailer List' )
     
     def onControl( self, control ):
