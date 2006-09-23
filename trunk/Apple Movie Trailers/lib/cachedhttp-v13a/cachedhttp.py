@@ -113,7 +113,8 @@ class CachedHTTP:
 		try:
 			self.cookies.revert(self.cookiefile)
 		except:
-			print('Could not open cookie file: '+self.cookiefile)
+			# print('Could not open cookie file: '+self.cookiefile)
+            pass
 			
 		hh=CustomHandler(self.cookies)
 		
@@ -261,7 +262,7 @@ class CachedHTTP:
 				if hasattr(furl, 'code') and furl.code == 304:
 					self.urlContext=metainfo['CM-UrlContext']
 					temp=os.path.split(metainfo['CM-Localfile'])
-					print('using cache: '+temp[1])
+					# print('using cache: '+temp[1])
 					isDownloadCompleted=True
 					if not (localfile is None):
 						nameext=os.path.splitext(metainfo['CM-Localfile'])
