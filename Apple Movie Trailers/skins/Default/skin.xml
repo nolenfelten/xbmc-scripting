@@ -15,19 +15,18 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>background.png</texture>
+			<texture>background-videos.png</texture>
 		</control>
 
 		<control>
 			<description>xbox media center label</description>
 			<type>label</type>
 			<id>1</id>
+			<width>200</width>
 			<posx>200</posx>
-			<posy>50</posy>
-			<width>250</width>
-			<height>35</height>
+			<posy>63</posy>
 			<align>right</align>
-			<label>apple.com</label>
+			<label>xbox media center</label>
 			<font>special12</font>
 		</control>
 
@@ -35,13 +34,49 @@
 			<description>description label</description>
 			<type>label</type>
 			<id>1</id>
+			<width>150</width>
 			<posx>207</posx>
-			<posy>50</posy>
+			<posy>63</posy>
+			<align>left</align>
+			<label>Apple.com Trailers</label>
+			<font>special13</font>
+		</control>
+
+		<control>
+			<description>Category Label</description>
+			<type>label</type>
+			<id>5</id>
+			<posx>670</posx>
+			<posy>63</posy>
 			<width>250</width>
 			<height>35</height>
-			<align>left</align>
-			<label>Apple Movie Trailers</label>
+			<align>right</align>
+			<label>Exclusives</label>
 			<font>special13</font>
+		</control>
+		
+		<control>
+			<description>contentpanel slice</description>
+			<type>image</type>
+			<id>0</id>
+			<posx>160</posx>
+			<posy>108</posy>
+			<width>64</width>
+			<height>468</height>
+			<texture>contentpanel_left.png</texture>
+			<include>contentpanelslide</include>
+		</control>
+
+		<control>
+			<description>contentpanel slice</description>
+			<type>image</type>
+			<id>0</id>
+			<posx>224</posx>
+			<posy>108</posy>
+			<width>500</width>
+			<height>468</height>
+			<texture>contentpanel.png</texture>
+			<include>contentpanelslide</include>
 		</control>
 
 		<control>
@@ -108,7 +143,6 @@
 			<description>Genre List</description>
 			<type>listcontrol</type>
 			<id>100</id>
-			<height>300</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -124,7 +158,8 @@
 			<description>Trailer List</description>
 			<type>listcontrol</type>
 			<id>110</id>
-			<height>300</height>
+			<width>270</width>
+			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -132,7 +167,7 @@
 			<onup>110</onup>
 			<ondown>110</ondown>
 			<onleft>10</onleft>
-			<onright>10</onright>
+			<onright>210</onright>
 			<visible>false</visible>
 		</control>
 
@@ -140,7 +175,8 @@
 			<description>Exclusives List</description>
 			<type>listcontrol</type>
 			<id>120</id>
-			<height>300</height>
+			<width>270</width>
+			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -148,7 +184,7 @@
 			<onup>120</onup>
 			<ondown>120</ondown>
 			<onleft>10</onleft>
-			<onright>10</onright>
+			<onright>210</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -156,7 +192,8 @@
 			<description>Newest List</description>
 			<type>listcontrol</type>
 			<id>130</id>
-			<height>300</height>
+			<width>270</width>
+			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -164,7 +201,7 @@
 			<onup>130</onup>
 			<ondown>130</ondown>
 			<onleft>10</onleft>
-			<onright>10</onright>
+			<onright>210</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -172,7 +209,8 @@
 			<description>Featured HD List</description>
 			<type>listcontrol</type>
 			<id>140</id>
-			<height>300</height>
+			<width>270</width>
+			<height>235</height>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
@@ -180,7 +218,7 @@
 			<onup>140</onup>
 			<ondown>140</ondown>
 			<onleft>10</onleft>
-			<onright>10</onright>
+			<onright>210</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -188,24 +226,43 @@
 			<description>Trailer Thumbnail</description>
 			<type>image</type>
 			<id>200</id>
-			<posx>211</posx>
-			<posy>440</posy>
-			<width>100</width>
-			<height>100</height>
+			<posx>500</posx>
+			<posy>120</posy>
+			<width>170</width>
+			<height>250</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
+			<visible>!Control.IsVisible(100)</visible>
+		</control>
+
+		<control>
+			<description>Trailer Title</description>
+			<type>label</type>
+			<id>205</id>
+			<width>250</width>
+			<posx>211</posx>
+			<posy>370</posy>
+			<align>left</align>
+			<label>Movie Title Goes Here</label>
+			<font>special13</font>
+			<visible>!Control.IsVisible(100)</visible>
 		</control>
 
 		<control>
 			<description>Trailer Info</description>
 			<type>textbox</type>
 			<id>210</id>
-			<posx>320</posx>
-			<posy>440</posy>
-			<width>336</width>
-			<height>100</height>
-			<font>font13</font>
+			<posx>211</posx>
+			<posy>400</posy>
+			<width>445</width>
+			<height>150</height>
+			<font>font12</font>
+			<onup>210</onup>
+			<ondown>210</ondown>
+			<onleft>100</onleft>
+			<onright>10</onright>
 			<include>controldefaults</include>
+			<visible>!Control.IsVisible(100)</visible>
 		</control>
 
 	</controls>

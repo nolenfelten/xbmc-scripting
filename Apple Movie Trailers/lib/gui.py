@@ -138,6 +138,7 @@ class GUI( xbmcgui.Window ):
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
+            self.initVariables()
             self.setupConstants()
             self.trailers = Trailers()
             self.showCategories()
@@ -157,7 +158,11 @@ class GUI( xbmcgui.Window ):
         except:
             skin = 'Default'
         return skin
-    
+
+    def initVariables( self ):
+        self.currentList = 0
+        self.previousList = self.currentList
+
     def setupConstants( self ):
         self.controllerAction = {
             256 : 'A Button',
@@ -197,10 +202,10 @@ class GUI( xbmcgui.Window ):
             # Trailer Thumbnail
             self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
             # Trailer Description
+            self.controls['Trailer Title']['control'].setLabel( title )
             self.controls['Trailer Info']['control'].reset()
             if description:
-                text = '\n'.join( ( title, description ) )
-                self.controls['Trailer Info']['control'].setText( text )
+                self.controls['Trailer Info']['control'].setText( description )
 
     def showTrailers ( self, genre, url ):
         self.controls['Trailer List']['control'].reset()
@@ -237,7 +242,7 @@ class GUI( xbmcgui.Window ):
         titles = self.trailer_list.keys()
         titles.sort()
         for title in titles: # now fill the list control
-            l = xbmcgui.ListItem( title )
+            l = xbmcgui.ListItem( title , '', self.trailer_list[title][0] )
             self.controls['Trailer List']['control'].addItem( l )
         dialog.close()
     
@@ -255,13 +260,17 @@ class GUI( xbmcgui.Window ):
     def exitScript(self):
         self.close()
     
-    def showList( self, glist ):
-        print 'showGenreList', glist
-        self.controls['Exclusives List']['control'].setVisible( glist == 0 )
-        self.controls['Newest List']['control'].setVisible( glist == 1)
-        self.controls['Featured HD List']['control'].setVisible( glist == 2)
-        self.controls['Genre List']['control'].setVisible( glist == 3)
-        self.controls['Trailer List']['control'].setVisible( glist == 4)
+    def showList( self, clist ):
+        self.previousList = self.currentList
+        self.currentList = clist
+        self.controls['Exclusives List']['control'].setVisible( clist == 0 )
+        self.controls['Newest List']['control'].setVisible( clist == 1)
+        self.controls['Featured HD List']['control'].setVisible( clist == 2)
+        self.controls['Genre List']['control'].setVisible( clist == 3)
+        self.controls['Trailer List']['control'].setVisible( clist == 4)
+        self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
+        self.controls['Trailer Title']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Title']['visible'] ) )
+        self.controls['Trailer Info']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Info']['visible'] ) )
     
     def onControl( self, control ):
         try:
@@ -291,6 +300,7 @@ class GUI( xbmcgui.Window ):
     def onAction( self, action ):
         buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
         if ( buttonDesc == 'Back Button' ): self.exitScript()
+        elif ( buttonDesc == 'B Button' ): self.showList( self.previousList )
         else:
             control = self.getFocus()
             if ( control == self.controls['Trailer List']['control'] ):
