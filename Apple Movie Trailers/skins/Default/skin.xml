@@ -104,11 +104,13 @@
 			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
-			<ondown>30</ondown>
+			<!-- <ondown>30</ondown> -->
+			<ondown>50</ondown>
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
 
+		<!--
 		<control>
 			<description>Featured HD Button</description>
 			<type>button</type>
@@ -123,6 +125,7 @@
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
+		-->
 
 		<control>
 			<description>Genre Button</description>
@@ -130,10 +133,12 @@
 			<id>50</id>
 			<label>Genre</label>
 			<posx>50</posx>
-			<posy>268</posy>
+			<!-- <posy>268</posy> -->
+			<posy>231</posy>
 			<onleft>100</onleft>
 			<onright>100</onright>
-			<onup>30</onup>
+			<!-- <onup>30</onup> -->
+			<onup>20</onup>
 			<ondown>10</ondown>
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
@@ -205,6 +210,7 @@
 			<visible>false</visible>
 		</control>
 		
+		<!--
 		<control>
 			<description>Featured HD List</description>
 			<type>listcontrol</type>
@@ -221,6 +227,7 @@
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
+		-->
 		
 		<control>
 			<description>Trailer Thumbnail</description>
