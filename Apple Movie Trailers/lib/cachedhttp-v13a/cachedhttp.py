@@ -114,7 +114,7 @@ class CachedHTTP:
 			self.cookies.revert(self.cookiefile)
 		except:
 			# print('Could not open cookie file: '+self.cookiefile)
-            pass
+			pass
 			
 		hh=CustomHandler(self.cookies)
 		
