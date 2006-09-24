@@ -267,7 +267,7 @@ class Trailers:
             for each in trailer_urls:
                 trailer_url_filenames += [ os.path.split( each )[1] ]
             selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
-            selection = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
+            filename = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
             # filename = fetcher.urlretrieve( selection )
             return filename
         except:
@@ -284,9 +284,9 @@ class Trailers:
         return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
-        print genre, movie_title
-        print self.genres['standard'][genre][movie_title]
-        print '*-' * 20
+        #print genre, movie_title
+        #print self.genres['standard'][genre][movie_title]
+        #print '*-' * 20
         thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         return [ thumbnail, description ]
 
