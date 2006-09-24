@@ -86,7 +86,7 @@
 			<label>Exclusives</label>
 			<posx>50</posx>
 			<posy>120</posy>
-			<onleft>100</onleft>
+			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>75</onup>
 			<ondown>20</ondown>
@@ -101,7 +101,7 @@
 			<label>Newest</label>
 			<posx>50</posx>
 			<posy>157</posy>
-			<onleft>100</onleft>
+			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<!-- <ondown>30</ondown> -->
@@ -135,7 +135,7 @@
 			<posx>50</posx>
 			<!-- <posy>268</posy> -->
 			<posy>231</posy>
-			<onleft>100</onleft>
+			<onleft>210</onleft>
 			<onright>100</onright>
 			<!-- <onup>30</onup> -->
 			<onup>20</onup>
@@ -152,7 +152,7 @@
 			<posx>50</posx>
 			<!-- <posy>268</posy> -->
 			<posy>305</posy>
-			<onleft>100</onleft>
+			<onleft>210</onleft>
 			<onright>100</onright>
 			<!-- <onup>30</onup> -->
 			<onup>50</onup>
@@ -176,7 +176,7 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<onleft>10</onleft>
-			<onright>210</onright>
+			<onright>110</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -192,8 +192,8 @@
 			<textxoff>3</textxoff>
 			<onup>110</onup>
 			<ondown>110</ondown>
-			<onleft>10</onleft>
-			<onright>210</onright>
+			<onleft>100</onleft>
+			<onright>130</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -226,8 +226,8 @@
 			<textxoff>3</textxoff>
 			<onup>130</onup>
 			<ondown>130</ondown>
-			<onleft>10</onleft>
-			<onright>10</onright>
+			<onleft>110</onleft>
+			<onright>140</onright>
 			<visible>false</visible>
 		</control>
 
@@ -243,7 +243,7 @@
 			<textxoff>3</textxoff>
 			<onup>140</onup>
 			<ondown>140</ondown>
-			<onleft>50</onleft>
+			<onleft>130</onleft>
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
@@ -289,7 +289,7 @@
 			<font>font12</font>
 			<onup>210</onup>
 			<ondown>210</ondown>
-			<onleft>100</onleft>
+			<onleft>140</onleft>
 			<onright>10</onright>
 			<include>controldefaults</include>
 			<!--visible>!Control.IsVisible(100)</visible-->
