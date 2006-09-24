@@ -27,6 +27,7 @@ class GUI( xbmcgui.Window ):
         self.skinPath = os.path.join( skinPath, self.getSkin( skinPath ) )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'skin.xml' ), self.imagePath, useDescAsKey=True, debug=False )
+        del guibuilder
 
     def getSkin( self, skinPath ):
         try:
@@ -70,13 +71,12 @@ class GUI( xbmcgui.Window ):
 
     def showVideo( self, title ):
         filename = self.trailers.get_video( self.genre, title )
-        print filename
-        try:
-            if filename:
+        #self.setCategoryLabel('G:%s T:%s' % (self.genre, title,))
+        #xbmc.output('Apple Movie Trailers: url = %s' % ( filename, ) )
+        if filename:
             ## don't create conf file for streaming
             #    self.createConf( filename )
-                xbmc.Player().play( filename )
-        except: print 'DID NOT PLAY'
+            xbmc.Player( xbmc.PLAYER_CORE_MPLAYER ).play( filename )
 
     def showTrailerInfo( self, title ):
         thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
@@ -89,8 +89,10 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Info']['control'].setText( description )
 
     def showTrailers( self, genre ):
+        self.controls['Trailer List']['control'].reset()
+        self.controls['Exclusives List']['control'].reset()
+        self.controls['Newest List']['control'].reset()
         if ( genre == 'Newest' ):
-            self.controls['Newest List']['control'].reset()
             titles = self.trailers.get_newest_list()
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
@@ -98,7 +100,6 @@ class GUI( xbmcgui.Window ):
                 self.controls['Newest List']['control'].addItem( l )
         
         elif ( genre == 'Exclusives' ):
-            self.controls['Exclusives List']['control'].reset()
             titles = self.trailers.get_exclusives_list()
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
@@ -106,7 +107,6 @@ class GUI( xbmcgui.Window ):
                 self.controls['Exclusives List']['control'].addItem( l )
         
         elif ( genre != 'Genre' ):
-            self.controls['Trailer List']['control'].reset()
             titles = self.trailers.get_trailer_list( genre )
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
