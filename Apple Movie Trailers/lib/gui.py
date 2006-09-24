@@ -14,11 +14,12 @@ class GUI( xbmcgui.Window ):
             #########################################
             self.controls['Settings Button']['control'].setEnabled(False)
             #########################################
-            self.initVariables()
+            #self.initVariables()
             self.setupConstants()
             self.trailers = trailers.Trailers()
             self.showCategories()
-            self.showList('Newest List')
+            self.setGenre( 'Newest' )
+            self.getTrailerInfo(  self.controls['Newest List']['control'].getSelectedItem() )
 
     def setupGUI(self):
         import guibuilder
@@ -36,10 +37,10 @@ class GUI( xbmcgui.Window ):
             skin = 'Default'
         return skin
 
-    def initVariables( self ):
+    #def initVariables( self ):
         #self.currentList = 'Newest List'
         #self.previousList = self.currentList
-        self.genre = 'Newest'
+        #self.genre = 'Newest'
 
     def setupConstants( self ):
         self.controllerAction = {
@@ -68,26 +69,16 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showVideo( self, title ):
-        #genre = self.controls['Category Label']['control'].getLabel()
-        #print self.genre, title
         filename = self.trailers.get_video( self.genre, title )
-        #print os.path.join(self.skinPath,'movie.strm')
-        #fname = os.path.join(self.skinPath,'movie.strm')
-        #f = open(fname ,'w')
-        #f.write(filename)
-        #f.close()
-        #print 'File created'
-        #xbmc.Player().play( fname )
+        print filename
         try:
             if filename:
             ## don't create conf file for streaming
             #    self.createConf( filename )
-                print 'showVideo', filename
                 xbmc.Player().play( filename )
         except: print 'DID NOT PLAY'
 
     def showTrailerInfo( self, title ):
-        #genre = self.controls['Category Label']['control'].getLabel()
         thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
         # Trailer Thumbnail
         self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
@@ -97,12 +88,30 @@ class GUI( xbmcgui.Window ):
         if description:
             self.controls['Trailer Info']['control'].setText( description )
 
-    def showTrailers ( self, genre ):
-        self.controls['Trailer List']['control'].reset()
-        for title in self.trailers.get_trailer_list( genre ): # now fill the list control
-            thumbnail, description = self.trailers.get_trailer_info( genre, title )
-            l = xbmcgui.ListItem( title, '', thumbnail )
-            self.controls['Trailer List']['control'].addItem( l )
+    def showTrailers( self, genre ):
+        if ( genre == 'Newest' ):
+            self.controls['Newest List']['control'].reset()
+            titles = self.trailers.get_newest_list()
+            for title in titles: # now fill the list control
+                thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                l = xbmcgui.ListItem( title, '', thumbnail )
+                self.controls['Newest List']['control'].addItem( l )
+        
+        elif ( genre == 'Exclusives' ):
+            self.controls['Exclusives List']['control'].reset()
+            titles = self.trailers.get_exclusives_list()
+            for title in titles: # now fill the list control
+                thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                l = xbmcgui.ListItem( title, '', thumbnail )
+                self.controls['Exclusives List']['control'].addItem( l )
+        
+        elif ( genre != 'Genre' ):
+            self.controls['Trailer List']['control'].reset()
+            titles = self.trailers.get_trailer_list( genre )
+            for title in titles: # now fill the list control
+                thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                l = xbmcgui.ListItem( title, '', thumbnail )
+                self.controls['Trailer List']['control'].addItem( l )
     
     def showCategories( self ):
         self.controls['Genre List']['control'].reset()
@@ -141,6 +150,7 @@ class GUI( xbmcgui.Window ):
         
     def setGenre( self, genre ):
         self.genre = genre
+        self.showTrailers( genre )
         self.showList( '%s List' % (genre,) )
         
     def setGenreLabel( self, genre ):
