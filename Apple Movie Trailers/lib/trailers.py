@@ -220,63 +220,70 @@ class Trailers:
         return reordered_dict
 
     def __update_trailer_info__( self, genre, title ):
-        url = self.BASEURL + self.genres['standard'][genre][title]
-        element = fetcher.urlopen( url )
-        element = ET.fromstring( element )
-        thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
-        # download the actual thumbnail to the local filesystem (or get the cached filename)
-        thumbnail = fetcher.urlretrieve( thumbnail )
-        if not thumbnail:
-            # default if the actual thumbnail couldn't be found for some reason
+        try:
+            url = self.BASEURL + self.genres['standard'][genre][title]
+            element = fetcher.urlopen( url )
+            element = ET.fromstring( element )
+            thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
+            # download the actual thumbnail to the local filesystem (or get the cached filename)
+            thumbnail = fetcher.urlretrieve( thumbnail )
+            if not thumbnail:
+                # default if the actual thumbnail couldn't be found for some reason
+                thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
+            description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
+            description = description.strip()
+            # remove any linefeeds so we can wrap properly to the text control this is displayed in
+            description = description.replace( '\r\n', ' ' )
+            description = description.replace( '\r', ' ' )
+            description = description.replace( '\n', ' ' )
+            if not description or len( description ) is 0:
+                description = 'No description could be retrieved for this title.'
+            urls = list()
+            for each in element.getiterator( ns('GotoURL') ):
+                url = each.get( 'url' )
+                if 'index_1' in url:
+                    continue
+                if '/moviesxml/g' in url:
+                    continue
+                if url[0] != '/':
+                    continue
+                if url in urls:
+                    continue
+                urls += [ url ]
+        except:
             thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
-        description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
-        description = description.strip()
-        # remove any linefeeds so we can wrap properly to the text control this is displayed in
-        description = description.replace( '\r\n', ' ' )
-        description = description.replace( '\r', ' ' )
-        description = description.replace( '\n', ' ' )
-        if not description or len( description ) is 0:
             description = 'No description could be retrieved for this title.'
-        urls = list()
-        for each in element.getiterator( ns('GotoURL') ):
-            url = each.get( 'url' )
-            if 'index_1' in url:
-                continue
-            if '/moviesxml/g' in url:
-                continue
-            if url[0] != '/':
-                continue
-            if url in urls:
-                continue
-            urls += [ url ]
+            urls = list()
         return [ thumbnail, description, urls ]
 
-    def get_video( self, url ):
-        url = self.BASEURL + url
-        element = fetcher.urlopen( url )
-        element = ET.fromstring( element )
-        trailer_urls = list()
-        for each in element.getiterator( ns('string') ):
-            text = each.text
-            if text == None:
-                continue
-            if 'http' not in text:
-                continue
-            if 'movies.apple.com' not in text:
-                continue
-            if text[-3:] == 'm4v':
-                continue
-            if text in trailer_urls:
-                continue
-            trailer_urls += [ text ]
+    def get_video( self, genre, movie_title ):
         try:
+            thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+            url = self.BASEURL + urls[0]
+            element = fetcher.urlopen( url )
+            element = ET.fromstring( element )
+            trailer_urls = list()
+            for each in element.getiterator( ns('string') ):
+                text = each.text
+                if text == None:
+                    continue
+                if 'http' not in text:
+                    continue
+                if 'movies.apple.com' not in text:
+                    continue
+                if text[-3:] == 'm4v':
+                    continue
+                if text in trailer_urls:
+                    continue
+                trailer_urls += [ text ]
             dialog = xbmcgui.Dialog()
             trailer_url_filenames = list()
             for each in trailer_urls:
                 trailer_url_filenames += [ os.path.split( each )[1] ]
             selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
             selection = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
-            return selection
+            # filename = fetcher.urlretrieve( selection )
+            return filename
         except:
             return None
 
@@ -285,11 +292,14 @@ class Trailers:
         genre_list.sort()
         return genre_list
 
-    def get_trailer_dict( self, genre ):
-        return self.genres['standard'][genre]
+    def get_trailer_list( self, genre ):
+        trailer_list = self.genres['standard'][genre].keys()
+        trailer_list.sort()
+        return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
-        return self.genres['standard'][genre][movie_title]
+        thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+        return [ thumbnail, description ]
 
     def get_exclusives_dict( self ):
         url = self.genres['special']['Exclusives']
