@@ -67,39 +67,33 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showVideo( self, title ):
-        thumbnail, description, url = self.trailer_list[title]
-        if url:
-            selected_video = self.trailers.get_video( url )
-            filename = fetcher_with_dialog.urlretrieve( selected_video )
+        genre = self.controls['Category Label']['control'].getLabel()
+        filename = self.trailers.get_video( genre, title )
+        if filename:
             self.createConf( filename )
-            if filename:
-                xbmc.Player().play( filename )
+            xbmc.Player().play( filename )
 
     def showTrailerInfo( self, title ):
-        thumbnail, description, url = self.trailer_list[title]
-        if url:
-            # Trailer Thumbnail
-            self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
-            # Trailer Description
-            self.controls['Trailer Title']['control'].setLabel( title )
-            self.controls['Trailer Info']['control'].reset()
-            if description:
-                self.controls['Trailer Info']['control'].setText( description )
+        genre = self.controls['Category Label']['control'].getLabel()
+        thumbnail, description = self.trailers.get_trailer_info( genre, title )
+        # Trailer Thumbnail
+        self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
+        # Trailer Description
+        self.controls['Trailer Title']['control'].setLabel( title )
+        self.controls['Trailer Info']['control'].reset()
+        if description:
+            self.controls['Trailer Info']['control'].setText( description )
 
     def showTrailers ( self, genre ):
         self.controls['Trailer List']['control'].reset()
-        self.trailer_list = self.trailers.get_trailer_dict( genre )
-        titles = self.trailer_list.keys()
-        titles.sort()
-        for title in titles: # now fill the list control
-            l = xbmcgui.ListItem( title , '', self.trailer_list[title][0] )
+        for title in self.trailers.get_trailer_list( genre ): # now fill the list control
+            thumbnail, description = self.trailers.get_trailer_info( genre, title )
+            l = xbmcgui.ListItem( title, '', thumbnail )
             self.controls['Trailer List']['control'].addItem( l )
-        dialog.close()
     
     def showCategories( self ):
         self.controls['Genre List']['control'].reset()
-        self.genres = self.trailers.get_genre_list()
-        for genre in self.genres:
+        for genre in self.trailers.get_genre_list():
             l = xbmcgui.ListItem( genre )
             self.controls['Genre List']['control'].addItem( l )
 
@@ -139,7 +133,6 @@ class GUI( xbmcgui.Window ):
     def getTrailerInfo( self, choice ):
         genre = self.controls['Category Label']['control'].getLabel()
         title = choice.getLabel()
-        self.trailers.get_trailer_info( genre, title )
         self.showTrailerInfo( title )
     
     def getTrailer( self, choice ):
@@ -148,51 +141,49 @@ class GUI( xbmcgui.Window ):
         
     def getTrailerGenre( self, choice ):
         genre = choice.getLabel()
+        print genre
         self.showTrailers( genre )
+        print 1
         self.setCategoryLabel( genre )
+        print 2
         self.showList( 'Trailer List' )
+        print 3
         
     def onControl( self, control ):
-        try:
-            if ( control == self.controls['Exclusives Button']['control'] ):
-                self.showList( 'Exclusives List' )
-            elif ( control == self.controls['Newest Button']['control'] ):
-                self.showList( 'Newest List' )
-            # elif ( control == self.controls['Featured HD Button']['control'] ):
-                # self.showList( 'Featured HD List' )
-            elif ( control == self.controls['Genre Button']['control'] ):
-                self.showList( 'Genre List' )
-            elif ( control == self.controls['Genre List']['control'] ):
-                self.getTrailerGenre( control.getSelectedItem() )
-            elif ( control == self.controls['Exclusives List']['control'] or\
-                control == self.controls['Newest List']['control'] or\
-                control == self.controls['Trailer List']['control'] ):
-                self.getTrailer( control.getSelectedItem() )
-        except:
-            print 'ERROR: in onControl'
+        if ( control is self.controls['Exclusives Button']['control'] ):
+            self.showList( 'Exclusives List' )
+        elif ( control is self.controls['Newest Button']['control'] ):
+            self.showList( 'Newest List' )
+        # elif ( control == self.controls['Featured HD Button']['control'] ):
+            # self.showList( 'Featured HD List' )
+        elif ( control is self.controls['Genre Button']['control'] ):
+            self.showList( 'Genre List' )
+        elif ( control is self.controls['Genre List']['control'] ):
+            self.getTrailerGenre( control.getSelectedItem() )
+        elif ( control is self.controls['Exclusives List']['control'] or\
+            control is self.controls['Newest List']['control'] or\
+            control is self.controls['Trailer List']['control'] ):
+            self.getTrailer( control.getSelectedItem() )
             
     def onAction( self, action ):
-        try:
-            buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
-            if ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ): self.exitScript()
-            elif ( buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button' ): 
-                self.showList( self.previousList )
-            else:
-                control = self.getFocus()
-                if ( 
-                    control == self.controls['Exclusives List']['control'] or
-                    control == self.controls['Newest List']['control'] or
-                    control == self.controls['Trailer List']['control']
-                    ):
-                    self.getTrailerInfo( control.getSelectedItem() )
-                elif ( control == self.controls['Exclusives Button']['control'] ):
-                    self.setListNavigation('Exclusives Button')
-                elif ( control == self.controls['Newest Button']['control'] ):
-                    self.setListNavigation('Newest Button')
-                elif ( control == self.controls['Genre Button']['control'] ):
-                    self.setListNavigation('Genre Button')
-                elif ( control == self.controls['Settings Button']['control'] ):
-                    self.setListNavigation('Settings Button')
-        except:
-            print 'ERROR: in onAction'
+        buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
+        if ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ): self.exitScript()
+        elif ( buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button' ): 
+            self.showList( self.previousList )
+        else:
+            control = self.getFocus()
+            if ( 
+                control is self.controls['Exclusives List']['control'] or
+                control is self.controls['Newest List']['control'] or
+                control is self.controls['Trailer List']['control']
+                ):
+                self.getTrailerInfo( control.getSelectedItem() )
+            elif ( control is self.controls['Exclusives Button']['control'] ):
+                self.setListNavigation('Exclusives Button')
+            elif ( control is self.controls['Newest Button']['control'] ):
+                self.setListNavigation('Newest Button')
+            elif ( control is self.controls['Genre Button']['control'] ):
+                self.setListNavigation('Genre Button')
+            elif ( control is self.controls['Settings Button']['control'] ):
+                self.setListNavigation('Settings Button')
             
