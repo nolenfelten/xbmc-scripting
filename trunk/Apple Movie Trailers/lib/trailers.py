@@ -30,7 +30,7 @@ class Trailers:
         except:
             self.update_all()
 
-    def update_all():
+    def update_all( self ):
         import pickle
         self.genres = dict()
         self.__update_genre_list__()
