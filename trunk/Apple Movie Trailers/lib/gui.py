@@ -1,6 +1,7 @@
 import xbmc, xbmcgui
 import sys, os
 import cachedhttp_mod as cachedhttp
+import trailers
 
 fetcher = cachedhttp.CachedHTTP()
 fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
@@ -15,9 +16,9 @@ class GUI( xbmcgui.Window ):
             #########################################
             self.initVariables()
             self.setupConstants()
-            import trailers
             self.trailers = trailers.Trailers()
             self.showCategories()
+            self.showList('Newest List')
 
     def setupGUI(self):
         import guibuilder
@@ -36,7 +37,7 @@ class GUI( xbmcgui.Window ):
         return skin
 
     def initVariables( self ):
-        self.currentList = 0
+        self.currentList = 'Newest List'
         self.previousList = self.currentList
 
     def setupConstants( self ):
@@ -109,10 +110,14 @@ class GUI( xbmcgui.Window ):
         self.previousList = self.currentList
         self.currentList = key
         self.controls['Exclusives List']['control'].setVisible( key == 'Exclusives List' )
+        self.controls['Exclusives List']['control'].setEnabled( key == 'Exclusives List' )
         self.controls['Newest List']['control'].setVisible( key == 'Newest List' )
+        self.controls['Newest List']['control'].setEnabled( key == 'Newest List' )
         #self.controls['Featured HD List']['control'].setVisible( key == 'Featured HD List' )
         self.controls['Genre List']['control'].setVisible( key == 'Genre List' )
+        self.controls['Genre List']['control'].setEnabled( key == 'Genre List' )
         self.controls['Trailer List']['control'].setVisible( key == 'Trailer List' )
+        self.controls['Trailer List']['control'].setEnabled( key == 'Trailer List' )
         # until initial visibilty is solved just hardcode them
         #self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
         #self.controls['Trailer Title']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Title']['visible'] ) )
@@ -120,32 +125,16 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Thumbnail']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Title']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setVisible( key != 'Genre List' )
+        self.controls['Trailer Info']['control'].setEnabled( key != 'Genre List' )
         if ( key != 'Trailer List' ):
             self.setCategoryLabel( key[:-5] )
         self.setFocus(self.controls[key]['control'])
-        self.setButtonNavigation( key )
         
     def setCategoryLabel( self, category ):
         self.controls['Category Label']['control'].setLabel( category )
             
-    def setButtonNavigation( self, key ):
-        self.controls['Exclusives Button']['control'].controlRight( self.controls[key]['control'] )
-        self.controls['Exclusives Button']['control'].controlLeft( self.controls[key]['control'] )
-        self.controls['Newest Button']['control'].controlRight( self.controls[key]['control'] )
-        self.controls['Newest Button']['control'].controlLeft( self.controls[key]['control'] )
-        self.controls['Genre Button']['control'].controlRight( self.controls[key]['control'] )
-        self.controls['Genre Button']['control'].controlLeft( self.controls[key]['control'] )
-        self.controls['Settings Button']['control'].controlRight( self.controls[key]['control'] )
-        self.controls['Settings Button']['control'].controlLeft( self.controls[key]['control'] )
-        self.controls['Trailer Info']['control'].controlLeft( self.controls[button]['control'] )
-
     def setListNavigation( self, button ):
         self.controls['Exclusives List']['control'].controlLeft( self.controls[button]['control'] )
-        self.controls['Newest List']['control'].controlLeft( self.controls[button]['control'] )
-        self.controls['Genre List']['control'].controlRight( self.controls[button]['control'] )
-        self.controls['Genre List']['control'].controlLeft( self.controls[button]['control'] )
-        self.controls['Trailer List']['control'].controlLeft( self.controls[button]['control'] )
-        self.controls['Trailer Info']['control'].controlRight( self.controls[button]['control'] )
         
     def getTrailerInfo( self, choice ):
         genre = self.controls['Category Label']['control'].getLabel()
