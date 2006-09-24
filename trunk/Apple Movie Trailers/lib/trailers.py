@@ -36,7 +36,7 @@ class Trailers:
         self.__update_genre_list__()
         datadir = os.path.dirname( self.DATAFILE )
         if not os.path.isdir( datadir ):
-            os.path.mkdir( datadir )
+            os.path.makedirs( datadir )
         datafile = open( self.DATAFILE, 'w' )
         pickle.dump( self.genres, datafile )
         datafile.close()
@@ -154,6 +154,27 @@ class Trailers:
         genre_percentage = 0
         dialog.create( dialog_header )
         dialog.update( dialog_percentage )
+        # special
+        genre_pos = 0
+        for genre in self.genres['special']:
+            movie_pos = 0
+            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
+            if dialog.iscanceled():
+                break
+            movie_percentage = 0
+            for movie in self.genres['special'][genre]:
+                if dialog.iscanceled():
+                    break
+                try:
+                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
+                except:
+                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
+                movie_pos += 1
+                movie_percentage = float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage
+            genre_pos += 1
+            genre_percentage = float( genre_pos ) / len( self.genres['special'] ) * 100
+        # standard
         genre_pos = 0
         for genre in self.genres['standard']:
             movie_pos = 0
@@ -179,7 +200,12 @@ class Trailers:
         """
             return a dict with movie titles and urls for the given genre
         """
-        url = self.BASEURL + self.genres['standard'][genre]
+        try:
+            url = self.BASEURL + self.genres['standard'][genre]
+            isSpecial = False
+        except:
+            url = self.BASEURL + self.genres['special'][genre]
+            isSpecial = True
         element = fetcher.urlopen( url )
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
@@ -189,6 +215,8 @@ class Trailers:
         for element in elements:
             url2 = element.get( 'url' )
             title = None
+            if isSpecial:
+                title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
             if 'index_1' in url2:
                 continue
             if '/moviesxml/g' in url2:
@@ -207,7 +235,12 @@ class Trailers:
 
     def __update_trailer_info__( self, genre, title ):
         try:
-            url = self.BASEURL + self.genres['standard'][genre][title]
+            try:
+                url = self.BASEURL + self.genres['standard'][genre][title]
+                isSpecial = False
+            except:
+                url = self.BASEURL + self.genres['special'][genre][title]
+                isSpecial = True
             element = fetcher.urlopen( url )
             element = ET.fromstring( element )
             thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
@@ -244,7 +277,12 @@ class Trailers:
 
     def get_video( self, genre, movie_title ):
         try:
-            thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+            try:
+                thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+                isSpecial = False
+            except:
+                thumbnail, description, urls = self.genres['special'][genre][movie_title]
+                isSpecial = True
             url = self.BASEURL + urls[0]
             element = fetcher.urlopen( url )
             element = ET.fromstring( element )
@@ -290,10 +328,12 @@ class Trailers:
         thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         return [ thumbnail, description ]
 
-    def get_exclusives_dict( self ):
-        url = self.genres['special']['Exclusives']
-        return None
+    def get_exclusives_list( self ):
+        e_list = self.genres['special']['Exclusives'].keys()
+        e_list.sort()
+        return e_list
 
-    def get_newest_dict( self ):
-        url = self.genres['special']['Newest']
-        return None
+    def get_newest_list( self ):
+        n_list = self.genres['special']['Newest'].keys()
+        n_list.sort()
+        return n_list
