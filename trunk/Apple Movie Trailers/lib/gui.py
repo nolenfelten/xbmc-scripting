@@ -141,13 +141,9 @@ class GUI( xbmcgui.Window ):
         
     def getTrailerGenre( self, choice ):
         genre = choice.getLabel()
-        print genre
         self.showTrailers( genre )
-        print 1
         self.setCategoryLabel( genre )
-        print 2
         self.showList( 'Trailer List' )
-        print 3
         
     def onControl( self, control ):
         if ( control is self.controls['Exclusives Button']['control'] ):

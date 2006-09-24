@@ -45,10 +45,41 @@ class Trailers:
         base_xml = fetcher.urlopen( self.BASEXML )
         base_xml = ET.fromstring( base_xml )
 
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': category_url,
+        #           'Newest': category_url,
+        #       }
+        #       'standard': {
+        #       }
+        #   }
         self.genres = {
             'special': dict(),
             'standard': dict(),
         }
+        view_matrix = {
+            'view1': 'Exclusives',
+            'view2': 'Newest',
+        }
+        elements = base_xml.getiterator( ns('Include') )
+        for each in elements:
+            url = each.get( 'url' )
+            for view in view_matrix:
+                if view in url:
+                    url = '/moviesxml/h/' + url
+                    self.genres['special'].update( { view_matrix[view]: url } )    
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': category_url,
+        #           'Newest': category_url,
+        #       }
+        #       'standard': {
+        #           genre: genre_url,
+        #           ...
+        #       }
+        #   }
         elements = base_xml.getiterator( ns('GotoURL') )
         for each in elements:
             url = each.get( 'url' )
@@ -73,27 +104,6 @@ class Trailers:
             name = ' '.join( genre_caps )
             if '/moviesxml/g' in url:
                 self.genres['standard'].update( { name: url } )
-
-        view_matrix = {
-            'view1': 'Exclusives',
-            'view2': 'Newest',
-        }
-        elements = base_xml.getiterator( ns('Include') )
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           'Exclusives': url,
-        #           'Newest': url,
-        #       }
-        #       'standard': {
-        #       }
-        #   }
-        for each in elements:
-            url = each.get( 'url' )
-            for view in view_matrix:
-                if view in url:
-                    url = '/moviesxml/h/' + url
-                    self.genres['special'].update( { view_matrix[view]: url } )    
         # make self.genres as such:
         #   {
         #       'special': {
@@ -107,33 +117,15 @@ class Trailers:
         #           ...
         #       }
         #   }
-        xbmc.log( '--- genre info ---' )
-        i = 0
         dialog = xbmcgui.DialogProgress()
-        i += 1
-        xbmc.log( str( i ) )
         dialog_header = 'Fetching category and genre information..'
-        i += 1
-        xbmc.log( str( i ) )
         dialog_line1 = 'Please wait a moment.'
-        i += 1
-        xbmc.log( str( i ) )
         dialog_errorline = ''
-        i += 1
-        xbmc.log( str( i ) )
         dialog_percentage = 0
-        i += 1
-        xbmc.log( str( i ) )
         dialog.create( dialog_header, dialog_line1 )
-        i += 1
-        xbmc.log( str( i ) )
         dialog.update( dialog_percentage )
-        i += 1
-        xbmc.log( str( i ) )
         pos = 0
-        xbmc.log( str( self.genres ) )
         for each in self.genres['standard']:
-            xbmc.log( each + str( dialog_percentage ) )
             try:
                 dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
                 self.genres['standard'][each] = self.__update_trailer_dict__( each )
@@ -141,10 +133,7 @@ class Trailers:
                 dialog_errorline = 'Error retrieving information for one or more genres.'
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['standard'] ) * 100 )
-        i += 1
-        xbmc.log( str( i ) )
         dialog.close()
-        xbmc.log( '------------------' )
         # update information for each movie in each genre
         # make self.genres as such:
         #   {
@@ -159,7 +148,6 @@ class Trailers:
         #           ...
         #       }
         #   }
-        xbmc.log( '--- movie info ---' )
         dialog = xbmcgui.DialogProgress()
         dialog_header = 'Fetching movie information..'
         dialog_errorline = ''
@@ -169,24 +157,22 @@ class Trailers:
         genre_pos = 0
         for genre in self.genres['standard']:
             movie_pos = 0
-            xbmc.log( genre + str( genre_percentage ) )
-            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
+            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
             for movie in self.genres['standard'][genre]:
-                xbmc.log( movie + str( movie_percentage ) )
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( dialog_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
                     self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
                     dialog_errorline = 'Error retrieving information for one or more movie titles.'
                 movie_pos += 1
-                movie_percentage = int( float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 ) + genre_percentage
+                movie_percentage = float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 + genre_percentage
             genre_pos += 1
-            genre_percentage = int( float( genre_pos ) / len( self.genres['standard'] ) * 100 )
+            genre_percentage = float( genre_pos ) / len( self.genres['standard'] ) * 100
         dialog.close()
 
     def __update_trailer_dict__( self, genre ):
@@ -298,6 +284,9 @@ class Trailers:
         return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
+        print genre, movie_title
+        print self.genres['standard'][genre][movie_title]
+        print '*-' * 20
         thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         return [ thumbnail, description ]
 
