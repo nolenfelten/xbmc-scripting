@@ -68,7 +68,7 @@ class Trailers:
             for view in view_matrix:
                 if view in url:
                     url = '/moviesxml/h/' + url
-                    self.genres['special'].update( { view_matrix[view]: url } )    
+                    self.genres['special'].update( { view_matrix[view]: url } )
         # make self.genres as such:
         #   {
         #       'special': {
@@ -90,11 +90,13 @@ class Trailers:
         dialog.create( dialog_header, dialog_line1 )
         dialog.update( dialog_percentage )
         pos = 0
-        for each in self.genres['special']:
+        for each in self.genres['special'].keys():
             try:
                 dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
                 self.genres['special'][each] = self.__update_trailer_dict__( each )
             except:
+                import traceback
+                traceback.print_exc()
                 dialog_errorline = 'Error retrieving information for one or more genres.'
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
@@ -120,15 +122,14 @@ class Trailers:
         dialog.update( dialog_percentage )
         # special
         genre_pos = 0
-        for genre in self.genres['special']:
+        for genre in self.genres['special'].keys():
             movie_pos = 0
-            print 'Updating:', genre
             dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
             for movie in self.genres['special'][genre]:
-                print 'Updating:', movie
+                print genre + ':', movie
                 if dialog.iscanceled():
                     break
                 try:
@@ -195,7 +196,7 @@ class Trailers:
         dialog.create( dialog_header, dialog_line1 )
         dialog.update( dialog_percentage )
         pos = 0
-        for each in self.genres['standard']:
+        for each in self.genres['standard'].keys():
             try:
                 dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
                 self.genres['standard'][each] = self.__update_trailer_dict__( each )
@@ -225,7 +226,7 @@ class Trailers:
         dialog.update( dialog_percentage )
         # standard
         genre_pos = 0
-        for genre in self.genres['standard']:
+        for genre in self.genres['standard'].keys():
             movie_pos = 0
             dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
@@ -246,6 +247,8 @@ class Trailers:
         dialog.close()
 
     def __update_trailer_dict__( self, genre ):
+        print '---- update_trailer_dict ----'
+        print 'genre:', genre
         """
             return a dict with movie titles and urls for the given genre
         """
@@ -259,13 +262,19 @@ class Trailers:
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
         element = ET.fromstring( element )
-        elements = element.getiterator( ns('GotoURL') )
+        print element.getchildren()
+        lookup = 'GotoURL'
+        if not isSpecial:
+            lookup = ns( lookup )
+        elements = element.getiterator( lookup )
+        print elements
         trailer_dict = dict()
         for element in elements:
             url2 = element.get( 'url' )
+            print url2
             title = None
             if isSpecial:
-                title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
+                title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
             if 'index_1' in url2:
                 continue
             if '/moviesxml/g' in url2:
@@ -273,7 +282,11 @@ class Trailers:
             if url2[0] != '/':
                 continue
             if url2 in trailer_dict.keys():
-                title = element.getiterator( ns('B') )[0].text.encode( 'ascii', 'ignore' )
+                lookup = 'b'
+                if not isSpecial:
+                    lookup = 'B'
+                    lookup = ns( lookup )
+                title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
                 trailer_dict[url2] = title
                 continue
             trailer_dict.update( { url2: title } )
@@ -371,9 +384,6 @@ class Trailers:
         return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
-        #print genre, movie_title
-        #print self.genres['standard'][genre][movie_title]
-        #print '*-' * 20
         thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         return [ thumbnail, description ]
 
