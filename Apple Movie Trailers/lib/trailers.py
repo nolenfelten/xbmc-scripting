@@ -1,4 +1,4 @@
-import os
+import os, sys
 import xbmc, xbmcgui
 import cachedhttp_mod as cachedhttp
 import elementtree.ElementTree as ET
@@ -18,18 +18,21 @@ class Trailers:
     def __init__( self ):
         self.BASEURL = 'http://www.apple.com'
         self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
+        self.DATAFILE = os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'AMT.pk' )
         self.genres = dict()
-        self.__update_genre_list__()
+        import pickle
+        try:
+            if not os.path.isfile( self.DATAFILE ):
+                raise
+            datafile = open( self.DATAFILE, 'r' )
+            self.genres = pickle.load( datafile )
+        except:
+            self.__update_genre_list__()
+            datafile = open( self.DATAFILE, 'w' )
+            pickle.dump( self.genres, datafile )
+        datafile.close()
 
     def __update_genre_list__( self ):
-        dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching category and genre information..'
-        dialog_line1 = 'Please wait a moment.'
-        dialog_errorline = ''
-        dialog_percentage = 0
-        dialog.create( dialog_header, dialog_line1 )
-        dialog.update( dialog_percentage )
-
         base_xml = fetcher.urlopen( self.BASEXML )
         base_xml = ET.fromstring( base_xml )
 
@@ -95,8 +98,33 @@ class Trailers:
         #           ...
         #       }
         #   }
+        xbmc.log( '--- genre info ---' )
+        i = 0
+        dialog = xbmcgui.DialogProgress()
+        i += 1
+        xbmc.log( str( i ) )
+        dialog_header = 'Fetching category and genre information..'
+        i += 1
+        xbmc.log( str( i ) )
+        dialog_line1 = 'Please wait a moment.'
+        i += 1
+        xbmc.log( str( i ) )
+        dialog_errorline = ''
+        i += 1
+        xbmc.log( str( i ) )
+        dialog_percentage = 0
+        i += 1
+        xbmc.log( str( i ) )
+        dialog.create( dialog_header, dialog_line1 )
+        i += 1
+        xbmc.log( str( i ) )
+        dialog.update( dialog_percentage )
+        i += 1
+        xbmc.log( str( i ) )
         pos = 0
+        xbmc.log( str( self.genres ) )
         for each in self.genres['standard']:
+            xbmc.log( each + str( dialog_percentage ) )
             try:
                 dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
                 self.genres['standard'][each] = self.__update_trailer_dict__( each )
@@ -104,11 +132,53 @@ class Trailers:
                 dialog_errorline = 'Error retrieving information for one or more genres.'
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['standard'] ) * 100 )
-
+        i += 1
+        xbmc.log( str( i ) )
         dialog.close()
-
-    def get_trailer_dict( self, genre ):
-        return self.genres['standard'][genre]
+        xbmc.log( '------------------' )
+        # update information for each movie in each genre
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': category_url,
+        #           'Newest': category_url,
+        #       }
+        #       'standard': {
+        #           genre: {
+        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
+        #           }
+        #           ...
+        #       }
+        #   }
+        xbmc.log( '--- movie info ---' )
+        dialog = xbmcgui.DialogProgress()
+        dialog_header = 'Fetching movie information..'
+        dialog_errorline = ''
+        genre_percentage = 0
+        dialog.create( dialog_header )
+        dialog.update( dialog_percentage )
+        genre_pos = 0
+        for genre in self.genres['standard']:
+            movie_pos = 0
+            xbmc.log( genre + str( genre_percentage ) )
+            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
+            if dialog.iscanceled():
+                break
+            movie_percentage = 0
+            for movie in self.genres['standard'][genre]:
+                xbmc.log( movie + str( movie_percentage ) )
+                if dialog.iscanceled():
+                    break
+                try:
+                    dialog.update( dialog_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
+                except:
+                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
+                movie_pos += 1
+                movie_percentage = int( float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 ) + genre_percentage
+            genre_pos += 1
+            genre_percentage = int( float( genre_pos ) / len( self.genres['standard'] ) * 100 )
+        dialog.close()
 
     def __update_trailer_dict__( self, genre ):
         """
@@ -140,13 +210,16 @@ class Trailers:
             reordered_dict.update( { trailer_dict[key]: key } )
         return reordered_dict
 
-    def get_trailer_info( self, url ):
-        xbmc.log( 'getting info for ' + url )
-        url = self.BASEURL + url
+    def __update_trailer_info__( self, genre, title ):
+        url = self.BASEURL + self.genres['standard'][genre][title]
         element = fetcher.urlopen( url )
         element = ET.fromstring( element )
-        title = element.getiterator( ns('b') )[0].text.encode( 'ascii', 'ignore' )
         thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
+        # download the actual thumbnail to the local filesystem (or get the cached filename)
+        thumbnail = fetcher.urlretrieve( thumbnail )
+        if not thumbnail:
+            # default if the actual thumbnail couldn't be found for some reason
+            thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
         description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
         description = description.strip()
         # remove any linefeeds so we can wrap properly to the text control this is displayed in
@@ -167,8 +240,7 @@ class Trailers:
             if url in urls:
                 continue
             urls += [ url ]
-        xbmc.log( 'done.' )
-        return [ title, thumbnail, description, urls ]
+        return [ thumbnail, description, urls ]
 
     def get_video( self, url ):
         url = self.BASEURL + url
@@ -204,12 +276,16 @@ class Trailers:
         genre_list.sort()
         return genre_list
 
+    def get_trailer_dict( self, genre ):
+        return self.genres['standard'][genre]
+
+    def get_trailer_info( self, genre, movie_title ):
+        return self.genres['standard'][genre][movie_title]
+
     def get_exclusives_dict( self ):
         url = self.genres['special']['Exclusives']
-        edict = self.get_trailer_dict( 'Exclusives' )
-        return edict
+        return None
 
     def get_newest_dict( self ):
         url = self.genres['special']['Newest']
-        edict = self.get_trailer_dict( 'Newest' )
-        return edict
+        return None

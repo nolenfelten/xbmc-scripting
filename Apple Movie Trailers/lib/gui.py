@@ -88,39 +88,6 @@ class GUI( xbmcgui.Window ):
     def showTrailers ( self, genre ):
         self.controls['Trailer List']['control'].reset()
         self.trailer_list = self.trailers.get_trailer_dict( genre )
-        if type( self.trailer_list.values()[0] ) == str:
-            dialog = xbmcgui.DialogProgress()
-            header = 'Fetching movie information..'
-            line1 = 'Please wait a moment.'
-            errorline = ''
-            dialog.create( header, line1 )
-            dialog.update( 0 ) # hide the progress bar until it's needed
-            position = 0 # to keep track of the position we are at in the trailer_list, for percentage computation
-            percentage = 0
-            for title in self.trailer_list: # fill the information first
-                dialog.update( percentage, line1, 'Fetching: ' + title, errorline )
-                try:
-                    # get the info url (this url will not be saved after we are done here)
-                    movie_info_url = self.trailer_list[title]
-                    # retrieve trailer information (don't overwrite the original title value, we don't want to cause problems with indexing)
-                    title2, thumbnail, description, urls = self.trailers.get_trailer_info( movie_info_url )
-                    # download the actual thumbnail to the local filesystem (or get the cached filename)
-                    thumbnail = fetcher.urlretrieve( thumbnail )
-                    if not thumbnail:
-                        # default if the actual thumbnail couldn't be found for some reason
-                        thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
-                    # save all this info to the trailer list under this title
-                    # { title: [ thumbnail, description, url ] }
-                    self.trailer_list[title] = [ thumbnail, description, urls[0] ]
-                except:
-                    errorline = 'Error retrieving one or more titles.'
-                # if the user pushed cancel, we end retrieval here
-                if dialog.iscanceled():
-                    break
-                # update the progress dialog
-                position += 1
-                percentage = int( float( position ) / len( self.trailer_list ) * 100 )
-                dialog.update( percentage )
         titles = self.trailer_list.keys()
         titles.sort()
         for title in titles: # now fill the list control
@@ -181,7 +148,9 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Info']['control'].controlRight( self.controls[button]['control'] )
         
     def getTrailerInfo( self, choice ):
+        genre = self.controls['Category Label']['control'].getLabel()
         title = choice.getLabel()
+        self.trailers.get_trailer_info( genre, title )
         self.showTrailerInfo( title )
     
     def getTrailer( self, choice ):
