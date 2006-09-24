@@ -34,6 +34,9 @@ class Trailers:
         import pickle
         self.genres = dict()
         self.__update_genre_list__()
+        datadir = os.path.dirname( self.DATAFILE )
+        if not os.path.isdir( datadir ):
+            os.path.mkdir( datadir )
         datafile = open( self.DATAFILE, 'w' )
         pickle.dump( self.genres, datafile )
         datafile.close()
