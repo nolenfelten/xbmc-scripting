@@ -272,7 +272,7 @@
 			<posx>211</posx>
 			<posy>370</posy>
 			<align>left</align>
-			<label>Movie Title Goes Here</label>
+			<label>Movie Title</label>
 			<font>special13</font>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
