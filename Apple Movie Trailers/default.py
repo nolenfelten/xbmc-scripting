@@ -10,7 +10,19 @@ __credits__ = 'XBMC TEAM, efnet/#xbmc-scripting'
 __version__ = '1.0 pre-release'
 
 if __name__ == '__main__':
-    ui = gui.GUI()
-    if ui.SUCCEEDED:
-        ui.doModal()
-    del ui
+    try:
+        ui = gui.GUI()
+        if ui.SUCCEEDED:
+            ui.doModal()
+    except:
+        import traceback
+        traceback.print_exc()
+        try:
+            ui.close()
+        except:
+            pass
+    try:
+        del ui
+    except:
+        pass
+    sys.exit()

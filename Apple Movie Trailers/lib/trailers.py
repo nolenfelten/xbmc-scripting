@@ -36,7 +36,7 @@ class Trailers:
         self.__update_genre_list__()
         datadir = os.path.dirname( self.DATAFILE )
         if not os.path.isdir( datadir ):
-            os.path.makedirs( datadir )
+            os.makedirs( datadir )
         datafile = open( self.DATAFILE, 'w' )
         pickle.dump( self.genres, datafile )
         datafile.close()
@@ -72,8 +72,79 @@ class Trailers:
         # make self.genres as such:
         #   {
         #       'special': {
-        #           'Exclusives': category_url,
-        #           'Newest': category_url,
+        #           'Exclusives': {
+        #               movie_title: movie_url
+        #           }
+        #           'Newest': {
+        #               movie_title: movie_url
+        #           }
+        #       }
+        #       'standard': {
+        #       }
+        #   }
+        dialog = xbmcgui.DialogProgress()
+        dialog_header = 'Fetching category and genre information..'
+        dialog_line1 = 'Please wait a moment.'
+        dialog_errorline = ''
+        dialog_percentage = 0
+        dialog.create( dialog_header, dialog_line1 )
+        dialog.update( dialog_percentage )
+        pos = 0
+        for each in self.genres['special']:
+            try:
+                dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
+                self.genres['special'][each] = self.__update_trailer_dict__( each )
+            except:
+                dialog_errorline = 'Error retrieving information for one or more genres.'
+            pos += 1
+            dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
+        dialog.close()
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           'Exclusives': {
+        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
+        #           }
+        #           'Newest': {
+        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
+        #           }
+        #       }
+        #       'standard': {
+        #       }
+        #   }
+        dialog = xbmcgui.DialogProgress()
+        dialog_header = 'Fetching movie information..'
+        dialog_errorline = ''
+        genre_percentage = 0
+        dialog.create( dialog_header )
+        dialog.update( dialog_percentage )
+        # special
+        genre_pos = 0
+        for genre in self.genres['special']:
+            movie_pos = 0
+            print 'Updating:', genre
+            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
+            if dialog.iscanceled():
+                break
+            movie_percentage = 0
+            for movie in self.genres['special'][genre]:
+                print 'Updating:', movie
+                if dialog.iscanceled():
+                    break
+                try:
+                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
+                except:
+                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
+                movie_pos += 1
+                movie_percentage = float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage
+            genre_pos += 1
+            genre_percentage = float( genre_pos ) / len( self.genres['special'] ) * 100
+        dialog.close()
+        # make self.genres as such:
+        #   {
+        #       'special': {
+        #           ...
         #       }
         #       'standard': {
         #           genre: genre_url,
@@ -107,8 +178,7 @@ class Trailers:
         # make self.genres as such:
         #   {
         #       'special': {
-        #           'Exclusives': category_url,
-        #           'Newest': category_url,
+        #           ...
         #       }
         #       'standard': {
         #           genre: {
@@ -138,8 +208,7 @@ class Trailers:
         # make self.genres as such:
         #   {
         #       'special': {
-        #           'Exclusives': category_url,
-        #           'Newest': category_url,
+        #           ...
         #       }
         #       'standard': {
         #           genre: {
@@ -154,26 +223,6 @@ class Trailers:
         genre_percentage = 0
         dialog.create( dialog_header )
         dialog.update( dialog_percentage )
-        # special
-        genre_pos = 0
-        for genre in self.genres['special']:
-            movie_pos = 0
-            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
-            if dialog.iscanceled():
-                break
-            movie_percentage = 0
-            for movie in self.genres['special'][genre]:
-                if dialog.iscanceled():
-                    break
-                try:
-                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
-                    self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
-                except:
-                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
-                movie_pos += 1
-                movie_percentage = float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage
-            genre_pos += 1
-            genre_percentage = float( genre_pos ) / len( self.genres['special'] ) * 100
         # standard
         genre_pos = 0
         for genre in self.genres['standard']:
