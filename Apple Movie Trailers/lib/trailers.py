@@ -26,10 +26,16 @@ class Trailers:
                 raise
             datafile = open( self.DATAFILE, 'r' )
             self.genres = pickle.load( datafile )
+            datafile.close()
         except:
-            self.__update_genre_list__()
-            datafile = open( self.DATAFILE, 'w' )
-            pickle.dump( self.genres, datafile )
+            self.update_all()
+
+    def update_all():
+        import pickle
+        self.genres = dict()
+        self.__update_genre_list__()
+        datafile = open( self.DATAFILE, 'w' )
+        pickle.dump( self.genres, datafile )
         datafile.close()
 
     def __update_genre_list__( self ):
