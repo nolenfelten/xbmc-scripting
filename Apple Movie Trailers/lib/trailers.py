@@ -129,7 +129,7 @@ class Trailers:
                 break
             movie_percentage = 0
             for movie in self.genres['special'][genre]:
-                print genre + ':', movie
+                ##print genre + ':', movie
                 if dialog.iscanceled():
                     break
                 try:
@@ -247,8 +247,8 @@ class Trailers:
         dialog.close()
 
     def __update_trailer_dict__( self, genre ):
-        print '---- update_trailer_dict ----'
-        print 'genre:', genre
+        ##print '---- update_trailer_dict ----'
+        ##print 'genre:', genre
         """
             return a dict with movie titles and urls for the given genre
         """
@@ -262,16 +262,16 @@ class Trailers:
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
         element = ET.fromstring( element )
-        print element.getchildren()
+        ##print element.getchildren()
         lookup = 'GotoURL'
         if not isSpecial:
             lookup = ns( lookup )
         elements = element.getiterator( lookup )
-        print elements
+        ##print elements
         trailer_dict = dict()
         for element in elements:
             url2 = element.get( 'url' )
-            print url2
+            ##print url2
             title = None
             if isSpecial:
                 title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
