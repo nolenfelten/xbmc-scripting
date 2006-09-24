@@ -384,7 +384,10 @@ class Trailers:
         return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
-        thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+        if genre in self.genres['special']:
+            thumbnail, description, urls = self.genres['special'][genre][movie_title]
+        else:
+            thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         return [ thumbnail, description ]
 
     def get_exclusives_list( self ):
