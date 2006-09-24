@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, traceback
 sys.path.append( os.path.join( sys.path[0], 'lib' ) )
 
 import gui
@@ -15,14 +15,8 @@ if __name__ == '__main__':
         if ui.SUCCEEDED:
             ui.doModal()
     except:
-        import traceback
         traceback.print_exc()
-        try:
-            ui.close()
-        except:
-            pass
     try:
         del ui
     except:
         pass
-    sys.exit()
