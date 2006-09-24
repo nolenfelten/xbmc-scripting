@@ -14,9 +14,6 @@ if __name__ == '__main__':
         ui = gui.GUI()
         if ui.SUCCEEDED:
             ui.doModal()
-    except:
-        traceback.print_exc()
-    try:
         del ui
     except:
-        pass
+        traceback.print_exc()

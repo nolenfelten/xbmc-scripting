@@ -34,7 +34,7 @@
 			<description>description label</description>
 			<type>label</type>
 			<id>1</id>
-			<width>150</width>
+			<width>200</width>
 			<posx>207</posx>
 			<posy>63</posy>
 			<align>left</align>
@@ -48,7 +48,7 @@
 			<id>5</id>
 			<posx>650</posx>
 			<posy>63</posy>
-			<width>250</width>
+			<width>300</width>
 			<height>35</height>
 			<align>right</align>
 			<label>Exclusives</label>
@@ -80,10 +80,10 @@
 		</control>
 
 		<control>
-			<description>Exclusives Button</description>
+			<description>Newest Button</description>
 			<type>button</type>
 			<id>10</id>
-			<label>Exclusives</label>
+			<label>Newest</label>
 			<posx>50</posx>
 			<posy>120</posy>
 			<onleft>210</onleft>
@@ -95,10 +95,10 @@
 		</control>
 
 		<control>
-			<description>Newest Button</description>
+			<description>Exclusives Button</description>
 			<type>button</type>
 			<id>20</id>
-			<label>Newest</label>
+			<label>Exclusives</label>
 			<posx>50</posx>
 			<posy>157</posy>
 			<onleft>210</onleft>
@@ -134,7 +134,7 @@
 			<label>Genre</label>
 			<posx>50</posx>
 			<!-- <posy>268</posy> -->
-			<posy>231</posy>
+			<posy>211</posy>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<!-- <onup>30</onup> -->
@@ -143,6 +143,23 @@
 			<include>buttonpanelslide</include>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
+		
+		<control>
+			<description>Genre Label</description>
+			<type>label</type>
+			<id>51</id>
+			<label>&lt;none&gt;</label>
+			<posx>50</posx>
+			<!-- <posy>268</posy> -->
+			<posy>248</posy>
+			<font>font10</font>
+			<include>textcolorgrey</include>
+			<width>150</width>
+			<include>buttonpanelslide</include>
+			<align>center</align>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
 
 		<control>
 			<description>Settings Button</description>
