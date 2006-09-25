@@ -313,6 +313,63 @@
 			<visible>false</visible>
 		</control>
 
+		<control>
+			<description>X Button On</description>
+			<id>300</id>
+			<type>image</type>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>button-X.png</texture>
+			<!--visible>Player.HasMedia</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<id>301</id>
+			<description>X Button Off</description>
+			<type>image</type>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>button-X-turnedoff.png</texture>
+			<!--visible>!Player.Hasmedia</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Full-Screen Visualisation Label</description>
+			<id>302</id>
+			<type>label</type>
+			<font>font12</font>
+			<posx>115</posx>
+			<posy>528</posy>
+			<width>250</width>
+			<label>Full Screen Visualization</label>
+			<align>left</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<visible>false</visible>
+			<!--visible>Player.HasAudio</visible-->
+		</control>
+
+		<control>
+			<description>Full-Screen Video Label</description>
+			<id>303</id>
+			<type>label</type>
+			<font>font12</font>
+			<posx>50</posx>
+			<posy>500</posy>
+			<label>Video Playing</label>
+			<align>center</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>false</visible!-->
+			<visible>Player.HasVideo</visible>
+		</control>
+
 	</controls>
 
 </window>

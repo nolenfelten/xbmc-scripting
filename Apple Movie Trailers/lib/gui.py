@@ -40,6 +40,7 @@ class GUI( xbmcgui.Window ):
         #self.genre = 'Newest'
 
     def setupConstants( self ):
+        self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = {
             216 : 'Remote Back Button',
             247 : 'Remote Menu Button',
@@ -56,7 +57,14 @@ class GUI( xbmcgui.Window ):
             272 : 'DPad Left',
             273 : 'DPad Right'
         }
-
+    
+    # this function is used for skins like XBMC360 that have player information on screen
+    def myPlayerChanged(self):
+        self.controls['X Button On']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button On']['visible'] ) )
+        self.controls['X Button Off']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button Off']['visible'] ) )
+        self.controls['Full-Screen Visualisation Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Visualisation Label']['visible'] ) )
+        self.controls['Full-Screen Video Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Video Label']['visible'] ) )
+        
     def createConf( self, filename ):
         try:
             if ( not os.path.isfile( filename + '.conf' ) ):
@@ -67,12 +75,13 @@ class GUI( xbmcgui.Window ):
 
     def showVideo( self, title ):
         filename = self.trailers.get_video( self.genre, title )
-        #self.setCategoryLabel('G:%s T:%s' % (self.genre, title,))
         #xbmc.output('Apple Movie Trailers: url = %s' % ( filename, ) )
-        if filename:
+        try:
             ## don't create conf file for streaming
             #    self.createConf( filename )
-            xbmc.Player( xbmc.PLAYER_CORE_MPLAYER ).play( filename )
+            self.MyPlayer.play( filename )
+        except:
+            xbmc.output('ERROR: playing url = %s' % ( filename, ) )
 
     def showTrailerInfo( self, title ):
         thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
@@ -217,3 +226,22 @@ class GUI( xbmcgui.Window ):
                 elif ( control is self.controls['Settings Button']['control'] ):
                     self.setListNavigation('Settings Button')
         except: print 'ERROR: in onAction'
+
+
+
+## Thanks Thor918 for this class ##
+class MyPlayer(xbmc.Player):
+    def  __init__(self, *args, **kwargs):
+        if (kwargs.has_key('function')): 
+            self.function = kwargs['function']
+            xbmc.Player.__init__(self)
+    
+    def onPlayBackStopped(self):
+        self.function()
+    
+    def onPlayBackEnded(self):
+        self.function()
+    
+    def onPlayBackStarted(self):
+        self.function()
+    

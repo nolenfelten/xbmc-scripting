@@ -141,13 +141,14 @@ class GUIBuilder:
 				self.includesExist = False
 			self.pct1 = int((100 - self.pct) * 0.333)
 			self.parseSkinFile(imagePath, skinXML)
-			if (self.includesExist): self.incdoc.unlink()
 			if (self.win.SUCCEEDED): self.setNav()
 			if (not self.win.SUCCEEDED): raise
 			else:
 				if (self.defaultControl and self.win.controls.has_key(self.navigation[self.defaultControl][0])):
 					self.win.setFocus(self.win.controls[self.navigation[self.defaultControl][0]]['control'])
 				self.setCondVisibility()
+				if (self.includesExist): self.incdoc.unlink()
+				self.clearVariables()
 			if (not self.fastMethod): self.dlg.close()
 		except:
 			self.win.SUCCEEDED = False
@@ -184,6 +185,15 @@ class GUIBuilder:
 		self.debugWrite('initVariables', True)
 
 
+	def clearVariables(self):
+		self.navigation						= None
+		self.m_references	 				= None
+		self.resPath 						= None
+		self.resolutions 					= None
+		self.resPath						= None
+		self.currentResolution 			= None
+		self.resolution						= None
+		
 	def GetConditionalVisibility(self, conditions):
 		if (len(conditions) == 0): return 'true'
 		if (len(conditions) == 1): return conditions[0]
