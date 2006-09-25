@@ -8,9 +8,9 @@ class GUI( xbmcgui.Window ):
         if ( not self.SUCCEEDED ): self.close()
         else:
             #########################################
+            ## remove when settings are done
             self.controls['Settings Button']['control'].setEnabled(False)
             #########################################
-            #self.initVariables()
             self.setupConstants()
             self.trailers = trailers.Trailers()
             self.showCategories()
@@ -34,11 +34,6 @@ class GUI( xbmcgui.Window ):
             skin = 'Default'
         return skin
 
-    #def initVariables( self ):
-        #self.currentList = 'Newest List'
-        #self.previousList = self.currentList
-        #self.genre = 'Newest'
-
     def setupConstants( self ):
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = {
@@ -60,6 +55,8 @@ class GUI( xbmcgui.Window ):
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
+        ## need to force a screen refresh for this to update properly
+        ## any ideas???
         self.controls['X Button On']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button On']['visible'] ) )
         self.controls['X Button Off']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button Off']['visible'] ) )
         self.controls['Full-Screen Visualisation Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Visualisation Label']['visible'] ) )
@@ -74,14 +71,28 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showVideo( self, title ):
-        filename = self.trailers.get_video( self.genre, title )
-        #xbmc.output('Apple Movie Trailers: url = %s' % ( filename, ) )
+        #filename = self.trailers.get_video( self.genre, title )
+        trailer_urls = self.trailers.get_video( self.genre, title )
+        print trailer_urls
+        ## test code for our own select dialog
+        #filename = trailer_urls[0].replace( '//', '/' ).replace( '/', '//', 1 )
+        #print filename
+        dialog = xbmcgui.Dialog()
+        trailer_url_filenames = list()
+        res = ['low quality', 'medium quality','high quality']
+        for cnt, each in enumerate( trailer_urls ):
+            trailer_url_filenames.append( res[cnt] )
+            if ( cnt == 2 ): break
+        choice = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
+        
         try:
-            ## don't create conf file for streaming
-            #    self.createConf( filename )
-            self.MyPlayer.play( filename )
+            if (choice != -1 ):
+                filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                ## don't create conf file for streaming
+                #    self.createConf( filename )
+                self.MyPlayer.play( filename )
         except:
-            xbmc.output('ERROR: playing url = %s' % ( filename, ) )
+            xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
 
     def showTrailerInfo( self, title ):
         thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
@@ -115,6 +126,7 @@ class GUI( xbmcgui.Window ):
             titles = self.trailers.get_trailer_list( genre )
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                ## remove thumbnail from list to save memory
                 l = xbmcgui.ListItem( title, '', thumbnail )
                 self.controls['Trailer List']['control'].addItem( l )
     
@@ -128,18 +140,15 @@ class GUI( xbmcgui.Window ):
         self.close()
     
     def showList( self, key ):
-        #self.previousList = self.currentList
-        #self.currentList = key
         self.controls['Exclusives List']['control'].setVisible( key == 'Exclusives List' )
         self.controls['Exclusives List']['control'].setEnabled( key == 'Exclusives List' )
         self.controls['Newest List']['control'].setVisible( key == 'Newest List' )
         self.controls['Newest List']['control'].setEnabled( key == 'Newest List' )
-        #self.controls['Featured HD List']['control'].setVisible( key == 'Featured HD List' )
         self.controls['Genre List']['control'].setVisible( key == 'Genre List' )
         self.controls['Genre List']['control'].setEnabled( key == 'Genre List' )
         self.controls['Trailer List']['control'].setVisible( key == 'Trailer List' )
         self.controls['Trailer List']['control'].setEnabled( key == 'Trailer List' )
-        # until initial visibilty is solved just hardcode them
+        ## until initial visibilty is solved just hardcode them
         #self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
         #self.controls['Trailer Title']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Title']['visible'] ) )
         #self.controls['Trailer Info']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Info']['visible'] ) )
@@ -147,9 +156,6 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Title']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setEnabled( key != 'Genre List' )
-        #if ( key != 'Trailer List' ):
-        #    self.setCategoryLabel( key[:-5] )
-        #else:
         self.setCategoryLabel( self.genre )    
         self.setFocus(self.controls[key]['control'])
         
@@ -169,7 +175,6 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Info']['control'].controlRight( self.controls[button]['control'] )
         
     def getTrailerInfo( self, choice ):
-        #genre = self.controls['Category Label']['control'].getLabel()
         title = choice.getLabel()
         self.showTrailerInfo( title )
     
@@ -190,8 +195,6 @@ class GUI( xbmcgui.Window ):
                 self.setGenre( 'Newest' )
             elif ( control is self.controls['Exclusives Button']['control'] ):
                 self.setGenre( 'Exclusives' )
-            # elif ( control == self.controls['Featured HD Button']['control'] ):
-                # self.showList( 'Featured HD List' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
             elif ( control is self.controls['Genre List']['control'] ):

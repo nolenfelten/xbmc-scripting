@@ -356,13 +356,14 @@ class Trailers:
                 if text in trailer_urls:
                     continue
                 trailer_urls += [ text ]
-            dialog = xbmcgui.Dialog()
-            trailer_url_filenames = list()
-            for each in trailer_urls:
-                trailer_url_filenames += [ os.path.split( each )[1] ]
-            selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
-            filename = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
-            return filename
+            #dialog = xbmcgui.Dialog()
+            #trailer_url_filenames = list()
+            #for each in trailer_urls:
+            #    trailer_url_filenames += [ os.path.split( each )[1] ]
+            #selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
+            #filename = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
+            #return filename
+            return trailer_urls
         except:
             return None
 
