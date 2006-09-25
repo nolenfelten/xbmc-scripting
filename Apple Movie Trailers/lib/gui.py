@@ -1,10 +1,6 @@
 import xbmc, xbmcgui
 import sys, os
-import cachedhttp_mod as cachedhttp
 import trailers
-
-fetcher = cachedhttp.CachedHTTP()
-fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
