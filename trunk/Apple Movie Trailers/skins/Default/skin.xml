@@ -15,7 +15,7 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>background-videos.png</texture>
+			<texture>\backgroundamtrc1ok5.png</texture>
 		</control>
 
 		<control>
@@ -369,6 +369,7 @@
 			<!--visible>false</visible!-->
 			<visible>Player.HasVideo</visible>
 		</control>
+
 
 	</controls>
 
