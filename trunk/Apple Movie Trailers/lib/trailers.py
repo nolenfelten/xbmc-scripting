@@ -1,6 +1,6 @@
 import os, sys
 import xbmc, xbmcgui
-import cachedhttp_mod as cachedhttp
+import httplib2_mod as httplib2
 import elementtree.ElementTree as ET
 
 def append_ns( text ):
@@ -11,8 +11,7 @@ def append_ns( text ):
     return '/'.join( result )
 ns = append_ns
 
-fetcher = cachedhttp.CachedHTTP()
-fetcher_with_dialog = cachedhttp.CachedHTTPWithProgress()
+fetcher = httplib2.Http_mod( os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'cache' ) )
 
 class Trailers:
     def __init__( self ):
@@ -247,8 +246,6 @@ class Trailers:
         dialog.close()
 
     def __update_trailer_dict__( self, genre ):
-        ##print '---- update_trailer_dict ----'
-        ##print 'genre:', genre
         """
             return a dict with movie titles and urls for the given genre
         """
@@ -262,16 +259,13 @@ class Trailers:
         if '<Document' not in element:
             element = '<Document>' + element + '</Document>'
         element = ET.fromstring( element )
-        ##print element.getchildren()
         lookup = 'GotoURL'
         if not isSpecial:
             lookup = ns( lookup )
         elements = element.getiterator( lookup )
-        ##print elements
         trailer_dict = dict()
         for element in elements:
             url2 = element.get( 'url' )
-            ##print url2
             title = None
             if isSpecial:
                 title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
@@ -368,7 +362,6 @@ class Trailers:
                 trailer_url_filenames += [ os.path.split( each )[1] ]
             selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
             filename = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
-            # filename = fetcher.urlretrieve( selection )
             return filename
         except:
             return None
