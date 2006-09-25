@@ -1,16 +1,14 @@
 import xbmc, xbmcgui
 import sys, os
-import trailers
+import trailers, threading
+import guibuilder
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
+        self.getSettings()
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
-            #########################################
-            ## remove when settings are done
-            self.controls['Settings Button']['control'].setEnabled(False)
-            #########################################
             self.setupConstants()
             self.trailers = trailers.Trailers()
             self.showCategories()
@@ -18,23 +16,37 @@ class GUI( xbmcgui.Window ):
             self.getTrailerInfo(  self.controls['Newest List']['control'].getSelectedItem() )
 
     def setupGUI(self):
-        import guibuilder
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        self.skinPath = os.path.join( skinPath, self.getSkin( skinPath ) )
+        self.skinPath = os.path.join( skinPath, self.settings['skin'] )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'skin.xml' ), self.imagePath, useDescAsKey=True, debug=False )
-        del guibuilder
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'skin.xml' ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
 
-    def getSkin( self, skinPath ):
+    def getSettings( self ):
         try:
-            f = open( os.path.join( skinPath, 'currentskin.txt' ) )
-            skin = f.read()
+            self.settings = {}
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
+            settings = f.read().split('|')
+            f.close()
+            self.settings['trailer size'] = int( settings[0] )
+            self.settings['download trailer'] = int( settings[1] )
+            self.settings['skin'] = settings[2]
+        except:
+            self.settings = {'trailer size' : 2, 'download trailer' : False, 'skin' : 'default'}
+                
+    def saveSettings( self ):
+        try:
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
+            settings = '%d|%d|%s' % ( self.settings['trailer size'], self.settings['download trailer'], self.settings['skin'], )
+            f.write(settings)
             f.close()
         except:
-            skin = 'Default'
-        return skin
+            dialog = xbmcgui.Dialog()
+            ok = dialog.ok('Apple Movie Trailers', 'There was an error saving your settings.')
 
     def setupConstants( self ):
+        # self.Timer is currently used for the Player() subclass to update screen on a onPlayback* event
+        self.Timer = threading.Timer(60*60, self.exitScript,() )
+        self.Timer.start()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = {
             216 : 'Remote Back Button',
@@ -55,8 +67,6 @@ class GUI( xbmcgui.Window ):
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
-        ## need to force a screen refresh for this to update properly
-        ## any ideas???
         self.controls['X Button On']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button On']['visible'] ) )
         self.controls['X Button Off']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button Off']['visible'] ) )
         self.controls['Full-Screen Visualisation Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Visualisation Label']['visible'] ) )
@@ -71,26 +81,18 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showVideo( self, title ):
-        #filename = self.trailers.get_video( self.genre, title )
         trailer_urls = self.trailers.get_video( self.genre, title )
-        print trailer_urls
-        ## test code for our own select dialog
-        #filename = trailer_urls[0].replace( '//', '/' ).replace( '/', '//', 1 )
-        #print filename
-        dialog = xbmcgui.Dialog()
-        trailer_url_filenames = list()
-        res = ['low quality', 'medium quality','high quality']
-        for cnt, each in enumerate( trailer_urls ):
-            trailer_url_filenames.append( res[cnt] )
-            if ( cnt == 2 ): break
-        choice = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
-        
+        if ( self.settings['trailer size'] > len( trailer_urls ) ):
+            choice = len( trailer_urls ) - 1
+        else:
+            choice = self.settings['trailer size']
         try:
-            if (choice != -1 ):
+            if ( not self.settings['download trailer'] ):
                 filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                self.MyPlayer.play( filename )
+            #else:
                 ## don't create conf file for streaming
                 #    self.createConf( filename )
-                self.MyPlayer.play( filename )
         except:
             xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
 
@@ -137,6 +139,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Genre List']['control'].addItem( l )
 
     def exitScript(self):
+        if ( self.Timer ): self.Timer.cancel()
         self.close()
     
     def showList( self, key ):
