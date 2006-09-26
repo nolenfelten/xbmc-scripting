@@ -33,16 +33,6 @@ class GUI( xbmcgui.Window ):
         except:
             self.settings = {'trailer size' : 2, 'download trailer' : False, 'skin' : 'default'}
                 
-    def saveSettings( self ):
-        try:
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-            settings = '%d|%d|%s' % ( self.settings['trailer size'], self.settings['download trailer'], self.settings['skin'], )
-            f.write(settings)
-            f.close()
-        except:
-            dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Apple Movie Trailers', 'There was an error saving your settings.')
-
     def setupConstants( self ):
         # self.Timer is currently used for the Player() subclass to update screen on a onPlayback* event
         self.Timer = threading.Timer(60*60, self.exitScript,() )
@@ -160,7 +150,7 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Title']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setEnabled( key != 'Genre List' )
-        self.setCategoryLabel( self.genre )    
+        self.setCategoryLabel( self.genre )
         self.setFocus(self.controls[key]['control'])
         
     def setGenre( self, genre ):
@@ -201,6 +191,9 @@ class GUI( xbmcgui.Window ):
                 self.setGenre( 'Exclusives' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
+            elif ( control is self.controls['Settings Button']['control'] ):
+                self.settingsGUI = settingsGUI()
+                self.settingsGUI.show()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
             elif ( control is self.controls['Exclusives List']['control'] or\
@@ -234,6 +227,48 @@ class GUI( xbmcgui.Window ):
                     self.setListNavigation('Settings Button')
         except: print 'ERROR: in onAction'
 
+
+class settingsGUI( xbmcgui.WindowDialog ):
+    def __init__( self ):
+        self.getSettings()
+        self.setupGUI()
+        if ( not self.SUCCEEDED ): self.close()
+
+    def setupGUI(self):
+        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        self.skinPath = os.path.join( skinPath, self.settings['skin'] )
+        self.imagePath = os.path.join( self.skinPath, 'gfx' )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'settings.xml' ), self.imagePath, useDescAsKey=True, fastMethod=True, debug=False )
+
+    def getSettings( self ):
+        try:
+            self.settings = {}
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
+            settings = f.read().split('|')
+            f.close()
+            self.settings['trailer size'] = int( settings[0] )
+            self.settings['download trailer'] = int( settings[1] )
+            self.settings['skin'] = settings[2]
+        except:
+            self.settings = {'trailer size' : 2, 'download trailer' : False, 'skin' : 'default'}
+
+    def saveSettings( self ):
+        try:
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
+            settings = '%d|%d|%s' % ( self.settings['trailer size'], self.settings['download trailer'], self.settings['skin'], )
+            f.write(settings)
+            f.close()
+        except:
+            dialog = xbmcgui.Dialog()
+            ok = dialog.ok('Apple Movie Trailers', 'There was an error saving your settings.')
+        self.close()
+
+    def onControl( self, control ):
+        if ( control is self.controls['Cancel Button']['control'] ):
+            self.close()
+        elif ( control is self.controls['Ok Button']['control'] ):
+            self.saveSettings()
+            
 
 
 ## Thanks Thor918 for this class ##

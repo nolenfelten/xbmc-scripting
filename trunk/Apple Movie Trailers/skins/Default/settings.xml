@@ -1,0 +1,211 @@
+<window>
+ <id>130</id>
+ <defaultcontrol>10</defaultcontrol>
+ <coordinates>
+   <system>1</system>
+   <posx>161</posx>
+   <posy>132</posy>
+ </coordinates>
+ <resolution>PAL</resolution>
+
+<controls>
+
+ <control>
+	<description>backdrop</description>
+	<type>image</type>
+	<id>0</id>
+	<posx>-300</posx>
+	<posy>-300</posy>
+	<width>1300</width>
+	<height>1300</height>
+	<texture>black.png</texture>
+ </control>
+
+ <control>
+	<description>background image</description>
+	<type>image</type>
+	<id>1</id>
+	<posx>-25</posx>
+	<posy>-11</posy>
+	<width>446</width>
+	<height>406</height>
+	<texture>dialog-panelprofile.png</texture>
+ </control>
+
+ <control>
+	<description>profile image</description>
+	<type>image</type>
+	<id>2</id>
+	<posx>0</posx>
+	<posy>8</posy>
+	<width>120</width>
+	<height>120</height>
+	<texture>unknown-user.png</texture>
+ </control>
+
+ <control>
+	<description>Title Label</description>
+	<type>label</type>
+	<id>1</id>
+	<posx>20</posx>
+	<posy>6</posy>
+	<width>280</width>
+	<align>left</align>
+	<font>special13</font>
+	<textcolor>60ffffff</textcolor>
+	<!--textcolor>DDced8da</textcolor-->
+	<label>Apple Movie Trailers Settings</label>
+ </control>
+  
+   <control>
+	<description>Trailer Size Button</description>
+	<type>button</type>
+	<id>10</id>
+	<posx>10</posx>
+	<posy>75</posy>
+	<width>150</width>
+	<height>32</height>
+	<align>left</align>
+	<aligny>center</aligny>
+	<label>Trailer Quality: High</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>10</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>30</onup>
+	<ondown>20</ondown>
+ </control>
+
+ <control>
+	<description>Download Button</description>
+	<type>button</type>
+	<id>20</id>
+	<posx>10</posx>
+	<posy>120</posy>
+	<width>150</width>
+	<height>32</height>
+	<align>left</align>
+	<aligny>center</aligny>
+	<label>Mode: Stream</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>10</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>10</onup>
+	<ondown>30</ondown>
+ </control>
+
+ <control>
+	<description>List Header</description>
+	<type>label</type>
+	<id>1</id>
+	<posx>20</posx>
+	<posy>172</posy>
+	<width>280</width>
+	<align>left</align>
+	<font>font10</font>
+	<textcolor>60ffffff</textcolor>
+	<!--textcolor>DDced8da</textcolor-->
+	<label>Choose a skin</label>
+ </control>
+
+
+  <control>
+  <description>Skin List</description>
+  <type>listcontrol</type>
+  <id>30</id>
+  <label>default</label>
+  <label>Future</label>
+  <posx>-20</posx>
+  <posy>195</posy>
+  <width>150</width>
+  <height>100</height>
+  <spinwidth>18</spinwidth>
+  <spinheight>16</spinheight>
+  <spinposx>419</spinposx>
+  <spinposy>404</spinposy>
+  <spincolor>ffffffff</spincolor>
+  <spinfont>font10</spinfont>
+  <textureup>scroll-up.png</textureup>
+  <texturedown>scroll-down.png</texturedown>
+  <textureupfocus>scroll-up-focus.png</textureupfocus>
+  <texturedownfocus>scroll-down-focus.png</texturedownfocus>
+  <texturefocus>list-focus.png</texturefocus>
+  <texturenofocus>list-nofocus.png</texturenofocus>
+  <image>icon-folder.png</image>
+  <textureheight>25</textureheight>
+  <font>font10</font>
+  <textcolor>ffffffff</textcolor>
+  <suffix>|</suffix>
+  <textxoff>0</textxoff>
+  <textxoff2>0</textxoff2>
+  <aligny>center</aligny>
+  	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>20</onup>
+	<ondown>10</ondown>
+
+ </control>
+
+ <!--control>
+	<description>separator image</description>
+	<type>image</type>
+	<id>11</id>
+	<width>350</width>
+	<height>5</height>
+	<texture>separatorOSD.png</texture>
+	<include>homemisc</include>
+ </control-->
+
+ <control>
+	<description>Ok Button</description>
+	<type>button</type>
+	<id>100</id>
+	<posx>223</posx>
+	<posy>325</posy>
+	<width>90</width>
+	<height>32</height>
+	<align>center</align>
+	<aligny>center</aligny>
+	<label>186</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>17</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>10</onleft>
+	<onright>150</onright>
+	<onup>30</onup>
+	<ondown>10</ondown>
+ </control>
+
+ <control>
+	<description>Cancel Button</description>
+	<type>button</type>
+	<id>150</id>
+	<posx>318</posx>
+	<posy>325</posy>
+	<width>90</width>
+	<height>32</height>
+	<align>center</align>
+	<aligny>center</aligny>
+	<label>222</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>17</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>100</onleft>
+	<onright>10</onright>
+	<onup>30</onup>
+	<ondown>10</ondown>
+ </control>
+
+ </controls>
+</window>
