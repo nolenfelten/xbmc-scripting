@@ -29,7 +29,7 @@
 	<posy>-11</posy>
 	<width>446</width>
 	<height>406</height>
-	<texture>\background-settings.png</texture>
+	<texture>\background-settings_16x9.png</texture>
  </control>
  <!--control>
 	<description>profile image</description>

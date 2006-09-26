@@ -15,7 +15,7 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>\background_169.png</texture>
+			<texture>\background_16x9.png</texture>
 		</control>
 
 		<control>
@@ -83,8 +83,8 @@
 			<description>q backdrop image</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>280</posx>
-			<posy>150</posy>
+			<posx>260</posx>
+			<posy>130</posy>
 			<width>375</width>
 			<height>373</height>
 			<aspectratio>keep</aspectratio>
@@ -329,7 +329,7 @@
 			<posx>211</posx>
 			<posy>400</posy>
 			<width>445</width>
-			<height>150</height>
+			<height>153</height>
 			<font>font12</font>
 			<onup>210</onup>
 			<ondown>210</ondown>
