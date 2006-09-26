@@ -1,7 +1,8 @@
 import xbmc, xbmcgui
 import sys, os
 import trailers, threading
-import guibuilder, settings
+import guibuilder, settingsGUI
+import settings_util
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -23,20 +24,10 @@ class GUI( xbmcgui.Window ):
         if ( res == 0 or res % 2 ): skin = 'skin_wide.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=True )
 
     def getSettings( self ):
-        try:
-            self.settings = {}
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
-            settings = f.read().split('|')
-            f.close()
-            self.settings['trailer quality'] = int( settings[0] )
-            self.settings['mode'] = int( settings[1] )
-            self.settings['skin'] = settings[2]
-            self.settings['save folder'] = settings[3]
-        except:
-            self.settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'default', 'save folder' : 'f:\\'}
+        self.settings = settings_util.getSettings()
 
     def setupConstants( self ):
         # self.Timer is currently used for the Player() subclass so when an onPlayback* event occurs, it's instant.
@@ -198,7 +189,7 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
             elif ( control is self.controls['Settings Button']['control'] ):
-                self.settingsGUI = settings.settingsGUI()
+                self.settingsGUI = settingsGUI.GUI()
                 self.settingsGUI.doModal()
                 del self.settingsGUI
                 self.getSettings()

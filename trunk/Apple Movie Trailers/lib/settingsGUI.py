@@ -1,13 +1,14 @@
 import xbmc, xbmcgui
 import os, guibuilder
+import settings_util
 
-
-class settingsGUI( xbmcgui.WindowDialog ):
+class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
-        self.getSettings()
+        self.settings = settings_util.getSettings()
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
-        else: 
+        else:
+            self.skin = self.settings['skin']
             self.setupConstants()
             self.setControlsValues()
 
@@ -39,19 +40,6 @@ class settingsGUI( xbmcgui.WindowDialog ):
             273 : 'DPad Right'
         }
     
-    def getSettings( self ):
-        try:
-            self.settings = {}
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
-            settings = f.read().split('|')
-            f.close()
-            self.settings['trailer quality'] = int( settings[0] )
-            self.settings['mode'] = int( settings[1] )
-            self.settings['skin'] = settings[2]
-            self.settings['save folder'] = settings[3]
-        except:
-            self.settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'default', 'save folder' : 'f:\\'}
-        self.skin = self.settings['skin']
         
     def setControlsValues( self ):
         quality = ['Low', 'Medium', 'High']
@@ -63,19 +51,15 @@ class settingsGUI( xbmcgui.WindowDialog ):
         self.controls['Skin Button']['control'].setLabel( 'Skin: %s' % (self.settings['skin'], ) )
 
     def saveSettings( self ):
-        try:
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-            settings = '%d|%d|%s|%s' % ( self.settings['trailer quality'], self.settings['mode'], self.settings['skin'], self.settings['save folder'], )
-            f.write(settings)
-            f.close()
-        except:
+        ret = settings_util.saveSettings( self.settings )
+        if ( not ret ):
             dialog = xbmcgui.Dialog()
             ok = dialog.ok( 'Apple Movie Trailers', 'There was an error saving your settings.' )
-            self.skin = None
-        if ( self.skin and self.skin != self.settings['skin']):
-            dialog = xbmcgui.Dialog()
-            ok = dialog.ok( 'Apple Movie Trailers', "The skin change won't take affect until you restart." )
-        self.closeDialog()
+        else:
+            if ( self.skin != self.settings['skin']):
+                dialog = xbmcgui.Dialog()
+                ok = dialog.ok( 'Apple Movie Trailers', "The skin change won't take affect until you restart." )
+            self.closeDialog()
 
     def toggleTrailerQuality( self ):
         quality = ['Low', 'Medium', 'High']
