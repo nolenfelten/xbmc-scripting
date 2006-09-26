@@ -30,31 +30,33 @@ class Http_mod:
 
     def urlopen( self, url ):
         filename = self.urlretrieve( url )
+        datafile = None
         try:
-            data = open( filename, 'r' ).read()
-        except:
-            data = ''
+            try:
+                # datafile = file( filename, 'rb' )
+                datafile = file( filename, 'r' )
+                data = datafile.read()
+            except:
+                data = ''
+        finally:
+            if datafile:
+                datafile.close()
         return data
 
     def urlretrieve( self, url ):
         response, content = self.fetcher.request( url )
         filename = os.path.join( self.cache_dir, self.fetcher.cache.last_accessed_file )
         if content:
-            file = None
+            datafile = None
             try:
                 try:
-                    print 'attempting to write:', filename
-                    file = open( filename, 'w' )
-                    print repr( content[:100] )
-                    file.write( content )
+                    # datafile = file( filename, 'wb' )
+                    datafile = file( filename, 'w' )
+                    datafile.write( content )
                 except:
                     import traceback
                     traceback.print_exc()
             finally:
-                if file:
-                    file.close()
-        print 'cached file:', filename
+                if datafile:
+                    datafile.close()
         return filename
-
-    def get_cache_location( self ):
-        return self.fetcher.cache.cache
