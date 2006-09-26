@@ -16,35 +16,45 @@ class FileCache_mod( FileCache ):
         FileCache.__init__( self, actual_cache )
 
     def get( self, key ):
-        retval = FileCache.get( self, key )
-        cache_dir = os.path.dirname( self.cache )
-        self.last_accessed_file = os.path.join( cache_dir, key )
-        return retval
+        self.last_accessed_file = key
+        return FileCache.get( self, key )
 
     def set( self, key, value ):
-        retval = FileCache.set( self, key, value )
-        cache_dir = os.path.dirname( self.cache )
-        self.last_accessed_file = os.path.join( cache_dir, key )
-        try:
-            file = open( self.last_accessed_file, 'w' )
-            file.write( value.split( '\r\n\r\n', 1 )[1] )
-            file.close
-        except:
-            self.last_accessed_file = None
-        return retval
+        self.last_accessed_file = key
+        return FileCache.set( self, key, value )
 
 class Http_mod:
     def __init__( self, cache ):
+        self.cache_dir = cache
         self.fetcher = Http( FileCache_mod( cache ) )
 
     def urlopen( self, url ):
         filename = self.urlretrieve( url )
-        data = open( filename, 'r' ).read()
+        try:
+            data = open( filename, 'r' ).read()
+        except:
+            data = ''
         return data
 
     def urlretrieve( self, url ):
-        self.fetcher.request( url )
-        return self.fetcher.cache.last_accessed_file
+        response, content = self.fetcher.request( url )
+        filename = os.path.join( self.cache_dir, self.fetcher.cache.last_accessed_file )
+        if content:
+            file = None
+            try:
+                try:
+                    print 'attempting to write:', filename
+                    file = open( filename, 'w' )
+                    print repr( content[:100] )
+                    file.write( content )
+                except:
+                    import traceback
+                    traceback.print_exc()
+            finally:
+                if file:
+                    file.close()
+        print 'cached file:', filename
+        return filename
 
     def get_cache_location( self ):
         return self.fetcher.cache.cache
