@@ -80,6 +80,19 @@
 		</control>
 
 		<control>
+			<description>q backdrop image</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>280</posx>
+			<posy>150</posy>
+			<width>375</width>
+			<height>373</height>
+			<aspectratio>keep</aspectratio>
+			<texture>\q_backdrop.png</texture>
+		</control>
+
+
+		<control>
 			<description>Newest Button</description>
 			<type>button</type>
 			<id>10</id>
@@ -268,9 +281,23 @@
 		<!-- start of the info controls -->
 		
 		<control>
-			<description>Trailer Thumbnail</description>
+			<description>Trailer Backdrop</description>
 			<type>image</type>
 			<id>200</id>
+			<posx>498</posx>
+			<posy>118</posy>
+			<width>174</width>
+			<height>254</height>
+			<texture>\t_backdrop.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer Thumbnail</description>
+			<type>image</type>
+			<id>201</id>
 			<posx>500</posx>
 			<posy>120</posy>
 			<width>170</width>
