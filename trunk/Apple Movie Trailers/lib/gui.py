@@ -1,7 +1,7 @@
 import xbmc, xbmcgui
 import sys, os
 import trailers, threading
-import guibuilder
+import guibuilder, settings
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -19,7 +19,11 @@ class GUI( xbmcgui.Window ):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'skin.xml' ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
+        res = self.getResolution()
+        if ( res == 0 or res % 2 ): skin = 'skin_wide.xml'
+        else: skin = 'skin.xml'
+        if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
 
     def getSettings( self ):
         try:
@@ -29,13 +33,13 @@ class GUI( xbmcgui.Window ):
             f.close()
             self.settings['trailer quality'] = int( settings[0] )
             self.settings['mode'] = int( settings[1] )
-            self.settings['save folder'] = settings[2]
-            self.settings['skin'] = settings[3]
+            self.settings['skin'] = settings[2]
+            self.settings['save folder'] = settings[3]
         except:
-            self.settings = {'trailer quality' : 2, 'mode' : 0, 'save folder' : 'f:\\', 'skin' : 'default'}
+            self.settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'default', 'save folder' : 'f:\\'}
 
     def setupConstants( self ):
-        # self.Timer is currently used for the Player() subclass to update screen on a onPlayback* event
+        # self.Timer is currently used for the Player() subclass so when an onPlayback* event occurs, it's instant.
         self.Timer = threading.Timer(60*60, self.exitScript,() )
         self.Timer.start()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
@@ -73,12 +77,12 @@ class GUI( xbmcgui.Window ):
 
     def showVideo( self, title ):
         trailer_urls = self.trailers.get_video( self.genre, title )
-        if ( self.settings['trailer size'] > len( trailer_urls ) ):
+        if ( self.settings['trailer quality'] > len( trailer_urls ) ):
             choice = len( trailer_urls ) - 1
         else:
-            choice = self.settings['trailer size']
+            choice = self.settings['trailer quality']
         try:
-            if ( not self.settings['download trailer'] ):
+            if ( self.settings['mode'] == 0):
                 filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 self.MyPlayer.play( filename )
             #else:
@@ -166,7 +170,7 @@ class GUI( xbmcgui.Window ):
         self.controls['Category Label']['control'].setLabel( category )
             
     def setListNavigation( self, button ):
-        self.controls['Exclusives List']['control'].controlLeft( self.controls[button]['control'] )
+        self.controls['Newest List']['control'].controlLeft( self.controls[button]['control'] )
         self.controls['Trailer Info']['control'].controlRight( self.controls[button]['control'] )
         
     def getTrailerInfo( self, choice ):
@@ -193,8 +197,9 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
             elif ( control is self.controls['Settings Button']['control'] ):
-                self.settingsGUI = settingsGUI()
+                self.settingsGUI = settings.settingsGUI()
                 self.settingsGUI.doModal()
+                del self.settingsGUI
                 self.getSettings()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
@@ -229,151 +234,6 @@ class GUI( xbmcgui.Window ):
                     self.setListNavigation('Settings Button')
         except: print 'ERROR: in onAction'
 
-
-class settingsGUI( xbmcgui.WindowDialog ):
-    def __init__( self ):
-        self.getSettings()
-        self.setupGUI()
-        if ( not self.SUCCEEDED ): self.close()
-        else: 
-            self.setupConstants()
-            self.setControlsValues()
-
-    def setupGUI(self):
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        self.skinPath = os.path.join( skinPath, self.settings['skin'] )
-        self.imagePath = os.path.join( self.skinPath, 'gfx' )
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, 'settings.xml' ), self.imagePath, useDescAsKey=True, fastMethod=True, debug=False )
-
-    def setupConstants( self ):
-        self.controllerAction = {
-            216 : 'Remote Back Button',
-            247 : 'Remote Menu Button',
-            256 : 'A Button',
-            257 : 'B Button',
-            258 : 'X Button',
-            259 : 'Y Button',
-            260 : 'Black Button',
-            261 : 'White Button',
-            274 : 'Start Button',
-            275 : 'Back Button',
-            270 : 'DPad Up',
-            271 : 'DPad Down',
-            272 : 'DPad Left',
-            273 : 'DPad Right'
-        }
-    
-    def getSettings( self ):
-        try:
-            self.settings = {}
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
-            settings = f.read().split('|')
-            f.close()
-            self.settings['trailer quality'] = int( settings[0] )
-            self.settings['mode'] = int( settings[1] )
-            self.settings['save folder'] = settings[2]
-            self.settings['skin'] = settings[3]
-        except:
-            self.settings = {'trailer quality' : 2, 'mode' : 0, 'save folder' : 'f:\\', 'skin' : 'default'}
-        
-    def setControlsValues( self ):
-        quality = ['low', 'medium', 'high']
-        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: %s' % ( quality[self.settings['trailer quality']], ) )
-        mode = ['stream', 'download']
-        self.controls['Mode Button']['control'].setLabel( 'Mode: %s' % ( mode[self.settings['mode']], ) )
-        self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: %s' % ( self.settings['save folder'], ) )
-        #self.controls['Save Folder Label']['control'].setLabel( self.settings['save folder'] )
-        self.controls['Skin Button']['control'].setLabel( 'Skin: %s' % (self.settings['skin'], ) )
-
-    def saveSettings( self ):
-        try:
-            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-            settings = '%d|%d|%s|%s' % ( self.settings['trailer quality'], self.settings['mode'], self.settings['save folder'], self.settings['skin'], )
-            f.write(settings)
-            f.close()
-        except:
-            dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Apple Movie Trailers', 'There was an error saving your settings.')
-        self.close()
-
-    def toggleTrailerQuality( self ):
-        quality = ['low', 'medium', 'high']
-        tq = self.settings['trailer quality'] + 1
-        if ( tq > 2 ): tq = 0
-        self.settings['trailer quality'] = tq
-        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: %s' % ( quality[tq], ) )
-      
-    def toggleMode( self ):
-        mode = ['stream', 'download']
-        m = self.settings['mode'] + 1
-        if ( m > 1 ): m = 0
-        self.settings['mode'] = m
-        self.controls['Mode Button']['control'].setLabel( 'Mode: %s' % ( mode[m], ) )
-
-    def browseForFolder( self ):
-        dialog = xbmcgui.Dialog()
-        folder = dialog.browse( 0, 'a save folder', 'files' )
-        if ( folder ):
-            self.settings['save folder'] = folder
-            self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: %s' % ( folder, ) )
-#            self.controls['Save Folder Label']['control'].setLabel( folder )
-            
-    def chooseSkin( self ):
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        self.showPopup( 'choose your skin', os.listdir( skinPath ) )
-        
-    def getThumb( self, choice ):
-        thumbnail = os.path.join( os.getcwd(), 'skins', choice.getLabel(), 'thumbnail.tbn' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        if ( os.path.isfile( thumbnail ) ):
-            self.controls['Popup Thumb']['control'].setImage( thumbnail )
-        else:
-            self.controls['Popup Thumb']['control'].setImage( '' )
-        
-    def hidePopup( self ):
-        self.setPopupVisibility( False )
-        self.setFocus( self.controls['Skin Button']['control'] )
-    
-    def showPopup( self, title, items ):
-        self.controls['Popup Label']['control'].setLabel( title )
-        self.controls['Popup List']['control'].reset()
-        for item in items:
-            self.controls['Popup List']['control'].addItem( item )
-        self.setPopupVisibility( True )
-        self.setFocus( self.controls['Popup List']['control'] )
-        
-    def setPopupVisibility( self, visible ):
-        self.controls['Popup Image']['control'].setVisible( visible )
-        self.controls['Popup Thumb']['control'].setVisible( visible )
-        self.controls['Popup Label']['control'].setVisible( visible )
-        self.controls['Popup List']['control'].setVisible( visible )
-    
-    def onControl( self, control ):
-        if ( control is self.controls['Cancel Button']['control'] ):
-            self.close()
-        elif ( control is self.controls['Ok Button']['control'] ):
-            self.saveSettings()
-        elif ( control is self.controls['Trailer Quality Button']['control'] ):
-            self.toggleTrailerQuality()
-        elif ( control is self.controls['Mode Button']['control'] ):
-            self.toggleMode()
-        elif ( control is self.controls['Save Folder Button']['control'] ):
-            self.browseForFolder()
-        elif ( control is self.controls['Skin Button']['control'] ):
-            self.chooseSkin()
-        elif ( control is self.controls['Popup List']['control'] ):
-            self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
-            self.controls['Skin Button']['control'].setLabel( 'Skin: %s' % (self.settings['skin'], ) )
-            self.hidePopup()
-            
-    def onAction( self, action ):
-        control = self.getFocus()
-        buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
-        if ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' or 
-            buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button'):
-            if ( control == self.controls['Popup List']['control']): self.hidePopup()
-            else: self.close()
-        elif ( control == self.controls['Popup List']['control'] ):
-            self.getThumb( control.getSelectedItem() )
 
 
 ## Thanks Thor918 for this class ##

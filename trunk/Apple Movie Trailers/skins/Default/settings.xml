@@ -31,7 +31,7 @@
 	<height>406</height>
 	<texture>dialog-panelprofile.png</texture>
  </control>
- <control>
+ <!--control>
 	<description>profile image</description>
 	<type>image</type>
 	<id>2</id>
@@ -40,13 +40,13 @@
 	<width>120</width>
 	<height>120</height>
 	<texture>unknown-user.png</texture>
- </control>
+ </control-->
 
  <control>
 	<description>Title Label</description>
 	<type>label</type>
 	<id>1</id>
-	<posx>20</posx>
+	<posx>10</posx>
 	<posy>6</posy>
 	<width>280</width>
 	<align>left</align>
@@ -101,7 +101,7 @@
  </control>
 
  <control>
-	<description>Save Folder Button</description>
+	<description>Skin Button</description>
 	<type>button</type>
 	<id>30</id>
 	<posx>10</posx>
@@ -137,7 +137,7 @@
  </control-->
 
  <control>
-	<description>Skin Button</description>
+	<description>Save Folder Button</description>
 	<type>button</type>
 	<id>40</id>
 	<posx>10</posx>
@@ -231,7 +231,7 @@
 	<description>Popup Label</description>
 	<type>label</type>
 	<id>1</id>
-	<posx>100</posx>
+	<posx>105</posx>
 	<posy>105</posy>
 	<width>280</width>
 	<align>left</align>

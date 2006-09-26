@@ -297,7 +297,6 @@ class GUIBuilder:
 				#self.win.controlKey[ctl.getId()] = key
 				self.navigation[int(control['id'])] = (key, int(control['onup']), int(control['ondown']), int(control['onleft']), int(control['onright']))
 				ctl.setVisible(xbmc.getCondVisibility(control['visible']))
-				#print "%s = %s (%d)" % (key, xbmc.getCondVisibility(control['visible']), ctl.getId(),)
 			except: pass
 		except:
 			if (not self.fastMethod): self.dlg.close()
@@ -598,10 +597,7 @@ class GUIBuilder:
 				# set the controls new visible condition
 				if (visibleChanged): self.win.controls[key]['visible'] = visible
 				# set the controls initial visibility
-				#print "%s = %s (%d) %s" % (key, xbmc.getCondVisibility(visible), self.win.controls[key]['controlId'], visible,)
 				self.win.controls[key]['control'].setVisible(xbmc.getCondVisibility(visible))
-				#s = 'control.isvisible(%d)' % (self.win.controls[key]['controlId'],)
-				#print '%s - %s %s' % (s, key, (xbmc.getCondVisibility(s) == 1),)
 			except: pass
 		self.debugWrite('setCondVisibility', True)
 

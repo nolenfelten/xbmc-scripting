@@ -3,7 +3,7 @@
 	<id>1156</id>
 	<allowoverlay>no</allowoverlay>
 	<defaultcontrol always="false">10</defaultcontrol>
-	<resolution>PAL</resolution>
+	<resolution>PAL16x9</resolution>
 
 	<controls>
 
@@ -15,7 +15,7 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>\background.png</texture>
+			<texture>\background_169.png</texture>
 		</control>
 
 		<control>
