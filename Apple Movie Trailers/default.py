@@ -1,4 +1,6 @@
 import sys, os, traceback
+
+scriptpath = sys.path[0]
 sys.path.append( os.path.join( sys.path[0], 'lib' ) )
 
 import gui
@@ -9,11 +11,27 @@ __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, efnet/#xbmc-scripting'
 __version__ = '1.0 pre-release'
 
+def py_cleanup():
+    for root, dirs, files in os.walk( scriptpath, topdown = False ):
+        if 'cache' in root:
+            continue
+        for name in files:
+            if os.path.splitext( name )[1] in [ '.pyc', '.pyo' ]:
+                os.remove( os.path.join( root, name ) )
+
 if __name__ == '__main__':
     try:
-        ui = gui.GUI()
-        if ui.SUCCEEDED:
-            ui.doModal()
-        del ui
-    except:
-        traceback.print_exc()
+        try:
+            ui = gui.GUI()
+            if ui.SUCCEEDED:
+                ui.doModal()
+        except:
+            traceback.print_exc()
+    finally:
+        try:
+            ui.close()
+            del ui
+        except:
+            pass
+        py_cleanup()
+
