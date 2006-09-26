@@ -135,6 +135,7 @@ class GUI( xbmcgui.Window ):
 
     def exitScript(self):
         if ( self.Timer ): self.Timer.cancel()
+        self.trailers.cleanup()
         self.close()
     
     def showList( self, key ):
