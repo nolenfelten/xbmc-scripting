@@ -547,19 +547,19 @@ class GUIBuilder:
 
 
 	def setNav(self):
-		try:
+		try: #self.navigation[int(control['id'])] = (key, int(control['onup']), int(control['ondown']), int(control['onleft']), int(control['onright']))
 			if (not self.fastMethod): 
 				self.lines[self.lineno + 1]	= 'setting up navigation...'
 				t = len(self.navigation)
 			for cnt, item in enumerate(self.navigation.values()):
 				if (not self.fastMethod): self.dlg.update(int((float(self.pct1) / float(t) * (cnt + 1)) + self.pct), self.lines[0], self.lines[1], self.lines[2])
-				if (self.win.controls.has_key(self.navigation[item[1]][0])):
+				if (self.navigation.has_key(item[1]) and self.win.controls.has_key(self.navigation[item[1]][0])):
 					self.win.controls[item[0]]['control'].controlUp(self.win.controls[self.navigation[item[1]][0]]['control'])
-				if (self.win.controls.has_key(self.navigation[item[2]][0])):
+				if (self.navigation.has_key(item[2]) and self.win.controls.has_key(self.navigation[item[2]][0])):
 					self.win.controls[item[0]]['control'].controlDown(self.win.controls[self.navigation[item[2]][0]]['control'])
-				if (self.win.controls.has_key(self.navigation[item[3]][0])):
+				if (self.navigation.has_key(item[3]) and self.win.controls.has_key(self.navigation[item[3]][0])):
 					self.win.controls[item[0]]['control'].controlLeft(self.win.controls[self.navigation[item[3]][0]]['control'])
-				if (self.win.controls.has_key(self.navigation[item[4]][0])):
+				if (self.navigation.has_key(item[4]) and self.win.controls.has_key(self.navigation[item[4]][0])):
 					self.win.controls[item[0]]['control'].controlRight(self.win.controls[self.navigation[item[4]][0]]['control'])
 			self.pct += self.pct1
 			self.debugWrite('setNavigation', True)
