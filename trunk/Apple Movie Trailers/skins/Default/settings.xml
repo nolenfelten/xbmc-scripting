@@ -31,7 +31,6 @@
 	<height>406</height>
 	<texture>dialog-panelprofile.png</texture>
  </control>
-
  <control>
 	<description>profile image</description>
 	<type>image</type>
@@ -63,7 +62,7 @@
 	<id>10</id>
 	<posx>10</posx>
 	<posy>75</posy>
-	<width>150</width>
+	<width>200</width>
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
@@ -85,7 +84,7 @@
 	<id>20</id>
 	<posx>10</posx>
 	<posy>120</posy>
-	<width>150</width>
+	<width>200</width>
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
@@ -107,7 +106,7 @@
 	<id>30</id>
 	<posx>10</posx>
 	<posy>165</posy>
-	<width>150</width>
+	<width>200</width>
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
@@ -123,7 +122,7 @@
 	<ondown>40</ondown>
  </control>
 
-<control>
+<!--control>
 	<description>Save Folder Label</description>
 	<type>label</type>
 	<id>1</id>
@@ -133,9 +132,9 @@
 	<align>left</align>
 	<font>font10</font>
 	<textcolor>60ffffff</textcolor>
-	<!--textcolor>DDced8da</textcolor-->
+	<textcolor>DDced8da</textcolor>
 	<label>(f:\videos\trailers\)</label>
- </control>
+ </control-->
 
  <control>
 	<description>Skin Button</description>
@@ -143,7 +142,7 @@
 	<id>40</id>
 	<posx>10</posx>
 	<posy>210</posy>
-	<width>150</width>
+	<width>200</width>
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
@@ -158,53 +157,6 @@
 	<onup>30</onup>
 	<ondown>10</ondown>
  </control>
-
-  <control>
-  <description>Skin List</description>
-  <type>listcontrol</type>
-  <id>50</id>
-  <label>default</label>
-  <label>Future</label>
-  <posx>10</posx>
-  <posy>250</posy>
-  <width>150</width>
-  <height>150</height>
-  <spinwidth>18</spinwidth>
-  <spinheight>16</spinheight>
-  <spinposx>419</spinposx>
-  <spinposy>404</spinposy>
-  <spincolor>ffffffff</spincolor>
-  <spinfont>font10</spinfont>
-  <textureup>scroll-up.png</textureup>
-  <texturedown>scroll-down.png</texturedown>
-  <textureupfocus>scroll-up-focus.png</textureupfocus>
-  <texturedownfocus>scroll-down-focus.png</texturedownfocus>
-  <texturefocus>list-focus.png</texturefocus>
-  <texturenofocus>list-nofocus.png</texturenofocus>
-  <image>icon-folder.png</image>
-  <textureheight>25</textureheight>
-  <font>font10</font>
-	<textcolor>60ffffff</textcolor>
-  <suffix>|</suffix>
-  <textxoff>0</textxoff>
-  <textxoff2>0</textxoff2>
-  <aligny>center</aligny>
-  	<onleft>150</onleft>
-	<onright>100</onright>
-	<onup>40</onup>
-	<ondown>10</ondown>
-
- </control>
-
- <!--control>
-	<description>separator image</description>
-	<type>image</type>
-	<id>11</id>
-	<width>350</width>
-	<height>5</height>
-	<texture>separatorOSD.png</texture>
-	<include>homemisc</include>
- </control-->
 
  <control>
 	<description>Ok Button</description>
@@ -248,6 +200,77 @@
 	<onright>10</onright>
 	<onup>30</onup>
 	<ondown>10</ondown>
+ </control>
+ 
+ <control>
+	<description>Popup Image</description>
+	<type>image</type>
+	<id>1</id>
+	<posx>90</posx>
+	<posy>100</posy>
+	<width>220</width>
+	<height>200</height>
+	<texture>dialog-panel.png</texture>
+	<visible>false</visible>
+ </control>
+ 
+ <control>
+	<description>Popup Thumb</description>
+	<type>image</type>
+	<id>1</id>
+	<posx>195</posx>
+	<posy>143</posy>
+	<width>128</width>
+	<height>72</height>
+	<texture>-</texture>
+	<visible>false</visible>
+	<aspectratio>keep</aspectratio>
+ </control>
+ 
+ <control>
+	<description>Popup Label</description>
+	<type>label</type>
+	<id>1</id>
+	<posx>100</posx>
+	<posy>105</posy>
+	<width>280</width>
+	<align>left</align>
+	<font>font10</font>
+	<textcolor>60ffffff</textcolor>
+	<!--textcolor>DDced8da</textcolor-->
+	<label>choose skin</label>
+	<visible>false</visible>
+ </control>
+ 
+  <control>
+  <description>Popup List</description>
+  <type>listcontrol</type>
+  <id>500</id>
+  <posx>100</posx>
+  <posy>145</posy>
+  <width>100</width>
+  <height>130</height>
+  <spinwidth>18</spinwidth>
+  <spinheight>16</spinheight>
+  <spinposx>419</spinposx>
+  <spinposy>404</spinposy>
+  <spincolor>ffffffff</spincolor>
+  <spinfont>font10</spinfont>
+  <textureup>scroll-up.png</textureup>
+  <texturedown>scroll-down.png</texturedown>
+  <textureupfocus>scroll-up-focus.png</textureupfocus>
+  <texturedownfocus>scroll-down-focus.png</texturedownfocus>
+  <texturefocus>list-focus.png</texturefocus>
+  <texturenofocus>list-nofocus.png</texturenofocus>
+  <image>icon-folder.png</image>
+  <textureheight>20</textureheight>
+  <font>font10</font>
+	<textcolor>ffffffff</textcolor>
+  <suffix>|</suffix>
+  <textxoff>-20</textxoff>
+  <textxoff2>0</textxoff2>
+  <aligny>center</aligny>
+  <visible>false</visible>
  </control>
 
  </controls>
