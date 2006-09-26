@@ -27,7 +27,7 @@ class FileCache_mod( FileCache ):
         self.last_accessed_file = os.path.join( cache_dir, key )
         try:
             file = open( self.last_accessed_file, 'w' )
-            file.write( '\r\n\r\n'.join( value.split( '\r\n\r\n' )[1:] ) )
+            file.write( value.split( '\r\n\r\n', 1 )[1] )
             file.close
         except:
             self.last_accessed_file = None
