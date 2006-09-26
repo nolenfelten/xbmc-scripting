@@ -155,6 +155,7 @@ class GUI( xbmcgui.Window ):
         #self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
         #self.controls['Trailer Title']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Title']['visible'] ) )
         #self.controls['Trailer Info']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Info']['visible'] ) )
+        self.controls['Trailer Backdrop']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Thumbnail']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Title']['control'].setVisible( key != 'Genre List' )
         self.controls['Trailer Info']['control'].setVisible( key != 'Genre List' )
