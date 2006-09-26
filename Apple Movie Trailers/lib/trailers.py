@@ -28,6 +28,10 @@ class Trailers:
             datafile.close()
         except:
             self.update_all()
+        del pickle
+
+    def cleanup( self ):
+        del self.genres
 
     def update_all( self ):
         import pickle
@@ -39,6 +43,7 @@ class Trailers:
         datafile = open( self.DATAFILE, 'w' )
         pickle.dump( self.genres, datafile )
         datafile.close()
+        del pickle
 
     def __update_genre_list__( self ):
         base_xml = fetcher.urlopen( self.BASEXML )
@@ -96,6 +101,7 @@ class Trailers:
             except:
                 import traceback
                 traceback.print_exc()
+                del traceback
                 dialog_errorline = 'Error retrieving information for one or more genres.'
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
