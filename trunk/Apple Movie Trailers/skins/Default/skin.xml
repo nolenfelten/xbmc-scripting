@@ -190,6 +190,22 @@
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
 
+		<control>
+			<description>Update Button</description>
+			<type>button</type>
+			<id>76</id>
+			<label>Update All</label>
+			<posx>50</posx>
+			<posy>500</posy>
+			<onleft>210</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>10</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+
 		<!-- start of list controls -->
 		
 		<control>
