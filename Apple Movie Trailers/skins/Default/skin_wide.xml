@@ -174,8 +174,8 @@
 			<label>Update All</label>
 			<posx>50</posx>
 			<posy>465</posy>
-			<onleft>210</onleft>
-			<onright>100</onright>
+			<onleft>60</onleft>
+			<onright>60</onright>
 			<onup>50</onup>
 			<ondown>10</ondown>
 			<texturefocus>\button-focus_arrows_16x9.png</texturefocus>
@@ -186,7 +186,7 @@
 		<!-- start of list controls -->
 		
 		<control>
-			<description>Newest List</description>
+			<description>Trailer List</description>
 			<type>listcontrol</type>
 			<id>100</id>
 			<width>270</width>
@@ -198,74 +198,21 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<onleft>10</onleft>
-			<onright>110</onright>
+			<onright>150</onright>
 			<visible>false</visible>
 		</control>
 		
-		<control>
-			<description>Exclusives List</description>
-			<type>listcontrol</type>
-			<id>110</id>
-			<width>270</width>
-			<height>235</height>
-			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<image>icon-folder.png</image>
-			<textxoff>3</textxoff>
-			<onup>110</onup>
-			<ondown>110</ondown>
-			<onleft>100</onleft>
-			<onright>130</onright>
-			<visible>false</visible>
-		</control>
-		
-		<!--
-		<control>
-			<description>Featured HD List</description>
-			<type>listcontrol</type>
-			<id>120</id>
-			<width>270</width>
-			<height>235</height>
-			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<image>icon-folder.png</image>
-			<textxoff>3</textxoff>
-			<onup>120</onup>
-			<ondown>120</ondown>
-			<onleft>30</onleft>
-			<onright>210</onright>
-			<visible>false</visible>
-		</control>
-		-->
-
 		<control>
 			<description>Genre List</description>
 			<type>listcontrol</type>
-			<id>130</id>
+			<id>150</id>
 			<texturefocus>list-focus.png</texturefocus>
 			<texturenofocus>list-nofocus.png</texturenofocus>
 			<image>icon-folder.png</image>
 			<textxoff>3</textxoff>
-			<onup>130</onup>
-			<ondown>130</ondown>
-			<onleft>110</onleft>
-			<onright>140</onright>
-			<visible>false</visible>
-		</control>
-
-		<control>
-			<description>Trailer List</description>
-			<type>listcontrol</type>
-			<id>140</id>
-			<width>270</width>
-			<height>235</height>
-			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<image>icon-folder.png</image>
-			<textxoff>3</textxoff>
-			<onup>140</onup>
-			<ondown>140</ondown>
-			<onleft>130</onleft>
+			<onup>150</onup>
+			<ondown>150</ondown>
+			<onleft>100</onleft>
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
@@ -325,7 +272,7 @@
 			<font>font12</font>
 			<onup>210</onup>
 			<ondown>210</ondown>
-			<onleft>140</onleft>
+			<onleft>150</onleft>
 			<onright>10</onright>
 			<include>controldefaults</include>
 			<!--visible>!Control.IsVisible(100)</visible-->

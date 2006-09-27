@@ -1,7 +1,7 @@
 import xbmc, xbmcgui
 import sys, os
 import trailers, threading
-import guibuilder, guiSettings
+import guibuilder, guisettings
 import amt_util
 
 class GUI( xbmcgui.Window ):
@@ -12,8 +12,9 @@ class GUI( xbmcgui.Window ):
         else:
             self.setupConstants()
             self.trailers = trailers.Trailers()
-            self.showCategories()
+            self.getGenreCategories()
             self.setStartupCategory()
+            ## enable when ready
             self.controls['Search Button']['control'].setEnabled( False )
             self.controls['Update Button']['control'].setEnabled( False )
     
@@ -35,8 +36,8 @@ class GUI( xbmcgui.Window ):
         self.setGenre( startup[self.settings['startup category']] )
         self.setListNavigation( '%s Button' % ( startup[self.settings['startup category']], ) )
         if ( startup[self.settings['startup category']] != 'Genre' ):
-            self.getTrailerInfo( self.controls['%s List' % ( startup[self.settings['startup category']], )]['control'].getSelectedItem() )
-
+            self.getTrailerInfo( self.controls['Trailer List']['control'].getSelectedItem() )
+            
     def setupConstants( self ):
         # self.Timer is currently used for the Player() subclass so when an onPlayback* event occurs, it's instant.
         self.Timer = threading.Timer(60*60, self.exitScript,() )
@@ -79,45 +80,30 @@ class GUI( xbmcgui.Window ):
         thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
         # Trailer Thumbnail
         self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
-        # Trailer Description
+        # Trailer Title
         self.controls['Trailer Title']['control'].setLabel( title )
+        # Trailer Description
         self.controls['Trailer Info']['control'].reset()
         if description:
             self.controls['Trailer Info']['control'].setText( description )
 
     def showTrailers( self, genre ):
         self.controls['Trailer List']['control'].reset()
-        self.controls['Exclusives List']['control'].reset()
-        self.controls['Newest List']['control'].reset()
-        if ( genre == 'Newest' ):
-            titles = self.trailers.get_newest_list()
-            for title in titles: # now fill the list control
-                thumbnail, description = self.trailers.get_trailer_info( genre, title )
-                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
-                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
-                l = xbmcgui.ListItem( title, '', thumbnail )
-                self.controls['Newest List']['control'].addItem( l )
-        elif ( genre == 'Exclusives' ):
-            titles = self.trailers.get_exclusives_list()
-            for title in titles: # now fill the list control
-                thumbnail, description = self.trailers.get_trailer_info( genre, title )
-                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
-                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
-                l = xbmcgui.ListItem( title, '', thumbnail )
-                self.controls['Exclusives List']['control'].addItem( l )
-        elif ( genre != 'Genre' ):
-            titles = self.trailers.get_trailer_list( genre )
-            for title in titles: # now fill the list control
-                thumbnail, description = self.trailers.get_trailer_info( genre, title )
-                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
-                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
-                l = xbmcgui.ListItem( title, '', thumbnail )
-                self.controls['Trailer List']['control'].addItem( l )
+        if ( genre == 'Newest' ): titles = self.trailers.get_newest_list()
+        elif ( genre == 'Exclusives' ): titles = self.trailers.get_exclusives_list()
+        else: titles = self.trailers.get_trailer_list( genre )
+        for title in titles: # now fill the list control
+            thumbnail, description = self.trailers.get_trailer_info( genre, title )
+            if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
+            elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
+            l = xbmcgui.ListItem( title, '', thumbnail )
+            self.controls['Trailer List']['control'].addItem( l )
     
-    def showCategories( self ):
+    def getGenreCategories( self ):
         self.controls['Genre List']['control'].reset()
+        thumbnail = os.path.join( self.imagePath, 'genre-thumbnail.tbn' )
         for genre in self.trailers.get_genre_list():
-            l = xbmcgui.ListItem( genre )
+            l = xbmcgui.ListItem( genre, '',  thumbnail)
             self.controls['Genre List']['control'].addItem( l )
 
     def exitScript(self):
@@ -125,37 +111,34 @@ class GUI( xbmcgui.Window ):
         self.trailers.cleanup()
         self.close()
     
-    def showList( self, key ):
-        self.controls['Exclusives List']['control'].setVisible( key == 'Exclusives List' )
-        self.controls['Exclusives List']['control'].setEnabled( key == 'Exclusives List' )
-        self.controls['Newest List']['control'].setVisible( key == 'Newest List' )
-        self.controls['Newest List']['control'].setEnabled( key == 'Newest List' )
-        self.controls['Genre List']['control'].setVisible( key == 'Genre List' )
-        self.controls['Genre List']['control'].setEnabled( key == 'Genre List' )
-        self.controls['Trailer List']['control'].setVisible( key == 'Trailer List' )
-        self.controls['Trailer List']['control'].setEnabled( key == 'Trailer List' )
+    def showList( self, Genre ):
+        self.controls['Genre List']['control'].setVisible( Genre )
+        self.controls['Genre List']['control'].setEnabled( Genre )
+        self.controls['Trailer List']['control'].setVisible( not Genre )
+        self.controls['Trailer List']['control'].setEnabled( not Genre )
         ## until initial visibilty is solved just hardcode them
         #self.controls['Trailer Thumbnail']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Thumbnail']['visible'] ) )
         #self.controls['Trailer Title']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Title']['visible'] ) )
         #self.controls['Trailer Info']['control'].setVisible(xbmc.getCondVisibility( self.controls['Trailer Info']['visible'] ) )
-        self.controls['Trailer Backdrop']['control'].setVisible( key != 'Genre List' )
-        self.controls['Trailer Thumbnail']['control'].setVisible( key != 'Genre List' )
-        self.controls['Trailer Title']['control'].setVisible( key != 'Genre List' )
-        self.controls['Trailer Info']['control'].setVisible( key != 'Genre List' )
-        self.controls['Trailer Info']['control'].setEnabled( key != 'Genre List' )
+        self.controls['Trailer Backdrop']['control'].setVisible( not Genre )
+        self.controls['Trailer Thumbnail']['control'].setVisible( not Genre )
+        self.controls['Trailer Title']['control'].setVisible( not Genre )
+        self.controls['Trailer Info']['control'].setVisible( not Genre )
+        self.controls['Trailer Info']['control'].setEnabled( not Genre )
         self.setCategoryLabel( self.genre )
-        self.setFocus(self.controls[key]['control'])
+        if ( Genre ): self.setFocus(self.controls['Genre List']['control'] )
+        else: self.setFocus(self.controls['Trailer List']['control'] )
         
     def setGenre( self, genre ):
         self.genre = genre
-        self.showTrailers( genre )
-        self.showList( '%s List' % (genre,) )
+        if ( genre != 'Genre' ): self.showTrailers( genre )
+        self.showList( genre == 'Genre' )
 
     def setCategoryLabel( self, category ):
         self.controls['Category Label']['control'].setLabel( category )
             
     def setListNavigation( self, button ):
-        self.controls['Newest List']['control'].controlLeft( self.controls[button]['control'] )
+        self.controls['Trailer List']['control'].controlLeft( self.controls[button]['control'] )
         self.controls['Trailer Info']['control'].controlRight( self.controls[button]['control'] )
         
     def getTrailerInfo( self, choice ):
@@ -169,9 +152,8 @@ class GUI( xbmcgui.Window ):
     def getTrailerGenre( self, choice ):
         self.genre = choice.getLabel()
         self.showTrailers( self.genre )
-        #self.setGenreLabel( self.genre )
         self.setCategoryLabel( self.genre )
-        self.showList( 'Trailer List' )
+        self.showList( False )
     
     def onControl( self, control ):
         try:
@@ -182,15 +164,13 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
             elif ( control is self.controls['Settings Button']['control'] ):
-                settings = guiSettings.GUI()
+                settings = guisettings.GUI()
                 settings.doModal()
                 #del settings
                 self.getSettings()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
-            elif ( control is self.controls['Exclusives List']['control'] or\
-                control is self.controls['Newest List']['control'] or\
-                control is self.controls['Trailer List']['control'] ):
+            elif ( control is self.controls['Trailer List']['control'] ):
                 self.getTrailer( control.getSelectedItem() )
         except: print 'ERROR: in onControl'
             
@@ -203,11 +183,7 @@ class GUI( xbmcgui.Window ):
                     self.setGenre( 'Genre' )
             else:
                 control = self.getFocus()
-                if ( 
-                        control is self.controls['Exclusives List']['control'] or
-                        control is self.controls['Newest List']['control'] or
-                        control is self.controls['Trailer List']['control']
-                    ):
+                if ( control is self.controls['Trailer List']['control'] ):
                     self.getTrailerInfo( control.getSelectedItem() )
                 elif ( control is self.controls['Exclusives Button']['control'] ):
                     self.setListNavigation('Exclusives Button')
