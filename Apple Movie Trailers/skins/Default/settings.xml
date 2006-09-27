@@ -60,7 +60,7 @@
 	<type>button</type>
 	<id>10</id>
 	<posx>0</posx>
-	<posy>90</posy>
+	<posy>70</posy>
 	<width>400</width>
 	<height>32</height>
 	<align>left</align>
@@ -82,7 +82,7 @@
 	<type>button</type>
 	<id>20</id>
 	<posx>0</posx>
-	<posy>125</posy>
+	<posy>105</posy>
 	<width>400</width>
 	<height>32</height>
 	<align>left</align>
@@ -104,7 +104,7 @@
 	<type>button</type>
 	<id>30</id>
 	<posx>0</posx>
-	<posy>160</posy>
+	<posy>140</posy>
 	<width>400</width>
 	<height>32</height>
 	<align>left</align>
@@ -126,7 +126,7 @@
 	<type>button</type>
 	<id>40</id>
 	<posx>0</posx>
-	<posy>195</posy>
+	<posy>175</posy>
 	<width>400</width>
 	<height>32</height>
 	<align>left</align>
@@ -148,7 +148,7 @@
 	<type>button</type>
 	<id>50</id>
 	<posx>0</posx>
-	<posy>230</posy>
+	<posy>210</posy>
 	<width>400</width>
 	<height>32</height>
 	<align>left</align>
@@ -162,9 +162,31 @@
 	<onleft>150</onleft>
 	<onright>100</onright>
 	<onup>40</onup>
-	<ondown>200</ondown>
+	<ondown>60</ondown>
  </control>
 
+ <control>
+	<description>Thumbnail Display Button</description>
+	<type>button</type>
+	<id>60</id>
+	<posx>0</posx>
+	<posy>245</posy>
+	<width>400</width>
+	<height>32</height>
+	<align>left</align>
+	<aligny>center</aligny>
+	<label>-</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>10</textoffsetx>
+	<texturefocus>input-focus.png</texturefocus>
+	<texturenofocus>-</texturenofocus>
+	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>50</onup>
+	<ondown>200</ondown>
+ </control>
+ 
  <control>
 	<description>Update Button</description>
 	<type>button</type>
@@ -183,7 +205,7 @@
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
 	<onleft>150</onleft>
 	<onright>100</onright>
-	<onup>50</onup>
+	<onup>60</onup>
 	<ondown>10</ondown>
  </control>
  

@@ -11,20 +11,23 @@ def getSettings():
         settings['skin'] = s[2]
         settings['save folder'] = s[3]
         settings['startup category'] = int( s[4] )
+        settings['thumbnail display'] = int( s[5] )
     except:
-        settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'default', 'save folder' : 'f:\\', 'startup category' : 0}
+        settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'Default', 'save folder' : 'f:\\', 'startup category' : 0, 'thumbnail display' : 1}
     return settings
 
 def saveSettings( settings ):
     try:
         f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-        strSettings = '%d|%d|%s|%s|%d' % ( settings['trailer quality'], settings['mode'], settings['skin'], settings['save folder'], settings['startup category'],)
+        strSettings = '%d|%d|%s|%s|%d|%d' % ( settings['trailer quality'], settings['mode'], settings['skin'], settings['save folder'], settings['startup category'], settings['thumbnail display'],)
         f.write(strSettings)
         f.close()
+        return True
     except:
         return False
-    else:
-        return True
+
+def setThumbnailDisplay():
+    return ['Movie Poster', 'Generic Thumb', 'Off']
 
 def setStartupCategory():
     return ['Newest', 'Exclusives', 'Genre']

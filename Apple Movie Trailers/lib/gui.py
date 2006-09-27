@@ -1,7 +1,7 @@
 import xbmc, xbmcgui
 import sys, os
 import trailers, threading
-import guibuilder, settingsGUI
+import guibuilder, guiSettings
 import amt_util
 
 class GUI( xbmcgui.Window ):
@@ -14,6 +14,8 @@ class GUI( xbmcgui.Window ):
             self.trailers = trailers.Trailers()
             self.showCategories()
             self.setStartupCategory()
+            self.controls['Search Button']['control'].setEnabled( False )
+            self.controls['Update Button']['control'].setEnabled( False )
     
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
@@ -31,9 +33,7 @@ class GUI( xbmcgui.Window ):
     def setStartupCategory( self ):
         startup = amt_util.setStartupCategory()
         self.setGenre( startup[self.settings['startup category']] )
-        try:
-            self.setListNavigation( '%s Button' % ( startup[self.settings['startup category']], ) )
-        except: 'fuck setnav'
+        self.setListNavigation( '%s Button' % ( startup[self.settings['startup category']], ) )
         if ( startup[self.settings['startup category']] != 'Genre' ):
             self.getTrailerInfo( self.controls['%s List' % ( startup[self.settings['startup category']], )]['control'].getSelectedItem() )
 
@@ -43,8 +43,6 @@ class GUI( xbmcgui.Window ):
         self.Timer.start()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = amt_util.setControllerAction()
-        #self.quality = amt_util.setQuality()
-        #self.mode = amt_util.setMode()
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
@@ -95,21 +93,24 @@ class GUI( xbmcgui.Window ):
             titles = self.trailers.get_newest_list()
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
+                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
                 l = xbmcgui.ListItem( title, '', thumbnail )
                 self.controls['Newest List']['control'].addItem( l )
-        
         elif ( genre == 'Exclusives' ):
             titles = self.trailers.get_exclusives_list()
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
+                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
+                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
                 l = xbmcgui.ListItem( title, '', thumbnail )
                 self.controls['Exclusives List']['control'].addItem( l )
-        
         elif ( genre != 'Genre' ):
             titles = self.trailers.get_trailer_list( genre )
             for title in titles: # now fill the list control
                 thumbnail, description = self.trailers.get_trailer_info( genre, title )
-                ## remove thumbnail from list to save memory
+                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
+                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
                 l = xbmcgui.ListItem( title, '', thumbnail )
                 self.controls['Trailer List']['control'].addItem( l )
     
@@ -149,10 +150,7 @@ class GUI( xbmcgui.Window ):
         self.genre = genre
         self.showTrailers( genre )
         self.showList( '%s List' % (genre,) )
-        
-    #def setGenreLabel( self, genre ):
-    #    self.controls['Genre Label']['control'].setLabel( '<%s>' % (genre,) )
-        
+
     def setCategoryLabel( self, category ):
         self.controls['Category Label']['control'].setLabel( category )
             
@@ -184,9 +182,9 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
             elif ( control is self.controls['Settings Button']['control'] ):
-                self.settingsGUI = settingsGUI.GUI()
-                self.settingsGUI.doModal()
-                del self.settingsGUI
+                settings = guiSettings.GUI()
+                settings.doModal()
+                #del settings
                 self.getSettings()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
@@ -217,8 +215,12 @@ class GUI( xbmcgui.Window ):
                     self.setListNavigation('Newest Button')
                 elif ( control is self.controls['Genre Button']['control'] ):
                     self.setListNavigation('Genre Button')
+                elif ( control is self.controls['Search Button']['control'] ):
+                    self.setListNavigation('Search Button')
                 elif ( control is self.controls['Settings Button']['control'] ):
                     self.setListNavigation('Settings Button')
+                elif ( control is self.controls['Update Button']['control'] ):
+                    self.setListNavigation('Update Button')
         except: print 'ERROR: in onAction'
 
 
