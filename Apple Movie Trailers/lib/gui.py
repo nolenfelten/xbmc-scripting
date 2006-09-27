@@ -2,7 +2,7 @@ import xbmc, xbmcgui
 import sys, os
 import trailers, threading
 import guibuilder, settingsGUI
-import settings_util
+import amt_util
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -13,9 +13,8 @@ class GUI( xbmcgui.Window ):
             self.setupConstants()
             self.trailers = trailers.Trailers()
             self.showCategories()
-            self.setGenre( 'Newest' )
-            self.getTrailerInfo(  self.controls['Newest List']['control'].getSelectedItem() )
-
+            self.setStartupCategory()
+    
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
@@ -27,29 +26,25 @@ class GUI( xbmcgui.Window ):
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
 
     def getSettings( self ):
-        self.settings = settings_util.getSettings()
+        self.settings = amt_util.getSettings()
+
+    def setStartupCategory( self ):
+        startup = amt_util.setStartupCategory()
+        self.setGenre( startup[self.settings['startup category']] )
+        try:
+            self.setListNavigation( '%s Button' % ( startup[self.settings['startup category']], ) )
+        except: 'fuck setnav'
+        if ( startup[self.settings['startup category']] != 'Genre' ):
+            self.getTrailerInfo( self.controls['%s List' % ( startup[self.settings['startup category']], )]['control'].getSelectedItem() )
 
     def setupConstants( self ):
         # self.Timer is currently used for the Player() subclass so when an onPlayback* event occurs, it's instant.
         self.Timer = threading.Timer(60*60, self.exitScript,() )
         self.Timer.start()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
-        self.controllerAction = {
-            216 : 'Remote Back Button',
-            247 : 'Remote Menu Button',
-            256 : 'A Button',
-            257 : 'B Button',
-            258 : 'X Button',
-            259 : 'Y Button',
-            260 : 'Black Button',
-            261 : 'White Button',
-            274 : 'Start Button',
-            275 : 'Back Button',
-            270 : 'DPad Up',
-            271 : 'DPad Down',
-            272 : 'DPad Left',
-            273 : 'DPad Right'
-        }
+        self.controllerAction = amt_util.setControllerAction()
+        #self.quality = amt_util.setQuality()
+        #self.mode = amt_util.setMode()
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
@@ -155,8 +150,8 @@ class GUI( xbmcgui.Window ):
         self.showTrailers( genre )
         self.showList( '%s List' % (genre,) )
         
-    def setGenreLabel( self, genre ):
-        self.controls['Genre Label']['control'].setLabel( '<%s>' % (genre,) )
+    #def setGenreLabel( self, genre ):
+    #    self.controls['Genre Label']['control'].setLabel( '<%s>' % (genre,) )
         
     def setCategoryLabel( self, category ):
         self.controls['Category Label']['control'].setLabel( category )
@@ -176,7 +171,7 @@ class GUI( xbmcgui.Window ):
     def getTrailerGenre( self, choice ):
         self.genre = choice.getLabel()
         self.showTrailers( self.genre )
-        self.setGenreLabel( self.genre )
+        #self.setGenreLabel( self.genre )
         self.setCategoryLabel( self.genre )
         self.showList( 'Trailer List' )
     

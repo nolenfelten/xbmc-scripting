@@ -157,13 +157,12 @@
 			<onclick>XBMC.ActivateWindow(34)</onclick>
 		</control>
 		
-		<control>
+		<!--control>
 			<description>Genre Label</description>
 			<type>label</type>
 			<id>51</id>
 			<label>&lt;none&gt;</label>
 			<posx>50</posx>
-			<!-- <posy>268</posy> -->
 			<posy>248</posy>
 			<font>font10</font>
 			<include>textcolorgrey</include>
@@ -171,7 +170,7 @@
 			<include>buttonpanelslide</include>
 			<align>center</align>
 			<onclick>XBMC.ActivateWindow(34)</onclick>
-		</control>
+		</control-->
 
 
 		<control>
@@ -180,11 +179,9 @@
 			<id>75</id>
 			<label>Settings</label>
 			<posx>50</posx>
-			<!-- <posy>268</posy> -->
 			<posy>305</posy>
 			<onleft>210</onleft>
 			<onright>100</onright>
-			<!-- <onup>30</onup> -->
 			<onup>50</onup>
 			<ondown>10</ondown>
 			<include>buttonpanelslide</include>
