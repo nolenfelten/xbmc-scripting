@@ -29,6 +29,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.quality = amt_util.setQuality()
         self.mode = amt_util.setMode()
         self.startup = amt_util.setStartupCategory()
+        self.thumbnail = amt_util.setThumbnailDisplay()
         
     def setControlsValues( self ):
         self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[self.settings['trailer quality']], ) )
@@ -36,6 +37,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( self.settings['save folder'], ) )
         self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % ( self.settings['skin'], ) )
         self.controls['Startup Category Button']['control'].setLabel( 'Startup Category: [%s]' % ( self.startup[self.settings['startup category']], ) )
+        self.controls['Thumbnail Display Button']['control'].setLabel( 'Thumbnail Display: [%s]' % ( self.thumbnail[self.settings['thumbnail display']], ) )
         
     def saveSettings( self ):
         ret = amt_util.saveSettings( self.settings )
@@ -69,6 +71,13 @@ class GUI( xbmcgui.WindowDialog ):
         #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
         
+    def toggleThumbnailDisplay( self ):
+        t = self.settings['thumbnail display'] + 1
+        if ( t > 2 ): t = 0
+        self.settings['thumbnail display'] = t
+        #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
+        self.setControlsValues()
+    
     def browseForFolder( self ):
         dialog = xbmcgui.Dialog()
         folder = dialog.browse( 0, 'a save folder', 'files' )
@@ -129,6 +138,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.chooseSkin()
         elif ( control is self.controls['Startup Category Button']['control'] ):
             self.toggleStartupCategory()
+        elif ( control is self.controls['Thumbnail Display Button']['control'] ):
+            self.toggleThumbnailDisplay()
         elif ( control is self.controls['Popup List']['control'] ):
             self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
             #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
