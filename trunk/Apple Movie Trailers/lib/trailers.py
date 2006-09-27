@@ -1,6 +1,6 @@
 import os, sys
 import xbmc, xbmcgui
-import httplib2_mod as httplib2
+import cacheurl
 import elementtree.ElementTree as ET
 
 def append_ns( text ):
@@ -11,7 +11,7 @@ def append_ns( text ):
     return '/'.join( result )
 ns = append_ns
 
-fetcher = httplib2.Http_mod( os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'cache' ) )
+fetcher = cacheurl.HTTP( os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'cache' ) )
 
 class Trailers:
     def __init__( self ):
@@ -134,7 +134,6 @@ class Trailers:
                 break
             movie_percentage = 0
             for movie in self.genres['special'][genre]:
-                ##print genre + ':', movie
                 if dialog.iscanceled():
                     break
                 try:
@@ -310,7 +309,7 @@ class Trailers:
             thumbnail = fetcher.urlretrieve( thumbnail )
             if not thumbnail:
                 # default if the actual thumbnail couldn't be found for some reason
-                thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
+                thumbnail = ''
             description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
             description = description.strip()
             # remove any linefeeds so we can wrap properly to the text control this is displayed in
@@ -332,7 +331,7 @@ class Trailers:
                     continue
                 urls += [ url ]
         except:
-            thumbnail = os.path.join( self.imagePath, 'blank_thumbnail.png' )
+            thumbnail = ''
             description = 'No description could be retrieved for this title.'
             urls = list()
         return [ thumbnail, description, urls ]
@@ -362,16 +361,9 @@ class Trailers:
                 if text in trailer_urls:
                     continue
                 trailer_urls += [ text ]
-            #dialog = xbmcgui.Dialog()
-            #trailer_url_filenames = list()
-            #for each in trailer_urls:
-            #    trailer_url_filenames += [ os.path.split( each )[1] ]
-            #selection = dialog.select( 'Choose a trailer to view:', trailer_url_filenames )
-            #filename = trailer_urls[selection].replace( '//', '/' ).replace( '/', '//', 1 )
-            #return filename
             return trailer_urls
         except:
-            return None
+            return list()
 
     def get_genre_list( self ):
         genre_list = self.genres['standard'].keys()
@@ -384,10 +376,14 @@ class Trailers:
         return trailer_list
 
     def get_trailer_info( self, genre, movie_title ):
-        if genre in self.genres['special']:
-            thumbnail, description, urls = self.genres['special'][genre][movie_title]
-        else:
-            thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+        try:
+            if genre in self.genres['special']:
+                thumbnail, description, urls = self.genres['special'][genre][movie_title]
+            else:
+                thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+        except:
+            thumbnail = ''
+            description = 'No description could be retrieved for this title.'
         return [ thumbnail, description ]
 
     def get_exclusives_list( self ):
