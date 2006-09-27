@@ -42,7 +42,7 @@
 	<texture>unknown-user.png</texture>
  </control-->
 
- <!--control>
+ <control>
 	<description>Title Label</description>
 	<type>label</type>
 	<id>1</id>
@@ -51,10 +51,9 @@
 	<width>280</width>
 	<align>left</align>
 	<font>special13</font>
-	<textcolor>60ffffff</textcolor>
 	<textcolor>DDced8da</textcolor>
-	<label>Apple Movie Trailers Settings</label>
- </control-->
+	<label>Apple Movie Trailers</label>
+ </control>
   
    <control>
 	<description>Trailer Quality Button</description>
@@ -236,8 +235,7 @@
 	<width>280</width>
 	<align>left</align>
 	<font>font10</font>
-	<textcolor>60ffffff</textcolor>
-	<!--textcolor>DDced8da</textcolor-->
+	<textcolor>DDced8da</textcolor>
 	<label>choose skin</label>
 	<visible>false</visible>
  </control>

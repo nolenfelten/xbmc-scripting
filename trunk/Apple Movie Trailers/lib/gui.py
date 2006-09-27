@@ -24,7 +24,7 @@ class GUI( xbmcgui.Window ):
         if ( res == 0 or res % 2 ): skin = 'skin_wide.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=True )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
 
     def getSettings( self ):
         self.settings = settings_util.getSettings()
@@ -68,7 +68,7 @@ class GUI( xbmcgui.Window ):
 
     def showVideo( self, title ):
         trailer_urls = self.trailers.get_video( self.genre, title )
-        if ( self.settings['trailer quality'] > len( trailer_urls ) ):
+        if ( self.settings['trailer quality'] >= len( trailer_urls ) ):
             choice = len( trailer_urls ) - 1
         else:
             choice = self.settings['trailer quality']
