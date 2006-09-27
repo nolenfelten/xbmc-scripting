@@ -1,10 +1,10 @@
 import xbmc, xbmcgui
 import os, guibuilder
-import settings_util
+import amt_util
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
-        self.settings = settings_util.getSettings()
+        self.settings = amt_util.getSettings()
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
@@ -23,35 +23,20 @@ class GUI( xbmcgui.WindowDialog ):
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, fastMethod=True, debug=False )
 
     def setupConstants( self ):
-        self.controllerAction = {
-            216 : 'Remote Back Button',
-            247 : 'Remote Menu Button',
-            256 : 'A Button',
-            257 : 'B Button',
-            258 : 'X Button',
-            259 : 'Y Button',
-            260 : 'Black Button',
-            261 : 'White Button',
-            274 : 'Start Button',
-            275 : 'Back Button',
-            270 : 'DPad Up',
-            271 : 'DPad Down',
-            272 : 'DPad Left',
-            273 : 'DPad Right'
-        }
-    
+        self.controllerAction = amt_util.setControllerAction()
+        self.quality = amt_util.setQuality()
+        self.mode = amt_util.setMode()
+        self.startup = amt_util.setStartupCategory()
         
     def setControlsValues( self ):
-        quality = ['Low', 'Medium', 'High']
-        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: %s' % ( quality[self.settings['trailer quality']], ) )
-        mode = ['Stream', 'Download', 'Download & Save']
-        self.controls['Mode Button']['control'].setLabel( 'Mode: %s' % ( mode[self.settings['mode']], ) )
-        self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: %s' % ( self.settings['save folder'], ) )
-        #self.controls['Save Folder Label']['control'].setLabel( self.settings['save folder'] )
-        self.controls['Skin Button']['control'].setLabel( 'Skin: %s' % (self.settings['skin'], ) )
-
+        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[self.settings['trailer quality']], ) )
+        self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[self.settings['mode']], ) )
+        self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( self.settings['save folder'], ) )
+        self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % ( self.settings['skin'], ) )
+        self.controls['Startup Category Button']['control'].setLabel( 'Startup Category: [%s]' % ( self.startup[self.settings['startup category']], ) )
+        
     def saveSettings( self ):
-        ret = settings_util.saveSettings( self.settings )
+        ret = amt_util.saveSettings( self.settings )
         if ( not ret ):
             dialog = xbmcgui.Dialog()
             ok = dialog.ok( 'Apple Movie Trailers', 'There was an error saving your settings.' )
@@ -62,26 +47,34 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
-        quality = ['Low', 'Medium', 'High']
         tq = self.settings['trailer quality'] + 1
         if ( tq > 2 ): tq = 0
         self.settings['trailer quality'] = tq
-        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: %s' % ( quality[tq], ) )
+        #self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[tq], ) )
+        self.setControlsValues()
       
     def toggleMode( self ):
-        mode = ['Stream', 'Download', 'Download & Save']
         m = self.settings['mode'] + 1
         if ( m > 2 ): m = 0
         self.settings['mode'] = m
-        self.controls['Mode Button']['control'].setLabel( 'Mode: %s' % ( mode[m], ) )
+        #self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[m], ) )
+        self.setControlsValues()
 
+    def toggleStartupCategory( self ):
+        c = self.settings['startup category'] + 1
+        if ( c > 2 ): c = 0
+        self.settings['startup category'] = c
+        #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
+        self.setControlsValues()
+        
     def browseForFolder( self ):
         dialog = xbmcgui.Dialog()
         folder = dialog.browse( 0, 'a save folder', 'files' )
         if ( folder ):
             self.settings['save folder'] = folder
-            self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: %s' % ( folder, ) )
-            
+            #self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( folder, ) )
+            self.setControlsValues()
+
     def chooseSkin( self ):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
         self.showPopup( 'choose your skin', os.listdir( skinPath ) )
@@ -101,7 +94,8 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup Label']['control'].setLabel( title )
         self.controls['Popup List']['control'].reset()
         for item in items:
-            self.controls['Popup List']['control'].addItem( item )
+            if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'skin.xml' ).replace( ';', '' ) ) ):
+                self.controls['Popup List']['control'].addItem( item )
         self.setPopupVisibility( True )
         self.setFocus( self.controls['Popup List']['control'] )
         
@@ -131,9 +125,12 @@ class GUI( xbmcgui.WindowDialog ):
             self.browseForFolder()
         elif ( control is self.controls['Skin Button']['control'] ):
             self.chooseSkin()
+        elif ( control is self.controls['Startup Category Button']['control'] ):
+            self.toggleStartupCategory()
         elif ( control is self.controls['Popup List']['control'] ):
             self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
-            self.controls['Skin Button']['control'].setLabel( 'Skin: %s' % (self.settings['skin'], ) )
+            #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
+            self.setControlsValues()
             self.hidePopup()
             
     def onAction( self, action ):

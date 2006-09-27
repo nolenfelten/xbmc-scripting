@@ -56,7 +56,7 @@
  </control>
   
    <control>
-	<description>Trailer Quality Button</description>
+	<description>Skin Button</description>
 	<type>button</type>
 	<id>10</id>
 	<posx>0</posx>
@@ -65,7 +65,7 @@
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
-	<label>Trailer Quality: High</label>
+	<label>-</label>
 	<font>font10</font>
     <textcolor>ffffffff</textcolor>
 	<textoffsetx>10</textoffsetx>
@@ -78,7 +78,7 @@
  </control>
 
  <control>
-	<description>Mode Button</description>
+	<description>Trailer Quality Button</description>
 	<type>button</type>
 	<id>20</id>
 	<posx>0</posx>
@@ -87,7 +87,7 @@
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
-	<label>Mode: Stream</label>
+	<label>-</label>
 	<font>font10</font>
     <textcolor>ffffffff</textcolor>
 	<textoffsetx>10</textoffsetx>
@@ -100,7 +100,7 @@
  </control>
 
  <control>
-	<description>Skin Button</description>
+	<description>Mode Button</description>
 	<type>button</type>
 	<id>30</id>
 	<posx>0</posx>
@@ -109,7 +109,7 @@
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
-	<label>Save Folder...</label>
+	<label>-</label>
 	<font>font10</font>
     <textcolor>ffffffff</textcolor>
 	<textoffsetx>10</textoffsetx>
@@ -121,20 +121,6 @@
 	<ondown>40</ondown>
  </control>
 
-<!--control>
-	<description>Save Folder Label</description>
-	<type>label</type>
-	<id>1</id>
-	<posx>175</posx>
-	<posy>165</posy>
-	<width>280</width>
-	<align>left</align>
-	<font>font10</font>
-	<textcolor>60ffffff</textcolor>
-	<textcolor>DDced8da</textcolor>
-	<label>(f:\videos\trailers\)</label>
- </control-->
-
  <control>
 	<description>Save Folder Button</description>
 	<type>button</type>
@@ -145,7 +131,7 @@
 	<height>32</height>
 	<align>left</align>
 	<aligny>center</aligny>
-	<label>Skin: Default</label>
+	<label>-</label>
 	<font>font10</font>
     <textcolor>ffffffff</textcolor>
 	<textoffsetx>10</textoffsetx>
@@ -153,6 +139,50 @@
 	<texturenofocus>-</texturenofocus>
 	<onleft>150</onleft>
 	<onright>100</onright>
+	<onup>30</onup>
+	<ondown>10</ondown>
+ </control>
+
+ <control>
+	<description>Startup Category Button</description>
+	<type>button</type>
+	<id>50</id>
+	<posx>0</posx>
+	<posy>230</posy>
+	<width>400</width>
+	<height>32</height>
+	<align>left</align>
+	<aligny>center</aligny>
+	<label>-</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>10</textoffsetx>
+	<texturefocus>input-focus.png</texturefocus>
+	<texturenofocus>-</texturenofocus>
+	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>40</onup>
+	<ondown>10</ondown>
+ </control>
+
+ <control>
+	<description>Update Button</description>
+	<type>button</type>
+	<id>200</id>
+	<posx>0</posx>
+	<posy>325</posy>
+	<width>90</width>
+	<height>32</height>
+	<align>center</align>
+	<aligny>center</aligny>
+	<label>Update All</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<textoffsetx>17</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>100</onleft>
+	<onright>10</onright>
 	<onup>30</onup>
 	<ondown>10</ondown>
  </control>
