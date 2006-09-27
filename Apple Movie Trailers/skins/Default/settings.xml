@@ -73,7 +73,7 @@
 	<texturenofocus>-</texturenofocus>
 	<onleft>150</onleft>
 	<onright>100</onright>
-	<onup>40</onup>
+	<onup>200</onup>
 	<ondown>20</ondown>
  </control>
 
@@ -140,9 +140,9 @@
 	<onleft>150</onleft>
 	<onright>100</onright>
 	<onup>30</onup>
-	<ondown>10</ondown>
+	<ondown>50</ondown>
  </control>
-
+ 
  <control>
 	<description>Startup Category Button</description>
 	<type>button</type>
@@ -162,7 +162,7 @@
 	<onleft>150</onleft>
 	<onright>100</onright>
 	<onup>40</onup>
-	<ondown>10</ondown>
+	<ondown>200</ondown>
  </control>
 
  <control>
@@ -181,12 +181,12 @@
 	<textoffsetx>17</textoffsetx>
 	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
-	<onleft>100</onleft>
-	<onright>10</onright>
-	<onup>30</onup>
+	<onleft>150</onleft>
+	<onright>100</onright>
+	<onup>50</onup>
 	<ondown>10</ondown>
  </control>
-
+ 
  <control>
 	<description>Ok Button</description>
 	<type>button</type>
@@ -203,9 +203,9 @@
 	<textoffsetx>17</textoffsetx>
 	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
-	<onleft>10</onleft>
+	<onleft>200</onleft>
 	<onright>150</onright>
-	<onup>30</onup>
+	<onup>50</onup>
 	<ondown>10</ondown>
  </control>
 
@@ -226,12 +226,12 @@
 	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
 	<onleft>100</onleft>
-	<onright>10</onright>
-	<onup>30</onup>
+	<onright>200</onright>
+	<onup>50</onup>
 	<ondown>10</ondown>
  </control>
  
- <control>
+  <control>
 	<description>Popup Image</description>
 	<type>image</type>
 	<id>1</id>

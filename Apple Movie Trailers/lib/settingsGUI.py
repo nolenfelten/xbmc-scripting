@@ -11,6 +11,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.skin = self.settings['skin']
             self.setupConstants()
             self.setControlsValues()
+            ##remove disabled when update script routine is done
+            self.controls['Update Button']['control'].setEnabled( False )
 
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
