@@ -41,7 +41,7 @@ class HTTP:
         info = opened.info()
         # construct the filename
         if self.flat_cache:
-            filename = 'flat_cache'
+            filename = 'flat_cache' + os.path.splitext( actual_url )[1]
         elif self.actual_filename:
             filename = actual_url.split( '/' )[-1]
         else:
@@ -50,9 +50,15 @@ class HTTP:
         filepath = os.path.join( self.cache_dir, filename )
         # save the total expected size of the file, based on the Content-Length header
         totalsize = int( info['Content-Length'] )
+        try:
+            is_completed = os.path.getsize( filepath ) == totalsize
+        except:
+            is_completed = False
 
         # if the file is already in the cache, return that filename
-        if os.path.isfile( filepath ) and os.path.getsize( filepath ) == totalsize:
+        if os.path.isfile( filepath ) and is_completed:
+            # notify handler of being finished
+            self.on_finished( actual_url, filepath, totalsize, is_completed )
             return filepath
 
         # write the data to the cache
@@ -71,7 +77,6 @@ class HTTP:
             if not do_continue:
                 break
         filehandle.close()
-        is_completed = os.path.getsize( filepath ) == totalsize
 
         # notify handler of being finished
         self.on_finished( actual_url, filepath, totalsize, is_completed )
@@ -93,24 +98,30 @@ class HTTP:
 import xbmcgui
 
 class HTTPProgress( HTTP ):
-    def __init__( self, cache = '.cache' ):
-        HTTP.__init__( self, cache )
+    def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
+        HTTP.__init__( self, cache, actual_filename, flat_cache )
         self.dialog = xbmcgui.DialogProgress()
+        self.status_symbols = [ '-', '\\', '|', '/' ]
+        self.status_symbol = 0
 
     def urlretrieve( self, url ):
-        self.dialog.create( 'Downloading..', url, '> ' )
+        self.dialog.create( 'Downloading..', url.split( '/' )[-1] )
         self.dialog.update( 0 )
         return HTTP.urlretrieve( self, url )
 
     def on_data( self, url, filepath, filesize, size_read_so_far ):
-        percentage = int( float( size_read_so_far ) / filesize ) * 100
-        self.dialog.update( percentage, url, '> ' + os.path.split( filepath )[1] )
+        percentage = int( float( size_read_so_far ) / filesize * 100 )
+        self.status_symbol += 1
+        if self.status_symbol >= len( self.status_symbols ):
+            self.status_symbol = 0
+        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%i/%i) %s ' % ( percentage, size_read_so_far, filesize, self.status_symbols[self.status_symbol] ) )
         if self.dialog.iscanceled():
             return False
         return True
 
     def on_finished( self, url, filepath, filesize, is_completed ):
         self.dialog.close()
+        self.status_symbol = 0
 
 class HTTPProgressSave( HTTPProgress ):
     def __init__( self, save_location = None ):
