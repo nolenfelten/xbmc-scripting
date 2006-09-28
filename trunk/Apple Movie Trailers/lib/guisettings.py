@@ -81,7 +81,7 @@ class GUI( xbmcgui.WindowDialog ):
     
     def browseForFolder( self ):
         dialog = xbmcgui.Dialog()
-        folder = dialog.browse( 0, 'a save folder', 'files' )
+        folder = dialog.browse( 3, 'a save folder', 'files' )
         if ( folder ):
             self.settings['save folder'] = folder
             #self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( folder, ) )
