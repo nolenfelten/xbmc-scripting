@@ -1,4 +1,4 @@
-import os, urllib2, md5
+import os, urllib2, md5, traceback
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
@@ -36,9 +36,7 @@ class HTTP:
                     os.remove( os.path.join( root, name ) )
                 os.rmdir( root )
         except:
-            import traceback
             traceback.print_exc()
-            del traceback
             raise
 
     def urlopen( self, url ):
@@ -58,9 +56,7 @@ class HTTP:
             request.add_header( 'User-Agent', '%s/%s' % ( __scriptname__, __version__ ) )
             opened = urllib2.urlopen( request )
         except:
-            import traceback
             traceback.print_exc()
-            del traceback
 
         # this is the actual url that we got (redirection, etc)
         actual_url = opened.geturl()
@@ -119,14 +115,14 @@ class HTTP:
                 break
         filehandle.close()
 
-        # notify handler of being finished
-        self.on_finished( actual_url, filepath, totalsize, is_completed )
-
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
         except:
             is_completed = False
         if DEBUG: print 'Is file complete?: %s' % is_completed
+
+        # notify handler of being finished
+        self.on_finished( actual_url, filepath, totalsize, is_completed )
 
         # if the file transfer was halted before completing, remove the partial file from cache
         if not is_completed:
@@ -177,22 +173,14 @@ class HTTPProgressSave( HTTPProgress ):
         else:
             HTTPProgress.__init__( self, flat_cache = True )
 
-    def on_data( self, url, filepath, filesize, size_read_so_far ):
-        if os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
+    def on_finished( self, url, filepath, filesize, is_completed ):
+        if is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
             try:
                 if ( not os.path.isfile( filepath + '.conf' ) ):
                     f = open( filepath + '.conf' , 'w' )
                     f.write( 'nocache=1' )
                     f.close()
             except:
-                pass
-        return HTTPProgress.on_data( self, url, filepath, filesize, size_read_so_far )
-
-    def on_finished( self, url, filepath, filesize, is_completed ):
-        if not is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
-            try:
-                if os.path.isfile( filepath + '.conf' ):
-                    os.remove( filepath + '.conf' )
-            except:
+                traceback.print_exc()
                 pass
         return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )
