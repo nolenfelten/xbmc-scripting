@@ -11,13 +11,22 @@ class GUI( xbmcgui.Window ):
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
-            self.setupConstants()
-            self.trailers = trailers.Trailers()
-            self.getGenreCategories()
-            self.setStartupCategory()
-            ## enable when ready
-            self.controls['Search Button']['control'].setEnabled( False )
-            self.controls['Update Button']['control'].setEnabled( False )
+            try:
+                self.setupConstants()
+                print 0
+                self.trailers = trailers.Trailers()
+                print 1
+                self.getGenreCategories()
+                print 2
+                self.setStartupCategory()
+                print 3
+                ## enable when ready
+                self.controls['Search Button']['control'].setEnabled( False )
+                self.controls['Update Button']['control'].setEnabled( False )
+                print 4
+            except: 
+                xbmc.output('Error at script start')
+                self.exitScript()
                 
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
