@@ -28,8 +28,10 @@ class HTTP:
         # retrieve the file so it is cached
         filepath = self.urlretrieve( url )
         # read the data out of the file
-        filehandle = open( filepath, 'rb' )
-        data = filehandle.read()
+        data = ''
+        if filepath:
+            filehandle = open( filepath, 'rb' )
+            data = filehandle.read()
         return data
 
     def urlretrieve( self, url ):
