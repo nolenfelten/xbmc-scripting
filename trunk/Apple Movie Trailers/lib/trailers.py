@@ -36,7 +36,7 @@ class Trailers:
     def update_all( self ):
         try:
             if os.path.isfile( self.DATAFILE ):
-                os.path.remove( self.DATAFILE )
+                os.remove( self.DATAFILE )
             fetcher.clear_cache()
         except:
             pass
