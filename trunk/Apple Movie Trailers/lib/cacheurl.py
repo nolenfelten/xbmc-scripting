@@ -3,7 +3,7 @@ import os, urllib2, md5
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
 
-DEBUG = True
+DEBUG = False
 
 class HTTP:
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
