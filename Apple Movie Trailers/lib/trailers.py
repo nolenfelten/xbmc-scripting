@@ -34,6 +34,12 @@ class Trailers:
         del self.genres
 
     def update_all( self ):
+        try:
+            if os.path.isfile( self.DATAFILE ):
+                os.path.remove( self.DATAFILE )
+            fetcher.clear_cache()
+        except:
+            pass
         import pickle
         self.genres = dict()
         try:

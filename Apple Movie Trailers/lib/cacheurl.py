@@ -29,6 +29,18 @@ class HTTP:
         # set default blocksize (this may require tweaking; cachedhttp1.3 had it set at 8192)
         self.blocksize = 8192
 
+    def clear_cache( self ):
+        try:
+            for root, dirs, files in os.walk( self.cache_dir, topdown = False ):
+                for name in files:
+                    os.remove( os.path.join( root, name ) )
+                os.rmdir( root )
+        except:
+            import traceback
+            traceback.print_exc()
+            del traceback
+            raise
+
     def urlopen( self, url ):
         # retrieve the file so it is cached
         filepath = self.urlretrieve( url )
@@ -166,5 +178,9 @@ class HTTPProgressSave( HTTPProgress ):
                     f = open( filepath + '.conf' , 'w' )
                     f.write( 'nocache=1' )
                     f.close()
-            except: pass
+            except:
+                import traceback
+                traceback.print_exc()
+                del traceback
+                pass
         return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )
