@@ -49,6 +49,7 @@ class Trailers:
             traceback.print_exc()
             del traceback
             xbmcgui.Dialog().ok( 'Error', 'Unable to properly update AMT.pk' )
+            raise
         del pickle
 
     def __update_genre_list__( self ):
