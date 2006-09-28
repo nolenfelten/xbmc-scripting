@@ -18,7 +18,7 @@ class GUI( xbmcgui.Window ):
                 self.setStartupCategory()
                 ## enable when ready
                 self.controls['Search Button']['control'].setEnabled( False )
-                self.controls['Update Button']['control'].setEnabled( False )
+                #self.controls['Update Button']['control'].setEnabled( False )
             except: 
                 xbmc.output('Error at script start')
                 self.exitScript()
@@ -28,7 +28,7 @@ class GUI( xbmcgui.Window ):
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         res = self.getResolution()
-        if ( res == 0 or res % 2 ): skin = 'skin_wide.xml'
+        if ( res == 0 or res % 2 ): skin = 'skin_16x9.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title=default.__scriptname__, useDescAsKey=True, debug=False )
@@ -49,6 +49,7 @@ class GUI( xbmcgui.Window ):
         self.Timer.start()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = amt_util.setControllerAction()
+        self.updateMethod = 0
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
@@ -113,7 +114,14 @@ class GUI( xbmcgui.Window ):
             elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
             l = xbmcgui.ListItem( title, '', thumbnail )
             self.controls['Trailer List']['control'].addItem( l )
-    
+            
+    def updateDatabase( self ):
+        if (self.updateMethod == 0 ):
+            self.trailers.update_all()
+            #self.getGenreCategories()
+            #self.showTrailers( self.genre )
+            self.setGenre( self. genre )
+            
     def getGenreCategories( self ):
         self.controls['Genre List']['control'].reset()
         thumbnail = os.path.join( self.imagePath, 'genre-thumbnail.tbn' )
@@ -178,6 +186,8 @@ class GUI( xbmcgui.Window ):
                 self.setGenre( 'Exclusives' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( 'Genre' )
+            elif ( control is self.controls['Update Button']['control'] ):
+                self.updateDatabase()
             elif ( control is self.controls['Settings Button']['control'] ):
                 settings = guisettings.GUI()
                 settings.doModal()

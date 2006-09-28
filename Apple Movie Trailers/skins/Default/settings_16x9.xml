@@ -9,6 +9,8 @@
 	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags,
 	so make sure all necessary tags are included. (This was done for speed, but may change)
 	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
 	The Skin Credits Label and List is where you add your credits.
 -->
 	
@@ -145,6 +147,7 @@
 			<label>-</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
@@ -329,7 +332,7 @@
 			<type>label</type>
 			<id>502</id>
 			<posx>85</posx>
-			<posy>75</posy>
+			<posy>78</posy>
 			<width>150</width>
 			<align>left</align>
 			<font>font10</font>
@@ -391,7 +394,7 @@
 			<type>label</type>
 			<id>601</id>
 			<posx>85</posx>
-			<posy>75</posy>
+			<posy>78</posy>
 			<width>150</width>
 			<align>left</align>
 			<font>font10</font>
@@ -406,7 +409,7 @@
 			<type>label</type>
 			<id>602</id>
 			<posx>320</posx>
-			<posy>75</posy>
+			<posy>78</posy>
 			<width>150</width>
 			<align>right</align>
 			<font>font10</font>
@@ -421,7 +424,7 @@
 			<type>label</type>
 			<id>603</id>
 			<posx>95</posx>
-			<posy>120</posy>
+			<posy>110</posy>
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
@@ -436,7 +439,7 @@
 			<type>listcontrol</type>
 			<id>604</id>
 			<posx>83</posx>
-			<posy>140</posy>
+			<posy>130</posy>
 			<width>247</width>
 			<height>100</height>
 			<spinwidth>18</spinwidth>
@@ -468,12 +471,12 @@
 			<type>label</type>
 			<id>605</id>
 			<posx>95</posx>
-			<posy>220</posy>
+			<posy>200</posy>
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>Skin Credits:</label>
+			<label>Additional Credits:</label>
 			<visible>false</visible>
 		</control>
 
@@ -486,11 +489,15 @@
 			<type>listcontrol</type>
 			<id>606</id>
 			<posx>83</posx>
-			<posy>240</posy>
+			<posy>220</posy>
 			<width>247</width>
-			<height>80</height>
+			<height>100</height>
+			<label>Xbox Media Center</label>
+			<label2>Team XBMC</label2>
 			<label>Graphics</label>
 			<label2>Chokemaniac</label2>
+			<label>Usability</label>
+			<label2>Spiff</label2>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>

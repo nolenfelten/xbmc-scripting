@@ -19,7 +19,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         res = self.getResolution()
-        if ( res == 0 or res % 2 ): skin = 'settings_wide.xml'
+        if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
         else: skin = 'settings.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'settings.xml'
         guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, fastMethod=True, debug=False )
@@ -35,10 +35,11 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[self.settings['trailer quality']], ) )
         self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[self.settings['mode']], ) )
         self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( self.settings['save folder'], ) )
+        self.controls['Save Folder Button']['control'].setEnabled( self.settings['mode'] == 2 )
         self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % ( self.settings['skin'], ) )
         self.controls['Startup Category Button']['control'].setLabel( 'Startup Category: [%s]' % ( self.startup[self.settings['startup category']], ) )
         self.controls['Thumbnail Display Button']['control'].setLabel( 'Thumbnail Display: [%s]' % ( self.thumbnail[self.settings['thumbnail display']], ) )
-        
+
     def saveSettings( self ):
         ret = amt_util.saveSettings( self.settings )
         if ( not ret ):
@@ -139,22 +140,19 @@ class GUI( xbmcgui.WindowDialog ):
 
     def showCredits( self ):
         try:
-            print 'got to credits'
             self.controls['Credits Label']['control'].setLabel( default.__scriptname__ )
             self.controls['Version Label']['control'].setLabel( 'Version: %s' % ( default.__version__, ) )
             self.controls['Team Credits Label']['control'].setLabel( 'Team Credits:' )
             self.controls['Team Credits List']['control'].reset()
-            print 'setlabels'
             l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
             self.controls['Team Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( default.__credits_l2__, default.__credits_r2__ )
             self.controls['Team Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
             self.controls['Team Credits List']['control'].addItem( l )
-            print 'added team credits'
             self.setCreditsVisibility( True )
             self.setFocus( self.controls['Skin Credits List']['control'] )
-        except: 'credits failed'
+        except: print 'Credits Removed'
             
     def hideCredits( self ):
         self.setCreditsVisibility( False )
@@ -169,7 +167,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Team Credits List']['control'].setVisible( visible )
             self.controls['Skin Credits Label']['control'].setVisible( visible )
             self.controls['Skin Credits List']['control'].setVisible( visible )
-        except: print 'credits failed'
+        except: print 'Credits Removed'
             
     def closeDialog( self ):
         self.close()
