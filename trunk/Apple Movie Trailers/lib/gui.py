@@ -13,17 +13,12 @@ class GUI( xbmcgui.Window ):
         else:
             try:
                 self.setupConstants()
-                print 0
                 self.trailers = trailers.Trailers()
-                print 1
                 self.getGenreCategories()
-                print 2
                 self.setStartupCategory()
-                print 3
                 ## enable when ready
                 self.controls['Search Button']['control'].setEnabled( False )
                 self.controls['Update Button']['control'].setEnabled( False )
-                print 4
             except: 
                 xbmc.output('Error at script start')
                 self.exitScript()
