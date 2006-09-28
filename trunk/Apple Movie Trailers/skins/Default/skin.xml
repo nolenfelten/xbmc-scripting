@@ -5,9 +5,14 @@
 	With one exception, required controls <description> tag and <type> tag must NOT be changed,
 	the <type> tag for labels may be changed to button. This allows <shadowcolor> tag to be used.
 	(if changing <type>label</type> to <type>button</type>, set <texturenofocus>-</texturenofocus>)
+	
 	There are four special controls that are displayed based on if media is playing. You may set their
 	tag <visible>false</visible> if you don't want them, but DO NOT delete them.
+	
 	<include> tags work and the reference.xml file will be used for any missing tags.
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
 -->
 
 	<defaultcontrol always="true">10</defaultcontrol>
@@ -63,7 +68,7 @@
 		</control>
 
 		<control>
-			<description>q backdrop image</description>
+			<description>backdrop image</description>
 			<type>image</type>
 			<id>1</id>
 			<posx>260</posx>
@@ -71,7 +76,7 @@
 			<width>375</width>
 			<height>373</height>
 			<aspectratio>keep</aspectratio>
-			<texture>\q_backdrop.png</texture>
+			<texture>\backdrop.png</texture>
 		</control>
 
 		<!-- labels -->
@@ -249,7 +254,7 @@
 			<posy>118</posy>
 			<width>174</width>
 			<height>254</height>
-			<texture>\t_backdrop.png</texture>
+			<texture>\poster_backdrop.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>

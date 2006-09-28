@@ -9,15 +9,13 @@ __scriptname__ = 'Apple Movie Trailers'
 __author__ = 'Apple Movie Trailers (AMT) Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, efnet/#xbmc-scripting'
-__version__ = '1.0 pre-release'
+__version__ = '1.0'
 __credits_l1__ = 'Head Developer & Coder'
 __credits_r1__ = 'Killarny'
 __credits_l2__ = 'Coder & Skinning'
 __credits_r2__ = 'Nuka1195'
 __credits_l3__ = 'Graphics & Skinning'
 __credits_r3__ = 'Pike'
-__credits_l4__ = 'Graphics'
-__credits_r4__ = 'Chokemaniac'
 
 def py_cleanup():
     try:
