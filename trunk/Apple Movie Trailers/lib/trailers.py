@@ -150,7 +150,7 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( genre_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    dialog.update( movie_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
                     self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
                     dialog_errorline = 'Error retrieving information for one or more movie titles.'
@@ -253,7 +253,7 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( genre_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    dialog.update( movie_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
                     self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
                     dialog_errorline = 'Error retrieving information for one or more movie titles.'
