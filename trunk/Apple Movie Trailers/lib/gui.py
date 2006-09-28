@@ -75,22 +75,14 @@ class GUI( xbmcgui.Window ):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 self.MyPlayer.play( url )
             elif ( self.settings['mode'] == 1):
-                print 'Mode 1'
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
-                print 'url',url
                 fetcher = cacheurl.HTTPProgressSave()
-                print 'got fetcher'
                 filename = fetcher.urlretrieve( url )
-                print 'filename', filename
                 self.MyPlayer.play( filename )
             elif ( self.settings['mode'] == 2):
-                print 'Mode 2'
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
-                print 'url',url
                 fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
-                print 'got fetcher'
                 filename = fetcher.urlretrieve( url )
-                print 'filename', filename
                 self.MyPlayer.play( filename )
         except:
             xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
