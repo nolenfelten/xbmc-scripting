@@ -2,7 +2,8 @@ import xbmc, xbmcgui
 import sys, os
 import trailers, threading
 import guibuilder, guisettings
-import amt_util
+import amt_util, default
+import cacheurl
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -17,7 +18,7 @@ class GUI( xbmcgui.Window ):
             ## enable when ready
             self.controls['Search Button']['control'].setEnabled( False )
             self.controls['Update Button']['control'].setEnabled( False )
-    
+                
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
@@ -26,7 +27,7 @@ class GUI( xbmcgui.Window ):
         if ( res == 0 or res % 2 ): skin = 'skin_wide.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title='Apple Movie Trailers', useDescAsKey=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title=default.__scriptname__, useDescAsKey=True, debug=False )
 
     def getSettings( self ):
         self.settings = amt_util.getSettings()
@@ -61,18 +62,36 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showVideo( self, title ):
-        trailer_urls = self.trailers.get_video( self.genre, title )
+#<Killarny> when download and save is active use this: fetcher = cacheurl.HTTPProgressSave( savepath )
+#<Killarny> when download only is active use this: fetcher = cacheurl.HTTPProgressSave()
+#<Killarny> then just use fetcher.urlretrieve( url_to_video ) 
+        trailer_urls = self.trailers.get_video_list( self.genre, title )
         if ( self.settings['trailer quality'] >= len( trailer_urls ) ):
             choice = len( trailer_urls ) - 1
         else:
             choice = self.settings['trailer quality']
         try:
             if ( self.settings['mode'] == 0):
-                filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                self.MyPlayer.play( url )
+            elif ( self.settings['mode'] == 1):
+                print 'Mode 1'
+                url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                print 'url',url
+                fetcher = cacheurl.HTTPProgressSave()
+                print 'got fetcher'
+                filename = fetcher.urlretrieve( url )
+                print 'filename', filename
                 self.MyPlayer.play( filename )
-            #else:
-                ## don't create conf file for streaming
-                #    self.createConf( filename )
+            elif ( self.settings['mode'] == 2):
+                print 'Mode 2'
+                url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
+                print 'url',url
+                fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
+                print 'got fetcher'
+                filename = fetcher.urlretrieve( url )
+                print 'filename', filename
+                self.MyPlayer.play( filename )
         except:
             xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
 

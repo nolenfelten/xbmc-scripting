@@ -1,6 +1,6 @@
 import xbmc, xbmcgui
 import os, guibuilder
-import amt_util
+import amt_util, default
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
@@ -43,11 +43,11 @@ class GUI( xbmcgui.WindowDialog ):
         ret = amt_util.saveSettings( self.settings )
         if ( not ret ):
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok( 'Apple Movie Trailers', 'There was an error saving your settings.' )
+            ok = dialog.ok( default.__scriptname__, 'There was an error saving your settings.' )
         else:
             if ( self.skin != self.settings['skin']):
                 dialog = xbmcgui.Dialog()
-                ok = dialog.ok( 'Apple Movie Trailers', "The skin change won't take affect until you restart." )
+                ok = dialog.ok( default.__scriptname__, "The skin change won't take affect until you restart." )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
@@ -138,18 +138,39 @@ class GUI( xbmcgui.WindowDialog ):
     #    self.controls['Credits Button']['control'].controlDown( control )
 
     def showCredits( self ):
-        self.setCreditsVisibility( True )
-        self.setFocus( self.controls['Credits List']['control'] )
-
+        try:
+            print 'got to credits'
+            self.controls['Credits Label']['control'].setLabel( default.__scriptname__ )
+            self.controls['Version Label']['control'].setLabel( 'Version: %s' % ( default.__version__, ) )
+            self.controls['Team Credits Label']['control'].setLabel( 'Team Credits:' )
+            self.controls['Team Credits List']['control'].reset()
+            print 'setlabels'
+            l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
+            self.controls['Team Credits List']['control'].addItem( l )
+            l = xbmcgui.ListItem( default.__credits_l2__, default.__credits_r2__ )
+            self.controls['Team Credits List']['control'].addItem( l )
+            l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
+            self.controls['Team Credits List']['control'].addItem( l )
+            print 'added team credits'
+            self.setCreditsVisibility( True )
+            self.setFocus( self.controls['Skin Credits List']['control'] )
+        except: 'credits failed'
+            
     def hideCredits( self ):
         self.setCreditsVisibility( False )
         self.setFocus( self.controls['Credits Button']['control'] )
 
     def setCreditsVisibility( self, visible ):
-        self.controls['Credits Image']['control'].setVisible( visible )
-        self.controls['Credits Label']['control'].setVisible( visible )
-        self.controls['Credits List']['control'].setVisible( visible )
-    
+        try:
+            self.controls['Credits Image']['control'].setVisible( visible )
+            self.controls['Credits Label']['control'].setVisible( visible )
+            self.controls['Version Label']['control'].setVisible( visible )
+            self.controls['Team Credits Label']['control'].setVisible( visible )
+            self.controls['Team Credits List']['control'].setVisible( visible )
+            self.controls['Skin Credits Label']['control'].setVisible( visible )
+            self.controls['Skin Credits List']['control'].setVisible( visible )
+        except: print 'credits failed'
+            
     def closeDialog( self ):
         self.close()
         
@@ -180,13 +201,13 @@ class GUI( xbmcgui.WindowDialog ):
         buttonDesc = self.controllerAction.get( action.getButtonCode(), 'n/a' )
         if ( buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
-            elif ( control == self.controls['Credits List']['control'] ): self.hideCredits()
+            elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.close()
         elif ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
-            elif ( control == self.controls['Credits List']['control'] ): self.hideCredits()
+            elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.saveSettings()
         elif ( control == self.controls['Popup List']['control'] ):
             self.getThumb( control.getSelectedItem() )
-        elif ( control != self.controls['Ok Button']['control'] and control != self.controls['Cancel Button']['control'] ):
-            self.setButtonNavigation( control )
+        #elif ( control != self.controls['Ok Button']['control'] and control != self.controls['Cancel Button']['control'] ):
+        #    self.setButtonNavigation( control )

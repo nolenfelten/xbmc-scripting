@@ -337,6 +337,11 @@
   <visible>false</visible>
  </control>
 
+
+
+
+
+
   <control>
 	<description>Credits Image</description>
 	<type>image</type>
@@ -359,24 +364,91 @@
 	<align>left</align>
 	<font>font10</font>
 	<textcolor>DDced8da</textcolor>
-	<label>Credits:</label>
+	<label>Apple Movie Trailers</label>
 	<visible>false</visible>
  </control>
  
-  <control>
-  <description>Credits List</description>
+ <control>
+	<description>Version Label</description>
+	<type>label</type>
+	<id>602</id>
+	<posx>320</posx>
+	<posy>75</posy>
+	<width>150</width>
+	<align>right</align>
+	<font>font10</font>
+	<textcolor>DDced8da</textcolor>
+	<label>Version: 1.0 pre</label>
+	<visible>false</visible>
+ </control>
+
+ <control>
+	<description>Team Credits Label</description>
+	<type>label</type>
+	<id>603</id>
+	<posx>95</posx>
+	<posy>120</posy>
+	<width>200</width>
+	<align>left</align>
+	<font>font10</font>
+	<textcolor>60ffffff</textcolor>
+	<label>Team Credits:</label>
+	<visible>false</visible>
+ </control>
+
+ <control>
+  <description>Team Credits List</description>
   <type>listcontrol</type>
-  <id>602</id>
+  <id>604</id>
   <posx>83</posx>
-  <posy>115</posy>
+  <posy>140</posy>
   <width>247</width>
-  <height>190</height>
-  <label>Head Developer &amp; Coder</label>
-  <label2>Killarny</label2>
-  <label>Coder &amp; Skinning</label>
-  <label2>Nuka1195</label2>
-  <label>Graphics &amp; Skinning</label>
-  <label2>Pike</label2>
+  <height>100</height>
+  <spinwidth>18</spinwidth>
+  <spinheight>16</spinheight>
+  <spinposx>419</spinposx>
+  <spinposy>404</spinposy>
+  <spincolor>ffffffff</spincolor>
+  <spinfont>font10</spinfont>
+  <textureup>scroll-up.png</textureup>
+  <texturedown>scroll-down.png</texturedown>
+  <textureupfocus>scroll-up-focus.png</textureupfocus>
+  <texturedownfocus>scroll-down-focus.png</texturedownfocus>
+  <texturefocus>-</texturefocus>
+  <texturenofocus>-</texturenofocus>
+  <image>icon-folder.png</image>
+  <textureheight>20</textureheight>
+  <font>font10</font>
+	<textcolor>ffffffff</textcolor>
+  <suffix>|</suffix>
+  <textxoff>-25</textxoff>
+  <textxoff2>0</textxoff2>
+  <aligny>center</aligny>
+  <visible>false</visible>
+ </control>
+
+ <control>
+	<description>Skin Credits Label</description>
+	<type>label</type>
+	<id>605</id>
+	<posx>95</posx>
+	<posy>220</posy>
+	<width>200</width>
+	<align>left</align>
+	<font>font10</font>
+	<textcolor>60ffffff</textcolor>
+	<label>Skin Credits:</label>
+	<visible>false</visible>
+ </control>
+
+ <control>
+  <description>Skin Credits List</description>
+  <type>listcontrol</type>
+  <id>606</id>
+  <posx>83</posx>
+  <posy>240</posy>
+  <width>247</width>
+  <height>80</height>
   <label>Graphics</label>
   <label2>Chokemaniac</label2>
   <spinwidth>18</spinwidth>
