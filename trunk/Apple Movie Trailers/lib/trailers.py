@@ -94,7 +94,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching category and genre information..'
+        dialog_header = 'Fetching category and genre information...'
         dialog_line1 = 'Please wait a moment.'
         dialog_errorline = ''
         dialog_percentage = 0
@@ -127,7 +127,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching movie information..'
+        dialog_header = 'Fetching movie information...'
         dialog_errorline = ''
         genre_percentage = 0
         dialog.create( dialog_header )
@@ -200,7 +200,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching category and genre information..'
+        dialog_header = 'Fetching category and genre information...'
         dialog_line1 = 'Please wait a moment.'
         dialog_errorline = ''
         dialog_percentage = 0
@@ -230,7 +230,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching movie information..'
+        dialog_header = 'Fetching movie information...'
         dialog_errorline = ''
         genre_percentage = 0
         dialog.create( dialog_header )
