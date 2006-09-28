@@ -76,19 +76,17 @@ class GUI( xbmcgui.Window ):
         else:
             choice = self.settings['trailer quality']
         try:
-            if ( self.settings['mode'] == 0):
-                url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
-                self.MyPlayer.play( url )
+            if ( self.settings['mode'] == 0 ):
+                filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
             elif ( self.settings['mode'] == 1):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 fetcher = cacheurl.HTTPProgressSave()
                 filename = fetcher.urlretrieve( url )
-                self.MyPlayer.play( filename )
             elif ( self.settings['mode'] == 2):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
                 filename = fetcher.urlretrieve( url )
-                self.MyPlayer.play( filename )
+            if ( filename ): self.MyPlayer.play( filename )
         except:
             xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
 
