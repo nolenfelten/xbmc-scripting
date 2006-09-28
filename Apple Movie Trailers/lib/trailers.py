@@ -11,7 +11,7 @@ def append_ns( text ):
     return '/'.join( result )
 ns = append_ns
 
-fetcher = cacheurl.HTTP( os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'cache' ) )
+fetcher = cacheurl.HTTP()
 
 class Trailers:
     def __init__( self ):
@@ -142,7 +142,7 @@ class Trailers:
         genre_pos = 0
         for genre in self.genres['special'].keys():
             movie_pos = 0
-            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
+            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
@@ -150,14 +150,14 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    dialog.update( genre_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
                     self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
                     dialog_errorline = 'Error retrieving information for one or more movie titles.'
                 movie_pos += 1
-                movie_percentage = float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage
+                movie_percentage = int( float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage )
             genre_pos += 1
-            genre_percentage = float( genre_pos ) / len( self.genres['special'] ) * 100
+            genre_percentage = int( float( genre_pos ) / len( self.genres['special'] ) * 100 )
         dialog.close()
         # make self.genres as such:
         #   {
@@ -245,7 +245,7 @@ class Trailers:
         genre_pos = 0
         for genre in self.genres['standard'].keys():
             movie_pos = 0
-            dialog.update( int( genre_percentage ), 'Genre: ' + genre, '', dialog_errorline )
+            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
@@ -253,14 +253,14 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( int( dialog_percentage ), 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    dialog.update( genre_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
                     self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
                     dialog_errorline = 'Error retrieving information for one or more movie titles.'
                 movie_pos += 1
-                movie_percentage = float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 + genre_percentage
+                movie_percentage = int( float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 + genre_percentage )
             genre_pos += 1
-            genre_percentage = float( genre_pos ) / len( self.genres['standard'] ) * 100
+            genre_percentage = int( float( genre_pos ) / len( self.genres['standard'] ) * 100 )
         dialog.close()
 
     def __update_trailer_dict__( self, genre ):
