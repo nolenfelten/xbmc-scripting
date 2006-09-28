@@ -3,7 +3,7 @@ import os, urllib2, md5
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
 
-DEBUG = False
+DEBUG = True
 
 class HTTP:
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
@@ -17,8 +17,7 @@ class HTTP:
         self.cache_dir = cache
         if self.cache_dir[0] == '.':
             self.cache_dir = os.path.join( self.default_data_dir, self.cache_dir )
-        if not os.path.isdir( self.cache_dir ):
-            os.makedirs( self.cache_dir )
+        if DEBUG: print 'cache dir: %s' % self.cache_dir
 
         # flat_cache means that each request will be cached in a single reused file; basically a non-persistent cache
         self.flat_cache = flat_cache
@@ -70,7 +69,7 @@ class HTTP:
         info = opened.info()
         if DEBUG: print 'Headers:'
         for header in info:
-            if DEBUG: print ' ' + header
+            if DEBUG: print ' %s: %s' % ( header, info[header] )
         # construct the filename
         if self.flat_cache:
             filename = 'flat_cache' + os.path.splitext( actual_url )[1]
@@ -95,6 +94,12 @@ class HTTP:
             # notify handler of being finished
             self.on_finished( actual_url, filepath, totalsize, is_completed )
             return filepath
+
+        # create the cache dir if it doesn't exist
+        if not os.path.isdir( self.cache_dir ):
+            if DEBUG: print 'making cache dir: %s' % self.cache_dir
+            os.makedirs( self.cache_dir )
+            if DEBUG: print 'successfully made?: %s' % os.path.isdir( self.cache_dir )
 
         # write the data to the cache
         filehandle = open( filepath, 'wb' )
