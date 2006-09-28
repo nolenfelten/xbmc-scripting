@@ -10,12 +10,13 @@ class HTTP:
         # this module's path
         import sys
         self.module_dir = os.path.dirname( sys.modules['cacheurl'].__file__ )
+        self.default_data_dir = os.path.join( os.path.dirname( self.module_dir ), 'data' )
         del sys
 
         # set the cache directory; default to a .cache directory off of the location where this module is
         self.cache_dir = cache
         if self.cache_dir[0] == '.':
-            self.cache_dir = os.path.join( self.module_dir, self.cache_dir )
+            self.cache_dir = os.path.join( self.default_data_dir, self.cache_dir )
         if not os.path.isdir( self.cache_dir ):
             os.makedirs( self.cache_dir )
 
