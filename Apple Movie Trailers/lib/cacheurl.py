@@ -1,5 +1,10 @@
 import os, urllib2, md5
 
+__scriptname__ = 'cacheurl'
+__version__ = '0.1'
+
+DEBUG = False
+
 class HTTP:
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
         # this module's path
@@ -32,15 +37,27 @@ class HTTP:
         if filepath:
             filehandle = open( filepath, 'rb' )
             data = filehandle.read()
+            if DEBUG: print data[:100]
         return data
 
     def urlretrieve( self, url ):
-        opened = urllib2.urlopen( url )
+        try:
+            request = urllib2.Request( url )
+            request.add_header( 'User-Agent', '%s/%s' % ( __scriptname__, __version__ ) )
+            opened = urllib2.urlopen( request )
+        except:
+            import traceback
+            traceback.print_exc()
+            del traceback
 
         # this is the actual url that we got (redirection, etc)
         actual_url = opened.geturl()
+        if DEBUG: print 'Actual Url: %s' % actual_url
         # info dict about the file (headers and such)
         info = opened.info()
+        if DEBUG: print 'Headers:'
+        for header in info:
+            if DEBUG: print ' ' + header
         # construct the filename
         if self.flat_cache:
             filename = 'flat_cache' + os.path.splitext( actual_url )[1]
@@ -50,12 +67,15 @@ class HTTP:
             filename = md5.new( actual_url ).hexdigest() + os.path.splitext( actual_url )[1]
         # ..and the filepath
         filepath = os.path.join( self.cache_dir, filename )
+        if DEBUG: print 'File path: %s' % filepath
         # save the total expected size of the file, based on the Content-Length header
         totalsize = int( info['Content-Length'] )
+        if DEBUG: print 'File size: %i' % totalsize
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
         except:
             is_completed = False
+        if DEBUG: print 'Is file complete?: %s' % is_completed
 
         # if the file is already in the cache, return that filename
         if os.path.isfile( filepath ) and is_completed:
@@ -71,6 +91,7 @@ class HTTP:
         while len( filedata ):
             filedata = opened.read( self.blocksize )
             if len( filedata ):
+                if DEBUG: print 'got filedata'
                 filehandle.write( filedata )
                 size_read_so_far += len( filedata )
                 do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
@@ -82,6 +103,12 @@ class HTTP:
 
         # notify handler of being finished
         self.on_finished( actual_url, filepath, totalsize, is_completed )
+
+        try:
+            is_completed = os.path.getsize( filepath ) == totalsize
+        except:
+            is_completed = False
+        if DEBUG: print 'Is file complete?: %s' % is_completed
 
         # if the file transfer was halted before completing, remove the partial file from cache
         if not is_completed:
