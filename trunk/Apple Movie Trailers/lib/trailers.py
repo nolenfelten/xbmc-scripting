@@ -336,7 +336,7 @@ class Trailers:
             urls = list()
         return [ thumbnail, description, urls ]
 
-    def get_video( self, genre, movie_title ):
+    def get_video_list( self, genre, movie_title ):
         try:
             try:
                 thumbnail, description, urls = self.genres['standard'][genre][movie_title]
