@@ -36,13 +36,19 @@ class Trailers:
     def update_all( self ):
         import pickle
         self.genres = dict()
-        self.__update_genre_list__()
-        datadir = os.path.dirname( self.DATAFILE )
-        if not os.path.isdir( datadir ):
-            os.makedirs( datadir )
-        datafile = open( self.DATAFILE, 'w' )
-        pickle.dump( self.genres, datafile )
-        datafile.close()
+        try:
+            self.__update_genre_list__()
+            datadir = os.path.dirname( self.DATAFILE )
+            if not os.path.isdir( datadir ):
+                os.makedirs( datadir )
+            datafile = open( self.DATAFILE, 'w' )
+            pickle.dump( self.genres, datafile )
+            datafile.close()
+        except:
+            import traceback
+            traceback.print_exc()
+            del traceback
+            xbmcgui.Dialog().ok( 'Error', 'Unable to properly update AMT.pk' )
         del pickle
 
     def __update_genre_list__( self ):
