@@ -88,7 +88,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def chooseSkin( self ):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        self.showPopup( 'choose your skin', os.listdir( skinPath ) )
+        skins = os.listdir( skinPath )
+        skins.sort()
+        self.showPopup( 'choose your skin', skins )
         
     def getThumb( self, choice ):
         thumbnail = os.path.join( os.getcwd(), 'skins', choice.getLabel(), 'thumbnail.tbn' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
@@ -105,7 +107,8 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup Label']['control'].setLabel( title )
         self.controls['Popup List']['control'].reset()
         for item in items:
-            if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'skin.xml' ).replace( ';', '' ) ) ):
+            if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'skin.xml' ).replace( ';', '' ) ) and
+                os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'settings.xml' ).replace( ';', '' ) ) ):
                 self.controls['Popup List']['control'].addItem( item )
         self.setPopupVisibility( True )
         self.setFocus( self.controls['Popup List']['control'] )
@@ -115,11 +118,38 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup Thumb']['control'].setVisible( visible )
         self.controls['Popup Label']['control'].setVisible( visible )
         self.controls['Popup List']['control'].setVisible( visible )
+        
+    def setSkinSelection( self ):
+        self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
+        #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
+        self.setControlsValues()
+        self.hidePopup()
+    
     
     def setButtonNavigation( self, control ):
-        self.controls['Ok Button']['control'].controlLeft( control )
-        self.controls['Cancel Button']['control'].controlRight( control )
-        
+        pass
+    #    self.controls['Ok Button']['control'].controlUp( control )
+    #    self.controls['Cancel Button']['control'].controlUp( control )
+    #    self.controls['Update Button']['control'].controlUp( control )
+    #    self.controls['Credits Button']['control'].controlUp( control )
+    #    self.controls['Ok Button']['control'].controlDown( control )
+    #    self.controls['Cancel Button']['control'].controlDown( control )
+    #    self.controls['Update Button']['control'].controlDown( control )
+    #    self.controls['Credits Button']['control'].controlDown( control )
+
+    def showCredits( self ):
+        self.setCreditsVisibility( True )
+        self.setFocus( self.controls['Credits List']['control'] )
+
+    def hideCredits( self ):
+        self.setCreditsVisibility( False )
+        self.setFocus( self.controls['Credits Button']['control'] )
+
+    def setCreditsVisibility( self, visible ):
+        self.controls['Credits Image']['control'].setVisible( visible )
+        self.controls['Credits Label']['control'].setVisible( visible )
+        self.controls['Credits List']['control'].setVisible( visible )
+    
     def closeDialog( self ):
         self.close()
         
@@ -128,6 +158,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
         elif ( control is self.controls['Ok Button']['control'] ):
             self.saveSettings()
+        elif ( control is self.controls['Credits Button']['control'] ):
+            self.showCredits()
         elif ( control is self.controls['Trailer Quality Button']['control'] ):
             self.toggleTrailerQuality()
         elif ( control is self.controls['Mode Button']['control'] ):
@@ -141,18 +173,19 @@ class GUI( xbmcgui.WindowDialog ):
         elif ( control is self.controls['Thumbnail Display Button']['control'] ):
             self.toggleThumbnailDisplay()
         elif ( control is self.controls['Popup List']['control'] ):
-            self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
-            #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
-            self.setControlsValues()
-            self.hidePopup()
+            self.setSkinSelection()
             
     def onAction( self, action ):
         control = self.getFocus()
-        buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
-        if ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' or 
-            buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button'):
-            if ( control == self.controls['Popup List']['control']): self.hidePopup()
+        buttonDesc = self.controllerAction.get( action.getButtonCode(), 'n/a' )
+        if ( buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button' ):
+            if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
+            elif ( control == self.controls['Credits List']['control'] ): self.hideCredits()
             else: self.close()
+        elif ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ):
+            if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
+            elif ( control == self.controls['Credits List']['control'] ): self.hideCredits()
+            else: self.saveSettings()
         elif ( control == self.controls['Popup List']['control'] ):
             self.getThumb( control.getSelectedItem() )
         elif ( control != self.controls['Ok Button']['control'] and control != self.controls['Cancel Button']['control'] ):
