@@ -134,7 +134,7 @@ class HTTPProgress( HTTP ):
         self.status_symbol = 0
 
     def urlretrieve( self, url ):
-        self.dialog.create( 'Downloading..', url.split( '/' )[-1] )
+        self.dialog.create( 'Downloading...', url.split( '/' )[-1] )
         self.dialog.update( 0 )
         return HTTP.urlretrieve( self, url )
 
