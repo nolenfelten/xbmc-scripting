@@ -202,7 +202,7 @@
 			<onright>60</onright>
 			<onup>50</onup>
 			<ondown>10</ondown>
-			<texturefocus>\button-focus_arrows_16x9.png</texturefocus>
+			<!--texturefocus>\button-focus_arrows_16x9.png</texturefocus-->
 			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
