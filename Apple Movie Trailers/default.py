@@ -20,12 +20,15 @@ __credits_l4__ = 'Graphics'
 __credits_r4__ = 'Chokemaniac'
 
 def py_cleanup():
-    for root, dirs, files in os.walk( scriptpath, topdown = False ):
-        if 'cache' in root:
-            continue
-        for name in files:
-            if os.path.splitext( name )[1] in [ '.pyc', '.pyo' ]:
-                os.remove( os.path.join( root, name ) )
+    try:
+        for root, dirs, files in os.walk( scriptpath, topdown = False ):
+            if 'cache' in root:
+                continue
+            for name in files:
+                if os.path.splitext( name )[1] in [ '.pyc', '.pyo' ]:
+                    os.remove( os.path.join( root, name ) )
+    except:
+        pass
 
 if __name__ == '__main__':
     try:
