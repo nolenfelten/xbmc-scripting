@@ -1,4 +1,4 @@
-import os, urllib, md5
+import os, urllib2, md5
 
 class HTTP:
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
