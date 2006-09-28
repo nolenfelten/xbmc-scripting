@@ -171,16 +171,22 @@ class HTTPProgressSave( HTTPProgress ):
         else:
             HTTPProgress.__init__( self, flat_cache = True )
 
-    def on_finished( self, url, filepath, filesize, is_completed ):
-        if is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
+    def on_data( self, url, filepath, filesize, size_read_so_far ):
+        if os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
             try:
                 if ( not os.path.isfile( filepath + '.conf' ) ):
                     f = open( filepath + '.conf' , 'w' )
                     f.write( 'nocache=1' )
                     f.close()
             except:
-                import traceback
-                traceback.print_exc()
-                del traceback
+                pass
+        return HTTPProgress.on_data( self, url, filepath, filesize, size_read_so_far )
+
+    def on_finished( self, url, filepath, filesize, is_completed ):
+        if not is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
+            try:
+                if os.path.isfile( filepath + '.conf' ):
+                    os.remove( filepath + '.conf' )
+            except:
                 pass
         return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )
