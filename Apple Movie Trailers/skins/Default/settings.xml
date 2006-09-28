@@ -31,16 +31,6 @@
 	<height>406</height>
 	<texture>\background-settings.png</texture>
  </control>
- <!--control>
-	<description>profile image</description>
-	<type>image</type>
-	<id>2</id>
-	<posx>0</posx>
-	<posy>8</posy>
-	<width>120</width>
-	<height>120</height>
-	<texture>unknown-user.png</texture>
- </control-->
 
  <control>
 	<description>Title Label</description>
@@ -73,7 +63,7 @@
 	<texturenofocus>-</texturenofocus>
 	<onleft>150</onleft>
 	<onright>100</onright>
-	<onup>200</onup>
+	<onup>210</onup>
 	<ondown>20</ondown>
  </control>
 
@@ -184,26 +174,50 @@
 	<onleft>150</onleft>
 	<onright>100</onright>
 	<onup>50</onup>
-	<ondown>200</ondown>
+	<ondown>210</ondown>
  </control>
  
  <control>
 	<description>Update Button</description>
 	<type>button</type>
 	<id>200</id>
-	<posx>0</posx>
+	<posx>-3</posx>
 	<posy>325</posy>
 	<width>90</width>
 	<height>32</height>
 	<align>center</align>
 	<aligny>center</aligny>
-	<label>Update All</label>
+	<label>Update</label>
 	<font>font10</font>
     <textcolor>ffffffff</textcolor>
+	<disabledcolor>60ffffff</disabledcolor>
 	<textoffsetx>17</textoffsetx>
 	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
 	<onleft>150</onleft>
+	<onright>210</onright>
+	<onup>60</onup>
+	<ondown>10</ondown>
+ </control>
+ 
+ <control>
+	<description>Credits Button</description>
+	<type>button</type>
+	<id>210</id>
+	<posx>92</posx>
+	<posy>325</posy>
+	<width>90</width>
+	<height>32</height>
+	<align>center</align>
+	<aligny>center</aligny>
+	<label>Credits</label>
+	<font>font10</font>
+    <textcolor>ffffffff</textcolor>
+	<disabledcolor>60ffffff</disabledcolor>
+	<textoffsetx>17</textoffsetx>
+	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
+	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+	<onleft>200</onleft>
 	<onright>100</onright>
 	<onup>60</onup>
 	<ondown>10</ondown>
@@ -225,9 +239,9 @@
 	<textoffsetx>17</textoffsetx>
 	<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
-	<onleft>200</onleft>
+	<onleft>210</onleft>
 	<onright>150</onright>
-	<onup>50</onup>
+	<onup>60</onup>
 	<ondown>10</ondown>
  </control>
 
@@ -249,18 +263,18 @@
 	<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
 	<onleft>100</onleft>
 	<onright>200</onright>
-	<onup>50</onup>
+	<onup>60</onup>
 	<ondown>10</ondown>
  </control>
  
   <control>
 	<description>Popup Image</description>
 	<type>image</type>
-	<id>1</id>
-	<posx>90</posx>
-	<posy>100</posy>
-	<width>220</width>
-	<height>200</height>
+	<id>500</id>
+	<posx>70</posx>
+	<posy>70</posy>
+	<width>260</width>
+	<height>240</height>
 	<texture>dialog-panel.png</texture>
 	<visible>false</visible>
  </control>
@@ -268,9 +282,9 @@
  <control>
 	<description>Popup Thumb</description>
 	<type>image</type>
-	<id>1</id>
+	<id>501</id>
 	<posx>195</posx>
-	<posy>143</posy>
+	<posy>113</posy>
 	<width>128</width>
 	<height>72</height>
 	<texture>-</texture>
@@ -281,10 +295,10 @@
  <control>
 	<description>Popup Label</description>
 	<type>label</type>
-	<id>1</id>
-	<posx>105</posx>
-	<posy>105</posy>
-	<width>280</width>
+	<id>502</id>
+	<posx>85</posx>
+	<posy>75</posy>
+	<width>150</width>
 	<align>left</align>
 	<font>font10</font>
 	<textcolor>DDced8da</textcolor>
@@ -295,11 +309,11 @@
   <control>
   <description>Popup List</description>
   <type>listcontrol</type>
-  <id>500</id>
-  <posx>100</posx>
-  <posy>145</posy>
-  <width>100</width>
-  <height>130</height>
+  <id>503</id>
+  <posx>83</posx>
+  <posy>115</posy>
+  <width>110</width>
+  <height>170</height>
   <spinwidth>18</spinwidth>
   <spinheight>16</spinheight>
   <spinposx>419</spinposx>
@@ -317,7 +331,72 @@
   <font>font10</font>
 	<textcolor>ffffffff</textcolor>
   <suffix>|</suffix>
-  <textxoff>-20</textxoff>
+  <textxoff>-25</textxoff>
+  <textxoff2>0</textxoff2>
+  <aligny>center</aligny>
+  <visible>false</visible>
+ </control>
+
+  <control>
+	<description>Credits Image</description>
+	<type>image</type>
+	<id>600</id>
+	<posx>70</posx>
+	<posy>70</posy>
+	<width>260</width>
+	<height>240</height>
+	<texture>dialog-panel.png</texture>
+	<visible>false</visible>
+ </control>
+ 
+ <control>
+	<description>Credits Label</description>
+	<type>label</type>
+	<id>601</id>
+	<posx>85</posx>
+	<posy>75</posy>
+	<width>150</width>
+	<align>left</align>
+	<font>font10</font>
+	<textcolor>DDced8da</textcolor>
+	<label>Credits:</label>
+	<visible>false</visible>
+ </control>
+ 
+  <control>
+  <description>Credits List</description>
+  <type>listcontrol</type>
+  <id>602</id>
+  <posx>83</posx>
+  <posy>115</posy>
+  <width>247</width>
+  <height>190</height>
+  <label>Head Developer &amp; Coder</label>
+  <label2>Killarny</label2>
+  <label>Coder &amp; Skinning</label>
+  <label2>Nuka1195</label2>
+  <label>Graphics &amp; Skinning</label>
+  <label2>Pike</label2>
+  <label>Graphics</label>
+  <label2>Chokemaniac</label2>
+  <spinwidth>18</spinwidth>
+  <spinheight>16</spinheight>
+  <spinposx>419</spinposx>
+  <spinposy>404</spinposy>
+  <spincolor>ffffffff</spincolor>
+  <spinfont>font10</spinfont>
+  <textureup>scroll-up.png</textureup>
+  <texturedown>scroll-down.png</texturedown>
+  <textureupfocus>scroll-up-focus.png</textureupfocus>
+  <texturedownfocus>scroll-down-focus.png</texturedownfocus>
+  <texturefocus>-</texturefocus>
+  <texturenofocus>-</texturenofocus>
+  <image>icon-folder.png</image>
+  <textureheight>20</textureheight>
+  <font>font10</font>
+	<textcolor>ffffffff</textcolor>
+  <suffix>|</suffix>
+  <textxoff>-25</textxoff>
   <textxoff2>0</textxoff2>
   <aligny>center</aligny>
   <visible>false</visible>

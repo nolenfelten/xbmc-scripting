@@ -317,8 +317,8 @@
 			<align>left</align>
 			<textcolor>FFFFFFFF</textcolor>
 			<shadowcolor>FF000000</shadowcolor>
-			<visible>false</visible>
 			<!--visible>Player.HasAudio</visible-->
+			<visible>false</visible>
 		</control>
 
 		<control>
@@ -332,6 +332,7 @@
 			<align>center</align>
 			<textcolor>FFFFFFFF</textcolor>
 			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>Player.HasVideo</visible-->
 			<visible>false</visible>
 		</control>
 
