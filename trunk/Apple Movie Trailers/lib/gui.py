@@ -44,12 +44,16 @@ class GUI( xbmcgui.Window ):
         else:
             try:
                 closeProgessDialog()
-                self.setupConstants()
-                self.trailers = trailers.Trailers()
-                self.getGenreCategories()
-                self.setStartupCategory()
                 ## enable when ready
                 self.controls['Search Button']['control'].setEnabled( False )
+                self.setupConstants()
+                self.trailers = trailers.Trailers()
+                if ( self.checkForDB() ):
+                    self.getGenreCategories()
+                    self.setStartupCategory()
+                else:
+                    dialog = xbmcgui.Dialog()
+                    ok = dialog.ok(default.__scriptname__, 'No database found!', 'You must Update all genre and movie information.')
             except: 
                 xbmc.output('Error at script start')
                 self.exitScript()
@@ -67,6 +71,10 @@ class GUI( xbmcgui.Window ):
     def getSettings( self ):
         self.settings = amt_util.getSettings()
 
+    def checkForDB( self ):
+        if ( os.path.isfile( os.path.join( os.getcwd(), 'data', 'AMT.pk' ).replace( ';', '' ) ) ): return True
+        else: return False
+
     def setStartupCategory( self ):
         startup = amt_util.setStartupCategory()
         self.setGenre( startup[self.settings['startup category']] )
@@ -82,6 +90,7 @@ class GUI( xbmcgui.Window ):
         self.controllerAction = amt_util.setControllerAction()
         self.updateMethod = 0
         self.thumbnail = None
+        self.genre = None
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
