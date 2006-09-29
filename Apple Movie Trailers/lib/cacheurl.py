@@ -142,21 +142,26 @@ class HTTP:
             size_read_so_far = 0
             do_continue = True
             while len( filedata ):
-                filedata = opened.read( self.blocksize )
-                if len( filedata ):
-                    if DEBUG: print 'got filedata'
-                    filehandle.write( filedata )
-                    size_read_so_far += len( filedata )
-                    do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
-                if len( filedata ) < self.blocksize:
+                try:
+                    filedata = opened.read( self.blocksize )
+                    if len( filedata ):
+                        if DEBUG: print 'got filedata'
+                        filehandle.write( filedata )
+                        size_read_so_far += len( filedata )
+                        do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
+                    if len( filedata ) < self.blocksize:
+                        break
+                    if not do_continue:
+                        break
+                except ( OSError, IOError ), ( errno, strerror ):
+                    xbmcgui.Dialog().ok( 'OS/IO Error...', '[%i] %s' % ( errno, strerror ) )
                     break
-                if not do_continue:
+                except:
+                    traceback.print_exc()
                     break
             filehandle.close()
-        except OSError:
-            xbmcgui.Dialog().ok( 'OS Error...', OSError.errno, OSError.strerror )
-        except IOError:
-            xbmcgui.Dialog().ok( 'IO Error...', IOError.errno, IOError.strerror )
+        except:
+            raise
 
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
