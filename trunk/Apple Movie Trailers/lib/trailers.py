@@ -34,29 +34,34 @@ class Trailers:
         del self.genres
 
     def update_all( self ):
-        try:
-            if os.path.isfile( self.DATAFILE ):
-                os.remove( self.DATAFILE )
-            fetcher.clear_cache()
-        except:
-            pass
-        import pickle
-        self.genres = dict()
-        try:
-            self.__update_genre_list__()
-            datadir = os.path.dirname( self.DATAFILE )
-            if not os.path.isdir( datadir ):
-                os.makedirs( datadir )
-            datafile = open( self.DATAFILE, 'w' )
-            pickle.dump( self.genres, datafile )
-            datafile.close()
-        except:
-            import traceback
-            traceback.print_exc()
-            del traceback
-            xbmcgui.Dialog().ok( 'Error', 'Unable to properly update AMT.pk' )
-            raise
-        del pickle
+        if xbmcgui.Dialog().yesno( 'Update all genre and movie information...', 
+            'Are you sure you want to do this?', 
+            'Updating can take anywhere from 5 - 15 minutes,', 
+            'depending upon your connection speed.' 
+        ):
+            try:
+                if os.path.isfile( self.DATAFILE ):
+                    os.remove( self.DATAFILE )
+                fetcher.clear_cache()
+            except:
+                pass
+            import pickle
+            self.genres = dict()
+            try:
+                self.__update_genre_list__()
+                datadir = os.path.dirname( self.DATAFILE )
+                if not os.path.isdir( datadir ):
+                    os.makedirs( datadir )
+                datafile = open( self.DATAFILE, 'w' )
+                pickle.dump( self.genres, datafile )
+                datafile.close()
+            except:
+                import traceback
+                traceback.print_exc()
+                del traceback
+                xbmcgui.Dialog().ok( 'Error', 'Unable to properly update AMT.pk' )
+                raise
+            del pickle
 
     def __update_genre_list__( self ):
         base_xml = fetcher.urlopen( self.BASEXML )
