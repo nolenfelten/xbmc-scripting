@@ -263,6 +263,9 @@
 			<description>Trailer List</description>
 			<type>listcontrol</type>
 			<id>100</id>
+			<font>font13</font>
+			<posx>211</posx>
+			<posy>121</posy>
 			<width>270</width>
 			<height>235</height>
 			<textcolor>FFFFFFFF</textcolor>
@@ -275,7 +278,7 @@
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<textureheight>26</textureheight>
 			<image>-</image>
-			<textxoff>0</textxoff>
+			<textxoff>3</textxoff>
 			<suffix>|</suffix>
 			<aligny>center</aligny>
 			<onup>100</onup>
@@ -290,11 +293,11 @@
 			<description>Genre List</description>
 			<type>listcontrol</type>
 			<id>110</id>
-			<font>font12</font>
-			<posx>222</posx>
-			<posy>190</posy>
-			<width>440</width>
-			<height>260</height>
+			<font>font13</font>
+			<posx>211</posx>
+			<posy>121</posy>
+			<width>445</width>
+			<height>425</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>d0ffffff</selectedcolor>
 			<textureup>\scroll-up.png</textureup>
@@ -305,7 +308,7 @@
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<textureheight>26</textureheight>
 			<image>-</image>
-			<textxoff>0</textxoff>
+			<textxoff>3</textxoff>
 			<suffix>|</suffix>
 			<aligny>center</aligny>
 			<onup>110</onup>
