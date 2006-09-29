@@ -312,25 +312,11 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
-			<description>Popup Thumb</description>
-			<type>image</type>
-			<id>501</id>
-			<posx>195</posx>
-			<posy>113</posy>
-			<width>128</width>
-			<height>72</height>
-			<texture>-</texture>
-			<visible>false</visible>
-			<aspectratio>keep</aspectratio>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Required ** Do not change <description> -->
 		<control>
 			<description>Popup Label</description>
 			<type>label</type>
-			<id>502</id>
+			<id>501</id>
 			<posx>85</posx>
 			<posy>78</posy>
 			<width>150</width>
@@ -343,9 +329,38 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
+			<description>Popup Thumb</description>
+			<type>image</type>
+			<id>502</id>
+			<posx>195</posx>
+			<posy>113</posy>
+			<width>128</width>
+			<height>72</height>
+			<texture>-</texture>
+			<visible>false</visible>
+			<aspectratio>keep</aspectratio>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Popup Warning Label</description>
+			<type>label</type>
+			<id>503</id>
+			<posx>195</posx>
+			<posy>190</posy>
+			<width>128</width>
+			<align>center</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>* Skin dependent</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
 			<description>Popup List</description>
 			<type>listcontrol</type>
-			<id>503</id>
+			<id>504</id>
 			<posx>83</posx>
 			<posy>115</posy>
 			<width>110</width>
