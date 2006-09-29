@@ -1,9 +1,49 @@
 import os, urllib2, md5, traceback
+import xbmcgui
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
 
 DEBUG = False
+
+def percent_from_ratio( top, bottom ):
+    return int( float( top ) / bottom * 100 )
+
+def byte_measurement( bytes, detailed = False ):
+    """
+        convert integer bytes into a friendly string with B/kB/MB
+    """
+    B = bytes
+    MB = int( float( B ) / 1024 / 1024 )
+    B = B - MB * 1024 * 1024
+    kB = int( float( B ) / 1024 )
+    B = B - kB * 1024
+    if detailed:
+        if MB:
+            result += str( MB )
+            if kB or B:
+                result += '.'
+            if kB:
+                result += str( percent_from_ratio( kB, 1024 ) )
+            if B:
+                result += str( percent_from_ratio( B, 1024 ) )
+            result += 'MB'
+        elif kB:
+            result += str( kB )
+            if B:
+                result += '.%i' % percent_from_ratio( B, 1024 )
+            result += 'kB'
+        elif B:
+            result += '%ib' % B
+    else:
+        if MB:
+            result = '%iMB' % MB
+        elif kB:
+            result = '%ikB' % kB
+        else:
+            result = '%ib' % B
+    return result
+
 
 class HTTP:
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
@@ -141,8 +181,6 @@ class HTTP:
         pass
 
 
-import xbmcgui
-
 class HTTPProgress( HTTP ):
     def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
         HTTP.__init__( self, cache, actual_filename, flat_cache )
@@ -156,11 +194,13 @@ class HTTPProgress( HTTP ):
         return HTTP.urlretrieve( self, url )
 
     def on_data( self, url, filepath, filesize, size_read_so_far ):
-        percentage = int( float( size_read_so_far ) / filesize * 100 )
+        percentage = percent_from_ratio( size_read_so_far, filesize )
+        so_far = byte_measurement( size_read_so_far )
+        fsize = byte_measurement( filesize )
         self.status_symbol += 1
         if self.status_symbol >= len( self.status_symbols ):
             self.status_symbol = 0
-        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%i/%i) %s ' % ( percentage, size_read_so_far, filesize, self.status_symbols[self.status_symbol] ) )
+        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s ' % ( percentage, so_far, fsize, self.status_symbols[self.status_symbol] ) )
         if self.dialog.iscanceled():
             return False
         return True
