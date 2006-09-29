@@ -1,9 +1,40 @@
-import xbmc, xbmcgui
-import sys, os
+'''
+Main GUI for Apple Movie Trailers
+'''
+__line1__       = 'Setting up script:'
+__line2__       = 'Importing modules & initializing...'
+
+def createProgressDialog( __line3__ ):
+    global dialog, pct
+    pct = 0
+    dialog = xbmcgui.DialogProgress()
+    dialog.create(default.__scriptname__)
+    updateProgressDialog( __line3__ )
+
+def updateProgressDialog( __line3__ ):
+    global dialog, pct
+    pct += 5
+    dialog.update(pct, __line1__, __line2__, __line3__)
+
+def closeProgessDialog():
+    global dialog
+    dialog.close()
+    
+import xbmcgui, default
+createProgressDialog('modules: xbmcgui, default')
+
+import xbmc, sys, os
+updateProgressDialog( 'modules: xbmc, sys, os')
+
 import trailers, threading
+updateProgressDialog( 'modules: trailers, threading' )
+
 import guibuilder, guisettings
-import amt_util, default
-import cacheurl
+updateProgressDialog( 'modules: guibuilder, guisettings' )
+
+import amt_util, cacheurl, shutil
+updateProgressDialog( 'modules: amt_util, cacheurl, shutil' )
+
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
@@ -12,6 +43,7 @@ class GUI( xbmcgui.Window ):
         if ( not self.SUCCEEDED ): self.close()
         else:
             try:
+                closeProgessDialog()
                 self.setupConstants()
                 self.trailers = trailers.Trailers()
                 self.getGenreCategories()
@@ -31,7 +63,7 @@ class GUI( xbmcgui.Window ):
         if ( res == 0 or res % 2 ): skin = 'skin_16x9.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, title=default.__scriptname__, useDescAsKey=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, title=default.__scriptname__, line1=__line1__, dlg=dialog, pct=pct, debug=False )
 
     def getSettings( self ):
         self.settings = amt_util.getSettings()
@@ -50,6 +82,7 @@ class GUI( xbmcgui.Window ):
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = amt_util.setControllerAction()
         self.updateMethod = 0
+        self.thumbnail = None
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
@@ -66,10 +99,7 @@ class GUI( xbmcgui.Window ):
                 f.close()
         except: pass
 
-    def showVideo( self, title ):
-#<Killarny> when download and save is active use this: fetcher = cacheurl.HTTPProgressSave( savepath )
-#<Killarny> when download only is active use this: fetcher = cacheurl.HTTPProgressSave()
-#<Killarny> then just use fetcher.urlretrieve( url_to_video ) 
+    def playTrailer( self, title ):
         trailer_urls = self.trailers.get_video_list( self.genre, title )
         if ( self.settings['trailer quality'] >= len( trailer_urls ) ):
             choice = len( trailer_urls ) - 1
@@ -86,14 +116,22 @@ class GUI( xbmcgui.Window ):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
                 filename = fetcher.urlretrieve( url )
+                self.saveThumbnail( filename )
             if ( filename ): self.MyPlayer.play( filename )
         except:
             xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
+            
+    def saveThumbnail( self, filename ):
+        try: 
+            newfilename = '%s.tbn' % ( os.path.splitext( filename )[0], )
+            if ( not os.path.isfile( newfilename ) ):
+                shutil.copyfile(self.thumbnail, newfilename )
+        except: pass
 
     def showTrailerInfo( self, title ):
-        thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
+        self.thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
         # Trailer Thumbnail
-        self.controls['Trailer Thumbnail']['control'].setImage( thumbnail )
+        self.controls['Trailer Thumbnail']['control'].setImage( self.thumbnail )
         # Trailer Title
         self.controls['Trailer Title']['control'].setLabel( title )
         # Trailer Description
@@ -122,8 +160,10 @@ class GUI( xbmcgui.Window ):
             
     def getGenreCategories( self ):
         self.controls['Genre List']['control'].reset()
-        thumbnail = os.path.join( self.imagePath, 'genre-thumbnail.tbn' )
         for genre in self.trailers.get_genre_list():
+            thumbnail = os.path.join( self.imagePath, '%s.tbn' % ( genre, ) )
+            if ( not os.path.isfile( thumbnail ) ):
+                thumbnail = os.path.join( self.imagePath, 'genre-thumbnail.tbn' )
             l = xbmcgui.ListItem( genre, '',  thumbnail)
             self.controls['Genre List']['control'].addItem( l )
 
@@ -168,7 +208,7 @@ class GUI( xbmcgui.Window ):
     
     def getTrailer( self, choice ):
         title = choice.getLabel()
-        self.showVideo( title )
+        self.playTrailer( title )
         
     def getTrailerGenre( self, choice ):
         self.genre = choice.getLabel()
