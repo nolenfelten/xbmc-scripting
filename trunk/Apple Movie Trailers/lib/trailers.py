@@ -2,6 +2,9 @@ import os, sys
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
+import default
+
+AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
 
 def append_ns( text ):
     BASENS = '{http://www.apple.com/itms/}'
@@ -24,8 +27,11 @@ class Trailers:
             if not os.path.isfile( self.DATAFILE ):
                 raise
             datafile = open( self.DATAFILE, 'r' )
-            self.genres = pickle.load( datafile )
+            version, self.genres = pickle.load( datafile )
             datafile.close()
+            if version not in AMT_PK_COMPATIBLE_VERSIONS:
+                xbmcgui.Dialog().ok( 'Database file invalid...', 'Your database file is incompatible with this version', 'of AMT. It must be regenerated.' )
+                raise
         except:
             self.update_all()
         del pickle
@@ -53,7 +59,7 @@ class Trailers:
                 if not os.path.isdir( datadir ):
                     os.makedirs( datadir )
                 datafile = open( self.DATAFILE, 'w' )
-                pickle.dump( self.genres, datafile )
+                pickle.dump( [ default.__version__, self.genres ], datafile )
                 datafile.close()
             except:
                 import traceback
