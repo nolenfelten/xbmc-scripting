@@ -93,27 +93,30 @@ class HTTP:
 
         # create the cache dir if it doesn't exist
         if not os.path.isdir( self.cache_dir ):
-            if DEBUG: print 'making cache dir: %s' % self.cache_dir
             os.makedirs( self.cache_dir )
-            if DEBUG: print 'successfully made?: %s' % os.path.isdir( self.cache_dir )
 
         # write the data to the cache
-        filehandle = open( filepath, 'wb' )
-        filedata = '...'
-        size_read_so_far = 0
-        do_continue = True
-        while len( filedata ):
-            filedata = opened.read( self.blocksize )
-            if len( filedata ):
-                if DEBUG: print 'got filedata'
-                filehandle.write( filedata )
-                size_read_so_far += len( filedata )
-                do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
-            if len( filedata ) < self.blocksize:
-                break
-            if not do_continue:
-                break
-        filehandle.close()
+        try:
+            filehandle = open( filepath, 'wb' )
+            filedata = '...'
+            size_read_so_far = 0
+            do_continue = True
+            while len( filedata ):
+                filedata = opened.read( self.blocksize )
+                if len( filedata ):
+                    if DEBUG: print 'got filedata'
+                    filehandle.write( filedata )
+                    size_read_so_far += len( filedata )
+                    do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
+                if len( filedata ) < self.blocksize:
+                    break
+                if not do_continue:
+                    break
+            filehandle.close()
+        except OSError:
+            xbmcgui.Dialog().ok( 'OS Error...', OSError.errno, OSError.strerror )
+        except IOError:
+            xbmcgui.Dialog().ok( 'IO Error...', IOError.errno, IOError.strerror )
 
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
