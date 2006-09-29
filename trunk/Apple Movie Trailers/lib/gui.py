@@ -23,17 +23,17 @@ def closeProgessDialog():
 import xbmcgui, default
 createProgressDialog( 'modules: xbmcgui, default' )
 
-import xbmc, sys, os
-updateProgressDialog( 'modules: xbmc, sys, os' )
+updateProgressDialog( 'modules: xbmc, sys, os, traceback' )
+import xbmc, sys, os, traceback
 
-import trailers, threading
 updateProgressDialog( 'modules: trailers, threading' )
+import trailers, threading
 
-import guibuilder, guisettings
 updateProgressDialog( 'modules: guibuilder, guisettings' )
+import guibuilder, guisettings
 
-import amt_util, cacheurl, shutil
 updateProgressDialog( 'modules: amt_util, cacheurl, shutil' )
+import amt_util, cacheurl, shutil
 
 
 class GUI( xbmcgui.Window ):
@@ -107,10 +107,10 @@ class GUI( xbmcgui.Window ):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
                 filename = fetcher.urlretrieve( url )
-                self.saveThumbnail( filename )
+                if ( filename ): self.saveThumbnail( filename )
             if ( filename ): self.MyPlayer.play( filename )
         except:
-            xbmc.output('ERROR: playing %s at %s' % ( title, filename, ) )
+            xbmc.output('ERROR: playing %s' % ( title, ) )
             
     def saveThumbnail( self, filename ):
         try: 
@@ -226,7 +226,7 @@ class GUI( xbmcgui.Window ):
                 self.getTrailerGenre( control.getSelectedItem() )
             elif ( control is self.controls['Trailer List']['control'] ):
                 self.getTrailer( control.getSelectedItem() )
-        except: print 'ERROR: in onControl'
+        except: traceback.print_exc()
             
     def onAction( self, action ):
         try:
@@ -251,7 +251,7 @@ class GUI( xbmcgui.Window ):
                     self.setListNavigation('Settings Button')
                 elif ( control is self.controls['Update Button']['control'] ):
                     self.setListNavigation('Update Button')
-        except: print 'ERROR: in onAction'
+        except: traceback.print_exc()
 
 
 
