@@ -94,7 +94,11 @@ class HTTP:
         try:
             request = urllib2.Request( url )
             request.add_header( 'User-Agent', '%s/%s' % ( __scriptname__, __version__ ) )
-            opened = urllib2.urlopen( request )
+            # hacky, I know, but the chances that the url will fail twice are slimmer than only trying once
+            try:
+                opened = urllib2.urlopen( request )
+            except:
+                opened = urllib2.urlopen( request )
         except:
             traceback.print_exc()
 
