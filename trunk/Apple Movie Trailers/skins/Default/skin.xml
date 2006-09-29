@@ -41,6 +41,7 @@
 			<align>right</align>
 			<label>xbox media center</label>
 			<font>special12</font>
+			<textcolor>FFFFFFFF</textcolor>
 		</control>
 
 		<control>
@@ -51,8 +52,7 @@
 			<posy>108</posy>
 			<width>64</width>
 			<height>468</height>
-			<texture>contentpanel_left.png</texture>
-			<include>contentpanelslide</include>
+			<texture>\contentpanel_left.png</texture>
 		</control>
 
 		<control>
@@ -63,8 +63,7 @@
 			<posy>108</posy>
 			<width>500</width>
 			<height>468</height>
-			<texture>contentpanel.png</texture>
-			<include>contentpanelslide</include>
+			<texture>\contentpanel.png</texture>
 		</control>
 
 		<control>
@@ -92,6 +91,7 @@
 			<align>left</align>
 			<label>Apple Movie Trailers</label>
 			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
@@ -106,6 +106,7 @@
 			<align>right</align>
 			<label>-</label>
 			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
 		</control>
 		
 		<!-- Buttons -->
@@ -118,11 +119,19 @@
 			<label>Newest</label>
 			<posx>50</posx>
 			<posy>120</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>60</onup>
 			<ondown>20</ondown>
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 
@@ -134,11 +143,19 @@
 			<label>Exclusives</label>
 			<posx>50</posx>
 			<posy>157</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 
@@ -150,11 +167,19 @@
 			<label>Genre</label>
 			<posx>50</posx>
 			<posy>194</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 
@@ -166,11 +191,19 @@
 			<label>Search</label>
 			<posx>50</posx>
 			<posy>268</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 		
@@ -182,11 +215,19 @@
 			<label>Settings</label>
 			<posx>50</posx>
 			<posy>342</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>210</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 
@@ -198,12 +239,20 @@
 			<label>Update All</label>
 			<posx>50</posx>
 			<posy>465</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 			<onleft>60</onleft>
 			<onright>60</onright>
 			<onup>50</onup>
 			<ondown>10</ondown>
 			<!--texturefocus>\button-focus_arrows.png</texturefocus-->
-			<include>buttonpanelslide</include>
 			<onclick>-</onclick>
 		</control>
 
@@ -216,10 +265,19 @@
 			<id>100</id>
 			<width>270</width>
 			<height>235</height>
-			<!--texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus-->
+			<textcolor>FFFFFFFF</textcolor>
+			<selectedcolor>d0ffffff</selectedcolor>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureheight>26</textureheight>
 			<image>-</image>
 			<textxoff>0</textxoff>
+			<suffix>|</suffix>
+			<aligny>center</aligny>
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<onleft>10</onleft>
@@ -232,10 +290,24 @@
 			<description>Genre List</description>
 			<type>listcontrol</type>
 			<id>110</id>
-			<!--texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus-->
+			<font>font12</font>
+			<posx>222</posx>
+			<posy>190</posy>
+			<width>440</width>
+			<height>260</height>
+			<textcolor>FFFFFFFF</textcolor>
+			<selectedcolor>d0ffffff</selectedcolor>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureheight>26</textureheight>
 			<image>-</image>
 			<textxoff>0</textxoff>
+			<suffix>|</suffix>
+			<aligny>center</aligny>
 			<onup>110</onup>
 			<ondown>110</ondown>
 			<onleft>100</onleft>
@@ -286,6 +358,7 @@
 			<align>left</align>
 			<label>-</label>
 			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
@@ -300,11 +373,15 @@
 			<width>445</width>
 			<height>153</height>
 			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
 			<onup>210</onup>
 			<ondown>210</ondown>
 			<onleft>110</onleft>
 			<onright>10</onright>
-			<include>controldefaults</include>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>

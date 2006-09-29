@@ -32,7 +32,7 @@
 			<posy>-300</posy>
 			<width>1300</width>
 			<height>1300</height>
-			<texture>black.png</texture>
+			<texture>\black.png</texture>
 		</control>
 
 		<control>
@@ -79,7 +79,7 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -102,7 +102,7 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -125,7 +125,7 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -149,7 +149,7 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -172,7 +172,7 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -195,7 +195,7 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>input-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -219,8 +219,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
-			<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>150</onleft>
 			<onright>210</onright>
 			<onup>60</onup>
@@ -243,8 +243,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
-			<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>200</onleft>
 			<onright>100</onright>
 			<onup>60</onup>
@@ -266,8 +266,8 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>17</textoffsetx>
-			<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>210</onleft>
 			<onright>150</onright>
 			<onup>60</onup>
@@ -289,8 +289,8 @@
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>17</textoffsetx>
-			<texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>100</onleft>
 			<onright>200</onright>
 			<onup>60</onup>
@@ -308,7 +308,7 @@
 			<posy>70</posy>
 			<width>260</width>
 			<height>240</height>
-			<texture>dialog-panel.png</texture>
+			<texture>\dialog-panel.png</texture>
 			<visible>false</visible>
 		</control>
 
@@ -356,13 +356,13 @@
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
-			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<image>icon-folder.png</image>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<image>-</image>
 			<textureheight>20</textureheight>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
@@ -384,7 +384,7 @@
 			<posy>70</posy>
 			<width>260</width>
 			<height>240</height>
-			<texture>dialog-panel.png</texture>
+			<texture>\dialog-panel.png</texture>
 			<visible>false</visible>
 		</control>
 
@@ -448,13 +448,13 @@
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<image>icon-folder.png</image>
+			<image>-</image>
 			<textureheight>20</textureheight>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
@@ -504,13 +504,13 @@
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<image>icon-folder.png</image>
+			<image>-</image>
 			<textureheight>20</textureheight>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
