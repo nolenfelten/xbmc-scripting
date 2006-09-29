@@ -8,23 +8,23 @@ def createProgressDialog( __line3__ ):
     global dialog, pct
     pct = 0
     dialog = xbmcgui.DialogProgress()
-    dialog.create(default.__scriptname__)
+    dialog.create( default.__scriptname__ )
     updateProgressDialog( __line3__ )
 
 def updateProgressDialog( __line3__ ):
     global dialog, pct
     pct += 5
-    dialog.update(pct, __line1__, __line2__, __line3__)
+    dialog.update( pct, __line1__, __line2__, __line3__ )
 
 def closeProgessDialog():
     global dialog
     dialog.close()
     
 import xbmcgui, default
-createProgressDialog('modules: xbmcgui, default')
+createProgressDialog( 'modules: xbmcgui, default' )
 
 import xbmc, sys, os
-updateProgressDialog( 'modules: xbmc, sys, os')
+updateProgressDialog( 'modules: xbmc, sys, os' )
 
 import trailers, threading
 updateProgressDialog( 'modules: trailers, threading' )
@@ -50,7 +50,6 @@ class GUI( xbmcgui.Window ):
                 self.setStartupCategory()
                 ## enable when ready
                 self.controls['Search Button']['control'].setEnabled( False )
-                #self.controls['Update Button']['control'].setEnabled( False )
             except: 
                 xbmc.output('Error at script start')
                 self.exitScript()
@@ -91,14 +90,6 @@ class GUI( xbmcgui.Window ):
         self.controls['Full-Screen Visualisation Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Visualisation Label']['visible'] ) )
         self.controls['Full-Screen Video Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Video Label']['visible'] ) )
         
-    def createConf( self, filename ):
-        try:
-            if ( not os.path.isfile( filename + '.conf' ) ):
-                f = open( filename + '.conf' , 'w' )
-                f.write( 'nocache=1' )
-                f.close()
-        except: pass
-
     def playTrailer( self, title ):
         trailer_urls = self.trailers.get_video_list( self.genre, title )
         if ( self.settings['trailer quality'] >= len( trailer_urls ) ):

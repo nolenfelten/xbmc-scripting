@@ -110,14 +110,18 @@ class GUI( xbmcgui.WindowDialog ):
         for item in items:
             if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'skin.xml' ).replace( ';', '' ) ) and
                 os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'settings.xml' ).replace( ';', '' ) ) ):
-                self.controls['Popup List']['control'].addItem( item )
+                if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'warning.txt' ).replace( ';', '' ) ) ):
+                    warning = '*'
+                else: warning = ''
+                self.controls['Popup List']['control'].addItem( '%s%s' % ( warning, item, ) )
         self.setPopupVisibility( True )
         self.setFocus( self.controls['Popup List']['control'] )
         
     def setPopupVisibility( self, visible ):
         self.controls['Popup Image']['control'].setVisible( visible )
-        self.controls['Popup Thumb']['control'].setVisible( visible )
         self.controls['Popup Label']['control'].setVisible( visible )
+        self.controls['Popup Thumb']['control'].setVisible( visible )
+        self.controls['Popup Warning Label']['control'].setVisible( visible )
         self.controls['Popup List']['control'].setVisible( visible )
         
     def setSkinSelection( self ):
