@@ -49,6 +49,7 @@ line1					: [opt] string - The first line of the progress dialog.
 dialog				: [opt] progress dialog - A current progress dialog.
 pct					: [opt] integer - The percent already completed. (0-100)
 fastMethod			: [opt] bool - True=no dialogs, no <include> tags and no defaults from references.xml.
+useLocal				: [opt] bool - True=use a local language file / False=use XBMC language files
 debug				: [opt] bool - True=output debug information / False=no logging.
 
 *Note, 	You may use the above as keywords for arguments and skip certain optional arguments.
@@ -115,7 +116,8 @@ try: import language
 except: pass
 
 class GUIBuilder:
-	def __init__(self, win, skinXML, imagePath='', useDescAsKey=False, title='GUI Builder', line1='', dlg=None, pct=0, fastMethod=False, useLocal=False, debug=False):
+	def __init__(self, win, skinXML, imagePath='', useDescAsKey=False, title='GUI Builder', line1='', dlg=None,
+						pct=0, fastMethod=False, useLocal=False, debug=False):
 		try:
 			self.debug									= debug
 			self.debugWrite('guibuilder.py', 2)
@@ -158,11 +160,11 @@ class GUIBuilder:
 			if (not self.fastMethod): self.dlg.close()
 		except:
 			self.win.SUCCEEDED = False
-			if (not self.fastMethod):
-				if (dlg): dlg.close()
-				dlg = xbmcgui.Dialog()
-				dlg.ok(title, 'There was an error setting up controls.', 'Check your skin file:', skinXML)
-				self.dlg.close()
+#			if (not self.fastMethod):
+#				if (dlg): dlg.close()
+#				dlg = xbmcgui.Dialog()
+#				dlg.ok(title, 'There was an error setting up controls.', 'Check your skin file:', skinXML)
+#				self.dlg.close()
 
 
 	def debugWrite(self, function, action, lines=[], values=[]):

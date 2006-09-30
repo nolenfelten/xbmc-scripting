@@ -6,14 +6,13 @@
   <!-- Dialog Messages -->
   <string id="50">Setting up script:</string>
   <string id="51">Importing modules &amp; initializing...</string>
-  <string id="52">modules:</string>
+  <string id="52">module:</string>
   <string id="53">No database found!</string>
   <string id="54">You must Update all genre and movie information.</string>
   <string id="55">There was an error saving your settings.</string>
   <string id="56">The skin change won't take affect until you restart.</string>
-  <string id="57">Handle HighScores</string>
-  <string id="58">Always use set nickname</string>
-  <string id="59">Check Version on Startup</string>
+  <string id="57">There was an error setting up your GUI.</string>
+  <string id="58">Check your skin file:</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
@@ -57,5 +56,6 @@
   <string id="330">Stream</string>
   <string id="331">Download</string>
   <string id="332">Download &amp; Save</string>
+  <string id="340">Check version on startup</string>
 
 </strings>

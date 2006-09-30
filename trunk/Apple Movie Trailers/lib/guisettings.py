@@ -1,12 +1,13 @@
 import xbmc, xbmcgui
-import os, guibuilder
-import amt_util, default, language
+import os, guibuilder, sys
+import amt_util, default
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
+        self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.settings = amt_util.getSettings()
-        self.language = language.Language()
-        self.skin = kwargs.get( 'skin', self.settings['skin'] )
+        self.language = kwargs['language']#language.Language()
+        self.skin = kwargs['skin']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
@@ -16,7 +17,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Update Button']['control'].setEnabled( False )
 
     def setupGUI(self):
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        skinPath = os.path.join( self.cwd, 'skins' )
         self.skinPath = os.path.join( skinPath, self.skin )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         res = self.getResolution()
@@ -89,13 +90,13 @@ class GUI( xbmcgui.WindowDialog ):
             self.setControlsValues()
 
     def chooseSkin( self ):
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        skinPath = os.path.join( self.cwd, 'skins' )
         skins = os.listdir( skinPath )
         skins.sort()
         self.showPopup( 'choose your skin', skins )
         
     def getThumb( self, choice ):
-        thumbnail = os.path.join( os.getcwd(), 'skins', choice.getLabel(), 'thumbnail.tbn' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        thumbnail = os.path.join( self.cwd, 'skins', choice.getLabel(), 'thumbnail.tbn' )
         if ( os.path.isfile( thumbnail ) ):
             self.controls['Popup Thumb']['control'].setImage( thumbnail )
         else:
@@ -109,9 +110,9 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup Label']['control'].setLabel( title )
         self.controls['Popup List']['control'].reset()
         for item in items:
-            if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'skin.xml' ).replace( ';', '' ) ) and
-                os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'settings.xml' ).replace( ';', '' ) ) ):
-                if ( os.path.isfile( os.path.join( os.getcwd(), 'skins', item, 'warning.txt' ).replace( ';', '' ) ) ):
+            if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'skin.xml' ).replace( ';', '' ) ) and
+                os.path.isfile( os.path.join( self.cwd, 'skins', item, 'settings.xml' ).replace( ';', '' ) ) ):
+                if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'warning.txt' ).replace( ';', '' ) ) ):
                     warning = '*'
                 else: warning = ''
                 self.controls['Popup List']['control'].addItem( '%s%s' % ( warning, item, ) )

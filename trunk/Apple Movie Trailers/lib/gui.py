@@ -1,14 +1,12 @@
 '''
 Main GUI for Apple Movie Trailers
 '''
-__line1__       = 'Setting up script:'
-__line2__       = 'Importing modules & initializing...'
 
 def createProgressDialog( __line3__ ):
     global dialog, pct
     pct = 0
     dialog = xbmcgui.DialogProgress()
-    dialog.create( default.__scriptname__ )
+    dialog.create( lang.string( 0 ) )
     updateProgressDialog( __line3__ )
 
 def updateProgressDialog( __line3__ ):
@@ -20,27 +18,39 @@ def closeProgessDialog():
     global dialog
     dialog.close()
     
-import xbmcgui, default
-createProgressDialog( 'modules: xbmcgui, default' )
+import xbmcgui, language
+lang = language.Language()
+__line1__       = lang.string(50)
+__line2__       = lang.string(51)
+createProgressDialog( '%s xbmcgui' % ( lang.string( 52 ), ) )
 
-updateProgressDialog( 'modules: xbmc, sys, os, traceback' )
-import xbmc, sys, os, traceback
-
-updateProgressDialog( 'modules: trailers' )
+import xbmc
+updateProgressDialog( '%s xbmc' % ( lang.string( 52 ), ) )
+import sys
+updateProgressDialog( '%s sys' % ( lang.string( 52 ), ) )
+import os
+updateProgressDialog( '%s os' % ( lang.string( 52 ), ) )
+import traceback
+updateProgressDialog( '%s traceback' % ( lang.string( 52 ), ) )
 import trailers
-
-updateProgressDialog( 'modules: threading, language' )
-import threading, language
-
-updateProgressDialog( 'modules: guibuilder, guisettings' )
-import guibuilder, guisettings
-
-updateProgressDialog( 'modules: amt_util, cacheurl, shutil' )
-import amt_util, cacheurl, shutil
+updateProgressDialog( '%s trailers' % ( lang.string( 52 ), ) )
+import threading
+updateProgressDialog( '%s threading' % ( lang.string( 52 ), ) )
+import guibuilder
+updateProgressDialog( '%s guibuilder' % ( lang.string( 52 ), ) )
+import guisettings
+updateProgressDialog( '%s guisettings' % ( lang.string( 52 ), ) )
+import amt_util
+updateProgressDialog( '%s amt_util' % ( lang.string( 52 ), ) )
+import cacheurl
+updateProgressDialog( '%s cacheurl' % ( lang.string( 52 ), ) )
+import shutil
+updateProgressDialog( '%s shutil' % ( lang.string( 52 ), ) )
 
 
 class GUI( xbmcgui.Window ):
     def __init__( self ):
+        self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.getSettings()
         self.skin = self.settings['skin']
         self.setupGUI()
@@ -57,26 +67,36 @@ class GUI( xbmcgui.Window ):
                     self.setStartupCategory()
                 else:
                     dialog = xbmcgui.Dialog()
-                    ok = dialog.ok(default.__scriptname__, 'No database found!', 'You must Update all genre and movie information.')
+                    ok = dialog.ok( lang.string( 0 ),
+                                        lang.string( 53),
+                                        lang.string( 54 ) )
             except: 
                 xbmc.output('Error at script start')
                 self.exitScript()
                 
     def setupGUI(self):
-        skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        skinPath = os.path.join( self.cwd, 'skins' )
         self.skinPath = os.path.join( skinPath, self.settings['skin'] )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         res = self.getResolution()
         if ( res == 0 or res % 2 ): skin = 'skin_16x9.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, title=default.__scriptname__, line1=__line1__, dlg=dialog, pct=pct, useLocal=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, 
+            title=lang.string( 0 ), line1=__line1__, dlg=dialog, pct=pct, useLocal=True, debug=False )
+        closeProgessDialog()
+        if ( not self.SUCCEEDED ):
+            dlg = xbmcgui.Dialog()
+            dlg.ok(lang.string( 0 ),
+                    lang.string( 57 ),
+                    lang.string( 58 ),
+                    os.path.join( self.skinPath, skin ) )
 
     def getSettings( self ):
         self.settings = amt_util.getSettings()
 
     def checkForDB( self ):
-        if ( os.path.isfile( os.path.join( os.getcwd(), 'data', 'AMT.pk' ).replace( ';', '' ) ) ): return True
+        if ( os.path.isfile( os.path.join( self.cwd, 'data', 'AMT.pk' ) ) ): return True
         else: return False
 
     def setStartupCategory( self ):
@@ -226,11 +246,10 @@ class GUI( xbmcgui.Window ):
         self.showList( False )
     
     def changeSettings( self ):
-        settings = guisettings.GUI( skin=self.skin )
+        settings = guisettings.GUI( skin=self.skin, language=lang )
         settings.doModal()
         del settings
         self.getSettings()
-        #self.getGenreCategories()
         self.setGenre( self.genre )
 
     def onControl( self, control ):
@@ -245,12 +264,6 @@ class GUI( xbmcgui.Window ):
                 self.updateDatabase()
             elif ( control is self.controls['Settings Button']['control'] ):
                 self.changeSettings()
-                #settings = guisettings.GUI()
-                #settings.doModal()
-                #del settings
-                #self.getSettings()
-                #self.getGenreCategories()
-                #self.setStartupCategory()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
             elif ( control is self.controls['Trailer List']['control'] ):
