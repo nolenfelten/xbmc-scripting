@@ -39,7 +39,7 @@
 			<posx>200</posx>
 			<posy>63</posy>
 			<align>right</align>
-			<label>xbox media center</label>
+			<label>1</label>
 			<font>special12</font>
 			<textcolor>FFFFFFFF</textcolor>
 		</control>
@@ -89,7 +89,7 @@
 			<posx>207</posx>
 			<posy>63</posy>
 			<align>left</align>
-			<label>Apple Movie Trailers</label>
+			<label>0</label>
 			<font>special13</font>
 			<textcolor>FFFFFFFF</textcolor>
 		</control>
@@ -116,7 +116,7 @@
 			<description>Newest Button</description>
 			<type>button</type>
 			<id>10</id>
-			<label>Newest</label>
+			<label>200</label>
 			<posx>50</posx>
 			<posy>120</posy>
 			<width>150</width>
@@ -140,7 +140,7 @@
 			<description>Exclusives Button</description>
 			<type>button</type>
 			<id>20</id>
-			<label>Exclusives</label>
+			<label>201</label>
 			<posx>50</posx>
 			<posy>157</posy>
 			<width>150</width>
@@ -164,7 +164,7 @@
 			<description>Genre Button</description>
 			<type>button</type>
 			<id>30</id>
-			<label>Genre</label>
+			<label>202</label>
 			<posx>50</posx>
 			<posy>194</posy>
 			<width>150</width>
@@ -188,7 +188,7 @@
 			<description>Search Button</description>
 			<type>button</type>
 			<id>40</id>
-			<label>Search</label>
+			<label>203</label>
 			<posx>50</posx>
 			<posy>268</posy>
 			<width>150</width>
@@ -212,7 +212,7 @@
 			<description>Settings Button</description>
 			<type>button</type>
 			<id>50</id>
-			<label>Settings</label>
+			<label>204</label>
 			<posx>50</posx>
 			<posy>342</posy>
 			<width>150</width>
@@ -236,7 +236,7 @@
 			<description>Update Button</description>
 			<type>button</type>
 			<id>60</id>
-			<label>Update All</label>
+			<label>205</label>
 			<posx>50</posx>
 			<posy>465</posy>
 			<width>150</width>
@@ -428,7 +428,7 @@
 			<posx>115</posx>
 			<posy>528</posy>
 			<width>250</width>
-			<label>Full Screen Visualization</label>
+			<label>220</label>
 			<align>left</align>
 			<textcolor>FFFFFFFF</textcolor>
 			<shadowcolor>FF000000</shadowcolor>
@@ -444,7 +444,7 @@
 			<font>font12</font>
 			<posx>50</posx>
 			<posy>500</posy>
-			<label>Full Screen Video</label>
+			<label>221</label>
 			<align>center</align>
 			<textcolor>FFFFFFFF</textcolor>
 			<shadowcolor>FF000000</shadowcolor>

@@ -111,9 +111,11 @@ import xbmc, xbmcgui
 import xml.dom.minidom
 import re, os
 
+try: import language
+except: pass
+
 class GUIBuilder:
-	def __init__(self, win, skinXML, imagePath='', useDescAsKey=False, title='GUI Builder', line1='',
-						dlg=None, pct=0, fastMethod=False, debug=False):
+	def __init__(self, win, skinXML, imagePath='', useDescAsKey=False, title='GUI Builder', line1='', dlg=None, pct=0, fastMethod=False, useLocal=False, debug=False):
 		try:
 			self.debug									= debug
 			self.debugWrite('guibuilder.py', 2)
@@ -122,12 +124,16 @@ class GUIBuilder:
 			self.skinXML 								= skinXML[skinXML.rfind('\\') + 1:]
 			self.useDescAsKey						= useDescAsKey
 			self.fastMethod							= fastMethod
+			self.useLocal								= useLocal
 			self.pct 										= pct
 			self.lineno 									= line1 != ''
 			self.lines 									= [''] * 3
 			self.lines[0] 								= line1
 			self.lines[self.lineno] 					= 'Creating GUI from %s.' % (self.skinXML,)
 			self.initVariables()
+			try:
+				if ( self.useLocal ): self.language = language.Language()
+			except: self.useLocal = False
 			if (not self.fastMethod):	
 				if (dlg): self.dlg = dlg
 				else: 
@@ -395,15 +401,21 @@ class GUIBuilder:
 				while (node):
 					# key node so save to the dictionary
 					if (node.tagName.lower() == 'label'): 
-						try: 
-							ls = xbmc.getLocalizedString(int(node.firstChild.nodeValue))
+						try:
+							v = node.firstChild.nodeValue
+							if ( self.useLocal ):
+								ls = self.language.string(int(v))
+							else: ls = xbmc.getLocalizedString(int(v))
 							if (ls): lbl1.append(ls)
 							else: raise
 						except: 
 							if (node.hasChildNodes()): lbl1.append(node.firstChild.nodeValue)
 					elif (node.tagName.lower() == 'label2'):
 						try: 
-							ls = xbmc.getLocalizedString(int(node.firstChild.nodeValue))
+							v = node.firstChild.nodeValue
+							if ( self.useLocal ):
+								ls = self.language.string(int(v))
+							else: ls = xbmc.getLocalizedString(int(v))
 							if (ls): lbl2.append(ls)
 							else: raise
 						except:

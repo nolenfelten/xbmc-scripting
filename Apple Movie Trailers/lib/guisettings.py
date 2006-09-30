@@ -1,10 +1,11 @@
 import xbmc, xbmcgui
 import os, guibuilder
-import amt_util, default
+import amt_util, default, language
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
         self.settings = amt_util.getSettings()
+        self.language = language.Language()
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
@@ -22,7 +23,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
         else: skin = 'settings.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'settings.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, fastMethod=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def setupConstants( self ):
         self.controllerAction = amt_util.setControllerAction()
@@ -32,23 +33,23 @@ class GUI( xbmcgui.WindowDialog ):
         self.thumbnail = amt_util.setThumbnailDisplay()
         
     def setControlsValues( self ):
-        self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[self.settings['trailer quality']], ) )
-        self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[self.settings['mode']], ) )
-        self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( self.settings['save folder'], ) )
+        self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(300), self.quality[self.settings['trailer quality']], ) )
+        self.controls['Mode Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(301), self.mode[self.settings['mode']], ) )
+        self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(302), self.settings['save folder'], ) )
         self.controls['Save Folder Button']['control'].setEnabled( self.settings['mode'] == 2 )
-        self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % ( self.settings['skin'], ) )
-        self.controls['Startup Category Button']['control'].setLabel( 'Startup Category: [%s]' % ( self.startup[self.settings['startup category']], ) )
-        self.controls['Thumbnail Display Button']['control'].setLabel( 'Thumbnail Display: [%s]' % ( self.thumbnail[self.settings['thumbnail display']], ) )
+        self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(303), self.settings['skin'], ) )
+        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(304), self.startup[self.settings['startup category']], ) )
+        self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self.language.string(305), self.thumbnail[self.settings['thumbnail display']], ) )
 
     def saveSettings( self ):
         ret = amt_util.saveSettings( self.settings )
         if ( not ret ):
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok( default.__scriptname__, 'There was an error saving your settings.' )
+            ok = dialog.ok( self.language.string(0), self.language.string(55) )
         else:
             if ( self.skin != self.settings['skin']):
                 dialog = xbmcgui.Dialog()
-                ok = dialog.ok( default.__scriptname__, "The skin change won't take affect until you restart." )
+                ok = dialog.ok( self.language.string(0), self.language.string(56)  )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
@@ -144,9 +145,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def showCredits( self ):
         try:
-            self.controls['Credits Label']['control'].setLabel( default.__scriptname__ )
-            self.controls['Version Label']['control'].setLabel( 'Version: %s' % ( default.__version__, ) )
-            self.controls['Team Credits Label']['control'].setLabel( 'Team Credits:' )
+            self.controls['Credits Label']['control'].setLabel( self.language.string(0) )
+            self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self.language.string(100), default.__version__, ) )
+            self.controls['Team Credits Label']['control'].setLabel( self.language.string(101) )
             self.controls['Team Credits List']['control'].reset()
             l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
             self.controls['Team Credits List']['control'].addItem( l )
@@ -154,6 +155,16 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Team Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
             self.controls['Team Credits List']['control'].addItem( l )
+
+            self.controls['Additional Credits Label']['control'].setLabel( self.language.string(102) )
+            self.controls['Additional Credits List']['control'].reset()
+            l = xbmcgui.ListItem( default.__acredits_l1__, default.__acredits_r1__ )
+            self.controls['Additional Credits List']['control'].addItem( l )
+            l = xbmcgui.ListItem( default.__acredits_l2__, default.__acredits_r2__ )
+            self.controls['Additional Credits List']['control'].addItem( l )
+            l = xbmcgui.ListItem( default.__acredits_l3__, default.__acredits_r3__ )
+            self.controls['Additional Credits List']['control'].addItem( l )
+
             self.setCreditsVisibility( True )
             self.setFocus( self.controls['Skin Credits List']['control'] )
         except: print 'Credits Removed'
@@ -169,6 +180,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Version Label']['control'].setVisible( visible )
             self.controls['Team Credits Label']['control'].setVisible( visible )
             self.controls['Team Credits List']['control'].setVisible( visible )
+            self.controls['Additional Credits Label']['control'].setVisible( visible )
+            self.controls['Additional Credits List']['control'].setVisible( visible )
             self.controls['Skin Credits Label']['control'].setVisible( visible )
             self.controls['Skin Credits List']['control'].setVisible( visible )
         except: print 'Credits Removed'

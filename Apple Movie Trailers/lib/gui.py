@@ -26,8 +26,11 @@ createProgressDialog( 'modules: xbmcgui, default' )
 updateProgressDialog( 'modules: xbmc, sys, os, traceback' )
 import xbmc, sys, os, traceback
 
-updateProgressDialog( 'modules: trailers, threading' )
-import trailers, threading
+updateProgressDialog( 'modules: trailers' )
+import trailers
+
+updateProgressDialog( 'modules: threading, language' )
+import threading, language
 
 updateProgressDialog( 'modules: guibuilder, guisettings' )
 import guibuilder, guisettings
@@ -66,7 +69,7 @@ class GUI( xbmcgui.Window ):
         if ( res == 0 or res % 2 ): skin = 'skin_16x9.xml'
         else: skin = 'skin.xml'
         if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, title=default.__scriptname__, line1=__line1__, dlg=dialog, pct=pct, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, title=default.__scriptname__, line1=__line1__, dlg=dialog, pct=pct, useLocal=True, debug=False )
 
     def getSettings( self ):
         self.settings = amt_util.getSettings()
