@@ -346,10 +346,11 @@
 			<description>Popup Warning Label</description>
 			<type>label</type>
 			<id>503</id>
-			<posx>195</posx>
-			<posy>190</posy>
+			<posx>240</posx>
+			<posy>270</posy>
 			<width>128</width>
-			<align>center</align>
+			<height>20</height>
+			<align>right</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>* Skin dependent</label>

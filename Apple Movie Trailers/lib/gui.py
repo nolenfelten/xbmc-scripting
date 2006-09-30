@@ -83,14 +83,18 @@ class GUI( xbmcgui.Window ):
             self.getTrailerInfo( self.controls['Trailer List']['control'].getSelectedItem() )
             
     def setupConstants( self ):
-        # self.Timer is currently used for the Player() subclass so when an onPlayback* event occurs, it's instant.
-        self.Timer = threading.Timer(60*60, self.exitScript,() )
-        self.Timer.start()
+        self.dummy()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
         self.controllerAction = amt_util.setControllerAction()
         self.updateMethod = 0
         self.thumbnail = None
         self.genre = None
+        
+    # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
+    #it calls myPlayerChanged() immediately.
+    def dummy( self ):
+        self.Timer = threading.Timer(60*60*60, self.dummy,() )
+        self.Timer.start()
     
     # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged(self):
@@ -131,6 +135,7 @@ class GUI( xbmcgui.Window ):
     def showTrailerInfo( self, title ):
         self.thumbnail, description = self.trailers.get_trailer_info( self.genre, title )
         # Trailer Thumbnail
+        if ( not self.thumbnail ): self.thumbnail = os.path.join( self.imagePath, 'blank_poster.tbn' )
         self.controls['Trailer Thumbnail']['control'].setImage( self.thumbnail )
         # Trailer Title
         self.controls['Trailer Title']['control'].setLabel( title )
@@ -216,6 +221,14 @@ class GUI( xbmcgui.Window ):
         self.setCategoryLabel( self.genre )
         self.showList( False )
     
+    def changeSettings( self ):
+        settings = guisettings.GUI()
+        settings.doModal()
+        del settings
+        self.getSettings()
+        #self.getGenreCategories()
+        self.setGenre( self.genre )
+
     def onControl( self, control ):
         try:
             if ( control is self.controls['Newest Button']['control'] ):
@@ -227,10 +240,13 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Update Button']['control'] ):
                 self.updateDatabase()
             elif ( control is self.controls['Settings Button']['control'] ):
-                settings = guisettings.GUI()
-                settings.doModal()
+                self.changeSettings()
+                #settings = guisettings.GUI()
+                #settings.doModal()
                 #del settings
-                self.getSettings()
+                #self.getSettings()
+                #self.getGenreCategories()
+                #self.setStartupCategory()
             elif ( control is self.controls['Genre List']['control'] ):
                 self.getTrailerGenre( control.getSelectedItem() )
             elif ( control is self.controls['Trailer List']['control'] ):
