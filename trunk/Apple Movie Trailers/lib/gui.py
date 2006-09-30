@@ -183,9 +183,9 @@ class GUI( xbmcgui.Window ):
     def updateDatabase( self ):
         if (self.updateMethod == 0 ):
             self.trailers.update_all()
-            #self.getGenreCategories()
+            self.getGenreCategories()
             #self.showTrailers( self.genre )
-            self.setGenre( self. genre )
+            self.setGenre( self.genre )
             
     def getGenreCategories( self ):
         self.controls['Genre List']['control'].reset()
