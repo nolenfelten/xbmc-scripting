@@ -1,5 +1,5 @@
 import os, urllib2, md5, traceback
-import xbmcgui
+import xbmc, xbmcgui
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
@@ -134,6 +134,26 @@ class HTTP:
             # notify handler of being finished
             self.on_finished( actual_url, filepath, totalsize, is_completed )
             return filepath
+
+        # check if enough disk space exists to store the file
+        try:
+            drive = os.path.splitdrive( self.cache_dir )[0].split(':')[0]
+            free_space = xbmc.getInfoLabel( 'System.Freespace(%s)' % drive )
+            if len( free_space ):
+                free_space_mb = int( free_space.split()[2] )
+                free_space_b = free_space_mb * 1024 * 1024
+                if totalsize >= free_space_mb:
+                    xbmcgui.Dialog().ok( 
+                        'Free space error...', 
+                        'Not enough free space in target drive.', 
+                        'Drive: %s %iMB Free' % ( drive, free_space_mb ), 'Space Required: ' + byte_measurement( totalsize )
+                    )
+                    # notify handler of being finished
+                    self.on_finished( actual_url, filepath, totalsize, is_completed )
+                    return ''
+        except:
+            traceback.print_exc()
+            raise
 
         # create the cache dir if it doesn't exist
         if not os.path.isdir( self.cache_dir ):
