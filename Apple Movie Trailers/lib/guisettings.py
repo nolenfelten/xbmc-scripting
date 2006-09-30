@@ -3,13 +3,13 @@ import os, guibuilder
 import amt_util, default, language
 
 class GUI( xbmcgui.WindowDialog ):
-    def __init__( self ):
+    def __init__( self, *args, **kwargs ):
         self.settings = amt_util.getSettings()
         self.language = language.Language()
+        self.skin = kwargs.get( 'skin', self.settings['skin'] )
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
-            self.skin = self.settings['skin']
             self.setupConstants()
             self.setControlsValues()
             ##remove disabled when update script routine is done
@@ -17,7 +17,7 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupGUI(self):
         skinPath = os.path.join( os.getcwd(), 'skins' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
-        self.skinPath = os.path.join( skinPath, self.settings['skin'] )
+        self.skinPath = os.path.join( skinPath, self.skin )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
         res = self.getResolution()
         if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
