@@ -42,6 +42,7 @@ import amt_util, cacheurl, shutil
 class GUI( xbmcgui.Window ):
     def __init__( self ):
         self.getSettings()
+        self.skin = self.settings['skin']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
@@ -225,7 +226,7 @@ class GUI( xbmcgui.Window ):
         self.showList( False )
     
     def changeSettings( self ):
-        settings = guisettings.GUI()
+        settings = guisettings.GUI( skin=self.skin )
         settings.doModal()
         del settings
         self.getSettings()
