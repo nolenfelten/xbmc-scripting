@@ -35,6 +35,5 @@ class Language:
         try:
             if ( self.strings.has_key( int( code ) ) ):
                 retVal = self.strings[int( code )].replace( '&amp;', '&' )
-                
             else: retVal = None
         finally: return retVal
