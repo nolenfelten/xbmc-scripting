@@ -17,6 +17,13 @@ __credits_r2__ = 'Nuka1195'
 __credits_l3__ = 'Graphics & Skinning'
 __credits_r3__ = 'Pike'
 
+__acredits_l1__ = 'Xbox Media Center'
+__acredits_r1__ = 'Team XBMC'
+__acredits_l2__ = 'Usability'
+__acredits_r2__ = 'Spiff'
+__acredits_l3__ = 'Language Routine'
+__acredits_r3__ = 'Rockstar & Donno'
+
 def py_cleanup():
     try:
         for root, dirs, files in os.walk( scriptpath, topdown = False ):

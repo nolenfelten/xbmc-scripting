@@ -59,7 +59,7 @@
 			<align>left</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>
-			<label>Apple Movie Trailers</label>
+			<label>0</label>
 		</control>
 
 		<!-- buttons -->
@@ -214,7 +214,7 @@
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>Update</label>
+			<label>208</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
@@ -238,7 +238,7 @@
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>Credits</label>
+			<label>209</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
@@ -262,7 +262,7 @@
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>186</label>
+			<label>210</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>17</textoffsetx>
@@ -285,7 +285,7 @@
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>222</label>
+			<label>211</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>17</textoffsetx>
@@ -323,7 +323,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>choose skin</label>
+			<label>214</label>
 			<visible>false</visible>
 		</control>
 
@@ -350,10 +350,10 @@
 			<posy>270</posy>
 			<width>128</width>
 			<height>20</height>
-			<align>right</align>
+			<align>Right</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>* Skin dependent</label>
+			<label>212</label>
 			<visible>false</visible>
 		</control>
 
@@ -396,10 +396,10 @@
 			<description>Credits Image</description>
 			<type>image</type>
 			<id>600</id>
-			<posx>70</posx>
-			<posy>70</posy>
-			<width>260</width>
-			<height>240</height>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>280</width>
+			<height>290</height>
 			<texture>\dialog-panel.png</texture>
 			<visible>false</visible>
 		</control>
@@ -409,13 +409,13 @@
 			<description>Credits Label</description>
 			<type>label</type>
 			<id>601</id>
-			<posx>85</posx>
-			<posy>78</posy>
-			<width>150</width>
+			<posx>75</posx>
+			<posy>48</posy>
+			<width>175</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>Apple Movie Trailers</label>
+			<label>0</label>
 			<visible>false</visible>
 		</control>
 
@@ -424,13 +424,13 @@
 			<description>Version Label</description>
 			<type>label</type>
 			<id>602</id>
-			<posx>320</posx>
-			<posy>78</posy>
+			<posx>330</posx>
+			<posy>48</posy>
 			<width>150</width>
 			<align>right</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>Version: 1.0 pre</label>
+			<label>213</label>
 			<visible>false</visible>
 		</control>
 
@@ -439,13 +439,13 @@
 			<description>Team Credits Label</description>
 			<type>label</type>
 			<id>603</id>
-			<posx>95</posx>
-			<posy>110</posy>
+			<posx>85</posx>
+			<posy>80</posy>
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>Team Credits:</label>
+			<label>101</label>
 			<visible>false</visible>
 		</control>
 
@@ -454,9 +454,9 @@
 			<description>Team Credits List</description>
 			<type>listcontrol</type>
 			<id>604</id>
-			<posx>83</posx>
-			<posy>130</posy>
-			<width>247</width>
+			<posx>73</posx>
+			<posy>100</posy>
+			<width>267</width>
 			<height>100</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
@@ -483,16 +483,69 @@
 
 		<!-- ** Required ** Do not change <description> -->
 		<control>
-			<description>Skin Credits Label</description>
+			<description>Additional Credits Label</description>
 			<type>label</type>
 			<id>605</id>
-			<posx>95</posx>
-			<posy>200</posy>
+			<posx>85</posx>
+			<posy>170</posy>
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>Additional Credits:</label>
+			<label>102</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Additional Credits List</description>
+			<type>listcontrol</type>
+			<id>606</id>
+			<posx>73</posx>
+			<posy>190</posy>
+			<width>267</width>
+			<height>100</height>
+			<label>Xbox Media Center</label>
+			<label2>Team XBMC</label2>
+			<label>Graphics</label>
+			<label2>Chokemaniac</label2>
+			<label>Usability</label>
+			<label2>Spiff</label2>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-25</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Skin Credits Label</description>
+			<type>label</type>
+			<id>607</id>
+			<posx>85</posx>
+			<posy>260</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>103</label>
 			<visible>false</visible>
 		</control>
 
@@ -503,17 +556,13 @@
 		<control>
 			<description>Skin Credits List</description>
 			<type>listcontrol</type>
-			<id>606</id>
-			<posx>83</posx>
-			<posy>220</posy>
-			<width>247</width>
+			<id>608</id>
+			<posx>73</posx>
+			<posy>280</posy>
+			<width>267</width>
 			<height>100</height>
-			<label>Xbox Media Center</label>
-			<label2>Team XBMC</label2>
 			<label>Graphics</label>
 			<label2>Chokemaniac</label2>
-			<label>Usability</label>
-			<label2>Spiff</label2>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>
