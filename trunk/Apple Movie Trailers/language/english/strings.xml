@@ -20,8 +20,13 @@
   <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string>
   <string id="64">Error</string>
   <string id="65">Unable to properly update AMT.pk</string>
-  <string id="66">Fetching:</string>
-  <string id="67">Fetching movie information:</string>
+  <string id="66">Fetching category and genre information...</string>
+  <string id="67">Please wait a moment.</string>
+  <string id="68">Fetching:</string>
+  <string id="69">Error retrieving information for one or more genres.</string>
+  <string id="70">Fetching movie information...</string>
+  <string id="71">Genre:</string>
+  <string id="72">Error retrieving information for one or more movie titles.</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
@@ -66,5 +71,8 @@
   <string id="331">Download</string>
   <string id="332">Download &amp; Save</string>
   <string id="340">Check version on startup</string>
+
+  <!-- Movie/Genre Information -->
+  <string id="400">No description could be retrieved for this title.</string>
 
 </strings>
