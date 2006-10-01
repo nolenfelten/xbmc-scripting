@@ -225,6 +225,12 @@ class GUI( xbmcgui.Window ):
         self.showList( genre == 'Genre' )
 
     def setCategoryLabel( self, category ):
+        if ( category == 'Newest' ):
+            category == lang.string(200)
+        elif ( category == 'Exclusives' ):
+            category == lang.string(201)
+        elif ( category == 'Genre' ):
+            category == lang.string(202)
         self.controls['Category Label']['control'].setLabel( category )
             
     def setListNavigation( self, button ):
