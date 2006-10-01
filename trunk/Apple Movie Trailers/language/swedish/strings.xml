@@ -1,0 +1,63 @@
+<strings>
+  <string id="0">Apple Movie Trailers</string>
+  <string id="1">xbox media center</string>
+
+
+  <!-- Dialog Messages -->
+  <string id="50">Konfigurerar skript:</string>
+  <string id="51">Importerar moduler &amp; startar...</string>
+  <string id="52">modul:</string>
+  <string id="53">Ingen databas funnen!</string>
+  <string id="54">Du måste Uppdatera all genre- och film-information.</string>
+  <string id="55">Ett fel uppstod när inställningarna skulle sparas.</string>
+  <string id="56">Skalet kommer inte att ändras förräns du startar om.</string>
+  <string id="57">Ett fel uppstod när gränssnittet skulle skapas.</string>
+  <string id="58">Kontrollera en fil i skalet:</string>
+  <string id="59">Databas filen är ogiltig...</string>
+  <string id="60">Din databas fil är inkompatibel med denna|versionen av AMT. Den måste återskapas.</string>
+  <string id="61">Uppdaterar all genre- och film-information...</string>
+  <string id="62">Är du säker på att du vill göra detta?</string>
+  <string id="63">Uppdateringen kan ta allt från 5 till 15 minuter,|beroende på din anslutningshastighet.</string>
+  <string id="64">Fel</string>
+  <string id="65">Kan ej uppdatera AMT.pk ordentligt</string>
+  
+  <!-- Credits -->
+
+  
+  <!-- Buttons and Labels -->
+  <string id="200">Nyaste</string>
+  <string id="201">Exklusiva</string>
+  <string id="202">Genre</string>
+  <string id="203">Sök</string>
+  <string id="204">Inställningar</string>
+  <string id="205">Updatera Alla</string>
+  <string id="206">Updatera Genre</string>
+  <string id="207">Updatera Trailer</string>
+  <string id="208">Updatera</string>
+  <string id="210">Ok</string>
+  <string id="211">Avbryt</string>
+  <string id="212">* Skalberoende</string>
+  <string id="213">Version</string>
+  <string id="214">välj skal</string>
+  <string id="220">Full Screen Visualization</string>
+  <string id="221">Full Screen Video</string>
+  
+  <!-- Settings -->
+  <string id="300">Trailer Kvalitet</string>
+  <string id="301">Läge</string>
+  <string id="302">Save Folder</string>
+  <string id="303">Skal</string>
+  <string id="304">Uppstarts Kategori</string>
+  <string id="305">Thumbnail Display</string>
+  <string id="310">Film Poster</string>
+  <string id="311">Generiska Minibilder</string>
+  <string id="312">Av</string>
+  <string id="320">Låg</string>
+  <string id="321">Medium</string>
+  <string id="322">Hög</string>
+  <string id="330">Strömma</string>
+  <string id="331">Ladda Ner</string>
+  <string id="332">Ladda Ner &amp; Spara</string>
+  <string id="340">Kolla version vid uppstart</string>
+
+</strings>
