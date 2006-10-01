@@ -27,9 +27,9 @@ class Language:
         
             if ( language != 'english' ):
                 language_path = os.path.join( cwd, 'english', 'strings.xml' )
+                f = open( language_path, 'r' )
                 temp_strings = f.read()
                 f.close()
-                pattern = '<string id="(.*?)">(.*?)</string>'
                 strings = re.findall(pattern, temp_strings)
                 for item in strings:
                     if ( not self.strings.has_key(int( item[0] ) ) ):
