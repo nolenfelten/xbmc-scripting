@@ -14,7 +14,6 @@ My email is darkdonno@gmail.com
 
 """
 
-
 import xbmc, xbmcgui
 import urllib
 import os, codecs, string
