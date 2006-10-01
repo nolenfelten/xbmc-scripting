@@ -119,8 +119,8 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching category and genre information...'
-        dialog_line1 = 'Please wait a moment.'
+        dialog_header = _(66) # Fetching category and genre information...
+        dialog_line1 = _(67) # Please wait a moment.
         dialog_errorline = ''
         dialog_percentage = 0
         dialog.create( dialog_header, dialog_line1 )
@@ -128,13 +128,14 @@ class Trailers:
         pos = 0
         for each in self.genres['special'].keys():
             try:
-                dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
+                line2 = _(68) # Fetching:
+                dialog.update( dialog_percentage, dialog_line1, line2 + ' ' + each, dialog_errorline )
                 self.genres['special'][each] = self.__update_trailer_dict__( each )
             except:
                 import traceback
                 traceback.print_exc()
                 del traceback
-                dialog_errorline = 'Error retrieving information for one or more genres.'
+                dialog_errorline = _(69) # Error retrieving information for one or more genres.
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
         dialog.close()
@@ -152,7 +153,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching movie information...'
+        dialog_header = _(70) # Fetching movie information...
         dialog_errorline = ''
         genre_percentage = 0
         dialog.create( dialog_header )
@@ -161,7 +162,8 @@ class Trailers:
         genre_pos = 0
         for genre in self.genres['special'].keys():
             movie_pos = 0
-            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
+            genre_line1 = _(71) # Genre:
+            dialog.update( genre_percentage, genre_line1 + ' ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
@@ -169,10 +171,12 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( movie_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    movie_line1 = _(71) # Genre:
+                    movie_line2 = _(68) # Fetching:
+                    dialog.update( movie_percentage, movie_line1 + ' ' + genre, movie_line2 + ' ' + movie, dialog_errorline )
                     self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
-                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
+                    dialog_errorline = _(72)
                 movie_pos += 1
                 movie_percentage = int( float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage )
             genre_pos += 1
@@ -225,8 +229,8 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching category and genre information...'
-        dialog_line1 = 'Please wait a moment.'
+        dialog_header = _(66) # Fetching category and genre information...
+        dialog_line1 = _(67) # Please wait a moment.
         dialog_errorline = ''
         dialog_percentage = 0
         dialog.create( dialog_header, dialog_line1 )
@@ -234,10 +238,11 @@ class Trailers:
         pos = 0
         for each in self.genres['standard'].keys():
             try:
-                dialog.update( dialog_percentage, dialog_line1, 'Fetching: ' + each, dialog_errorline )
+                line2 = _(68) # Fetching:
+                dialog.update( dialog_percentage, dialog_line1, line2 + ' ' + each, dialog_errorline )
                 self.genres['standard'][each] = self.__update_trailer_dict__( each )
             except:
-                dialog_errorline = 'Error retrieving information for one or more genres.'
+                dialog_errorline = _(69) # Error retrieving information for one or more genres.
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['standard'] ) * 100 )
         dialog.close()
@@ -255,7 +260,7 @@ class Trailers:
         #       }
         #   }
         dialog = xbmcgui.DialogProgress()
-        dialog_header = 'Fetching movie information...'
+        dialog_header = _(70) # Fetching movie information...
         dialog_errorline = ''
         genre_percentage = 0
         dialog.create( dialog_header )
@@ -264,7 +269,8 @@ class Trailers:
         genre_pos = 0
         for genre in self.genres['standard'].keys():
             movie_pos = 0
-            dialog.update( genre_percentage, 'Genre: ' + genre, '', dialog_errorline )
+            genre_line1 = _(71) # Genre:
+            dialog.update( genre_percentage, genre_line1 + ' ' + genre, '', dialog_errorline )
             if dialog.iscanceled():
                 break
             movie_percentage = 0
@@ -272,10 +278,12 @@ class Trailers:
                 if dialog.iscanceled():
                     break
                 try:
-                    dialog.update( movie_percentage, 'Genre: ' + genre, 'Fetching: ' + movie, dialog_errorline )
+                    movie_line1 = _(71) # Genre:
+                    movie_line2 = _(68) # Fetching:
+                    dialog.update( movie_percentage, movie_line1 + ' ' + genre, movie_line2 + ' ' + movie, dialog_errorline )
                     self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
                 except:
-                    dialog_errorline = 'Error retrieving information for one or more movie titles.'
+                    dialog_errorline = _(72) # Error retrieving information for one or more movie titles.
                 movie_pos += 1
                 movie_percentage = int( float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 + genre_percentage )
             genre_pos += 1
@@ -349,7 +357,7 @@ class Trailers:
             description = description.replace( '\r', ' ' )
             description = description.replace( '\n', ' ' )
             if not description or len( description ) is 0:
-                description = 'No description could be retrieved for this title.'
+                description = _(400) # No description could be retrieved for this title.
             urls = list()
             for each in element.getiterator( ns('GotoURL') ):
                 url = each.get( 'url' )
@@ -364,7 +372,7 @@ class Trailers:
                 urls += [ url ]
         except:
             thumbnail = ''
-            description = 'No description could be retrieved for this title.'
+            description = _(400) # No description could be retrieved for this title.
             urls = list()
         return [ thumbnail, description, urls ]
 
@@ -415,7 +423,7 @@ class Trailers:
                 thumbnail, description, urls = self.genres['standard'][genre][movie_title]
         except:
             thumbnail = ''
-            description = 'No description could be retrieved for this title.'
+            description = _(400) # No description could be retrieved for this title.
         return [ thumbnail, description ]
 
     def get_exclusives_list( self ):
