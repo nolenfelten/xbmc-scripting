@@ -3,7 +3,7 @@
     Using RSS Feed for the Data
     Coding By Donno [darkdonno@gmail.com]
     BackButton by BlackBolt
-    Version: 1.7
+    Version: 1.8
 
     THIS IS THE MC360 PORT
 
@@ -34,7 +34,7 @@ global yPath
 yPath = ""
 yPathMain = os.getcwd().replace(";","")+"\\"
 
-SD = xbmc.getSkinDir().lower() 
+SD = xbmc.getSkinDir().lower()
 txtboxColor = "0xFF000000"
 fc = "0xFF000000"
 
@@ -75,7 +75,6 @@ def parseXMLFile(filename,win):
             if (not data): raise
             for video in data:
                 node = video.firstChild
-                #node = self.FirstChildElement(tmp, None)
                 title = ""
                 url = ""
                 while (node):
@@ -111,7 +110,7 @@ def parseFriendsXMLFile(filename,win):
             for video in data:
                 node = video.firstChild
                 #node = self.FirstChildElement(tmp, None)
-                user = ""
+                title = ""
                 while (node):
                     # key node get value
                     if (node.tagName.lower() == 'user' and node.hasChildNodes()):
@@ -224,7 +223,7 @@ class YouTube(xbmcgui.Window):
         self.contextUp = 0
         ct_x = 325
         if SD == "pdm":
-            yPath = yPathMain+"gfx\\"           
+            yPath = yPathMain+"gfx\\"
         self.cbgt = xbmcgui.ControlImage(ct_x, 150-30, 230,31, yPath+"dialog-context-top.png")
         self.cbgm = xbmcgui.ControlImage(ct_x, 150, 230,210, yPath+"dialog-context-middle.png")
         self.cbgb = xbmcgui.ControlImage(ct_x, 150+210, 230,37, yPath+"dialog-context-bottom.png")
@@ -643,8 +642,7 @@ class YouTubeProfile(xbmcgui.Window):
         self.addControl(xbmcgui.ControlLabel(610,510, 200,35, 'Back',alignment=1,font="font12"))
         self.addControl(xbmcgui.ControlLabel(79,155, 200,35, 'media',angle=270,textColor="0xFF000000",font="font14"))
         self.addControl(xbmcgui.ControlLabel(79,155, 200,35, 'media',angle=270,textColor="0xFF000000",font="font14"))
-        self.lblCatergory = xbmcgui.ControlLabel(300,45,300,60,"",font=thefont14,textColor=fc)
-        
+        self.lblCatergory = xbmcgui.ControlLabel(300,45,300,60,"",font=thefont14,textColor="0xFFFFFFFF")
         self.addControl(xbmcgui.ControlImage(60,90,210,355, "systemhomebutton-1-top.png"))
         self.addControl(self.lblCatergory)
         """ Create your Menu buttons here: """
@@ -664,6 +662,7 @@ class YouTubeProfile(xbmcgui.Window):
         self.thumb_picurl = []
         self.selT = 0
         self.mode = 0
+        self.ContextMode = 0
 
         self.contextUp = 0
         ct_x = 325
@@ -678,10 +677,10 @@ class YouTubeProfile(xbmcgui.Window):
         self.checkMark_DownPlay = xbmcgui.ControlCheckMark(270, 450,200, 20,"Save",yPath+"check-box.png",yPath+"check-boxNF.png",font=thefont10,textColor=fc)
         self.curUser ="henryperu77"
         self.addControl(self.checkMark_DownPlay)
-        
-        self.videoList = xbmcgui.ControlList(270,90,430,340,"font12",fc,yPath+"iconlist-nofocus.png",yPath+"iconlist-focus.png",itemTextXOffset=-10,)
+
+        self.videoList = xbmcgui.ControlList(270,90,430,340,"font12",fc,yPath+"iconlist-nofocus.png",yPath+"iconlist-focus.png",itemTextXOffset=-10)
         self.addControl(self.videoList)
-        self.friendList = xbmcgui.ControlList(2270,90,430,340,"font12",fc,yPath+"list-nofocus.png",yPath+"list-focus.png",itemTextXOffset=-10)
+        self.friendList = xbmcgui.ControlList(270,90,430,340,"font12",fc,yPath+"iconlist-nofocus.png",yPath+"iconlist-focus.png",itemTextXOffset=-10)
         self.addControl(self.friendList)
 
         self.infoBox = xbmcgui.ControlTextBox(270,90,430,340,"font12",fc)
@@ -689,9 +688,9 @@ class YouTubeProfile(xbmcgui.Window):
 
         self.setFocus(self.btnVP)
         self.btnVP.setNavigation(self.checkMark_DownPlay,self.btnUFA,self.btnVP,self.btnVP)
-        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.btnUFA,self.btnUFA)        
+        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.btnUFA,self.btnUFA)
         self.btnUV.setNavigation(self.btnUFA,self.btnUFR,self.btnUV,self.btnUV)
-        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.btnUFR,self.btnUFR)        
+        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.btnUFR,self.btnUFR)
         self.btnF.setNavigation(self.btnUFR,self.checkMark_DownPlay,self.btnF,self.btnF)
         self.checkMark_DownPlay.setNavigation(self.btnF,self.btnVP,self.checkMark_DownPlay,self.checkMark_DownPlay)
 
@@ -713,6 +712,9 @@ class YouTubeProfile(xbmcgui.Window):
                         self.createConText(self.title_list[self.videoList.getSelectedPosition()],325,"Add To Favorites")
                     else:
                         self.createConText(self.title_list[self.videoList.getSelectedPosition()],325,"Remove From Favorites")
+            elif self.getFocus() == self.friendList:
+                if self.friendList.getSelectedPosition() != -1:
+                    self.createConTextFriends(self.friend_list[self.friendList.getSelectedPosition()],325)
         elif action == ACTION_WHITE:
             if self.contextUp == 1:
                 self.delconOL()
@@ -722,6 +724,9 @@ class YouTubeProfile(xbmcgui.Window):
                         self.createConText(self.title_list[self.videoList.getSelectedPosition()],325,"Add To Favorites")
                     else:
                         self.createConText(self.title_list[self.videoList.getSelectedPosition()],325,"Remove From Favorites")
+            elif self.getFocus() == self.friendList:
+                if self.friendList.getSelectedPosition() != -1:
+                    self.createConTextFriends(self.friend_list[self.friendList.getSelectedPosition()],325)
         elif action == ACTION_Y:
             if self.mode == 0:
                 self.lblCatergory.setLabel("Saved/ Booked Marked Videos")
@@ -766,14 +771,13 @@ class YouTubeProfile(xbmcgui.Window):
         dp.close()
         self.infoBox.setText(nfostr)
         self.curUser = tname
-        
+
         self.btnVP.setNavigation(self.checkMark_DownPlay,self.btnUFA,self.btnVP,self.infoBox)
-        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.infoBox,self.infoBox)        
+        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.infoBox,self.infoBox)
         self.btnUV.setNavigation(self.btnUFA,self.btnUFR,self.infoBox,self.infoBox)
-        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.infoBox,self.infoBox)        
+        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.infoBox,self.infoBox)
         self.btnF.setNavigation(self.btnUFR,self.checkMark_DownPlay,self.infoBox,self.infoBox)
-        
-        
+        self.setFocus(self.infoBox)
         self.infoBox.setNavigation(self.infoBox,self.infoBox,self.btnVP,self.btnVP)
         self.infoBox.setVisible(1)
         self.videoList.setVisible(0)
@@ -802,14 +806,16 @@ class YouTubeProfile(xbmcgui.Window):
             dp.close()
             return 0
         self.btnVP.setNavigation(self.checkMark_DownPlay,self.videoList,self.btnVP,self.videoList)
-        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.videoList,self.videoList)        
+        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.videoList,self.videoList)
         self.btnUV.setNavigation(self.btnUFA,self.btnUFR,self.videoList,self.videoList)
-        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.videoList,self.videoList)        
+        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.videoList,self.videoList)
         self.btnF.setNavigation(self.btnUFR,self.checkMark_DownPlay,self.infoBox,self.infoBox)
         self.videoList.setNavigation(self.videoList,self.videoList,self.btnUFA,self.btnUFA)
         self.infoBox.setVisible(0)
+        self.setFocus(self.videoList)
         self.videoList.setVisible(1)
         self.friendList.setVisible(0)
+        self.curUser = tname
         dp.close()
         return 1
     def ViewFriendList(self,tname):
@@ -833,17 +839,19 @@ class YouTubeProfile(xbmcgui.Window):
             dp.close()
             return 0
         self.btnVP.setNavigation(self.checkMark_DownPlay,self.friendList,self.btnVP,self.friendList)
-        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.friendList,self.friendList)        
+        self.btnUFA.setNavigation(self.btnVP,self.btnUV,self.friendList,self.friendList)
         self.btnUV.setNavigation(self.btnUFA,self.btnUFR,self.friendList,self.friendList)
-        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.friendList,self.friendList)        
+        self.btnUFR.setNavigation(self.btnUV,self.btnF,self.friendList,self.friendList)
+        self.btnF.setNavigation(self.btnUFR,self.checkMark_DownPlay,self.friendList,self.friendList)
         self.friendList.setNavigation(self.friendList,self.friendList,self.btnUFR,self.btnUFR)
         self.infoBox.setVisible(0)
         self.videoList.setVisible(0)
         self.friendList.setVisible(1)
+        self.setFocus(self.friendList)
+        self.curUser = tname
         dp.close()
         return 1
 
-       # TO CALL INFO use  nfo['author'] # do a check first to make sure we can
     def onControl(self, control):
         if self.btnVP == control:
             tname = unikeyboard(self.curUser,"Enter in a Username to view profile infomation")
@@ -856,13 +864,13 @@ class YouTubeProfile(xbmcgui.Window):
             if tname != "":
                 self.lblCatergory.setLabel("Viewing Favorites of %s" % tname)
                 self.ViewVideoList(tname,"users.list_favorite_videos")
-            self.mode = 0
+                self.mode = 0
         elif self.btnUV == control:
             tname = unikeyboard(self.curUser,"Enter in a Username to view there video")
             if tname != "":
                 self.lblCatergory.setLabel("Viewing Videos of %s" % tname)
                 self.ViewVideoList(tname,"videos.list_by_user")
-            self.mode = 0
+                self.mode = 0
         elif self.btnUFR == control:
             tname = unikeyboard(self.curUser,"Enter in a Username to view friends")
             if tname != "":
@@ -875,7 +883,10 @@ class YouTubeProfile(xbmcgui.Window):
             del self.feedwin
         elif self.videoList == control:
             self.playVideo()
-        elif self.contextUp == 1 and self.videoList.getSelectedPosition() != -1:
+        elif self.friendList == control:
+            if self.friendList.getSelectedPosition() != -1:
+                self.createConTextFriends(self.friend_list[self.friendList.getSelectedPosition()],325)
+        elif self.ContextMode == 1 and self.videoList.getSelectedPosition() != -1:
             if control == self.conButs[0]:
                 self.delconOL()
                 self.playVideo()
@@ -892,7 +903,27 @@ class YouTubeProfile(xbmcgui.Window):
                 self.infoWin = YouTubeInfo(ext=self.title_list[self.videoList.getSelectedPosition()],id=self.video_id_list[self.videoList.getSelectedPosition()])
                 self.infoWin.doModal()
                 del self.infoWin
-
+        elif  self.ContextMode == 2 and self.friendList.getSelectedPosition() != -1:
+            if control == self.conButs[0]:
+                tname = self.friend_list[self.friendList.getSelectedPosition()]
+                self.delconOL()
+                self.lblCatergory.setLabel("Viewing Profile of %s" % tname)
+                self.ViewProfile(tname)
+            elif control == self.conButs[1]:
+                tname = self.friend_list[self.friendList.getSelectedPosition()]
+                self.delconOL()
+                self.lblCatergory.setLabel("Viewing Favorites of %s" % tname)
+                self.ViewVideoList(tname,"users.list_favorite_videos")
+            elif control == self.conButs[2]:
+                tname = self.friend_list[self.friendList.getSelectedPosition()]
+                self.delconOL()
+                self.ViewVideoList(tname,"videos.list_by_user")
+                self.lblCatergory.setLabel("Viewing Videos of %s" % tname)
+            elif control == self.conButs[3]:
+                tname = self.friend_list[self.friendList.getSelectedPosition()]
+                self.delconOL()
+                self.ViewFriendList(tname)
+                self.lblCatergory.setLabel("Viewing Friends of %s" % tname)
     def playVideo(self):
         if self.videoList.getSelectedPosition() != -1:
             if self.mode == 1:
@@ -923,6 +954,30 @@ class YouTubeProfile(xbmcgui.Window):
         s.conButs.append(AddButton(s,'Video Info'))
         s.createnav_context()
         s.setFocus(s.conButs[0])
+        s.ContextMode = 1
+
+    def createConTextFriends(s,text="",ct_x=450):
+        s.contextUp = 1
+        # 250 is fine but over (this way its on the right)
+        s.addControl(s.cbgt)
+        s.addControl(s.cbgm)
+        s.addControl(s.cbgb)
+        s.addControl(s.clbl)
+        s.addControl(s.clbgl)
+        s.clbgl.addLabel(text)
+        SetupButtons(s,ct_x+20,220,195,30,2,gap=10)
+        s.conButs = []
+        s.conButs.append(AddButton(s,'Their Profile'))
+        s.conButs.append(AddButton(s,'Their Favorites'))
+        s.conButs.append(AddButton(s,'Their Videos'))
+        s.conButs.append(AddButton(s,'Their Friends'))
+        s.createnav_context()
+        s.conButs[0].controlUp(s.conButs[3])
+        s.conButs[2].controlDown(s.conButs[3])
+        s.conButs[3].controlUp(s.conButs[2])
+        s.conButs[3].controlDown(s.conButs[0])
+        s.setFocus(s.conButs[0])
+        s.ContextMode = 2
     def createnav_context(self):
         self.conButs[0].controlDown(self.conButs[1])
         self.conButs[1].controlDown(self.conButs[2])
@@ -932,7 +987,10 @@ class YouTubeProfile(xbmcgui.Window):
         self.conButs[2].controlUp(self.conButs[1])
 
     def delconOL(s):
-        s.setFocus(s.videoList)
+        if s.ContextMode == 1:
+            s.setFocus(s.videoList)
+        else:
+            s.setFocus(s.friendList)
         for i in range(0,len(s.conButs)):
             s.removeControl(s.conButs[i])
         s.removeControl(s.cbgt)
@@ -941,9 +999,10 @@ class YouTubeProfile(xbmcgui.Window):
         s.removeControl(s.clbl)
         s.removeControl(s.clbgl)
         s.contextUp = 0
+        s.ContextMode = 0
     def getVideo(self,id,title):
         dp = xbmcgui.DialogProgress()
-        dp.create("YouTube.com","Playing Video")
+        dp.create("YouTube.com","Playing Video",title)
         t = self.newTvalie(id)
         v_url = base_v_url + id + "&t=" + t
         request = urllib2.Request(v_url)
