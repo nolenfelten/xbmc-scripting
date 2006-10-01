@@ -13,6 +13,13 @@
   <string id="56">The skin change won't take affect until you restart.</string>
   <string id="57">There was an error setting up your GUI.</string>
   <string id="58">Check your skin file:</string>
+  <string id="59">Database file invalid...</string>
+  <string id="60">Your database file is incompatible with this version|of AMT. It must be regenerated.</string>
+  <string id="61">Update all genre and movie information...</string>
+  <string id="62">Are you sure you want to do this?</string>
+  <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending upon your connection speed.</string>
+  <string id="64">Error</string>
+  <string id="65">Unable to properly update AMT.pk</string>
   
   <!-- Credits -->
   <string id="100">Version</string>

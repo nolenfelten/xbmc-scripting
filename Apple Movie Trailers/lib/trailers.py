@@ -3,6 +3,7 @@ import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
 import default
+import language
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
 
@@ -15,6 +16,8 @@ def append_ns( text ):
 ns = append_ns
 
 fetcher = cacheurl.HTTP()
+lang = language.Language()
+_ = lang.string
 
 class Trailers:
     def __init__( self ):
@@ -30,7 +33,10 @@ class Trailers:
             version, self.genres = pickle.load( datafile )
             datafile.close()
             if version not in AMT_PK_COMPATIBLE_VERSIONS:
-                xbmcgui.Dialog().ok( 'Database file invalid...', 'Your database file is incompatible with this version', 'of AMT. It must be regenerated.' )
+                header = _(59) # Database file invalid...
+                line1 = _(60).split('|')[0] # Your database file is incompatible with this version
+                line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
+                xbmcgui.Dialog().ok( header, line1, line2 )
                 raise
         except:
             self.update_all()
@@ -40,11 +46,11 @@ class Trailers:
         del self.genres
 
     def update_all( self ):
-        if xbmcgui.Dialog().yesno( 'Update all genre and movie information...', 
-            'Are you sure you want to do this?', 
-            'Updating can take anywhere from 5 - 15 minutes,', 
-            'depending upon your connection speed.' 
-        ):
+        header = _(61) # Update all genre and movie information...
+        line1 = _(62) # Are you sure you want to do this?
+        line2 = _(63).split('|')[0] # Updating can take anywhere from 5 - 15 minutes,
+        line3 = _(63).split('|')[1] # depending upon your connection speed.
+        if xbmcgui.Dialog().yesno( header, line1, line2, line3 ):
             try:
                 if os.path.isfile( self.DATAFILE ):
                     os.remove( self.DATAFILE )
@@ -65,7 +71,9 @@ class Trailers:
                 import traceback
                 traceback.print_exc()
                 del traceback
-                xbmcgui.Dialog().ok( 'Error', 'Unable to properly update AMT.pk' )
+                header = _(64) # Error
+                line1 = _(65) # Unable to properly update AMT.pk
+                xbmcgui.Dialog().ok( header, line1 )
                 raise
             del pickle
 
