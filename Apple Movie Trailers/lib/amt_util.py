@@ -1,5 +1,5 @@
-import os, language
-lang = language.Language()
+import os#, language
+#lang = language.Language()
 
 def getSettings():
     try:
@@ -27,16 +27,19 @@ def saveSettings( settings ):
     except:
         return False
 
-def setThumbnailDisplay():
+def setThumbnailDisplay( lang ):
     return [lang.string(310), lang.string(311), lang.string(312)]
 
-def setStartupCategory():
+def setStartupCategory( lang ):
     return [lang.string(200), lang.string(201), lang.string(202)]
 
-def setQuality():
+def setStartupCategoryActual():
+    return ['Newest', 'Exclusives', 'Genre']
+
+def setQuality( lang ):
     return [lang.string(320), lang.string(321), lang.string(322)]
 
-def setMode():
+def setMode( lang ):
     return [lang.string(330), lang.string(331), lang.string(332)]
 
 def setControllerAction():

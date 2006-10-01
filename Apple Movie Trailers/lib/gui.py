@@ -100,12 +100,12 @@ class GUI( xbmcgui.Window ):
         else: return False
 
     def setStartupCategory( self ):
-        startup = amt_util.setStartupCategory()
+        startup = amt_util.setStartupCategoryActual()
         self.setGenre( startup[self.settings['startup category']] )
         self.setListNavigation( '%s Button' % ( startup[self.settings['startup category']], ) )
         if ( startup[self.settings['startup category']] != 'Genre' ):
             self.getTrailerInfo( self.controls['Trailer List']['control'].getSelectedItem() )
-            
+
     def setupConstants( self ):
         self.dummy()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged)
@@ -269,7 +269,7 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Trailer List']['control'] ):
                 self.getTrailer( control.getSelectedItem() )
         except: traceback.print_exc()
-            
+
     def onAction( self, action ):
         try:
             buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')

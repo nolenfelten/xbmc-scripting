@@ -3,33 +3,39 @@
     Is used to translate a language file like Xbox Media Center's language files.
     Originally Coded by Rockstar, Recoded by Donno :D
 """
-import xbmc, re, os#, default
+import xbmc, re, os
 
-
-#---Language Class by RockStar and tweaked by Donno--#000000#FFFFFF-----------------------------------------
 class Language:
     def __init__( self ):
-        thePath = os.path.join( os.getcwd(), 'language' ).replace( ';', '' ) # workaround apparent xbmc bug - os.getcwd() returns an extraneous semicolon (;) at the end of the path
+        cwd = os.path.join( os.getcwd(), 'language' ).replace( ';', '' )
         self.strings = {}
-        tempstrings = []
+        temp_strings = []
         language = xbmc.getLanguage().lower()
-        if ( os.path.exists( os.path.join( thePath, '%s.xml' % ( language, ) ) ) ):
-            foundlang = language
-        else:
-            foundlang = "english"
-        langdoc = os.path.join( thePath, '%s.xml' % ( foundlang, ) )
+        language_path = os.path.join( cwd, language, 'strings.xml' )
+        if ( not os.path.isfile( language_path ) ):
+            language = 'english'
+            language_path = os.path.join( cwd, language, 'strings.xml' )
+        
         try:
-            f=open( langdoc, 'r' )
-            tempstrings=f.read()
+            f = open( language_path, 'r' )
+            temp_strings = f.read()
             f.close()
-            exp='<string id="(.*?)">(.*?)</string>'
-            
-            res=re.findall(exp,tempstrings)
-            for stringdat in res:
-                self.strings[int( stringdat[0] )] = str( stringdat[1] )
+            pattern = '<string id="(.*?)">(.*?)</string>'
+            strings = re.findall(pattern, temp_strings)
+            for item in strings:
+                self.strings[int( item[0] )] = str( item[1] )
+        
+            if ( language != 'english' ):
+                language_path = os.path.join( cwd, 'english', 'strings.xml' )
+                temp_strings = f.read()
+                f.close()
+                pattern = '<string id="(.*?)">(.*?)</string>'
+                strings = re.findall(pattern, temp_strings)
+                for item in strings:
+                    if ( not self.strings.has_key(int( item[0] ) ) ):
+                        self.strings[int( item[0] )] = str( item[1] )
         except:
-            print "ERROR: Language file %s can't be opened" % ( langdoc, )
-            #xbmcgui.Dialog().ok(default.__scriptname__, "ERROR!", "Language file %s can't be opened" % ( langdoc, ) )
+            print "ERROR: Language file %s can't be opened" % ( language_path, )
 
     def string( self, code ):
         try:
