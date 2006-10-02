@@ -1,8 +1,12 @@
 import os, urllib2, md5, traceback
 import xbmc, xbmcgui
+import language
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
+
+lang = language.Language()
+_ = lang.string
 
 def percent_from_ratio( top, bottom ):
     return int( float( top ) / bottom * 100 )
@@ -148,11 +152,12 @@ class HTTP:
                 free_space_mb = int( free_space.split()[2] )
                 free_space_b = free_space_mb * 1024 * 1024
                 if totalsize >= free_space_b:
-                    xbmcgui.Dialog().ok( 
-                        'Free space error...', 
-                        'Not enough free space in target drive.', 
-                        'Drive: %s %iMB Free' % ( drive, free_space_mb ), 'Space Required: ' + byte_measurement( totalsize )
-                    )
+                    header = _(64) # Error
+                    line1 = _(75) # Not enough free space in target drive.
+                    line2_drive = _(76) # Drive
+                    line2_free = _(77) # Free
+                    line2_space_required = _(78) # Space Required
+                    xbmcgui.Dialog().ok( header, line1, line2_drive + ': %s %iMB ' + line2_free % ( drive, free_space_mb ), line2_space_required + ': ' + byte_measurement( totalsize ) )
                     # notify handler of being finished
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
                     return ''
@@ -182,7 +187,8 @@ class HTTP:
                     if not do_continue:
                         break
                 except ( OSError, IOError ), ( errno, strerror ):
-                    xbmcgui.Dialog().ok( 'OS/IO Error...', '[%i] %s' % ( errno, strerror ) )
+                    # Error
+                    xbmcgui.Dialog().ok( _(64), '[%i] %s' % ( errno, strerror ) )
                     break
                 except:
                     traceback.print_exc()
@@ -221,7 +227,8 @@ class HTTPProgress( HTTP ):
         self.status_symbol = 0
 
     def urlretrieve( self, url ):
-        self.dialog.create( 'Downloading...', url.split( '/' )[-1] )
+        # Downloading...
+        self.dialog.create( _(79), url.split( '/' )[-1] )
         self.dialog.update( 0 )
         return HTTP.urlretrieve( self, url )
 
