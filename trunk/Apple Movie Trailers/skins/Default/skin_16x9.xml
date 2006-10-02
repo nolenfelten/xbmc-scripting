@@ -386,7 +386,7 @@
 			<description>Plot Button</description>
 			<type>button</type>
 			<id>210</id>
-			<label>Plot</label>
+			<label>215</label>
 			<posx>211</posx>
 			<posy>370</posy>
 			<width>32</width>
@@ -413,7 +413,7 @@
 			<description>Cast Button</description>
 			<type>button</type>
 			<id>211</id>
-			<label>Cast</label>
+			<label>216</label>
 			<posx>211</posx>
 			<posy>370</posy>
 			<width>32</width>
