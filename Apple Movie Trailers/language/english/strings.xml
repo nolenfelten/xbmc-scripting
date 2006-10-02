@@ -29,7 +29,7 @@
   <string id="72">Error retrieving information for one or more movie titles.</string>
   <string id="73">Clear cache folder...</string>
   <string id="74">If you don't clear your cache, update will|be faster but some content may not be updated.</string>
-  <string id="75">Not enough free space 0 target drive.</string>
+  <string id="75">Not enough free space on target drive.</string>
   <string id="76">Drive</string>
   <string id="77">Free</string>
   <string id="78">Space Required</string>
