@@ -142,7 +142,7 @@ class HTTP:
             if len( free_space ):
                 free_space_mb = int( free_space.split()[2] )
                 free_space_b = free_space_mb * 1024 * 1024
-                if totalsize >= free_space_mb:
+                if totalsize >= free_space_b:
                     xbmcgui.Dialog().ok( 
                         'Free space error...', 
                         'Not enough free space in target drive.', 
