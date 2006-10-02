@@ -54,7 +54,11 @@ class Trailers:
             try:
                 if os.path.isfile( self.DATAFILE ):
                     os.remove( self.DATAFILE )
-                fetcher.clear_cache()
+                header = _(73) # Clear cache folder...
+                line1 = _(74).split('|')[0] # Updating your database will be much faster, but possibly
+                line2 = _(74).split('|')[1] # out of date, without clearing your cache.
+                if xbmcgui.Dialog().yesno( header, line1, line2 ):
+                    fetcher.clear_cache()
             except:
                 pass
             import pickle

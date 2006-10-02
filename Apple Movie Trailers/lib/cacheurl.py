@@ -4,8 +4,6 @@ import xbmc, xbmcgui
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
 
-DEBUG = False
-
 def percent_from_ratio( top, bottom ):
     return int( float( top ) / bottom * 100 )
 
@@ -57,7 +55,6 @@ class HTTP:
         self.cache_dir = cache
         if self.cache_dir[0] == '.':
             self.cache_dir = os.path.join( self.default_data_dir, self.cache_dir )
-        if DEBUG: print 'cache dir: %s' % self.cache_dir
 
         # flat_cache means that each request will be cached in a single reused file; basically a non-persistent cache
         self.flat_cache = flat_cache
@@ -87,10 +84,30 @@ class HTTP:
         if filepath:
             filehandle = open( filepath, 'rb' )
             data = filehandle.read()
-            if DEBUG: print data[:100]
         return data
 
+    def make_cache_filename( self, url ):
+        # construct the filename
+        if self.flat_cache:
+            filename = 'flat_cache' + os.path.splitext( url )[1]
+        elif self.actual_filename:
+            filename = url.split( '/' )[-1]
+        else:
+            filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
+        # ..and the filepath
+        filepath = os.path.join( self.cache_dir, filename )
+        return filepath
+
     def urlretrieve( self, url ):
+        # get the filename
+        filepath = self.make_cache_filename( url )
+
+        # if the file is already in the cache, return that filename
+        if os.path.isfile( filepath ):
+            # notify handler of being finished
+            self.on_finished( url, filepath, os.path.getsize( filepath ), True )
+            return filepath
+
         try:
             request = urllib2.Request( url )
             request.add_header( 'User-Agent', '%s/%s' % ( __scriptname__, __version__ ) )
@@ -104,30 +121,18 @@ class HTTP:
 
         # this is the actual url that we got (redirection, etc)
         actual_url = opened.geturl()
-        if DEBUG: print 'Actual Url: %s' % actual_url
         # info dict about the file (headers and such)
         info = opened.info()
-        if DEBUG: print 'Headers:'
-        for header in info:
-            if DEBUG: print ' %s: %s' % ( header, info[header] )
-        # construct the filename
-        if self.flat_cache:
-            filename = 'flat_cache' + os.path.splitext( actual_url )[1]
-        elif self.actual_filename:
-            filename = actual_url.split( '/' )[-1]
-        else:
-            filename = md5.new( actual_url ).hexdigest() + os.path.splitext( actual_url )[1]
-        # ..and the filepath
-        filepath = os.path.join( self.cache_dir, filename )
-        if DEBUG: print 'File path: %s' % filepath
+
+        # get the filename
+        filepath = self.make_cache_filename( actual_url )
+
         # save the total expected size of the file, based on the Content-Length header
         totalsize = int( info['Content-Length'] )
-        if DEBUG: print 'File size: %i' % totalsize
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
         except:
             is_completed = False
-        if DEBUG: print 'Is file complete?: %s' % is_completed
 
         # if the file is already in the cache, return that filename
         if os.path.isfile( filepath ) and is_completed:
@@ -169,7 +174,6 @@ class HTTP:
                 try:
                     filedata = opened.read( self.blocksize )
                     if len( filedata ):
-                        if DEBUG: print 'got filedata'
                         filehandle.write( filedata )
                         size_read_so_far += len( filedata )
                         do_continue = self.on_data( actual_url, filepath, totalsize, size_read_so_far )
@@ -191,7 +195,6 @@ class HTTP:
             is_completed = os.path.getsize( filepath ) == totalsize
         except:
             is_completed = False
-        if DEBUG: print 'Is file complete?: %s' % is_completed
 
         # notify handler of being finished
         self.on_finished( actual_url, filepath, totalsize, is_completed )

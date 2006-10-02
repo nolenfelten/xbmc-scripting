@@ -27,6 +27,8 @@
   <string id="70">Fetching movie information...</string>
   <string id="71">Genre:</string>
   <string id="72">Error retrieving information for one or more movie titles.</string>
+  <string id="73">Clear cache folder...</string>
+  <string id="74">Updating your database will be much faster, but possibly|out of date, without clearing your cache.</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
