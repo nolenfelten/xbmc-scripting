@@ -6,7 +6,7 @@ class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.settings = amt_util.getSettings()
-        self.lang = kwargs['language']#language.Language()
+        self._ = kwargs['language']
         self.skin = kwargs['skin']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
@@ -16,7 +16,7 @@ class GUI( xbmcgui.WindowDialog ):
             ##remove disabled when update script routine is done
             self.controls['Update Button']['control'].setEnabled( False )
 
-    def setupGUI(self):
+    def setupGUI( self ):
         skinPath = os.path.join( self.cwd, 'skins' )
         self.skinPath = os.path.join( skinPath, self.skin )
         self.imagePath = os.path.join( self.skinPath, 'gfx' )
@@ -28,29 +28,29 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupConstants( self ):
         self.controllerAction = amt_util.setControllerAction()
-        self.quality = amt_util.setQuality( self.lang )
-        self.mode = amt_util.setMode( self.lang )
-        self.startup = amt_util.setStartupCategory( self.lang )
-        self.thumbnail = amt_util.setThumbnailDisplay( self.lang )
+        self.quality = amt_util.setQuality( self._ )
+        self.mode = amt_util.setMode( self._ )
+        self.startup = amt_util.setStartupCategory( self._ )
+        self.thumbnail = amt_util.setThumbnailDisplay( self._ )
         
     def setControlsValues( self ):
-        self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(300), self.quality[self.settings['trailer quality']], ) )
-        self.controls['Mode Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(301), self.mode[self.settings['mode']], ) )
-        self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(302), self.settings['save folder'], ) )
+        self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self._(300), self.quality[self.settings['trailer quality']], ) )
+        self.controls['Mode Button']['control'].setLabel( '%s: [%s]' % ( self._(301), self.mode[self.settings['mode']], ) )
+        self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self._(302), self.settings['save folder'], ) )
         self.controls['Save Folder Button']['control'].setEnabled( self.settings['mode'] == 2 )
-        self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(303), self.settings['skin'], ) )
-        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(304), self.startup[self.settings['startup category']], ) )
-        self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self.lang.string(305), self.thumbnail[self.settings['thumbnail display']], ) )
+        self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self._(303), self.settings['skin'], ) )
+        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings['startup category']], ) )
+        self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self._(305), self.thumbnail[self.settings['thumbnail display']], ) )
 
     def saveSettings( self ):
         ret = amt_util.saveSettings( self.settings )
         if ( not ret ):
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok( self.lang.string(0), self.lang.string(55) )
+            ok = dialog.ok( self._(0), self._(55) )
         else:
             if ( self.skin != self.settings['skin']):
                 dialog = xbmcgui.Dialog()
-                ok = dialog.ok( self.lang.string(0), self.lang.string(56)  )
+                ok = dialog.ok( self._(0), self._(56)  )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
@@ -146,9 +146,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def showCredits( self ):
         try:
-            self.controls['Credits Label']['control'].setLabel( self.lang.string(0) )
-            self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self.lang.string(100), default.__version__, ) )
-            self.controls['Team Credits Label']['control'].setLabel( self.lang.string(101) )
+            self.controls['Credits Label']['control'].setLabel( self._(0) )
+            self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
+            self.controls['Team Credits Label']['control'].setLabel( self._(101) )
             self.controls['Team Credits List']['control'].reset()
             l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
             self.controls['Team Credits List']['control'].addItem( l )
@@ -157,7 +157,7 @@ class GUI( xbmcgui.WindowDialog ):
             l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
             self.controls['Team Credits List']['control'].addItem( l )
 
-            self.controls['Additional Credits Label']['control'].setLabel( self.lang.string(102) )
+            self.controls['Additional Credits Label']['control'].setLabel( self._(102) )
             self.controls['Additional Credits List']['control'].reset()
             l = xbmcgui.ListItem( default.__acredits_l1__, default.__acredits_r1__ )
             self.controls['Additional Credits List']['control'].addItem( l )

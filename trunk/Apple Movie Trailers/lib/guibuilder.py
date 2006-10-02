@@ -277,6 +277,7 @@ class GUIBuilder:
 					imageHeight=int(control['itemheight']), itemTextXOffset=int(control['textxoff']), itemTextYOffset=int(control['textyoff']),\
 					itemHeight=int(control['textureheight']), space=int(control['spacebetweenitems'])))#, shadowColor=control['shadowcolor']))
 				self.win.addControl(ctl)
+				ctl.setPageControlVisible( not control['hidespinner'] )
 				if (control.has_key('label')):
 					for cnt, item in enumerate(control['label']):
 						if (item != ''): 
@@ -540,6 +541,7 @@ class GUIBuilder:
 						if (not ctl.has_key('textxoff')): ctl['textxoff'] = self.m_references.get(ctype + '_textxoff', '0')
 						if (not ctl.has_key('textyoff')): ctl['textyoff'] = self.m_references.get(ctype + '_textyoff', '0')
 						if (not ctl.has_key('spacebetweenitems')): ctl['spacebetweenitems'] = self.m_references.get(ctype + '_spacebetweenitems', '0')
+						if (not ctl.has_key('hidespinner')): ctl['hidespinner'] = 'false'
 						if (not ctl['image']): ctl['image'] = [self.m_references.get(ctype + '_image', ' ')]
 						for i in range(len(ctl['image'])):
 							if (ctl['image'][i][0] == '\\'): ctl['image'][i] = os.path.join(imagePath, ctl['image'][i][1:])

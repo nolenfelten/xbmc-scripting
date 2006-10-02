@@ -381,10 +381,10 @@ class Trailers:
     def get_video_list( self, genre, movie_title ):
         try:
             try:
-                thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+                thumbnail, description, cast, urls = self.genres['standard'][genre][movie_title]
                 isSpecial = False
             except:
-                thumbnail, description, urls = self.genres['special'][genre][movie_title]
+                thumbnail, description, cast, urls = self.genres['special'][genre][movie_title]
                 isSpecial = True
             url = self.BASEURL + urls[0]
             element = fetcher.urlopen( url )

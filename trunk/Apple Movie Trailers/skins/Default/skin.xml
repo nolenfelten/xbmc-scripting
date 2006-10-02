@@ -128,7 +128,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>210</onleft>
+			<onleft>216</onleft>
 			<onright>100</onright>
 			<onup>60</onup>
 			<ondown>20</ondown>
@@ -152,7 +152,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>210</onleft>
+			<onleft>216</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
@@ -176,7 +176,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>210</onleft>
+			<onleft>216</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
@@ -200,7 +200,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>210</onleft>
+			<onleft>216</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
@@ -224,7 +224,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>210</onleft>
+			<onleft>216</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
@@ -242,6 +242,7 @@
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
+			<!--texturefocus>\button-focus_arrows.png</texturefocus-->
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
@@ -252,11 +253,24 @@
 			<onright>60</onright>
 			<onup>50</onup>
 			<ondown>10</ondown>
-			<!--texturefocus>\button-focus_arrows.png</texturefocus-->
 			<onclick>-</onclick>
 		</control>
 
 		<!-- list controls -->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer List Scrollbar</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>485</posx>
+			<posy>121</posy>
+			<width>20</width>
+			<height>233</height>
+			<texture>\list-scrollbar.png</texture>
+			<visible>false</visible>
+		</control>
+
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
@@ -267,7 +281,7 @@
 			<posx>211</posx>
 			<posy>121</posy>
 			<width>270</width>
-			<height>235</height>
+			<height>260</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>d0ffffff</selectedcolor>
 			<textureup>\scroll-up.png</textureup>
@@ -277,6 +291,7 @@
 			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<textureheight>26</textureheight>
+			<hidespinner>true</hidespinner>
 			<image>-</image>
 			<textxoff>3</textxoff>
 			<suffix>|</suffix>
@@ -355,9 +370,9 @@
 			<description>Trailer Title</description>
 			<type>label</type>
 			<id>205</id>
-			<width>250</width>
-			<posx>211</posx>
-			<posy>370</posy>
+			<width>400</width>
+			<posx>250</posx>
+			<posy>375</posy>
 			<align>left</align>
 			<label>-</label>
 			<font>special13</font>
@@ -365,21 +380,99 @@
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Plot Button</description>
+			<type>button</type>
+			<id>210</id>
+			<label>Plot</label>
+			<posx>211</posx>
+			<posy>370</posy>
+			<width>32</width>
+			<height>32</height>
+			<texturefocus>\plot-button-focus.png</texturefocus>
+			<texturenofocus>\plot-button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<align>center</align>
+			<aligny>center</aligny>
+			<onleft>110</onleft>
+			<onright>211</onright>
+			<onup>100</onup>
+			<ondown>215</ondown>
+			<!--visible>Control.IsVisible(215)</visible-->
+			<visible>false</visible>
+			<onclick>-</onclick>
+		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Info</description>
+			<description>Cast Button</description>
+			<type>button</type>
+			<id>211</id>
+			<label>Cast</label>
+			<posx>211</posx>
+			<posy>370</posy>
+			<width>32</width>
+			<height>32</height>
+			<texturefocus>\cast-button-focus.png</texturefocus>
+			<texturenofocus>\cast-button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<align>center</align>
+			<aligny>center</aligny>
+			<onleft>210</onleft>
+			<onright>215</onright>
+			<onup>100</onup>
+			<ondown>216</ondown>
+			<!--texturefocus>\button-focus_arrows.png</texturefocus-->
+			<!--visible>Control.IsVisible(216)</visible-->
+			<visible>false</visible>
+			<onclick>-</onclick>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Plot</description>
 			<type>textbox</type>
-			<id>210</id>
+			<id>215</id>
 			<posx>211</posx>
 			<posy>400</posy>
 			<width>445</width>
 			<height>153</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<onup>210</onup>
-			<ondown>210</ondown>
-			<onleft>110</onleft>
+			<onup>215</onup>
+			<ondown>215</ondown>
+			<onleft>211</onleft>
+			<onright>216</onright>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Cast</description>
+			<type>listcontrol</type>
+			<id>216</id>
+			<posx>211</posx>
+			<posy>400</posy>
+			<width>445</width>
+			<height>153</height>
+			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onup>216</onup>
+			<ondown>216</ondown>
+			<onleft>215</onleft>
 			<onright>10</onright>
 			<textureup>\scroll-up.png</textureup>
 			<texturedown>\scroll-down.png</texturedown>
