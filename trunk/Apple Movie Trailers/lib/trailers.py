@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, traceback
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
@@ -72,9 +72,7 @@ class Trailers:
                 pickle.dump( [ default.__version__, self.genres ], datafile )
                 datafile.close()
             except:
-                import traceback
                 traceback.print_exc()
-                del traceback
                 header = _(64) # Error
                 line1 = _(65) # Unable to properly update AMT.pk
                 xbmcgui.Dialog().ok( header, line1 )
@@ -136,9 +134,7 @@ class Trailers:
                 dialog.update( dialog_percentage, dialog_line1, line2 + ' ' + each, dialog_errorline )
                 self.genres['special'][each] = self.__update_trailer_dict__( each )
             except:
-                import traceback
                 traceback.print_exc()
-                del traceback
                 dialog_errorline = _(69) # Error retrieving information for one or more genres.
             pos += 1
             dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
@@ -362,6 +358,7 @@ class Trailers:
             description = description.replace( '\n', ' ' )
             if not description or len( description ) is 0:
                 description = _(400) # No description could be retrieved for this title.
+            cast = 'FIXME: CAST INFO GOES HERE'
             urls = list()
             for each in element.getiterator( ns('GotoURL') ):
                 url = each.get( 'url' )
@@ -377,8 +374,9 @@ class Trailers:
         except:
             thumbnail = ''
             description = _(400) # No description could be retrieved for this title.
+            cast = 'FIXME: CAST INFO GOES HERE'
             urls = list()
-        return [ thumbnail, description, urls ]
+        return [ thumbnail, description, cast, urls ]
 
     def get_video_list( self, genre, movie_title ):
         try:
@@ -422,13 +420,14 @@ class Trailers:
     def get_trailer_info( self, genre, movie_title ):
         try:
             if genre in self.genres['special']:
-                thumbnail, description, urls = self.genres['special'][genre][movie_title]
+                thumbnail, description, cast, urls = self.genres['special'][genre][movie_title]
             else:
-                thumbnail, description, urls = self.genres['standard'][genre][movie_title]
+                thumbnail, description, cast, urls = self.genres['standard'][genre][movie_title]
         except:
             thumbnail = ''
             description = _(400) # No description could be retrieved for this title.
-        return [ thumbnail, description ]
+            cast = 'FIXME: CAST INFO GOES HERE'
+        return [ thumbnail, description, cast ]
 
     def get_exclusives_list( self ):
         e_list = self.genres['special']['Exclusives'].keys()
