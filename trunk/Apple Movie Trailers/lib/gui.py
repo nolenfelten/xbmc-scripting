@@ -45,16 +45,13 @@ updateProgressDialog( '%s cacheurl' % ( _( 52 ), ) )
 import cacheurl
 updateProgressDialog( '%s shutil' % ( _( 52 ), ) )
 import shutil
-updateProgressDialog( '%s default' % ( _( 52 ), ) )
-import default
-
-debug = default.__debug__
 
 
 class GUI( xbmcgui.Window ):
     
     def __init__( self ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
+        self.debug = os.path.isfile( os.path.join( self.cwd, 'debug.txt' ))
         self.getSettings()
         self.skin = self.settings['skin']
         self.setupGUI()
@@ -82,7 +79,7 @@ class GUI( xbmcgui.Window ):
         else: return False
 
     def debugWrite( self, function, action, lines=[], values=[] ):
-        if ( debug ):
+        if ( self.debug ):
             Action = ( 'Failed', 'Succeeded', 'Started' )
             Highlight = ( '__', '__', '<<<<< ', '__', '__', ' >>>>>' )
             xbmc.output( '%s%s%s : (%s)\n' % ( Highlight[action], function, Highlight[action + 3], Action[action] ) )
@@ -369,7 +366,6 @@ class GUI( xbmcgui.Window ):
         except: traceback.print_exc()
 
     def onAction( self, action ):
-        self.debugWrite( 'onAction', 2 )
         try:
             buttonDesc = self.controllerAction.get( action.getButtonCode(), 'n/a' )
             if ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ): self.exitScript()
