@@ -1,7 +1,7 @@
 '''
 Main GUI for Apple Movie Trailers
 '''
-debug = False
+debug = True
 
 def createProgressDialog( __line3__ ):
     global dialog, pct
