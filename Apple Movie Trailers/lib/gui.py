@@ -109,7 +109,7 @@ class GUI( xbmcgui.Window ):
     def exitScript( self ):
         self.debugWrite( 'exitScript', 2 )
         if ( self.Timer ): self.Timer.cancel()
-        #self.trailers.cleanup()
+        ##self.trailers.cleanup()
         self.close()
     
     def getGenreCategories( self ):
@@ -272,42 +272,53 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre )
 
     def showTrailerInfo( self, title ):
-        #self.debugWrite('showTrailerInfo', 2)
-        self.thumbnail, description, cast = self.trailers.get_trailer_info( self.genre, title )
-        ## Test code ##
-        cast = ['Angelina Jolee', 'Jessica Alba', 'Chuck Norris', 'Arnold Swarzenegger', 'Hillary Duff', 'William Shatner']
-        # Trailer Thumbnail
-        if ( not self.thumbnail ): self.thumbnail = os.path.join( self.imagePath, 'blank_poster.tbn' )
-        self.controls['Trailer Thumbnail']['control'].setImage( self.thumbnail )
-        # Trailer Title
-        self.controls['Trailer Title']['control'].setLabel( title )
-        # Trailer Description
-        self.controls['Trailer Plot']['control'].reset()
-        if ( description ):
-            self.controls['Trailer Plot']['control'].setText( description )
-        # Trailer Cast
-        self.controls['Trailer Cast']['control'].reset()
-        if ( cast ):
-            cast.sort()
-            for actor in cast:#.split( '|' ):
-                thumbnail = os.path.join( self.imagePath, 'generic-actor.tbn' )
-                l = xbmcgui.ListItem( actor, '', thumbnail )
-                self.controls['Trailer Cast']['control'].addItem( l )
+        try:
+            xbmcgui.lock()
+            self.debugWrite('showTrailers', 2)
+            #self.debugWrite('showTrailerInfo', 2)
+            self.thumbnail, description, cast = self.trailers.get_trailer_info( self.genre, title )
+            ## Test code ##
+            cast = ['Angelina Jolee', 'Jessica Alba', 'Chuck Norris', 'Arnold Swarzenegger', 'Hillary Duff', 'William Shatner']
+            # Trailer Thumbnail
+            if ( not self.thumbnail ): self.thumbnail = os.path.join( self.imagePath, 'blank_poster.tbn' )
+            self.controls['Trailer Thumbnail']['control'].setImage( self.thumbnail )
+            # Trailer Title
+            self.controls['Trailer Title']['control'].setLabel( title )
+            # Trailer Description
+            self.controls['Trailer Plot']['control'].reset()
+            if ( description ):
+                self.controls['Trailer Plot']['control'].setText( description )
+            # Trailer Cast
+            self.controls['Trailer Cast']['control'].reset()
+            if ( cast ):
+                cast.sort()
+                for actor in cast:#.split( '|' ):
+                    thumbnail = os.path.join( self.imagePath, 'generic-actor.tbn' )
+                    l = xbmcgui.ListItem( actor, '', thumbnail )
+                    self.controls['Trailer Cast']['control'].addItem( l )
+            xbmcgui.unlock()
+        except:
+            xbmcgui.unlock()
 
     def showTrailers( self, genre ):
-        self.debugWrite('showTrailers', 2)
-        self.controls['Trailer List']['control'].reset()
-        if ( genre == 'Newest' ): titles = self.trailers.get_newest_list()
-        elif ( genre == 'Exclusives' ): titles = self.trailers.get_exclusives_list()
-        else: titles = self.trailers.get_trailer_list( genre )
-        for title in titles: # now fill the list control
-            thumbnail, description, cast = self.trailers.get_trailer_info( genre, title )
-            if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
-            elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
-            l = xbmcgui.ListItem( title, '', thumbnail )
-            self.controls['Trailer List']['control'].addItem( l )
-        self.setSelection( 0 )
-        self.calcScrollbar()
+        try:
+            self.debugWrite('showTrailers', 2)
+            xbmcgui.lock()
+            self.controls['Trailer List']['control'].reset()
+            if ( genre == 'Newest' ): titles = self.trailers.get_newest_list()
+            elif ( genre == 'Exclusives' ): titles = self.trailers.get_exclusives_list()
+            else: titles = self.trailers.get_trailer_list( genre )
+            for title in titles: # now fill the list control
+                thumbnail, description, cast = self.trailers.get_trailer_info( genre, title )
+                if ( self.settings['thumbnail display'] == 2 ): thumbnail = ''
+                elif ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.imagePath, 'generic-thumbnail.tbn' )
+                l = xbmcgui.ListItem( title, '', thumbnail )
+                self.controls['Trailer List']['control'].addItem( l )
+            self.setSelection( 0 )
+            self.calcScrollbar()
+            xbmcgui.unlock()
+        except:
+            xbmcgui.unlock()
         
     def calcScrollbar( self ):
         trailers = self.controls['Trailer List']['control'].size()
