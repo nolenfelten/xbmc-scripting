@@ -45,6 +45,8 @@ updateProgressDialog( '%s cacheurl' % ( _( 52 ), ) )
 import cacheurl
 updateProgressDialog( '%s shutil' % ( _( 52 ), ) )
 import shutil
+updateProgressDialog( '%s default' % ( _( 52 ), ) )
+import default
 
 debug = default.__debug__
 
