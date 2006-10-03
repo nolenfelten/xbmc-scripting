@@ -263,7 +263,7 @@
 			<description>Trailer List Scrollbar</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>485</posx>
+			<posx>483</posx>
 			<posy>121</posy>
 			<width>20</width>
 			<height>233</height>
@@ -291,7 +291,10 @@
 			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<textureheight>26</textureheight>
+			<itemwidth>10</itemwidth>
+			<itemheight>22</itemheight>
 			<hidespinner>true</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
 			<image>-</image>
 			<textxoff>3</textxoff>
 			<suffix>|</suffix>
@@ -322,6 +325,10 @@
 			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<textureheight>26</textureheight>
+			<itemwidth>22</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>false</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
 			<image>-</image>
 			<textxoff>3</textxoff>
 			<suffix>|</suffix>
@@ -402,7 +409,7 @@
 			<onleft>110</onleft>
 			<onright>211</onright>
 			<onup>100</onup>
-			<ondown>215</ondown>
+			<ondown>216</ondown>
 			<!--visible>Control.IsVisible(215)</visible-->
 			<visible>false</visible>
 			<onclick>-</onclick>
@@ -429,7 +436,7 @@
 			<onleft>210</onleft>
 			<onright>215</onright>
 			<onup>100</onup>
-			<ondown>216</ondown>
+			<ondown>215</ondown>
 			<!--texturefocus>\button-focus_arrows_16x9.png</texturefocus-->
 			<!--visible>Control.IsVisible(216)</visible-->
 			<visible>false</visible>
@@ -465,9 +472,9 @@
 			<type>listcontrol</type>
 			<id>216</id>
 			<posx>211</posx>
-			<posy>400</posy>
-			<width>445</width>
-			<height>153</height>
+			<posy>403</posy>
+			<width>455</width>
+			<height>135</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<onup>216</onup>
@@ -478,6 +485,13 @@
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureheight>26</textureheight>
+			<itemwidth>16</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>false</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
