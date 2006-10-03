@@ -216,6 +216,7 @@ class GUIBuilder:
 
 	def addCtl(self, control):
 		try:
+			control['special'] = ''
 			if (self.useDescAsKey): key = control['description']
 			else: key = int(control['id'])
 			if (control['type'] == 'image'):
@@ -278,6 +279,9 @@ class GUIBuilder:
 					itemHeight=int(control['textureheight']), space=int(control['spacebetweenitems'])))#, shadowColor=control['shadowcolor']))
 				self.win.addControl(ctl)
 				ctl.setPageControlVisible( not control['hidespinner'] )
+				fheight = int(control['textureheight']) + int(control['spacebetweenitems'])
+				ftotalheight = int(control['height']) - 20
+				control['special'] = int(float(ftotalheight) / float(fheight))
 				if (control.has_key('label')):
 					for cnt, item in enumerate(control['label']):
 						if (item != ''): 
@@ -294,6 +298,7 @@ class GUIBuilder:
 					'id'				: int(control['id']),
 					'controlId'	: ctl.getId(),
 					'control' 		: ctl,
+					'special'		: control['special'],
 					'posx'		 	: int(control['posx']),
 					'posy'			: int(control['posy']),
 					'width'		: int(control['width']),
@@ -542,6 +547,9 @@ class GUIBuilder:
 						if (not ctl.has_key('textyoff')): ctl['textyoff'] = self.m_references.get(ctype + '_textyoff', '0')
 						if (not ctl.has_key('spacebetweenitems')): ctl['spacebetweenitems'] = self.m_references.get(ctype + '_spacebetweenitems', '0')
 						if (not ctl.has_key('hidespinner')): ctl['hidespinner'] = 'false'
+						if (ctl['hidespinner'] == 'false' or ctl['hidespinner'] == 'no'): ctl['hidespinner'] = 0
+						elif (ctl['hidespinner'] == 'true' or ctl['hidespinner'] == 'yes'): ctl['hidespinner'] = 1
+						else: ctl['hidespinner'] = 0
 						if (not ctl['image']): ctl['image'] = [self.m_references.get(ctype + '_image', ' ')]
 						for i in range(len(ctl['image'])):
 							if (ctl['image'][i][0] == '\\'): ctl['image'][i] = os.path.join(imagePath, ctl['image'][i][1:])
