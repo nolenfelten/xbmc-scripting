@@ -1,7 +1,6 @@
 '''
 Main GUI for Apple Movie Trailers
 '''
-debug = True
 
 def createProgressDialog( __line3__ ):
     global dialog, pct
@@ -46,6 +45,8 @@ updateProgressDialog( '%s cacheurl' % ( _( 52 ), ) )
 import cacheurl
 updateProgressDialog( '%s shutil' % ( _( 52 ), ) )
 import shutil
+
+debug = default.__debug__
 
 
 class GUI( xbmcgui.Window ):
