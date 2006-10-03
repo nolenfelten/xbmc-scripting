@@ -296,8 +296,7 @@ class GUI( xbmcgui.Window ):
                     thumbnail = os.path.join( self.imagePath, 'generic-actor.tbn' )
                     l = xbmcgui.ListItem( actor, '', thumbnail )
                     self.controls['Trailer Cast']['control'].addItem( l )
-            xbmcgui.unlock()
-        except:
+        finally:
             xbmcgui.unlock()
 
     def showTrailers( self, genre ):
@@ -316,8 +315,7 @@ class GUI( xbmcgui.Window ):
                 self.controls['Trailer List']['control'].addItem( l )
             self.setSelection( 0 )
             self.calcScrollbar()
-            xbmcgui.unlock()
-        except:
+        finally:
             xbmcgui.unlock()
         
     def calcScrollbar( self ):
