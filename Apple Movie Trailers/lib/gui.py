@@ -181,7 +181,7 @@ class GUI( xbmcgui.Window ):
         except: pass
 
     def showTrailerInfo( self, title ):
-        self.debugWrite('showTrailerInfo', 2)
+        #self.debugWrite('showTrailerInfo', 2)
         self.thumbnail, description, cast = self.trailers.get_trailer_info( self.genre, title )
         # Trailer Thumbnail
         if ( not self.thumbnail ): self.thumbnail = os.path.join( self.imagePath, 'blank_poster.tbn' )
