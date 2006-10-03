@@ -215,6 +215,7 @@ class GUI( xbmcgui.Window ):
     def setSelection( self, pos ):
         self.debugWrite('setSelection', 2)
         self.controls['Trailer List']['control'].selectItem( pos )
+        self.getTrailerInfo( self.controls['Trailer List']['control'].getSelectedItem() )
 
     def updateDatabase( self ):
         self.debugWrite('updateDatabase', 2)
