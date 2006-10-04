@@ -2,7 +2,7 @@ import os, sys, traceback
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
-import default
+#import default
 import language
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
@@ -29,22 +29,42 @@ class Info( object ):
         return '/'.join( result )
 
     def __set_defaults__( self ):
-        pass
+        self.__all__ = list()
+        try:
+            if self.title:
+                self.__all__ += [ 'title' ]
+            if self.url:
+                self.__all__ += [ 'url' ]
+        except:
+            pass
 
     def __update__( self ):
         pass
 
     def __getattribute__( self, name ):
-        if not self.__updated__ and not self.__updating__:
-            self.__updating__ = True
-            try:
-                self.__update__()
-                self.__updated__ = True
-            except:
-                pass
-            self.__updating__ = False
-        return getattr( self, name )
+        try:
+            if name in super( Info, self ).__getattribute__( '__all__' ):
+                if not self.__updated__ and not self.__updating__:
+                    self.__updating__ = True
+                    try:
+                        self.__update__()
+                        self.__updated__ = True
+                    except:
+                        pass
+                    self.__updating__ = False
+        except:
+            pass
+        value = super( Info, self ).__getattribute__( name )
+        if name != '__dict__':
+            print '-- get %s:' % name, value
+        return value
 
+    def __setattr__( self, name, value ):
+        try:
+            self.__dict__[name] = value
+        except:
+            self.__dict__.update( { name: value } )
+        print '-- set %s:' % name, value
 
 class Movie( Info ):
     """
@@ -60,6 +80,8 @@ class Movie( Info ):
         # needs to fill thumbnail, description, cast, trailer_urls
 
     def __set_defaults__( self ):
+        Info.__set_defaults__( self )
+        self.__all__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
         self.thumbnail = ''
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
@@ -142,6 +164,8 @@ class Genre( Info ):
         # needs to provide Movie(), Movie()
 
     def __set_defaults__( self ):
+        Info.__set_defaults__( self )
+        self.__all__ += [ 'movies' ]
         self.movies = list()
 
     def __update__( self ):
@@ -202,9 +226,9 @@ class Trailers( Info ):
         - genres (sorted list of Genre() object instances)
     """
     def __init__( self ):
-        self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
         self.DATAFILE = os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'AMT.pk' )
         Info.__init__( self )
+        self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
 
     def __set_defaults__( self ):
         # import pickle
@@ -225,6 +249,8 @@ class Trailers( Info ):
         # finally:
             # self.genres = data
         # del pickle
+        Info.__set_defaults__( self )
+        self.__all__ += [ 'genres' ]
         self.genres = list()
 
     def __update__( self ):
