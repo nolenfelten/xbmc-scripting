@@ -11,15 +11,16 @@ def getSettings():
         settings['skin'] = s[2]
         settings['save folder'] = s[3]
         settings['startup category'] = int( s[4] )
-        settings['thumbnail display'] = int( s[5] )
+        settings['startup category id'] = int( s[5] )
+        settings['thumbnail display'] = int( s[6] )
     except:
-        settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'Default', 'save folder' : 'f:\\', 'startup category' : 0, 'thumbnail display' : 1}
+        settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'Default', 'save folder' : 'f:\\', 'startup category' : 0, 'startup category id' : 1, 'thumbnail display' : 1}
     return settings
 
 def saveSettings( settings ):
     try:
         f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-        strSettings = '%d|%d|%s|%s|%d|%d' % ( settings['trailer quality'], settings['mode'], settings['skin'], settings['save folder'], settings['startup category'], settings['thumbnail display'],)
+        strSettings = '%d|%d|%s|%s|%d|%d|%d' % ( settings['trailer quality'], settings['mode'], settings['skin'], settings['save folder'], settings['startup category'], settings['startup category id'], settings['thumbnail display'],)
         f.write(strSettings)
         f.close()
         return True
