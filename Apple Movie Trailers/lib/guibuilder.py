@@ -279,9 +279,9 @@ class GUIBuilder:
 					itemHeight=int(control['textureheight']), space=int(control['spacebetweenitems'])))#, shadowColor=control['shadowcolor']))
 				self.win.addControl(ctl)
 				ctl.setPageControlVisible( not control['hidespinner'] )
-				fheight = int(control['textureheight']) + int(control['spacebetweenitems'])
-				ftotalheight = int(control['height']) - 20
-				control['special'] = int(float(ftotalheight) / float(fheight))
+				height = int(control['textureheight']) + int(control['spacebetweenitems'])
+				totalheight = int(control['height']) - 20
+				control['special'] = int(float(totalheight) / float(height))
 				if (control.has_key('label')):
 					for cnt, item in enumerate(control['label']):
 						if (item != ''): 
