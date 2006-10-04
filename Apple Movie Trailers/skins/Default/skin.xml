@@ -506,6 +506,58 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
+			<description>Trailer Cast Scrollbar Up Arrow</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>667</posx>
+			<posy>403</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>\scrollbar-up-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Cast Scrollbar Middle</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>667</posx>
+			<posy>423</posy>
+			<width>20</width>
+			<height>64</height>
+			<texture>\list-nofocus.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Cast Scrollbar Down Arrow</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>667</posx>
+			<posy>487</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>\scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Cast Scrollbar Position Indicator</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>667</posx>
+			<posy>423</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>\list-focus.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
 			<description>Trailer Cast</description>
 			<type>listcontrol</type>
 			<id>216</id>
@@ -528,7 +580,7 @@
 			<textureheight>26</textureheight>
 			<itemwidth>16</itemwidth>
 			<itemheight>22</itemheight>
-			<hidespinner>false</hidespinner>
+			<hidespinner>true</hidespinner>
 			<spacebetweenitems>0</spacebetweenitems>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
