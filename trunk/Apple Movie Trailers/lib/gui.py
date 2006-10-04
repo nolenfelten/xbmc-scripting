@@ -196,7 +196,7 @@ class GUI( xbmcgui.Window ):
     def setGenre( self, genre ):
         self.debugWrite('setGenre', 2)
         self.genre = genre
-        self.showScrollbar( False )
+        self.showScrollbar( False, 'Trailer List' )
         if ( genre != 'Genre' ): self.showTrailers( genre )
         self.showControls( genre == 'Genre' )
 
@@ -251,7 +251,6 @@ class GUI( xbmcgui.Window ):
         self.controls['Genre List']['control'].setEnabled( genre )
         self.controls['Trailer List']['control'].setVisible( not genre )
         self.controls['Trailer List']['control'].setEnabled( not genre )
-        #self.controls['Trailer List Scrollbar']['control'].setVisible( not genre )
         self.controls['Trailer Backdrop']['control'].setVisible( not genre )
         self.controls['Trailer Thumbnail']['control'].setVisible( not genre )
         self.controls['Trailer Title']['control'].setVisible( not genre )
@@ -270,6 +269,7 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Plot']['control'].setEnabled( not self.display_cast and not genre )
         self.controls['Trailer Cast']['control'].setVisible( self.display_cast and not genre )
         self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre )
+        
 
     def showTrailerInfo( self, title ):
         try:
@@ -296,7 +296,7 @@ class GUI( xbmcgui.Window ):
                     thumbnail = os.path.join( self.imagePath, 'generic-actor.tbn' )
                     l = xbmcgui.ListItem( actor, '', thumbnail )
                     self.controls['Trailer Cast']['control'].addItem( l )
-            self.setScrollbarIndicator()
+            self.setScrollbarIndicator('Trailer List')
 
         finally:
             xbmcgui.unlock()
@@ -321,30 +321,24 @@ class GUI( xbmcgui.Window ):
             xbmcgui.unlock()
         
     def calcScrollbarVisibilty( self ):
-        trailers = self.controls['Trailer List']['control'].size()
-        items_per_page = self.controls['Trailer List']['special']
-        visible = ( trailers > items_per_page )
-        #print visible, trailers, items_per_page
-        #self.setScrollbarIndicator( 0 )
-        self.showScrollbar( visible )
+        if ( self.controls['Trailer List']['special'] ):
+            visible = ( self.controls['Trailer List']['control'].size() > self.controls['Trailer List']['special'] )
+            self.showScrollbar( visible, 'Trailer List' )
+        if ( self.controls['Trailer Cast']['special'] ):
+            visible = (( self.controls['Trailer Cast']['control'].size() > self.controls['Trailer Cast']['special'] ))# and self.display_cast )
+            self.showScrollbar( visible, 'Trailer Cast' )
         
-    def setScrollbarIndicator( self ):
-        position = self.controls['Trailer List']['control'].getSelectedPosition()
-        trailers = self.controls['Trailer List']['control'].size()
-        posx = self.controls['Trailer List Scrollbar Position Indicator']['posx']
-        height = self.controls['Trailer List Scrollbar Middle']['height']
-        indicator_height = self.controls['Trailer List Scrollbar Position Indicator']['height']
-        offset = float( height - indicator_height ) / float( trailers - 1 )
-        posy = int( self.controls['Trailer List Scrollbar Middle']['posy'] + ( offset * position ))
-        self.controls['Trailer List Scrollbar Position Indicator']['control'].setPosition( posx, posy )
-#        posy = int( posy
-#    (height-indicator height)/(items-1)
+    def setScrollbarIndicator( self, list_control ):
+        if ( self.controls[list_control]['special'] ):
+            offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )]['height'] - self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['height'] ) / float( self.controls[list_control]['control'].size() - 1 )
+            posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )]['posy'] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ))
+            self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'], posy )
     
-    def showScrollbar( self, visible ):
-        self.controls['Trailer List Scrollbar Up Arrow']['control'].setVisible( visible )
-        self.controls['Trailer List Scrollbar Middle']['control'].setVisible( visible )
-        self.controls['Trailer List Scrollbar Down Arrow']['control'].setVisible( visible )
-        self.controls['Trailer List Scrollbar Position Indicator']['control'].setVisible( visible )
+    def showScrollbar( self, visible, list_control ):
+        self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible )
+        self.controls['%s Scrollbar Middle' % ( list_control, )]['control'].setVisible( visible )
+        self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible )
+        self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setVisible( visible )
         
     def togglePlotCast( self ):
         self.debugWrite('togglePlotCast', 2)
@@ -393,6 +387,8 @@ class GUI( xbmcgui.Window ):
                 control = self.getFocus()
                 if ( control is self.controls['Trailer List']['control'] ):
                     self.getTrailerInfo( control.getSelectedItem() )
+                elif ( control is self.controls['Trailer Cast']['control'] ):
+                    self.setScrollbarIndicator( 'Trailer Cast' )
                 elif ( control is self.controls['Exclusives Button']['control'] ):
                     self.setListNavigation('Exclusives Button')
                 elif ( control is self.controls['Newest Button']['control'] ):
