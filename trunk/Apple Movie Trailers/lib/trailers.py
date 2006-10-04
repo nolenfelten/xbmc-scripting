@@ -8,7 +8,7 @@ import language
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
 
 fetcher = cacheurl.HTTP()
-_ = language.Language().string()
+_ = language.Language().string
 
 class Info( object ):
     def __init__( self, title = None, url = None ):
