@@ -18,6 +18,8 @@ class Info( object ):
         if url:
             self.url = self.BASEURL + url
         self.__set_defaults__()
+        self.__updated__ = False
+        self.__updating__ = False
 
     def ns( text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -34,14 +36,13 @@ class Info( object ):
 
     def __getattribute__( self, name ):
         if not self.__updated__ and not self.__updating__:
+            self.__updating__ = True
             try:
-                self.__updating__ = True
                 self.__update__()
                 self.__updated__ = True
             except:
-                self.__updated__ = False
-            finally:
-                self.__updating__ = False
+                pass
+            self.__updating__ = False
         return getattr( self, name )
 
 
