@@ -148,7 +148,7 @@ class HTTP:
         try:
             drive = os.path.splitdrive( self.cache_dir )[0].split(':')[0]
             free_space = xbmc.getInfoLabel( 'System.Freespace(%s)' % drive )
-            if len( free_space ):
+            if len( free_space.split() ) > 2:
                 free_space_mb = int( free_space.split()[2] )
                 free_space_b = free_space_mb * 1024 * 1024
                 if totalsize >= free_space_b:
