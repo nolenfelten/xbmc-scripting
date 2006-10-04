@@ -277,6 +277,7 @@ class Trailers( Info ):
                     continue
 
     def update_all( self ):
+        pass
         # header = _(61) # Update all genre and movie information...
         # line1 = _(62) # Are you sure you want to do this?
         # line2 = _(63).split('|')[0] # Updating can take anywhere from 5 - 15 minutes,
