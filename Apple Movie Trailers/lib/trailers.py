@@ -11,10 +11,12 @@ fetcher = cacheurl.HTTP()
 _ = language.Language().string()
 
 class Info( object ):
-    def __init__( self, title, url ):
-        self.title = title
+    def __init__( self, title = None, url = None ):
+        if title:
+            self.title = title
         self.BASEURL = 'http://www.apple.com'
-        self.url = self.BASEURL + url
+        if url:
+            self.url = self.BASEURL + url
         self.__set_defaults__()
 
     def ns( text ):
@@ -46,8 +48,9 @@ class Info( object ):
 class Movie( Info ):
     """
         Exposes the following:
+        - title (string)
         - thumbnail (string path to image file, blank string if not found)
-        - description (string)
+        - plot (string)
         - cast (??? string ???)
         - trailer_urls (list of string urls to trailers)
     """
@@ -57,7 +60,7 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         self.thumbnail = ''
-        self.description = _(400) # No description could be retrieved for this title.
+        self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
         self.trailer_urls = list()
 
@@ -73,15 +76,15 @@ class Movie( Info ):
             if thumbnail:
                 self.thumbnail = thumbnail
 
-            # -- description --
-            description = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
-            description = description.strip()
+            # -- plot --
+            plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
+            plot = plot.strip()
             # remove any linefeeds so we can wrap properly to the text control this is displayed in
-            description = description.replace( '\r\n', ' ' )
-            description = description.replace( '\r', ' ' )
-            description = description.replace( '\n', ' ' )
-            if description:
-                self.description = description
+            plot = plot.replace( '\r\n', ' ' )
+            plot = plot.replace( '\r', ' ' )
+            plot = plot.replace( '\n', ' ' )
+            if plot:
+                self.plot = plot
 
             # -- cast --
             cast = 'FIXME: CAST INFO GOES HERE'
@@ -129,6 +132,7 @@ class Movie( Info ):
 class Genre( Info ):
     """
         Exposes the following:
+        - title (string)
         - movies (sorted list of Movie() object instances)
     """
     def __init__( self, title, url ):
@@ -199,7 +203,7 @@ class Trailers( Info ):
     def __init__( self ):
         self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
         self.DATAFILE = os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'AMT.pk' )
-        Info.__init__( self, title, url )
+        Info.__init__( self )
 
     def __set_defaults__( self ):
         # import pickle
