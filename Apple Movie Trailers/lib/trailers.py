@@ -21,7 +21,7 @@ class Info( object ):
         self.__updated__ = False
         self.__updating__ = False
 
-    def ns( text ):
+    def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
         result = list()
         for each in text.split( '/' ):
@@ -29,42 +29,33 @@ class Info( object ):
         return '/'.join( result )
 
     def __set_defaults__( self ):
-        self.__all__ = list()
-        try:
-            if self.title:
-                self.__all__ += [ 'title' ]
-            if self.url:
-                self.__all__ += [ 'url' ]
-        except:
-            pass
+        self.__update_items__ = list()
 
     def __update__( self ):
         pass
 
     def __getattribute__( self, name ):
         try:
-            if name in super( Info, self ).__getattribute__( '__all__' ):
-                if not self.__updated__ and not self.__updating__:
-                    self.__updating__ = True
-                    try:
-                        self.__update__()
-                        self.__updated__ = True
-                    except:
-                        pass
-                    self.__updating__ = False
+            if name in super( Info, self ).__getattribute__( '__update_items__' ):
+                if not self.__updated__:
+                    if not self.__updating__:
+                        self.__updating__ = True
+                        try:
+                            self.__update__()
+                            self.__updated__ = True
+                        except:
+                            traceback.print_exc()
+                            pass
+                        self.__updating__ = False
         except:
             pass
-        value = super( Info, self ).__getattribute__( name )
-        if name != '__dict__':
-            print '-- get %s:' % name, value
-        return value
+        return super( Info, self ).__getattribute__( name )
 
     def __setattr__( self, name, value ):
         try:
             self.__dict__[name] = value
         except:
             self.__dict__.update( { name: value } )
-        print '-- set %s:' % name, value
 
 class Movie( Info ):
     """
@@ -81,7 +72,7 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__all__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
+        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
         self.thumbnail = ''
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
@@ -160,17 +151,17 @@ class Genre( Info ):
     """
     def __init__( self, title, url ):
         Info.__init__( self, title, url )
-        self.is_special = self.title in [ 'Exclusives', 'Newest' ]
+        self.is_special = title in [ 'Exclusives', 'Newest' ]
         # needs to provide Movie(), Movie()
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__all__ += [ 'movies' ]
+        self.__update_items__ += [ 'movies' ]
         self.movies = list()
 
     def __update__( self ):
         try:
-            element = fetcher.urlopen( url )
+            element = fetcher.urlopen( self.url )
             if '<Document' not in element:
                 element = '<Document>' + element + '</Document>'
             element = ET.fromstring( element )
@@ -250,50 +241,51 @@ class Trailers( Info ):
             # self.genres = data
         # del pickle
         Info.__set_defaults__( self )
-        self.__all__ += [ 'genres' ]
+        self.__update_items__ += [ 'genres' ]
         self.genres = list()
 
     def __update__( self ):
-        base_xml = fetcher.urlopen( self.BASEXML )
-        base_xml = ET.fromstring( base_xml )
+        try:
+            base_xml = fetcher.urlopen( self.BASEXML )
+            base_xml = ET.fromstring( base_xml )
 
-        view_matrix = {
-            'view1': 'Exclusives',
-            'view2': 'Newest',
-        }
-        elements = base_xml.getiterator( ns('Include') )
-        for each in elements:
-            url = each.get( 'url' )
-            for view in view_matrix:
-                if view in url:
-                    url = '/moviesxml/h/' + url
-                    self.genres += [ Genre( view_matrix[view], url ) ]
+            view_matrix = {
+                'view1': 'Exclusives',
+                'view2': 'Newest',
+            }
+            elements = base_xml.getiterator( self.ns('Include') )
+            for each in elements:
+                url = each.get( 'url' )
+                for view in view_matrix:
+                    if view in url:
+                        url = '/moviesxml/h/' + url
+                        self.genres += [ Genre( view_matrix[view], url ) ]
 
-        elements = base_xml.getiterator( ns('GotoURL') )
-        genre_dict = dict()
-        for each in elements:
-            url = each.get( 'url' )
-            name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
-            genre_caps = list()
-            # smart capitalization of the genre name
-            for word in name.split():
-                # only prevent capitalization of these words if they aren't the leading word in the genre name
-                # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
-                cap = True
-                if word != name[0]:
-                    if word == 'and':
-                        cap = False
-                    if word == 'of':
-                        cap = False
-                    if word == 'a':
-                        cap = False
-                if cap:
-                    genre_caps += [ word.capitalize() ]
-                else:
-                    genre_caps += [ word ]
-            name = ' '.join( genre_caps )
-            if '/moviesxml/g' in url:
-                genre_dict.update( { name: url } )
+            elements = base_xml.getiterator( self.ns('GotoURL') )
+            genre_dict = dict()
+            for each in elements:
+                url = each.get( 'url' )
+                name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
+                genre_caps = list()
+                # smart capitalization of the genre name
+                for word in name.split():
+                    # only prevent capitalization of these words if they aren't the leading word in the genre name
+                    # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
+                    cap = True
+                    if word != name[0]:
+                        if word == 'and':
+                            cap = False
+                        if word == 'of':
+                            cap = False
+                        if word == 'a':
+                            cap = False
+                    if cap:
+                        genre_caps += [ word.capitalize() ]
+                    else:
+                        genre_caps += [ word ]
+                name = ' '.join( genre_caps )
+                if '/moviesxml/g' in url:
+                    genre_dict.update( { name: url } )
             genre_list = genre_dict.keys()
             genre_list.sort()
             for genre in genre_list:
@@ -301,6 +293,10 @@ class Trailers( Info ):
                     self.genres += [ Genre( genre, genre_dict[genre] ) ]
                 except:
                     continue
+        except:
+            traceback.print_exc()
+            self.__set_defaults__()
+            raise
 
     def update_all( self ):
         pass
