@@ -7,95 +7,225 @@ import language
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
 
-def append_ns( text ):
-    BASENS = '{http://www.apple.com/itms/}'
-    result = list()
-    for each in text.split( '/' ):
-        result += [ BASENS + each ]
-    return '/'.join( result )
-ns = append_ns
-
 fetcher = cacheurl.HTTP()
-lang = language.Language()
-_ = lang.string
+_ = language.Language().string()
 
-class Trailers:
-    def __init__( self ):
+class Info( object ):
+    def __init__( self, title, url ):
+        self.title = title
         self.BASEURL = 'http://www.apple.com'
+        self.url = self.BASEURL + url
+        self.__set_defaults__()
+
+    def ns( text ):
+        BASENS = '{http://www.apple.com/itms/}'
+        result = list()
+        for each in text.split( '/' ):
+            result += [ BASENS + each ]
+        return '/'.join( result )
+
+    def __set_defaults__( self ):
+        pass
+
+    def __update__( self ):
+        pass
+
+    def __getattribute__( self, name ):
+        if not self.__updated__ and not self.__updating__:
+            try:
+                self.__updating__ = True
+                self.__update__()
+                self.__updated__ = True
+            except:
+                self.__updated__ = False
+            finally:
+                self.__updating__ = False
+        return getattr( self, name )
+
+
+class Movie( Info ):
+    """
+        Exposes the following:
+        - thumbnail (string path to image file, blank string if not found)
+        - description (string)
+        - cast (??? string ???)
+        - trailer_urls (list of string urls to trailers)
+    """
+    def __init__( self, title, url ):
+        Info.__init__( self, title, url )
+        # needs to fill thumbnail, description, cast, trailer_urls
+
+    def __set_defaults__( self ):
+        self.thumbnail = ''
+        self.description = _(400) # No description could be retrieved for this title.
+        self.cast = 'FIXME: CAST INFO GOES HERE'
+        self.trailer_urls = list()
+
+    def __update__( self ):
+        try:
+            element = fetcher.urlopen( self.url )
+            element = ET.fromstring( element )
+
+            # -- thumbnail --
+            thumbnail = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
+            # download the actual thumbnail to the local filesystem (or get the cached filename)
+            thumbnail = fetcher.urlretrieve( thumbnail )
+            if thumbnail:
+                self.thumbnail = thumbnail
+
+            # -- description --
+            description = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
+            description = description.strip()
+            # remove any linefeeds so we can wrap properly to the text control this is displayed in
+            description = description.replace( '\r\n', ' ' )
+            description = description.replace( '\r', ' ' )
+            description = description.replace( '\n', ' ' )
+            if description:
+                self.description = description
+
+            # -- cast --
+            cast = 'FIXME: CAST INFO GOES HERE'
+            if cast:
+                self.cast = cast
+
+            # -- trailer urls --
+            urls = list()
+            for each in element.getiterator( self.ns('GotoURL') ):
+                url = each.get( 'url' )
+                if 'index_1' in url:
+                    continue
+                if '/moviesxml/g' in url:
+                    continue
+                if url[0] != '/':
+                    continue
+                if url in urls:
+                    continue
+                urls += [ url ]
+            if len( urls ):
+                url = self.BASEURL + urls[0]
+                element = fetcher.urlopen( url )
+                element = ET.fromstring( element )
+                trailer_urls = list()
+                for each in element.getiterator( self.ns('string') ):
+                    text = each.text
+                    if text == None:
+                        continue
+                    if 'http' not in text:
+                        continue
+                    if 'movies.apple.com' not in text:
+                        continue
+                    if text[-3:] == 'm4v':
+                        continue
+                    if text in trailer_urls:
+                        continue
+                    trailer_urls += [ text ]
+                self.trailer_urls = trailer_urls
+        except:
+            traceback.print_exc()
+            self.__set_defaults__()
+            raise
+
+
+class Genre( Info ):
+    """
+        Exposes the following:
+        - movies (sorted list of Movie() object instances)
+    """
+    def __init__( self, title, url ):
+        Info.__init__( self, title, url )
+        self.is_special = self.title in [ 'Exclusives', 'Newest' ]
+        # needs to provide Movie(), Movie()
+
+    def __set_defaults__( self ):
+        self.movies = list()
+
+    def __update__( self ):
+        try:
+            element = fetcher.urlopen( url )
+            if '<Document' not in element:
+                element = '<Document>' + element + '</Document>'
+            element = ET.fromstring( element )
+            
+            lookup = 'GotoURL'
+            if not self.is_special:
+                lookup = self.ns( lookup )
+            elements = element.getiterator( lookup )
+            trailer_dict = dict()
+            for element in elements:
+                url2 = element.get( 'url' )
+                title = None
+                if self.is_special:
+                    title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
+                if 'index_1' in url2:
+                    continue
+                if '/moviesxml/g' in url2:
+                    continue
+                if url2[0] != '/':
+                    continue
+                if url2 in trailer_dict.keys():
+                    lookup = 'b'
+                    if not self.is_special:
+                        lookup = 'B'
+                        lookup = self.ns( lookup )
+                    title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
+                    trailer_dict[url2] = title
+                    continue
+                trailer_dict.update( { url2: title } )
+            reordered_dict = dict()
+            for key in trailer_dict:
+                reordered_dict.update( { trailer_dict[key]: key } )
+
+            movies = list()
+            keys = reordered_dict.keys()
+            keys.sort()
+            for key in keys:
+                try:
+                    movie = Movie( key, reordered_dict[key] )
+                except:
+                    continue
+                movies += [ movie ]
+            if len( movies ):
+                self.movies = movies
+        except:
+            traceback.print_exc()
+            self.__set_defaults__()
+            raise
+
+class Trailers( Info ):
+    """
+        Exposes the following:
+        - genres (sorted list of Genre() object instances)
+    """
+    def __init__( self ):
         self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
         self.DATAFILE = os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'AMT.pk' )
-        self.genres = dict()
-        import pickle
-        try:
-            if not os.path.isfile( self.DATAFILE ):
-                raise
-            datafile = open( self.DATAFILE, 'r' )
-            version, self.genres = pickle.load( datafile )
-            datafile.close()
-            if version not in AMT_PK_COMPATIBLE_VERSIONS:
-                header = _(59) # Database file invalid...
-                line1 = _(60).split('|')[0] # Your database file is incompatible with this version
-                line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
-                xbmcgui.Dialog().ok( header, line1, line2 )
-                raise
-        except:
-            self.update_all()
-        del pickle
+        Info.__init__( self, title, url )
 
-    def cleanup( self ):
-        del self.genres
+    def __set_defaults__( self ):
+        # import pickle
+        # try:
+            # if not os.path.isfile( self.DATAFILE ):
+                # raise
+            # datafile = open( self.DATAFILE, 'r' )
+            # version, data = pickle.load( datafile )
+            # datafile.close()
+            # if version not in AMT_PK_COMPATIBLE_VERSIONS:
+                # header = _(59) # Database file invalid...
+                # line1 = _(60).split('|')[0] # Your database file is incompatible with this version
+                # line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
+                # xbmcgui.Dialog().ok( header, line1, line2 )
+                # raise
+        # except:
+            # data = list()
+        # finally:
+            # self.genres = data
+        # del pickle
+        self.genres = list()
 
-    def update_all( self ):
-        header = _(61) # Update all genre and movie information...
-        line1 = _(62) # Are you sure you want to do this?
-        line2 = _(63).split('|')[0] # Updating can take anywhere from 5 - 15 minutes,
-        line3 = _(63).split('|')[1] # depending upon your connection speed.
-        if xbmcgui.Dialog().yesno( header, line1, line2, line3 ):
-            try:
-                if os.path.isfile( self.DATAFILE ):
-                    os.remove( self.DATAFILE )
-                header = _(73) # Clear cache folder...
-                line1 = _(74).split('|')[0] # Updating your database will be much faster, but possibly
-                line2 = _(74).split('|')[1] # out of date, without clearing your cache.
-                if xbmcgui.Dialog().yesno( header, line1, line2 ):
-                    fetcher.clear_cache()
-            except:
-                pass
-            import pickle
-            self.genres = dict()
-            try:
-                self.__update_genre_list__()
-                datadir = os.path.dirname( self.DATAFILE )
-                if not os.path.isdir( datadir ):
-                    os.makedirs( datadir )
-                datafile = open( self.DATAFILE, 'w' )
-                pickle.dump( [ default.__version__, self.genres ], datafile )
-                datafile.close()
-            except:
-                traceback.print_exc()
-                header = _(64) # Error
-                line1 = _(65) # Unable to properly update AMT.pk
-                xbmcgui.Dialog().ok( header, line1 )
-                raise
-            del pickle
-
-    def __update_genre_list__( self ):
+    def __update__( self ):
         base_xml = fetcher.urlopen( self.BASEXML )
         base_xml = ET.fromstring( base_xml )
 
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           'Exclusives': category_url,
-        #           'Newest': category_url,
-        #       }
-        #       'standard': {
-        #       }
-        #   }
-        self.genres = {
-            'special': dict(),
-            'standard': dict(),
-        }
         view_matrix = {
             'view1': 'Exclusives',
             'view2': 'Newest',
@@ -106,93 +236,10 @@ class Trailers:
             for view in view_matrix:
                 if view in url:
                     url = '/moviesxml/h/' + url
-                    self.genres['special'].update( { view_matrix[view]: url } )
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           'Exclusives': {
-        #               movie_title: movie_url
-        #           }
-        #           'Newest': {
-        #               movie_title: movie_url
-        #           }
-        #       }
-        #       'standard': {
-        #       }
-        #   }
-        dialog = xbmcgui.DialogProgress()
-        dialog_header = _(66) # Fetching category and genre information...
-        dialog_line1 = _(67) # Please wait a moment.
-        dialog_errorline = ''
-        dialog_percentage = 0
-        dialog.create( dialog_header, dialog_line1 )
-        dialog.update( dialog_percentage )
-        pos = 0
-        for each in self.genres['special'].keys():
-            try:
-                line2 = _(68) # Fetching:
-                dialog.update( dialog_percentage, dialog_line1, line2 + ' ' + each, dialog_errorline )
-                self.genres['special'][each] = self.__update_trailer_dict__( each )
-            except:
-                traceback.print_exc()
-                dialog_errorline = _(69) # Error retrieving information for one or more genres.
-            pos += 1
-            dialog_percentage = int( float( pos ) / len( self.genres['special'] ) * 100 )
-        dialog.close()
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           'Exclusives': {
-        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
-        #           }
-        #           'Newest': {
-        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
-        #           }
-        #       }
-        #       'standard': {
-        #       }
-        #   }
-        dialog = xbmcgui.DialogProgress()
-        dialog_header = _(70) # Fetching movie information...
-        dialog_errorline = ''
-        genre_percentage = 0
-        dialog.create( dialog_header )
-        dialog.update( dialog_percentage )
-        # special
-        genre_pos = 0
-        for genre in self.genres['special'].keys():
-            movie_pos = 0
-            genre_line1 = _(71) # Genre:
-            dialog.update( genre_percentage, genre_line1 + ' ' + genre, '', dialog_errorline )
-            if dialog.iscanceled():
-                break
-            movie_percentage = 0
-            for movie in self.genres['special'][genre]:
-                if dialog.iscanceled():
-                    break
-                try:
-                    movie_line1 = _(71) # Genre:
-                    movie_line2 = _(68) # Fetching:
-                    dialog.update( movie_percentage, movie_line1 + ' ' + genre, movie_line2 + ' ' + movie, dialog_errorline )
-                    self.genres['special'][genre][movie] = self.__update_trailer_info__( genre, movie )
-                except:
-                    dialog_errorline = _(72)
-                movie_pos += 1
-                movie_percentage = int( float( movie_pos ) / len( self.genres['special'][genre] ) * 10 + genre_percentage )
-            genre_pos += 1
-            genre_percentage = int( float( genre_pos ) / len( self.genres['special'] ) * 100 )
-        dialog.close()
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           ...
-        #       }
-        #       'standard': {
-        #           genre: genre_url,
-        #           ...
-        #       }
-        #   }
+                    self.genres += [ Genre( view_matrix[view], url ) ]
+
         elements = base_xml.getiterator( ns('GotoURL') )
+        genre_dict = dict()
         for each in elements:
             url = each.get( 'url' )
             name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
@@ -215,226 +262,46 @@ class Trailers:
                     genre_caps += [ word ]
             name = ' '.join( genre_caps )
             if '/moviesxml/g' in url:
-                self.genres['standard'].update( { name: url } )
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           ...
-        #       }
-        #       'standard': {
-        #           genre: {
-        #               movie_title: movie_url
-        #           }
-        #           ...
-        #       }
-        #   }
-        dialog = xbmcgui.DialogProgress()
-        dialog_header = _(66) # Fetching category and genre information...
-        dialog_line1 = _(67) # Please wait a moment.
-        dialog_errorline = ''
-        dialog_percentage = 0
-        dialog.create( dialog_header, dialog_line1 )
-        dialog.update( dialog_percentage )
-        pos = 0
-        for each in self.genres['standard'].keys():
-            try:
-                line2 = _(68) # Fetching:
-                dialog.update( dialog_percentage, dialog_line1, line2 + ' ' + each, dialog_errorline )
-                self.genres['standard'][each] = self.__update_trailer_dict__( each )
-            except:
-                dialog_errorline = _(69) # Error retrieving information for one or more genres.
-            pos += 1
-            dialog_percentage = int( float( pos ) / len( self.genres['standard'] ) * 100 )
-        dialog.close()
-        # update information for each movie in each genre
-        # make self.genres as such:
-        #   {
-        #       'special': {
-        #           ...
-        #       }
-        #       'standard': {
-        #           genre: {
-        #               movie_title: [ thumbnail, description, [ trailer_url, ... ] ]
-        #           }
-        #           ...
-        #       }
-        #   }
-        dialog = xbmcgui.DialogProgress()
-        dialog_header = _(70) # Fetching movie information...
-        dialog_errorline = ''
-        genre_percentage = 0
-        dialog.create( dialog_header )
-        dialog.update( dialog_percentage )
-        # standard
-        genre_pos = 0
-        for genre in self.genres['standard'].keys():
-            movie_pos = 0
-            genre_line1 = _(71) # Genre:
-            dialog.update( genre_percentage, genre_line1 + ' ' + genre, '', dialog_errorline )
-            if dialog.iscanceled():
-                break
-            movie_percentage = 0
-            for movie in self.genres['standard'][genre]:
-                if dialog.iscanceled():
-                    break
+                genre_dict.update( { name: url } )
+            genre_list = genre_dict.keys()
+            genre_list.sort()
+            for genre in genre_list:
                 try:
-                    movie_line1 = _(71) # Genre:
-                    movie_line2 = _(68) # Fetching:
-                    dialog.update( movie_percentage, movie_line1 + ' ' + genre, movie_line2 + ' ' + movie, dialog_errorline )
-                    self.genres['standard'][genre][movie] = self.__update_trailer_info__( genre, movie )
+                    self.genres += [ Genre( genre, genre_dict[genre] ) ]
                 except:
-                    dialog_errorline = _(72) # Error retrieving information for one or more movie titles.
-                movie_pos += 1
-                movie_percentage = int( float( movie_pos ) / len( self.genres['standard'][genre] ) * 10 + genre_percentage )
-            genre_pos += 1
-            genre_percentage = int( float( genre_pos ) / len( self.genres['standard'] ) * 100 )
-        dialog.close()
+                    continue
 
-    def __update_trailer_dict__( self, genre ):
-        """
-            return a dict with movie titles and urls for the given genre
-        """
-        try:
-            url = self.BASEURL + self.genres['standard'][genre]
-            isSpecial = False
-        except:
-            url = self.BASEURL + self.genres['special'][genre]
-            isSpecial = True
-        element = fetcher.urlopen( url )
-        if '<Document' not in element:
-            element = '<Document>' + element + '</Document>'
-        element = ET.fromstring( element )
-        lookup = 'GotoURL'
-        if not isSpecial:
-            lookup = ns( lookup )
-        elements = element.getiterator( lookup )
-        trailer_dict = dict()
-        for element in elements:
-            url2 = element.get( 'url' )
-            title = None
-            if isSpecial:
-                title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
-            if 'index_1' in url2:
-                continue
-            if '/moviesxml/g' in url2:
-                continue
-            if url2[0] != '/':
-                continue
-            if url2 in trailer_dict.keys():
-                lookup = 'b'
-                if not isSpecial:
-                    lookup = 'B'
-                    lookup = ns( lookup )
-                title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
-                trailer_dict[url2] = title
-                continue
-            trailer_dict.update( { url2: title } )
-        reordered_dict = dict()
-        for key in trailer_dict:
-            reordered_dict.update( { trailer_dict[key]: key } )
-        return reordered_dict
+    def update_all( self ):
+        # header = _(61) # Update all genre and movie information...
+        # line1 = _(62) # Are you sure you want to do this?
+        # line2 = _(63).split('|')[0] # Updating can take anywhere from 5 - 15 minutes,
+        # line3 = _(63).split('|')[1] # depending upon your connection speed.
+        # if xbmcgui.Dialog().yesno( header, line1, line2, line3 ):
+            # try:
+                # if os.path.isfile( self.DATAFILE ):
+                    # os.remove( self.DATAFILE )
+                # header = _(73) # Clear cache folder...
+                # line1 = _(74).split('|')[0] # Updating your database will be much faster, but possibly
+                # line2 = _(74).split('|')[1] # out of date, without clearing your cache.
+                # if xbmcgui.Dialog().yesno( header, line1, line2 ):
+                    # fetcher.clear_cache()
+            # except:
+                # pass
+            # import pickle
+            # self.genres = dict()
+            # try:
+                # self.__update_genre_list__()
+                # datadir = os.path.dirname( self.DATAFILE )
+                # if not os.path.isdir( datadir ):
+                    # os.makedirs( datadir )
+                # datafile = open( self.DATAFILE, 'w' )
+                # pickle.dump( [ default.__version__, self.genres ], datafile )
+                # datafile.close()
+            # except:
+                # traceback.print_exc()
+                # header = _(64) # Error
+                # line1 = _(65) # Unable to properly update AMT.pk
+                # xbmcgui.Dialog().ok( header, line1 )
+                # raise
+            # del pickle
 
-    def __update_trailer_info__( self, genre, title ):
-        try:
-            try:
-                url = self.BASEURL + self.genres['standard'][genre][title]
-                isSpecial = False
-            except:
-                url = self.BASEURL + self.genres['special'][genre][title]
-                isSpecial = True
-            element = fetcher.urlopen( url )
-            element = ET.fromstring( element )
-            thumbnail = element.getiterator( ns('PictureView') )[1].get( 'url' )
-            # download the actual thumbnail to the local filesystem (or get the cached filename)
-            thumbnail = fetcher.urlretrieve( thumbnail )
-            if not thumbnail:
-                # default if the actual thumbnail couldn't be found for some reason
-                thumbnail = ''
-            description = element.getiterator( ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
-            description = description.strip()
-            # remove any linefeeds so we can wrap properly to the text control this is displayed in
-            description = description.replace( '\r\n', ' ' )
-            description = description.replace( '\r', ' ' )
-            description = description.replace( '\n', ' ' )
-            if not description or len( description ) is 0:
-                description = _(400) # No description could be retrieved for this title.
-            cast = 'FIXME: CAST INFO GOES HERE'
-            urls = list()
-            for each in element.getiterator( ns('GotoURL') ):
-                url = each.get( 'url' )
-                if 'index_1' in url:
-                    continue
-                if '/moviesxml/g' in url:
-                    continue
-                if url[0] != '/':
-                    continue
-                if url in urls:
-                    continue
-                urls += [ url ]
-        except:
-            thumbnail = ''
-            description = _(400) # No description could be retrieved for this title.
-            cast = 'FIXME: CAST INFO GOES HERE'
-            urls = list()
-        return [ thumbnail, description, cast, urls ]
-
-    def get_video_list( self, genre, movie_title ):
-        try:
-            try:
-                thumbnail, description, cast, urls = self.genres['standard'][genre][movie_title]
-                isSpecial = False
-            except:
-                thumbnail, description, cast, urls = self.genres['special'][genre][movie_title]
-                isSpecial = True
-            url = self.BASEURL + urls[0]
-            element = fetcher.urlopen( url )
-            element = ET.fromstring( element )
-            trailer_urls = list()
-            for each in element.getiterator( ns('string') ):
-                text = each.text
-                if text == None:
-                    continue
-                if 'http' not in text:
-                    continue
-                if 'movies.apple.com' not in text:
-                    continue
-                if text[-3:] == 'm4v':
-                    continue
-                if text in trailer_urls:
-                    continue
-                trailer_urls += [ text ]
-            return trailer_urls
-        except:
-            return list()
-
-    def get_genre_list( self ):
-        genre_list = self.genres['standard'].keys()
-        genre_list.sort()
-        return genre_list
-
-    def get_trailer_list( self, genre ):
-        trailer_list = self.genres['standard'][genre].keys()
-        trailer_list.sort()
-        return trailer_list
-
-    def get_trailer_info( self, genre, movie_title ):
-        try:
-            if genre in self.genres['special']:
-                thumbnail, description, cast, urls = self.genres['special'][genre][movie_title]
-            else:
-                thumbnail, description, cast, urls = self.genres['standard'][genre][movie_title]
-        except:
-            thumbnail = ''
-            description = _(400) # No description could be retrieved for this title.
-            cast = 'FIXME: CAST INFO GOES HERE'
-        return [ thumbnail, description, cast ]
-
-    def get_exclusives_list( self ):
-        e_list = self.genres['special']['Exclusives'].keys()
-        e_list.sort()
-        return e_list
-
-    def get_newest_list( self ):
-        n_list = self.genres['special']['Newest'].keys()
-        n_list.sort()
-        return n_list
