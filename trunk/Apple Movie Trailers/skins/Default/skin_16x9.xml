@@ -260,18 +260,56 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer List Scrollbar</description>
+			<description>Trailer List Scrollbar Up Arrow</description>
 			<type>image</type>
 			<id>1</id>
 			<posx>483</posx>
 			<posy>121</posy>
 			<width>20</width>
-			<height>233</height>
-			<texture>\list-scrollbar.png</texture>
+			<height>20</height>
+			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
 		</control>
 
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer List Scrollbar Middle</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>483</posx>
+			<posy>141</posy>
+			<width>20</width>
+			<height>193</height>
+			<texture>\list-nofocus.png</texture>
+			<visible>false</visible>
+		</control>
 		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer List Scrollbar Down Arrow</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>483</posx>
+			<posy>334</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>\scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer List Scrollbar Position Indicator</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>483</posx>
+			<posy>181</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>\list-focus.png</texture>
+			<visible>false</visible>
+		</control>
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List</description>
