@@ -12,11 +12,20 @@ _ = language.Language().string
 
 class Info( object ):
     def __init__( self, title = None, url = None ):
+        self.DEBUG = os.path.isfile( os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'debug.txt' ) )
         if title:
             self.title = title
         self.BASEURL = 'http://www.apple.com'
         if url:
             self.url = self.BASEURL + url
+            if self.DEBUG:
+                if self.title and self.url:
+                    print '%s: %s' % ( self.title, self.url )
+                else:
+                    if self.title:
+                        print self.title
+                    if self.url:
+                        print self.url
         self.__set_defaults__()
         self.__updated__ = False
         self.__updating__ = False
