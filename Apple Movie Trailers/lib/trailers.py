@@ -29,6 +29,7 @@ class Info( object ):
         self.__set_defaults__()
         self.__updated__ = False
         self.__updating__ = False
+        self.dialog = xbmcgui.DialogProgress()
 
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -89,8 +90,14 @@ class Movie( Info ):
 
     def __update__( self ):
         try:
+            # dialog
+            self.dialog.create( self.title )
+            self.dialog.update( 0 )
+
+            # xml parsing
             element = fetcher.urlopen( self.url )
             element = ET.fromstring( element )
+            self.dialog.update( 20 )
 
             # -- thumbnail --
             thumbnail = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
@@ -98,6 +105,7 @@ class Movie( Info ):
             thumbnail = fetcher.urlretrieve( thumbnail )
             if thumbnail:
                 self.thumbnail = thumbnail
+            self.dialog.update( 40 )
 
             # -- plot --
             plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
@@ -108,11 +116,13 @@ class Movie( Info ):
             plot = plot.replace( '\n', ' ' )
             if plot:
                 self.plot = plot
+            self.dialog.update( 60 )
 
             # -- cast --
             cast = 'FIXME: CAST INFO GOES HERE'
             if cast:
                 self.cast = cast
+            self.dialog.update( 80 )
 
             # -- trailer urls --
             urls = list()
@@ -146,10 +156,13 @@ class Movie( Info ):
                         continue
                     trailer_urls += [ text ]
                 self.trailer_urls = trailer_urls
+            self.dialog.update( 100 )
         except:
             traceback.print_exc()
             self.__set_defaults__()
+            self.dialog.close()
             raise
+        self.dialog.close()
 
 
 class Genre( Info ):
