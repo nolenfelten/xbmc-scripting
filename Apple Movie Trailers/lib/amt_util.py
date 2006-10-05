@@ -46,6 +46,8 @@ def setControllerAction():
     return {
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
+                    166 : 'Remote Up',
+                    167 : 'Remote Down',
                     256 : 'A Button',
                     257 : 'B Button',
                     258 : 'X Button',
