@@ -128,7 +128,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>216</onleft>
+			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>60</onup>
 			<ondown>20</ondown>
@@ -152,7 +152,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>216</onleft>
+			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
@@ -176,7 +176,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>216</onleft>
+			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
@@ -200,7 +200,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>216</onleft>
+			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
@@ -224,7 +224,7 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>216</onleft>
+			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
@@ -263,7 +263,7 @@
 			<description>Trailer List Scrollbar Up Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>483</posx>
+			<posx>482</posx>
 			<posy>121</posy>
 			<width>20</width>
 			<height>20</height>
@@ -276,7 +276,7 @@
 			<description>Trailer List Scrollbar Middle</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>483</posx>
+			<posx>482</posx>
 			<posy>141</posy>
 			<width>20</width>
 			<height>193</height>
@@ -289,7 +289,7 @@
 			<description>Trailer List Scrollbar Down Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>483</posx>
+			<posx>482</posx>
 			<posy>334</posy>
 			<width>20</width>
 			<height>20</height>
@@ -300,14 +300,25 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Position Indicator</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>483</posx>
+			<type>button</type>
+			<id>90</id>
+			<label>-</label>
+			<posx>482</posx>
 			<posy>181</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>\scrollbar-indicator.png</texture>
-			<visible>false</visible>
+			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
+			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<disabledcolor>00ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>100</onleft>
+			<onright>110</onright>
+			<onup>90</onup>
+			<ondown>90</ondown>
+			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -321,7 +332,7 @@
 			<width>270</width>
 			<height>260</height>
 			<textcolor>FFFFFFFF</textcolor>
-			<selectedcolor>d0ffffff</selectedcolor>
+			<selectedcolor>FFFFFF00</selectedcolor>
 			<textureup>\scroll-up.png</textureup>
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
@@ -340,7 +351,7 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<onleft>10</onleft>
-			<onright>110</onright>
+			<onright>90</onright>
 			<visible>false</visible>
 		</control>
 		
@@ -444,7 +455,7 @@
 			<textoffsetx>17</textoffsetx>
 			<align>center</align>
 			<aligny>center</aligny>
-			<onleft>110</onleft>
+			<onleft>90</onleft>
 			<onright>211</onright>
 			<onup>100</onup>
 			<ondown>216</ondown>
@@ -525,7 +536,7 @@
 			<posx>667</posx>
 			<posy>423</posy>
 			<width>20</width>
-			<height>64</height>
+			<height>63</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
 		</control>
@@ -536,7 +547,7 @@
 			<type>image</type>
 			<id>1</id>
 			<posx>667</posx>
-			<posy>487</posy>
+			<posy>486</posy>
 			<width>20</width>
 			<height>20</height>
 			<texture>\scrollbar-down-arrow.png</texture>
@@ -546,14 +557,25 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer Cast Scrollbar Position Indicator</description>
-			<type>image</type>
-			<id>1</id>
+			<type>button</type>
+			<id>95</id>
+			<label>-</label>
 			<posx>667</posx>
 			<posy>423</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>\scrollbar-indicator.png</texture>
-			<visible>false</visible>
+			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
+			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<disabledcolor>00ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>216</onleft>
+			<onright>10</onright>
+			<onup>95</onup>
+			<ondown>95</ondown>
+			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -570,7 +592,7 @@
 			<onup>216</onup>
 			<ondown>216</ondown>
 			<onleft>215</onleft>
-			<onright>10</onright>
+			<onright>95</onright>
 			<textureup>\scroll-up.png</textureup>
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
