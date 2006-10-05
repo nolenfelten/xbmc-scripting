@@ -280,7 +280,7 @@
 			<posy>141</posy>
 			<width>20</width>
 			<height>193</height>
-			<texture>\list-nofocus.png</texture>
+			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -306,7 +306,7 @@
 			<posy>181</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>\list-focus.png</texture>
+			<texture>\scrollbar-indicator.png</texture>
 			<visible>false</visible>
 		</control>
 
@@ -526,7 +526,7 @@
 			<posy>423</posy>
 			<width>20</width>
 			<height>64</height>
-			<texture>\list-nofocus.png</texture>
+			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -552,7 +552,7 @@
 			<posy>423</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>\list-focus.png</texture>
+			<texture>\scrollbar-indicator.png</texture>
 			<visible>false</visible>
 		</control>
 
