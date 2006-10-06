@@ -208,6 +208,7 @@ class Irc_client(xbmcgui.Window):
         self.serverports = []
         global ircmg2
         self.ircmg = ircmg2
+        self.setCoordinateResolution(6)
         # GUI Start
         self.addControl(xbmcgui.ControlImage(0,0,720,576, ScriptHome  + "background.png"))
         self.addControl(xbmcgui.ControlImage((720 / 2 - 185) , 45, 0, 0, ScriptHome + "ircx_logo.png")) #(screen witdht / 2 - (image widht / 2))
@@ -377,6 +378,7 @@ class Channel_Win(xbmcgui.Window):
     def __init__(self):
         if Emulating: xbmcgui.Window.__init__(self)
         xbmcgui.lock()
+        self.setCoordinateResolution(6)
         self.addControl(xbmcgui.ControlImage(0,0,0,0, ScriptHome  + "background.png"))
         self.addControl(xbmcgui.ControlImage(50, 50, 0, 0,ScriptHome + "ircx_logo.png"))
         self.chan_topic = xbmcgui.ControlFadeLabel(60, 530,720-60*2, 30)
@@ -522,6 +524,7 @@ class TheAbout(xbmcgui.WindowDialog):
     def __init__(self):
         if Emulating: xbmcgui.WindowDialog.__init__(self)
         self.isaboutplaying = 0
+        self.setCoordinateResolution(6)
         self.bgpanel = xbmcgui.ControlImage(720-505, 70, 0,0, 'panel2.png')
 
         #self.addControl(xbmcgui.ControlImage((screenwidht / 2 - 185) , 45, 0, 0, ScriptHome + "ircx_logo.png")) #(screen witdht / 2 - (image widht / 2))
@@ -568,6 +571,7 @@ class TheSettings(xbmcgui.Window):
     # This window is for editing the settings such as real name, user name (not nickname), other stuff
     def __init__(self):
       if Emulating: xbmcgui.Window.__init__(self)
+      self.setCoordinateResolution(6)
       self.addControl(xbmcgui.ControlImage(0,0, 0,0,  ScriptHome + "background.png"))
       self.addControl(xbmcgui.ControlImage(60,65, 0,0,  ScriptHome + "overlay1.png"))
       screenwidht =  float(self.getWidth())
