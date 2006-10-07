@@ -11,23 +11,23 @@ class GUI( xbmcgui.WindowDialog ):
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
-            self.setupConstants()
+            self.setupVariables()
             self.setControlsValues()
             ##remove disabled when update script routine is done
             self.controls['Update Button']['control'].setEnabled( False )
 
     def setupGUI( self ):
-        skinPath = os.path.join( self.cwd, 'skins' )
-        self.skinPath = os.path.join( skinPath, self.skin )
-        self.imagePath = os.path.join( self.skinPath, 'gfx' )
+        skin_path = os.path.join( self.cwd, 'skins' )
+        self.skin_path = os.path.join( skin_path, self.skin )
+        self.image_path = os.path.join( self.skin_path, 'gfx' )
         res = self.getResolution()
         if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
         else: skin = 'settings.xml'
-        if ( not os.path.isfile( os.path.join( self.skinPath, skin ) ) ): skin = 'settings.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skinPath, skin ), self.imagePath, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
+        if ( not os.path.isfile( os.path.join( self.skin_path, skin ) ) ): skin = 'settings.xml'
+        guibuilder.GUIBuilder( self, os.path.join( self.skin_path, skin ), self.image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
-    def setupConstants( self ):
-        self.controllerAction = amt_util.setControllerAction()
+    def setupVariables( self ):
+        self.controller_action = amt_util.setControllerAction()
         self.quality = amt_util.setQuality( self._ )
         self.mode = amt_util.setMode( self._ )
         self.startup = amt_util.setStartupCategory( self._ )
@@ -90,18 +90,19 @@ class GUI( xbmcgui.WindowDialog ):
             self.setControlsValues()
 
     def chooseSkin( self ):
-        skinPath = os.path.join( self.cwd, 'skins' )
-        skins = os.listdir( skinPath )
+        skin_path = os.path.join( self.cwd, 'skins' )
+        skins = os.listdir( skin_path )
         skins.sort()
         self.showPopup( 'choose your skin', skins )
         
     def getThumb( self, choice ):
-        thumbnail = os.path.join( self.cwd, 'skins', choice.getLabel(), 'thumbnail.tbn' )
+        thumbnail = os.path.join( self.cwd, 'skins', choice.getLabel().replace( '*','' ), 'thumbnail.tbn' )
         if ( os.path.isfile( thumbnail ) ):
             self.controls['Popup Thumb']['control'].setImage( thumbnail )
         else:
             self.controls['Popup Thumb']['control'].setImage( '' )
-        
+        self.controls['Popup Warning Label']['control'].setVisible( choice.getLabel()[0] == '*' )
+
     def hidePopup( self ):
         self.setPopupVisibility( False )
         self.setFocus( self.controls['Skin Button']['control'] )
@@ -110,12 +111,12 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup Label']['control'].setLabel( title )
         self.controls['Popup List']['control'].reset()
         for item in items:
-            if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'skin.xml' ).replace( ';', '' ) ) and
-                os.path.isfile( os.path.join( self.cwd, 'skins', item, 'settings.xml' ).replace( ';', '' ) ) ):
-                if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'warning.txt' ).replace( ';', '' ) ) ):
+            if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'skin.xml' )) and
+                os.path.isfile( os.path.join( self.cwd, 'skins', item, 'settings.xml' ))):
+                if ( os.path.isfile( os.path.join( self.cwd, 'skins', item, 'warning.txt' ))):
                     warning = '*'
                 else: warning = ''
-                self.controls['Popup List']['control'].addItem( '%s%s' % ( warning, item, ) )
+                self.controls['Popup List']['control'].addItem( '%s%s' % ( warning, item, ))
         self.setPopupVisibility( True )
         self.setFocus( self.controls['Popup List']['control'] )
         
@@ -214,12 +215,12 @@ class GUI( xbmcgui.WindowDialog ):
             
     def onAction( self, action ):
         control = self.getFocus()
-        buttonDesc = self.controllerAction.get( action.getButtonCode(), 'n/a' )
-        if ( buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button' ):
+        button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
+        if ( button_key == 'B Button' or button_key == 'Remote Back Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.close()
-        elif ( buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' ):
+        elif ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.saveSettings()

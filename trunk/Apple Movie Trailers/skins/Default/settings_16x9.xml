@@ -346,11 +346,11 @@
 			<description>Popup Warning Label</description>
 			<type>label</type>
 			<id>503</id>
-			<posx>240</posx>
-			<posy>270</posy>
+			<posx>195</posx>
+			<posy>188</posy>
 			<width>128</width>
 			<height>20</height>
-			<align>Right</align>
+			<align>center</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>212</label>
