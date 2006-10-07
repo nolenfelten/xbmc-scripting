@@ -152,11 +152,13 @@ class GUI( xbmcgui.Window ):
             self.debugWrite('showTrailers', 2)
             xbmcgui.lock()
             self.controls['Trailer List']['control'].reset()
+            movie_quality = 'LMH'
             for movie in self.trailers.genres[self.genre_id].movies: # now fill the list control
                 thumbnail = ''
                 if ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
                 elif ( self.settings['thumbnail display'] == 0 ): thumbnail = movie.thumbnail
-                l = xbmcgui.ListItem( movie.title, '', thumbnail )
+                choices = movie_quality[:len( movie.trailer_urls )]
+                l = xbmcgui.ListItem( movie.title, choices, thumbnail )
                 self.controls['Trailer List']['control'].addItem( l )
             self.setSelection( 'Trailer List', 0 )
             self.calcScrollbarVisibilty('Trailer List')
