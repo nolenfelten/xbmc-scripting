@@ -31,6 +31,9 @@ class Info( object ):
         self.__updating__ = False
         self.dialog = xbmcgui.DialogProgress()
 
+    def serialize( self ):
+        return ''
+
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
         result = list()
@@ -354,4 +357,11 @@ class Trailers( Info ):
                 # xbmcgui.Dialog().ok( header, line1 )
                 # raise
             # del pickle
+
+    def loadDatabase( self ):
+        pass
+
+    def saveDatabase( self ):
+        pass
+
 
