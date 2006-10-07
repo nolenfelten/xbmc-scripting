@@ -1,6 +1,6 @@
 import os, urllib2, md5, traceback
 import xbmc, xbmcgui
-import language
+import language, time
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
@@ -225,7 +225,8 @@ class HTTPProgress( HTTP ):
         self.dialog = xbmcgui.DialogProgress()
         self.status_symbols = [ '-', '\\', '|', '/' ]
         self.status_symbol = 0
-
+        self.download_start_time = time.time()
+        
     def urlretrieve( self, url ):
         # Downloading...
         self.dialog.create( _(79), url.split( '/' )[-1] )
@@ -236,10 +237,11 @@ class HTTPProgress( HTTP ):
         percentage = percent_from_ratio( size_read_so_far, filesize )
         so_far = byte_measurement( size_read_so_far )
         fsize = byte_measurement( filesize )
+        rate = '%d %s' % ( size_read_so_far / 1024 / ( time.time() - self.download_start_time ), _(80) )
         self.status_symbol += 1
         if self.status_symbol >= len( self.status_symbols ):
             self.status_symbol = 0
-        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s ' % ( percentage, so_far, fsize, self.status_symbols[self.status_symbol] ) )
+        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s ' % ( percentage, so_far, fsize, rate, self.status_symbols[self.status_symbol] ) )
         if self.dialog.iscanceled():
             return False
         return True
