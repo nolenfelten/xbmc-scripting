@@ -18,21 +18,57 @@ class Info( object ):
         self.BASEURL = 'http://www.apple.com'
         if url:
             self.url = self.BASEURL + url
-            if self.DEBUG:
-                if self.title and self.url:
-                    print '%s: %s' % ( self.title, self.url )
-                else:
-                    if self.title:
-                        print self.title
-                    if self.url:
-                        print self.url
+        if self.DEBUG:
+            if self.title and self.url:
+                print '%s: %s' % ( self.title, self.url )
+            else:
+                if self.title:
+                    print self.title
+                if self.url:
+                    print self.url
         self.__set_defaults__()
         self.__updated__ = False
         self.__updating__ = False
+        self.__serializing__ = False
         self.dialog = xbmcgui.DialogProgress()
 
     def serialize( self ):
-        return ''
+        self.__serializing__ = True
+        classname = str( self.__class__ ).split( '\'' )[1].split( '.' )[1]
+        
+        #root element
+        root = ET.Element( classname )
+
+        #begin serialization
+        serialize_items = list()
+        try:
+            if self.title:
+                serialize_items += [ 'title' ]
+            if self.url:
+                serialize_items += [ 'url' ]
+        except:
+            pass
+        serialize_items += self.__update_items__
+
+        for item in serialize_items:
+            itemtype = type( self.__dict__[ item ] )
+            itemvalue = itemtype()
+            itemelement = ET.SubElement( root, item, { 'type': str( itemtype ).split('\'')[1] } )
+            # doesn't do nested lists below one level
+            if itemtype == type( list() ):
+                for i in self.__dict__[ item ]:
+                    if str( type( i ) ).split()[0] == '<class':
+                        itemelement.append( i.serialize() )
+                    else:
+                        itemvalue = str( i )
+                        itemelement.text = itemvalue
+            elif str( itemtype ).split()[0] == '<class':
+                itemelement.append( self.__dict__[ item ].serialize() )
+            else:
+                itemvalue = str( self.__dict__[ item ] )
+                itemelement.text = itemvalue
+        self.__serializing__ = False
+        return root
 
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -51,7 +87,7 @@ class Info( object ):
         try:
             if name in super( Info, self ).__getattribute__( '__update_items__' ):
                 if not self.__updated__:
-                    if not self.__updating__:
+                    if not self.__updating__ and not self.__serializing__:
                         self.__updating__ = True
                         try:
                             self.__update__()
@@ -362,6 +398,11 @@ class Trailers( Info ):
         pass
 
     def saveDatabase( self ):
-        pass
+        root = ET.Element( 'AMT' )
+        root.set( 'version', '0.92' )
+        root.append( self.serialize() )
+        
+        # ready to save to file
+        print ET.tostring( root )
 
 
