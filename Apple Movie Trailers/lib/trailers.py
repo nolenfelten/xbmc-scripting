@@ -114,6 +114,7 @@ class Movie( Info ):
         - plot (string)
         - cast (??? string ???)
         - trailer_urls (list of string urls to trailers)
+        - watched (boolean)
     """
     def __init__( self, title, url ):
         Info.__init__( self, title, url )
@@ -121,11 +122,12 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
+        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls', 'watched' ]
         self.thumbnail = ''
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
         self.trailer_urls = list()
+        self.watched = False
 
     def __update__( self ):
         try:
