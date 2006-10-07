@@ -265,8 +265,8 @@
 			<id>1</id>
 			<posx>482</posx>
 			<posy>121</posy>
-			<width>20</width>
-			<height>20</height>
+			<width>16</width>
+			<height>16</height>
 			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -277,9 +277,9 @@
 			<type>image</type>
 			<id>1</id>
 			<posx>482</posx>
-			<posy>141</posy>
-			<width>20</width>
-			<height>193</height>
+			<posy>137</posy>
+			<width>16</width>
+			<height>201</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
 		</control>
@@ -290,9 +290,9 @@
 			<type>image</type>
 			<id>1</id>
 			<posx>482</posx>
-			<posy>334</posy>
-			<width>20</width>
-			<height>20</height>
+			<posy>338</posy>
+			<width>16</width>
+			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -304,13 +304,14 @@
 			<id>90</id>
 			<label>-</label>
 			<posx>482</posx>
-			<posy>181</posy>
-			<width>20</width>
-			<height>20</height>
+			<posy>137</posy>
+			<width>16</width>
+			<height>16</height>
 			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
 			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
 			<disabledcolor>00ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
@@ -451,6 +452,7 @@
 			<texturenofocus>\plot-button-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<align>center</align>
@@ -478,6 +480,7 @@
 			<texturenofocus>\cast-button-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<align>center</align>
@@ -520,10 +523,10 @@
 			<description>Trailer Cast Scrollbar Up Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>667</posx>
+			<posx>647</posx>
 			<posy>403</posy>
-			<width>20</width>
-			<height>20</height>
+			<width>16</width>
+			<height>16</height>
 			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -533,10 +536,10 @@
 			<description>Trailer Cast Scrollbar Middle</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>667</posx>
-			<posy>423</posy>
-			<width>20</width>
-			<height>63</height>
+			<posx>647</posx>
+			<posy>419</posy>
+			<width>16</width>
+			<height>71</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
 		</control>
@@ -546,10 +549,10 @@
 			<description>Trailer Cast Scrollbar Down Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>667</posx>
-			<posy>486</posy>
-			<width>20</width>
-			<height>20</height>
+			<posx>647</posx>
+			<posy>490</posy>
+			<width>16</width>
+			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -560,14 +563,15 @@
 			<type>button</type>
 			<id>95</id>
 			<label>-</label>
-			<posx>667</posx>
-			<posy>423</posy>
-			<width>20</width>
-			<height>20</height>
+			<posx>647</posx>
+			<posy>419</posy>
+			<width>16</width>
+			<height>16</height>
 			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
 			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
 			<disabledcolor>00ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
@@ -585,7 +589,7 @@
 			<id>216</id>
 			<posx>211</posx>
 			<posy>403</posy>
-			<width>455</width>
+			<width>435</width>
 			<height>135</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
