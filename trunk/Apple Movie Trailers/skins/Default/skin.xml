@@ -263,7 +263,7 @@
 			<description>Trailer List Scrollbar Up Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>482</posx>
+			<posx>502</posx>
 			<posy>121</posy>
 			<width>16</width>
 			<height>16</height>
@@ -276,7 +276,7 @@
 			<description>Trailer List Scrollbar Middle</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>482</posx>
+			<posx>502</posx>
 			<posy>137</posy>
 			<width>16</width>
 			<height>201</height>
@@ -289,7 +289,7 @@
 			<description>Trailer List Scrollbar Down Arrow</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>482</posx>
+			<posx>502</posx>
 			<posy>338</posy>
 			<width>16</width>
 			<height>16</height>
@@ -303,7 +303,7 @@
 			<type>button</type>
 			<id>90</id>
 			<label>-</label>
-			<posx>482</posx>
+			<posx>502</posx>
 			<posy>137</posy>
 			<width>16</width>
 			<height>16</height>
@@ -330,7 +330,7 @@
 			<font>font13</font>
 			<posx>211</posx>
 			<posy>121</posy>
-			<width>270</width>
+			<width>290</width>
 			<height>260</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>FFFFFF00</selectedcolor>
@@ -397,7 +397,7 @@
 			<description>Trailer Backdrop</description>
 			<type>image</type>
 			<id>200</id>
-			<posx>498</posx>
+			<posx>518</posx>
 			<posy>118</posy>
 			<width>174</width>
 			<height>254</height>
@@ -412,11 +412,41 @@
 			<description>Trailer Thumbnail</description>
 			<type>image</type>
 			<id>201</id>
-			<posx>500</posx>
+			<posx>520</posx>
 			<posy>120</posy>
 			<width>170</width>
 			<height>250</height>
 			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Watched Overlay</description>
+			<type>image</type>
+			<id>202</id>
+			<posx>520</posx>
+			<posy>120</posy>
+			<width>170</width>
+			<height>250</height>
+			<texture>\watched.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Favorite Overlay</description>
+			<type>image</type>
+			<id>203</id>
+			<posx>520</posx>
+			<posy>120</posy>
+			<width>170</width>
+			<height>250</height>
+			<texture>\favorite.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
@@ -428,7 +458,7 @@
 			<type>label</type>
 			<id>205</id>
 			<width>400</width>
-			<posx>250</posx>
+			<posx>240</posx>
 			<posy>375</posy>
 			<align>left</align>
 			<label>-</label>
@@ -446,7 +476,7 @@
 			<label>215</label>
 			<posx>211</posx>
 			<posy>370</posy>
-			<width>32</width>
+			<width>24</width>
 			<height>32</height>
 			<texturefocus>\plot-button-focus.png</texturefocus>
 			<texturenofocus>\plot-button-nofocus.png</texturenofocus>
@@ -474,7 +504,7 @@
 			<label>216</label>
 			<posx>211</posx>
 			<posy>370</posy>
-			<width>32</width>
+			<width>24</width>
 			<height>32</height>
 			<texturefocus>\cast-button-focus.png</texturefocus>
 			<texturenofocus>\cast-button-nofocus.png</texturenofocus>
