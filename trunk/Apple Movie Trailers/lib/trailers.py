@@ -487,7 +487,6 @@ class Trailers( Info ):
                 os.remove( self.DATAFILE )
             datafile = open( self.DATAFILE, 'w' )
             data = ET.tostring( root )
-            print data
             datafile.write( data )
         except:
             if datafile:
