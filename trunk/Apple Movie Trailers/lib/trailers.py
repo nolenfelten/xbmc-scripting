@@ -2,7 +2,7 @@ import os, sys, traceback
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
-#import default
+import default
 import language
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.92' ]
@@ -324,6 +324,7 @@ class Trailers( Info ):
         self.DATAFILE = os.path.join( os.path.dirname( os.path.dirname( sys.modules['trailers'].__file__ ) ), 'data', 'AMT.pk' )
         Info.__init__( self )
         self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
+        self.loadDatabase()
 
     def __set_defaults__( self ):
         # import pickle
@@ -440,8 +441,8 @@ class Trailers( Info ):
     def loadDatabase( self ):
         datafile = None
         try:
-            if os.path.isfile( self.DATAFILE ):
-                os.remove( self.DATAFILE )
+            if not os.path.isfile( self.DATAFILE ):
+                return
             datafile = open( self.DATAFILE, 'r' )
             data = datafile.read()
             root = ET.fromstring( data )
@@ -451,15 +452,19 @@ class Trailers( Info ):
                 line1 = _(60).split('|')[0] # Your database file is incompatible with this version
                 line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
                 xbmcgui.Dialog().ok( header, line1, line2 )
-                raise
-            element = root.getchildren()
-            self.deserialize( element )
+                datafile.close()
+                if os.path.isfile( self.DATAFILE ):
+                    os.remove( self.DATAFILE )
+            else:
+                if ET.iselement( root ):
+                    element = root.getchildren()[0]
+                    self.deserialize( element )
         except:
             if datafile:
                 datafile.close()
             traceback.print_exc()
             header = _(64) # Error
-            line1 = _(65) # Unable to properly update AMT.pk --- FIXME --- CHANGE TO A NEW STRING
+            line1 = 'Unable to properly load AMT.pk' # Unable to properly load AMT.pk
             xbmcgui.Dialog().ok( header, line1 )
             raise
         if datafile:
@@ -479,7 +484,9 @@ class Trailers( Info ):
             if os.path.isfile( self.DATAFILE ):
                 os.remove( self.DATAFILE )
             datafile = open( self.DATAFILE, 'w' )
-            datafile.write( ET.tostring( root ) )
+            data = ET.tostring( root )
+            print data
+            datafile.write( data )
         except:
             if datafile:
                 datafile.close()
@@ -490,6 +497,5 @@ class Trailers( Info ):
             raise
         if datafile:
             datafile.close()
-        del pickle
 
 
