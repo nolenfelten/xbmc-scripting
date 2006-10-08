@@ -17,7 +17,9 @@ class Info( object ):
             self.title = title
         self.BASEURL = 'http://www.apple.com'
         if url:
-            self.url = self.BASEURL + url
+            if url[:7] != 'http://':
+                url = self.BASEURL + url
+            self.url = url
         if self.DEBUG:
             if self.title and self.url:
                 print '%s: %s' % ( self.title, self.url )
@@ -38,34 +40,41 @@ class Info( object ):
         
         #root element
         root = ET.Element( classname )
+        try:
+            if self.title:
+                root.set( 'title', self.__dict__[ 'title' ] )
+            if self.url:
+                root.set( 'url', self.__dict__[ 'url' ] )
+        except:
+            pass
 
         #begin serialization
         serialize_items = list()
-        try:
-            if self.title:
-                serialize_items += [ 'title' ]
-            if self.url:
-                serialize_items += [ 'url' ]
-        except:
-            pass
         serialize_items += self.__update_items__
 
         for item in serialize_items:
             itemtype = type( self.__dict__[ item ] )
             itemvalue = itemtype()
-            itemelement = ET.SubElement( root, item, { 'type': str( itemtype ).split('\'')[1] } )
+            itemelement = ET.SubElement( root, item )
+            itemelement.set( 'type', str( itemtype ).split('\'')[1] )
             # doesn't do nested lists below one level
             if itemtype == type( list() ):
                 for i in self.__dict__[ item ]:
                     if str( type( i ) ).split()[0] == '<class':
-                        itemelement.append( i.serialize() )
+                        ielement = i.serialize()
+                        ielement.set( 'type', 'class' )
+                        itemelement.append( ielement )
                     else:
                         itemvalue = str( i )
+                        itemelement.set( 'type', str( itemtype ).split('\'')[1] )
                         itemelement.text = itemvalue
             elif str( itemtype ).split()[0] == '<class':
-                itemelement.append( self.__dict__[ item ].serialize() )
+                ielement = self.__dict__[ item ].serialize()
+                ielement.set( 'type', 'class' )
+                itemelement.append( ielement )
             else:
                 itemvalue = str( self.__dict__[ item ] )
+                itemelement.set( 'type', str( itemtype ).split('\'')[1] )
                 itemelement.text = itemvalue
         self.__serializing__ = False
         return root
@@ -74,10 +83,33 @@ class Info( object ):
         items = element.getchildren()
         for item in items:
             itemtype = item.get( 'type' )
-            itemvalue = item.getchildren()
-            print 'name:', str( item ).split()[1]
-            print 'type:', eval( '%s()' % itemtype )
-            print 'value:', itemvalue
+            itemtitle = item.get( 'title', None )
+            itemurl = item.get( 'url', None )
+            if itemtype == 'class':
+                itemvalue = eval( '%s( \'%s\', \'%s\' )' % ( item.tag, itemtitle, itemurl ) )
+                itemvalue.deserialize( item )
+            elif itemtype == 'list':
+                itemvalue = item.text
+                if not itemvalue:
+                    itemvalue = list()
+                    children = item.getchildren()
+                    for child in children:
+                        childtype = child.get( 'type' )
+                        childtitle = child.get( 'title', None )
+                        childurl = child.get( 'url', None )
+                        if childtype == 'class':
+                            childvalue = eval( '%s( \"%s\", \"%s\" )' % ( child.tag, str( childtitle ), str( childurl ) ) )
+                            childvalue.deserialize( child )
+                        elif childtype == 'list':
+                            childvalue = list( item.text )
+                        else:
+                            childvalue = item.text
+                            childvalue = eval( '%s(%s)' % ( childtype, repr( childvalue ) ) )
+                        itemvalue += [ childvalue ]
+            else:
+                itemvalue = item.text
+                itemvalue = eval( '%s(%s)' % ( itemtype, repr( itemvalue ) ) )
+            self.__setattr__( item.tag, itemvalue )
 
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
