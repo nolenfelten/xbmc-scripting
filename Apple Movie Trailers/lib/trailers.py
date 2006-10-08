@@ -156,6 +156,7 @@ class Movie( Info ):
         - cast (??? string ???)
         - trailer_urls (list of string urls to trailers)
         - watched (boolean)
+        - favorite (boolean)
     """
     def __init__( self, title, url ):
         Info.__init__( self, title, url )
@@ -169,6 +170,7 @@ class Movie( Info ):
         self.cast = 'FIXME: CAST INFO GOES HERE'
         self.trailer_urls = list()
         self.watched = False
+        self.favorite = False
 
     def __update__( self ):
         try:
