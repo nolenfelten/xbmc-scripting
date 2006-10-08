@@ -5,7 +5,7 @@ import elementtree.ElementTree as ET
 #import default
 import language
 
-AMT_PK_COMPATIBLE_VERSIONS = [ '0.91' ]
+AMT_PK_COMPATIBLE_VERSIONS = [ '0.92' ]
 
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
@@ -69,6 +69,15 @@ class Info( object ):
                 itemelement.text = itemvalue
         self.__serializing__ = False
         return root
+
+    def deserialize( self, element ):
+        items = element.getchildren()
+        for item in items:
+            itemtype = item.get( 'type' )
+            itemvalue = item.getchildren()
+            print 'name:', str( item ).split()[1]
+            print 'type:', eval( '%s()' % itemtype )
+            print 'value:', itemvalue
 
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -397,14 +406,58 @@ class Trailers( Info ):
             # del pickle
 
     def loadDatabase( self ):
-        pass
+        datafile = None
+        try:
+            if os.path.isfile( self.DATAFILE ):
+                os.remove( self.DATAFILE )
+            datafile = open( self.DATAFILE, 'r' )
+            data = datafile.read()
+            root = ET.fromstring( data )
+            version = root.get( 'version', default = '0.00' )
+            if version not in AMT_PK_COMPATIBLE_VERSIONS:
+                header = _(59) # Database file invalid...
+                line1 = _(60).split('|')[0] # Your database file is incompatible with this version
+                line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
+                xbmcgui.Dialog().ok( header, line1, line2 )
+                raise
+            element = root.getchildren()
+            self.deserialize( element )
+        except:
+            if datafile:
+                datafile.close()
+            traceback.print_exc()
+            header = _(64) # Error
+            line1 = _(65) # Unable to properly update AMT.pk --- FIXME --- CHANGE TO A NEW STRING
+            xbmcgui.Dialog().ok( header, line1 )
+            raise
+        if datafile:
+            datafile.close()
 
     def saveDatabase( self ):
         root = ET.Element( 'AMT' )
-        root.set( 'version', '0.92' )
+        root.set( 'version', default.__version__ )
         root.append( self.serialize() )
-        
+
         # ready to save to file
-        print ET.tostring( root )
+        datafile = None
+        try:
+            datadir = os.path.dirname( self.DATAFILE )
+            if not os.path.isdir( datadir ):
+                os.makedirs( datadir )
+            if os.path.isfile( self.DATAFILE ):
+                os.remove( self.DATAFILE )
+            datafile = open( self.DATAFILE, 'w' )
+            datafile.write( ET.tostring( root ) )
+        except:
+            if datafile:
+                datafile.close()
+            traceback.print_exc()
+            header = _(64) # Error
+            line1 = _(65) # Unable to properly update AMT.pk
+            xbmcgui.Dialog().ok( header, line1 )
+            raise
+        if datafile:
+            datafile.close()
+        del pickle
 
 
