@@ -352,6 +352,7 @@ class Trailers( Info ):
         # del pickle
         Info.__set_defaults__( self )
         self.__update_items__ += [ 'genres' ]
+        self.__serialize_items__ += self.__update_items__
         self.genres = list()
 
     def __update__( self ):
