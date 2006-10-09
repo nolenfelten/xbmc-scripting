@@ -278,36 +278,57 @@ class Genre( Info ):
 
     def __update__( self ):
         try:
-            element = fetcher.urlopen( self.url )
-            if '<Document' not in element:
-                element = '<Document>' + element + '</Document>'
-            element = ET.fromstring( element )
-            
-            lookup = 'GotoURL'
-            if not self.is_special:
-                lookup = self.ns( lookup )
-            elements = element.getiterator( lookup )
+            next_url = self.url
+            first_url = True
             trailer_dict = dict()
-            for element in elements:
-                url2 = element.get( 'url' )
-                title = None
-                if self.is_special:
-                    title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
-                if 'index_1' in url2:
-                    continue
-                if '/moviesxml/g' in url2:
-                    continue
-                if url2[0] != '/':
-                    continue
-                if url2 in trailer_dict.keys():
-                    lookup = 'b'
+            dialog = xbmcgui.DialogProgress()
+            dialog.create( _(66), _(67) )
+            dialog.update( 0 )
+            while next_url:
+                try:
+                    element = fetcher.urlopen( next_url )
+                    if '<Document' not in element:
+                        element = '<Document>' + element + '</Document>'
+                    element = ET.fromstring( element )
+                    
+                    lookup = 'GotoURL'
                     if not self.is_special:
-                        lookup = 'B'
                         lookup = self.ns( lookup )
-                    title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
-                    trailer_dict[url2] = title
-                    continue
-                trailer_dict.update( { url2: title } )
+                    elements = element.getiterator( lookup )
+
+                    if first_url:
+                        next_url = elements[0].get( 'url' )
+                        first_url = False
+                    else:
+                        next_url = elements[2].get( 'url' )
+                    if next_url[0] != '/':
+                        next_url = '/'.join( self.url.split( '/' )[:-1] + [ next_url ] )
+                    else:
+                        next_url = None
+
+                    for element in elements:
+                        url2 = element.get( 'url' )
+                        title = None
+                        if self.is_special:
+                            title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
+                        if 'index_1' in url2:
+                            continue
+                        if '/moviesxml/g' in url2:
+                            continue
+                        if url2[0] != '/':
+                            continue
+                        if url2 in trailer_dict.keys():
+                            lookup = 'b'
+                            if not self.is_special:
+                                lookup = 'B'
+                                lookup = self.ns( lookup )
+                            title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
+                            trailer_dict[url2] = title
+                            continue
+                        trailer_dict.update( { url2: title } )
+                except:
+                    break
+
             reordered_dict = dict()
             for key in trailer_dict:
                 reordered_dict.update( { trailer_dict[key]: key } )
@@ -323,9 +344,11 @@ class Genre( Info ):
                 movies += [ movie ]
             if len( movies ):
                 self.movies = movies
+            dialog.close()
         except:
             traceback.print_exc()
             self.__set_defaults__()
+            dialog.close()
             raise
 
 class Trailers( Info ):
@@ -340,24 +363,6 @@ class Trailers( Info ):
         self.loadDatabase()
 
     def __set_defaults__( self ):
-        # import pickle
-        # try:
-            # if not os.path.isfile( self.DATAFILE ):
-                # raise
-            # datafile = open( self.DATAFILE, 'r' )
-            # version, data = pickle.load( datafile )
-            # datafile.close()
-            # if version not in AMT_PK_COMPATIBLE_VERSIONS:
-                # header = _(59) # Database file invalid...
-                # line1 = _(60).split('|')[0] # Your database file is incompatible with this version
-                # line2 = _(60).split('|')[1] # of AMT. It must be regenerated.
-                # xbmcgui.Dialog().ok( header, line1, line2 )
-                # raise
-        # except:
-            # data = list()
-        # finally:
-            # self.genres = data
-        # del pickle
         Info.__set_defaults__( self )
         self.__update_items__ += [ 'genres' ]
         self.__serialize_items__ += self.__update_items__
@@ -419,38 +424,6 @@ class Trailers( Info ):
 
     def update_all( self ):
         pass
-        # header = _(61) # Update all genre and movie information...
-        # line1 = _(62) # Are you sure you want to do this?
-        # line2 = _(63).split('|')[0] # Updating can take anywhere from 5 - 15 minutes,
-        # line3 = _(63).split('|')[1] # depending upon your connection speed.
-        # if xbmcgui.Dialog().yesno( header, line1, line2, line3 ):
-            # try:
-                # if os.path.isfile( self.DATAFILE ):
-                    # os.remove( self.DATAFILE )
-                # header = _(73) # Clear cache folder...
-                # line1 = _(74).split('|')[0] # Updating your database will be much faster, but possibly
-                # line2 = _(74).split('|')[1] # out of date, without clearing your cache.
-                # if xbmcgui.Dialog().yesno( header, line1, line2 ):
-                    # fetcher.clear_cache()
-            # except:
-                # pass
-            # import pickle
-            # self.genres = dict()
-            # try:
-                # self.__update_genre_list__()
-                # datadir = os.path.dirname( self.DATAFILE )
-                # if not os.path.isdir( datadir ):
-                    # os.makedirs( datadir )
-                # datafile = open( self.DATAFILE, 'w' )
-                # pickle.dump( [ default.__version__, self.genres ], datafile )
-                # datafile.close()
-            # except:
-                # traceback.print_exc()
-                # header = _(64) # Error
-                # line1 = _(65) # Unable to properly update AMT.pk
-                # xbmcgui.Dialog().ok( header, line1 )
-                # raise
-            # del pickle
 
     def loadDatabase( self ):
         datafile = None
