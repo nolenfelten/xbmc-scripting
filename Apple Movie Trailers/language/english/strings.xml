@@ -20,7 +20,7 @@
   <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string>
   <string id="64">Error</string>
   <string id="65">Unable to properly update AMT.pk</string>
-  <string id="66">Fetching category and genre information...</string>
+  <string id="66">Fetching genre information...</string>
   <string id="67">Please wait a moment.</string>
   <string id="68">Fetching:</string>
   <string id="69">Error retrieving information for one or more genres.</string>
