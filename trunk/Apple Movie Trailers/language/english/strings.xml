@@ -35,6 +35,7 @@
   <string id="78">Space Required</string>
   <string id="79">Downloading...</string>
   <string id="80">KB/s</string>
+  <string id="81">All the required modules could not be found!</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
@@ -84,5 +85,15 @@
 
   <!-- Movie/Genre Information -->
   <string id="400">No description could be retrieved for this title.</string>
+
+  <!-- Context Menu -->
+  <string id="500">Add to Playlist</string>
+  <string id="501">Remove from Playlist</string>
+  <string id="502">Add to Favorites</string>
+  <string id="503">Remove from Favorites</string>
+  <string id="504">Mark as Watched</string>
+  <string id="505">Mark as Unwatched</string>
+  <string id="506">Refresh Movie Info</string>
+  <string id="507">Refresh Genre</string>
 
 </strings>
