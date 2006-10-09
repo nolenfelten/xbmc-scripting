@@ -1,5 +1,23 @@
+from PIL import Image, ImageEnhance
 import os
 
+def makeThumbnails( filename ):
+    try:
+        size = ( 26, 38 )
+        unwatched_filename = '%s-uw.png' % ( os.path.splitext( filename )[0], )
+        watched_filename = '%s-w.png' % ( os.path.splitext( filename )[0], )
+        im = Image.open( filename )
+        im.thumbnail(size, Image.ANTIALIAS)
+        im = im.convert('RGBA')
+        im.save(unwatched_filename, 'PNG')
+        alpha = im.split()[3]
+        alpha = ImageEnhance.Brightness(alpha).enhance(0.2)
+        im.putalpha(alpha)
+        im.save(watched_filename, 'PNG')
+        return unwatched_filename, watched_filename
+    except:
+        return None, None
+    
 def getSettings():
     try:
         settings = {}
@@ -46,6 +64,8 @@ def setControllerAction():
     return {
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
+                    229 : 'Remote Title',
+                    207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
                     256 : 'A Button',
