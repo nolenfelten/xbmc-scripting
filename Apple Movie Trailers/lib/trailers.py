@@ -50,7 +50,7 @@ class Info( object ):
 
         #begin serialization
         serialize_items = list()
-        serialize_items += self.__update_items__
+        serialize_items += self.__serialize_items__
 
         for item in serialize_items:
             itemtype = type( self.__dict__[ item ] )
@@ -120,6 +120,7 @@ class Info( object ):
 
     def __set_defaults__( self ):
         self.__update_items__ = list()
+        self.__serialize_items__ = [ '__updated__' ]
 
     def __update__( self ):
         pass
@@ -164,7 +165,8 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls', 'watched' ]
+        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
+        self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
         self.thumbnail = ''
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
@@ -263,6 +265,7 @@ class Genre( Info ):
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
         self.__update_items__ += [ 'movies' ]
+        self.__serialize_items__ += self.__update_items__
         self.movies = list()
 
     def __update__( self ):
