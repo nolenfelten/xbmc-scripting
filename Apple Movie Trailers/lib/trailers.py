@@ -73,6 +73,8 @@ class Info( object ):
                 ielement.set( 'type', 'class' )
                 itemelement.append( ielement )
             else:
+                if itemtype == type( bool() ):
+                    itemvalue = str( int( self.__dict__[ item ] ) )
                 itemvalue = str( self.__dict__[ item ] )
                 itemelement.set( 'type', str( itemtype ).split('\'')[1] )
                 itemelement.text = itemvalue
@@ -101,14 +103,20 @@ class Info( object ):
                             childvalue = eval( '%s( \"%s\", \"%s\" )' % ( child.tag, str( childtitle ), str( childurl ) ) )
                             childvalue.deserialize( child )
                         elif childtype == 'list':
-                            childvalue = list( item.text )
+                            childvalue = list( child.text )
                         else:
-                            childvalue = item.text
-                            childvalue = eval( '%s(%s)' % ( childtype, repr( childvalue ) ) )
+                            childvalue = child.text
+                            try:
+                                childvalue = eval( '%s(%s)' % ( childtype, childvalue ) )
+                            except:
+                                childvalue = eval( '%s(%s)' % ( childtype, repr( childvalue ) ) )
                         itemvalue += [ childvalue ]
             else:
                 itemvalue = item.text
-                itemvalue = eval( '%s(%s)' % ( itemtype, repr( itemvalue ) ) )
+                try:
+                    itemvalue = eval( '%s(%s)' % ( itemtype, itemvalue ) )
+                except:
+                    itemvalue = eval( '%s(%s)' % ( itemtype, repr( itemvalue ) ) )
             self.__setattr__( item.tag, itemvalue )
 
     def ns( self, text ):
