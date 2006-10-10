@@ -197,6 +197,8 @@ class Movie( Info ):
 
             # xml parsing
             element = fetcher.urlopen( self.url )
+            #fix for badly formed xml
+            element = element.replace( ' & ', '&amp;' )
             element = ET.fromstring( element )
             self.dialog.update( 20 )
 
