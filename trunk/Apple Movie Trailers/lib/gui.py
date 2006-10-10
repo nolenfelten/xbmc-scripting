@@ -126,9 +126,9 @@ class GUI( xbmcgui.Window ):
         self.controls['Full-Screen Video Label']['control'].setVisible( xbmc.getCondVisibility( self.controls['Full-Screen Video Label']['visible'] ))
         if ( event == 1 and self.currently_playing_movie >= 0 ):
             self.markAsWatched( True, self.currently_playing_movie, self.currently_playing_genre_id )
-        elif ( event == 2 ):
-            self.currently_playing_movie = -1
-            self.currently_playing_genre_id = -1
+        #elif ( event == 2 ):
+        #    self.currently_playing_movie = -1
+        #    self.currently_playing_genre_id = -1
 
     ## Remove if no DB used ##
     def checkForDB( self ):
@@ -164,6 +164,7 @@ class GUI( xbmcgui.Window ):
                 if ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
                 elif ( self.settings.thumbnail_display == 0 ): thumbnail = movie.thumbnail
                 else: thumbnail = ''
+                #print thumbnail
                 #choices = movie_quality[:len( movie.trailer_urls )]
                 if ( movie.favorite ): favorite = '*'
                 else: favorite = ''

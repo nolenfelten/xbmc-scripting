@@ -1,20 +1,20 @@
 from PIL import Image, ImageEnhance
 import os
 
-def makeThumbnails( filename ):
+def makeThumbnails( poster ):
     try:
         size = ( 26, 38 )
-        unwatched_filename = '%s-uw.png' % ( os.path.splitext( filename )[0], )
-        watched_filename = '%s-w.png' % ( os.path.splitext( filename )[0], )
-        im = Image.open( filename )
+        thumbnail = '%s.png' % ( os.path.splitext( poster )[0], )
+        watched_thumbnail = '%s-w.png' % ( os.path.splitext( poster )[0], )
+        im = Image.open( poster )
         im.thumbnail(size, Image.ANTIALIAS)
         im = im.convert('RGBA')
-        im.save(unwatched_filename, 'PNG')
+        im.save(thumbnail, 'PNG')
         alpha = im.split()[3]
         alpha = ImageEnhance.Brightness(alpha).enhance(0.2)
         im.putalpha(alpha)
-        im.save(watched_filename, 'PNG')
-        return unwatched_filename, watched_filename
+        im.save(watched_thumbnail, 'PNG')
+        return thumbnail, watched_thumbnail
     except:
         return None, None
 
