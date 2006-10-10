@@ -160,6 +160,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer List']['control'].reset()
             #movie_quality = 'LMH'
             for movie in self.trailers.genres[self.genre_id].movies: # now fill the list control
+                #thumbnail = movie.thumbnail
                 if ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
                 elif ( self.settings.thumbnail_display == 0 ): thumbnail = movie.thumbnail
                 else: thumbnail = ''
@@ -233,7 +234,7 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer List']['control'].setVisible( not genre )
         self.controls['Trailer List']['control'].setEnabled( not genre )
         self.controls['Trailer Backdrop']['control'].setVisible( not genre )
-        self.controls['Trailer Thumbnail']['control'].setVisible( not genre )
+        self.controls['Trailer Poster']['control'].setVisible( not genre )
         self.controls['Trailer Watched Overlay']['control'].setVisible( not genre )
         self.controls['Trailer Favorite Overlay']['control'].setVisible( not genre )
         self.controls['Trailer Title']['control'].setVisible( not genre )
@@ -281,7 +282,7 @@ class GUI( xbmcgui.Window ):
             trailer = self.controls['Trailer List']['control'].getSelectedPosition()
             self.poster = self.trailers.genres[self.genre_id].movies[trailer].poster
             if ( self.poster == '' ): self.poster = os.path.join( self.image_path, 'blank_poster.tbn' )
-            self.controls['Trailer Thumbnail']['control'].setImage( self.poster )
+            self.controls['Trailer Poster']['control'].setImage( self.poster )
             self.controls['Trailer Title']['control'].setLabel( self.trailers.genres[self.genre_id].movies[trailer].title )
             self.controls['Trailer Watched Overlay']['control'].setVisible( self.trailers.genres[self.genre_id].movies[trailer].watched )
             self.controls['Trailer Favorite Overlay']['control'].setVisible( self.trailers.genres[self.genre_id].movies[trailer].favorite )
