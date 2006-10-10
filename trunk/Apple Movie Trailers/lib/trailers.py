@@ -79,7 +79,8 @@ class Info( object ):
             else:
                 if itemtype == type( bool() ):
                     itemvalue = str( int( self.__dict__[ item ] ) )
-                itemvalue = str( self.__dict__[ item ] )
+                else:
+                    itemvalue = str( self.__dict__[ item ] )
                 itemelement.set( 'type', str( itemtype ).split('\'')[1] )
                 itemelement.text = itemvalue
         self.__serializing__ = False
@@ -199,7 +200,7 @@ class Movie( Info ):
             # xml parsing
             element = fetcher.urlopen( self.url )
             #fix for badly formed xml
-            element = element.replace( '&', '&amp;' )
+            element = element.replace( ' & ', ' &amp; ' )
             element = ET.fromstring( element )
             self.dialog.update( 20 )
 
