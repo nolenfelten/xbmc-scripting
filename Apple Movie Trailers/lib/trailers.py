@@ -178,8 +178,8 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls' ]
-        self.__serialize_items__ += self.__update_items__ + [ 'thumbnail', 'watched', 'favorite' ]
+        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls', 'favorite' ]
+        self.__serialize_items__ += self.__update_items__ + [ 'watched' ]
         self.thumbnail = ''
         self.__thumbnail__ = ''
         self.__thumbnail_watched__ = ''
@@ -199,7 +199,7 @@ class Movie( Info ):
             # xml parsing
             element = fetcher.urlopen( self.url )
             #fix for badly formed xml
-            element = element.replace( ' & ', '&amp;' )
+            element = element.replace( '&', '&amp;' )
             element = ET.fromstring( element )
             self.dialog.update( 20 )
 
