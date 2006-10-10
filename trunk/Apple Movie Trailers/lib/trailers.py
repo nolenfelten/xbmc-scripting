@@ -22,13 +22,16 @@ class Info( object ):
                 url = self.BASEURL + url
             self.url = url
         if self.DEBUG:
-            if self.title and self.url:
-                print '%s: %s' % ( self.title, self.url )
-            else:
-                if self.title:
-                    print self.title
-                if self.url:
-                    print self.url
+            try:
+                if self.title and self.url:
+                    print '%s: %s' % ( self.title, self.url )
+                else:
+                    if self.title:
+                        print self.title
+                    if self.url:
+                        print self.url
+            except:
+                pass
         self.__set_defaults__()
         self.__updated__ = False
         self.__updating__ = False
