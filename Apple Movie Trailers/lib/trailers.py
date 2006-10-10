@@ -4,6 +4,7 @@ import cacheurl
 import elementtree.ElementTree as ET
 import default
 import language
+import amt_util
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.92' ]
 
@@ -161,6 +162,7 @@ class Movie( Info ):
         Exposes the following:
         - title (string)
         - thumbnail (string path to image file, blank string if not found)
+        - poster (string path to image file, blank string if not found)
         - plot (string)
         - cast (??? string ???)
         - trailer_urls (list of string urls to trailers)
@@ -173,9 +175,10 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ 'thumbnail', 'plot', 'cast', 'trailer_urls' ]
+        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'plot', 'cast', 'trailer_urls' ]
         self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
         self.thumbnail = ''
+        self.poster = ''
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = 'FIXME: CAST INFO GOES HERE'
         self.trailer_urls = list()
@@ -194,11 +197,12 @@ class Movie( Info ):
             self.dialog.update( 20 )
 
             # -- thumbnail --
-            thumbnail = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
-            # download the actual thumbnail to the local filesystem (or get the cached filename)
-            thumbnail = fetcher.urlretrieve( thumbnail )
-            if thumbnail:
-                self.thumbnail = thumbnail
+            poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
+            # download the actual poster to the local filesystem (or get the cached filename)
+            poster = fetcher.urlretrieve( poster )
+            if poster:
+                self.poster = poster
+                self.__thumbnail__, self.__thumbnail_unwatched__ = amt_util.makeThumbnails( poster )
             self.dialog.update( 40 )
 
             # -- plot --
@@ -258,6 +262,17 @@ class Movie( Info ):
             raise
         self.dialog.close()
 
+    def __getattribute__( self, name ):
+        try:
+            retval = Info.__getattribute__( self, name )
+            if name == 'thumbnail':
+                if self.watched:
+                    retval = self.__thumbnail_watched__
+                else:
+                    retval = self.__thumbnail__
+        except:
+            pass
+        return retval
 
 class Genre( Info ):
     """
