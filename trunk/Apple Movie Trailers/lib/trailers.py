@@ -178,7 +178,7 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls' ]
+        self.__update_items__ += [ 'thumbnail', 'poster', 'plot', 'cast', 'trailer_urls' ]
         self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
         self.__thumbnail__ = ''
         self.__thumbnail_watched__ = ''
@@ -209,6 +209,7 @@ class Movie( Info ):
             if poster:
                 self.poster = poster
                 self.__thumbnail__, self.__thumbnail_watched__ = amt_util.makeThumbnails( poster )
+                self.thumbnail = self.__getattribute__( 'thumbnail' )
             self.dialog.update( 40 )
 
             # -- plot --
