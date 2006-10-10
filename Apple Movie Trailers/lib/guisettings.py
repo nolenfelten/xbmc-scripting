@@ -5,7 +5,7 @@ import amt_util, default
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
-        self.settings = amt_util.getSettings()
+        self.getSettings()
         self._ = kwargs['language']
         self.skin = kwargs['skin']
         self.setupGUI()
@@ -34,50 +34,53 @@ class GUI( xbmcgui.WindowDialog ):
         self.thumbnail = amt_util.setThumbnailDisplay( self._ )
         
     def setControlsValues( self ):
-        self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self._(300), self.quality[self.settings['trailer quality']], ) )
-        self.controls['Mode Button']['control'].setLabel( '%s: [%s]' % ( self._(301), self.mode[self.settings['mode']], ) )
-        self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self._(302), self.settings['save folder'], ) )
-        self.controls['Save Folder Button']['control'].setEnabled( self.settings['mode'] == 2 )
-        self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self._(303), self.settings['skin'], ) )
-        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings['startup category']], ) )
-        self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self._(305), self.thumbnail[self.settings['thumbnail display']], ) )
+        self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self._(300), self.quality[self.settings.trailer_quality], ) )
+        self.controls['Mode Button']['control'].setLabel( '%s: [%s]' % ( self._(301), self.mode[self.settings.mode], ) )
+        self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self._(302), self.settings.save_folder, ) )
+        self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode == 2 )
+        self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self._(303), self.settings.skin, ) )
+        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings.startup_category], ) )
+        self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self._(305), self.thumbnail[self.settings.thumbnail_display], ) )
+
+    def getSettings( self ):
+        self.settings = amt_util.Settings()
 
     def saveSettings( self ):
-        ret = amt_util.saveSettings( self.settings )
+        ret = self.settings.saveSettings()
         if ( not ret ):
             dialog = xbmcgui.Dialog()
             ok = dialog.ok( self._(0), self._(55) )
         else:
-            if ( self.skin != self.settings['skin']):
+            if ( self.skin != self.settings.skin):
                 dialog = xbmcgui.Dialog()
                 ok = dialog.ok( self._(0), self._(56)  )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
-        tq = self.settings['trailer quality'] + 1
+        tq = self.settings.trailer_quality + 1
         if ( tq > 2 ): tq = 0
-        self.settings['trailer quality'] = tq
+        self.settings.trailer_quality = tq
         #self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[tq], ) )
         self.setControlsValues()
       
     def toggleMode( self ):
-        m = self.settings['mode'] + 1
+        m = self.settings.mode + 1
         if ( m > 2 ): m = 0
-        self.settings['mode'] = m
+        self.settings.mode = m
         #self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[m], ) )
         self.setControlsValues()
 
     def toggleStartupCategory( self ):
-        c = self.settings['startup category'] + 1
+        c = self.settings.startup_category + 1
         if ( c > 2 ): c = 0
-        self.settings['startup category'] = c
+        self.settings.startup_category = c
         #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
         
     def toggleThumbnailDisplay( self ):
-        t = self.settings['thumbnail display'] + 1
+        t = self.settings.thumbnail_display + 1
         if ( t > 2 ): t = 0
-        self.settings['thumbnail display'] = t
+        self.settings.thumbnail_display = t
         #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
     
@@ -85,7 +88,7 @@ class GUI( xbmcgui.WindowDialog ):
         dialog = xbmcgui.Dialog()
         folder = dialog.browse( 3, 'a save folder', 'files' )
         if ( folder ):
-            self.settings['save folder'] = folder
+            self.settings.save_folder = folder
             #self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( folder, ) )
             self.setControlsValues()
 
@@ -128,7 +131,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup List']['control'].setVisible( visible )
         
     def setSkinSelection( self ):
-        self.settings['skin'] = self.controls['Popup List']['control'].getSelectedItem().getLabel()
+        self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel()
         #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
         self.setControlsValues()
         self.hidePopup()

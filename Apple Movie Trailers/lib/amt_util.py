@@ -17,33 +17,6 @@ def makeThumbnails( filename ):
         return unwatched_filename, watched_filename
     except:
         return None, None
-    
-def getSettings():
-    try:
-        settings = {}
-        f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
-        s = f.read().split('|')
-        f.close()
-        settings['trailer quality'] = int( s[0] )
-        settings['mode'] = int( s[1] )
-        settings['skin'] = s[2]
-        settings['save folder'] = s[3]
-        settings['startup category'] = int( s[4] )
-        settings['startup category id'] = int( s[5] )
-        settings['thumbnail display'] = int( s[6] )
-    except:
-        settings = {'trailer quality' : 2, 'mode' : 0, 'skin' : 'Default', 'save folder' : 'f:\\', 'startup category' : 0, 'startup category id' : 1, 'thumbnail display' : 1}
-    return settings
-
-def saveSettings( settings ):
-    try:
-        f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
-        strSettings = '%d|%d|%s|%s|%d|%d|%d' % ( settings['trailer quality'], settings['mode'], settings['skin'], settings['save folder'], settings['startup category'], settings['startup category id'], settings['thumbnail display'],)
-        f.write(strSettings)
-        f.close()
-        return True
-    except:
-        return False
 
 def setThumbnailDisplay( _ ):
     return [_(310), _(311), _(312)]
@@ -81,3 +54,48 @@ def setControllerAction():
                     272 : 'DPad Left',
                     273 : 'DPad Right'
                 }
+
+class Settings:
+    def __init__( self ):
+        self.getSettings()
+        
+    def getSettings( self ):
+        try:
+            settings = {}
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'r' )
+            s = f.read().split('|')
+            f.close()
+            self.trailer_quality = int( s[0] )
+            self.mode = int( s[1] )
+            self.skin = s[2]
+            self.save_folder = s[3]
+            self.startup_category = int( s[4] )
+            self.startup_category_id = int( s[5] )
+            self.thumbnail_display = int( s[6] )
+        except:
+            self.setDefaults()
+
+    def setDefaults( self ):
+        self.trailer_quality = 2
+        self.mode = 0
+        self.skin = 'Default'
+        self.save_folder = 'f:\\'
+        self.startup_category = 0
+        self.startup_category_id = 1
+        self.thumbnail_display = 1
+
+    def saveSettings( self ):
+        try:
+            strSettings = '%d|%d|%s|%s|%d|%d|%d' % ( 
+                self.trailer_quality,
+                self.mode, self.skin,
+                self.save_folder,
+                self.startup_category,
+                self.startup_category_id,
+                self.thumbnail_display, )
+            f = open( os.path.join( os.getcwd(), 'data', 'settings.txt' ).replace( ';', '' ), 'w' )
+            f.write(strSettings)
+            f.close()
+            return True
+        except:
+            return False

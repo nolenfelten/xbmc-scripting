@@ -79,11 +79,11 @@ class GUI( xbmcgui.Window ):
 
     def getSettings( self ):
         self.debugWrite('getSettings', 2)
-        self.settings = amt_util.getSettings()
+        self.settings = amt_util.Settings()
 
     def setupGUI(self):
         self.debugWrite('setupGUI', 2)
-        self.skin_path = os.path.join( self.cwd, 'skins', self.settings['skin'] )
+        self.skin_path = os.path.join( self.cwd, 'skins', self.settings.skin )
         self.image_path = os.path.join( self.skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): skin = 'skin_16x9.xml'
         else: skin = 'skin.xml'
@@ -98,13 +98,13 @@ class GUI( xbmcgui.Window ):
     def setupVariables( self ):
         self.debugWrite('setupConstants', 2)
         self.trailers = trailers.Trailers()
-        self.skin = self.settings['skin']
+        self.skin = self.settings.skin
         self.display_cast = False
         self.dummy()
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function = self.myPlayerChanged)
         self.controller_action = amt_util.setControllerAction()
         self.update_method = 0
-        self.thumbnail = None
+        self.poster = None
         self.genre_id = None
         self.currently_playing_movie = -1
         self.currently_playing_genre = -1
@@ -160,26 +160,13 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer List']['control'].reset()
             #movie_quality = 'LMH'
             for movie in self.trailers.genres[self.genre_id].movies: # now fill the list control
-                thumbnail = ''
-                if ( self.settings['thumbnail display'] == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
-                elif ( self.settings['thumbnail display'] == 0 ): thumbnail = movie.thumbnail
+                if ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
+                elif ( self.settings.thumbnail_display == 0 ): thumbnail = movie.thumbnail
+                else: thumbnail = ''
                 #choices = movie_quality[:len( movie.trailer_urls )]
-                
-                #unwatched_thumbnail, watched_thumbnail = amt_util.makeThumbnails( movie.thumbnail )
-                try:
-                    if ( movie.watched ): 
-                        thumbnail = movie.watched_thumbnail
-                        ##test code
-                        watched = 'watched'
-                    else: 
-                        thumbnail = movie.unwatched_thumbnail
-                        ## test code
-                        watched = ''
-                except:
-                    watched = ''
                 if ( movie.favorite ): favorite = '*'
                 else: favorite = ''
-                l = xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), watched, thumbnail )
+                l = xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), '', thumbnail )
                 self.controls['Trailer List']['control'].addItem( l )
             self.setSelection( 'Trailer List', choice )
             self.calcScrollbarVisibilty('Trailer List')
@@ -218,8 +205,8 @@ class GUI( xbmcgui.Window ):
     def setStartupCategory( self ):
         self.debugWrite('setStartupCategory', 2)
         startup = amt_util.setStartupCategoryActual()
-        self.setGenre( self.settings['startup category id'] )
-        self.setControlNavigation( '%s Button' % ( startup[self.settings['startup category']], ))
+        self.setGenre( self.settings.startup_category_id )
+        self.setControlNavigation( '%s Button' % ( startup[self.settings.startup_category], ))
 
     def setGenre( self, genre_id ):
         self.debugWrite('setGenre', 2)
@@ -292,9 +279,9 @@ class GUI( xbmcgui.Window ):
             self.debugWrite('showTrailerInfo', 2)
             xbmcgui.lock()
             trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-            self.thumbnail = self.trailers.genres[self.genre_id].movies[trailer].thumbnail
-            if ( not self.thumbnail ): self.thumbnail = os.path.join( self.image_path, 'blank_poster.tbn' )
-            self.controls['Trailer Thumbnail']['control'].setImage( self.thumbnail )
+            self.poster = self.trailers.genres[self.genre_id].movies[trailer].poster
+            if ( self.poster == '' ): self.poster = os.path.join( self.image_path, 'blank_poster.tbn' )
+            self.controls['Trailer Thumbnail']['control'].setImage( self.poster )
             self.controls['Trailer Title']['control'].setLabel( self.trailers.genres[self.genre_id].movies[trailer].title )
             self.controls['Trailer Watched Overlay']['control'].setVisible( self.trailers.genres[self.genre_id].movies[trailer].watched )
             self.controls['Trailer Favorite Overlay']['control'].setVisible( self.trailers.genres[self.genre_id].movies[trailer].favorite )
@@ -305,7 +292,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Cast']['control'].reset()
             cast = self.trailers.genres[self.genre_id].movies[trailer].cast
             ## Test code ##
-            cast = ['Angelina Jolee', 'Jessica Alba', 'Chuck Norris', 'Arnold Swarzenegger', 'Hillary Duff', 'William Shatner']
+            #cast = ['Angelina Jolee', 'Jessica Alba', 'Chuck Norris', 'Arnold Swarzenegger', 'Hillary Duff', 'William Shatner']
             if ( cast ):
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
@@ -328,20 +315,20 @@ class GUI( xbmcgui.Window ):
         self.debugWrite('PlayTrailer', 2)
         trailer = self.controls['Trailer List']['control'].getSelectedPosition()
         trailer_urls = self.trailers.genres[self.genre_id].movies[trailer].trailer_urls
-        if ( self.settings['trailer quality'] >= len( trailer_urls )):
+        if ( self.settings.trailer_quality >= len( trailer_urls )):
             choice = len( trailer_urls ) - 1
         else:
-            choice = self.settings['trailer quality']
+            choice = self.settings.trailer_quality
         try:
-            if ( self.settings['mode'] == 0 ):
+            if ( self.settings.mode == 0 ):
                 filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
-            elif ( self.settings['mode'] == 1):
+            elif ( self.settings.mode == 1):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
                 fetcher = cacheurl.HTTPProgressSave()
                 filename = fetcher.urlretrieve( url )
-            elif ( self.settings['mode'] == 2):
+            elif ( self.settings.mode == 2):
                 url = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
-                fetcher = cacheurl.HTTPProgressSave( self.settings['save folder'] )
+                fetcher = cacheurl.HTTPProgressSave( self.settings.save_folder )
                 filename = fetcher.urlretrieve( url )
                 if ( filename ): self.saveThumbnail( filename )
             if ( filename ): 
@@ -356,7 +343,7 @@ class GUI( xbmcgui.Window ):
         try: 
             new_filename = '%s.tbn' % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
-                shutil.copyfile(self.thumbnail, new_filename )
+                shutil.copyfile( self.poster, new_filename )
         except: pass
     
     def toggleContextMenu( self ):
@@ -400,12 +387,12 @@ class GUI( xbmcgui.Window ):
   
     def changeSettings( self ):
         self.debugWrite('changeSettings', 2)
-        thumbnail_display = self.settings['thumbnail display']
+        thumbnail_display = self.settings.thumbnail_display
         settings = guisettings.GUI( skin=self.skin, language=_ )
         settings.doModal()
         del settings
         self.getSettings()
-        if ( thumbnail_display != self.settings['thumbnail display'] ):
+        if ( thumbnail_display != self.settings.thumbnail_display ):
             self.setGenre( self.genre_id )
         
     def exitScript( self ):
