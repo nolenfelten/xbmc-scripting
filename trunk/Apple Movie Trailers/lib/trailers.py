@@ -202,7 +202,7 @@ class Movie( Info ):
             poster = fetcher.urlretrieve( poster )
             if poster:
                 self.poster = poster
-                self.__thumbnail__, self.__thumbnail_unwatched__ = amt_util.makeThumbnails( poster )
+                self.__thumbnail_unwatched__, self.__thumbnail__ = amt_util.makeThumbnails( poster )
             self.dialog.update( 40 )
 
             # -- plot --
