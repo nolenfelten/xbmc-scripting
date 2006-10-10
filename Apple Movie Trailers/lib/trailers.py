@@ -264,7 +264,7 @@ class Movie( Info ):
         self.dialog.close()
 
     def __getattribute__( self, name ):
-        retval = None
+        retval = ''
         try:
             retval = Info.__getattribute__( self, name )
             if name == 'thumbnail':
