@@ -180,6 +180,7 @@ class Movie( Info ):
         Info.__set_defaults__( self )
         self.__update_items__ += [ 'thumbnail', 'poster', 'plot', 'cast', 'trailer_urls' ]
         self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
+        self.thumbnail = ''
         self.__thumbnail__ = ''
         self.__thumbnail_watched__ = ''
         self.poster = ''
