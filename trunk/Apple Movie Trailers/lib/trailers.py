@@ -208,7 +208,7 @@ class Movie( Info ):
             poster = fetcher.urlretrieve( poster )
             if poster:
                 self.poster = poster
-                self.__thumbnail_unwatched__, self.__thumbnail__ = amt_util.makeThumbnails( poster )
+                self.__thumbnail__, self.__thumbnail_watched__ = amt_util.makeThumbnails( poster )
             self.dialog.update( 40 )
 
             # -- plot --
@@ -269,7 +269,6 @@ class Movie( Info ):
         self.dialog.close()
 
     def __getattribute__( self, name ):
-        retval = ''
         try:
             retval = Info.__getattribute__( self, name )
             if name == 'thumbnail':
@@ -278,7 +277,7 @@ class Movie( Info ):
                 else:
                     retval = self.__thumbnail__
         except:
-            pass
+            retval = ''
         return retval
 
 class Genre( Info ):
