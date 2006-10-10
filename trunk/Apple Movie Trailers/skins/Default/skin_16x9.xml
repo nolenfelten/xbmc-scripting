@@ -409,7 +409,7 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Thumbnail</description>
+			<description>Trailer Poster</description>
 			<type>image</type>
 			<id>201</id>
 			<posx>520</posx>
