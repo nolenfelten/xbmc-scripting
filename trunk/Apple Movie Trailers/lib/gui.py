@@ -139,9 +139,10 @@ class GUI( xbmcgui.Window ):
     def updateDatabase( self ):
         self.debugWrite('updateDatabase', 2)
         if (self.update_method == 0 ):
-            self.trailers.update_all()
-            self.getGenreCategories()
-            self.setGenre( self.genre_id )
+            if ( self.genre_id >= 0 ):
+                self.trailers.genres[self.genre_id].update_all( force_update = True )
+                self.getGenreCategories()
+                self.setGenre( self.genre_id )
     
     def getGenreCategories( self ):
         self.debugWrite('getGenreCategories', 2)
@@ -156,6 +157,7 @@ class GUI( xbmcgui.Window ):
     def showTrailers( self, choice = 0 ):
         try:
             self.debugWrite('showTrailers', 2)
+            if ( self.settings.thumbnail_display == 0 ): self.trailers.genres[self.genre_id].update_all()
             xbmcgui.lock()
             self.controls['Trailer List']['control'].reset()
             #movie_quality = 'LMH'
@@ -291,8 +293,6 @@ class GUI( xbmcgui.Window ):
                 self.controls['Trailer Plot']['control'].setText( plot )
             self.controls['Trailer Cast']['control'].reset()
             cast = self.trailers.genres[self.genre_id].movies[trailer].cast
-            ## Test code ##
-            #cast = ['Angelina Jolee', 'Jessica Alba', 'Chuck Norris', 'Arnold Swarzenegger', 'Hillary Duff', 'William Shatner']
             if ( cast ):
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
