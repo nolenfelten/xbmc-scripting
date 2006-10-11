@@ -137,22 +137,26 @@ class Info( object ):
         self.__update_items__ = list()
         self.__serialize_items__ = [ '__updated__' ]
 
-    def __update__( self ):
+    def __update__( self, show_dialog = True  ):
         pass
+
+    def update( self, show_dialog = True  ):
+        if self.__updated__ or self.__updating__:
+            return
+        self.__updating__ = True
+        try:
+            self.__update__( show_dialog )
+            self.__updated__ = True
+        except:
+            traceback.print_exc()
+            pass
+        self.__updating__ = False
 
     def __getattribute__( self, name ):
         try:
             if name in super( Info, self ).__getattribute__( '__update_items__' ):
-                if not self.__updated__:
-                    if not self.__updating__ and not self.__serializing__:
-                        self.__updating__ = True
-                        try:
-                            self.__update__()
-                            self.__updated__ = True
-                        except:
-                            traceback.print_exc()
-                            pass
-                        self.__updating__ = False
+                if not self.__serializing__:
+                    self.update()
         except:
             pass
         return super( Info, self ).__getattribute__( name )
@@ -394,8 +398,11 @@ class Genre( Info ):
             raise
 
     def update_all( self, force_update = False ):
-        if self.__updated__ and not force_update:
+        if self.__updated__:
+            if not force_update:
                 return
+            else:
+                self.__updated__ = False
         dialog = xbmcgui.DialogProgress()
         dialog.create( _(70), _(67), ' '.join( [ _(71), self.title ] ) )
         dialog.update( 0 )
@@ -405,7 +412,7 @@ class Genre( Info ):
             pct = int( float( pos ) / len( self.movies ) * 100 )
             dialog.update( pct, _(67), ' '.join( [ _(71), self.title ] ), ' '.join( [ _(68), movie.title ] ) )
             try:
-                movie.__update__( show_dialog = False )
+                movie.update( show_dialog = False )
             except:
                 traceback.print_exc()
                 continue
