@@ -1147,7 +1147,7 @@ class SRH(urllib2.HTTPRedirectHandler):
         return result
 
 class AppURLopener(urllib.FancyURLopener):
-    version = "XBMC YouTube/1.6"
+    version = "XBMC YouTube/1.8"
 
 def DownloaderClass(url,dest,dp):
     try:

@@ -3,9 +3,10 @@
     Using RSS Feed for the Data
     Coding By Donno [darkdonno@gmail.com]
     BackButton by BlackBolt
-    Version: 1.8
+    Version: 1.8a
 
     Changes Since 1.8
+        - Fixed little bug reguarding playvide on list
         USER Screen
         - View User Videos, Favorites and Firends
     Changes Since 1.7
@@ -49,7 +50,7 @@ except: Emulating = False
 download_first = 1
 
 __title__ = "YouTube.com"
-__version__ = '1.6'
+__version__ = '1.8a'
 __coder__ = 'Donno'
 __author__ = 'Donno [darkdonno@gmail.com]'
 __date__ = '2006'
@@ -1132,7 +1133,7 @@ class SRH(urllib2.HTTPRedirectHandler):
         return result
 
 class AppURLopener(urllib.FancyURLopener):
-    version = "XBMC YouTube/1.6"
+    version = "XBMC YouTube/1.8"
 
 def DownloaderClass(url,dest,dp):
     try:
