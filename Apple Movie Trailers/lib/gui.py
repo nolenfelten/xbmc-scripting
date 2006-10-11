@@ -160,11 +160,9 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer List']['control'].reset()
             #movie_quality = 'LMH'
             for movie in self.trailers.genres[self.genre_id].movies: # now fill the list control
-                #thumbnail = movie.thumbnail
                 if ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
                 elif ( self.settings.thumbnail_display == 0 ): thumbnail = movie.thumbnail
                 else: thumbnail = ''
-                #print thumbnail
                 #choices = movie_quality[:len( movie.trailer_urls )]
                 if ( movie.favorite ): favorite = '*'
                 else: favorite = ''
