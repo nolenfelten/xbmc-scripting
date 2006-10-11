@@ -68,10 +68,12 @@ class Info( object ):
                         ielement = i.serialize()
                         ielement.set( 'type', 'class' )
                         itemelement.append( ielement )
+                        processed = True
                     else:
-                        itemvalue = str( i )
-                        itemelement.set( 'type', str( itemtype ).split('\'')[1] )
-                        itemelement.text = itemvalue
+                        ielement = ET.SubElement( itemelement, 'item' )
+                        ielement.set( 'type', str( type( i ) ).split('\'')[1] )
+                        ivalue = str( i )
+                        ielement.text = ivalue
             elif str( itemtype ).split()[0] == '<class':
                 ielement = self.__dict__[ item ].serialize()
                 ielement.set( 'type', 'class' )
@@ -179,8 +181,8 @@ class Movie( Info ):
 
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
-        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls', 'favorite' ]
-        self.__serialize_items__ += self.__update_items__ + [ 'watched' ]
+        self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls' ]
+        self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
         self.thumbnail = ''
         self.__thumbnail__ = ''
         self.__thumbnail_watched__ = ''
