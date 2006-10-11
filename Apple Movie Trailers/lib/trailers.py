@@ -4,7 +4,7 @@ import cacheurl
 import elementtree.ElementTree as ET
 import default
 import language
-import amt_util
+import pil_util
 
 AMT_PK_COMPATIBLE_VERSIONS = [ '0.92' ]
 
@@ -218,7 +218,7 @@ class Movie( Info ):
             poster = fetcher.urlretrieve( poster )
             if poster:
                 self.poster = poster
-                self.__thumbnail__, self.__thumbnail_watched__ = amt_util.makeThumbnails( poster )
+                self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
                 self.thumbnail = self.__getattribute__( 'thumbnail' )
             if show_dialog:
                 self.dialog.update( 40 )
