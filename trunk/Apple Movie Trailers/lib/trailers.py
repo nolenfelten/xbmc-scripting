@@ -393,7 +393,9 @@ class Genre( Info ):
                 dialog.close()
             raise
 
-    def update_all( self ):
+    def update_all( self, force_update = False ):
+        if self.__updated__ and not force_update:
+                return
         dialog = xbmcgui.DialogProgress()
         dialog.create( _(70), _(67), ' '.join( [ _(71), self.title ] ) )
         dialog.update( 0 )
