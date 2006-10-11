@@ -403,6 +403,7 @@ class Genre( Info ):
             pct = int( float( pos ) / len( self.movies ) * 100 )
             dialog.update( pct, _(67), ' '.join( [ _(71), self.title ] ), ' '.join( [ _(68), movie.title ] ) )
             movie.__update__( show_dialog = False )
+        dialog.close()
 
 class Trailers( Info ):
     """
