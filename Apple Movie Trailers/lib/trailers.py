@@ -437,7 +437,7 @@ class Trailers( Info ):
         self.__serialize_items__ += self.__update_items__
         self.genres = list()
 
-    def __update__( self ):
+    def __update__( self, show_dialog = True ):
         try:
             base_xml = fetcher.urlopen( self.BASEXML )
             base_xml = ET.fromstring( base_xml )
