@@ -240,7 +240,9 @@ class Movie( Info ):
             cast = list()
             try:
                 for i in range( 5, 10 ):
-                    cast += [ SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip() ]
+                    actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
+                    if len( actor ):
+                        cast += [ actor ]
             except:
                 cast = list()
             self.cast = cast
