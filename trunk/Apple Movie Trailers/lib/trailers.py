@@ -188,7 +188,7 @@ class Movie( Info ):
         self.__thumbnail_watched__ = ''
         self.poster = ''
         self.plot = _(400) # No description could be retrieved for this title.
-        self.cast = 'FIXME: CAST INFO GOES HERE'
+        self.cast = list()
         self.trailer_urls = list()
         self.watched = False
         self.favorite = False
@@ -232,9 +232,14 @@ class Movie( Info ):
                 self.dialog.update( 60 )
 
             # -- cast --
-            cast = 'FIXME: CAST INFO GOES HERE'
-            if cast:
-                self.cast = cast
+            SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
+            cast = list()
+            try:
+                for i in range( 5, 10 ):
+                    cast += SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
+            except:
+                cast = list()
+            self.cast = cast
             if show_dialog:
                 self.dialog.update( 80 )
 
