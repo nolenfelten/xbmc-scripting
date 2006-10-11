@@ -193,18 +193,20 @@ class Movie( Info ):
         self.watched = False
         self.favorite = False
 
-    def __update__( self ):
+    def __update__( self, show_dialog = True  ):
         try:
             # dialog
-            self.dialog.create( self.title )
-            self.dialog.update( 0 )
+            if show_dialog:
+                self.dialog.create( self.title )
+                self.dialog.update( 0 )
 
             # xml parsing
             element = fetcher.urlopen( self.url )
             #fix for badly formed xml
             element = element.replace( ' & ', ' &amp; ' )
             element = ET.fromstring( element )
-            self.dialog.update( 20 )
+            if show_dialog:
+                self.dialog.update( 20 )
 
             # -- thumbnail --
             poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
@@ -214,7 +216,8 @@ class Movie( Info ):
                 self.poster = poster
                 self.__thumbnail__, self.__thumbnail_watched__ = amt_util.makeThumbnails( poster )
                 self.thumbnail = self.__getattribute__( 'thumbnail' )
-            self.dialog.update( 40 )
+            if show_dialog:
+                self.dialog.update( 40 )
 
             # -- plot --
             plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
@@ -225,13 +228,15 @@ class Movie( Info ):
             plot = plot.replace( '\n', ' ' )
             if plot:
                 self.plot = plot
-            self.dialog.update( 60 )
+            if show_dialog:
+                self.dialog.update( 60 )
 
             # -- cast --
             cast = 'FIXME: CAST INFO GOES HERE'
             if cast:
                 self.cast = cast
-            self.dialog.update( 80 )
+            if show_dialog:
+                self.dialog.update( 80 )
 
             # -- trailer urls --
             urls = list()
@@ -265,13 +270,16 @@ class Movie( Info ):
                         continue
                     trailer_urls += [ text ]
                 self.trailer_urls = trailer_urls
-            self.dialog.update( 100 )
+            if show_dialog:
+                self.dialog.update( 100 )
         except:
             traceback.print_exc()
             self.__set_defaults__()
-            self.dialog.close()
+            if show_dialog:
+                self.dialog.close()
             raise
-        self.dialog.close()
+        if show_dialog:
+            self.dialog.close()
 
     def __getattribute__( self, name ):
         try:
@@ -302,14 +310,15 @@ class Genre( Info ):
         self.__serialize_items__ += self.__update_items__
         self.movies = list()
 
-    def __update__( self ):
+    def __update__( self, show_dialog = True ):
         try:
             next_url = self.url
             first_url = True
             trailer_dict = dict()
-            dialog = xbmcgui.DialogProgress()
-            dialog.create( _(66), _(67) )
-            dialog.update( 0 )
+            if show_dialog:
+                dialog = xbmcgui.DialogProgress()
+                dialog.create( _(66), _(67) )
+                dialog.update( 0 )
             while next_url:
                 try:
                     element = fetcher.urlopen( next_url )
@@ -370,12 +379,25 @@ class Genre( Info ):
                 movies += [ movie ]
             if len( movies ):
                 self.movies = movies
-            dialog.close()
+            if show_dialog:
+                dialog.close()
         except:
             traceback.print_exc()
             self.__set_defaults__()
-            dialog.close()
+            if show_dialog:
+                dialog.close()
             raise
+
+    def update_all( self ):
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( _(70), _(67), ' '.join( [ _(71), self.title ] ) )
+        dialog.update( 0 )
+        pos = 0
+        for movie in self.movies:
+            pos += 1
+            pct = int( float( pos ) / len( self.movies ) * 100 )
+            dialog.update( pct, _(67), ' '.join( [ _(71), self.title ] ), ' '.join( [ _(68), movie.title ] ) )
+            movie.__update__( show_dialog = False )
 
 class Trailers( Info ):
     """
