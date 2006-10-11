@@ -449,7 +449,7 @@ class YouTube(xbmcgui.Window):
                 self.vis(2)
                 self.selT = 2
         if self.videoList == control:
-            self.playVideo
+            self.playVideo()
         if self.contextUp == 1 and self.videoList.getSelectedPosition() != -1:
             if control == self.conButs[0]:
                 self.delconOL()
