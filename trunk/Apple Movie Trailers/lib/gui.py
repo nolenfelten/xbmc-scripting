@@ -50,7 +50,7 @@ except:
     closeProgessDialog()
     dlg = xbmcgui.Dialog()
     ok = dlg.ok( _( 0 ), _( 81 ) )
-
+    raise
     
 class GUI( xbmcgui.Window ):
 
@@ -138,11 +138,11 @@ class GUI( xbmcgui.Window ):
 
     def updateDatabase( self ):
         self.debugWrite('updateDatabase', 2)
-        if (self.update_method == 0 ):
-            if ( self.genre_id >= 0 ):
-                self.trailers.genres[self.genre_id].update_all( force_update = True )
-                self.getGenreCategories()
-                self.setGenre( self.genre_id )
+        #if (self.update_method == 0 ):
+        #    if ( self.genre_id >= 0 ):
+        #        self.trailers.genres[self.genre_id].update_all( force_update = True )
+        #        self.getGenreCategories()
+        #        self.setGenre( self.genre_id )
     
     def getGenreCategories( self ):
         self.debugWrite('getGenreCategories', 2)
@@ -157,7 +157,7 @@ class GUI( xbmcgui.Window ):
     def showTrailers( self, choice = 0 ):
         try:
             self.debugWrite('showTrailers', 2)
-            if ( self.settings.thumbnail_display == 0 ): self.trailers.genres[self.genre_id].update_all()
+            #if ( self.settings.thumbnail_display == 0 ): self.trailers.genres[self.genre_id].update_all()
             xbmcgui.lock()
             self.controls['Trailer List']['control'].reset()
             #movie_quality = 'LMH'

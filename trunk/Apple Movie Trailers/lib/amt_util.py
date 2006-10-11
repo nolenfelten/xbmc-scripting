@@ -1,22 +1,4 @@
-from PIL import Image, ImageEnhance
 import os
-
-def makeThumbnails( poster ):
-    try:
-        size = ( 26, 38 )
-        thumbnail = '%s.png' % ( os.path.splitext( poster )[0], )
-        watched_thumbnail = '%s-w.png' % ( os.path.splitext( poster )[0], )
-        im = Image.open( poster )
-        im.thumbnail(size, Image.ANTIALIAS)
-        im = im.convert('RGBA')
-        im.save(thumbnail, 'PNG')
-        alpha = im.split()[3]
-        alpha = ImageEnhance.Brightness(alpha).enhance(0.2)
-        im.putalpha(alpha)
-        im.save(watched_thumbnail, 'PNG')
-        return thumbnail, watched_thumbnail
-    except:
-        return None, None
 
 def setThumbnailDisplay( _ ):
     return [_(310), _(311), _(312)]
