@@ -170,7 +170,7 @@ class Movie( Info ):
         - thumbnail (string path to image file, blank string if not found)
         - poster (string path to image file, blank string if not found)
         - plot (string)
-        - cast (??? string ???)
+        - cast (list of string cast member names)
         - trailer_urls (list of string urls to trailers)
         - watched (boolean)
         - favorite (boolean)
@@ -236,7 +236,7 @@ class Movie( Info ):
             cast = list()
             try:
                 for i in range( 5, 10 ):
-                    cast += SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
+                    cast += [ SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip() ]
             except:
                 cast = list()
             self.cast = cast
