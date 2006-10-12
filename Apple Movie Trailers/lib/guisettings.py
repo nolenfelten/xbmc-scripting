@@ -1,6 +1,7 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
+#import trailers
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -8,14 +9,20 @@ class GUI( xbmcgui.WindowDialog ):
         self.getSettings()
         self._ = kwargs['language']
         self.skin = kwargs['skin']
+        self.genres = kwargs['genres']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
             self.setupVariables()
+            self.getGenreCategories()
             self.setControlsValues()
             ##remove disabled when update script routine is done
             self.controls['Update Button']['control'].setEnabled( False )
 
+    def getGenreCategories( self ):
+        for genre in self.genres[2:]:
+            self.startup.append( genre.title )
+    
     def setupGUI( self ):
         skin_path = os.path.join( self.cwd, 'skins' )
         self.skin_path = os.path.join( skin_path, self.skin )
@@ -39,7 +46,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self._(302), self.settings.save_folder, ) )
         self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode == 2 )
         self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self._(303), self.settings.skin, ) )
-        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings.startup_category], ) )
+        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings.startup_category_id], ) )
         self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self._(305), self.thumbnail[self.settings.thumbnail_display], ) )
 
     def getSettings( self ):
@@ -71,9 +78,9 @@ class GUI( xbmcgui.WindowDialog ):
         self.setControlsValues()
 
     def toggleStartupCategory( self ):
-        c = self.settings.startup_category + 1
-        if ( c > 2 ): c = 0
-        self.settings.startup_category = c
+        c = self.settings.startup_category_id + 1
+        if ( c == ( len( self.startup ) ) ): c = 0
+        self.settings.startup_category_id = c
         #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
         

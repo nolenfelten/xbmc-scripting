@@ -2,12 +2,15 @@
 
 <!--
 	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag must NOT be changed,
-	the <type> tag for labels may be changed to button. This allows <shadowcolor> tag to be used.
-	(if changing <type>label</type> to <type>button</type>, set <texturenofocus>-</texturenofocus>)
-	
+	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+		
 	There are four special controls that are displayed based on if media is playing. You may set their
 	tag <visible>false</visible> if you don't want them, but DO NOT delete them.
+	
+	<type>listcontrol</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
+	in place of the spinner control.
 	
 	<include> tags work and the reference.xml file will be used for any missing tags.
 	
@@ -185,10 +188,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Search Button</description>
 			<type>button</type>
+			<description>Favorites Button</description>
 			<id>40</id>
-			<label>203</label>
+			<label>217</label>
 			<posx>50</posx>
 			<posy>268</posy>
 			<width>150</width>
@@ -203,18 +206,18 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
-			<ondown>50</ondown>
+			<ondown>45</ondown>
 			<onclick>-</onclick>
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Settings Button</description>
 			<type>button</type>
-			<id>50</id>
-			<label>204</label>
+			<description>Playlist Button</description>
+			<id>45</id>
+			<label>218</label>
 			<posx>50</posx>
-			<posy>342</posy>
+			<posy>305</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -227,16 +230,40 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
+			<ondown>50</ondown>
+			<onclick>-</onclick>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Search Button</description>
+			<type>button</type>
+			<id>50</id>
+			<label>203</label>
+			<posx>50</posx>
+			<posy>379</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>45</onup>
 			<ondown>60</ondown>
 			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Favorites Button</description>
+			<description>Settings Button</description>
 			<type>button</type>
 			<id>60</id>
-			<label>217</label>
+			<label>204</label>
 			<posx>50</posx>
 			<posy>465</posy>
 			<width>150</width>

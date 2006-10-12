@@ -36,6 +36,7 @@
   <string id="79">Downloading...</string>
   <string id="80">KB/s</string>
   <string id="81">All the required modules could not be found!</string>
+  <string id="82">Are you sure you want to delete</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
@@ -47,9 +48,9 @@
   <!-- Buttons and Labels -->
   <string id="200">Newest</string>
   <string id="201">Exclusives</string>
-  <string id="202">Genre</string>
-  <string id="203">Search</string>
-  <string id="204">Settings</string>
+  <string id="202">Genre...</string>
+  <string id="203">Search...</string>
+  <string id="204">Settings...</string>
   <string id="205">Update All</string>
   <string id="206">Update Genre</string>
   <string id="207">Update Trailer</string>
@@ -63,6 +64,7 @@
   <string id="215">Plot</string>
   <string id="216">Cast</string>
   <string id="217">Favorites</string>
+  <string id="218">Playlist</string>
   <string id="220">Full Screen Visualization</string>
   <string id="221">Full Screen Video</string>
   

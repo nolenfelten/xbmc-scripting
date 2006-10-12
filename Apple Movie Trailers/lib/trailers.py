@@ -189,15 +189,15 @@ class Movie( Info ):
         self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls' ]
         self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite', 'saved' ]
         self.thumbnail = ''
-        self.__thumbnail__ = ''
-        self.__thumbnail_watched__ = ''
-        self.poster = ''
+        self.__thumbnail__ = 'None'
+        self.__thumbnail_watched__ = 'None'
+        self.poster = 'None'
         self.plot = _(400) # No description could be retrieved for this title.
         self.cast = list()
         self.trailer_urls = list()
         self.watched = False
         self.favorite = False
-        self.saved = ''
+        self.saved = 'None'
 
     def __update__( self, show_dialog = True  ):
         try:
@@ -290,7 +290,7 @@ class Movie( Info ):
             self.__set_defaults__()
             if show_dialog:
                 self.dialog.close()
-            raise
+            #raise
         if show_dialog:
             self.dialog.close()
 
