@@ -48,7 +48,7 @@ def byte_measurement( bytes, detailed = False ):
 
 
 class HTTP:
-    def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
+    def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
         # this module's path
         import sys
         self.module_dir = os.path.dirname( sys.modules['cacheurl'].__file__ )
@@ -60,6 +60,9 @@ class HTTP:
         if self.cache_dir[0] == '.':
             self.cache_dir = os.path.join( self.default_data_dir, self.cache_dir )
 
+        # title is the real name of the trailer, used for saving
+        self.title = title
+        
         # flat_cache means that each request will be cached in a single reused file; basically a non-persistent cache
         self.flat_cache = flat_cache
 
@@ -95,7 +98,7 @@ class HTTP:
         if self.flat_cache:
             filename = 'flat_cache' + os.path.splitext( url )[1]
         elif self.actual_filename:
-            filename = url.split( '/' )[-1]
+            filename = self.title#url.split( '/' )[-1]
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
         # ..and the filepath
@@ -220,8 +223,8 @@ class HTTP:
 
 
 class HTTPProgress( HTTP ):
-    def __init__( self, cache = '.cache', actual_filename = False, flat_cache = False ):
-        HTTP.__init__( self, cache, actual_filename, flat_cache )
+    def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
+        HTTP.__init__( self, cache, title, actual_filename, flat_cache )
         self.dialog = xbmcgui.DialogProgress()
         self.status_symbols = [ '-', '\\', '|', '/' ]
         self.status_symbol = 0
@@ -251,9 +254,9 @@ class HTTPProgress( HTTP ):
         self.status_symbol = 0
 
 class HTTPProgressSave( HTTPProgress ):
-    def __init__( self, save_location = None ):
+    def __init__( self, save_location = None, save_title = '' ):
         if save_location:
-            HTTPProgress.__init__( self, save_location, actual_filename = True )
+            HTTPProgress.__init__( self, save_location, save_title, actual_filename = True )
         else:
             HTTPProgress.__init__( self, flat_cache = True )
 

@@ -233,10 +233,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Update Button</description>
+			<description>Favorites Button</description>
 			<type>button</type>
 			<id>60</id>
-			<label>205</label>
+			<label>217</label>
 			<posx>50</posx>
 			<posy>465</posy>
 			<width>150</width>
@@ -249,8 +249,8 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>60</onleft>
-			<onright>60</onright>
+			<onleft>95</onleft>
+			<onright>100</onright>
 			<onup>50</onup>
 			<ondown>10</ondown>
 			<onclick>-</onclick>
@@ -424,14 +424,14 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Watched Overlay</description>
+			<description>Trailer Favorite Overlay</description>
 			<type>image</type>
 			<id>202</id>
-			<posx>520</posx>
-			<posy>120</posy>
-			<width>170</width>
-			<height>250</height>
-			<texture>\watched.png</texture>
+			<posx>550</posx>
+			<posy>350</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\overlay-favorite.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
@@ -439,14 +439,29 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Favorite Overlay</description>
+			<description>Trailer Watched Overlay</description>
 			<type>image</type>
 			<id>203</id>
-			<posx>520</posx>
-			<posy>120</posy>
-			<width>170</width>
-			<height>250</height>
-			<texture>\favorite.png</texture>
+			<posx>550</posx>
+			<posy>350</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\overlay-watched.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Saved Overlay</description>
+			<type>image</type>
+			<id>204</id>
+			<posx>550</posx>
+			<posy>350</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\overlay-saved.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
@@ -712,10 +727,10 @@
 			<description>Context Menu Background</description>
 			<type>image</type>
 			<id>1</id>
-			<posx>280</posx>
-			<posy>160</posy>
-			<width>150</width>
-			<height>160</height>
+			<posx>270</posx>
+			<posy>145</posy>
+			<width>180</width>
+			<height>195</height>
 			<texture>\dialog-panel.png</texture>
 			<visible>false</visible>
 		</control>
@@ -725,21 +740,22 @@
 			<description>Context Menu Queue Button</description>
 			<type>button</type>
 			<id>1000</id>
-			<posx>290</posx>
-			<posy>168</posy>
-			<width>135</width>
+			<posx>280</posx>
+			<posy>153</posy>
+			<width>165</width>
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
 			<label>-</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>1000</onleft>
 			<onright>1000</onright>
-			<onup>1030</onup>
+			<onup>1040</onup>
 			<ondown>1010</ondown>
 			<visible>false</visible>
 		</control>
@@ -749,15 +765,16 @@
 			<description>Context Menu Favorite Button</description>
 			<type>button</type>
 			<id>1010</id>
-			<posx>290</posx>
-			<posy>202</posy>
-			<width>135</width>
+			<posx>280</posx>
+			<posy>187</posy>
+			<width>165</width>
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
 			<label>-</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
@@ -773,15 +790,16 @@
 			<description>Context Menu Watched Button</description>
 			<type>button</type>
 			<id>1020</id>
-			<posx>290</posx>
-			<posy>236</posy>
-			<width>135</width>
+			<posx>280</posx>
+			<posy>221</posy>
+			<width>165</width>
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
 			<label>-</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
@@ -797,21 +815,47 @@
 			<description>Context Menu Refresh Button</description>
 			<type>button</type>
 			<id>1030</id>
-			<posx>290</posx>
-			<posy>270</posy>
-			<width>135</width>
+			<posx>280</posx>
+			<posy>255</posy>
+			<width>165</width>
 			<height>32</height>
 			<align>center</align>
 			<aligny>center</aligny>
 			<label>-</label>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>1030</onleft>
 			<onright>1030</onright>
 			<onup>1020</onup>
+			<ondown>1040</ondown>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Context Menu Delete Button</description>
+			<type>button</type>
+			<id>1040</id>
+			<posx>280</posx>
+			<posy>289</posy>
+			<width>165</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>1040</onleft>
+			<onright>1040</onright>
+			<onup>1030</onup>
 			<ondown>1000</ondown>
 			<visible>false</visible>
 		</control>
