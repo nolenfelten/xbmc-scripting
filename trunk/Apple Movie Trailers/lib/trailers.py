@@ -178,6 +178,7 @@ class Movie( Info ):
         - trailer_urls (list of string urls to trailers)
         - watched (boolean)
         - favorite (boolean)
+        - saved (string path to saved trailer)
     """
     def __init__( self, title, url ):
         Info.__init__( self, title, url )
@@ -186,7 +187,7 @@ class Movie( Info ):
     def __set_defaults__( self ):
         Info.__set_defaults__( self )
         self.__update_items__ += [ '__thumbnail__', '__thumbnail_watched__', 'poster', 'plot', 'cast', 'trailer_urls' ]
-        self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite' ]
+        self.__serialize_items__ += self.__update_items__ + [ 'watched', 'favorite', 'saved' ]
         self.thumbnail = ''
         self.__thumbnail__ = ''
         self.__thumbnail_watched__ = ''
@@ -196,6 +197,7 @@ class Movie( Info ):
         self.trailer_urls = list()
         self.watched = False
         self.favorite = False
+        self.saved = ''
 
     def __update__( self, show_dialog = True  ):
         try:
