@@ -423,6 +423,12 @@ class GUI( xbmcgui.Window ):
         if ( thumbnail_display != self.settings.thumbnail_display ):
             self.setGenre( self.genre_id )
     
+    def refreshInfo( self ):
+        trailer = self.controls['Trailer List']['control'].getSelectedPosition()
+        if ( self.context_menu ): self.toggleContextMenu()
+        self.trailers.genres[self.genre_id].movies[trailer].__update__()
+        self.showTrailers( trailer )
+        
     def deleteSavedTrailer( self ):
         saved_trailer = self.trailers.genres[self.genre_id].movies[self.trailer].saved
         dialog = xbmcgui.Dialog()
@@ -471,6 +477,8 @@ class GUI( xbmcgui.Window ):
                 self.toggleAsFavorite()
             elif ( control is self.controls['Context Menu Watched Button']['control'] ):
                 self.toggleAsWatched()
+            elif ( control is self.controls['Context Menu Refresh Button']['control'] ):
+                self.refreshInfo()
             elif ( control is self.controls['Context Menu Delete Button']['control'] ):
                 self.deleteSavedTrailer()
         except: traceback.print_exc()
