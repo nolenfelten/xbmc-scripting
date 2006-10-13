@@ -382,7 +382,21 @@
 			<onright>90</onright>
 			<visible>false</visible>
 		</control>
-		
+
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Trailer Count Label</description>
+			<type>label</type>
+			<id>1</id>
+			<width>100</width>
+			<posx>500</posx>
+			<posy>355</posy>
+			<align>right</align>
+			<label>117 of 138</label>
+			<font>font10</font>
+			<textcolor>CCFFFFFF</textcolor>
+		</control>
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Genre List</description>
