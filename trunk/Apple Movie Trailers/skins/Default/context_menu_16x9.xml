@@ -35,9 +35,9 @@
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>180</width>
-			<height>195</height>
+			<height>229</height>
 			<texture>\dialog-panel.png</texture>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -60,9 +60,9 @@
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>1000</onleft>
 			<onright>1000</onright>
-			<onup>1040</onup>
+			<onup>1050</onup>
 			<ondown>1010</ondown>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -87,7 +87,7 @@
 			<onright>1010</onright>
 			<onup>1000</onup>
 			<ondown>1020</ondown>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -112,7 +112,7 @@
 			<onright>1020</onright>
 			<onup>1010</onup>
 			<ondown>1030</ondown>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -137,7 +137,7 @@
 			<onright>1030</onright>
 			<onup>1020</onup>
 			<ondown>1040</ondown>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -161,8 +161,33 @@
 			<onleft>1040</onleft>
 			<onright>1040</onright>
 			<onup>1030</onup>
+			<ondown>1050</ondown>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Context Menu Button6</description>
+			<type>button</type>
+			<id>1050</id>
+			<posx>10</posx>
+			<posy>178</posy>
+			<width>165</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>1050</onleft>
+			<onright>1050</onright>
+			<onup>1040</onup>
 			<ondown>1000</ondown>
-			<visible>true</visible>
+			<visible>false</visible>
 		</control>
 
 	</controls>

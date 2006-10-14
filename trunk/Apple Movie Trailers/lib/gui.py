@@ -107,11 +107,9 @@ class GUI( xbmcgui.Window ):
         self.MyPlayer = MyPlayer(xbmc.PLAYER_CORE_MPLAYER, function = self.myPlayerChanged)
         self.controller_action = amt_util.setControllerAction()
         self.update_method = 0
-        #self.poster = None
         self.genre_id = None
         self.currently_playing_movie = -1
         self.currently_playing_genre = -1
-        self.context_menu = False
         
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
@@ -120,7 +118,6 @@ class GUI( xbmcgui.Window ):
         self.Timer = threading.Timer( 60*60*60, self.dummy,() )
         self.Timer.start()
 
-    # this function is used for skins like XBMC360 that have player information on screen
     def myPlayerChanged( self, event ):
         #self.debugWrite('myPlayerChanged', 2)
         self.controls['X Button On']['control'].setVisible( xbmc.getCondVisibility( self.controls['X Button On']['visible'] ))
@@ -139,15 +136,6 @@ class GUI( xbmcgui.Window ):
         if ( os.path.isfile( os.path.join( self.cwd, 'data', 'AMT.pk' ))): return True
         else: return False
 
-    def updateDatabase( self ):
-        pass
-        #self.debugWrite('updateDatabase', 2)
-        #if (self.update_method == 0 ):
-        #    if ( self.genre_id >= 0 ):
-        #        self.trailers.genres[self.genre_id].update_all( force_update = True )
-        #        self.getGenreCategories()
-        #        self.setGenre( self.genre_id )
-    
     def getGenreCategories( self ):
         #self.debugWrite('getGenreCategories', 2)
         self.controls['Genre List']['control'].reset()
@@ -160,7 +148,6 @@ class GUI( xbmcgui.Window ):
             
     def showTrailers( self, choice = 0 ):
         try:
-            #print 'Show Trailers'
             #self.debugWrite('showTrailers', 2)
             #if ( self.settings.thumbnail_display == 0 ): self.trailers.genres[self.genre_id].update_all()
             xbmcgui.lock()
@@ -171,7 +158,6 @@ class GUI( xbmcgui.Window ):
                 else: thumbnail = ''
                 favorite = ['','*'][movie.favorite]
                 self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), '', thumbnail ) )
-            #self.calcScrollbarVisibilty('Trailer List')
             self.setSelection( 'Trailer List', choice )
         finally:
             xbmcgui.unlock()
@@ -218,7 +204,6 @@ class GUI( xbmcgui.Window ):
     def setGenre( self, genre_id ):
         #self.debugWrite('setGenre', 2)
         self.genre_id = genre_id
-        #self.showScrollbar( False, 'Trailer List' )
         if ( genre_id != -1 ): self.showTrailers()
         self.showControls( genre_id == -1 )
         if ( genre_id != -1 ): self.setFocus( self.controls['Trailer List']['control'] )
@@ -248,21 +233,19 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Backdrop']['control'].setVisible( not genre )
             self.controls['Trailer Poster']['control'].setVisible( not genre )
             self.controls['Trailer Title']['control'].setVisible( not genre )
-            #if ( genre ): self.setFocus( self.controls['Genre List']['control'] )
-            #else: self.setFocus( self.controls['Trailer List']['control'] )
             if ( genre ):
                 self.controls['Trailer Favorite Overlay']['control'].setVisible( False )
                 self.controls['Trailer Watched Overlay']['control'].setVisible( False )
                 self.controls['Trailer Saved Overlay']['control'].setVisible( False )
             self.calcScrollbarVisibilty( 'Trailer List' )
-            self.showPlotCastControls( genre )
             self.setCategoryLabel()
+            self.showPlotCastControls( genre )
         finally:
             xbmcgui.unlock()
             
     def showPlotCastControls( self, genre ):
         try:
-            #xbmcgui.lock()
+            xbmcgui.lock()
             #self.debugWrite('showPlotCastControls', 2)
             self.controls['Plot Button']['control'].setVisible( self.display_cast and not genre )
             self.controls['Plot Button']['control'].setEnabled( self.display_cast and not genre )
@@ -274,7 +257,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre )
             self.calcScrollbarVisibilty('Trailer Cast')
         finally:
-            pass#xbmcgui.unlock()
+            xbmcgui.unlock()
             
     def togglePlotCast( self ):
         #self.debugWrite('togglePlotCast', 2)
@@ -282,7 +265,6 @@ class GUI( xbmcgui.Window ):
         self.showPlotCastControls( False )
         if ( self.display_cast ): self.setFocus( self.controls['Plot Button']['control'] )
         else: self.setFocus( self.controls['Cast Button']['control'] )
-        #self.calcScrollbarVisibilty('Trailer Cast')
 
     def setCategoryLabel( self ):
         #self.debugWrite('setCategoryLabel', 2)
@@ -306,7 +288,7 @@ class GUI( xbmcgui.Window ):
             if ( poster == 'None' ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
             self.controls['Trailer Poster']['control'].setImage( poster )
             self.controls['Trailer Title']['control'].setLabel( self.trailers.genres[self.genre_id].movies[trailer].title )
-            #print 'show trailer info: ', self.trailers.genres[self.genre_id].movies[trailer].title
+            #print 'showTrailerInfo: %s' % self.trailers.genres[self.genre_id].movies[trailer].title
             plot = self.trailers.genres[self.genre_id].movies[trailer].plot
             self.controls['Trailer Plot']['control'].reset()
             if ( plot ):
@@ -326,20 +308,16 @@ class GUI( xbmcgui.Window ):
     def showOverlays( self, trailer ):
         posx = self.controls['Trailer Favorite Overlay']['posx']
         posy = self.controls['Trailer Favorite Overlay']['posy']
-        
         favorite = self.trailers.genres[self.genre_id].movies[trailer].favorite
         self.controls['Trailer Favorite Overlay']['control'].setVisible( favorite )
         posx = posx + ( favorite * self.controls['Trailer Favorite Overlay']['width'] )
-        
         watched = self.trailers.genres[self.genre_id].movies[trailer].watched
         self.controls['Trailer Watched Overlay']['control'].setPosition( posx, posy )
         self.controls['Trailer Watched Overlay']['control'].setVisible( watched )
         posx = posx + ( watched * self.controls['Trailer Watched Overlay']['width'] )
-        
         saved = ( self.trailers.genres[self.genre_id].movies[trailer].saved != 'None' )
         self.controls['Trailer Saved Overlay']['control'].setPosition( posx, posy )
         self.controls['Trailer Saved Overlay']['control'].setVisible( saved )
-        #print 'showoverlays', favorite, watched, saved
 
     def getTrailerGenre( self ):
         #self.debugWrite('getTrailerGenre', 2)
@@ -376,9 +354,7 @@ class GUI( xbmcgui.Window ):
                 self.currently_playing_movie = trailer
                 self.currently_playing_genre_id = self.genre_id
         except: traceback.print_exc()
-            
-            #self.debugWrite( 'playTrailer', False, ['ERROR: Trying to play trailer'], [()] )
-    
+
     def saveThumbnail( self, filename, trailer, poster ):
         #self.debugWrite( 'saveThumbnail', 2 )
         try: 
@@ -390,59 +366,14 @@ class GUI( xbmcgui.Window ):
                 self.showTrailers( trailer )
         except: traceback.print_exc()
     
-    def contextMenu( self ):
+    def showContextMenu( self ):
         cm = context_menu.GUI( win = self, language=_ )
         cm.doModal()
         del cm
-        '''    
-    def toggleContextMenu( self ):
-        #self.debugWrite('toggleContextMenu', 2)
-        self.context_menu = not self.context_menu
-        if ( self.context_menu ):
-            self.trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-            self.controls['Context Menu Queue Button']['control'].setLabel( _( 500 ) )
-            self.controls['Context Menu Favorite Button']['control'].setLabel( _( 502 + self.trailers.genres[self.genre_id].movies[self.trailer].favorite ) )
-            self.controls['Context Menu Watched Button']['control'].setLabel( _( 504 + self.trailers.genres[self.genre_id].movies[self.trailer].watched ) )
-            self.controls['Context Menu Refresh Button']['control'].setLabel( _( 506 + ( self.genre_id == -1 ) ) )
-            self.controls['Context Menu Delete Button']['control'].setLabel( _( 509 ) )
-            self.controls['Context Menu Delete Button']['control'].setEnabled( self.trailers.genres[self.genre_id].movies[self.trailer].saved != 'None' )
-            self.showContextMenu( True )
-            self.setFocus( self.controls['Context Menu Queue Button']['control'] )
-        else:
-            self.showContextMenu( False )
-            self.setFocus( self.controls['Trailer List']['control'] )
-            
-    def showContextMenu( self, visible ):
-        self.controls['Context Menu Background']['control'].setVisible( visible )
-        self.controls['Context Menu Queue Button']['control'].setVisible( visible )
-        self.controls['Context Menu Favorite Button']['control'].setVisible( visible )
-        self.controls['Context Menu Watched Button']['control'].setVisible( visible )
-        self.controls['Context Menu Refresh Button']['control'].setVisible( visible )
-        self.controls['Context Menu Delete Button']['control'].setVisible( visible )
-
-    def toggleAsWatched( self ):
-        trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-        watched = not self.trailers.genres[self.genre_id].movies[trailer].watched
-        self.markAsWatched( watched, trailer, self.genre_id )
-        if ( self.context_menu ): self.toggleContextMenu()
-        
-    def toggleAsFavorite( self ):
-        trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-        self.trailers.genres[self.genre_id].movies[trailer].favorite = not self.trailers.genres[self.genre_id].movies[trailer].favorite
-        self.showTrailers( trailer )
-        if ( self.context_menu ): self.toggleContextMenu()
-
-    def refreshInfo( self ):
-        trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-        if ( self.context_menu ): self.toggleContextMenu()
-        self.trailers.genres[self.genre_id].movies[trailer].__update__()
-        self.showTrailers( trailer )
-        '''
     
     def markAsWatched( self, watched, trailer, genre_id ):
         self.trailers.genres[genre_id].movies[trailer].watched = watched
-        if ( genre_id == self.genre_id ):
-            self.showTrailers( trailer )
+        if ( genre_id == self.genre_id ): self.showTrailers( trailer )
     
     def changeSettings( self ):
         #self.debugWrite('changeSettings', 2)
@@ -454,23 +385,6 @@ class GUI( xbmcgui.Window ):
         if ( thumbnail_display != self.settings.thumbnail_display ):
             self.setGenre( self.genre_id )
     
-    def deleteSavedTrailer( self ):
-        saved_trailer = self.trailers.genres[self.genre_id].movies[self.trailer].saved
-        dialog = xbmcgui.Dialog()
-        if ( dialog.yesno( '%s?' % ( _( 509 ), ), _( 82 ), saved_trailer ) ):
-            try:
-                os.remove( saved_trailer )
-            finally:
-                try:
-                    os.remove( '%s.conf' % ( saved_trailer, ) )
-                finally:
-                    try:
-                        os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-                    finally:
-                        self.trailers.genres[self.genre_id].movies[self.trailer].saved = 'None'
-                        self.showTrailers( self.trailer )
-                        if ( self.context_menu ): self.toggleContextMenu()
-
     def exitScript( self ):
         #self.debugWrite( 'exitScript', 2 )
         try:
@@ -480,7 +394,6 @@ class GUI( xbmcgui.Window ):
             self.close()
     
     def onControl( self, control ):
-        #self.debugWrite( 'onControl', 2 )
         try:
             if ( control is self.controls['Newest Button']['control'] ):
                 self.setGenre( 1 )
@@ -489,7 +402,11 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( -1 )
             elif ( control is self.controls['Favorites Button']['control'] ):
-                self.updateDatabase()
+                pass#self.setGenre( -2 )
+            elif ( control is self.controls['Playlist Button']['control'] ):
+                pass#self.setGenre( -3 )
+            elif ( control is self.controls['Search Button']['control'] ):
+                pass#self.search
             elif ( control is self.controls['Settings Button']['control'] ):
                 self.changeSettings()
             elif ( control is self.controls['Plot Button']['control'] or control is self.controls['Cast Button']['control'] ):
@@ -498,16 +415,6 @@ class GUI( xbmcgui.Window ):
                 self.getTrailerGenre()
             elif ( control is self.controls['Trailer List']['control'] ):
                 self.playTrailer()
-            '''
-            elif ( control is self.controls['Context Menu Favorite Button']['control'] ):
-                self.toggleAsFavorite()
-            elif ( control is self.controls['Context Menu Watched Button']['control'] ):
-                self.toggleAsWatched()
-            elif ( control is self.controls['Context Menu Refresh Button']['control'] ):
-                self.refreshInfo()
-            elif ( control is self.controls['Context Menu Delete Button']['control'] ):
-                self.deleteSavedTrailer()
-            '''
         except: traceback.print_exc()
 
     def onAction( self, action ):
@@ -515,23 +422,17 @@ class GUI( xbmcgui.Window ):
             button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
             control = self.getFocus()
             if ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-                if ( self.context_menu ): self.toggleContextMenu()
-                else: self.exitScript()
-            #elif (button_key == 'B Button' or button_key == 'Remote Back Button' ):
-                #if ( self.context_menu ): self.toggleContextMenu()
-            #    if ( self.genre_id >= 2):
-            #        self.setGenre( -1 )
-            elif ( button_key == 'Remote Title' or button_key == 'White Button' ):
-                if ( control is self.controls['Trailer List']['control'] or self.context_menu ):
-                    #self.toggleContextMenu()
-                    self.contextMenu()
+                self.exitScript()
             elif ( control is self.controls['Trailer List']['control'] ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
                     pass#self.toggleAsFavorite()##change to queue
                 elif (button_key == 'B Button' or button_key == 'Remote Back Button' ):
                     if ( self.genre_id >= 2):
                         self.setGenre( -1 )
-                else: self.showTrailerInfo()
+                elif ( button_key == 'Remote Title' or button_key == 'White Button' ):
+                    self.showContextMenu()
+                else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):
+                    self.showTrailerInfo()
             elif ( control is self.controls['Trailer List Scrollbar Position Indicator']['control'] ):
                 if ( button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Trailer List', -1 )
@@ -544,18 +445,20 @@ class GUI( xbmcgui.Window ):
                     self.pageIndicator( 'Trailer Cast', -1 )
                 elif ( button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Trailer Cast', 1 )
-            elif ( control is self.controls['Exclusives Button']['control'] ):
-                self.setControlNavigation( 'Exclusives Button' )
             elif ( control is self.controls['Newest Button']['control'] ):
                 self.setControlNavigation( 'Newest Button' )
+            elif ( control is self.controls['Exclusives Button']['control'] ):
+                self.setControlNavigation( 'Exclusives Button' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setControlNavigation( 'Genre Button' )
+            elif ( control is self.controls['Favorites Button']['control'] ):
+                self.setControlNavigation( 'Favorites Button' )
+            elif ( control is self.controls['Playlist Button']['control'] ):
+                self.setControlNavigation( 'Playlist Button' )
             elif ( control is self.controls['Search Button']['control'] ):
                 self.setControlNavigation( 'Search Button' )
             elif ( control is self.controls['Settings Button']['control'] ):
                 self.setControlNavigation( 'Settings Button' )
-            elif ( control is self.controls['Favorites Button']['control'] ):
-                self.setControlNavigation( 'Favorites Button' )
         except: traceback.print_exc()
 
     def debugWrite( self, function, action, lines=[], values=[] ):

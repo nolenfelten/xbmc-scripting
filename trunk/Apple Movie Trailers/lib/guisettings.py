@@ -24,14 +24,13 @@ class GUI( xbmcgui.WindowDialog ):
             self.startup.append( genre.title )
     
     def setupGUI( self ):
-        skin_path = os.path.join( self.cwd, 'skins' )
-        self.skin_path = os.path.join( skin_path, self.skin )
-        self.image_path = os.path.join( self.skin_path, 'gfx' )
+        skin_path = os.path.join( self.cwd, 'skins', self.skin )
+        image_path = os.path.join( skin_path, 'gfx' )
         res = self.getResolution()
         if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
         else: skin = 'settings.xml'
-        if ( not os.path.isfile( os.path.join( self.skin_path, skin ) ) ): skin = 'settings.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skin_path, skin ), self.image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
+        if ( not os.path.isfile( os.path.join( skin_path, skin ) ) ): skin = 'settings.xml'
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, skin ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
@@ -229,7 +228,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( button_key == 'B Button' or button_key == 'Remote Back Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
-            else: self.close()
+            else: self.closeDialog()
         elif ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
