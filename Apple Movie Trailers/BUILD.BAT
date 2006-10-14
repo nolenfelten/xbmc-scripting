@@ -18,6 +18,7 @@ Echo Thumbs.db>>"BUILD\exclude.txt"
 Echo Desktop.ini>>"BUILD\exclude.txt"
 Echo.
 
+:: Create release version..
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
 xcopy data "BUILD\%ScriptName%\data" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
@@ -27,6 +28,7 @@ xcopy skins "BUILD\%ScriptName%\skins" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 copy default.* "BUILD\%ScriptName%\"
 Echo.
 
+:: Notify user of completion
 Echo Build Complete - Scroll Up to check for errors.
 Echo Final build is located in the BUILD folder.
 Echo copy: \%ScriptName%\ folder in the \BUILD\ folder.
