@@ -16,8 +16,6 @@ class GUI( xbmcgui.WindowDialog ):
             self.setupVariables()
             self.getGenreCategories()
             self.setControlsValues()
-            ##remove disabled when update script routine is done
-            self.controls['Update Button']['control'].setEnabled( False )
 
     def getGenreCategories( self ):
         for genre in self.genres[2:]:
@@ -197,6 +195,10 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Skin Credits List']['control'].setVisible( visible )
         except: print 'Credits Removed'
             
+    def updateScript( self ):
+        import update
+        updt = update.Update()
+
     def closeDialog( self ):
         self.close()
         
@@ -205,6 +207,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
         elif ( control is self.controls['Ok Button']['control'] ):
             self.saveSettings()
+        elif ( control is self.controls['Update Button']['control'] ):
+            self.updateScript()
         elif ( control is self.controls['Credits Button']['control'] ):
             self.showCredits()
         elif ( control is self.controls['Trailer Quality Button']['control'] ):

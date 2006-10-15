@@ -269,11 +269,11 @@ class GUI( xbmcgui.Window ):
     def setCategoryLabel( self ):
         #self.debugWrite('setCategoryLabel', 2)
         if ( self.genre_id == 1 ):
-            category = _(200)
+            category = _( 200 )
         elif ( self.genre_id == 0 ):
-            category = _(201)
+            category = _( 201 )
         elif ( self.genre_id == -1 ):
-            category = _(202)
+            category = _( 219 )
         else:
             category = self.trailers.genres[self.genre_id].title
         self.controls['Category Label']['control'].setLabel( category )
@@ -299,8 +299,8 @@ class GUI( xbmcgui.Window ):
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
                     self.controls['Trailer Cast']['control'].addItem( xbmcgui.ListItem( actor, '', thumbnail ) )
-            self.calcScrollbarVisibilty('Trailer Cast')
-            self.setScrollbarIndicator('Trailer List')
+            self.calcScrollbarVisibilty( 'Trailer Cast' )
+            self.setScrollbarIndicator( 'Trailer List' )
             self.showOverlays( trailer )
         finally:
             xbmcgui.unlock()
@@ -325,14 +325,14 @@ class GUI( xbmcgui.Window ):
         self.setGenre( self.genre_id )
 
     def playTrailer( self ):
-        #self.debugWrite('PlayTrailer', 2)
-        trailer = self.controls['Trailer List']['control'].getSelectedPosition()
-        trailer_urls = self.trailers.genres[self.genre_id].movies[trailer].trailer_urls
-        if ( self.settings.trailer_quality >= len( trailer_urls )):
-            choice = len( trailer_urls ) - 1
-        else:
-            choice = self.settings.trailer_quality
         try:
+            #self.debugWrite('PlayTrailer', 2)
+            trailer = self.controls['Trailer List']['control'].getSelectedPosition()
+            trailer_urls = self.trailers.genres[self.genre_id].movies[trailer].trailer_urls
+            if ( self.settings.trailer_quality >= len( trailer_urls )):
+                choice = len( trailer_urls ) - 1
+            else:
+                choice = self.settings.trailer_quality
             if ( self.settings.mode == 0 ):
                 filename = trailer_urls[choice].replace( '//', '/' ).replace( '/', '//', 1 )
             elif ( self.settings.mode == 1):
