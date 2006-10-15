@@ -5,9 +5,6 @@
 	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
 	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-		
-	<type>listcontrol</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
-	in place of the spinner control.
 	
 	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags.
 	

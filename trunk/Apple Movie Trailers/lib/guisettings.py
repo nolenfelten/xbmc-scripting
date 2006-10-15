@@ -31,6 +31,7 @@ class GUI( xbmcgui.WindowDialog ):
         guibuilder.GUIBuilder( self, os.path.join( skin_path, skin ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def setupVariables( self ):
+        self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
         self.controller_action = amt_util.setControllerAction()
         self.quality = amt_util.setQuality( self._ )
         self.mode = amt_util.setMode( self._ )
@@ -154,8 +155,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def showCredits( self ):
         try:
+            # Team credits
             self.controls['Credits Label']['control'].setLabel( self._(0) )
-            self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
+            self.controls['Credits Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
             self.controls['Team Credits Label']['control'].setLabel( self._(101) )
             self.controls['Team Credits List']['control'].reset()
             l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
@@ -164,7 +166,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Team Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
             self.controls['Team Credits List']['control'].addItem( l )
-
+            
+            # Additional credits
             self.controls['Additional Credits Label']['control'].setLabel( self._(102) )
             self.controls['Additional Credits List']['control'].reset()
             l = xbmcgui.ListItem( default.__acredits_l1__, default.__acredits_r1__ )
@@ -173,7 +176,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Additional Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( default.__acredits_l3__, default.__acredits_r3__ )
             self.controls['Additional Credits List']['control'].addItem( l )
-
+            
             self.setCreditsVisibility( True )
             self.setFocus( self.controls['Skin Credits List']['control'] )
         except: print 'Credits Removed'
@@ -186,7 +189,7 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             self.controls['Credits Image']['control'].setVisible( visible )
             self.controls['Credits Label']['control'].setVisible( visible )
-            self.controls['Version Label']['control'].setVisible( visible )
+            self.controls['Credits Version Label']['control'].setVisible( visible )
             self.controls['Team Credits Label']['control'].setVisible( visible )
             self.controls['Team Credits List']['control'].setVisible( visible )
             self.controls['Additional Credits Label']['control'].setVisible( visible )
@@ -197,8 +200,9 @@ class GUI( xbmcgui.WindowDialog ):
             
     def updateScript( self ):
         import update
-        updt = update.Update()
-
+        updt = update.Update( language = self._, script = default.__scriptname__, version = default.__version__ )
+        del update
+        
     def closeDialog( self ):
         self.close()
         

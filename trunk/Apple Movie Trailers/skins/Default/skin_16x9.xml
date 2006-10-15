@@ -269,7 +269,6 @@
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
-			<!--texturefocus>\button-focus_arrows_16x9.png</texturefocus-->
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
@@ -575,7 +574,6 @@
 			<onright>215</onright>
 			<onup>100</onup>
 			<ondown>215</ondown>
-			<!--texturefocus>\button-focus_arrows_16x9.png</texturefocus-->
 			<!--visible>Control.IsVisible(216)</visible-->
 			<visible>false</visible>
 			<onclick>-</onclick>
