@@ -2,12 +2,11 @@
 
 <!--
 	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag must NOT be changed,
-	the <type> tag for labels may be changed to button. This allows <shadowcolor> tag to be used.
-	(if changing <type>label</type> to <type>button</type>, set <texturenofocus>-</texturenofocus>)
+	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
 	
-	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags,
-	so make sure all necessary tags are included. (This was done for speed, but may change)
+	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags.
 	
 	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
 	
@@ -62,6 +61,20 @@
 			<label>0</label>
 		</control>
 
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Version Label</description>
+			<type>label</type>
+			<id>1</id>
+			<posx>400</posx>
+			<posy>6</posy>
+			<width>150</width>
+			<align>right</align>
+			<font>special13</font>
+			<textcolor>DDced8da</textcolor>
+			<label>-</label>
+		</control>
+
 		<!-- buttons -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -83,7 +96,7 @@
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
-			<onup>210</onup>
+			<onup>200</onup>
 			<ondown>20</ondown>
 		</control>
 
@@ -200,7 +213,7 @@
 			<onleft>150</onleft>
 			<onright>100</onright>
 			<onup>50</onup>
-			<ondown>210</ondown>
+			<ondown>200</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -421,7 +434,7 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Version Label</description>
+			<description>Credits Version Label</description>
 			<type>label</type>
 			<id>602</id>
 			<posx>330</posx>
@@ -430,7 +443,7 @@
 			<align>right</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>213</label>
+			<label>-</label>
 			<visible>false</visible>
 		</control>
 

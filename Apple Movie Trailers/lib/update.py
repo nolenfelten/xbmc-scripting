@@ -26,14 +26,14 @@ class Parser( SGMLParser ):
             self.url_found = True
 
 class Update:
-    def __init__( self, script = 'Apple Movie Trailers', version = '0' ):
+    def __init__( self, language, script = 'Apple Movie Trailers', version = '0' ):
         try:
+            self._ = language
             self.dialog = xbmcgui.DialogProgress()
-            self.dialog.create( script, 'Fetching current tagged versions...' )
+            self.dialog.create( script, self._( 90 ) )
             script_files = []
             self.script = script.replace( ' ', '%20' )
             self.base_url = 'http://xbmc-scripting.googlecode.com/svn'
-            
             # get version tags
             htmlsource = self.getHTMLSource( '%s/tags/%s' % ( self.base_url, self.script, ) )
             if ( htmlsource ):
@@ -41,10 +41,9 @@ class Update:
                 url = url[url.find( ': ' ) + 2:].replace( ' ', '%20' )
             else: raise
             self.dialog.close()
-            
             if ( version < versions[-1][:-1] ):
-                if ( xbmcgui.Dialog().yesno( script, 'Version %s is newer.' % ( versions[-1][:-1], ), 'Would you like to upgrade?' ) ):
-                    self.dialog.create( script, 'Fetching file list', 'Please wait...' )
+                if ( xbmcgui.Dialog().yesno( script, '%s %s %s.' % ( self._( 100 ), versions[-1][:-1], self._( 91 ) ), self._( 92 ) ) ):
+                    self.dialog.create( script, self._( 93 ), self._( 94 ) )
                     folders = ['%s/%s' % ( url, versions[-1], )]
                     while folders:
                         try:
@@ -58,17 +57,16 @@ class Update:
                                 for folder in dirs:
                                     folders.append( '%s/%s' % ( folders[0], folder, ) )
                             else: 
-                                print 'ERROR: trying to retrieve files and folders.'
                                 raise
                             folders = folders[1:]
                         except:
                             folders = None
                     self.getFiles( script_files, versions[-1][:-1] )
             else:
-                xbmcgui.Dialog().ok( script, 'Your version is up to date.' )
+                xbmcgui.Dialog().ok( script, self._( 95 ) )
         except:
             self.dialog.close()
-            xbmcgui.Dialog().ok( script, 'There was an error upgrading.' )
+            xbmcgui.Dialog().ok( script, self._( 96 ) )
         
     def getFiles( self, script_files, version ):
         try:
@@ -77,7 +75,7 @@ class Update:
                 path = items[0].replace( '/tags/%s/' % ( self.script, ), 'Q:\\scripts\\%s_v' % ( self.script, ) ).replace( '%20', ' ' ).replace( '/', '\\' )
                 file = items[1].replace( '%20', ' ' )
                 pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
-                self.dialog.update( pct, 'Fetching files...', 'current path: %s' % ( path, ), 'current file: %s' % ( file, ) )
+                self.dialog.update( pct, '%s %s' % ( self._( 68 ), url, ), '%s %s' % ( self._( 97 ), path, ), '%s %s' % ( self._( 98 ), file, ) )
                 if ( self.dialog.iscanceled() ): raise
                 if ( not os.path.isdir( path ) ): os.makedirs( path )
                 urllib.urlretrieve( '%s%s' % ( self.base_url, url, ), '%s\\%s' % ( path, file, ) )
@@ -85,7 +83,7 @@ class Update:
             raise
         else:
             self.dialog.close()
-            xbmcgui.Dialog().ok( self.script.replace( '%20', ' ' ), 'Your new version was saved to:', 'Q:\\scripts\\%s_v%s\\' % ( self.script.replace( '%20', ' ' ), version, ) )
+            xbmcgui.Dialog().ok( self.script.replace( '%20', ' ' ), self._( 99 ), 'Q:\\scripts\\%s_v%s\\' % ( self.script.replace( '%20', ' ' ), version, ) )
             
     def getHTMLSource( self, url ):
         try:
