@@ -58,15 +58,17 @@
   <string id="209">Credits</string>
   <string id="210">Ok</string>
   <string id="211">Cancel</string>
-  <string id="212">* Skin dependent</string>
+  <string id="212">*Skin dependent</string>
   <string id="213">Version</string>
   <string id="214">choose skin</string>
   <string id="215">Plot</string>
   <string id="216">Cast</string>
   <string id="217">Favorites</string>
   <string id="218">Playlist</string>
+  <string id="219">Genre</string>
   <string id="220">Full Screen Visualization</string>
   <string id="221">Full Screen Video</string>
+  <string id="222">Studio...</string>
   
   <!-- Settings -->
   <string id="300">Trailer Quality</string>
