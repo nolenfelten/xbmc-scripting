@@ -174,8 +174,8 @@ class GUI( xbmcgui.Window ):
     def setScrollbarIndicator( self, list_control ):
         if ( self.controls[list_control]['special'] ):
             offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )]['height'] - self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['height'] ) / float( self.controls[list_control]['control'].size() - 1 )
-            posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )]['posy'] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ))
-            self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'], posy )
+            posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )]['posy'] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
+            self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'] + self.coordinates[0], posy + self.coordinates[1] )
 
     def setSelection( self, list_control, pos ):
         #self.debugWrite('setSelection', 2)
@@ -306,8 +306,8 @@ class GUI( xbmcgui.Window ):
             xbmcgui.unlock()
 
     def showOverlays( self, trailer ):
-        posx = self.controls['Trailer Favorite Overlay']['posx']
-        posy = self.controls['Trailer Favorite Overlay']['posy']
+        posx = self.controls['Trailer Favorite Overlay']['posx'] + self.coordinates[0]
+        posy = self.controls['Trailer Favorite Overlay']['posy'] + self.coordinates[1]
         favorite = self.trailers.genres[self.genre_id].movies[trailer].favorite
         self.controls['Trailer Favorite Overlay']['control'].setVisible( favorite )
         posx = posx + ( favorite * self.controls['Trailer Favorite Overlay']['width'] )
