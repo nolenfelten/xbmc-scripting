@@ -98,9 +98,10 @@ class HTTP:
         if self.flat_cache:
             filename = 'flat_cache' + os.path.splitext( url )[1]
         elif self.actual_filename:
-            filename = self.title#url.split( '/' )[-1]
+            filename = self.title
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
+            filename = '%s\\%s' % ( filename[0], filename, )
         # ..and the filepath
         filepath = os.path.join( self.cache_dir, filename )
         return filepath
@@ -169,8 +170,8 @@ class HTTP:
             raise
 
         # create the cache dir if it doesn't exist
-        if not os.path.isdir( self.cache_dir ):
-            os.makedirs( self.cache_dir )
+        if not os.path.isdir( os.path.split( filepath )[0] ):#self.cache_dir ):
+            os.makedirs( os.path.split( filepath )[0] )#self.cache_dir )
 
         # write the data to the cache
         try:
