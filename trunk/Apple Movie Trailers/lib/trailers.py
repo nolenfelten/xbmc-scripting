@@ -209,7 +209,7 @@ class Movie( Info ):
             # xml parsing
             element = fetcher.urlopen( self.url )
             #fix for badly formed xml
-            element = element.replace( ' & ', ' &amp; ' )
+            #element = element.replace( ' & ', ' &amp; ' )
             element = ET.fromstring( element )
             if show_dialog:
                 self.dialog.update( 20 )
@@ -497,6 +497,8 @@ class Trailers( Info ):
         pass
 
     def loadDatabase( self ):
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( _(83), _(67) )
         datafile = None
         try:
             if not os.path.isfile( self.DATAFILE ):
@@ -517,7 +519,9 @@ class Trailers( Info ):
                 if ET.iselement( root ):
                     element = root.getchildren()[0]
                     self.deserialize( element )
+            dialog.close()
         except:
+            dialog.close()
             if datafile:
                 datafile.close()
             traceback.print_exc()
@@ -529,6 +533,8 @@ class Trailers( Info ):
             datafile.close()
 
     def saveDatabase( self ):
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( _(84), _(67) )
         root = ET.Element( 'AMT' )
         root.set( 'version', default.__version__ )
         root.append( self.serialize() )
@@ -544,7 +550,9 @@ class Trailers( Info ):
             datafile = open( self.DATAFILE, 'w' )
             data = ET.tostring( root )
             datafile.write( data )
+            dialog.close()
         except:
+            dialog.close()
             if datafile:
                 datafile.close()
             traceback.print_exc()
