@@ -37,6 +37,8 @@
   <string id="80">KB/s</string>
   <string id="81">All the required modules could not be found!</string>
   <string id="82">Are you sure you want to delete</string>
+  <string id="83">Loading database...</string>
+  <string id="84">Saving database...</string>
 
   <string id="90">Fetching current tagged versions...</string>
   <string id="91">is newer</string>
