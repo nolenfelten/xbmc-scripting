@@ -6,7 +6,7 @@ import default
 import language
 import pil_util
 
-AMT_PK_COMPATIBLE_VERSIONS = [ '0.92', '0.92.1' ]
+AMT_PK_COMPATIBLE_VERSIONS = [ '0.92.2' ]
 
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
