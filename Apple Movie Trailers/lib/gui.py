@@ -172,7 +172,7 @@ class GUI( xbmcgui.Window ):
             else: self.showScrollbar( False, list_control )
 
     def setScrollbarIndicator( self, list_control ):
-        if ( self.controls[list_control]['special'] ):
+        if ( self.controls[list_control]['control'].size() > int( self.controls[list_control]['special'] ) ):
             offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )]['height'] - self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['height'] ) / float( self.controls[list_control]['control'].size() - 1 )
             posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )]['posy'] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
             self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'] + self.coordinates[0], posy + self.coordinates[1] )
@@ -254,7 +254,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Plot']['control'].setVisible( not self.display_cast and not genre )
             self.controls['Trailer Plot']['control'].setEnabled( not self.display_cast and not genre )
             self.controls['Trailer Cast']['control'].setVisible( self.display_cast and not genre )
-            self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre )
+            self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre and self.cast_exists )
             self.calcScrollbarVisibilty('Trailer Cast')
         finally:
             xbmcgui.unlock()
@@ -289,17 +289,25 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Poster']['control'].setImage( poster )
             self.controls['Trailer Title']['control'].setLabel( self.trailers.genres[self.genre_id].movies[trailer].title )
             #print 'showTrailerInfo: %s' % self.trailers.genres[self.genre_id].movies[trailer].title
-            plot = self.trailers.genres[self.genre_id].movies[trailer].plot
+            # Plot
             self.controls['Trailer Plot']['control'].reset()
-            if ( plot ):
+            plot = self.trailers.genres[self.genre_id].movies[trailer].plot
+            if ( plot != 'None' ):
                 self.controls['Trailer Plot']['control'].setText( plot )
+            else: self.controls['Trailer Plot']['control'].setText( _( 400 ) )
+            # Cast
             self.controls['Trailer Cast']['control'].reset()
             cast = self.trailers.genres[self.genre_id].movies[trailer].cast
             if ( cast ):
+                self.cast_exists = True
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
                     self.controls['Trailer Cast']['control'].addItem( xbmcgui.ListItem( actor, '', thumbnail ) )
-            self.calcScrollbarVisibilty( 'Trailer Cast' )
+            else: 
+                self.cast_exists = False
+                self.controls['Trailer Cast']['control'].addItem( _( 401 ) )
+            self.showPlotCastControls( False )
+            #self.calcScrollbarVisibilty( 'Trailer Cast' )
             self.setScrollbarIndicator( 'Trailer List' )
             self.showOverlays( trailer )
         finally:
