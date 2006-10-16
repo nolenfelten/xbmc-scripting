@@ -100,7 +100,8 @@
   <string id="340">Check version on startup</string>
 
   <!-- Movie/Genre Information -->
-  <string id="400">No description could be retrieved for this title.</string>
+  <string id="400">*No description could be retrieved for this title.</string>
+  <string id="401">*No cast listing could be retrieved for this title.</string>
 
   <!-- Context Menu -->
   <string id="500">Add to Playlist</string>

@@ -6,7 +6,7 @@ import default
 import language
 import pil_util
 
-AMT_PK_COMPATIBLE_VERSIONS = [ '0.92.2' ]
+AMT_PK_COMPATIBLE_VERSIONS = [ '0.92.3' ]
 
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
@@ -192,7 +192,7 @@ class Movie( Info ):
         self.__thumbnail__ = 'None'
         self.__thumbnail_watched__ = 'None'
         self.poster = 'None'
-        self.plot = _(400) # No description could be retrieved for this title.
+        self.plot = 'None' # Do not localize the database _(400) # No description could be retrieved for this title.
         self.cast = list()
         self.trailer_urls = list()
         self.watched = False
@@ -246,7 +246,7 @@ class Movie( Info ):
                     if len( actor ):
                         cast += [ actor ]
             except:
-                cast = list()
+                pass#cast = list()
             self.cast = cast
             if show_dialog:
                 self.dialog.update( 80 )
