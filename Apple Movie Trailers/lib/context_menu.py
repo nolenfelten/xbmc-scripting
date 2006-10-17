@@ -48,25 +48,12 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Context Menu Button6']['control'].setLabel( self._( 509 ) )
     
     def setMenuPosition( self ):
-        #posx = self.controls['Context Menu Background']['posx'] + self.coordinates[0]
-        #posy = self.controls['Context Menu Background']['posy'] + self.coordinates[1]
         button_height = self.controls['Context Menu Button1']['height'] + 2
         height = self.controls['Context Menu Background']['height']
         height -=  ( button_height * ( not self.saved ) )
         self.controls['Context Menu Background']['control'].setHeight( height )
-        #self.controls['Context Menu Background']['control'].setPosition( posx, posy )
     
     def setMenuVisibility( self ):
-        self.controls['Context Menu Background']['control'].setVisible( True )
-        self.controls['Context Menu Button1']['control'].setVisible( True )
-        self.controls['Context Menu Button1']['control'].setEnabled( True )
-        self.controls['Context Menu Button2']['control'].setVisible( True )
-        self.controls['Context Menu Button2']['control'].setEnabled( True )
-        self.controls['Context Menu Button3']['control'].setVisible( True )
-        self.controls['Context Menu Button3']['control'].setEnabled( True )
-        self.controls['Context Menu Button4']['control'].setVisible( True )
-        self.controls['Context Menu Button4']['control'].setEnabled( True )
-        self.controls['Context Menu Button5']['control'].setVisible( True )
         self.controls['Context Menu Button6']['control'].setVisible( self.saved )
         self.controls['Context Menu Button6']['control'].setEnabled( self.saved )
         self.setFocus( self.controls['Context Menu Button1']['control'] )
@@ -82,12 +69,12 @@ class GUI( xbmcgui.WindowDialog ):
         self.closeDialog()
 
     def refreshInfo( self, refresh_all ):
+        self.closeDialog()
         if ( refresh_all ):
-            self.win.trailers.genres[self.win.genre_id].__update__()
+            self.win.trailers.genres[self.win.genre_id].update_all( force_update = True )
         else:
             self.win.trailers.genres[self.win.genre_id].movies[self.trailer].__update__()
         self.win.showTrailers( self.trailer )
-        self.closeDialog()
         
     def deleteSavedTrailer( self ):
         saved_trailer = self.win.trailers.genres[self.win.genre_id].movies[self.trailer].saved
