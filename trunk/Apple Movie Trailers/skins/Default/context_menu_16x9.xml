@@ -34,7 +34,7 @@
 			<width>180</width>
 			<height>229</height>
 			<texture>\dialog-panel.png</texture>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -59,7 +59,7 @@
 			<onright>1000</onright>
 			<onup>1050</onup>
 			<ondown>1010</ondown>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -84,7 +84,7 @@
 			<onright>1010</onright>
 			<onup>1000</onup>
 			<ondown>1020</ondown>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -109,7 +109,7 @@
 			<onright>1020</onright>
 			<onup>1010</onup>
 			<ondown>1030</ondown>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -134,7 +134,7 @@
 			<onright>1030</onright>
 			<onup>1020</onup>
 			<ondown>1040</ondown>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -159,7 +159,7 @@
 			<onright>1040</onright>
 			<onup>1030</onup>
 			<ondown>1050</ondown>
-			<visible>false</visible>
+			<visible>true</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
