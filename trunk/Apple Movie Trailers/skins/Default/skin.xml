@@ -182,18 +182,18 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
-			<ondown>40</ondown>
+			<ondown>35</ondown>
 			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
+			<description>Studio Button</description>
 			<type>button</type>
-			<description>Favorites Button</description>
-			<id>40</id>
-			<label>217</label>
+			<id>35</id>
+			<label>222</label>
 			<posx>50</posx>
-			<posy>268</posy>
+			<posy>231</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -206,6 +206,30 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
+			<ondown>40</ondown>
+			<onclick>-</onclick>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<type>button</type>
+			<description>Favorites Button</description>
+			<id>40</id>
+			<label>217</label>
+			<posx>50</posx>
+			<posy>305</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>35</onup>
 			<ondown>45</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -217,7 +241,7 @@
 			<id>45</id>
 			<label>218</label>
 			<posx>50</posx>
-			<posy>305</posy>
+			<posy>342</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -241,7 +265,7 @@
 			<id>50</id>
 			<label>203</label>
 			<posx>50</posx>
-			<posy>379</posy>
+			<posy>416</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -299,6 +323,19 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
+			<description>Trailer List Scrollbar Up Arrow NA</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>482</posx>
+			<posy>121</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\scrollbar-up-arrow-na.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
 			<description>Trailer List Scrollbar Middle</description>
 			<type>image</type>
 			<id>1</id>
@@ -320,6 +357,19 @@
 			<width>16</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer List Scrollbar Down Arrow NA</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>482</posx>
+			<posy>338</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\scrollbar-down-arrow-na.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -348,6 +398,45 @@
 			<onclick>-</onclick>
 		</control>
 
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Trailer List Backdrop</description>
+			<type>listcontrol</type>
+			<id>1</id>
+			<font>font13</font>
+			<posx>211</posx>
+			<posy>121</posy>
+			<width>270</width>
+			<height>260</height>
+			<textcolor>00FFFFFF</textcolor>
+			<selectedcolor>FFFFFF00</selectedcolor>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureheight>26</textureheight>
+			<itemwidth>10</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>true</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
+			<image>-</image>
+			<textxoff>3</textxoff>
+			<suffix>|</suffix>
+			<aligny>center</aligny>
+			<visible>false</visible>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+		</control>
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List</description>
@@ -365,7 +454,7 @@
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
 			<texturefocus>\list-focus.png</texturefocus>
-			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<texturenofocus>-</texturenofocus>
 			<textureheight>26</textureheight>
 			<itemwidth>10</itemwidth>
 			<itemheight>22</itemheight>
@@ -377,7 +466,7 @@
 			<aligny>center</aligny>
 			<onup>100</onup>
 			<ondown>100</ondown>
-			<onleft>10</onleft>
+			<onleft>110</onleft>
 			<onright>90</onright>
 			<visible>false</visible>
 		</control>
@@ -425,7 +514,7 @@
 			<aligny>center</aligny>
 			<onup>110</onup>
 			<ondown>110</ondown>
-			<onleft>100</onleft>
+			<onleft>10</onleft>
 			<onright>210</onright>
 			<visible>false</visible>
 		</control>
@@ -617,6 +706,19 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
+			<description>Trailer Cast Scrollbar Up Arrow NA</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>647</posx>
+			<posy>403</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\scrollbar-up-arrow-na.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
 			<description>Trailer Cast Scrollbar Middle</description>
 			<type>image</type>
 			<id>1</id>
@@ -638,6 +740,19 @@
 			<width>16</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Cast Scrollbar Down Arrow NA</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>647</posx>
+			<posy>490</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>\scrollbar-down-arrow-na.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -666,6 +781,36 @@
 			<onclick>-</onclick>
 		</control>
 
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Trailer Cast Backdrop</description>
+			<type>listcontrol</type>
+			<id>1</id>
+			<posx>211</posx>
+			<posy>403</posy>
+			<width>435</width>
+			<height>135</height>
+			<font>font12</font>
+			<textcolor>00FFFFFF</textcolor>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureheight>26</textureheight>
+			<itemwidth>16</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>true</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+			<label> </label>
+		</control>
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer Cast</description>
@@ -686,7 +831,7 @@
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
 			<texturefocus>\list-focus.png</texturefocus>
-			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<texturenofocus>-</texturenofocus>
 			<textureheight>26</textureheight>
 			<itemwidth>16</itemwidth>
 			<itemheight>22</itemheight>
