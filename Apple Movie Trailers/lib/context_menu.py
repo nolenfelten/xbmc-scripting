@@ -115,3 +115,5 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
         elif ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.closeDialog()
+        elif ( button_key == 'Remote Title' or button_key == 'White Button' ):
+            self.closeDialog()

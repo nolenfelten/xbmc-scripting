@@ -64,6 +64,7 @@ class GUI( xbmcgui.Window ):
         else:
             try:
                 ## enable when ready
+                self.controls['Studio Button']['control'].setEnabled( False )
                 self.controls['Search Button']['control'].setEnabled( False )
                 self.controls['Favorites Button']['control'].setEnabled( False )
                 self.controls['Playlist Button']['control'].setEnabled( False )
@@ -166,11 +167,22 @@ class GUI( xbmcgui.Window ):
         if ( self.controls[list_control]['special'] ):
             if ( self.genre_id != -1 ):
                 visible = ( self.controls[list_control]['control'].size() > self.controls[list_control]['special'] )
-                if ( list_control == 'Trailer Cast' and visible ): visible = self.display_cast
-                self.showScrollbar( visible, list_control )
+                visible2 = not visible
+                if ( list_control == 'Trailer Cast' and not self.display_cast ) :
+                    visible = False
+                    visible2 = False
+                self.showScrollbar( visible, visible2, list_control )
                 self.setSelection( list_control, 0 )
-            else: self.showScrollbar( False, list_control )
+            else: self.showScrollbar( False, False, list_control )
 
+    def showScrollbar( self, visible, visible2, list_control ):
+        self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible )
+        self.controls['%s Scrollbar Up Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
+        self.controls['%s Scrollbar Middle' % ( list_control, )]['control'].setVisible( visible or visible2 )
+        self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible )
+        self.controls['%s Scrollbar Down Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
+        self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setVisible( visible )
+    
     def setScrollbarIndicator( self, list_control ):
         if ( self.controls[list_control]['control'].size() > int( self.controls[list_control]['special'] ) ):
             offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )]['height'] - self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['height'] ) / float( self.controls[list_control]['control'].size() - 1 )
@@ -209,15 +221,9 @@ class GUI( xbmcgui.Window ):
         if ( genre_id != -1 ): self.setFocus( self.controls['Trailer List']['control'] )
         else: self.setFocus( self.controls['Genre List']['control'] )
 
-    def showScrollbar( self, visible, list_control ):
-        self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible )
-        self.controls['%s Scrollbar Middle' % ( list_control, )]['control'].setVisible( visible )
-        self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible )
-        self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setVisible( visible )
-    
     def setControlNavigation( self, button ):
         #self.debugWrite('setControlNavigation', 2)
-        self.controls['Trailer List']['control'].controlLeft( self.controls[button]['control'] )
+        self.controls['Genre List']['control'].controlLeft( self.controls[button]['control'] )
         self.controls['Trailer Cast Scrollbar Position Indicator']['control'].controlRight( self.controls[button]['control'] )
         
     def showControls( self, genre ):
@@ -227,6 +233,7 @@ class GUI( xbmcgui.Window ):
             xbmcgui.lock()
             self.controls['Genre List']['control'].setVisible( genre )
             self.controls['Genre List']['control'].setEnabled( genre )
+            self.controls['Trailer List Backdrop']['control'].setVisible( not genre )
             self.controls['Trailer List']['control'].setVisible( not genre )
             self.controls['Trailer List']['control'].setEnabled( not genre )
             self.controls['Trailer Count Label']['control'].setVisible( not genre )
@@ -248,13 +255,14 @@ class GUI( xbmcgui.Window ):
             xbmcgui.lock()
             #self.debugWrite('showPlotCastControls', 2)
             self.controls['Plot Button']['control'].setVisible( self.display_cast and not genre )
-            self.controls['Plot Button']['control'].setEnabled( self.display_cast and not genre )
+            #self.controls['Plot Button']['control'].setEnabled( self.display_cast and not genre )
             self.controls['Cast Button']['control'].setVisible( not self.display_cast and not genre )
-            self.controls['Cast Button']['control'].setEnabled( not self.display_cast and not genre )
+            #self.controls['Cast Button']['control'].setEnabled( not self.display_cast and not genre )
             self.controls['Trailer Plot']['control'].setVisible( not self.display_cast and not genre )
             self.controls['Trailer Plot']['control'].setEnabled( not self.display_cast and not genre )
             self.controls['Trailer Cast']['control'].setVisible( self.display_cast and not genre )
             self.controls['Trailer Cast']['control'].setEnabled( self.display_cast and not genre and self.cast_exists )
+            self.controls['Trailer Cast Backdrop']['control'].setVisible( self.display_cast and not genre )
             self.calcScrollbarVisibilty('Trailer Cast')
         finally:
             xbmcgui.unlock()
@@ -409,6 +417,8 @@ class GUI( xbmcgui.Window ):
                 self.setGenre( 0 )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setGenre( -1 )
+            elif ( control is self.controls['Studio Button']['control'] ):
+                pass#self.setGenre( -1 )
             elif ( control is self.controls['Favorites Button']['control'] ):
                 pass#self.setGenre( -2 )
             elif ( control is self.controls['Playlist Button']['control'] ):
@@ -459,6 +469,8 @@ class GUI( xbmcgui.Window ):
                 self.setControlNavigation( 'Exclusives Button' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setControlNavigation( 'Genre Button' )
+            elif ( control is self.controls['Studio Button']['control'] ):
+                self.setControlNavigation( 'Studio Button' )
             elif ( control is self.controls['Favorites Button']['control'] ):
                 self.setControlNavigation( 'Favorites Button' )
             elif ( control is self.controls['Playlist Button']['control'] ):
