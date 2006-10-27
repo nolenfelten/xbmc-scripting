@@ -9,7 +9,7 @@ __scriptname__ = 'Apple Movie Trailers'
 __author__ = 'Apple Movie Trailers (AMT) Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, efnet/#xbmc-scripting'
-__version__ = '0.92.3'
+__version__ = '0.93'
 
 __credits_l1__ = 'Head Developer & Coder'
 __credits_r1__ = 'Killarny'
@@ -25,30 +25,11 @@ __acredits_r2__ = 'Spiff'
 __acredits_l3__ = 'Language Routine'
 __acredits_r3__ = 'Rockstar & Donno'
 
-def py_cleanup():
-    try:
-        for root, dirs, files in os.walk( scriptpath, topdown = False ):
-            if 'cache' in root:
-                continue
-            for name in files:
-                if os.path.splitext( name )[1] in [ '.pyc', '.pyo' ]:
-                    os.remove( os.path.join( root, name ) )
-    except:
-        pass
-
 if __name__ == '__main__':
     try:
-        try:
-            ui = gui.GUI()
-            if ui.SUCCEEDED:
-                ui.doModal()
-        except:
-            traceback.print_exc()
-    finally:
-        try:
-            ui.close()
+        ui = gui.GUI()
+        if ui.SUCCEEDED:
+            ui.doModal()
             del ui
-        except:
-            pass
-        #py_cleanup()
-
+    except:
+        traceback.print_exc()
