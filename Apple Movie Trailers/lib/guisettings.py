@@ -136,7 +136,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup List']['control'].setVisible( visible )
         
     def setSkinSelection( self ):
-        self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel()
+        self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel().replace( '*', '' )
         #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
         self.setControlsValues()
         self.hidePopup()
