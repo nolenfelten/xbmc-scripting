@@ -1,6 +1,12 @@
 import os, urllib2, md5, traceback
 import xbmc, xbmcgui
 import language, time
+import socket
+
+# timeout in seconds
+timeout = 10
+socket.setdefaulttimeout(timeout)
+
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
@@ -98,7 +104,10 @@ class HTTP:
         if self.flat_cache:
             filename = 'flat_cache' + os.path.splitext( url )[1]
         elif self.actual_filename:
-            filename = self.title
+            if len( self.title ) > 42:
+                self.title = '%s_%s' % ( self.title[0:37], self.title[-4:] )
+            filename = self.title.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
+            filename = filename.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
             filename = '%s\\%s' % ( filename[0], filename, )
