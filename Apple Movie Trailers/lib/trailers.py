@@ -155,7 +155,7 @@ class Trailers:
                     trailer_urls = self.loadGenreInfo( genre, 2**genre_id, genre_dict[genre], cnt, total_cnt, pct_sect )
                     if ( trailer_urls ):
                         success = DB.addRecord( ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls) ), 'Genres' )
-                        self.categories += [Category( ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0 ) )]
+                        self.categories += [Category( ( genre, len( trailer_urls), genre_dict[genre], 2**genre_id, 0 ) )]
                         ##success = DB.addRecord( ( genre, genre_dict[genre], 2**genre_id, 0, repr( [] ) ), 'Genres' )
                     genre_id += 1
                 self.dialog.close()
