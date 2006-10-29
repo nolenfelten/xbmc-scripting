@@ -1,6 +1,11 @@
 import urllib, os, sys, xbmcgui
 sys.path.append( os.path.join( os.path.dirname( sys.modules['update'].__file__ ), '_xmlplus.zip' ) )
 from sgmllib import SGMLParser
+import socket
+
+# timeout in seconds
+timeout = 10
+socket.setdefaulttimeout(timeout)
 
 class Parser( SGMLParser ):
     def reset( self ):

@@ -14,12 +14,15 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not self.SUCCEEDED ): self.close()
         else:
             self.setupVariables()
-            self.getGenreCategories()
+            #self.getGenreCategories()
             self.setControlsValues()
 
-    def getGenreCategories( self ):
-        for genre in self.genres[2:]:
-            self.startup.append( genre.title )
+    ##def getGenreCategories( self ):
+    ##    for cnt, genre in enumerate( self.genres ):
+    ##        if ( genre.title == self.settings.startup_category_id ):
+    ##            self.startup_id = cnt
+    ##            break
+            #self.startup.append( genre.title )
     
     def setupGUI( self ):
         skin_path = os.path.join( self.cwd, 'skins', self.skin )
@@ -35,8 +38,9 @@ class GUI( xbmcgui.WindowDialog ):
         self.controller_action = amt_util.setControllerAction()
         self.quality = amt_util.setQuality( self._ )
         self.mode = amt_util.setMode( self._ )
-        self.startup = amt_util.setStartupCategory( self._ )
+        #self.startup = amt_util.setStartupCategory( self._ )
         self.thumbnail = amt_util.setThumbnailDisplay( self._ )
+        ##self.getGenreCategories()
         
     def setControlsValues( self ):
         self.controls['Trailer Quality Button']['control'].setLabel( '%s: [%s]' % ( self._(300), self.quality[self.settings.trailer_quality], ) )
@@ -44,7 +48,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Save Folder Button']['control'].setLabel( '%s: [%s]' % ( self._(302), self.settings.save_folder, ) )
         self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode == 2 )
         self.controls['Skin Button']['control'].setLabel( '%s: [%s]' % ( self._(303), self.settings.skin, ) )
-        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.startup[self.settings.startup_category_id], ) )
+        self.controls['Startup Category Button']['control'].setLabel( '%s: [%s]' % ( self._(304), self.genres[self.settings.startup_category_id].title ) )
         self.controls['Thumbnail Display Button']['control'].setLabel( '%s: [%s]' % ( self._(305), self.thumbnail[self.settings.thumbnail_display], ) )
 
     def getSettings( self ):
@@ -76,9 +80,9 @@ class GUI( xbmcgui.WindowDialog ):
         self.setControlsValues()
 
     def toggleStartupCategory( self ):
-        c = self.settings.startup_category_id + 1
-        if ( c == ( len( self.startup ) ) ): c = 0
-        self.settings.startup_category_id = c
+        self.settings.startup_category_id += 1
+        if ( self.settings.startup_category_id == ( len( self.genres ) ) ): self.settings.startup_category_id = 0
+        #self.settings.startup_category_id = self.genres[self.startup_category_id].title
         #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
         
@@ -136,7 +140,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup List']['control'].setVisible( visible )
         
     def setSkinSelection( self ):
-        self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel().replace( '*', '' )
+        self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel()
         #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
         self.setControlsValues()
         self.hidePopup()

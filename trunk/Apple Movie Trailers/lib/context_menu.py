@@ -19,7 +19,7 @@ class GUI( xbmcgui.WindowDialog ):
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
         self.trailer = self.win.controls['Trailer List']['control'].getSelectedPosition()
-        self.saved = self.win.trailers.genres[self.win.genre_id].movies[self.trailer].saved != 'None'
+        self.saved = self.win.trailers.movies[self.trailer].saved != ''
         
     def setupGUI( self ):
         skin_path = os.path.join( self.cwd, 'skins', self.win.skin )
@@ -41,8 +41,11 @@ class GUI( xbmcgui.WindowDialog ):
         
     def setButtonLabels( self ):
         self.controls['Context Menu Button1']['control'].setLabel( self._( 500 ) )
-        self.controls['Context Menu Button2']['control'].setLabel( self._( 502 + self.win.trailers.genres[self.win.genre_id].movies[self.trailer].favorite ) )
-        self.controls['Context Menu Button3']['control'].setLabel( self._( 504 + self.win.trailers.genres[self.win.genre_id].movies[self.trailer].watched ) )
+        self.controls['Context Menu Button2']['control'].setLabel( self._( 502 + self.win.trailers.movies[self.trailer].favorite ) )
+        watched = self.win.trailers.movies[self.trailer].watched
+        if ( watched ): watched_lbl = '  (%d)' % ( watched, )
+        else: watched_lbl = ''
+        self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
         self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
         self.controls['Context Menu Button5']['control'].setLabel( self._( 507 ) )
         self.controls['Context Menu Button6']['control'].setLabel( self._( 509 ) )
@@ -59,45 +62,58 @@ class GUI( xbmcgui.WindowDialog ):
         self.setFocus( self.controls['Context Menu Button1']['control'] )
         
     def toggleAsWatched( self ):
-        self.win.trailers.genres[self.win.genre_id].movies[self.trailer].watched = not self.win.trailers.genres[self.win.genre_id].movies[self.trailer].watched
-        self.win.showTrailers( self.trailer )
+        watched = not ( self.win.trailers.movies[self.trailer].watched > 0 )
+        self.win.markAsWatched( watched, self.win.trailers.movies[self.trailer].title, self.trailer )
         self.closeDialog()
   
     def toggleAsFavorite( self ):
-        self.win.trailers.genres[self.win.genre_id].movies[self.trailer].favorite = not self.win.trailers.genres[self.win.genre_id].movies[self.trailer].favorite
-        self.win.showTrailers( self.trailer )
+        favorite = not self.win.trailers.movies[self.trailer].favorite
+        success = self.win.trailers.updateRecord( ( 'favorite', ), 'Movies', ( favorite, ), key_value = self.win.trailers.movies[self.trailer].title )
+        if ( success ):
+            self.win.trailers.movies[self.trailer].favorite = favorite
+            if ( self.win.category_id == -3 ):
+                params = ( 1, )
+                choice = self.trailer - 1 + ( self.trailer == 0 )
+                force_update = True
+            else: 
+                params = self.win.params
+                choice = self.trailer
+                force_update = False
+            self.win.showTrailers( self.win.sql, params = params, choice = choice, force_update = force_update )
         self.closeDialog()
-
+    
     def refreshInfo( self, refresh_all ):
         self.closeDialog()
+        '''
         if ( refresh_all ):
-            self.win.trailers.genres[self.win.genre_id].update_all( force_update = True )
+            self.win.trailers.update_all( force_update = True )
         else:
-            self.win.trailers.genres[self.win.genre_id].movies[self.trailer].__update__()
-        self.win.showTrailers( self.trailer )
+            self.win.trailers.movies[self.trailer].__update__()
+        self.win.showTrailers( self.win.sql, choice = self.trailer )
+        '''
         
     def deleteSavedTrailer( self ):
-        saved_trailer = self.win.trailers.genres[self.win.genre_id].movies[self.trailer].saved
-        dialog = xbmcgui.Dialog()
-        if ( dialog.yesno( '%s?' % ( self._( 509 ), ), self._( 82 ), saved_trailer ) ):
-            try:
+        saved_trailer = self.win.trailers.movies[self.trailer].saved
+        if ( xbmcgui.Dialog().yesno( '%s?' % ( self._( 509 ), ), self._( 82 ), saved_trailer ) ):
+            if ( os.path.isfile( saved_trailer ) ):
                 os.remove( saved_trailer )
-            finally:
-                try:
-                    os.remove( '%s.conf' % ( saved_trailer, ) )
-                finally:
-                    try:
-                        os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-                    finally:
-                        self.win.trailers.genres[self.win.genre_id].movies[self.trailer].saved = 'None'
-                        self.win.showTrailers( self.trailer )
-                        self.closeDialog()
+            if ( os.path.isfile( '%s.conf' % ( saved_trailer, ) ) ):
+                os.remove( '%s.conf' % ( saved_trailer, ) )
+            if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
+                os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
+            success = self.win.trailers.updateRecord( ( 'saved_location', ), 'Movies', ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
+            if ( success ):
+                self.win.trailers.movies[self.trailer].saved = ''
+                self.win.showTrailers( self.win.sql, self.win.params, choice = self.trailer )
+            self.closeDialog()
 
     def closeDialog( self ):
         self.close()
         
     def onControl( self, control ):
-        if ( control is self.controls['Context Menu Button2']['control'] ):
+        if ( control is self.controls['Context Menu Button1']['control'] ):
+            pass#self.addPlaylist()
+        elif ( control is self.controls['Context Menu Button2']['control'] ):
             self.toggleAsFavorite()
         elif ( control is self.controls['Context Menu Button3']['control'] ):
             self.toggleAsWatched()

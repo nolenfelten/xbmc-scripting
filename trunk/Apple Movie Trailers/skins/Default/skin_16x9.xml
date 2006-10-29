@@ -553,10 +553,25 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Favorite Overlay</description>
+			<description>Trailer Rating</description>
 			<type>image</type>
 			<id>202</id>
-			<posx>550</posx>
+			<posx>540</posx>
+			<posy>350</posy>
+			<width>66</width>
+			<height>15</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Favorite Overlay</description>
+			<type>image</type>
+			<id>203</id>
+			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>
@@ -570,8 +585,8 @@
 		<control>
 			<description>Trailer Watched Overlay</description>
 			<type>image</type>
-			<id>203</id>
-			<posx>550</posx>
+			<id>204</id>
+			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>
@@ -585,8 +600,8 @@
 		<control>
 			<description>Trailer Saved Overlay</description>
 			<type>image</type>
-			<id>204</id>
-			<posx>550</posx>
+			<id>205</id>
+			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>
@@ -600,7 +615,7 @@
 		<control>
 			<description>Trailer Title</description>
 			<type>label</type>
-			<id>205</id>
+			<id>206</id>
 			<width>400</width>
 			<posx>240</posx>
 			<posy>375</posy>
