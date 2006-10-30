@@ -164,7 +164,7 @@ class Database:
             ##    cur.execute( sql , values )
             ##else: 
             ##    cur.execute( sql )
-            print sql
+            print sql, params
             if ( params != None ):
                 cur.execute( sql , params )
             else: 

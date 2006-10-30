@@ -53,12 +53,12 @@ class Settings:
             self.category_newest = int( s[7] )
             self.category_exclusives = int( s[8] )
             if ( version not in COMPATIBLE_VERSIONS ):
-                self.setDefaults()
+                self.setDefaults( True )
         except:
             print 'ERROR: getting settings'
             self.setDefaults()
 
-    def setDefaults( self ):
+    def setDefaults( self, show_dialog = False ):
         self.trailer_quality = 2
         self.mode = 0
         self.skin = 'Default'
@@ -68,7 +68,7 @@ class Settings:
         self.category_exclusives = 4
         self.startup_category_id = self.category_newest
         success = self.saveSettings()
-        if ( success ):
+        if ( success and show_dialog ):
             xbmcgui.Dialog().ok( 'Apple Movie Trailers', 'Settings incompatible, using default values.' )
         
     def saveSettings( self ):
