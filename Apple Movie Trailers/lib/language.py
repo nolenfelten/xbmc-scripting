@@ -3,11 +3,12 @@
     Is used to translate a language file like Xbox Media Center's language files.
     Originally Coded by Rockstar, Recoded by Donno :D
 """
-import xbmc, re, os
+import xbmc, re, os ,sys
 
 class Language:
     def __init__( self ):
-        cwd = os.path.join( os.getcwd(), 'language' ).replace( ';', '' )
+        module_dir = os.path.dirname( sys.modules['language'].__file__ )
+        cwd = os.path.join( os.path.dirname( module_dir ), 'language' )
         self.strings = {}
         temp_strings = []
         language = xbmc.getLanguage().lower()

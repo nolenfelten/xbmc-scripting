@@ -11,8 +11,7 @@ socket.setdefaulttimeout(timeout)
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
 
-lang = language.Language()
-_ = lang.string
+_ = language.Language().string
 
 def percent_from_ratio( top, bottom ):
     return int( float( top ) / bottom * 100 )
@@ -60,7 +59,7 @@ class HTTP:
         self.module_dir = os.path.dirname( sys.modules['cacheurl'].__file__ )
         self.default_data_dir = os.path.join( os.path.dirname( self.module_dir ), 'data' )
         del sys
-
+        
         # set the cache directory; default to a .cache directory off of the location where this module is
         self.cache_dir = cache
         if self.cache_dir[0] == '.':
