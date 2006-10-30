@@ -97,7 +97,6 @@ class Trailers:
             #columns = 'title, url, id, count, loaded', table = 'Genres', orderby = 'title', all = True )
             self.categories = []
             if (genre_list):
-                print 'YES GENRE LIST'
                 #self.categories = genre_list
                 for genre in genre_list:
                     self.categories += [Category( genre )]
@@ -339,7 +338,8 @@ class Trailers:
                 except:
                     pass
                 self.actors = actors
-
+                self.actors.sort()
+                
                 # -- studio --
                 studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' )
                 if studio:
