@@ -107,6 +107,7 @@ class HTTP:
                 self.title = '%s_%s' % ( self.title[0:37], self.title[-4:] )
             filename = self.title.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
             filename = filename.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
+            filename = filename.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
             filename = '%s\\%s' % ( filename[0], filename, )
