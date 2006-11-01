@@ -308,7 +308,7 @@
 
 		<!-- Trailer list controls -->
         
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Up Arrow</description>
 			<type>image</type>
@@ -321,7 +321,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Up Arrow NA</description>
 			<type>image</type>
@@ -334,7 +334,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Middle</description>
 			<type>image</type>
@@ -347,7 +347,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Down Arrow</description>
 			<type>image</type>
@@ -360,7 +360,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Down Arrow NA</description>
 			<type>image</type>
@@ -373,7 +373,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Trailer List Scrollbar Position Indicator</description>
 			<type>button</type>
@@ -398,7 +398,7 @@
 			<onclick>-</onclick>
 		</control>
 
-		<!-- ** Required ** Do not change <description> -->
+		<!-- ** Optional ** Do not change <description> -->
 		<control>
 			<description>Trailer List Backdrop</description>
 			<type>listcontrol</type>
@@ -473,14 +473,14 @@
 
 		<!-- ** Required ** Do not change <description> -->
 		<control>
-			<description>Trailer Count Label</description>
+			<description>Trailer List Count Label</description>
 			<type>label</type>
 			<id>1</id>
 			<width>100</width>
 			<posx>500</posx>
 			<posy>355</posy>
 			<align>right</align>
-			<label>117 of 138</label>
+			<label>-</label>
 			<font>font10</font>
 			<textcolor>CCFFFFFF</textcolor>
 			<visible>false</visible>
@@ -488,7 +488,7 @@
 
         <!-- Category list controls -->
         
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Up Arrow</description>
 			<type>image</type>
@@ -501,7 +501,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Up Arrow NA</description>
 			<type>image</type>
@@ -514,7 +514,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Middle</description>
 			<type>image</type>
@@ -527,7 +527,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Down Arrow</description>
 			<type>image</type>
@@ -540,7 +540,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Down Arrow NA</description>
 			<type>image</type>
@@ -553,7 +553,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Category List Scrollbar Position Indicator</description>
 			<type>button</type>
@@ -578,7 +578,7 @@
 			<onclick>-</onclick>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional ** Do not change <description> -->
 		<control>
 			<description>Category List Backdrop</description>
 			<type>listcontrol</type>
@@ -659,7 +659,7 @@
 
 		<!-- ** Required ** Do not change <description> -->
 		<control>
-			<description>Category Count Label</description>
+			<description>Category List Count Label</description>
 			<type>label</type>
 			<id>1</id>
 			<width>100</width>
@@ -676,7 +676,7 @@
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control>
-			<description>Trailer Backdrop</description>
+			<description>Poster Backdrop</description>
 			<type>image</type>
 			<id>200</id>
 			<posx>518</posx>
@@ -859,7 +859,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Up Arrow</description>
 			<type>image</type>
@@ -872,7 +872,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Up Arrow NA</description>
 			<type>image</type>
@@ -885,7 +885,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Middle</description>
 			<type>image</type>
@@ -898,7 +898,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Down Arrow</description>
 			<type>image</type>
@@ -911,7 +911,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Down Arrow NA</description>
 			<type>image</type>
@@ -924,7 +924,7 @@
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control>
 			<description>Cast List Scrollbar Position Indicator</description>
 			<type>button</type>
@@ -949,7 +949,7 @@
 			<onclick>-</onclick>
 		</control>
 
-		<!-- ** Required ** Do not change <description> -->
+		<!-- ** Optional ** Do not change <description> -->
 		<control>
 			<description>Cast List Backdrop</description>
 			<type>listcontrol</type>
@@ -1011,7 +1011,7 @@
 
 		<!-- special controls for media playing info -->
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
 		<control>
 			<description>X Button On</description>
 			<id>300</id>
@@ -1025,7 +1025,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
 		<control>
 			<id>301</id>
 			<description>X Button Off</description>
@@ -1039,7 +1039,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
 		<control>
 			<description>Full-Screen Visualisation Label</description>
 			<id>302</id>
@@ -1056,7 +1056,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
 		<control>
 			<description>Full-Screen Video Label</description>
 			<id>303</id>
