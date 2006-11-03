@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<settings name='Poker Timer II'>
+  <setting type='string' id='EndTournamentAlarm'>
+    <value>EndTournamentAlarm.mp3</value>
+  </setting>
+  <setting type='float' id='EndTournamentAlarmTime'>
+    <value>6.95</value>
+  </setting>
+  <setting type='string' id='EndLevelAlarm'>
+    <value>EndLevelAlarm.mp3</value>
+  </setting>
+  <setting type='float' id='EndLevelAlarmTime'>
+    <value>1.60</value>
+  </setting>
+  <setting type='string' id='StartLevelAlarm'>
+    <value>StartLevelAlarm.mp3</value>
+  </setting>
+  <setting type='float' id='StartLevelAlarmTime'>
+    <value>2.14</value>
+  </setting>
+  <setting type='string' id='WarningAlarm'>
+    <value>WarningAlarm.mp3</value>
+  </setting>
+  <setting type='float' id='WarningAlarmTime'>
+    <value>1.10</value>
+  </setting>
+  <setting type='list int' id='LEVEL_TIME'>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+    <value>20</value>
+  </setting>
+  <setting type='int' id='WARNING_TIME'>
+    <value>5</value>
+  </setting>
+  <setting type='list float' id='ANTE'>
+    <value>5</value>
+    <value>10</value>
+    <value>15</value>
+    <value>20</value>
+    <value>30</value>
+    <value>40</value>
+    <value>50</value>
+    <value>60</value>
+    <value>70</value>
+    <value>80</value>
+    <value>90</value>
+    <value>100</value>
+    <value>125</value>
+    <value>150</value>
+    <value>200</value>
+    <value>300</value>
+    <value>500</value>
+    <value>500</value>
+    <value>500</value>
+    <value>500</value>
+  </setting>
+  <setting type='list float' id='SM_BLIND'>
+    <value>10</value>
+    <value>15</value>
+    <value>20</value>
+    <value>25</value>
+    <value>50</value>
+    <value>75</value>
+    <value>100</value>
+    <value>150</value>
+    <value>200</value>
+    <value>300</value>
+    <value>400</value>
+    <value>500</value>
+    <value>600</value>
+    <value>800</value>
+    <value>1000</value>
+    <value>1500</value>
+    <value>2000</value>
+    <value>3000</value>
+    <value>4000</value>
+    <value>5000</value>
+  </setting>
+  <setting type='list float' id='BIG_BLIND'>
+    <value>20</value>
+    <value>30</value>
+    <value>40</value>
+    <value>50</value>
+    <value>100</value>
+    <value>150</value>
+    <value>200</value>
+    <value>300</value>
+    <value>400</value>
+    <value>600</value>
+    <value>800</value>
+    <value>1000</value>
+    <value>1200</value>
+    <value>1600</value>
+    <value>2000</value>
+    <value>3000</value>
+    <value>4000</value>
+    <value>6000</value>
+    <value>8000</value>
+    <value>10000</value>
+  </setting>
+  <setting type='list int' id='BREAK_TIME'>
+    <value>0</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>15</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>5</value>
+    <value>15</value>
+  </setting>
+  <setting type='list float' id='CHIP_AMT'>
+    <value>1</value>
+    <value>5</value>
+    <value>10</value>
+    <value>25</value>
+    <value>100</value>
+  </setting>
+  <setting type='list' id='CHIP_IMAGE'>
+    <value>chip1.png</value>
+    <value>chip2.png</value>
+    <value>chip3.png</value>
+    <value>chip4.png</value>
+    <value>chip5.png</value>
+  </setting>
+  <setting type='list float' id='CHIP_TABLE'>
+    <value>0.05</value>
+    <value>0.10</value>
+    <value>0.25</value>
+    <value>0.50</value>
+    <value>1</value>
+    <value>2</value>
+    <value>5</value>
+    <value>10</value>
+    <value>20</value>
+    <value>25</value>
+    <value>50</value>
+    <value>100</value>
+    <value>250</value>
+    <value>500</value>
+    <value>1000</value>
+    <value>2000</value>
+    <value>5000</value>
+    <value>10000</value>
+    <value>25000</value>
+    <value>50000</value>
+  </setting>
+  <setting type='list float' id='BLIND_TABLE'>
+    <value>0.25</value>
+    <value>0.50</value>
+    <value>1</value>
+    <value>2</value>
+    <value>5</value>
+    <value>10</value>
+    <value>15</value>
+    <value>20</value>
+    <value>25</value>
+    <value>50</value>
+    <value>75</value>
+    <value>100</value>
+    <value>150</value>
+    <value>200</value>
+    <value>300</value>
+    <value>400</value>
+    <value>500</value>
+    <value>600</value>
+    <value>700</value>
+    <value>800</value>
+    <value>1000</value>
+    <value>1500</value>
+    <value>2000</value>
+    <value>3000</value>
+    <value>4000</value>
+    <value>5000</value>
+    <value>6000</value>
+    <value>8000</value>
+    <value>10000</value>
+    <value>15000</value>
+  </setting>
+</settings>
