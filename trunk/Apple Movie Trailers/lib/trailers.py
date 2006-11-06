@@ -423,7 +423,6 @@ class Trailers:
             dialog = xbmcgui.DialogProgress()
             dialog.create( 'Executing query...', 'Please wait a moment.' )
             dialog.update( -1 )
-            #print '>>>>>>>>>>>>>>> GET MOVIES <<<<<<<<<<<<<<<<'
             movie_list = DB.getRecords( sql, params, all )
             self.movies = []
             for movie in movie_list:

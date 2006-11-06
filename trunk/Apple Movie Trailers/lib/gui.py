@@ -59,8 +59,6 @@ class GUI( xbmcgui.Window ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.debug = os.path.isfile( os.path.join( self.cwd, 'debug.txt' ))
         self.getSettings()
-        #self.gui = threading.Thread(target=self.setupGUI, args=())
-        #self.gui.start()
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
@@ -161,8 +159,8 @@ class GUI( xbmcgui.Window ):
                 sql = 'SELECT * FROM Movies WHERE favorite=? ORDER BY title'
                 params = ( 1, )
             elif ( self.main_category == -1 ):
-                    sql = 'SELECT * FROM Movies WHERE %s&genre>? ORDER BY title' % ( self.trailers.categories[category_id].id, )
-                    params = ( 0, )
+                sql = 'SELECT * FROM Movies WHERE %s&genre>? ORDER BY title' % ( self.trailers.categories[category_id].id, )
+                params = ( 0, )
             elif ( self.main_category == -2 ):
                 sql = 'SELECT * FROM Movies WHERE studio=? ORDER BY title'
                 params = ( self.trailers.categories[category_id].title, )
@@ -203,8 +201,7 @@ class GUI( xbmcgui.Window ):
                     if ( not os.path.isfile( thumbnail )):
                         thumbnail = os.path.join( self.image_path, 'generic-%s.tbn' % ( thumb_category, ) )
                     count = '(%d)' % ( category.count, )
-                    l = xbmcgui.ListItem( category.title, count, thumbnail )
-                    self.controls['Category List']['control'].addItem( l )
+                    self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail ) )
             xbmcgui.unlock()
         except:
             xbmcgui.unlock()
@@ -265,7 +262,7 @@ class GUI( xbmcgui.Window ):
                     self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'] + self.coordinates[0], posy + self.coordinates[1] )
         except: pass
             
-    def setSelection( self, list_control, pos = 0):
+    def setSelection( self, list_control, pos = 0 ):
         #self.debugWrite('setSelection', 2)
         self.controls[list_control]['control'].selectItem( pos )
         #self.setFocus( self.controls[list_control]['control'] )
@@ -333,7 +330,7 @@ class GUI( xbmcgui.Window ):
             self.controls['Trailer Plot']['control'].setEnabled( not self.display_cast and not category )
             self.controls['Cast List']['control'].setVisible( self.display_cast and not category )
             self.controls['Cast List']['control'].setEnabled( self.display_cast and not category and self.cast_exists )
-            self.calcScrollbarVisibilty('Cast List')
+            self.calcScrollbarVisibilty( 'Cast List' )
         finally:
             xbmcgui.unlock()
             
@@ -440,6 +437,7 @@ class GUI( xbmcgui.Window ):
                 choice = len( trailer_urls ) - 1
             else:
                 choice = self.settings.trailer_quality
+            if ( 'p.mov' in trailer_urls[choice] ): choice -= 1
             if ( self.settings.mode == 0 ):
                 filename = trailer_urls[choice]
             elif ( self.settings.mode == 1):
@@ -458,6 +456,7 @@ class GUI( xbmcgui.Window ):
                     self.saveThumbnail( filename, trailer, poster, )
             if ( filename ):
                 self.MyPlayer.play( filename)
+                xbmc.sleep(500)
                 self.markAsWatched( self.trailers.movies[trailer].watched + 1, self.trailers.movies[trailer].title, trailer )
                 #self.changed_trailers = False
         except: traceback.print_exc()
