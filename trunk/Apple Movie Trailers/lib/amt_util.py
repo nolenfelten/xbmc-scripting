@@ -1,7 +1,7 @@
 import xbmcgui
 import os, sys, default
 
-COMPATIBLE_VERSIONS = [ '0.94' ]
+COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
 
 def setThumbnailDisplay( _ ):
     return [_(310), _(311), _(312)]
@@ -14,6 +14,11 @@ def setMode( _ ):
 
 def setControllerAction():
     return {
+                61478 : 'Keyboard Up Arrow',
+                61480 : 'Keyboard Down Arrow',
+                61488 : 'Keyboard Backspace Button',
+                61533 : 'Keyboard Menu Button',
+                61467 : 'Keyboard ESC Button',
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',

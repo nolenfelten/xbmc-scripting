@@ -553,39 +553,39 @@ class GUI( xbmcgui.Window ):
         try:
             button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
             control = self.getFocus()
-            if ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitScript()
             elif ( control is self.controls['Trailer List']['control'] ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
                     pass#self.toggleAsFavorite()##change to queue
-                elif (button_key == 'B Button' or button_key == 'Remote Back Button' ):
+                elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
                     if ( self.main_category == -99 ): self.main_category = -3
                     self.setCategory( self.main_category )
-                elif ( button_key == 'Remote Title' or button_key == 'White Button' ):
+                elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
                     self.showContextMenu()
                 else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):
                     self.showTrailerInfo()
             elif ( control is self.controls['Trailer List Scrollbar Position Indicator']['control'] ):
-                if ( button_key == 'Remote Up' or button_key == 'DPad Up' ):
+                if ( button_key == 'Keyboard Up Arrow' or button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Trailer List', -1 )
-                elif ( button_key == 'Remote Down' or button_key == 'DPad Down' ):
+                elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Trailer List', 1 )
             elif ( control is self.controls['Category List']['control'] ):
                 self.setScrollbarIndicator( 'Category List' )
                 choice = self.setCountLabel( 'Category List' )
             elif ( control is self.controls['Category List Scrollbar Position Indicator']['control'] ):
-                if ( button_key == 'Remote Up' or button_key == 'DPad Up' ):
+                if ( button_key == 'Keyboard Up Arrow' or button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Category List', -1 )
                     choice = self.setCountLabel( 'Category List' )
-                elif ( button_key == 'Remote Down' or button_key == 'DPad Down' ):
+                elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Category List', 1 )
                     choice = self.setCountLabel( 'Category List' )
             elif ( control is self.controls['Cast List']['control'] ):
                 self.setScrollbarIndicator( 'Cast List' )
             elif ( control is self.controls['Cast List Scrollbar Position Indicator']['control'] ):
-                if ( button_key == 'Remote Up' or button_key == 'DPad Up' ):
+                if ( button_key == 'Keyboard Up Arrow' or button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Cast List', -1 )
-                elif ( button_key == 'Remote Down' or button_key == 'DPad Down' ):
+                elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Cast List', 1 )
             elif ( control is self.controls['Newest Button']['control'] ):
                 self.setControlNavigation( 'Newest Button' )

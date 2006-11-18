@@ -15,39 +15,40 @@ class Movie:
     def __init__( self, *args, **kwargs ):
         '''
             0   ( 'title', 'text', True ),
-            1   ( 'urls', 'text', None ),
-            2   ( 'genre', 'integer', False ),
-            3   ( 'poster', 'text', None ),
-            4   ( 'thumbnail', 'text', None ),
-            5   ( 'thumbnail_watched', 'text', None ),
-            6   ( 'plot', 'text', None ),
-            7   ( 'actors', 'text', None ),
-            8   ( 'studio', 'text', None ),
-            9   ( 'rating', 'text', None ),
-            10  ( 'rating_url', 'text', None ),
-            11  ( 'year', 'integer', None ),
-            12  ( 'times_watched', 'integer', None ),
-            13  ( 'last_watched', 'text', None ),
-            14  ( 'favorite', 'integer', None ),
-            15  ( 'saved_location', 'text', None ),
+            1   ( 'url', 'text', None ),
+            2   ( 'trailer_urls', 'text', None ),
+            3   ( 'genre', 'integer', False ),
+            4   ( 'poster', 'text', None ),
+            5   ( 'thumbnail', 'text', None ),
+            6   ( 'thumbnail_watched', 'text', None ),
+            7   ( 'plot', 'text', None ),
+            8   ( 'actors', 'text', None ),
+            9   ( 'studio', 'text', None ),
+            10  ( 'rating', 'text', None ),
+            11  ( 'rating_url', 'text', None ),
+            12  ( 'year', 'integer', None ),
+            13  ( 'times_watched', 'integer', None ),
+            14  ( 'last_watched', 'text', None ),
+            15  ( 'favorite', 'integer', None ),
+            16  ( 'saved_location', 'text', None ),
         '''
         self.title = args[0][0]
-        self.trailer_urls = eval( args[0][1] )
-        self.genre = args[0][2]
-        self.poster = args[0][3]
+        self.trailer_urls = eval( args[0][2] )
+        self.genre = args[0][3]
+        self.poster = args[0][4]
         #self.thumbnail = args[0][4 + ( self.watched > 0 )]
-        self.thumbnail = args[0][4]
-        self.thumbnail_watched = args[0][5]
-        self.plot = args[0][6]
-        self.cast = eval( args[0][7] )
-        self.studio = args[0][8]
-        self.rating = args[0][9]
-        self.rating_url = args[0][10]
-        self.year = args[0][11]
-        self.watched = args[0][12]
-        self.watched_date = args[0][13]
-        self.favorite = args[0][14]
-        self.saved = args[0][15]
+        self.thumbnail = args[0][5]
+        self.thumbnail_watched = args[0][6]
+        self.plot = args[0][7]
+        self.cast = eval( args[0][8] )
+        self.studio = args[0][9]
+        self.rating = args[0][10]
+        self.rating_url = args[0][11]
+        self.year = args[0][12]
+        self.watched = args[0][13]
+        self.watched_date = args[0][14]
+        self.favorite = args[0][15]
+        self.saved = args[0][16]
         
 class Category:
     def __init__( self, *args, **kwargs ):
@@ -168,11 +169,12 @@ class Trailers:
         try:
             '''
             self.tables['Genres'] = (
-                ( 'title', 'text' ),
-                ( 'url', 'text' ),
-                ( 'id', 'integer' ), 
-                ( 'count', 'integer' ),
-                ( 'trailer_urls', 'text' ),
+                ( 'title', 'text', True ),
+                ( 'url', 'text', None ),
+                ( 'id', 'integer', None ), 
+                ( 'count', 'integer', None ),
+                ( 'loaded', 'integer', None ),
+                ( 'trailer_urls', 'blob', None ),
                 )
             '''
             trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre, ) )
@@ -240,6 +242,7 @@ class Trailers:
                 for cnt, key in enumerate( keys ):
                     try:
                         trailer_urls.append( ( key, reordered_dict[key] ) )
+                        #self.saveMovieGenre( key, genre_id )
                     except:
                         continue
                 return trailer_urls
@@ -256,29 +259,30 @@ class Trailers:
                 total_cnt += genre.count
                 total_genre_cnt += 1
         if ( total_cnt > 0 ):
-            if ( xbmcgui.Dialog().yesno('Would you like to load all movie info?', 'Not all movie info is loaded. This process can take from 15 to 45 minutes.', 'No, means you choose to load the info per request.', 'The search function will not be accurate until complete.' ) ):
-                try:
-                    dialog = xbmcgui.DialogProgress()
-                    dialog.create('Loading movie info into database...')
-                    pct_sect = float( 100 ) / total_cnt
-                    cnt = 0
-                    genre_cnt = 0
-                    for genre in self.categories :
-                        if ( genre.loaded == 0 ):
-                            genre_cnt += 1
-                            trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre.title, ) )
-                            #DB.getRecords( columns = 'trailer_urls', table = 'Genres', condition = 'title=?', values = ( genre.title, ) )
-                            for movie in eval( trailer_urls[0] ):
-                                cnt += 1
-                                dialog.update( int( cnt * pct_sect ) , 'Current genre: %s - (%d of %d)' % (genre.title, genre_cnt, total_genre_cnt, ), '', 'Current trailer: %s' % movie[0] )
-                                self.loadMovieInfo( movie[0], genre.id, movie[1] )
-                                if ( dialog.iscanceled() ): raise
+            self.load_all = xbmcgui.Dialog().yesno('Would you like to load all movie info?', 'Not all movie info is loaded. This process can take from 15 to 45 minutes.', 'No, means you choose to load only title and genre.', 'The search function will not be accurate until all info is loaded.' )
+            try:
+                dialog = xbmcgui.DialogProgress()
+                dialog.create('Loading movie info into database...')
+                pct_sect = float( 100 ) / total_cnt
+                cnt = 0
+                genre_cnt = 0
+                for genre in self.categories :
+                    if ( genre.loaded == 0 ):
+                        genre_cnt += 1
+                        trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre.title, ) )
+                        #DB.getRecords( columns = 'trailer_urls', table = 'Genres', condition = 'title=?', values = ( genre.title, ) )
+                        for movie in eval( trailer_urls[0] ):
+                            cnt += 1
+                            dialog.update( int( cnt * pct_sect ) , 'Current genre: %s - (%d of %d)' % (genre.title, genre_cnt, total_genre_cnt, ), '', 'Current trailer: %s' % movie[0] )
+                            self.loadMovieInfo( movie[0], genre.id, movie[1] )
+                            if ( dialog.iscanceled() ): raise
+                        if ( self.load_all ):
                             success = DB.updateRecord( columns = ( 'loaded', ), table = 'Genres', values = ( genre.count, ), key_value = genre.title )
-                    dialog.close()
-                except:
-                    dialog.close()
-                    traceback.print_exc()
-                    xbmcgui.Dialog().ok( 'Loading movie info into database...', 'The operation was aborted.' )
+                dialog.close()
+            except:
+                dialog.close()
+                traceback.print_exc()
+                xbmcgui.Dialog().ok( 'Loading movie info into database...', 'The operation was aborted.' )
                 
     def loadMovieInfo( self, title, genre_id, url ):
         try:
@@ -291,108 +295,109 @@ class Trailers:
             self.studio = ''
             self.rating = ''
             self.rating_url = ''
-
             genre = DB.getRecords( 'SELECT genre FROM Movies WHERE title=?', ( title, ) )
             if ( genre ):
                 if ( not genre_id&genre[0] > 0 ):
                     genre_id += genre[0]
                     success = DB.updateRecord( columns = ( 'genre', ), table = 'Movies', values = ( genre_id, ), key_value = title )
             else:
-                if url[:7] != 'http://':
-                    url = self.BASEURL + url
-                # xml parsing
-                element = fetcher.urlopen( url )
-                element = ET.fromstring( element )
-
-                # -- thumbnail --
-                poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
-                # download the actual poster to the local filesystem (or get the cached filename)
-                poster = fetcher.urlretrieve( poster )
-                if poster:
-                    self.poster = poster
-                    self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
-
-                # -- plot --
-                plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
-                plot = plot.strip()
-                # remove any linefeeds so we can wrap properly to the text control this is displayed in
-                plot = plot.replace( '\r\n', ' ' )
-                plot = plot.replace( '\r', ' ' )
-                plot = plot.replace( '\n', ' ' )
-                if plot:
-                    self.plot = plot
-
-                # -- actors --
-                SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
-                actors = list()
-                try:
-                    for i in range( 5, 10 ):
-                        actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
-                        if len( actor ):
-                            actors += [ actor ]
-                            actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
-                            if ( actor_exists ):
-                                success = DB.updateRecord( ( 'count', ) , 'Actors', ( actor_exists[0] + 1, ), key = 'name', key_value = actor )
-                            else:
-                                success = DB.addRecord( ( actor, 1, ) , 'Actors' )
-                except:
-                    pass
-                self.actors = actors
-                self.actors.sort()
-                
-                # -- studio --
-                studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' )
-                if studio:
-                    self.studio = studio.strip()
-                    studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
-                    if ( studio_exists ):
-                        success = DB.updateRecord( ( 'count', ) , 'Studios', ( studio_exists[0] + 1, ), key_value = self.studio )
-                    else:
-                        success = DB.addRecord( ( self.studio, 1, ) , 'Studios' )
-
-                # -- rating --2
-                url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
-                if url:
-                    if '/mpaa' in url:
-                        rating_url = fetcher.urlretrieve( url )
-                        if rating_url:
-                            self.rating_url = rating_url
-                            self.rating = os.path.split( url )[1][:-4].replace( 'mpaa_', '' )
-                            
-                # -- trailer urls --
-                urls = list()
-                for each in element.getiterator( self.ns('GotoURL') ):
-                    url = each.get( 'url' )
-                    if 'index_1' in url:
-                        continue
-                    if '/moviesxml/g' in url:
-                        continue
-                    if url[0] != '/':
-                        continue
-                    if url in urls:
-                        continue
-                    urls += [ url ]
-                if len( urls ):
-                    url = self.BASEURL + urls[0]
+                if ( self.load_all ):
+                    if url[:7] != 'http://':
+                        url = self.BASEURL + url
+                    # xml parsing
                     element = fetcher.urlopen( url )
                     element = ET.fromstring( element )
-                    trailer_urls = list()
-                    for each in element.getiterator( self.ns('string') ):
-                        text = each.text
-                        if text == None:
+
+                    # -- thumbnail --
+                    poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
+                    # download the actual poster to the local filesystem (or get the cached filename)
+                    poster = fetcher.urlretrieve( poster )
+                    if poster:
+                        self.poster = poster
+                        self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
+
+                    # -- plot --
+                    plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
+                    plot = plot.strip()
+                    # remove any linefeeds so we can wrap properly to the text control this is displayed in
+                    plot = plot.replace( '\r\n', ' ' )
+                    plot = plot.replace( '\r', ' ' )
+                    plot = plot.replace( '\n', ' ' )
+                    if plot:
+                        self.plot = plot
+
+                    # -- actors --
+                    SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
+                    actors = list()
+                    try:
+                        for i in range( 5, 10 ):
+                            actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
+                            if len( actor ):
+                                actors += [ actor ]
+                                actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
+                                if ( actor_exists ):
+                                    success = DB.updateRecord( ( 'count', ) , 'Actors', ( actor_exists[0] + 1, ), key = 'name', key_value = actor )
+                                else:
+                                    success = DB.addRecord( ( actor, 1, ) , 'Actors' )
+                    except:
+                        pass
+                    self.actors = actors
+                    self.actors.sort()
+                    
+                    # -- studio --
+                    studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' )
+                    if studio:
+                        self.studio = studio.strip()
+                        studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
+                        if ( studio_exists ):
+                            success = DB.updateRecord( ( 'count', ) , 'Studios', ( studio_exists[0] + 1, ), key_value = self.studio )
+                        else:
+                            success = DB.addRecord( ( self.studio, 1, ) , 'Studios' )
+
+                    # -- rating --2
+                    temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
+                    if temp_url:
+                        if '/mpaa' in temp_url:
+                            rating_url = fetcher.urlretrieve( temp_url )
+                            if rating_url:
+                                self.rating_url = rating_url
+                                self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
+                                
+                    # -- trailer urls --
+                    urls = list()
+                    for each in element.getiterator( self.ns('GotoURL') ):
+                        temp_url = each.get( 'url' )
+                        if 'index_1' in temp_url:
                             continue
-                        if 'http' not in text:
+                        if '/moviesxml/g' in temp_url:
                             continue
-                        if 'movies.apple.com' not in text:
+                        if temp_url[0] != '/':
                             continue
-                        if text[-3:] == 'm4v':
+                        if temp_url in urls:
                             continue
-                        if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
-                            continue
-                        trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
-                    self.trailer_urls = trailer_urls
+                        urls += [ temp_url ]
+                    if len( urls ):
+                        temp_url = self.BASEURL + urls[0]
+                        element = fetcher.urlopen( temp_url )
+                        element = ET.fromstring( element )
+                        trailer_urls = list()
+                        for each in element.getiterator( self.ns('string') ):
+                            text = each.text
+                            if text == None:
+                                continue
+                            if 'http' not in text:
+                                continue
+                            if 'movies.apple.com' not in text:
+                                continue
+                            if text[-3:] == 'm4v':
+                                continue
+                            if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
+                                continue
+                            trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
+                        self.trailer_urls = trailer_urls
                 
                 info_list = [title]
+                info_list += [url]
                 info_list += [repr( self.trailer_urls )]
                 info_list += [genre_id]
                 info_list += [self.poster]
@@ -409,8 +414,7 @@ class Trailers:
                 info_list += [0]
                 info_list += ['']
                 success = DB.addRecord( info_list, 'Movies' )
-                
-            
+
         except:
             pass#traceback.print_exc()
             
