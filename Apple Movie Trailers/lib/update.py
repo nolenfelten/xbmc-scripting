@@ -46,7 +46,7 @@ class Update:
                 url = url[url.find( ': ' ) + 2:].replace( ' ', '%20' )
             else: raise
             self.dialog.close()
-            if ( version < versions[-1][:-1] ):
+            if ( version < versions[-1][:-1] or ( version[:4] == 'pre-' and version.replace( 'pre-', '' ) <= versions[-1][:-1] ) ):
                 if ( xbmcgui.Dialog().yesno( script, '%s %s %s.' % ( self._( 100 ), versions[-1][:-1], self._( 91 ) ), self._( 92 ) ) ):
                     self.dialog.create( script, self._( 93 ), self._( 94 ) )
                     folders = ['%s/%s' % ( url, versions[-1], )]

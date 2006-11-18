@@ -4,7 +4,7 @@ cwd = os.path.dirname( sys.modules['default'].__file__ )
 from pysqlite2 import dbapi2 as sqlite
 import traceback
 
-COMPATIBLE_VERSIONS = [ '0.95' ]
+COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
 
 class Database:
     def __init__( self ):
@@ -28,8 +28,8 @@ class Database:
         return version
 
     def convertDatabase( self, version ):
-        print version
-        print default.__version__
+        #print version
+        #print default.__version__
         #succeeded = self.updateRecord( ( 'version', ), 'Version', ( default.__version__, ), 'version', version[0] )
         #xbmcgui.Dialog().ok( 'Converted database...', 'The conversion succeeded %s' % ( succeeded, ) )
         #if ( succeeded ): return ( default.__version__, )
@@ -62,7 +62,8 @@ class Database:
                                         )
         self.tables['Movies'] = (
                                             ( 'title', 'text', True ),
-                                            ( 'urls', 'text', None ),
+                                            ( 'url', 'text', None ),
+                                            ( 'trailer_urls', 'text', None ),
                                             ( 'genre', 'integer', False ),
                                             ( 'poster', 'text', None ),
                                             ( 'thumbnail', 'text', None ),
@@ -84,7 +85,7 @@ class Database:
             dialog = xbmcgui.DialogProgress()
             dialog.create('Creating database...')
             for table in self.tables.keys():
-                dialog.update(-1,'Table: %s' % table)
+                dialog.update( -1, 'Table: %s' % table )
                 success = self.createTable( table )
                 if ( not success ):
                     raise
@@ -128,7 +129,7 @@ class Database:
                 sql += '%s, ' % item[0]
             sql = sql[:-2] + ') VALUES (' + ( '?, '*len( columns ) )
             sql = sql[:-2] + ')'
-            print sql
+            #print sql
             cur.execute( sql, columns )
             self.con.commit()
             return True
@@ -142,7 +143,7 @@ class Database:
             for col in columns:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?" % ( key, )
-            print sql
+            #print sql
             cur.execute( sql, values + ( key_value, ) )
             self.con.commit()
             return True
@@ -164,7 +165,7 @@ class Database:
             ##    cur.execute( sql , values )
             ##else: 
             ##    cur.execute( sql )
-            print sql, params
+            #print sql, params
             if ( params != None ):
                 cur.execute( sql , params )
             else: 

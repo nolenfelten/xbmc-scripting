@@ -237,11 +237,11 @@ class GUI( xbmcgui.WindowDialog ):
     def onAction( self, action ):
         control = self.getFocus()
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
-        if ( button_key == 'B Button' or button_key == 'Remote Back Button' ):
+        if ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.closeDialog()
-        elif ( button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+        elif ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
             elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.saveSettings()
