@@ -291,7 +291,7 @@ class GUIBuilder:
 							if (cnt < len(control['image'])): tmp2 = control['image'][cnt]
 							elif control['image']:	tmp2 = control['image'][len(control['image']) - 1]
 							else: tmp2 = ''
-							l = xbmcgui.ListItem(item, tmp, '', tmp2)
+							l = xbmcgui.ListItem(item, tmp, tmp2, tmp2)
 							ctl.addItem(l)
 			
 			try:

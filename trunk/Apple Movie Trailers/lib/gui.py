@@ -201,7 +201,7 @@ class GUI( xbmcgui.Window ):
                     if ( not os.path.isfile( thumbnail )):
                         thumbnail = os.path.join( self.image_path, 'generic-%s.tbn' % ( thumb_category, ) )
                     count = '(%d)' % ( category.count, )
-                    self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail ) )
+                    self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
             xbmcgui.unlock()
         except:
             xbmcgui.unlock()
@@ -223,7 +223,7 @@ class GUI( xbmcgui.Window ):
                 favorite = ['','*'][movie.favorite]
                 if ( movie.rating ): rating = '[%s]' % movie.rating
                 else: rating = ''
-                self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), rating, thumbnail ) )
+                self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), rating, thumbnail, thumbnail ) )
             xbmcgui.unlock()
             self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
         except:
@@ -393,7 +393,7 @@ class GUI( xbmcgui.Window ):
                 self.cast_exists = True
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
-                    self.controls['Cast List']['control'].addItem( xbmcgui.ListItem( actor, '', thumbnail ) )
+                    self.controls['Cast List']['control'].addItem( xbmcgui.ListItem( actor, '', thumbnail, thumbnail ) )
             else: 
                 self.cast_exists = False
                 self.controls['Cast List']['control'].addItem( _( 401 ) )

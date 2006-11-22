@@ -259,7 +259,7 @@ class Trailers:
                 total_cnt += genre.count
                 total_genre_cnt += 1
         if ( total_cnt > 0 ):
-            self.load_all = xbmcgui.Dialog().yesno('Would you like to load all movie info?', 'Not all movie info is loaded. This process can take from 15 to 45 minutes.', 'No, means you choose to load only title and genre.', 'The search function will not be accurate until all info is loaded.' )
+            self.load_all = xbmcgui.Dialog().yesno('Create the movie trailers database', 'Complete: thumbnails, actor, studio and search works. (20 - 60 minutes)', 'Minimal: movie information is loaded as needed. (5 - 10 minutes)', 'USE COMPLETE!!!', 'Minimal', 'Complete' )
             try:
                 dialog = xbmcgui.DialogProgress()
                 dialog.create('Loading movie info into database...')
