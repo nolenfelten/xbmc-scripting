@@ -253,13 +253,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 		elif (buttonDesc == 'A Button'): self.toggleAutoPWM()
 		elif (buttonDesc == 'X Button'): self.togglePointer()
 		elif (buttonDesc == 'Y Button'): self.toggleStepMovement()
-		else:
-			if (buttonDesc == 'Left ThumbStick Up'): arg = (0, -1)
-			elif (buttonDesc == 'Left ThumbStick Down'): arg = (0, 1)
-			elif (buttonDesc == 'Left ThumbStick Left'): arg = (-1, 0)
-			elif (buttonDesc == 'Left ThumbStick Right'): arg = (1, 0)
-			else: arg = (0, 0)
-			if (arg[0] != 0 or arg[1] != 0): self.movePointer(arg)
+		elif (buttonDesc == 'Left ThumbStick'):	self.movePointer((action.getAmount1(), -1*action.getAmount2()))
 	
 	def startDemo(self):
 		if (self.patch):
