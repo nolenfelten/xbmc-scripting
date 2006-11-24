@@ -393,10 +393,11 @@
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<image>-</image>
 			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<suffix>|</suffix>
-			<textxoff>-25</textxoff>
+			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
 			<visible>false</visible>
@@ -485,10 +486,11 @@
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
 			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<suffix>|</suffix>
-			<textxoff>-25</textxoff>
+			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
 			<visible>false</visible>
@@ -538,10 +540,11 @@
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
 			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<suffix>|</suffix>
-			<textxoff>-25</textxoff>
+			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
 			<visible>false</visible>
@@ -590,10 +593,11 @@
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
 			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<suffix>|</suffix>
-			<textxoff>-25</textxoff>
+			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
 			<visible>false</visible>
