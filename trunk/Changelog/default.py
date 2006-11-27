@@ -12,7 +12,7 @@ import urllib, os, datetime
 import xbmc, xbmcgui
 
 # url for the raw changelog
-CHANGELOG = 'http://xbmc.cvs.sourceforge.net/*checkout*/xbmc/XBMC/Changelog.txt'
+CHANGELOG = 'http://xbmc.svn.sourceforge.net/viewvc/*checkout*/xbmc/trunk/XBMC/Changelog.txt'
 # how many lines of changes to show
 LISTRANGE = 100
 
