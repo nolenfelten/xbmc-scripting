@@ -1,14 +1,13 @@
 #################################################################################
 # 'Display' on the remote hides/shows Pad when level timer is running.          #
-# 'Display' on the remote toggles pad size. (Before 1st level starts)           #
-#  (Except when in config mode)                                                 #
-#                                                                               #
 # 'X' on the control pad hides/shows Pad when level timer is running.           #
-# 'X' on the control pad toggles pad size. (Before 1st level starts)            #
+#
+# '0' on the remote toggles pad size. (Before 1st level starts)            #
+# 'Y' on the control pad toggles pad size. (Before 1st level starts)            #
 #  (Except when in config mode)                                                 #
 #                                                                               #
-# '0' on the remote toggles autohide on/off.                                    #
-# 'Y' on the control pad toggles autohide on/off.                               #
+# 'Back' on the remote toggles autohide on/off.                                    #
+# 'B' on the control pad toggles autohide on/off.                               #
 #      (Lock in the upper left corner means autohide is disabled)               #
 #      (It's set for 30 seconds in PTPadFile.xml                                #
 #                                                                               #
@@ -18,12 +17,15 @@
 #      Up/Down changes value.                                                   #
 #      You can manually edit PTCfgFile.py for more customization.               #
 #                                                                               #
+# 'Info' on the remote toggles pad position mode on/off      #
+# 'Black' on the control pad toggles pad position mode on/off      #
+#      (Green arrows will appear, position is saved on exit.)
+#
 # To set the number of levels in your tournament, you would set the next        #
 # level's ante to -1. (i.e. for 10 levels set level 11's ante to -1)            #
 #   (There are 20 levels in the tournament if no Ante is set to -1)             #
 #                                                                               #
-# Up/Down/Left/Right repositions the pad except when in config mode. Position   #
-# is saved on exit.                                                             #
+# 'Up/Down' Increases and decreases starting level. (Before 1st level starts)
 #                                                                               #
 # If the Pad is hidden pause is disabled, pressing any key will show Pad.       #
 #                                                                               #
@@ -35,8 +37,10 @@
 # TIP: If you create your own event alarms, make sure they're longer than the   #
 #      corresponding AlarmTime + your crossfade setting.                        #
 #                                                                               #
-# Cool Animated slide in/out by:   Thanks to the skinners for the panel2.png:   #
+# Cool Animated slide in/out by:   Thanks to Chokemaniac for the panel2.png:   #
 #       EnderW                          Chokemaniac  (lock.png)                 #
+#
+# Thanks to Korben Dallas for the WPT poker chips
 #                                                                               #
 # Thanks to Phunck for the code used for reading the config files.              #
 #                                                                               #
@@ -149,11 +153,13 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.msg = []
         self.msg.append("")
         self.msg.append("(Title/White) - Config Mode")
-        self.msg.append("(L/R) - Select  (U) - Inc  (D) - Dec")
+        self.msg.append("(Left/Right) - Select  (Up) - Inc  (Down) - Dec")
         self.msg.append("Tournament has completed.")
-        self.msg.append("(Display/X) - Toggle Pad Size")
-        self.msg.append("(0/Y) - Toggle autohide on/off")
-        self.msg.append("(L/R/U/D) - Move pad")
+        self.msg.append("(Back/B) - Toggle autohide on/off")
+        self.msg.append("(0/Y) - Toggle Pad Size")
+        self.msg.append("(Up) - Inc Level  (Down) - Dec Level")
+        self.msg.append("(Info/Black) - Move pad")
+        self.msg.append("(Left/Right/Up/Down) - Move pad")
 
         self.CHANGING_AMOUNT = False
         self.BREAK_TIMER = False
@@ -167,7 +173,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.START_SCRIPT = True
         self.RESET_PANEL = False
         self.ACTIVE_CONTROL = 1
-
+        self.MOVE_PAD = False
         self.timeX = [0] * 4
         self.levelX = [0] * 2
         self.anteX = [0] * 4
@@ -182,6 +188,54 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.BigBlindStatus = [0] * 4
         self.ChipImage = [''] * 6
         self.ChipHeading = [''] * 6
+        self.controllerAction = {
+            61478 : 'Keyboard Up Arrow',
+            61480 : 'Keyboard Down Arrow',
+            61477 : 'Keyboard Left Arrow',
+            61479 : 'Keyboard Right Arrow',
+            61488 : 'Keyboard Backspace Key',
+            61533 : 'Keyboard Menu Key',
+            61467 : 'Keyboard ESC Key',
+                213 : 'Remote Display Button',
+                216 : 'Remote Back Button',
+                247 : 'Remote Menu Button',
+                229 : 'Remote Title Button',
+                195 : 'Remote Info Button',
+                  11 : 'Remote Select Button',
+                207 : 'Remote 0 Button',
+                166 : 'Remote Up',
+                167 : 'Remote Down',
+                169 : 'Remote Left',
+                168 : 'Remote Right',
+                256 : 'A Button',
+                257 : 'B Button',
+                258 : 'X Button',
+                259 : 'Y Button',
+                260 : 'Black Button',
+                261 : 'White Button',
+                274 : 'Start Button',
+                275 : 'Back Button',
+                264 : 'Left ThumbStick',
+                276 : 'Left ThumbStick Button',
+                280 : 'Left ThumbStick Up',
+                281 : 'Left ThumbStick Down',
+                282 : 'Left ThumbStick Left',
+                283 : 'Left ThumbStick Right',
+                265 : 'Right ThumbStick',
+                277 : 'Right ThumbStick Button',
+                266 : 'Right ThumbStick Up',
+                267 : 'Right ThumbStick Down',
+                268 : 'Right ThumbStick Left',
+                269 : 'Right ThumbStick Right',
+                262 : 'Left Trigger Button',
+                278 : 'Left Trigger Analog',
+                263 : 'Right Trigger Button',
+                279 : 'Right Trigger Analog',
+                270 : 'DPad Up',
+                271 : 'DPad Down',
+                272 : 'DPad Left',
+                273 : 'DPad Right'
+        }
 
     def getPadConfig(self):
         try:
@@ -340,6 +394,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.pad = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, ExtrasPath + self.PadImageName, "", 0)
         self.addControl(self.pad)
 
+        self.padArrows = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, ExtrasPath + "PadPosArrows.png", "", 0)
+        self.addControl(self.padArrows)
+        self.padArrows.setVisible(self.MOVE_PAD)
+
         self.padTitle = xbmcgui.ControlLabel(self.offScreenX + self.titleX, self.titleY, self.titleW, self.titleH, self.ScriptTitle, self.padFontTitle, "0xFFF1EA40", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.padTitle)
 
@@ -375,7 +433,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.addControl(self.LevelHeading)
 
         for x in range(2):
-            self.LevelStatus[x] = xbmcgui.ControlImage(self.offScreenX,0 ,1 ,1 ,ExtrasPath + 'chip0.png', "", 0)
+            self.LevelStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.timeY, int(self.amountH * .5), self.amountH ,ExtrasPath + 'chip0.png', "", 0)
             self.addControl(self.LevelStatus[x])
 
         self.statusMessageSuccess = xbmcgui.ControlFadeLabel(self.offScreenX + self.messageX, self.messageY, self.messageW, self.messageH, self.padFontMessage, "0xFF00CCFF", XBFONT_CENTER_Y|XBFONT_LEFT)
@@ -384,26 +442,27 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.statusMessageSuccess.addLabel(self.msg[4])
         self.statusMessageSuccess.addLabel(self.msg[5])
         self.statusMessageSuccess.addLabel(self.msg[6])
+        self.statusMessageSuccess.addLabel(self.msg[7])
 
         self.AnteHeading = xbmcgui.ControlLabel(self.offScreenX + self.label1X, self.label2Y, self.label2W, self.labelH, "Ante", self.padFontLabel, "", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.AnteHeading)
 
         for x in range(4):
-            self.AnteStatus[x] = xbmcgui.ControlImage(self.offScreenX, 0, 1, 1, ExtrasPath + 'chip0.png', "", 0)
+            self.AnteStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
             self.addControl(self.AnteStatus[x])
 
         self.SmBlindHeading = xbmcgui.ControlLabel(self.offScreenX + self.label2X, self.label2Y, self.label2W, self.labelH, "Small Blind", self.padFontLabel, "", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.SmBlindHeading)
 
         for x in range(4):
-            self.SmBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, 0, 1, 1, ExtrasPath + 'chip0.png', "", 0)
+            self.SmBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
             self.addControl(self.SmBlindStatus[x])
 
         self.BigBlindHeading = xbmcgui.ControlLabel(self.offScreenX + self.label3X, self.label2Y, self.label2W, self.labelH, "Big Blind", self.padFontLabel, "", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.BigBlindHeading)
 
         for x in range(4):
-            self.BigBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, 0, 1, 1, ExtrasPath + 'chip0.png', "", 0)
+            self.BigBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
             self.addControl(self.BigBlindStatus[x])
 
         for x in range(1,6):
@@ -455,6 +514,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.aHide.setVisible(not self.autoHide)
 
     def setAnteStatus(self):
+        xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.ANTE[self.LEVEL])
         l = len(s)
@@ -467,11 +527,12 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.removeControl(self.AnteStatus[x])
-            self.AnteStatus[x] = xbmcgui.ControlImage(m + self.anteX[x], self.amountY, self.anteW, self.amountH, ExtrasPath + 'green_' + s[x] + '.png', "", 0)
-            self.addControl(self.AnteStatus[x])
-
+            self.AnteStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.AnteStatus[x].setPosition(m + self.anteX[x], self.amountY)
+        xbmcgui.unlock()
+        
     def setSmBlindStatus(self):
+        xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.SM_BLIND[self.LEVEL])
         l = len(s)
@@ -483,11 +544,12 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.removeControl(self.SmBlindStatus[x])
-            self.SmBlindStatus[x] = xbmcgui.ControlImage(m + self.smBlindX[x], self.amountY, self.smBlindW, self.amountH, ExtrasPath + 'green_' + s[x] + '.png', "", 0)
-            self.addControl(self.SmBlindStatus[x])
+            self.SmBlindStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.SmBlindStatus[x].setPosition(m + self.smBlindX[x], self.amountY)
+        xbmcgui.unlock()
 
     def setBigBlindStatus(self):
+        xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.BIG_BLIND[self.LEVEL])
         l = len(s)
@@ -499,11 +561,12 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.removeControl(self.BigBlindStatus[x])
-            self.BigBlindStatus[x] = xbmcgui.ControlImage(m + self.bigBlindX[x], self.amountY, self.bigBlindW, self.amountH, ExtrasPath + 'green_' + s[x] + '.png', "", 0)
-            self.addControl(self.BigBlindStatus[x])
-
+            self.BigBlindStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.BigBlindStatus[x].setPosition(m + self.bigBlindX[x], self.amountY)
+        xbmcgui.unlock()
+        
     def setLevelStatus(self):
+        xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = str(int(self.LEVEL))
         l = len(s)
@@ -514,10 +577,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(2):
-            self.removeControl(self.LevelStatus[x])
-            self.LevelStatus[x] = xbmcgui.ControlImage(m + self.levelX[x], self.timeY, self.LevelW, self.amountH, ExtrasPath + 'yellow_' + s[x] + '.png', "", 0)
-            self.addControl(self.LevelStatus[x])
-
+            self.LevelStatus[x].setImage(ExtrasPath + 'yellow_' + s[x] + '.png')
+            self.LevelStatus[x].setPosition(m + self.levelX[x], self.timeY)
+        xbmcgui.unlock()
+        
     def resetTimer(self, time):
         for x in range(4):
             for y in range(10):
@@ -536,6 +599,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.statusMessageSuccess.addLabel(self.msg[4])
         self.statusMessageSuccess.addLabel(self.msg[5])
         self.statusMessageSuccess.addLabel(self.msg[6])
+        self.statusMessageSuccess.addLabel(self.msg[7])
         self.padTitle.setLabel(self.ScriptTitle)
         self.LEVEL = 0
         self.setStatus()
@@ -644,10 +708,9 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.set_panel(0)
 
     def setChips(self):
+        xbmcgui.lock()
         for x in range(1,6):
-            self.removeControl(self.ChipImage[x])
-            self.ChipImage[x] = xbmcgui.ControlImage(self.chipX[x], self.chipY, self.chipW, self.chipH, ExtrasPath + self.CHIP_IMAGE[x], "", 2)
-            self.addControl(self.ChipImage[x])
+            self.ChipImage[x].setImage(ExtrasPath + self.CHIP_IMAGE[x])
             if self.CHIP_AMT[x]:
                 s = str('%.2f' % self.CHIP_AMT[x])
                 if s[-3:] == ".00":
@@ -655,38 +718,42 @@ class windowOverlay(xbmcgui.WindowDialog):
             else:
                 s =''
             self.ChipHeading[x].setLabel(s)
-
+        xbmcgui.unlock()
+        
     def setChip(self, a):
+        xbmcgui.lock()
         if a:
             self.CHIP_IMAGE_NUMBER += a
             self.CHIP_IMAGE[self.CHIP] = 'Chip' + str(self.CHIP_IMAGE_NUMBER) + '.png'
-            self.removeControl(self.ChipImage[self.CHIP])
-            self.ChipImage[self.CHIP] = xbmcgui.ControlImage(self.chipX[self.CHIP], self.chipY, self.chipW, self.chipH, ExtrasPath + self.CHIP_IMAGE[self.CHIP], "", 2)
-            self.addControl(self.ChipImage[self.CHIP])
+            self.ChipImage[self.CHIP].setImage(ExtrasPath + self.CHIP_IMAGE[self.CHIP])
             if not self.CHIP_IMAGE_NUMBER:
                 self.CHIP_AMT[self.CHIP] = 0
-
-
         if self.CHIP_AMT[self.CHIP]:
             s = returnStringAmount(self.CHIP_AMT[self.CHIP])
         else:
             s = ''
         self.ChipHeading[self.CHIP].setLabel(s)
+        xbmcgui.unlock()
+        
+    def calcChipAmount(self, b, a):
+        for x in range(0,14):
+            if b <= self.CHIP_TABLE[x]:
+                b = self.CHIP_TABLE[x + a]
+                break
+        return b
 
     def calcAnteAmount(self, b, a):
         if b == 0 and a == -1:
             b = -1
         elif b == -1:
             b = 0
-        elif b == 0:
-            b = self.CHIP_TABLE[1]
         else:
-            for x in range(1,21):
-                if b <= self.CHIP_TABLE[x]:
-                    b = self.CHIP_TABLE[x + a]
+            for x in range(0,31):
+                if b <= self.BLIND_TABLE[x]:
+                    b = self.BLIND_TABLE[x + a]
                     break
         return b
-
+    
     def calcSmBlindAmount(self, b, a):
         for x in range(1,31):
             if b <= self.BLIND_TABLE[x]:
@@ -741,7 +808,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def setChipAmount(self, a):
         self.CHANGING_AMOUNT = True
-        self.CHIP_AMT[self.CHIP] = self.calcAnteAmount(self.CHIP_AMT[self.CHIP], a)
+        self.CHIP_AMT[self.CHIP] = self.calcChipAmount(self.CHIP_AMT[self.CHIP], a)
         self.CHANGING_AMOUNT = False
         self.setChip(0)
 
@@ -760,43 +827,47 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.setTimers()
 
     def movePadDown(self):
-        if self.VISIBLE_BUTTON == 5:
-            self.decreaseValue()
-        else:
+        if self.MOVE_PAD:
             self.padOffsetY += 5
             self.setAmountsPos(0)
+        elif self.VISIBLE_BUTTON == 5:
+            self.decreaseValue()
+        elif self.START_SCRIPT:
+            self.changeStartingLevel(0)
 
     def movePadUp(self):
-        if self.VISIBLE_BUTTON == 5:
-            self.increaseValue()
-        else:
+        if self.MOVE_PAD:
             self.padOffsetY -= 5
             self.setAmountsPos(0)
+        elif self.VISIBLE_BUTTON == 5:
+            self.increaseValue()
+        elif self.START_SCRIPT:
+            self.changeStartingLevel(1)
 
     def movePadLeft(self):
-        if self.VISIBLE_BUTTON == 5:
+        if self.MOVE_PAD:
+            self.setAmountsPos(5)
+        elif self.VISIBLE_BUTTON == 5:
             self.ACTIVE_CONTROL -= 1
             if self.ACTIVE_CONTROL == 0:
                 self.ACTIVE_CONTROL = 16
             self.setHighlightPos()
-        else:
-            self.setAmountsPos(5)
-
+        
     def movePadRight(self):
-        if self.VISIBLE_BUTTON == 5:
+        if self.MOVE_PAD:
+            self.setAmountsPos(-5)
+        elif self.VISIBLE_BUTTON == 5:
             self.ACTIVE_CONTROL += 1
             if self.ACTIVE_CONTROL == 17:
                 self.ACTIVE_CONTROL = 1
             self.setHighlightPos()
-        else:
-            self.setAmountsPos(-5)
 
     def increaseValue(self):
         if self.ACTIVE_CONTROL >= 7 and self.ACTIVE_CONTROL <= 11:
-            if self.CHIP_IMAGE_NUMBER < 12:
+            if self.CHIP_IMAGE_NUMBER < 25:
                 self.setChip(1)
         elif self.ACTIVE_CONTROL >= 12:
-            if self.CHIP_AMT[self.CHIP] < self.CHIP_TABLE[20]:
+            if self.CHIP_AMT[self.CHIP] < self.CHIP_TABLE[13]:
                 self.setChipAmount(1)
         elif self.ACTIVE_CONTROL == 1:
             if self.LEVEL_TIME[self.LEVEL] < 90:
@@ -808,7 +879,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             if self.LEVEL < 20 and self.ANTE[self.LEVEL] != -1:
                 self.setLevelAmount(1)
         elif self.ACTIVE_CONTROL == 4:
-            if self.ANTE[self.LEVEL] < self.CHIP_TABLE[20]:
+            if self.ANTE[self.LEVEL] < self.BLIND_TABLE[30]:
                 self.setAnteAmount(1)
         elif self.ACTIVE_CONTROL == 5:
             if self.SM_BLIND[self.LEVEL] < self.BLIND_TABLE[30]:
@@ -939,8 +1010,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                     m = int(float(seconds - cnt) / 60)
                     s = int(float(seconds - cnt) % 60)
                     self.statusMessageSuccess.reset()
-                    self.statusMessageSuccess.addLabel('Level (' + str(self.LEVEL) + \
-                        ') starts in ' + str('%d:%02d' % (m, s)))
+                    self.statusMessageSuccess.addLabel('Level (' + str(self.LEVEL) + ') starts in ' + str('%d:%02d' % (m, s)))
 
             except loopExit:
                 self.RAISE_EXCEPTION = False
@@ -1052,6 +1122,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def set_panel(self, m):
         self.pad.setPosition(m + self.padX, self.padY)
+        self.padArrows.setPosition(m + self.padX, self.padY)
 
         self.padTitle.setPosition(m + self.titleX, self.titleY)
 
@@ -1099,6 +1170,15 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.slidePanel()
         self.close()
 
+    def changeStartingLevel(self, c):
+        if ( c == 1 and self.LEVEL < self.LEVELS ):
+            self.setStatus()
+            self.setAmountsPos(0)
+        elif ( c == 0 and self.LEVEL > 1 ):
+            self.LEVEL -= 2
+            self.setStatus()
+            self.setAmountsPos(0)
+
     def exitScript(self):
         self.EXIT_SCRIPT = True
         self.savePadSettings()
@@ -1109,36 +1189,54 @@ class windowOverlay(xbmcgui.WindowDialog):
         finally:
             #sleep(1)
             self.close()
+    
+    def toggleMovePad(self):
+        self.MOVE_PAD = not self.MOVE_PAD
+        self.padArrows.setVisible(self.MOVE_PAD)
+        self.statusMessageSuccess.reset()
+        if (self.MOVE_PAD):
+            self.statusMessageSuccess.addLabel(self.msg[8])
+        else:
+            self.statusMessageSuccess.addLabel(self.msg[1])
+            self.statusMessageSuccess.addLabel(self.msg[4])
+            self.statusMessageSuccess.addLabel(self.msg[5])
+            self.statusMessageSuccess.addLabel(self.msg[6])
+            self.statusMessageSuccess.addLabel(self.msg[7])
 
     def onAction(self, action):
-        if self.HIDE_PANEL and not self.EXIT_SCRIPT:
+        buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
+        if self.HIDE_PANEL and not self.EXIT_SCRIPT and not self.CHANGING_AMOUNT:
             self.RESET_PANEL = True
-            if action == ACTION_WHITE_BUTTON and self.START_SCRIPT:
+            if (buttonDesc == 'White Button' or buttonDesc == 'Remote Title Button' or buttonDesc == 'Keyboard Menu Key') and self.START_SCRIPT:
                 self.setConfig()
-            elif action == ACTION_0 or action == ACTION_Y_BUTTON:
-                self.setAutoHide()
-            elif action == ACTION_X_BUTTON and self.START_SCRIPT and not self.CHANGING_AMOUNT:
+            elif (buttonDesc == 'Y Button' or buttonDesc == 'Remote 0 Button') and self.START_SCRIPT:
                 self.sizePanel()
-            elif action == ACTION_MOVE_RIGHT and not self.CHANGING_AMOUNT:
+            elif buttonDesc == 'B Button' or buttonDesc == 'Remote Back Button':# and self.START_SCRIPT:
+                self.setAutoHide()
+            elif (buttonDesc == 'Black Button' or buttonDesc == 'Remote Info Button') and self.VISIBLE_BUTTON == 1 and self.START_SCRIPT:
+                self.toggleMovePad()
+            elif buttonDesc == 'DPad Right' or buttonDesc == 'Remote Right' or buttonDesc == 'Keyboard Right Arrow':
                 self.movePadRight()
-            elif action == ACTION_MOVE_LEFT and not self.CHANGING_AMOUNT:
+            elif buttonDesc == 'DPad Left' or buttonDesc == 'Remote Left' or buttonDesc == 'Keyboard Left Arrow':
                 self.movePadLeft()
-            elif action == ACTION_MOVE_UP and not self.CHANGING_AMOUNT:
+            elif buttonDesc == 'DPad Up' or buttonDesc == 'Remote Up' or buttonDesc == 'Keyboard Up Arrow':
                 self.movePadUp()
-            elif action == ACTION_MOVE_DOWN and not self.CHANGING_AMOUNT:
+            elif buttonDesc == 'DPad Down' or buttonDesc == 'Remote Down' or buttonDesc == 'Keyboard Down Arrow':
                 self.movePadDown()
-            elif self.VISIBLE_BUTTON == 5 and action == ACTION_PARENT_DIR:
+            elif self.VISIBLE_BUTTON == 5 and (buttonDesc == 'Back Button' or buttonDesc == 'White Button' or \
+                buttonDesc == 'Remote Title Button' or buttonDesc == 'Remote Menu Button' or \
+                buttonDesc == 'Keyboard Menu Key' or buttonDesc == 'Keyboard Esc Key'):
                 self.resetSettings()
-            elif self.VISIBLE_BUTTON == 2 and action == ACTION_X_BUTTON:
+            elif self.VISIBLE_BUTTON == 2 and (buttonDesc == 'X Button' or buttonDesc == 'Remote Display Button'):
                 self.slidePanel()
-            elif not self.VISIBLE_BUTTON == 2 and not self.EXIT_SCRIPT:
-                if action == ACTION_PREVIOUS_MENU:
+            elif not self.VISIBLE_BUTTON == 2:
+                if (buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' or buttonDesc == 'Keyboard ESC Key'):
                     self.exitScript()
-        elif not self.EXIT_SCRIPT and action != ACTION_SELECT_ITEM:
+        elif not self.EXIT_SCRIPT:# and (buttonDesc != 'A Button' or buttonDesc != 'Remote Select Button'):
             self.slidePanel()
 
     def onControl(self, control):
-        if self.HIDE_PANEL and not self.EXIT_SCRIPT:
+        if self.HIDE_PANEL and not self.EXIT_SCRIPT and not self.MOVE_PAD:
             if self.VISIBLE_BUTTON == 1:
                 if self.BREAK_TIMER:
                     self.RAISE_EXCEPTION = True
