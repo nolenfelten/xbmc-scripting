@@ -19,9 +19,9 @@
     <value>30</value>
   </setting>
   <setting type='int' id='padOffsetX'>
-    <value>35</value>
+    <value>30</value>
   </setting>
   <setting type='int' id='padOffsetY'>
-    <value>10</value>
+    <value>55</value>
   </setting>
 </settings>
