@@ -204,7 +204,7 @@ def saveSettings(settings, settingsfile):
 
     pNode = add_pNode(doc, docElement)
     set_pNode(pNode, "CHIP_TABLE", "list float")
-    for c in range(1,21):
+    for c in range(1,14):
         s = returnString(settings['CHIP_TABLE'][c])
         cNode = add_cNode(doc, pNode, s)
 
