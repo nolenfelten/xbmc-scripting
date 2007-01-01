@@ -1,28 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <settings name='Poker Timer II'>
   <setting type='string' id='EndTournamentAlarm'>
-    <value>EndTournamentAlarm.mp3</value>
+    <value>EndTournamentAlarm.wav</value>
   </setting>
-  <setting type='float' id='EndTournamentAlarmTime'>
-    <value>6.95</value>
+  <setting type='int' id='EndTournamentAlarmTime'>
+    <value>0</value>
   </setting>
   <setting type='string' id='EndLevelAlarm'>
-    <value>EndLevelAlarm.mp3</value>
+    <value>EndLevelAlarm.wav</value>
   </setting>
-  <setting type='float' id='EndLevelAlarmTime'>
-    <value>1.60</value>
+  <setting type='int' id='EndLevelAlarmTime'>
+    <value>0</value>
   </setting>
   <setting type='string' id='StartLevelAlarm'>
-    <value>StartLevelAlarm.mp3</value>
+    <value>StartLevelAlarm.wav</value>
   </setting>
-  <setting type='float' id='StartLevelAlarmTime'>
-    <value>2.14</value>
+  <setting type='int' id='StartLevelAlarmTime'>
+    <value>2500</value>
   </setting>
   <setting type='string' id='WarningAlarm'>
-    <value>WarningAlarm.mp3</value>
+    <value>WarningAlarm.wav</value>
   </setting>
-  <setting type='float' id='WarningAlarmTime'>
-    <value>1.10</value>
+  <setting type='int' id='WarningAlarmTime'>
+    <value>0</value>
   </setting>
   <setting type='list int' id='LEVEL_TIME'>
     <value>15</value>
@@ -49,7 +49,7 @@
   <setting type='int' id='WARNING_TIME'>
     <value>5</value>
   </setting>
-  <setting type='list float' id='ANTE'>
+  <setting type='list int' id='ANTE'>
     <value>0</value>
     <value>0</value>
     <value>0</value>
@@ -71,7 +71,7 @@
     <value>1500</value>
     <value>2000</value>
   </setting>
-  <setting type='list float' id='SM_BLIND'>
+  <setting type='list int' id='SM_BLIND'>
     <value>10</value>
     <value>15</value>
     <value>25</value>
@@ -93,7 +93,7 @@
     <value>15000</value>
     <value>20000</value>
   </setting>
-  <setting type='list float' id='BIG_BLIND'>
+  <setting type='list int' id='BIG_BLIND'>
     <value>20</value>
     <value>30</value>
     <value>50</value>
@@ -137,7 +137,7 @@
     <value>5</value>
     <value>15</value>
   </setting>
-  <setting type='list float' id='CHIP_AMT'>
+  <setting type='list int' id='CHIP_AMT'>
     <value>5</value>
     <value>10</value>
     <value>25</value>
@@ -151,7 +151,7 @@
     <value>Chip6.png</value>
     <value>Chip8.png</value>
   </setting>
-  <setting type='list float' id='CHIP_TABLE'>
+  <setting type='list int' id='CHIP_TABLE'>
     <value>1</value>
     <value>2</value>
     <value>5</value>
@@ -166,7 +166,7 @@
     <value>2000</value>
     <value>5000</value>
   </setting>
-  <setting type='list float' id='BLIND_TABLE'>
+  <setting type='list int' id='BLIND_TABLE'>
     <value>5</value>
     <value>10</value>
     <value>15</value>

@@ -52,7 +52,7 @@
 
 from os import path, getcwd
 import xbmc, xbmcgui, sys
-from time import sleep
+#from time import sleep
 import thread, threading
 
 ExtrasPath      = getcwd()[:-1] + '\\Extras\\'
@@ -148,7 +148,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.padFontLabel = "font14"
             self.padFontMessage = "font14"
 
-        self.slideSpeed = 0.015
+        self.slideSpeed = 15#0.015
 
         self.msg = []
         self.msg.append("")
@@ -391,6 +391,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.progressBarCount = int(float(self.messageW) / (4 + (self.padSize == 2)))
 
     def addControls(self):
+        xbmcgui.lock()
         self.pad = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, ExtrasPath + self.PadImageName, "", 0)
         self.addControl(self.pad)
 
@@ -478,8 +479,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.Button = xbmcgui.ControlButton(self.offScreenX + self.buttonX, self.buttonY, self.buttonW, self.buttonH, "Start", "button-focus.png", "button-nofocus.png", 0, 0, XBFONT_CENTER_Y|XBFONT_CENTER_X, self.padFontLabel)
         self.addControl(self.Button)
         self.setFocus(self.Button)
+        xbmcgui.unlock()
 
     def setStatus(self):
+        #xbmcgui.lock()
         self.LEVEL += 1
         if self.LEVEL <= self.LEVELS:
             self.VISIBLE_BUTTON = 1
@@ -504,6 +507,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.VISIBLE_BUTTON = 4
         self.Button.setVisible(True)
         self.setFocus(self.Button)
+        #xbmcgui.unlock()
 
     def setAutoHide(self):
         self.autoHide = not self.autoHide
@@ -582,6 +586,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def resetTimer(self, time):
+        xbmcgui.lock()
         for x in range(4):
             for y in range(10):
                 self.TimeImage[x * 10 + y].setVisible(False)
@@ -591,8 +596,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.TimeImage[10 + int(t[1])].setVisible(True)
         self.TimeImage[20 + int(t[2])].setVisible(True)
         self.TimeImage[30 + int(t[3])].setVisible(True)
-
+        xbmcgui.unlock()
+        
     def setBegin(self):
+        xbmcgui.lock()
         self.highlight.setVisible(False)
         self.statusMessageSuccess.reset()
         self.statusMessageSuccess.addLabel(self.msg[1])
@@ -602,13 +609,16 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.statusMessageSuccess.addLabel(self.msg[7])
         self.padTitle.setLabel(self.ScriptTitle)
         self.LEVEL = 0
+        xbmcgui.unlock()
         self.setStatus()
+        xbmcgui.lock()
         self.START_SCRIPT = True
         self.colon.setVisible(True)
         self.resetTimer(self.LEVEL_TIME[self.LEVEL])
         self.TimeHeading1.setVisible(False)
         self.TimeHeading2.setVisible(False)
         self.TimeHeading.setVisible(True)
+        xbmcgui.unlock()
 
     def resetSettings(self):
         self.getConfigValues()
@@ -677,6 +687,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.setTimers()
 
     def setTimers(self):
+        xbmcgui.lock()
         self.RT2 = str('%02d%02d' % (self.LEVEL_TIME[self.LEVEL], self.BREAK_TIME[self.LEVEL]))
 
         self.TimeImage[0 + int(self.RT1[0])].setVisible(False)
@@ -690,8 +701,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.TimeImage[30 + int(self.RT2[3])].setVisible(True)
 
         self.RT1 = str('%02d%02d' % (self.LEVEL_TIME[self.LEVEL], self.BREAK_TIME[self.LEVEL]))
+        xbmcgui.unlock()
 
     def setAmountsPos(self, a):
+        xbmcgui.lock()
         if a:
             self.padOffsetX += a
             for x in range(4):
@@ -706,6 +719,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 self.BigBlindStatus[x].setPosition(self.bigBlindX[x], self.amountY)
         self.calcPositions()
         self.set_panel(0)
+        xbmcgui.unlock()
 
     def setChips(self):
         xbmcgui.lock()
@@ -915,6 +929,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 self.setBigAmount(-1)
 
     def setHighlightPos(self):
+        xbmcgui.lock()
         self.highlight.setVisible(False)
 
         if self.ACTIVE_CONTROL >= 7 and self.ACTIVE_CONTROL <= 11:
@@ -965,6 +980,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.highlight.setWidth(self.highlightW)
         self.highlight.setPosition(self.highlightX, self.highlightY)
         self.highlight.setVisible(True)
+        xbmcgui.unlock()
 
     def pauseTimer(self):
         self.VISIBLE_BUTTON = 3
@@ -988,13 +1004,13 @@ class windowOverlay(xbmcgui.WindowDialog):
             seconds = 60 * self.BREAK_TIME[self.LEVEL]
             t2 = str('%02d%02d' % (self.LEVEL_TIME[self.LEVEL],0))
             if seconds:
-                activateGUI()
+                #activateGUI()
                 self.setFocus(self.Button)
 
             try:
                 for cnt in range(1, seconds + 1):
                     for x in range(10):
-                        sleep(.1)
+                        xbmc.sleep(100)
                         if x == 4:
                             self.blinkTimer(False, t2)
                         elif x == 9:
@@ -1035,10 +1051,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         try:
             for cnt in range(1, seconds + 1):
                 for x in range(10):
-                    sleep(.1)
+                    xbmc.sleep(100)
                     while self.VISIBLE_BUTTON == 3:
                         for y in range(10):
-                            sleep(.1)
+                            xbmc.sleep(100)
                             if self.EXIT_SCRIPT:
                                 self.blinkTimer(True, t2)
                                 cnt = seconds
@@ -1048,6 +1064,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                             elif y == 9:
                                 self.blinkTimer(True, t2)
 
+                xbmcgui.lock()
                 t = str('%02d%02d' % (int(float(seconds - cnt) / 60), int(float(seconds - cnt) % 60)))
                 self.TimeImage[int(t2[0])].setVisible(False)
                 self.TimeImage[int(t[0])].setVisible(True)
@@ -1058,10 +1075,12 @@ class windowOverlay(xbmcgui.WindowDialog):
                 self.TimeImage[30 + int(t2[3])].setVisible(False)
                 self.TimeImage[30 + int(t[3])].setVisible(True)
                 t2 = t
+                xbmcgui.unlock()
 
                 if t2 == t3:
-                    thread.start_new_thread(playWarning, (self.WarningAlarm, self.WarningAlarmTime,))
-
+                    #thread.start_new_thread(playWarning, (self.WarningAlarm, self.WarningAlarmTime,))
+                    thread.start_new_thread(playAlarm, (self.WarningAlarm,))
+                    #playAlarm(self.WarningAlarm, 0)
                 #only needed if music ends
                 self.setFocus(self.Button)
 
@@ -1072,13 +1091,17 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.TIMER_RUNNING = False
 
     def blinkTimer(self, a, t2):
+        xbmcgui.lock()
         self.TimeImage[int(t2[0])].setVisible(a)
         self.TimeImage[10 + int(t2[1])].setVisible(a)
         self.TimeImage[20 + int(t2[2])].setVisible(a)
         self.TimeImage[30 + int(t2[3])].setVisible(a)
+        xbmcgui.unlock()
 
     def notifyStartLevel(self):
-        playAlarm(self.StartLevelAlarm, self.StartLevelAlarmTime)
+        thread.start_new_thread(playAlarm, (self.StartLevelAlarm,))
+        xbmc.sleep(self.StartLevelAlarmTime)
+        #playAlarm(self.StartLevelAlarm, self.StartLevelAlarmTime)
         self.setFocus(self.Button)
 
     def notifyTimesUp(self):
@@ -1086,9 +1109,14 @@ class windowOverlay(xbmcgui.WindowDialog):
         if not self.HIDE_PANEL:
             self.slidePanel()
         if self.LEVEL == self.LEVELS:
-            playAlarm(self.EndTournamentAlarm, self.EndTournamentAlarmTime)
+            playAlarm(self.EndTournamentAlarm)#, self.EndTournamentAlarmTime)
+            #thread.start_new_thread(playAlarm, (self.EndTournamentAlarm,))
+            #xbmc.sleep(self.EndTournamentAlarm)
         else:
-            playAlarm(self.EndLevelAlarm, self.EndLevelAlarmTime)
+            #thread.start_new_thread(playAlarm, (self.EndLevelAlarm,))
+            #xbmc.sleep(self.EndLevelAlarm)
+            playAlarm(self.EndLevelAlarm)#, self.EndLevelAlarmTime)
+        #self.setFocus(self.Button)
         self.setStatus()
         self.breakTimer()
 
@@ -1111,7 +1139,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 m = int(pct**2 * 0.295)
                 self.set_panel(m)
                 pct += slide
-                sleep(self.slideSpeed)
+                xbmc.sleep(self.slideSpeed)
         else:
             if slide == -1:
                 self.set_panel(0)
@@ -1121,6 +1149,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.HIDING_PANEL = False
 
     def set_panel(self, m):
+        xbmcgui.lock()
         self.pad.setPosition(m + self.padX, self.padY)
         self.padArrows.setPosition(m + self.padX, self.padY)
 
@@ -1163,6 +1192,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.statusMessageSuccess.setPosition(m + self.messageX, self.messageY)
 
         self.highlight.setPosition(m + self.highlightX, self.highlightY)
+        xbmcgui.unlock()
 
     def sizePanel(self):
         self.padSize = ((self.padSize == 0) * 1)
@@ -1187,10 +1217,11 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.startScript.join(1)
             self.autoHideTimer.join(1)
         finally:
-            #sleep(1)
+            #xbmc.sleep(1000)
             self.close()
     
     def toggleMovePad(self):
+        xbmcgui.lock()
         self.MOVE_PAD = not self.MOVE_PAD
         self.padArrows.setVisible(self.MOVE_PAD)
         self.statusMessageSuccess.reset()
@@ -1202,12 +1233,13 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.statusMessageSuccess.addLabel(self.msg[5])
             self.statusMessageSuccess.addLabel(self.msg[6])
             self.statusMessageSuccess.addLabel(self.msg[7])
+        xbmcgui.unlock()
 
     def onAction(self, action):
         buttonDesc = self.controllerAction.get(action.getButtonCode(), 'n/a')
         if self.HIDE_PANEL and not self.EXIT_SCRIPT and not self.CHANGING_AMOUNT:
             self.RESET_PANEL = True
-            if (buttonDesc == 'White Button' or buttonDesc == 'Remote Title Button' or buttonDesc == 'Keyboard Menu Key') and self.START_SCRIPT:
+            if not self.MOVE_PAD and (buttonDesc == 'White Button' or buttonDesc == 'Remote Title Button' or buttonDesc == 'Keyboard Menu Key') and self.START_SCRIPT:
                 self.setConfig()
             elif (buttonDesc == 'Y Button' or buttonDesc == 'Remote 0 Button') and self.START_SCRIPT:
                 self.sizePanel()
@@ -1232,7 +1264,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             elif not self.VISIBLE_BUTTON == 2:
                 if (buttonDesc == 'Back Button' or buttonDesc == 'Remote Menu Button' or buttonDesc == 'Keyboard ESC Key'):
                     self.exitScript()
-        elif not self.EXIT_SCRIPT:# and (buttonDesc != 'A Button' or buttonDesc != 'Remote Select Button'):
+        elif not self.EXIT_SCRIPT and not self.HIDE_PANEL:#(buttonDesc != 'A Button' or buttonDesc != 'Remote Select Button'):
             self.slidePanel()
 
     def onControl(self, control):
@@ -1278,7 +1310,7 @@ class autoHideTimer(threading.Thread):
                 while self.windowOverlay.HIDE_PANEL and self.windowOverlay.autoHide:
                     s = self.windowOverlay.autoHideTime * 10
                     for x in range(s):
-                        sleep(.1)
+                        xbmc.sleep(100)
                         if self.windowOverlay.VISIBLE_BUTTON == 3 or not self.windowOverlay.HIDE_PANEL \
                             or not self.windowOverlay.TIMER_RUNNING or self.windowOverlay.RESET_PANEL:
                             raise loopExit
@@ -1287,44 +1319,45 @@ class autoHideTimer(threading.Thread):
             except:
                 pass
 
-def playWarning(alarm, SleepTime):
-    playAlarm(alarm, SleepTime)
+#def playWarning(alarm, SleepTime):
+#    playAlarm(alarm, SleepTime)
 
-def playAlarm(alarm, SleepTime):
-    CURRENT_FILE = getPlayingFile()
-    CURRENT_TIME = getPlayingTime()
-    xbmc.Player().play(ExtrasPath + alarm)
-    sleep(SleepTime)
-    playFile(CURRENT_FILE, CURRENT_TIME)
-    activateGUI()
+def playAlarm(alarm):#, SleepTime):
+    #CURRENT_FILE = getPlayingFile()
+    #CURRENT_TIME = getPlayingTime()
+    #xbmc.Player().play(ExtrasPath + alarm)
+    xbmc.playSFX(ExtrasPath + alarm)
+    #if SleepTime: xbmc.sleep(SleepTime)
+#    playFile(CURRENT_FILE, CURRENT_TIME)
+#    activateGUI()
 
-def playFile(CURRENT_FILE, CURRENT_TIME):
-    if CURRENT_FILE == "{none}":
-        xbmc.Player().stop()
-    else:
-        xbmc.Player().play(CURRENT_FILE)
-        xbmc.Player().seekTime(CURRENT_TIME)
+#def playFile(CURRENT_FILE, CURRENT_TIME):
+#    if CURRENT_FILE == "{none}":
+#        xbmc.Player().stop()
+#    else:
+#        xbmc.Player().play(CURRENT_FILE)
+#        xbmc.Player().seekTime(CURRENT_TIME)
 
-def getPlayingFile():
-    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
-        CURRENT_FILE = xbmc.Player().getPlayingFile()
-    else:
-        CURRENT_FILE = "{none}"
-    return CURRENT_FILE
+#def getPlayingFile():
+#    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
+#        CURRENT_FILE = xbmc.Player().getPlayingFile()
+#    else:
+#        CURRENT_FILE = "{none}"
+#    return CURRENT_FILE
 
-def getPlayingTime():
-    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
-        CURRENT_TIME = xbmc.Player().getTime()
-    else:
-        CURRENT_TIME = "{none}"
-    return CURRENT_TIME
+#def getPlayingTime():
+#    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
+#        CURRENT_TIME = xbmc.Player().getTime()
+#    else:
+#        CURRENT_TIME = "{none}"
+#    return CURRENT_TIME
 
 def activateGUI():
     if xbmc.Player().isPlayingAudio():
         xbmc.executebuiltin('XBMC.ActivateWindow(2006)')
     elif xbmc.Player().isPlayingVideo():
         xbmc.executebuiltin('XBMC.ActivateWindow(2005)')
-    sleep(.5)
+    xbmc.sleep(500)
 
 def returnStringAmount(a):
     e = ''
@@ -1336,6 +1369,8 @@ def returnStringAmount(a):
         s = s[:-3]
     s = s + e
     return s
+
+activateGUI()
 
 while 1:
     MyDisplay = windowOverlay()

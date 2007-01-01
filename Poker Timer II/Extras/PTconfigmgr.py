@@ -135,28 +135,28 @@ def saveSettings(settings, settingsfile):
     set_pNode(pNode, "EndTournamentAlarm", "string")
     cNode = add_cNode(doc, pNode, settings['EndTournamentAlarm'])
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "EndTournamentAlarmTime", "float")
+    set_pNode(pNode, "EndTournamentAlarmTime", "int")
     cNode = add_cNode(doc, pNode, returnString(settings['EndTournamentAlarmTime']))
 
     pNode = add_pNode(doc, docElement)
     set_pNode(pNode, "EndLevelAlarm", "string")
     cNode = add_cNode(doc, pNode, settings['EndLevelAlarm'])
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "EndLevelAlarmTime", "float")
+    set_pNode(pNode, "EndLevelAlarmTime", "int")
     cNode = add_cNode(doc, pNode, returnString(settings['EndLevelAlarmTime']))
 
     pNode = add_pNode(doc, docElement)
     set_pNode(pNode, "StartLevelAlarm", "string")
     cNode = add_cNode(doc, pNode, settings['StartLevelAlarm'])
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "StartLevelAlarmTime", "float")
+    set_pNode(pNode, "StartLevelAlarmTime", "int")
     cNode = add_cNode(doc, pNode, returnString(settings['StartLevelAlarmTime']))
 
     pNode = add_pNode(doc, docElement)
     set_pNode(pNode, "WarningAlarm", "string")
     cNode = add_cNode(doc, pNode, settings['WarningAlarm'])
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "WarningAlarmTime", "float")
+    set_pNode(pNode, "WarningAlarmTime", "int")
     cNode = add_cNode(doc, pNode, returnString(settings['WarningAlarmTime']))
 
     pNode = add_pNode(doc, docElement)
@@ -169,19 +169,19 @@ def saveSettings(settings, settingsfile):
     cNode = add_cNode(doc, pNode, str(settings['WARNING_TIME']))
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "ANTE", "list float")
+    set_pNode(pNode, "ANTE", "list int")
     for c in range(1,21):
         s = returnString(settings['ANTE'][c])
         cNode = add_cNode(doc, pNode, s)
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "SM_BLIND", "list float")
+    set_pNode(pNode, "SM_BLIND", "list int")
     for c in range(1,21):
         s = returnString(settings['SM_BLIND'][c])
         cNode = add_cNode(doc, pNode, s)
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "BIG_BLIND", "list float")
+    set_pNode(pNode, "BIG_BLIND", "list int")
     for c in range(1,21):
         s = returnString(settings['BIG_BLIND'][c])
         cNode = add_cNode(doc, pNode, s)
@@ -192,7 +192,7 @@ def saveSettings(settings, settingsfile):
         cNode = add_cNode(doc, pNode, str(settings['BREAK_TIME'][c]))
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "CHIP_AMT", "list float")
+    set_pNode(pNode, "CHIP_AMT", "list int")
     for c in range(1,6):
         s = returnString(settings['CHIP_AMT'][c])
         cNode = add_cNode(doc, pNode, s)
@@ -203,13 +203,13 @@ def saveSettings(settings, settingsfile):
         cNode = add_cNode(doc, pNode, settings['CHIP_IMAGE'][c])
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "CHIP_TABLE", "list float")
+    set_pNode(pNode, "CHIP_TABLE", "list int")
     for c in range(1,14):
         s = returnString(settings['CHIP_TABLE'][c])
         cNode = add_cNode(doc, pNode, s)
 
     pNode = add_pNode(doc, docElement)
-    set_pNode(pNode, "BLIND_TABLE", "list float")
+    set_pNode(pNode, "BLIND_TABLE", "list int")
     for c in range(1,31):
         s = returnString(settings['BLIND_TABLE'][c])
         cNode = add_cNode(doc, pNode, s)
