@@ -50,22 +50,20 @@
 #   Nuka1195                                                                    #
 #################################################################################
 
-from os import path, getcwd
-import xbmc, xbmcgui, sys
+debug           = False     # True outputs debug info to debug screen
+
+import xbmc, xbmcgui
+import os, sys
 #from time import sleep
 import thread, threading
 
-ExtrasPath      = getcwd()[:-1] + '\\Extras\\'
+ExtrasPath = os.path.join( sys.path[0], 'Extras' )
+GFXPath = os.path.join( ExtrasPath, 'gfx' )
+SoundPath = os.path.join( ExtrasPath, 'sounds' )
 
-debug           = False     # True outputs debug info to debug screen
+sys.path.append( os.path.join( ExtrasPath, 'Lib' ) )
+sys.path.append( os.path.join( ExtrasPath, 'Lib', '_xmlplus.zip' ) )
 
-try:
-    Emulating = xbmcgui.Emulating
-except:
-    Emulating = False
-
-sys.path.append(ExtrasPath)
-sys.path.append(ExtrasPath + '\\_xmlplus.zip')
 try:
     reload(PTconfigmgr)
 except:
@@ -239,7 +237,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def getPadConfig(self):
         try:
-            self.padsettings                = PTconfigmgr.ReadSettings(ExtrasPath + 'PTPadFile.xml')
+            self.padsettings                = PTconfigmgr.ReadSettings(os.path.join( ExtrasPath, 'PTPadFile.xml' ) )
 
             self.ScriptTitle                = self.padsettings['ScriptTitle']
             self.PadImageName               = self.padsettings['PadImageName']
@@ -256,7 +254,7 @@ class windowOverlay(xbmcgui.WindowDialog):
     def getConfigValues(self):
 
         try:
-            self.settings = PTconfigmgr.ReadSettings(ExtrasPath + 'PTCfgFile.xml')
+            self.settings = PTconfigmgr.ReadSettings(os.path.join( ExtrasPath, 'PTCfgFile.xml' ) )
 
             self.EndTournamentAlarm     = self.settings['EndTournamentAlarm']
             self.EndTournamentAlarmTime = self.settings['EndTournamentAlarmTime']
@@ -392,21 +390,21 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def addControls(self):
         xbmcgui.lock()
-        self.pad = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, ExtrasPath + self.PadImageName, "", 0)
+        self.pad = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, os.path.join( GFXPath, self.PadImageName ), "", 0)
         self.addControl(self.pad)
 
-        self.padArrows = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, ExtrasPath + "PadPosArrows.png", "", 0)
+        self.padArrows = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, os.path.join( GFXPath, "PadPosArrows.png" ), "", 0)
         self.addControl(self.padArrows)
         self.padArrows.setVisible(self.MOVE_PAD)
 
         self.padTitle = xbmcgui.ControlLabel(self.offScreenX + self.titleX, self.titleY, self.titleW, self.titleH, self.ScriptTitle, self.padFontTitle, "0xFFF1EA40", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.padTitle)
 
-        self.highlight = xbmcgui.ControlImage(self.offScreenX + self.highlightX, self.highlightY, self.highlightW, self.highlightH, ExtrasPath + 'highlight.png', "", 0)
+        self.highlight = xbmcgui.ControlImage(self.offScreenX + self.highlightX, self.highlightY, self.highlightW, self.highlightH, os.path.join( GFXPath, 'highlight.png' ), "", 0)
         self.addControl(self.highlight)
         self.highlight.setVisible(False)
 
-        self.aHide = xbmcgui.ControlImage(self.offScreenX + self.aHideX, self.aHideY, self.aHideW, self.aHideH, ExtrasPath + 'lock.png', "", 2)
+        self.aHide = xbmcgui.ControlImage(self.offScreenX + self.aHideX, self.aHideY, self.aHideW, self.aHideH, os.path.join( GFXPath, 'lock.png' ), "", 2)
         self.addControl(self.aHide)
         #self.aHide.setVisible(False)
 
@@ -421,12 +419,12 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.addControl(self.TimeHeading2)
         self.TimeHeading2.setVisible(False)
 
-        self.colon = xbmcgui.ControlImage(self.offScreenX + self.colonX, self.timeY, self.timeW, self.timeH, ExtrasPath + 'red_colon.png', "", 0)
+        self.colon = xbmcgui.ControlImage(self.offScreenX + self.colonX, self.timeY, self.timeW, self.timeH, os.path.join( GFXPath, 'red_colon.png' ), "", 0)
         self.addControl(self.colon)
 
         for x in range(4):
             for y in range(10):
-                self.TimeImage[x * 10 + y] = xbmcgui.ControlImage(self.offScreenX + self.timeX[x], self.timeY, self.timeW, self.timeH, ExtrasPath + 'red_' + str(y) + '.png', "", 0)
+                self.TimeImage[x * 10 + y] = xbmcgui.ControlImage(self.offScreenX + self.timeX[x], self.timeY, self.timeW, self.timeH, os.path.join( GFXPath, 'red_%d.png' % ( y, ) ), "", 0)
                 self.addControl(self.TimeImage[x * 10 + y])
         self.resetTimer(self.LEVEL_TIME[self.LEVEL])
 
@@ -434,7 +432,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.addControl(self.LevelHeading)
 
         for x in range(2):
-            self.LevelStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.timeY, int(self.amountH * .5), self.amountH ,ExtrasPath + 'chip0.png', "", 0)
+            self.LevelStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.timeY, int(self.amountH * .5), self.amountH, os.path.join( GFXPath, 'chip0.png' ), "", 0)
             self.addControl(self.LevelStatus[x])
 
         self.statusMessageSuccess = xbmcgui.ControlFadeLabel(self.offScreenX + self.messageX, self.messageY, self.messageW, self.messageH, self.padFontMessage, "0xFF00CCFF", XBFONT_CENTER_Y|XBFONT_LEFT)
@@ -449,25 +447,25 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.addControl(self.AnteHeading)
 
         for x in range(4):
-            self.AnteStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
+            self.AnteStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, os.path.join( GFXPath, 'chip0.png' ), "", 0)
             self.addControl(self.AnteStatus[x])
 
         self.SmBlindHeading = xbmcgui.ControlLabel(self.offScreenX + self.label2X, self.label2Y, self.label2W, self.labelH, "Small Blind", self.padFontLabel, "", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.SmBlindHeading)
 
         for x in range(4):
-            self.SmBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
+            self.SmBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, os.path.join( GFXPath, 'chip0.png' ), "", 0)
             self.addControl(self.SmBlindStatus[x])
 
         self.BigBlindHeading = xbmcgui.ControlLabel(self.offScreenX + self.label3X, self.label2Y, self.label2W, self.labelH, "Big Blind", self.padFontLabel, "", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
         self.addControl(self.BigBlindHeading)
 
         for x in range(4):
-            self.BigBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, ExtrasPath + 'chip0.png', "", 0)
+            self.BigBlindStatus[x] = xbmcgui.ControlImage(self.offScreenX, self.amountY, int(self.amountH * .5), self.amountH, os.path.join( GFXPath, 'chip0.png' ), "", 0)
             self.addControl(self.BigBlindStatus[x])
 
         for x in range(1,6):
-            self.ChipImage[x] = xbmcgui.ControlImage(self.offScreenX + self.chipX[x], self.chipY, self.chipW, self.chipH, ExtrasPath + self.CHIP_IMAGE[x], "", 2)
+            self.ChipImage[x] = xbmcgui.ControlImage(self.offScreenX + self.chipX[x], self.chipY, self.chipW, self.chipH, os.path.join( GFXPath, self.CHIP_IMAGE[x] ), "", 2)
             self.addControl(self.ChipImage[x])
             if self.CHIP_AMT[x]:
                 s = str('%.2f' % self.CHIP_AMT[x])
@@ -531,7 +529,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.AnteStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.AnteStatus[x].setImage(os.path.join( GFXPath, 'green_%s.png' % ( s[x], ) ) )
             self.AnteStatus[x].setPosition(m + self.anteX[x], self.amountY)
         xbmcgui.unlock()
         
@@ -548,7 +546,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.SmBlindStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.SmBlindStatus[x].setImage(os.path.join( GFXPath, 'green_%s.png' % ( s[x], ) ) )
             self.SmBlindStatus[x].setPosition(m + self.smBlindX[x], self.amountY)
         xbmcgui.unlock()
 
@@ -565,7 +563,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(4):
-            self.BigBlindStatus[x].setImage(ExtrasPath + 'green_' + s[x] + '.png')
+            self.BigBlindStatus[x].setImage(os.path.join( GFXPath, 'green_%s.png' % ( s[x], ) ) )
             self.BigBlindStatus[x].setPosition(m + self.bigBlindX[x], self.amountY)
         xbmcgui.unlock()
         
@@ -581,7 +579,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         s = s + "    "
 
         for x in range(2):
-            self.LevelStatus[x].setImage(ExtrasPath + 'yellow_' + s[x] + '.png')
+            self.LevelStatus[x].setImage(os.path.join( GFXPath, 'yellow_%s.png' % ( s[x], ) ) )
             self.LevelStatus[x].setPosition(m + self.levelX[x], self.timeY)
         xbmcgui.unlock()
         
@@ -648,7 +646,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.settings['BLIND_TABLE']            = self.BLIND_TABLE
 
         try:
-            PTconfigmgr.saveSettings(self.settings, ExtrasPath + 'PTCfgFile.xml')
+            PTconfigmgr.saveSettings(self.settings, os.path.join( ExtrasPath, 'PTCfgFile.xml' ) )
         except:
             print "ERROR: saving settings."
 
@@ -665,7 +663,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.padsettings['padOffsetY']          = self.padOffsetY
 
         try:
-            PTconfigmgr.savePadSettings(self.padsettings, ExtrasPath + 'PTPadFile.xml')
+            PTconfigmgr.savePadSettings(self.padsettings, os.path.join( ExtrasPath, 'PTPadFile.xml' ) )
         except:
             print "ERROR: saving pad position."
 
@@ -724,7 +722,7 @@ class windowOverlay(xbmcgui.WindowDialog):
     def setChips(self):
         xbmcgui.lock()
         for x in range(1,6):
-            self.ChipImage[x].setImage(ExtrasPath + self.CHIP_IMAGE[x])
+            self.ChipImage[x].setImage(os.path.join( GFXPath, self.CHIP_IMAGE[x] ) )
             if self.CHIP_AMT[x]:
                 s = str('%.2f' % self.CHIP_AMT[x])
                 if s[-3:] == ".00":
@@ -738,8 +736,8 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.lock()
         if a:
             self.CHIP_IMAGE_NUMBER += a
-            self.CHIP_IMAGE[self.CHIP] = 'Chip' + str(self.CHIP_IMAGE_NUMBER) + '.png'
-            self.ChipImage[self.CHIP].setImage(ExtrasPath + self.CHIP_IMAGE[self.CHIP])
+            self.CHIP_IMAGE[self.CHIP] = 'Chip%d.png' % ( self.CHIP_IMAGE_NUMBER, )
+            self.ChipImage[self.CHIP].setImage(os.path.join( GFXPath, self.CHIP_IMAGE[self.CHIP] ) )
             if not self.CHIP_IMAGE_NUMBER:
                 self.CHIP_AMT[self.CHIP] = 0
         if self.CHIP_AMT[self.CHIP]:
@@ -1257,7 +1255,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 self.movePadDown()
             elif self.VISIBLE_BUTTON == 5 and (buttonDesc == 'Back Button' or buttonDesc == 'White Button' or \
                 buttonDesc == 'Remote Title Button' or buttonDesc == 'Remote Menu Button' or \
-                buttonDesc == 'Keyboard Menu Key' or buttonDesc == 'Keyboard Esc Key'):
+                buttonDesc == 'Keyboard Menu Key' or buttonDesc == 'Keyboard ESC Key'):
                 self.resetSettings()
             elif self.VISIBLE_BUTTON == 2 and (buttonDesc == 'X Button' or buttonDesc == 'Remote Display Button'):
                 self.slidePanel()
@@ -1319,38 +1317,8 @@ class autoHideTimer(threading.Thread):
             except:
                 pass
 
-#def playWarning(alarm, SleepTime):
-#    playAlarm(alarm, SleepTime)
-
 def playAlarm(alarm):#, SleepTime):
-    #CURRENT_FILE = getPlayingFile()
-    #CURRENT_TIME = getPlayingTime()
-    #xbmc.Player().play(ExtrasPath + alarm)
-    xbmc.playSFX(ExtrasPath + alarm)
-    #if SleepTime: xbmc.sleep(SleepTime)
-#    playFile(CURRENT_FILE, CURRENT_TIME)
-#    activateGUI()
-
-#def playFile(CURRENT_FILE, CURRENT_TIME):
-#    if CURRENT_FILE == "{none}":
-#        xbmc.Player().stop()
-#    else:
-#        xbmc.Player().play(CURRENT_FILE)
-#        xbmc.Player().seekTime(CURRENT_TIME)
-
-#def getPlayingFile():
-#    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
-#        CURRENT_FILE = xbmc.Player().getPlayingFile()
-#    else:
-#        CURRENT_FILE = "{none}"
-#    return CURRENT_FILE
-
-#def getPlayingTime():
-#    if xbmc.Player().isPlayingAudio() or xbmc.Player().isPlayingVideo():
-#        CURRENT_TIME = xbmc.Player().getTime()
-#    else:
-#        CURRENT_TIME = "{none}"
-#    return CURRENT_TIME
+    xbmc.playSFX(os.path.join( SoundPath, alarm) )
 
 def activateGUI():
     if xbmc.Player().isPlayingAudio():
@@ -1376,5 +1344,4 @@ while 1:
     MyDisplay = windowOverlay()
     MyDisplay.doModal()
     if MyDisplay.EXIT_SCRIPT: break
-    #del MyDisplay
 del MyDisplay
