@@ -266,8 +266,8 @@ class Tetris(xbmcgui.WindowDialog):
 		self.blockSize = 17
 		self.spacing = 3
 		self.blockX = 400
-		self.blockY = 50
-		self.addControl(xbmcgui.ControlImage(self.blockX-117,self.blockY-20,353,445, ROOT_DIR+'images\\background.png'))
+		self.blockY = 70
+		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, ROOT_DIR+'images\\background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
 		self.imgNextPiece = []
@@ -408,19 +408,19 @@ class Tetris(xbmcgui.WindowDialog):
  		elif action == ACTION_MOVE_RIGHT:
  			controller.movePiece(1)
  		elif action == ACTION_MOVE_UP:
- 			controller.rotatePiece(1)
- 		elif action == ACTION_MOVE_DOWN:
- 			controller.rotatePiece(-1)
- 		elif action == ACTION_SELECT_ITEM:
+ 			event,rows = controller.quickDrop(fromGround=2)
+ 		elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
  			event,rows = controller.quickDrop(fromGround=0)
 			if rows == 0 and not event == EVENT_GAME_OVER:
 				xbmc.playSFX(ROOT_DIR+"sounds\\bigdrop.wav")
  		elif action == ACTION_SHOW_GUI:
- 			event,rows = controller.quickDrop(fromGround=2)
-		elif action == ACTION_SCROLL_UP:
-			event,rows = controller.dropPiece()
+			controller.rotatePiece(-1)
+		#elif action == ACTION_SCROLL_UP:
+		#	event,rows = controller.dropPiece()
  			
-  		elif action == ACTION_PARENT_DIR or action == ACTION_PREVIOUS_MENU:
+  		elif action == ACTION_PARENT_DIR:
+			controller.rotatePiece(1)
+		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
 			lock.release()
 			self.close()
@@ -456,7 +456,7 @@ class Tetris(xbmcgui.WindowDialog):
 
 lock = threading.Lock()
 random.seed()
-board = Board(11,20)
+board = Board(10,20)
 controller = BoardController(board)
 t = Tetris()
 t.setController(controller)
