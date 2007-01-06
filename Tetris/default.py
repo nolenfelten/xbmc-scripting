@@ -130,11 +130,10 @@ class Board:
 			self.blocks.append([COLOR_NONE]*self.width)
 
 	def clear(self):
-		LOG('CL')
+		LOG('Clear')
 		self.blocks = []
 		LOG('CL2')
 		for i in range(self.height):
-			LOG('CL3')
 			self.blocks.append([COLOR_NONE]*self.width)
 		LOG('CL4')
 
@@ -157,7 +156,7 @@ class Board:
 					self.blocks[i+piece.y][j+piece.x] = piece.type.color
 	
 	def deleteRow(self,row):
-		LOG('DR')
+		LOG('DeleteRow')
 		for i in range(row,0,-1):
 			LOG('DR1' + str(i))
 			self.blocks[i] = self.blocks[i-1][:]
@@ -183,7 +182,7 @@ class BoardController:
 
 #	returns whether number 
 	def dropPiece(self):
-		LOG('DP')
+		LOG('DropPiece')
 		if not self.board.isCollision(self.curPiece,self.curPiece.x,self.curPiece.y+1,self.curPiece.rotation):
 			LOG('DP1')
 			self.curPiece.y = self.curPiece.y + 1
@@ -199,19 +198,20 @@ class BoardController:
 				self.nLevel += 1
 				self.nScore += 15 * self.nLevel
 				return EVENT_LEVEL_UP,rows
-			return EVENT_NEW_PIECE,rows
 			LOG('DP3')
+			return EVENT_NEW_PIECE,rows
+			
 	
 	def checkBoard(self):
-		LOG('CB')
+		LOG('  CheckBoard->')
 		rows = 0
 		for row in range(self.board.height):
-			LOG('CB1')
 			if board.isRowFilled(row):
 				LOG('CB2')
 				board.deleteRow(row)
 				self.nLines += 1
 				rows += 1
+		LOG('  CheckBoard<-')
 		return rows
 		
 	def movePiece(self,dx):
@@ -239,14 +239,14 @@ class BoardController:
 		return EVENT_NEW_PIECE
 
 	def gameOver(self):
-		LOG('GO')
+		LOG('GameOver')
 		self.newGame()
 
 	def newGame(self):
 		self.nLines = 0
 		self.nLevel = 1
 		self.nScore = 0	
-		LOG('NG')
+		LOG('NewGame')
 		self.board.clear()
 		LOG('NG2')
 		self.doNewPiece();
@@ -291,15 +291,18 @@ class Tetris(xbmcgui.WindowDialog):
 				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.08)
 				LOG('TIMER sleep')
 				time.sleep(sleeptime)
-				LOG('-> TIMER TICK')
+				LOG('-> TIMER attempting lock')
+				#This mutex thing is really lame, the lock is broken I swear!!
+				view.mutex = False
 				lock.acquire()
-				LOG('   TIMER: LOCK acquired!')
+				LOG('   TIMER lock acquired!')
 				event,rows = controller.dropPiece()
 				view.processEvent(event,rows)
-				#if rows == 0:
-				#	xbmc.playSFX(ROOT_DIR+"sounds\\drop.wav")
+				if rows == 0:
+					xbmc.playSFX(ROOT_DIR+"sounds\\drop.wav")
 				LOG('   TIMER: LOCK released!')
 				lock.release()
+				view.mutex = True
 				LOG('<- TIMER TICK')
 				
 			
@@ -352,7 +355,7 @@ class Tetris(xbmcgui.WindowDialog):
  		LOG('<- UB4')
  		
  	def updatePiece(self):
- 		LOG('-> UP ' + str(len(self.imgPiece)))
+ 		LOG('-> Update Piece')
  		for img in self.imgPiece:
  			self.removeControl(img)
 
@@ -369,11 +372,11 @@ class Tetris(xbmcgui.WindowDialog):
 		self.lblLevel.setLabel(str(self.controller.nLevel))
 		for i in range(len(PIECETYPE)):
 			self.lblPieceCount[i].setLabel(str(self.controller.nPieceCount[i]))
- 		LOG('<- UP4')
+ 		LOG('<- Update Piece')
  		
 
 	def rasterPiece(self,piece,blockX,blockY,spacing,size):
-		LOG('RP ->')
+		LOG('RasterPiece ->')
 		mask = piece.getCollisionMask(piece.rotation)
 		LOG('RP2')
 		imgRaster = []
@@ -384,7 +387,7 @@ class Tetris(xbmcgui.WindowDialog):
  					imgRaster.append(self.blockImage(i+piece.y,j+piece.x,piece.type.color,blockX,blockY,spacing,size))
  					self.addControl(imgRaster[-1])
  		return imgRaster
- 		LOG('RP <-')
+ 		LOG('RasterPiece <-')
 		
 
  	def blockImage(self,i,j,color,blockX,blockY,spacing,size):
@@ -396,11 +399,11 @@ class Tetris(xbmcgui.WindowDialog):
 #			return
 		if not self.mutex:
 			return
-		LOG('OA: attempting to acquire lock')
-		lock.acquire()
-		LOG('OA: lock acquired')
 		self.mutex = False
-		LOG('-> OA')
+		LOG('-> OnAct attempting lock')
+		while not lock.acquire(False):
+			pass
+		LOG('   OnAct lock acquired!!')
 		event = 0
 		rows = 0
  		if action == ACTION_MOVE_LEFT:
@@ -430,11 +433,11 @@ class Tetris(xbmcgui.WindowDialog):
 		self.mutex = True
 		LOG('OA: lock released')
 		lock.release()
-		LOG('<- OA3')
+		LOG('<- OnAction')
 
 	def processEvent(self,event,rows):
 		xbmcgui.lock()
-		LOG('PE-> ' + str(event)+ ' ' + str(rows))
+		LOG('ProcessEvent-> ' + str(event)+ ' ' + str(rows))
 		self.updatePiece()
 		entryEvent = event
 		if event == EVENT_NEW_PIECE or event == EVENT_LEVEL_UP:
@@ -450,7 +453,7 @@ class Tetris(xbmcgui.WindowDialog):
 			xbmc.playSFX(ROOT_DIR+"sounds\\levelup.wav")
 		elif rows > 0:
 			xbmc.playSFX(ROOT_DIR+"sounds\\clear"+str(rows)+".wav")
-		LOG('PE<-')
+		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
 		
 
