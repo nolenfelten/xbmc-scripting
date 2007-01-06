@@ -62,7 +62,7 @@ COLOR_MAGENTA 	= 6
 COLOR_ORANGE 	= 7
 COLORS = ['none','blu','red','gre','yel','cya','mag','ora']
 
-DO_LOGGING = 1
+DO_LOGGING = 0
 try:
 	LOG_FILE.close()
 except Exception:
@@ -255,7 +255,7 @@ class BoardController:
 
 	def newGame(self):
 		self.nLines = 0
-		self.nLevel = 10
+		self.nLevel = 1
 		self.nScore = 0	
 		LOG('NewGame')
 		self.board.clear()
