@@ -38,6 +38,17 @@ XBFONT_CENTER_X   = 0x00000002
 XBFONT_CENTER_Y   = 0x00000004
 XBFONT_TRUNCATED  = 0x00000008
 
+COORD_1080I      = 0 
+COORD_720P       = 1 
+COORD_480P_4X3   = 2 
+COORD_480P_16X9  = 3 
+COORD_NTSC_4X3   = 4 
+COORD_NTSC_16X9  = 5 
+COORD_PAL_4X3    = 6 
+COORD_PAL_16X9   = 7 
+COORD_PAL60_4X3  = 8 
+COORD_PAL60_16X9 = 9 
+
 ROOT_DIR = os.getcwd()[:-1]+'\\'    
 
 MAX_LENGTH 		= 4
@@ -244,7 +255,7 @@ class BoardController:
 
 	def newGame(self):
 		self.nLines = 0
-		self.nLevel = 1
+		self.nLevel = 10
 		self.nScore = 0	
 		LOG('NewGame')
 		self.board.clear()
@@ -263,6 +274,7 @@ EVENT_LEVEL_UP = 4
 
 class Tetris(xbmcgui.WindowDialog):
 	def __init__(self):
+		self.setCoordinateResolution(COORD_PAL_4X3)
 		self.blockSize = 17
 		self.spacing = 3
 		self.blockX = 400
@@ -272,6 +284,7 @@ class Tetris(xbmcgui.WindowDialog):
 		self.imgPiece = []
 		self.imgNextPiece = []
 		self.mutex = True
+		self.pendingAction = None
 		self.timer = True
 		self.renderPieces()
 		self.renderLabels()
@@ -285,15 +298,13 @@ class Tetris(xbmcgui.WindowDialog):
 	def startTimer(self):
 		LOG('Start Timer')
 		self.timer = True
-		self.something = 4
+
 		def timerProc(view,controller,delay):
 			while view.timer:
-				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.08)
+				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
 				LOG('TIMER sleep')
 				time.sleep(sleeptime)
 				LOG('-> TIMER attempting lock')
-				#This mutex thing is really lame, the lock is broken I swear!!
-				view.mutex = False
 				lock.acquire()
 				LOG('   TIMER lock acquired!')
 				event,rows = controller.dropPiece()
@@ -302,9 +313,9 @@ class Tetris(xbmcgui.WindowDialog):
 					xbmc.playSFX(ROOT_DIR+"sounds\\drop.wav")
 				LOG('   TIMER: LOCK released!')
 				lock.release()
-				view.mutex = True
 				LOG('<- TIMER TICK')
-				
+
+			
 			
 		self.subThread = threading.Thread(target=timerProc, args=(self,self.controller,1.50))
 		self.subThread.setDaemon(True)
@@ -393,47 +404,6 @@ class Tetris(xbmcgui.WindowDialog):
  	def blockImage(self,i,j,color,blockX,blockY,spacing,size):
  		return xbmcgui.ControlImage(blockX + (size + spacing)*j, blockY + (size + spacing)*i,
 									size, size, ROOT_DIR+"images\\block_"+COLORS[color]+'.jpg')
- 
-	def onAction(self, action):
-#		if not lock.acquire(blocking=0):
-#			return
-		if not self.mutex:
-			return
-		self.mutex = False
-		LOG('-> OnAct attempting lock')
-		while not lock.acquire(False):
-			pass
-		LOG('   OnAct lock acquired!!')
-		event = 0
-		rows = 0
- 		if action == ACTION_MOVE_LEFT:
- 			controller.movePiece(-1)
- 		elif action == ACTION_MOVE_RIGHT:
- 			controller.movePiece(1)
- 		elif action == ACTION_MOVE_UP:
- 			event,rows = controller.quickDrop(fromGround=2)
- 		elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
- 			event,rows = controller.quickDrop(fromGround=0)
-			if rows == 0 and not event == EVENT_GAME_OVER:
-				xbmc.playSFX(ROOT_DIR+"sounds\\bigdrop.wav")
- 		elif action == ACTION_SHOW_GUI:
-			controller.rotatePiece(-1)
-		#elif action == ACTION_SCROLL_UP:
-		#	event,rows = controller.dropPiece()
- 			
-  		elif action == ACTION_PARENT_DIR:
-			controller.rotatePiece(1)
-		elif action == ACTION_PREVIOUS_MENU:
-			LOG('OA2: lock released')
-			lock.release()
-			self.close()
-			return
-		LOG('OA2')
-		self.processEvent(event,rows)
-		self.mutex = True
-		LOG('OA: lock released')
-		lock.release()
-		LOG('<- OnAction')
 
 	def processEvent(self,event,rows):
 		xbmcgui.lock()
@@ -455,6 +425,49 @@ class Tetris(xbmcgui.WindowDialog):
 			xbmc.playSFX(ROOT_DIR+"sounds\\clear"+str(rows)+".wav")
 		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
+
+ 
+	def onAction(self, action):
+		def SubProc(view,action):
+			view.onActionProc(action)
+		
+		thread = threading.Thread(target=SubProc, args=(self,action))
+		thread.setDaemon(True)
+		thread.start()
+
+	def onActionProc(self, action):
+		lock.acquire()
+		LOG('   OnAct lock acquired!!')
+		event = 0
+		rows = 0
+	 	if action == ACTION_MOVE_LEFT:
+	 		controller.movePiece(-1)
+	 	elif action == ACTION_MOVE_RIGHT:
+	 		controller.movePiece(1)
+	 	elif action == ACTION_MOVE_UP:
+	 		event,rows = controller.quickDrop(fromGround=2)
+	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
+	 		event,rows = controller.quickDrop(fromGround=0)
+			if rows == 0 and not event == EVENT_GAME_OVER:
+				xbmc.playSFX(ROOT_DIR+"sounds\\bigdrop.wav")
+	 	elif action == ACTION_SHOW_GUI:
+			controller.rotatePiece(1)
+		elif action == ACTION_SCROLL_UP:
+			event,rows = controller.dropPiece()
+	 		
+	  	elif action == ACTION_PARENT_DIR:
+			controller.rotatePiece(-1)
+		elif action == ACTION_PREVIOUS_MENU:
+			LOG('OA2: lock released')
+			lock.release()
+			self.close()
+			return
+		LOG('OA2')
+		self.processEvent(event,rows)
+		LOG('OA: lock released')
+		lock.release()
+		LOG('<- OnAction')
+
 		
 
 lock = threading.Lock()
