@@ -17,8 +17,8 @@ Credits:
 '''
 
 import xbmcgui, xbmc
-import threading
 import os, sys
+import threading
 
 ExtrasPath = os.path.join(sys.path[0], 'extras')
 sys.path.append(os.path.join(ExtrasPath, 'lib'))
