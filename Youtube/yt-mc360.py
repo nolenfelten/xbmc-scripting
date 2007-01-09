@@ -20,7 +20,7 @@ except: Emulating = False
 download_first = 1
 
 __title__ = "YouTube.com"
-__version__ = '1.6'
+__version__ = '1.8b'
 __coder__ = 'Donno'
 __author__ = 'Donno [darkdonno@gmail.com]'
 __date__ = '2006'
