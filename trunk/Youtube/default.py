@@ -3,7 +3,7 @@
     Using RSS Feed for the Data
     Coding By Donno [darkdonno@gmail.com]
     BackButton by BlackBolt
-    Version: 1.8a
+    Version: 1.8b
 
     Changes Since 1.8
         - Fixed little bug reguarding playvide on list
@@ -50,7 +50,7 @@ except: Emulating = False
 download_first = 1
 
 __title__ = "YouTube.com"
-__version__ = '1.8a'
+__version__ = '1.8b'
 __coder__ = 'Donno'
 __author__ = 'Donno [darkdonno@gmail.com]'
 __date__ = '2006'
@@ -70,7 +70,7 @@ fc = "0xFFFFFFFF"
 txtboxColor = fc
 if SD == "pdm":
     yPath = ""
-if  SD == "project mayhem ii" or  SD == "project mayhem 1":
+if  SD == "project mayhem ii" or  SD == "project mayhem i":
     yPath = ""
     txtboxColor = "0xFF000000"
 
