@@ -21,16 +21,43 @@ ACTION_HIGHLIGHT_ITEM	= 8
 ACTION_PARENT_DIR	= 9
 ACTION_PREVIOUS_MENU	= 10
 ACTION_SHOW_INFO	= 11
-
 ACTION_PAUSE		= 12
 ACTION_STOP		= 13
 ACTION_NEXT_ITEM	= 14
 ACTION_PREV_ITEM	= 15
-
 ACTION_SHOW_GUI = 18  #X Button
-
 ACTION_SCROLL_UP	= 111
 ACTION_SCROLL_DOWN	= 112
+
+KEY_BUTTON_A                        = 256
+KEY_BUTTON_B                        = 257
+KEY_BUTTON_X                        = 258
+KEY_BUTTON_Y                        = 259
+KEY_BUTTON_BLACK                    = 260
+KEY_BUTTON_WHITE                    = 261
+KEY_BUTTON_LEFT_TRIGGER             = 262
+KEY_BUTTON_RIGHT_TRIGGER            = 263
+KEY_BUTTON_LEFT_THUMB_STICK         = 264
+KEY_BUTTON_RIGHT_THUMB_STICK        = 265
+KEY_BUTTON_RIGHT_THUMB_STICK_UP     = 266 # right thumb stick directions
+KEY_BUTTON_RIGHT_THUMB_STICK_DOWN   = 267 # for defining different actions per direction
+KEY_BUTTON_RIGHT_THUMB_STICK_LEFT   = 268
+KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT  = 269
+KEY_BUTTON_DPAD_UP                  = 270
+KEY_BUTTON_DPAD_DOWN                = 271
+KEY_BUTTON_DPAD_LEFT                = 272
+KEY_BUTTON_DPAD_RIGHT               = 273
+KEY_BUTTON_START                    = 274
+KEY_BUTTON_BACK                     = 275
+KEY_BUTTON_LEFT_THUMB_BUTTON        = 276
+KEY_BUTTON_RIGHT_THUMB_BUTTON       = 277
+KEY_BUTTON_LEFT_ANALOG_TRIGGER      = 278
+KEY_BUTTON_RIGHT_ANALOG_TRIGGER     = 279
+KEY_BUTTON_LEFT_THUMB_STICK_UP      = 280 # left thumb stick  directions
+KEY_BUTTON_LEFT_THUMB_STICK_DOWN    = 281 # for defining different actions per direction
+KEY_BUTTON_LEFT_THUMB_STICK_LEFT    = 282
+KEY_BUTTON_LEFT_THUMB_STICK_RIGHT   = 283
+
 
 XBFONT_LEFT       = 0x00000000
 XBFONT_RIGHT      = 0x00000001
@@ -50,6 +77,8 @@ COORD_PAL60_4X3  = 8
 COORD_PAL60_16X9 = 9 
 
 ROOT_DIR = os.getcwd()[:-1]+'\\'    
+IMAGE_DIR = ROOT_DIR+"images\\"
+SOUND_DIR = ROOT_DIR+"sounds\\"
 
 MAX_LENGTH 		= 4
 COLOR_NONE 		= 0
@@ -62,7 +91,7 @@ COLOR_MAGENTA 	= 6
 COLOR_ORANGE 	= 7
 COLORS = ['none','blu','red','gre','yel','cya','mag','ora']
 
-DO_LOGGING = 0
+DO_LOGGING = 1
 try:
 	LOG_FILE.close()
 except Exception:
@@ -271,6 +300,14 @@ EVENT_GAME_OVER = 2
 EVENT_NEW_GAME = 3
 EVENT_LEVEL_UP = 4
 
+class PauseWindow(xbmcgui.WindowDialog):
+	def setPosition(self,x,y):
+		self.setCoordinateResolution(COORD_PAL_4X3)
+		self.addControl(xbmcgui.ControlImage(x,y,213,113, IMAGE_DIR+'pause.png'))
+	
+	def onAction(self, action):
+		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE):
+			self.close()
 
 class Tetris(xbmcgui.WindowDialog):
 	def __init__(self):
@@ -279,7 +316,9 @@ class Tetris(xbmcgui.WindowDialog):
 		self.spacing = 3
 		self.blockX = 400
 		self.blockY = 70
-		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, ROOT_DIR+'images\\background.png'))
+		self.pauseWindow = PauseWindow()
+		self.pauseWindow.setPosition(self.blockX-20,self.blockY + 70)
+		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
 		self.imgNextPiece = []
@@ -300,20 +339,23 @@ class Tetris(xbmcgui.WindowDialog):
 		self.timer = True
 
 		def timerProc(view,controller,delay):
+			sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
+			LOG('TIMER sleep')
+			time.sleep(sleeptime)		
 			while view.timer:
-				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
-				LOG('TIMER sleep')
-				time.sleep(sleeptime)
 				LOG('-> TIMER attempting lock')
 				lock.acquire()
 				LOG('   TIMER lock acquired!')
 				event,rows = controller.dropPiece()
 				view.processEvent(event,rows)
 				if rows == 0:
-					xbmc.playSFX(ROOT_DIR+"sounds\\drop.wav")
+					xbmc.playSFX(SOUND_DIR+"drop.wav")
 				LOG('   TIMER: LOCK released!')
 				lock.release()
-				LOG('<- TIMER TICK')
+				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
+				LOG('TIMER sleep')
+				time.sleep(sleeptime)		
+
 
 			
 			
@@ -403,7 +445,7 @@ class Tetris(xbmcgui.WindowDialog):
 
  	def blockImage(self,i,j,color,blockX,blockY,spacing,size):
  		return xbmcgui.ControlImage(blockX + (size + spacing)*j, blockY + (size + spacing)*i,
-									size, size, ROOT_DIR+"images\\block_"+COLORS[color]+'.jpg')
+									size, size, IMAGE_DIR+"block_"+COLORS[color]+'.jpg')
 
 	def processEvent(self,event,rows):
 		xbmcgui.lock()
@@ -418,14 +460,28 @@ class Tetris(xbmcgui.WindowDialog):
 		if event == EVENT_GAME_OVER or rows > 0:
 			self.updateBlocks()
 		if event == EVENT_GAME_OVER:
-			xbmc.playSFX(ROOT_DIR+"sounds\\gameover.wav")
+			xbmc.playSFX(SOUND_DIR+"gameover.wav")
 		if entryEvent == EVENT_LEVEL_UP:
-			xbmc.playSFX(ROOT_DIR+"sounds\\levelup.wav")
+			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 		elif rows > 0:
-			xbmc.playSFX(ROOT_DIR+"sounds\\clear"+str(rows)+".wav")
+			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
 		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
 
+	def togglePause(self):
+		xbmcgui.lock()
+		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece):
+			self.removeControl(img)
+		xbmcgui.unlock()
+		self.pauseWindow.show()
+		self.stopTimer()
+		self.pauseWindow.doModal()
+		xbmcgui.lock()
+		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece):
+			self.addControl(img)
+		self.startTimer()
+		xbmcgui.unlock()
+		
  
 	def onAction(self, action):
 		def SubProc(view,action):
@@ -449,12 +505,13 @@ class Tetris(xbmcgui.WindowDialog):
 	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
 	 		event,rows = controller.quickDrop(fromGround=0)
 			if rows == 0 and not event == EVENT_GAME_OVER:
-				xbmc.playSFX(ROOT_DIR+"sounds\\bigdrop.wav")
+				xbmc.playSFX(SOUND_DIR+"bigdrop.wav")
 	 	elif action == ACTION_SHOW_GUI:
 			controller.rotatePiece(1)
-		elif action == ACTION_SCROLL_UP:
+		elif action == ACTION_SCROLL_DOWN:
 			event,rows = controller.dropPiece()
-	 		
+		elif action == ACTION_PAUSE:
+	 		self.togglePause()
 	  	elif action == ACTION_PARENT_DIR:
 			controller.rotatePiece(-1)
 		elif action == ACTION_PREVIOUS_MENU:
