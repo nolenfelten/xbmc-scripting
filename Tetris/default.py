@@ -89,7 +89,8 @@ COLOR_YELLOW 	= 4
 COLOR_CYAN 		= 5
 COLOR_MAGENTA 	= 6
 COLOR_ORANGE 	= 7
-COLORS = ['none','blu','red','gre','yel','cya','mag','ora']
+COLOR_GHOST 	= 8
+COLORS = ['none','blu','red','gre','yel','cya','mag','ora','ghost']
 
 DO_LOGGING = 1
 try:
@@ -153,6 +154,7 @@ PIECETYPE = [
 class Piece:
 	def __init__(self,type):
 		self.type = type
+		self.color = type.color
 		self.y = 0
 		self.x = 0
 		self.rotation = 0
@@ -266,6 +268,14 @@ class BoardController:
 		while not self.board.isCollision(self.curPiece,self.curPiece.x,self.curPiece.y+fromGround+1,self.curPiece.rotation):
 			self.dropPiece()
 		return self.dropPiece()
+	
+	def getDroppedPieceCopy(self):
+		copyPiece = Piece(self.curPiece.type)
+		copyPiece.x,copyPiece.y,copyPiece.rotation = self.curPiece.x,self.curPiece.y,self.curPiece.rotation
+		while not self.board.isCollision(copyPiece,copyPiece.x,copyPiece.y+1,copyPiece.rotation):
+			copyPiece.y += 1
+		copyPiece.color = COLOR_GHOST
+		return copyPiece
 
 	def doNewPiece(self):
 		LOG('DN')
@@ -300,7 +310,10 @@ EVENT_GAME_OVER = 2
 EVENT_NEW_GAME = 3
 EVENT_LEVEL_UP = 4
 
-class PauseWindow(xbmcgui.WindowDialog):
+GRAVITY_SPEED_DELAY = 2
+GRAVITY_NEW_PIECE_DELAY = 1
+
+class PauseDialog(xbmcgui.WindowDialog):
 	def setPosition(self,x,y):
 		self.setCoordinateResolution(COORD_PAL_4X3)
 		self.addControl(xbmcgui.ControlImage(x,y,213,113, IMAGE_DIR+'pause.png'))
@@ -316,12 +329,15 @@ class Tetris(xbmcgui.WindowDialog):
 		self.spacing = 3
 		self.blockX = 400
 		self.blockY = 70
-		self.pauseWindow = PauseWindow()
-		self.pauseWindow.setPosition(self.blockX-20,self.blockY + 70)
+		self.pauseDialog = PauseDialog()
+		self.pauseDialog.setPosition(self.blockX-20,self.blockY + 70)
+		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
+		
 		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
 		self.imgNextPiece = []
+		self.imgGhostPiece = []
 		self.mutex = True
 		self.pendingAction = None
 		self.timer = True
@@ -348,8 +364,8 @@ class Tetris(xbmcgui.WindowDialog):
 				LOG('   TIMER lock acquired!')
 				event,rows = controller.dropPiece()
 				view.processEvent(event,rows)
-				if rows == 0:
-					xbmc.playSFX(SOUND_DIR+"drop.wav")
+				if self.gravityControl >= GRAVITY_SPEED_DELAY:
+					self.gravityControl -= 1
 				LOG('   TIMER: LOCK released!')
 				lock.release()
 				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
@@ -406,20 +422,25 @@ class Tetris(xbmcgui.WindowDialog):
  					self.imgBlocks.append(self.blockImage(i,j,self.board.blocks[i][j],self.blockX,self.blockY,self.spacing,self.blockSize))
  					self.addControl(self.imgBlocks[-1])
  		LOG('<- UB4')
+
+	def removeBlocks(self, blocks):
+		for img in blocks:
+ 			self.removeControl(img)
  		
  	def updatePiece(self):
  		LOG('-> Update Piece')
- 		for img in self.imgPiece:
- 			self.removeControl(img)
-
+		self.removeBlocks(self.imgGhostPiece)	
+		self.imgGhostPiece = self.rasterPiece(self.controller.getDroppedPieceCopy(),self.blockX,self.blockY,self.spacing,self.blockSize)
+		
+		self.removeBlocks(self.imgPiece)
 		self.imgPiece = self.rasterPiece(self.controller.curPiece,self.blockX,self.blockY,self.spacing,self.blockSize)
 
- 		for img in self.imgNextPiece:
- 			self.removeControl(img)
-		LOG('UP2.5')
+		self.removeBlocks(self.imgNextPiece)
 		self.imgNextPiece = self.rasterPiece(self.controller.nextPiece,
 			self.blockX-40-self.controller.nextPiece.type.size*12,self.blockY+18-self.controller.nextPiece.type.size*6,2,10)
 
+
+			
 		self.lblLines.setLabel(str(self.controller.nLines))
 		self.lblScore.setLabel(str(self.controller.nScore))
 		self.lblLevel.setLabel(str(self.controller.nLevel))
@@ -437,7 +458,7 @@ class Tetris(xbmcgui.WindowDialog):
  			for j in range(len(mask[0])):
  				if mask[i][j]:
  					LOG('RP3')
- 					imgRaster.append(self.blockImage(i+piece.y,j+piece.x,piece.type.color,blockX,blockY,spacing,size))
+ 					imgRaster.append(self.blockImage(i+piece.y,j+piece.x,piece.color,blockX,blockY,spacing,size))
  					self.addControl(imgRaster[-1])
  		return imgRaster
  		LOG('RasterPiece <-')
@@ -459,25 +480,31 @@ class Tetris(xbmcgui.WindowDialog):
 			self.updatePiece()
 		if event == EVENT_GAME_OVER or rows > 0:
 			self.updateBlocks()
-		if event == EVENT_GAME_OVER:
-			xbmc.playSFX(ROOT_DIR+"sounds\\gameover.wav")#SOUND_DIR+"gameover.wav")
-		if entryEvent == EVENT_LEVEL_UP:
+			
+		if event == EVENT_GAME_OVER:      #sound priority
+			xbmc.playSFX(SOUND_DIR+"gameover.wav")
+		elif entryEvent == EVENT_LEVEL_UP:
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 		elif rows > 0:
 			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
+		elif entryEvent == EVENT_NEW_PIECE:
+			xbmc.playSFX(SOUND_DIR+"lock.wav")
+		else:
+			xbmc.playSFX(SOUND_DIR+"drop.wav")
 		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
 
 	def togglePause(self):
 		xbmcgui.lock()
-		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece):
-			self.removeControl(img)
+		self.removeBlocks(self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece)
+		self.pauseDialog.show()
 		xbmcgui.unlock()
-		self.pauseWindow.show()
 		self.stopTimer()
-		self.pauseWindow.doModal()
+		xbmc.playSFX(SOUND_DIR+"pause.wav")
+		self.pauseDialog.doModal()
+		xbmc.playSFX(SOUND_DIR+"unpause.wav")
 		xbmcgui.lock()
-		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece):
+		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece):
 			self.addControl(img)
 		self.startTimer()
 		xbmcgui.unlock()
@@ -506,13 +533,19 @@ class Tetris(xbmcgui.WindowDialog):
 	 		event,rows = controller.quickDrop(fromGround=2)
 	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
 	 		event,rows = controller.quickDrop(fromGround=0)
-			if rows == 0 and not event == EVENT_GAME_OVER:
-				xbmc.playSFX(SOUND_DIR+"bigdrop.wav")
 	 	elif action == ACTION_SHOW_GUI:
 			controller.rotatePiece(1)
 			xbmc.playSFX(SOUND_DIR+"rotate.wav")
 		elif action == ACTION_SCROLL_DOWN:
-			event,rows = controller.dropPiece()
+			if self.gravityControl < GRAVITY_SPEED_DELAY: 
+				# this slows down the frequency			
+				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
+				if self.gravityControl == 0:
+					event,rows = controller.dropPiece()
+					# give it a break after you hit bottom
+					if event == EVENT_NEW_PIECE:
+						# if we hit the ground give gravity a break for a bit				
+						self.gravityControl = GRAVITY_SPEED_DELAY + GRAVITY_NEW_PIECE_DELAY - 1 
 		elif action == ACTION_PAUSE:
 	 		self.togglePause()
 	  	elif action == ACTION_PARENT_DIR:
