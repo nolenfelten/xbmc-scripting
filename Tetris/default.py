@@ -460,7 +460,7 @@ class Tetris(xbmcgui.WindowDialog):
 		if event == EVENT_GAME_OVER or rows > 0:
 			self.updateBlocks()
 		if event == EVENT_GAME_OVER:
-			xbmc.playSFX(SOUND_DIR+"gameover.wav")
+			xbmc.playSFX(ROOT_DIR+"sounds\\gameover.wav")#SOUND_DIR+"gameover.wav")
 		if entryEvent == EVENT_LEVEL_UP:
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 		elif rows > 0:
@@ -498,8 +498,10 @@ class Tetris(xbmcgui.WindowDialog):
 		rows = 0
 	 	if action == ACTION_MOVE_LEFT:
 	 		controller.movePiece(-1)
+			xbmc.playSFX(SOUND_DIR+"move.wav")
 	 	elif action == ACTION_MOVE_RIGHT:
 	 		controller.movePiece(1)
+			xbmc.playSFX(SOUND_DIR+"move.wav")
 	 	elif action == ACTION_MOVE_UP:
 	 		event,rows = controller.quickDrop(fromGround=2)
 	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
@@ -508,11 +510,13 @@ class Tetris(xbmcgui.WindowDialog):
 				xbmc.playSFX(SOUND_DIR+"bigdrop.wav")
 	 	elif action == ACTION_SHOW_GUI:
 			controller.rotatePiece(1)
+			xbmc.playSFX(SOUND_DIR+"rotate.wav")
 		elif action == ACTION_SCROLL_DOWN:
 			event,rows = controller.dropPiece()
 		elif action == ACTION_PAUSE:
 	 		self.togglePause()
 	  	elif action == ACTION_PARENT_DIR:
+			xbmc.playSFX(SOUND_DIR+"rotate.wav")
 			controller.rotatePiece(-1)
 		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
@@ -525,8 +529,7 @@ class Tetris(xbmcgui.WindowDialog):
 		lock.release()
 		LOG('<- OnAction')
 
-		
-
+xbmc.enableNavSounds(False)
 lock = threading.Lock()
 random.seed()
 board = Board(10,20)
@@ -537,5 +540,5 @@ t.startTimer()
 t.doModal()
 t.stopTimer()
 del t,controller,board
-
+xbmc.enableNavSounds(True)
 LOGCLOSE()
