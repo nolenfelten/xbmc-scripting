@@ -92,7 +92,7 @@ COLOR_ORANGE 	= 7
 COLOR_GHOST 	= 8
 COLORS = ['none','blu','red','gre','yel','cya','mag','ora','ghost']
 
-DO_LOGGING = 1
+DO_LOGGING = 0
 try:
 	LOG_FILE.close()
 except Exception:
@@ -228,7 +228,7 @@ class BoardController:
 		if not self.board.isCollision(self.curPiece,self.curPiece.x,self.curPiece.y+1,self.curPiece.rotation):
 			LOG('DP1')
 			self.curPiece.y = self.curPiece.y + 1
-			return EVENT_NONE,0
+			return EVENT_DROP,0
 		else:
 			LOG('DP2')
 			self.board.addPiece(self.curPiece)
@@ -259,10 +259,12 @@ class BoardController:
 	def movePiece(self,dx):
 		if not self.board.isCollision(self.curPiece,self.curPiece.x+dx,self.curPiece.y,self.curPiece.rotation):
 			self.curPiece.x = self.curPiece.x + dx
+		return EVENT_MOVE
 
 	def rotatePiece(self,dr):
 		if not self.board.isCollision(self.curPiece,self.curPiece.x,self.curPiece.y,(self.curPiece.rotation + dr) % self.curPiece.type.symmetry):
 			self.curPiece.rotation = (self.curPiece.rotation + dr) % self.curPiece.type.symmetry
+		return EVENT_ROTATE
 	
 	def quickDrop(self, fromGround=2):
 		while not self.board.isCollision(self.curPiece,self.curPiece.x,self.curPiece.y+fromGround+1,self.curPiece.rotation):
@@ -309,9 +311,15 @@ EVENT_NEW_PIECE = 1
 EVENT_GAME_OVER = 2
 EVENT_NEW_GAME = 3
 EVENT_LEVEL_UP = 4
+EVENT_MOVE = 5
+EVENT_ROTATE = 6
+EVENT_DROP = 7
 
-GRAVITY_SPEED_DELAY = 2
+GRAVITY_SPEED_DELAY = 4
 GRAVITY_NEW_PIECE_DELAY = 1
+
+STATE_READY = 0
+STATE_PAUSED = 1
 
 class PauseDialog(xbmcgui.WindowDialog):
 	def setPosition(self,x,y):
@@ -319,7 +327,7 @@ class PauseDialog(xbmcgui.WindowDialog):
 		self.addControl(xbmcgui.ControlImage(x,y,213,113, IMAGE_DIR+'pause.png'))
 	
 	def onAction(self, action):
-		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE):
+		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE) or action.getButtonCode() == KEY_BUTTON_START:
 			self.close()
 
 class Tetris(xbmcgui.WindowDialog):
@@ -332,6 +340,7 @@ class Tetris(xbmcgui.WindowDialog):
 		self.pauseDialog = PauseDialog()
 		self.pauseDialog.setPosition(self.blockX-20,self.blockY + 70)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
+		self.state = STATE_READY
 		
 		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
@@ -356,21 +365,21 @@ class Tetris(xbmcgui.WindowDialog):
 
 		def timerProc(view,controller,delay):
 			sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
-			LOG('TIMER sleep')
 			time.sleep(sleeptime)		
 			while view.timer:
-				LOG('-> TIMER attempting lock')
-				lock.acquire()
-				LOG('   TIMER lock acquired!')
-				event,rows = controller.dropPiece()
-				view.processEvent(event,rows)
-				if self.gravityControl >= GRAVITY_SPEED_DELAY:
-					self.gravityControl -= 1
-				LOG('   TIMER: LOCK released!')
-				lock.release()
+				if not view.state == STATE_PAUSED:
+					LOG('-> TIMER attempting lock')
+					lock.acquire()
+					LOG('   TIMER lock acquired!')
+					event,rows = controller.dropPiece()
+					view.processEvent(event,rows)
+					if self.gravityControl >= GRAVITY_SPEED_DELAY:
+						self.gravityControl -= 1
+					LOG('   TIMER: LOCK released!')
+					lock.release()
 				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
 				LOG('TIMER sleep')
-				time.sleep(sleeptime)		
+				time.sleep(sleeptime)
 
 
 			
@@ -489,7 +498,11 @@ class Tetris(xbmcgui.WindowDialog):
 			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
 		elif entryEvent == EVENT_NEW_PIECE:
 			xbmc.playSFX(SOUND_DIR+"lock.wav")
-		else:
+		elif entryEvent == EVENT_MOVE:
+			xbmc.playSFX(SOUND_DIR+"move.wav")
+		elif entryEvent == EVENT_ROTATE:
+			xbmc.playSFX(SOUND_DIR+"rotate.wav")
+		elif entryEvent == EVENT_DROP:
 			xbmc.playSFX(SOUND_DIR+"drop.wav")
 		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
@@ -497,22 +510,32 @@ class Tetris(xbmcgui.WindowDialog):
 	def togglePause(self):
 		xbmcgui.lock()
 		self.removeBlocks(self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece)
-		self.pauseDialog.show()
-		xbmcgui.unlock()
-		self.stopTimer()
-		xbmc.playSFX(SOUND_DIR+"pause.wav")
+		xbmcgui.unlock()		
+		self.state = STATE_PAUSED
+		xbmc.playSFX(SOUND_DIR+"pause.wav")		
 		self.pauseDialog.doModal()
 		xbmc.playSFX(SOUND_DIR+"unpause.wav")
+		self.state = STATE_READY
 		xbmcgui.lock()
 		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece):
 			self.addControl(img)
-		self.startTimer()
 		xbmcgui.unlock()
 		
  
 	def onAction(self, action):
 		def SubProc(view,action):
 			view.onActionProc(action)
+
+		# The scroll actions have a very high freq
+		# decrease this frequency so we dont get bogged down with extra threads		
+		if action == ACTION_SCROLL_DOWN or action == ACTION_SCROLL_UP:  
+			if self.gravityControl >= GRAVITY_SPEED_DELAY: 
+				return
+			if self.gravityControl < GRAVITY_SPEED_DELAY: 
+				# this slows down the frequency			
+				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
+				if not self.gravityControl == 0:
+					return
 		
 		thread = threading.Thread(target=SubProc, args=(self,action))
 		thread.setDaemon(True)
@@ -524,33 +547,27 @@ class Tetris(xbmcgui.WindowDialog):
 		event = 0
 		rows = 0
 	 	if action == ACTION_MOVE_LEFT:
-	 		controller.movePiece(-1)
-			xbmc.playSFX(SOUND_DIR+"move.wav")
+	 		event = controller.movePiece(-1)
 	 	elif action == ACTION_MOVE_RIGHT:
-	 		controller.movePiece(1)
-			xbmc.playSFX(SOUND_DIR+"move.wav")
+	 		event = controller.movePiece(1)
 	 	elif action == ACTION_MOVE_UP:
 	 		event,rows = controller.quickDrop(fromGround=2)
+	 		if event == EVENT_DROP:
+	 			event = EVENT_MOVE
 	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
 	 		event,rows = controller.quickDrop(fromGround=0)
 	 	elif action == ACTION_SHOW_GUI:
-			controller.rotatePiece(1)
-			xbmc.playSFX(SOUND_DIR+"rotate.wav")
-		elif action == ACTION_SCROLL_DOWN:
-			if self.gravityControl < GRAVITY_SPEED_DELAY: 
-				# this slows down the frequency			
-				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
-				if self.gravityControl == 0:
-					event,rows = controller.dropPiece()
-					# give it a break after you hit bottom
-					if event == EVENT_NEW_PIECE:
-						# if we hit the ground give gravity a break for a bit				
-						self.gravityControl = GRAVITY_SPEED_DELAY + GRAVITY_NEW_PIECE_DELAY - 1 
-		elif action == ACTION_PAUSE:
-	 		self.togglePause()
+			event = controller.rotatePiece(1)
 	  	elif action == ACTION_PARENT_DIR:
-			xbmc.playSFX(SOUND_DIR+"rotate.wav")
-			controller.rotatePiece(-1)
+			event = controller.rotatePiece(-1)
+		elif action == ACTION_SCROLL_DOWN:
+			event,rows = controller.dropPiece()
+			# give it a break after you hit bottom
+			if event == EVENT_NEW_PIECE:
+				# if we hit the ground give gravity a break for a bit				
+				self.gravityControl = GRAVITY_SPEED_DELAY + GRAVITY_NEW_PIECE_DELAY - 1 
+		elif action == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
+	 		self.togglePause()
 		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
 			lock.release()
