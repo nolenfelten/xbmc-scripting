@@ -1,0 +1,465 @@
+<window>
+
+	<id>1156</id>
+	<allowoverlay>no</allowoverlay>
+	<defaultcontrol always="false">10</defaultcontrol>
+	<resolution>PAL</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>220</posx>
+		<posy>50</posy>
+		<origin x="100" y="50">Window.IsActive(Home)</origin>
+	</coordinates>
+
+	<controls>
+
+		<control>
+			<description>background image</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>-220</posx>
+			<posy>-50</posy>
+			<width>720</width>
+			<height>576</height>
+			<texture>\blackhole_large.png</texture>
+		</control>
+
+		<control>
+			<description>Buttons Pad</description>
+			<type>image</type>
+			<id>1000</id>
+			<posx>-150</posx>
+			<posy>0</posy>
+			<width>450</width>
+			<height>450</height>
+			<texture>\future-slide-pad.png</texture>
+		</control>
+
+		<control>
+			<description>Main Pad</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>450</width>
+			<height>450</height>
+			<texture>\future-pad.png</texture>
+		</control>
+		
+		<!--control>
+			<description>xbox media center label</description>
+			<type>label</type>
+			<id>1</id>
+			<width>200</width>
+			<posx>200</posx>
+			<posy>63</posy>
+			<align>right</align>
+			<label>xbox media center</label>
+			<font>special12</font>
+		</control-->
+		<control>
+			<description>Title</description>
+			<type>button</type>
+			<id>1</id>
+			<posx>50</posx>
+			<posy>72</posy>
+			<width>200</width>
+			<height>20</height>
+			<font>font12</font>
+			<align>left</align>
+			<label>Apple Movie Trailers</label>
+			<textcolor>FF001100</textcolor>
+			<shadowcolor>FFdbdddb</shadowcolor>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+		</control>
+
+		<control>
+			<description>Category Label</description>
+			<type>label</type>
+			<id>5</id>
+			<posx>245</posx>
+			<posy>78</posy>
+			<width>100</width>
+			<height>20</height>
+			<align>center</align>
+			<label>Exclusives</label>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+		</control>
+		
+		<control>
+			<description>Newest Button</description>
+			<type>button</type>
+			<id>10</id>
+			<label>Newest</label>
+			<posx>-70</posx>
+			<posy>100</posy>
+			<width>115</width>
+			<height>20</height>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<align>left</align>
+			<aligny>center</aligny>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>210</onleft>
+			<onright>100</onright>
+			<onup>75</onup>
+			<ondown>20</ondown>
+			<textoffsetx>15</textoffsetx>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<control>
+			<description>Exclusives Button</description>
+			<type>button</type>
+			<id>20</id>
+			<label>Exclusives</label>
+			<posx>-70</posx>
+			<posy>120</posy>
+			<width>115</width>
+			<height>20</height>
+			<onleft>210</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<!-- <ondown>30</ondown> -->
+			<ondown>50</ondown>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<textoffsetx>15</textoffsetx>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<!--
+		<control>
+			<description>Featured HD Button</description>
+			<type>button</type>
+			<id>30</id>
+			<label>Featured HD</label>
+			<posx>50</posx>
+			<posy>194</posy>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>20</onup>
+			<ondown>50</ondown>
+			<include>buttonpanelslide</include>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+		-->
+
+		<control>
+			<description>Genre Button</description>
+			<type>button</type>
+			<id>50</id>
+			<label>Genre</label>
+			<posx>-70</posx>
+			<posy>140</posy>
+			<width>115</width>
+			<height>20</height>
+			<onleft>210</onleft>
+			<onright>100</onright>
+			<!-- <onup>30</onup> -->
+			<onup>20</onup>
+			<ondown>75</ondown>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<textoffsetx>15</textoffsetx>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+		
+		<control>
+			<description>Genre Label</description>
+			<type>label</type>
+			<id>51</id>
+			<label>&lt;none&gt;</label>
+			<posx>-70</posx>
+			<posy>160</posy>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+			<width>125</width>
+			<align>center</align>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+
+		<control>
+			<description>Settings Button</description>
+			<type>button</type>
+			<id>75</id>
+			<label>Settings</label>
+			<posx>-70</posx>
+			<posy>200</posy>
+			<width>115</width>
+			<height>20</height>
+			<onleft>210</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>10</ondown>
+			<font>font10</font>
+			<textcolor>FF001100</textcolor>
+			<disabledcolor>FFBAC9BD</disabledcolor>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<textoffsetx>15</textoffsetx>
+			<onclick>XBMC.ActivateWindow(34)</onclick>
+		</control>
+
+		<!-- start of list controls -->
+		
+		<control>
+			<description>Newest List</description>
+			<type>listcontrol</type>
+			<id>100</id>
+			<width>200</width>
+			<height>147</height>
+			<posx>75</posx>
+			<posy>108</posy>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<font>font10</font>
+			<spacebetweenitems>1</spacebetweenitems>
+			<textureheight>20</textureheight>
+			<itemheight>20</itemheight>
+			<aligny>center</aligny>
+			<textcolor>FF001100</textcolor>
+			<image>icon-folder.png</image>
+			<textxoff>0</textxoff>
+			<onup>100</onup>
+			<ondown>100</ondown>
+			<onleft>10</onleft>
+			<onright>110</onright>
+			<visible>false</visible>
+		</control>
+<!--
+ <control>
+  <image>icon-folder.png</image>
+  <textureheight>26</textureheight>
+  <font>font13</font>
+  <aligny>center</aligny>
+ </control>
+
+-->
+
+		<control>
+			<description>Exclusives List</description>
+			<type>listcontrol</type>
+			<id>110</id>
+			<width>200</width>
+			<height>147</height>
+			<posx>75</posx>
+			<posy>108</posy>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<font>font10</font>
+			<spacebetweenitems>1</spacebetweenitems>
+			<textureheight>20</textureheight>
+			<itemheight>20</itemheight>
+			<aligny>center</aligny>
+			<textcolor>FF001100</textcolor>
+			<image>icon-folder.png</image>
+			<textxoff>0</textxoff>
+			<onup>110</onup>
+			<ondown>110</ondown>
+			<onleft>100</onleft>
+			<onright>130</onright>
+			<visible>false</visible>
+		</control>
+		
+		<!--
+		<control>
+			<description>Featured HD List</description>
+			<type>listcontrol</type>
+			<id>120</id>
+			<width>270</width>
+			<height>235</height>
+			<texturefocus>list-focus.png</texturefocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
+			<image>icon-folder.png</image>
+			<textxoff>3</textxoff>
+			<onup>120</onup>
+			<ondown>120</ondown>
+			<onleft>30</onleft>
+			<onright>210</onright>
+			<visible>false</visible>
+		</control>
+		-->
+
+		<control>
+			<description>Genre List</description>
+			<type>listcontrol</type>
+			<id>130</id>
+			<width>200</width>
+			<height>275</height>
+			<posx>75</posx>
+			<posy>108</posy>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<font>font10</font>
+			<spacebetweenitems>1</spacebetweenitems>
+			<textureheight>20</textureheight>
+			<itemheight>20</itemheight>
+			<aligny>center</aligny>
+			<textcolor>FF001100</textcolor>
+			<image>icon-folder.png</image>
+			<textxoff>0</textxoff>
+			<onup>130</onup>
+			<ondown>130</ondown>
+			<onleft>110</onleft>
+			<onright>140</onright>
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer List</description>
+			<type>listcontrol</type>
+			<id>140</id>
+			<width>200</width>
+			<height>147</height>
+			<posx>75</posx>
+			<posy>108</posy>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<font>font10</font>
+			<spacebetweenitems>1</spacebetweenitems>
+			<textureheight>20</textureheight>
+			<itemheight>20</itemheight>
+			<aligny>center</aligny>
+			<textcolor>FF001100</textcolor>
+			<image>icon-folder.png</image>
+			<textxoff>0</textxoff>
+			<onup>140</onup>
+			<ondown>140</ondown>
+			<onleft>130</onleft>
+			<onright>210</onright>
+			<visible>false</visible>
+		</control>
+
+		<!-- start of the info controls -->
+
+		<control>
+			<description>Trailer Backdrop</description>
+			<type>image</type>
+			<id>200</id>
+			<posx>279</posx>
+			<posy>109</posy>
+			<width>92</width>
+			<height>132</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer Thumbnail</description>
+			<type>image</type>
+			<id>201</id>
+			<posx>280</posx>
+			<posy>110</posy>
+			<width>90</width>
+			<height>130</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer Title</description>
+			<type>label</type>
+			<id>205</id>
+			<width>250</width>
+			<posx>90</posx>
+			<posy>258</posy>
+			<align>left</align>
+			<label>Movie Title</label>
+			<font>font10</font>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<textcolor>FF001100</textcolor>
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Trailer Info</description>
+			<type>textbox</type>
+			<id>210</id>
+			<posx>80</posx>
+			<posy>275</posy>
+			<width>280</width>
+			<height>115</height>
+			<font>font10</font>
+			<onup>210</onup>
+			<ondown>210</ondown>
+			<onleft>140</onleft>
+			<onright>10</onright>
+			<include>controldefaults</include>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<textcolor>FF001100</textcolor>
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>X Button On</description>
+			<id>300</id>
+			<type>image</type>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>button-X.png</texture>
+			<!--visible>Player.HasMedia</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<id>301</id>
+			<description>X Button Off</description>
+			<type>image</type>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>button-X-turnedoff.png</texture>
+			<!--visible>!Player.Hasmedia</visible-->
+			<visible>false</visible>
+		</control>
+
+		<control>
+			<description>Full-Screen Visualisation Label</description>
+			<id>302</id>
+			<type>label</type>
+			<font>font12</font>
+			<posx>115</posx>
+			<posy>528</posy>
+			<width>250</width>
+			<label>Full Screen Visualization</label>
+			<align>left</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<visible>false</visible>
+			<!--visible>Player.HasAudio</visible-->
+		</control>
+
+		<control>
+			<description>Full-Screen Video Label</description>
+			<id>303</id>
+			<type>label</type>
+			<font>font12</font>
+			<posx>50</posx>
+			<posy>500</posy>
+			<label>Video Playing</label>
+			<align>center</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<visible>false</visible>
+		</control>
+
+	</controls>
+
+</window>
