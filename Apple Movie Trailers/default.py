@@ -1,7 +1,7 @@
 import sys, os, traceback
 
 scriptpath = sys.path[0]
-sys.path.append( os.path.join( sys.path[0], 'lib' ) )
+sys.path.append( os.path.join( sys.path[0], 'extras', 'lib' ) )
 
 import gui
 

@@ -21,10 +21,7 @@ Echo.
 :: Create release version..
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
-xcopy data "BUILD\%ScriptName%\data" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-xcopy lib "BUILD\%ScriptName%\lib" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-xcopy language "BUILD\%ScriptName%\language" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-xcopy skins "BUILD\%ScriptName%\skins" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+xcopy extras "BUILD\%ScriptName%\extras" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 copy default.* "BUILD\%ScriptName%\"
 Echo.
 
