@@ -1,0 +1,540 @@
+<window>
+
+<!--
+	You may move, add or delete any controls you want as long as they're not Required.
+	With one exception, required controls <description> tag and <type> tag must NOT be changed,
+	the <type> tag for labels may be changed to button. This allows <shadowcolor> tag to be used.
+	(if changing <type>label</type> to <type>button</type>, set <texturenofocus>-</texturenofocus>)
+	
+	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags,
+	so make sure all necessary tags are included. (This was done for speed, but may change)
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
+	The Skin Credits Label and List is where you add your credits.
+-->
+	
+	<defaultcontrol>10</defaultcontrol>
+	<resolution>PAL</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>161</posx>
+		<posy>132</posy>
+	</coordinates>
+
+	<controls>
+
+		<control>
+			<description>backdrop</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>-300</posx>
+			<posy>-300</posy>
+			<width>1300</width>
+			<height>1300</height>
+			<texture>\black.png</texture>
+		</control>
+
+		<control>
+			<description>background image</description>
+			<type>image</type>
+			<id>1</id>
+			<posx>-25</posx>
+			<posy>-11</posy>
+			<width>446</width>
+			<height>406</height>
+			<texture>\background-settings.png</texture>
+		</control>
+
+		<!-- labels -->
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Title Label</description>
+			<type>label</type>
+			<id>1</id>
+			<posx>10</posx>
+			<posy>6</posy>
+			<width>280</width>
+			<align>left</align>
+			<font>special13</font>
+			<textcolor>DDced8da</textcolor>
+			<label>Apple Movie Trailers</label>
+		</control>
+
+		<!-- buttons -->
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Skin Button</description>
+			<type>button</type>
+			<id>10</id>
+			<posx>0</posx>
+			<posy>70</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>210</onup>
+			<ondown>20</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Trailer Quality Button</description>
+			<type>button</type>
+			<id>20</id>
+			<posx>0</posx>
+			<posy>105</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Mode Button</description>
+			<type>button</type>
+			<id>30</id>
+			<posx>0</posx>
+			<posy>140</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>20</onup>
+			<ondown>40</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Save Folder Button</description>
+			<type>button</type>
+			<id>40</id>
+			<posx>0</posx>
+			<posy>175</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>30</onup>
+			<ondown>50</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Startup Category Button</description>
+			<type>button</type>
+			<id>50</id>
+			<posx>0</posx>
+			<posy>210</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>40</onup>
+			<ondown>60</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Thumbnail Display Button</description>
+			<type>button</type>
+			<id>60</id>
+			<posx>0</posx>
+			<posy>245</posy>
+			<width>400</width>
+			<height>32</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>210</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Update Button</description>
+			<type>button</type>
+			<id>200</id>
+			<posx>-3</posx>
+			<posy>325</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>Update</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>150</onleft>
+			<onright>210</onright>
+			<onup>60</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Credits Button</description>
+			<type>button</type>
+			<id>210</id>
+			<posx>92</posx>
+			<posy>325</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>Credits</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>200</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Ok Button</description>
+			<type>button</type>
+			<id>100</id>
+			<posx>223</posx>
+			<posy>325</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>186</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>210</onleft>
+			<onright>150</onright>
+			<onup>60</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Cancel Button</description>
+			<type>button</type>
+			<id>150</id>
+			<posx>318</posx>
+			<posy>325</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>222</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>100</onleft>
+			<onright>200</onright>
+			<onup>60</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- skin selection dialog -->
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Popup Image</description>
+			<type>image</type>
+			<id>500</id>
+			<posx>70</posx>
+			<posy>70</posy>
+			<width>260</width>
+			<height>240</height>
+			<texture>\dialog-panel.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Popup Label</description>
+			<type>label</type>
+			<id>501</id>
+			<posx>85</posx>
+			<posy>78</posy>
+			<width>150</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>choose skin</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Popup Thumb</description>
+			<type>image</type>
+			<id>502</id>
+			<posx>195</posx>
+			<posy>113</posy>
+			<width>128</width>
+			<height>72</height>
+			<texture>-</texture>
+			<visible>false</visible>
+			<aspectratio>keep</aspectratio>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Popup Warning Label</description>
+			<type>label</type>
+			<id>503</id>
+			<posx>195</posx>
+			<posy>190</posy>
+			<width>128</width>
+			<align>center</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>* Skin dependent</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Popup List</description>
+			<type>listcontrol</type>
+			<id>504</id>
+			<posx>83</posx>
+			<posy>115</posy>
+			<width>110</width>
+			<height>170</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-25</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+
+		<!-- credits dialog -->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Credits Image</description>
+			<type>image</type>
+			<id>600</id>
+			<posx>70</posx>
+			<posy>70</posy>
+			<width>260</width>
+			<height>240</height>
+			<texture>\dialog-panel.png</texture>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Credits Label</description>
+			<type>label</type>
+			<id>601</id>
+			<posx>85</posx>
+			<posy>78</posy>
+			<width>150</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>Apple Movie Trailers</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Version Label</description>
+			<type>label</type>
+			<id>602</id>
+			<posx>320</posx>
+			<posy>78</posy>
+			<width>150</width>
+			<align>right</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>Version: 1.0 pre</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Team Credits Label</description>
+			<type>label</type>
+			<id>603</id>
+			<posx>95</posx>
+			<posy>110</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>Team Credits:</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control>
+			<description>Team Credits List</description>
+			<type>listcontrol</type>
+			<id>604</id>
+			<posx>83</posx>
+			<posy>130</posy>
+			<width>247</width>
+			<height>100</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-25</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> -->
+		<control>
+			<description>Skin Credits Label</description>
+			<type>label</type>
+			<id>605</id>
+			<posx>95</posx>
+			<posy>200</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>Additional Credits:</label>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- This control is where you add your credits.
+				( <label> for left column and <label2> for right column )
+				( you may have multiple <label> and <label2> tags )-->
+		<control>
+			<description>Skin Credits List</description>
+			<type>listcontrol</type>
+			<id>606</id>
+			<posx>83</posx>
+			<posy>220</posy>
+			<width>247</width>
+			<height>100</height>
+			<label>Xbox Media Center</label>
+			<label2>Team XBMC</label2>
+			<label>Graphics</label>
+			<label2>Chokemaniac</label2>
+			<label>Usability</label>
+			<label2>Spiff</label2>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-25</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+
+	</controls>
+</window>
