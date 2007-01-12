@@ -474,7 +474,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.ChipHeading[x] = xbmcgui.ControlLabel(self.offScreenX + self.chipX[x], self.chipHeadingY, self.chipW, self.labelH, s, self.padFontLabel, "0xFFF1EA40", "", XBFONT_CENTER_Y|XBFONT_CENTER_X)
             self.addControl(self.ChipHeading[x])
 
-        self.Button = xbmcgui.ControlButton(self.offScreenX + self.buttonX, self.buttonY, self.buttonW, self.buttonH, "Start", "button-focus.png", "button-nofocus.png", 0, 0, XBFONT_CENTER_Y|XBFONT_CENTER_X, self.padFontLabel)
+        self.Button = xbmcgui.ControlButton(self.offScreenX + self.buttonX, self.buttonY, self.buttonW, self.buttonH, "Start",  os.path.join( GFXPath, "button-focus.png" ),  os.path.join( GFXPath, "button-nofocus.png" ), 0, 0, XBFONT_CENTER_Y|XBFONT_CENTER_X, self.padFontLabel)
         self.addControl(self.Button)
         self.setFocus(self.Button)
         xbmcgui.unlock()
