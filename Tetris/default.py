@@ -6,9 +6,10 @@
 #	
 ###################################################################
 
-import urllib, re, random, math, threading, time
+import re, random, math, threading, time
 import xbmc, xbmcgui
-import threading, os
+import threading, os, re
+import scores
 
 ACTION_MOVE_LEFT 	= 1	
 ACTION_MOVE_RIGHT	= 2
@@ -292,7 +293,7 @@ class BoardController:
 
 	def gameOver(self):
 		LOG('GameOver')
-		self.newGame()
+		#self.newGame()
 
 	def newGame(self):
 		self.nLines = 0
@@ -320,14 +321,32 @@ GRAVITY_NEW_PIECE_DELAY = 1
 
 STATE_READY = 0
 STATE_PAUSED = 1
+STATE_QUITTING = 2
 
 class PauseDialog(xbmcgui.WindowDialog):
-	def setPosition(self,x,y):
+	def __init__(self,parent=None):
 		self.setCoordinateResolution(COORD_PAL_4X3)
-		self.addControl(xbmcgui.ControlImage(x,y,213,113, IMAGE_DIR+'pause.png'))
+		self.parent = parent
+		self.addControl(xbmcgui.ControlImage(parent.blockX-20,parent.blockY+70,213,113, IMAGE_DIR+'pause.png'))
+		self.addControl(xbmcgui.ControlLabel(parent.blockX+10,parent.blockY+10, 100,25,"High Score:",'font14','FFFFFF00'))
+		self.lblHighScoreName = xbmcgui.ControlLabel(parent.blockX+30,parent.blockY+29, 100,25,"Asteron",'font14','FFFFFFFF')
+		self.lblHighScore = xbmcgui.ControlLabel(parent.blockX+170,parent.blockY+27, 100,25,"00000",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.chkGhostPiece = xbmcgui.ControlCheckMark(parent.blockX+10,parent.blockY+230, 100,25,"Ghost Piece",font='font14')
+		self.addControl(self.lblHighScoreName)
+		self.addControl(self.lblHighScore)
+		self.addControl(self.chkGhostPiece)
+		self.setFocus(self.chkGhostPiece)
+	
+	def onControl(self,control):
+		LOG("PW - Oc -->")
+		if control == self.chkGhostPiece:
+			self.parent.drawGhostPiece = self.chkGhostPiece.getSelected()
+		LOG("PW - Oc <--")
 	
 	def onAction(self, action):
+		LOG("PW - OA")
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE) or action.getButtonCode() == KEY_BUTTON_START:
+			xbmcgui.lock()
 			self.close()
 
 class Tetris(xbmcgui.WindowDialog):
@@ -337,8 +356,9 @@ class Tetris(xbmcgui.WindowDialog):
 		self.spacing = 3
 		self.blockX = 400
 		self.blockY = 70
-		self.pauseDialog = PauseDialog()
-		self.pauseDialog.setPosition(self.blockX-20,self.blockY + 70)
+		self.drawGhostPiece = False
+		self.dlgPause = PauseDialog(parent=self)
+		self.dlgGame= scores.GameDialog(gamename='Tetris-testing',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
 		self.state = STATE_READY
 		
@@ -353,11 +373,41 @@ class Tetris(xbmcgui.WindowDialog):
 		self.renderPieces()
 		self.renderLabels()
 		
+		
 	def setController(self,controller):
 		LOG('SC')
 		self.controller = controller
 		self.board = controller.board
 		self.updatePiece()
+		
+	def drawBloom(self,msg,x,y,duration=45,font='font12'):
+		def SubProc(window,msg,x,y,duration,font):
+			LOG("dsb 3a")
+			lbl = xbmcgui.ControlLabel(x,y,200,25,msg,font)
+			window.addControl(lbl)
+			amp = random.uniform(2,6)
+			if random.randint(0,1): amp = -amp
+			freq = random.uniform(8,15)
+			offset = random.uniform(0,3)
+			for i in range(0,duration):
+				lock.acquire()
+				if window.state == STATE_QUITTING:
+					lock.release()
+					return
+				lbl.setPosition(x+int(amp*math.sin((offset+float(i))/freq)),y-i)
+				lock.release()
+				time.sleep(.016)
+			window.removeControl(lbl)
+		
+		LOG("dsb 1 " + str(msg) + "-"+str(x)+"-"+str(y))
+		screenx = self.blockX + (self.blockSize + self.spacing)*x + 10
+		screeny = self.blockY + (self.blockSize + self.spacing)*y
+		LOG("dsb 2")
+
+		thread = threading.Thread(target=SubProc, args=(self,msg,screenx,screeny,duration,font))
+		thread.setDaemon(True)
+		thread.start()
+
 
 	def startTimer(self):
 		LOG('Start Timer')
@@ -366,7 +416,7 @@ class Tetris(xbmcgui.WindowDialog):
 		def timerProc(view,controller,delay):
 			sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
 			time.sleep(sleeptime)		
-			while view.timer:
+			while view.timer and not view.state == STATE_QUITTING:
 				if not view.state == STATE_PAUSED:
 					LOG('-> TIMER attempting lock')
 					lock.acquire()
@@ -439,16 +489,15 @@ class Tetris(xbmcgui.WindowDialog):
  	def updatePiece(self):
  		LOG('-> Update Piece')
 		self.removeBlocks(self.imgGhostPiece)	
-		self.imgGhostPiece = self.rasterPiece(self.controller.getDroppedPieceCopy(),self.blockX,self.blockY,self.spacing,self.blockSize)
-		
+		self.imgGhostPiece = []
+		if self.drawGhostPiece:
+			self.imgGhostPiece = self.rasterPiece(self.controller.getDroppedPieceCopy(),self.blockX,self.blockY,self.spacing,self.blockSize)
 		self.removeBlocks(self.imgPiece)
 		self.imgPiece = self.rasterPiece(self.controller.curPiece,self.blockX,self.blockY,self.spacing,self.blockSize)
 
 		self.removeBlocks(self.imgNextPiece)
 		self.imgNextPiece = self.rasterPiece(self.controller.nextPiece,
 			self.blockX-40-self.controller.nextPiece.type.size*12,self.blockY+18-self.controller.nextPiece.type.size*6,2,10)
-
-
 			
 		self.lblLines.setLabel(str(self.controller.nLines))
 		self.lblScore.setLabel(str(self.controller.nScore))
@@ -461,12 +510,10 @@ class Tetris(xbmcgui.WindowDialog):
 	def rasterPiece(self,piece,blockX,blockY,spacing,size):
 		LOG('RasterPiece ->')
 		mask = piece.getCollisionMask(piece.rotation)
-		LOG('RP2')
 		imgRaster = []
  		for i in range(len(mask)):
  			for j in range(len(mask[0])):
  				if mask[i][j]:
- 					LOG('RP3')
  					imgRaster.append(self.blockImage(i+piece.y,j+piece.x,piece.color,blockX,blockY,spacing,size))
  					self.addControl(imgRaster[-1])
  		return imgRaster
@@ -482,20 +529,38 @@ class Tetris(xbmcgui.WindowDialog):
 		LOG('ProcessEvent-> ' + str(event)+ ' ' + str(rows))
 		self.updatePiece()
 		entryEvent = event
+		clearLev = bloomX = bloomY = 0
 		if event == EVENT_NEW_PIECE or event == EVENT_LEVEL_UP:
+			if rows>0 or True:
+				clearLev = self.controller.nLevel - (event == EVENT_LEVEL_UP)
+				bloomX = self.controller.curPiece.x+self.controller.curPiece.type.size/2 -1
+				bloomY = self.controller.curPiece.y
 			self.imgBlocks.extend(self.imgPiece)
 			self.imgPiece = []
 			event = self.controller.doNewPiece()
 			self.updatePiece()
-		if event == EVENT_GAME_OVER or rows > 0:
-			self.updateBlocks()
-			
 		if event == EVENT_GAME_OVER:      #sound priority
+			self.state = STATE_PAUSED
 			xbmc.playSFX(SOUND_DIR+"gameover.wav")
+			xbmcgui.unlock()
+			doNewGame = self.dlgGame.showDialog(self.controller.nScore)
+			xbmcgui.lock()
+			if doNewGame:
+				self.state = STATE_READY
+				self.controller.newGame()
+				self.updateBlocks()
+				self.updatePiece()
+			else:
+				self.state = STATE_QUITTING
 		elif entryEvent == EVENT_LEVEL_UP:
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
+			self.updateBlocks()
+			self.drawBloom("+"+str(rows*rows*clearLev),bloomX,bloomY)
+			self.drawBloom("Bonus +"+str(self.controller.nLevel*15),-1,5,font="font14",duration=90)
 		elif rows > 0:
 			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
+			self.updateBlocks()
+			self.drawBloom("+"+str(rows*rows*clearLev),bloomX,bloomY)
 		elif entryEvent == EVENT_NEW_PIECE:
 			xbmc.playSFX(SOUND_DIR+"lock.wav")
 		elif entryEvent == EVENT_MOVE:
@@ -513,10 +578,12 @@ class Tetris(xbmcgui.WindowDialog):
 		xbmcgui.unlock()		
 		self.state = STATE_PAUSED
 		xbmc.playSFX(SOUND_DIR+"pause.wav")		
-		self.pauseDialog.doModal()
+		name,score = self.dlgGame.dlgHighScores.getHighestScore()
+		self.dlgPause.lblHighScore.setLabel(score)
+		self.dlgPause.lblHighScoreName.setLabel(name)
+		self.dlgPause.doModal() #leaves gui locked
 		xbmc.playSFX(SOUND_DIR+"unpause.wav")
 		self.state = STATE_READY
-		xbmcgui.lock()
 		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece):
 			self.addControl(img)
 		xbmcgui.unlock()
@@ -578,6 +645,48 @@ class Tetris(xbmcgui.WindowDialog):
 		LOG('OA: lock released')
 		lock.release()
 		LOG('<- OnAction')
+		if self.state == STATE_QUITTING:
+			self.close()
+
+			
+			
+
+	def saveSettings(self):
+		if not os.path.exists("P:\\Scripts\\"):
+			os.mkdir("P:\\Scripts\\")
+		dict = {"username":self.dlgGame.dlgSubmit.username,
+				"password":self.dlgGame.dlgSubmit.password,
+				"userid":self.dlgGame.dlgSubmit.userID,
+				"nickname":self.dlgGame.username,
+				"gameid":self.dlgGame.gameID,
+				"ghost":(self.drawGhostPiece and "True") or "False"
+				}
+		LOG("Save Settings: " + str(dict))
+		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">\n" for key in dict.keys()])+ "</tetris>"
+		LOG("Save settings : " + str(dict))
+		fb = open("P:\\Scripts\\tetris_settings.xml",'w')
+		fb.write(curdat)
+		fb.close()
+	
+	def loadSettings(self):
+		if not os.path.exists("P:\\Scripts\\tetris_settings.xml"):
+			return
+		fb = open("P:\\Scripts\\tetris_settings.xml",'r')
+		indat = fb.read()
+		fb.close()
+		LOG("LoadSettings: reading" + indat)
+		regp = '<([^<]*)>([^</]*)</'
+		save_info = re.compile(regp,re.IGNORECASE).findall(indat)
+		dict = {"username":'',"password":'',"userid":'',"nickname":'',"gameid":'',"ghost":'False'}
+		for x in save_info:
+			dict[x[0]] = x[1]
+		self.dlgGame.dlgSubmit.setUsername(dict["username"])
+		self.dlgGame.dlgSubmit.setPassword(dict["password"])
+		self.dlgGame.dlgSubmit.userID=dict["userid"]
+		self.dlgGame.setUsername(dict["nickname"])
+		self.dlgGame.gameID=dict["gameid"]
+		self.drawGhostPiece=dict["ghost"]=="True"
+		self.dlgPause.chkGhostPiece.setSelected(self.drawGhostPiece)
 
 xbmc.enableNavSounds(False)
 lock = threading.Lock()
@@ -585,10 +694,13 @@ random.seed()
 board = Board(10,20)
 controller = BoardController(board)
 t = Tetris()
+t.loadSettings()
 t.setController(controller)
 t.startTimer()
+#t.processEvent(EVENT_GAME_OVER,0)
 t.doModal()
 t.stopTimer()
+t.saveSettings()
 del t,controller,board
 xbmc.enableNavSounds(True)
 LOGCLOSE()
