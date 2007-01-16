@@ -3,7 +3,8 @@
 #   Tetris v1.0
 #		by asteron  
 #
-#	
+#  This module is pretty much entirely self contained, the interface to it is the showDialog on the gameDialog class
+#  You do have to load its settings manually though.
 ###################################################################
 import xbmc,xbmcgui
 import onlinehighscores
@@ -38,11 +39,8 @@ def unikeyboard(default,header=""):
 		Give it the Default value and header and it will return the value entered
 		If user cancelled it will return the default text.
 	"""
-	LOG("KB1")
 	kb = xbmc.Keyboard(default,header)
-	LOG("KB2")
 	kb.doModal()
-	LOG("KB3")
 	while (kb.isConfirmed()):
 		text = kb.getText()
 		if len(text) > 0:
@@ -50,6 +48,8 @@ def unikeyboard(default,header=""):
 		kb.doModal()
 	return default
 
+	
+# I had problems with onlinehighscores giving exceptions if network unplugged...  wrap it up to be safe
 class SafeOnlineHighScores:
 	def __init__(self):
 		self.ohs = onlinehighscores.highscore()
@@ -175,7 +175,6 @@ class SubmitDialog(xbmcgui.WindowDialog):
 		if self.userID == "0":
 			LOG("SS2.1")
 			return False
-		LOG("SS3")
 		retVal = ONLINEHIGHSCORE.insert_new_highscore(self.parent.gameID, self.userID, str(score))
 		LOG("SS4 " + str(retVal))	
 		return retVal
@@ -187,7 +186,7 @@ class SubmitDialog(xbmcgui.WindowDialog):
 		elif control == self.btnPassword:
 			self.promptPassword()
 		elif control == self.btnSubmit:
-			if self.submitScore(self.parent.score):
+			if not self.submitScore(self.parent.score) == "0":
 				xbmcgui.Dialog().ok(self.parent.gamename, 'Submission Successful!')
 				self.close()
 			else:
@@ -228,7 +227,8 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-noselect-focus.png'),
 			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-nofocus.png'),
 			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-focus.png')]
-		for i in range(0,4):  # This adds the textures so that the select textures are in front of the unselected textures... this way tabs can have a little overlap
+		# This adds the textures so that the select textures are in front of the unselected textures... this way tabs can have a little overlap and it looks nicer
+		for i in range(0,4):  
 			self.addControl(self.imgtabLocal[i])
 			self.imgtabLocal[i].setVisible(False)
 			self.addControl(self.imgtabOnline[i])
@@ -266,11 +266,10 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		return False
 	
 	def parseScores(self, data):
-		LOG('Parsing data ' + data)
+		LOG('Parsing data ')
 		scores = []
 		for line in data.split("\n"):
 			nameScore = line.split("|")
-			LOG(nameScore)
 			if len(nameScore) == 2:
 				scores.append((nameScore[0],nameScore[1]))
 		LOG("scores")
@@ -279,10 +278,12 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 	
 	def populateList(self,scores):
 		LOG("PL setting to "+str(scores))
+		xbmcgui.lock()
 		self.updateTabImages()
 		self.lstHighScores.reset()
 		for name,score in scores:
 			self.lstHighScores.addItem(xbmcgui.ListItem(name,str(score)))
+		xbmcgui.unlock()
 	
 	def loadLocalHighScores(self):
 		data = ''
@@ -310,11 +311,8 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 	
 		LOG('AS1 - ' + str(name) + '|'+str(score))
 		self.localHighScores.append((name,score)) #add
-		LOG('AS2')
 		self.localHighScores.sort(key=lambda x: int(x[1]),reverse=True) #sort
-		LOG('AS3')
 		self.localHighScores = self.localHighScores[0:min(len(self.localHighScores),self.parent.maxScoreLength)] #truncate
-		LOG('AS4')
 		self.populateList(self.localHighScores)
 		LOG('AS5')
 		try:
@@ -332,7 +330,6 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		output = open(self.hsFileName,'w')
 		LOG("Scores:" + str(self.localHighScores))
 		scoreStrings = [str(x[0]) +"|"+str(x[1]) for x in self.localHighScores]
-		LOG("\n".join(scoreStrings))
 		output.write("\n".join(scoreStrings))
 		output.close()
 	
@@ -392,7 +389,9 @@ class GameDialog(xbmcgui.WindowDialog):
 		self.setCoordinateResolution(COORD_PAL_4X3)
 		self.posX = x
 		self.posY = y
-		self.focusWindow = WINDOW_GAME
+		# I had a problem with different window dialogs having duplicate  ControlIDs
+		# This generated two differen onControl events,  use self.focusWindow as a lock
+		self.focusWindow = WINDOW_GAME 
 		self.imagedir = imagedir
 		self.score = "0"
 		self.buildGui()
@@ -433,15 +432,14 @@ class GameDialog(xbmcgui.WindowDialog):
 			self.setUsername(unikeyboard(self.username, "Enter New Player Name"))
 			if self.dlgSubmit.username == '':
 				self.dlgSubmit.setUsername(self.username)
-		LOG("SD5")
 		self.dlgHighScores.addScore(self.username,str(score))
-		LOG("SD6")
 		self.gameID = self.getGameID(self.gamename)
 		xbmc.enableNavSounds(True)
-		self.doModal()
+		self.doModal() #leaves xbmcgui locked
 		xbmc.enableNavSounds(False)
 		LOG("SD7")
 		self.dlgHighScores.saveHighScores()
+		xbmcgui.unlock()
 		LOG("SD8")
 		return self.retVal
 		
@@ -475,10 +473,12 @@ class GameDialog(xbmcgui.WindowDialog):
 		if control == self.btnNewGame:
 			LOG('OC2.3')
 			self.retVal = True
+			xbmcgui.lock()
 			self.close()
 		LOG('OC3')
 		if control == self.btnQuit:
 			self.retVal = False
+			xbmcgui.lock()
 			self.close()
 		LOG('OC4')
 		if control == self.btnSubmit:
