@@ -16,7 +16,9 @@ ACTION_PARENT_DIR	= 9
 ACTION_STOP		= 13
 ACTION_PREVIOUS_MENU	= 10
 
+COORD_720P    = 1
 COORD_PAL_4X3    = 6 
+
 
 DO_LOGGING = 0
 try:
@@ -48,6 +50,10 @@ def unikeyboard(default,header=""):
 		kb.doModal()
 	return default
 
+#avoid stretching on different pixel aspect ratios
+def noStretch(window):
+	if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
+	else: window.setCoordinateResolution(COORD_PAL_4X3)
 	
 # I had problems with onlinehighscores giving exceptions if network unplugged...  wrap it up to be safe
 class SafeOnlineHighScores:
@@ -100,7 +106,7 @@ ONLINEHIGHSCORE=SafeOnlineHighScores()
 
 class SubmitDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
-		self.setCoordinateResolution(COORD_PAL_4X3)
+		noStretch(self)
 		self.parent = parent
 		x = self.parent.posX + 50
 		y = self.parent.posY + 130
@@ -200,7 +206,7 @@ class SubmitDialog(xbmcgui.WindowDialog):
 	
 class HighScoreDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
-		self.setCoordinateResolution(COORD_PAL_4X3)
+		noStretch(self)
 		self.parent = parent
 		self.posX = parent.posX -55
 		self.posY = parent.posY + 30
@@ -386,7 +392,7 @@ WINDOW_HIGHSCORE = 1
 WINDOW_SUBMIT = 2
 class GameDialog(xbmcgui.WindowDialog):
 	def __init__(self, gamename='',x=100,y=100, imagedir='', maxScoreLength=10):
-		self.setCoordinateResolution(COORD_PAL_4X3)
+		noStretch(self)
 		self.posX = x
 		self.posY = y
 		# I had a problem with different window dialogs having duplicate  ControlIDs

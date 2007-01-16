@@ -317,9 +317,14 @@ STATE_READY = 0
 STATE_PAUSED = 1
 STATE_QUITTING = 2
 
+#avoid stretching on different pixel aspect ratios
+def noStretch(window):
+	if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
+	else: window.setCoordinateResolution(COORD_PAL_4X3)
+
 class PauseDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
-		self.setCoordinateResolution(COORD_PAL_4X3)
+		noStretch(self)
 		self.parent = parent
 		self.addControl(xbmcgui.ControlImage(parent.blockX-20,parent.blockY+70,213,113, IMAGE_DIR+'pause.png'))
 		self.addControl(xbmcgui.ControlLabel(parent.blockX+10,parent.blockY+10, 100,25,"High Score:",'font14','FFFFFF00'))
@@ -345,7 +350,7 @@ class PauseDialog(xbmcgui.WindowDialog):
 
 class Tetris(xbmcgui.WindowDialog):
 	def __init__(self):
-		self.setCoordinateResolution(COORD_PAL_4X3)
+		noStretch(self)
 		self.blockSize = 17
 		self.spacing = 3
 		self.blockX = 400
