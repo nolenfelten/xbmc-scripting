@@ -365,9 +365,9 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		if control == self.btnOnline:
 			if len(self.onlineHighScores) == 0:
 				LOG('HS - OC2.1')
-				self.currentTab = 1
 				self.onlineHighScores = self.loadOnlineHighScores()
 			LOG('HS - OC2.2')
+			self.currentTab = 1
 			self.populateList(self.onlineHighScores)
 			#self.btnRefresh.setVisible(True)
 			self.btnRefresh.setEnabled(True)
