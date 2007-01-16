@@ -331,7 +331,7 @@ class PauseDialog(xbmcgui.WindowDialog):
 		self.addControl(xbmcgui.ControlLabel(parent.blockX+10,parent.blockY+10, 100,25,"High Score:",'font14','FFFFFF00'))
 		self.lblHighScoreName = xbmcgui.ControlLabel(parent.blockX+30,parent.blockY+29, 100,25,"Asteron",'font14','FFFFFFFF')
 		self.lblHighScore = xbmcgui.ControlLabel(parent.blockX+170,parent.blockY+27, 100,25,"00000",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.chkGhostPiece = xbmcgui.ControlCheckMark(parent.blockX+10,parent.blockY+230, 100,25,"Ghost Piece",font='font14')
+		self.chkGhostPiece = xbmcgui.ControlCheckMark(parent.blockX+25,parent.blockY+230, 100,25,"Ghost Piece",font='font14',focusTexture=IMAGE_DIR+"check-box.png",noFocusTexture=IMAGE_DIR+"check-box-nofocus.png",checkWidth=24,checkHeight=24)
 		self.addControl(self.lblHighScoreName)
 		self.addControl(self.lblHighScore)
 		self.addControl(self.chkGhostPiece)
@@ -358,7 +358,7 @@ class Tetris(xbmcgui.WindowDialog):
 		self.blockY = 70
 		self.drawGhostPiece = False
 		self.dlgPause = PauseDialog(parent=self)
-		self.dlgGame= scores.GameDialog(gamename='Tetris-testing',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
+		self.dlgGame= scores.GameDialog(gamename='Tetris',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
 		self.state = STATE_READY
 		
@@ -649,8 +649,6 @@ class Tetris(xbmcgui.WindowDialog):
 			self.close()
 
 			
-			
-
 	def saveSettings(self):
 		if not os.path.exists("P:\\Scripts\\"):
 			os.mkdir("P:\\Scripts\\")
@@ -662,7 +660,7 @@ class Tetris(xbmcgui.WindowDialog):
 				"ghost":(self.drawGhostPiece and "True") or "False"
 				}
 		LOG("Save Settings: " + str(dict))
-		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">\n" for key in dict.keys()])+ "</tetris>"
+		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">" for key in dict.keys()])+ "\n</tetris>"
 		LOG("Save settings : " + str(dict))
 		fb = open("P:\\Scripts\\tetris_settings.xml",'w')
 		fb.write(curdat)
@@ -690,7 +688,7 @@ class Tetris(xbmcgui.WindowDialog):
 
 xbmc.enableNavSounds(False)
 lock = threading.Lock()
-random.seed()
+random.seed(time.time())
 board = Board(10,20)
 controller = BoardController(board)
 t = Tetris()
