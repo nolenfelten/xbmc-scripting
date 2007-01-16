@@ -161,7 +161,6 @@ class Piece:
 		self.rotation = 0
 	
 	def getCollisionMask(self,rotation):
-		LOG('GCM')
 		return self.type.masks[rotation]
 		
 class Board:
@@ -175,10 +174,8 @@ class Board:
 	def clear(self):
 		LOG('Clear')
 		self.blocks = []
-		LOG('CL2')
 		for i in range(self.height):
 			self.blocks.append([COLOR_NONE]*self.width)
-		LOG('CL4')
 
 	def isCollision(self,piece,x,y,rotation):
 		collisionMask = piece.getCollisionMask(rotation)
@@ -186,9 +183,9 @@ class Board:
 			for j in range(len(collisionMask)):
 				if collisionMask[i][j]:
 					if i+y < 0 or i+y >= self.height or j+x < 0 or j+x >= self.width:
-						return True
+						return True  #collided with wall
 					if self.blocks[i+y][j+x]:
-						return True
+						return True  #collided with block
 		return False
 	
 	def addPiece(self,piece):
@@ -199,9 +196,7 @@ class Board:
 					self.blocks[i+piece.y][j+piece.x] = piece.type.color
 	
 	def deleteRow(self,row):
-		LOG('DeleteRow')
 		for i in range(row,0,-1):
-			LOG('DR1' + str(i))
 			self.blocks[i] = self.blocks[i-1][:]
 		self.blocks[0] = [0]*self.width
 
@@ -250,11 +245,10 @@ class BoardController:
 		rows = 0
 		for row in range(self.board.height):
 			if board.isRowFilled(row):
-				LOG('CB2')
 				board.deleteRow(row)
 				self.nLines += 1
 				rows += 1
-		LOG('  CheckBoard<-')
+		LOG('  CheckBoard<-' + str(rows))
 		return rows
 		
 	def movePiece(self,dx):
@@ -317,7 +311,7 @@ EVENT_ROTATE = 6
 EVENT_DROP = 7
 
 GRAVITY_SPEED_DELAY = 4
-GRAVITY_NEW_PIECE_DELAY = 1
+GRAVITY_NEW_PIECE_DELAY = 0.4
 
 STATE_READY = 0
 STATE_PAUSED = 1
@@ -423,16 +417,10 @@ class Tetris(xbmcgui.WindowDialog):
 					LOG('   TIMER lock acquired!')
 					event,rows = controller.dropPiece()
 					view.processEvent(event,rows)
-					if self.gravityControl >= GRAVITY_SPEED_DELAY:
-						self.gravityControl -= 1
 					LOG('   TIMER: LOCK released!')
 					lock.release()
 				sleeptime = max(delay * (0.6**(controller.nLevel-1)),0.05)
-				LOG('TIMER sleep')
 				time.sleep(sleeptime)
-
-
-			
 			
 		self.subThread = threading.Thread(target=timerProc, args=(self,self.controller,1.50))
 		self.subThread.setDaemon(True)
@@ -543,7 +531,7 @@ class Tetris(xbmcgui.WindowDialog):
 			self.state = STATE_PAUSED
 			xbmc.playSFX(SOUND_DIR+"gameover.wav")
 			xbmcgui.unlock()
-			doNewGame = self.dlgGame.showDialog(self.controller.nScore)
+			doNewGame = self.dlgGame.showDialog(self.controller.nScore) #it unlocks and locks gui
 			xbmcgui.lock()
 			if doNewGame:
 				self.state = STATE_READY
@@ -556,7 +544,7 @@ class Tetris(xbmcgui.WindowDialog):
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 			self.updateBlocks()
 			self.drawBloom("+"+str(rows*rows*clearLev),bloomX,bloomY)
-			self.drawBloom("Bonus +"+str(self.controller.nLevel*15),-1,5,font="font14",duration=90)
+			self.drawBloom("Level Up! +"+str(self.controller.nLevel*15),-1,5,font="font14",duration=90)
 		elif rows > 0:
 			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
 			self.updateBlocks()
@@ -588,7 +576,8 @@ class Tetris(xbmcgui.WindowDialog):
 			self.addControl(img)
 		xbmcgui.unlock()
 		
- 
+	# I had huge freezing problems with the incoming thread not being able to wait properly on a lock.  XBMC really want the
+	# thread to return quickly so we spawn a child thread immediately
 	def onAction(self, action):
 		def SubProc(view,action):
 			view.onActionProc(action)
@@ -596,9 +585,13 @@ class Tetris(xbmcgui.WindowDialog):
 		# The scroll actions have a very high freq
 		# decrease this frequency so we dont get bogged down with extra threads		
 		if action == ACTION_SCROLL_DOWN or action == ACTION_SCROLL_UP:  
+			LOG ("ASD - " + str(self.gravityControl) +"="+ str(time.clock()+GRAVITY_SPEED_DELAY-self.gravityControl))
 			if self.gravityControl >= GRAVITY_SPEED_DELAY: 
-				return
-			if self.gravityControl < GRAVITY_SPEED_DELAY: 
+				#self.gravityControl -= 1
+				if time.clock() + GRAVITY_SPEED_DELAY - self.gravityControl < GRAVITY_NEW_PIECE_DELAY:
+					return
+				self.gravityControl = 0
+			else: 
 				# this slows down the frequency			
 				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
 				if not self.gravityControl == 0:
@@ -631,8 +624,8 @@ class Tetris(xbmcgui.WindowDialog):
 			event,rows = controller.dropPiece()
 			# give it a break after you hit bottom
 			if event == EVENT_NEW_PIECE:
-				# if we hit the ground give gravity a break for a bit				
-				self.gravityControl = GRAVITY_SPEED_DELAY + GRAVITY_NEW_PIECE_DELAY - 1 
+				# if we hit the ground give gravity a break for a bit 			
+				self.gravityControl = time.clock() + GRAVITY_NEW_PIECE_DELAY + GRAVITY_SPEED_DELAY
 		elif action == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
 	 		self.togglePause()
 		elif action == ACTION_PREVIOUS_MENU:
@@ -657,11 +650,10 @@ class Tetris(xbmcgui.WindowDialog):
 				"userid":self.dlgGame.dlgSubmit.userID,
 				"nickname":self.dlgGame.username,
 				"gameid":self.dlgGame.gameID,
-				"ghost":(self.drawGhostPiece and "True") or "False"
+				"ghost":(self.drawGhostPiece and "True") or "False"  # like ? : operator
 				}
-		LOG("Save Settings: " + str(dict))
 		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">" for key in dict.keys()])+ "\n</tetris>"
-		LOG("Save settings : " + str(dict))
+		LOG("Save settings : " + curdat)
 		fb = open("P:\\Scripts\\tetris_settings.xml",'w')
 		fb.write(curdat)
 		fb.close()
@@ -695,7 +687,6 @@ t = Tetris()
 t.loadSettings()
 t.setController(controller)
 t.startTimer()
-#t.processEvent(EVENT_GAME_OVER,0)
 t.doModal()
 t.stopTimer()
 t.saveSettings()
