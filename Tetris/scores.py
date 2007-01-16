@@ -7,7 +7,7 @@
 ###################################################################
 import xbmc,xbmcgui
 import onlinehighscores
-import os, threading
+import os, threading, traceback
 
 MAX_SCORE_LENGTH = 10
 
@@ -71,24 +71,29 @@ class SafeOnlineHighScores:
 		try:
 			return self.ohs.insert_new_highscore(gi,ui,sc)
 		except Exception:
+			traceback.print_exc()
 			return "0"
 	def get_highscore(self,i):
 		LOG("GHS - " + str(i))
 		try:
 			return self.ohs.get_highscore(i)
 		except Exception:
+			LOG("GHS error")
+			traceback.print_exc()
 			return ""
 	def get_game_id(self,g):
 		LOG("GGID - " + g)
 		try:
 			return self.ohs.get_game_id(g)
 		except Exception:
+			traceback.print_exc()
 			return "0"
 	def create_new_game(self,g):
 		LOG("CNG! - " +g)
 		try:
 			return self.ohs.create_new_game(g)
 		except Exception:
+			traceback.print_exc()
 			return "0"
 
 ONLINEHIGHSCORE=SafeOnlineHighScores()
@@ -99,12 +104,13 @@ class SubmitDialog(xbmcgui.WindowDialog):
 		self.parent = parent
 		x = self.parent.posX + 50
 		y = self.parent.posY + 130
-		self.addControl(xbmcgui.ControlImage(x,y,243,113, self.parent.imagedir+'submit.png'))
-		self.btnUsername = xbmcgui.ControlButton(x + 20, y+10, 100, 25, 'Username:', textYOffset=3)
-		self.btnPassword = xbmcgui.ControlButton(x + 20, y+40, 100, 25, 'Password:', textYOffset=3)
+		imagedir = self.parent.imagedir
+		self.addControl(xbmcgui.ControlImage(x,y,243,113, imagedir+'submit.png'))
+		self.btnUsername = xbmcgui.ControlButton(x + 20, y+10, 100, 25, 'Username:', textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
+		self.btnPassword = xbmcgui.ControlButton(x + 20, y+40, 100, 25, 'Password:', textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
 		self.lblUsername = xbmcgui.ControlLabel(x+135, y+10+3, 100, 25, '')
 		self.lblPassword = xbmcgui.ControlLabel(x+135, y+40+3, 100, 25, '')
-		self.btnSubmit = xbmcgui.ControlButton(x+20, y+75, 100, 25, 'Submit')
+		self.btnSubmit = xbmcgui.ControlButton(x+20, y+75, 100, 25, 'Submit',focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
 		
 		self.addControl(xbmcgui.ControlLabel(0,0,0,0,''))
 		self.addControl(xbmcgui.ControlLabel(0,0,0,0,''))
@@ -205,15 +211,32 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		self.onlineHighScores = []
 		
 		self.buildGui()
+		self.currentTab = 0 #local
 		self.populateList(self.localHighScores)
 		
 		
 		
 	def buildGui(self):
-		self.addControl(xbmcgui.ControlImage(self.posX,self.posY,270,380, self.parent.imagedir+'highscore.png'))
-		self.btnLocal = xbmcgui.ControlButton(self.posX + 20, self.posY+20, 70, 25, 'Local')
-		self.btnOnline = xbmcgui.ControlButton(self.posX + 100, self.posY+20, 70, 25, 'Online')
-		self.btnRefresh = xbmcgui.ControlButton(self.posX + 180, self.posY+20, 70, 25, 'Refresh')
+		self.addControl(xbmcgui.ControlImage(self.posX,self.posY,270,355, self.parent.imagedir+'highscore.png'))
+		self.imgtabLocal = [
+			xbmcgui.ControlImage(self.posX + 20, self.posY+9, 80, 32,self.parent.imagedir+'tab-noselect-nofocus.png'),
+			xbmcgui.ControlImage(self.posX + 20, self.posY+9, 80, 32,self.parent.imagedir+'tab-noselect-focus.png'),
+			xbmcgui.ControlImage(self.posX + 20, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-nofocus.png'),
+			xbmcgui.ControlImage(self.posX + 20, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-focus.png')]
+		self.imgtabOnline = [
+			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-noselect-nofocus.png'),
+			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-noselect-focus.png'),
+			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-nofocus.png'),
+			xbmcgui.ControlImage(self.posX + 80, self.posY+9, 80, 32,self.parent.imagedir+'tab-select-focus.png')]
+		for i in range(0,4):  # This adds the textures so that the select textures are in front of the unselected textures... this way tabs can have a little overlap
+			self.addControl(self.imgtabLocal[i])
+			self.imgtabLocal[i].setVisible(False)
+			self.addControl(self.imgtabOnline[i])
+			self.imgtabOnline[i].setVisible(False)
+		self.addControl(xbmcgui.ControlImage(self.posX+5,self.posY+38,263,4, self.parent.imagedir+'seperator.png'))
+		self.btnLocal = xbmcgui.ControlButton(self.posX + 20, self.posY+12, 70, 25, 'Local',focusTexture='',noFocusTexture='')
+		self.btnOnline = xbmcgui.ControlButton(self.posX + 80, self.posY+12, 70, 25, 'Online',focusTexture='',noFocusTexture='')
+		self.btnRefresh = xbmcgui.ControlButton(self.posX + 180, self.posY+10, 70, 25, 'Refresh',focusTexture=self.parent.imagedir+"button-focus.png",noFocusTexture=self.parent.imagedir+"button-nofocus.png")
 		self.lstHighScores = xbmcgui.ControlList(self.posX +20, self.posY + 50, 230, 320)
 		self.addControl(xbmcgui.ControlLabel(0,0,0,0,''))
 		self.addControl(self.btnLocal)
@@ -227,8 +250,12 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		self.btnLocal.controlRight(self.btnOnline)
 		self.btnRefresh.controlRight(self.btnLocal)
 		self.btnOnline.controlRight(self.btnRefresh)
-		self.btnRefresh.setVisible(False)
+		#self.btnRefresh.setVisible(False)
+		self.lstHighScores.setEnabled(False)
+		self.btnRefresh.setEnabled(False)
 		self.setFocus(self.btnLocal)
+		self.imgtabLocal[3].setVisible(True)
+		self.imgtabOnline[0].setVisible(True)
 		
 	def isHighScore(self,score):
 		scores = [s[1] for s in self.localHighScore]
@@ -252,6 +279,7 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 	
 	def populateList(self,scores):
 		LOG("PL setting to "+str(scores))
+		self.updateTabImages()
 		self.lstHighScores.reset()
 		for name,score in scores:
 			self.lstHighScores.addItem(xbmcgui.ListItem(name,str(score)))
@@ -274,6 +302,7 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		try: idx = self.localHighScores.index((oldName,score))
 		except: return False
 		self.localHighScores[idx] = (newName,score)
+		self.currentTab = 0
 		self.populateList(self.localHighScores)
 		return True
 	
@@ -306,27 +335,51 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		LOG("\n".join(scoreStrings))
 		output.write("\n".join(scoreStrings))
 		output.close()
+	
+	def updateTabImages(self):
+		LOG("UTI1")
+		focusControl = self.getFocus()
+		imgidx = [0,0]
+		if focusControl == self.btnLocal:
+			if self.currentTab == 0: imgidx = [3,0]
+			else: imgidx = [1,2]
+		elif focusControl == self.btnOnline:
+			if self.currentTab == 1: imgidx = [0,3]
+			else: imgidx = [2,1]		
+		else:
+			if self.currentTab == 0: imgidx = [2,0]
+			else: imgidx = [0,2]
+		LOG("UTI2 " + str(imgidx))
+		for i in range(4):
+			self.imgtabLocal[i].setVisible(i==imgidx[0])
+			self.imgtabOnline[i].setVisible(i==imgidx[1])
 		
 	def onControl(self, control):
 		LOG('HS - OC1 - ' + str(control.getId()))
 		if control == self.btnLocal:
+			self.currentTab = 0
 			self.populateList(self.localHighScores)
-			self.btnRefresh.setVisible(False)
+			#self.btnRefresh.setVisible(False)
+			self.btnRefresh.setEnabled(False)
 		LOG('HS - OC2')
 		if control == self.btnOnline:
 			if len(self.onlineHighScores) == 0:
 				LOG('HS - OC2.1')
+				self.currentTab = 1
 				self.onlineHighScores = self.loadOnlineHighScores()
 			LOG('HS - OC2.2')
 			self.populateList(self.onlineHighScores)
-			self.btnRefresh.setVisible(True)
+			#self.btnRefresh.setVisible(True)
+			self.btnRefresh.setEnabled(True)
 		LOG('HS - OC3')
 		if control == self.btnRefresh:
+			self.currentTab = 1
 			self.onlineHighScores = self.loadOnlineHighScores()
 			self.populateList(self.onlineHighScores)
 		LOG('HS - OC4')
 	
 	def onAction(self, action):
+		self.updateTabImages()
 		LOG('HS - OA1')
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR, ACTION_STOP):
 			self.close()
@@ -355,14 +408,14 @@ class GameDialog(xbmcgui.WindowDialog):
 		
 	def buildGui(self):
 		self.addControl(xbmcgui.ControlImage(self.posX,self.posY,270,150, self.imagedir+'panel.png'))
-		self.btnUsername = xbmcgui.ControlButton(self.posX + 20, self.posY+10, 100, 25, 'Name:', textXOffset=10, textYOffset=3)
+		self.btnUsername = xbmcgui.ControlButton(self.posX + 20, self.posY+10, 100, 25, 'Name:', textXOffset=10, textYOffset=3,focusTexture=self.imagedir+"button-focus.png",noFocusTexture=self.imagedir+"button-nofocus.png")
 		self.lblUsername = xbmcgui.ControlLabel(self.posX+140, self.posY+13, 100, 25, '')
 		self.lblScore	= xbmcgui.ControlLabel(self.posX+140, self.posY+40, 100, 25, '0')
 		self.addControl(xbmcgui.ControlLabel(self.posX+30, self.posY+40, 100, 25, 'Score:'))
-		self.btnNewGame = xbmcgui.ControlButton(self.posX + 20, self.posY+75, 100, 25, 'Play Again',textXOffset=10, textYOffset=3)
-		self.btnHighScores = xbmcgui.ControlButton(self.posX + 130, self.posY+75, 120, 25, 'High Scores',textXOffset=10, textYOffset=3)
-		self.btnSubmit = xbmcgui.ControlButton(self.posX + 130, self.posY+105, 120, 25, 'Submit Online',textXOffset=10, textYOffset=3)
-		self.btnQuit = xbmcgui.ControlButton(self.posX + 20, self.posY+105, 100, 25, 'Quit',textXOffset=10, textYOffset=3)
+		self.btnNewGame = xbmcgui.ControlButton(self.posX + 20, self.posY+75, 100, 25, 'Play Again',textXOffset=10, textYOffset=3,focusTexture=self.imagedir+"button-focus.png",noFocusTexture=self.imagedir+"button-nofocus.png")
+		self.btnHighScores = xbmcgui.ControlButton(self.posX + 130, self.posY+75, 120, 25, 'High Scores',textXOffset=10, textYOffset=3,focusTexture=self.imagedir+"button-focus.png",noFocusTexture=self.imagedir+"button-nofocus.png")
+		self.btnSubmit = xbmcgui.ControlButton(self.posX + 130, self.posY+105, 120, 25, 'Submit Online',textXOffset=10, textYOffset=3,focusTexture=self.imagedir+"button-focus.png",noFocusTexture=self.imagedir+"button-nofocus.png")
+		self.btnQuit = xbmcgui.ControlButton(self.posX + 20, self.posY+105, 100, 25, 'Quit',textXOffset=10, textYOffset=3,focusTexture=self.imagedir+"button-focus.png",noFocusTexture=self.imagedir+"button-nofocus.png")
 		for control in (self.btnNewGame, self.btnHighScores, self.btnQuit, self.btnSubmit, self.btnUsername, self.lblUsername, self.lblScore):
 			self.addControl(control)
 		self.btnNewGame.setNavigation(self.btnUsername, self.btnQuit, self.btnHighScores, self.btnHighScores)
@@ -395,7 +448,6 @@ class GameDialog(xbmcgui.WindowDialog):
 		
 		
 	def getGameID(self,gamename):
-		#TODO load gameID from XML
 		LOG('gGID ' +self.gameID)
 		if self.gameID == '':
 			self.gameID = ONLINEHIGHSCORE.get_game_id(gamename)		
