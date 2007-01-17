@@ -88,22 +88,24 @@ class GUI( xbmcgui.Window ):
     def getSettings( self ):
         self.settings = amt_util.Settings()
 
-    def setupGUI(self):
-        self.skin_path = os.path.join( self.cwd, 'extras', 'skins', self.settings.skin )
-        self.image_path = os.path.join( self.skin_path, 'gfx' )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): skin = 'skin_16x9.xml'
-        else: skin = 'skin.xml'
-        if ( not os.path.isfile( os.path.join( self.skin_path, skin ) ) ): skin = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( self.skin_path, skin ), self.image_path, useDescAsKey = True, 
-            title = _( 0 ), line1 = __line1__, dlg = dialog, pct = pct, useLocal = True, debug = False, fastMethod = True )
+    def setupGUI( self ):
+        current_skin = xbmc.getSkinDir()
+        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
+        skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
+        self.image_path = os.path.join( skin_path, 'gfx' )
+        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
+        else: xml_file = 'skin.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), self.image_path, useDescAsKey = True, 
+            title = _( 0 ), line1 = __line1__, dlg = dialog, pct = pct, useLocal = True, debug = True )
         closeProgessDialog()
         if ( not self.SUCCEEDED ):
-            xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( self.skin_path, skin ))
+            xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
 
     def setupVariables( self ):
         import trailers
         self.trailers = trailers.Trailers()
-        self.skin = self.settings.skin
+        #self.skin = self.settings.skin
         self.sql = None
         self.params = None
         self.display_cast = False
@@ -492,7 +494,7 @@ class GUI( xbmcgui.Window ):
     def changeSettings( self ):
         #self.debugWrite('changeSettings', 2)
         thumbnail_display = self.settings.thumbnail_display
-        settings = guisettings.GUI( skin=self.skin, language=_ , genres=self.genres )
+        settings = guisettings.GUI( language=_ , genres=self.genres )
         settings.doModal()
         del settings
         self.getSettings()

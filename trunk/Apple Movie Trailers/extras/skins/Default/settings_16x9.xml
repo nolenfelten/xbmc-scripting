@@ -1,6 +1,8 @@
 <window>
 
 <!--
+    The <resolution> tag is used for the setCoordinateResolution() function.
+    
 	You may move, add or delete any controls you want as long as they're not Required.
 	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
@@ -23,10 +25,8 @@
 
 	<controls>
 
-		<control>
+		<control type="image" id="1">
 			<description>backdrop</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>-300</posx>
 			<posy>-300</posy>
 			<width>1300</width>
@@ -34,10 +34,7 @@
 			<texture>\black.png</texture>
 		</control>
 
-		<control>
-			<description>background image</description>
-			<type>image</type>
-			<id>1</id>
+		<control type="image" id="1">
 			<posx>-25</posx>
 			<posy>-11</posy>
 			<width>446</width>
@@ -48,10 +45,8 @@
 		<!-- labels -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="1">
 			<description>Title Label</description>
-			<type>label</type>
-			<id>1</id>
 			<posx>10</posx>
 			<posy>6</posy>
 			<width>280</width>
@@ -62,10 +57,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="1">
 			<description>Version Label</description>
-			<type>label</type>
-			<id>1</id>
 			<posx>400</posx>
 			<posy>6</posy>
 			<width>150</width>
@@ -78,10 +71,8 @@
 		<!-- buttons -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="10">
 			<description>Skin Button</description>
-			<type>button</type>
-			<id>10</id>
 			<posx>0</posx>
 			<posy>70</posy>
 			<width>400</width>
@@ -101,10 +92,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="20">
 			<description>Trailer Quality Button</description>
-			<type>button</type>
-			<id>20</id>
 			<posx>0</posx>
 			<posy>105</posy>
 			<width>400</width>
@@ -124,10 +113,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="30">
 			<description>Mode Button</description>
-			<type>button</type>
-			<id>30</id>
 			<posx>0</posx>
 			<posy>140</posy>
 			<width>400</width>
@@ -147,10 +134,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="40">
 			<description>Save Folder Button</description>
-			<type>button</type>
-			<id>40</id>
 			<posx>0</posx>
 			<posy>175</posy>
 			<width>400</width>
@@ -171,10 +156,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="50">
 			<description>Startup Category Button</description>
-			<type>button</type>
-			<id>50</id>
 			<posx>0</posx>
 			<posy>210</posy>
 			<width>400</width>
@@ -194,10 +177,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="60">
 			<description>Thumbnail Display Button</description>
-			<type>button</type>
-			<id>60</id>
 			<posx>0</posx>
 			<posy>245</posy>
 			<width>400</width>
@@ -217,10 +198,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="200">
 			<description>Update Button</description>
-			<type>button</type>
-			<id>200</id>
 			<posx>-3</posx>
 			<posy>325</posy>
 			<width>90</width>
@@ -241,10 +220,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="210">
 			<description>Credits Button</description>
-			<type>button</type>
-			<id>210</id>
 			<posx>92</posx>
 			<posy>325</posy>
 			<width>90</width>
@@ -265,10 +242,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="100">
 			<description>Ok Button</description>
-			<type>button</type>
-			<id>100</id>
 			<posx>223</posx>
 			<posy>325</posy>
 			<width>90</width>
@@ -288,10 +263,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="150">
 			<description>Cancel Button</description>
-			<type>button</type>
-			<id>150</id>
 			<posx>318</posx>
 			<posy>325</posy>
 			<width>90</width>
@@ -313,10 +286,8 @@
 		<!-- skin selection dialog -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="500">
 			<description>Popup Image</description>
-			<type>image</type>
-			<id>500</id>
 			<posx>70</posx>
 			<posy>70</posy>
 			<width>260</width>
@@ -326,10 +297,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="501">
 			<description>Popup Label</description>
-			<type>label</type>
-			<id>501</id>
 			<posx>85</posx>
 			<posy>78</posy>
 			<width>150</width>
@@ -341,10 +310,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="502">
 			<description>Popup Thumb</description>
-			<type>image</type>
-			<id>502</id>
 			<posx>195</posx>
 			<posy>113</posy>
 			<width>128</width>
@@ -355,10 +322,8 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="503">
 			<description>Popup Warning Label</description>
-			<type>label</type>
-			<id>503</id>
 			<posx>195</posx>
 			<posy>188</posy>
 			<width>128</width>
@@ -371,10 +336,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="504">
 			<description>Popup List</description>
-			<type>listcontrol</type>
-			<id>504</id>
 			<posx>83</posx>
 			<posy>115</posy>
 			<width>110</width>
@@ -406,10 +369,8 @@
 		<!-- credits dialog -->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="600">
 			<description>Credits Image</description>
-			<type>image</type>
-			<id>600</id>
 			<posx>60</posx>
 			<posy>40</posy>
 			<width>280</width>
@@ -419,10 +380,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="601">
 			<description>Credits Label</description>
-			<type>label</type>
-			<id>601</id>
 			<posx>75</posx>
 			<posy>48</posy>
 			<width>175</width>
@@ -434,10 +393,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="602">
 			<description>Credits Version Label</description>
-			<type>label</type>
-			<id>602</id>
 			<posx>330</posx>
 			<posy>48</posy>
 			<width>150</width>
@@ -449,10 +406,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="603">
 			<description>Team Credits Label</description>
-			<type>label</type>
-			<id>603</id>
 			<posx>85</posx>
 			<posy>80</posy>
 			<width>200</width>
@@ -464,10 +419,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="604">
 			<description>Team Credits List</description>
-			<type>listcontrol</type>
-			<id>604</id>
 			<posx>73</posx>
 			<posy>100</posy>
 			<width>267</width>
@@ -497,10 +450,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="605">
 			<description>Additional Credits Label</description>
-			<type>label</type>
-			<id>605</id>
 			<posx>85</posx>
 			<posy>170</posy>
 			<width>200</width>
@@ -512,10 +463,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="606">
 			<description>Additional Credits List</description>
-			<type>listcontrol</type>
-			<id>606</id>
 			<posx>73</posx>
 			<posy>190</posy>
 			<width>267</width>
@@ -551,10 +500,8 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="607">
 			<description>Skin Credits Label</description>
-			<type>label</type>
-			<id>607</id>
 			<posx>85</posx>
 			<posy>260</posy>
 			<width>200</width>
@@ -569,10 +516,8 @@
 		<!-- This control is where you add your credits.
 				( <label> for left column and <label2> for right column )
 				( you may have multiple <label> and <label2> tags )-->
-		<control>
+		<control type="list" id="608">
 			<description>Skin Credits List</description>
-			<type>listcontrol</type>
-			<id>608</id>
 			<posx>73</posx>
 			<posy>280</posy>
 			<width>267</width>

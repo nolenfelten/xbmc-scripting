@@ -8,7 +8,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.getSettings()
         self._ = kwargs['language']
-        self.skin = kwargs['skin']
+        #self.skin = kwargs['skin']
         self.genres = kwargs['genres']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
@@ -25,13 +25,14 @@ class GUI( xbmcgui.WindowDialog ):
             #self.startup.append( genre.title )
     
     def setupGUI( self ):
-        skin_path = os.path.join( self.cwd, 'extras', 'skins', self.skin )
+        current_skin = xbmc.getSkinDir()
+        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ) ) ): current_skin = 'default'
+        skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
-        res = self.getResolution()
-        if ( res == 0 or res % 2 ): skin = 'settings_16x9.xml'
-        else: skin = 'settings.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, skin ) ) ): skin = 'settings.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, skin ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
+        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'settings_16x9.xml'
+        else: xml_file = 'settings.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ) ) ): xml_file = 'settings.xml'
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def setupVariables( self ):
         self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
@@ -60,9 +61,9 @@ class GUI( xbmcgui.WindowDialog ):
             dialog = xbmcgui.Dialog()
             ok = dialog.ok( self._(0), self._(55) )
         else:
-            if ( self.skin != self.settings.skin):
-                dialog = xbmcgui.Dialog()
-                ok = dialog.ok( self._(0), self._(56)  )
+            #if ( self.skin != self.settings.skin):
+            #    dialog = xbmcgui.Dialog()
+            #    ok = dialog.ok( self._(0), self._(56)  )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
