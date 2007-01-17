@@ -1,6 +1,8 @@
 <window>
 
 <!--
+    The <resolution> tag is used for the setCoordinateResolution() function.
+    
 	You may move, add or delete any controls you want as long as they're not Required.
 	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
@@ -9,7 +11,7 @@
 	There are four special controls that are displayed based on if media is playing. You may set their
 	tag <visible>false</visible> if you don't want them, but DO NOT delete them.
 	
-	<type>listcontrol</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
+	<type>list</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
 	in place of the spinner control.
 	
 	<include> tags work and the reference.xml file will be used for any missing tags.
@@ -23,10 +25,8 @@
 
 	<controls>
 
-		<control>
+		<control type="image" id="1">
 			<description>background image</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>720</width>
@@ -34,10 +34,8 @@
 			<texture>\background.png</texture>
 		</control>
 
-		<control>
+		<control type="label" id="1">
 			<description>xbox media center label</description>
-			<type>label</type>
-			<id>1</id>
 			<width>200</width>
 			<posx>200</posx>
 			<posy>63</posy>
@@ -47,10 +45,8 @@
 			<textcolor>FFFFFFFF</textcolor>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>contentpanel slice</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>160</posx>
 			<posy>108</posy>
 			<width>64</width>
@@ -58,10 +54,8 @@
 			<texture>\contentpanel_left.png</texture>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>contentpanel slice</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>224</posx>
 			<posy>108</posy>
 			<width>500</width>
@@ -69,10 +63,8 @@
 			<texture>\contentpanel.png</texture>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>backdrop image</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>260</posx>
 			<posy>130</posy>
 			<width>375</width>
@@ -84,10 +76,8 @@
 		<!-- labels -->
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="1">
 			<description>Title Label</description>
-			<type>label</type>
-			<id>1</id>
 			<width>200</width>
 			<posx>207</posx>
 			<posy>63</posy>
@@ -98,10 +88,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="1">
 			<description>Category Label</description>
-			<type>label</type>
-			<id>1</id>
 			<posx>650</posx>
 			<posy>63</posy>
 			<width>300</width>
@@ -115,11 +103,9 @@
 		<!-- Buttons -->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="10">
 			<description>Newest Button</description>
 			<label>200</label>
-			<type>button</type>
-			<id>10</id>
 			<posx>50</posx>
 			<posy>120</posy>
 			<width>150</width>
@@ -139,11 +125,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="20">
 			<description>Exclusives Button</description>
 			<label>201</label>
-			<type>button</type>
-			<id>20</id>
 			<posx>50</posx>
 			<posy>157</posy>
 			<width>150</width>
@@ -163,11 +147,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="30">
 			<description>Favorites Button</description>
 			<label>217</label>
-			<type>button</type>
-			<id>30</id>
 			<posx>50</posx>
 			<posy>194</posy>
 			<width>150</width>
@@ -187,11 +169,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="35">
 			<description>Genre Button</description>
 			<label>202</label>
-			<type>button</type>
-			<id>35</id>
 			<posx>50</posx>
 			<posy>260</posy>
 			<width>150</width>
@@ -211,11 +191,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="40">
 			<description>Studio Button</description>
 			<label>222</label>
-			<type>button</type>
-			<id>40</id>
 			<posx>50</posx>
 			<posy>297</posy>
 			<width>150</width>
@@ -235,11 +213,9 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="45">
 			<description>Actor Button</description>
 			<label>224</label>
-			<type>button</type>
-			<id>45</id>
 			<posx>50</posx>
 			<posy>334</posy>
 			<width>150</width>
@@ -259,11 +235,9 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="50">
 			<description>Search Button</description>
 			<label>203</label>
-			<type>button</type>
-			<id>50</id>
 			<posx>50</posx>
 			<posy>400</posy>
 			<width>150</width>
@@ -283,11 +257,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="60">
 			<description>Settings Button</description>
 			<label>204</label>
-			<type>button</type>
-			<id>60</id>
 			<posx>50</posx>
 			<posy>466</posy>
 			<width>150</width>
@@ -309,10 +281,8 @@
 		<!-- Trailer list controls -->
         
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Trailer List Scrollbar Up Arrow</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>482</posx>
 			<posy>121</posy>
 			<width>16</width>
@@ -322,10 +292,8 @@
 		</control>
 
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Trailer List Scrollbar Up Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>482</posx>
 			<posy>121</posy>
 			<width>16</width>
@@ -335,10 +303,8 @@
 		</control>
 
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Trailer List Scrollbar Middle</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>482</posx>
 			<posy>137</posy>
 			<width>16</width>
@@ -348,10 +314,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Trailer List Scrollbar Down Arrow</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>482</posx>
 			<posy>338</posy>
 			<width>16</width>
@@ -361,10 +325,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Trailer List Scrollbar Down Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>482</posx>
 			<posy>338</posy>
 			<width>16</width>
@@ -374,10 +336,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="900">
 			<description>Trailer List Scrollbar Position Indicator</description>
-			<type>button</type>
-			<id>90</id>
 			<label>-</label>
 			<posx>482</posx>
 			<posy>137</posy>
@@ -393,16 +353,14 @@
 			<aligny>center</aligny>
 			<onleft>110</onleft>
 			<onright>91</onright>
-			<onup>90</onup>
-			<ondown>90</ondown>
+			<onup>900</onup>
+			<ondown>900</ondown>
 			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control>
+		<control type="list" id="0">
 			<description>Trailer List Backdrop</description>
-			<type>listcontrol</type>
-			<id>0</id>
 			<font>font13</font>
 			<posx>211</posx>
 			<posy>121</posy>
@@ -438,10 +396,8 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="100">
 			<description>Trailer List</description>
-			<type>listcontrol</type>
-			<id>100</id>
 			<font>font13</font>
 			<posx>211</posx>
 			<posy>121</posy>
@@ -472,12 +428,10 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="1">
 			<description>Trailer List Count Label</description>
-			<type>label</type>
-			<id>1</id>
 			<width>100</width>
-			<posx>480</posx>
+			<posx>500</posx>
 			<posy>355</posy>
 			<align>right</align>
 			<label>-</label>
@@ -489,11 +443,9 @@
         <!-- Category list controls -->
         
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Category List Scrollbar Up Arrow</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>121</posy>
 			<width>16</width>
 			<height>16</height>
@@ -502,11 +454,9 @@
 		</control>
 
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Category List Scrollbar Up Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>121</posy>
 			<width>16</width>
 			<height>16</height>
@@ -515,11 +465,9 @@
 		</control>
 
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Category List Scrollbar Middle</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>137</posy>
 			<width>16</width>
 			<height>357</height>
@@ -528,11 +476,9 @@
 		</control>
 		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Category List Scrollbar Down Arrow</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>494</posy>
 			<width>16</width>
 			<height>16</height>
@@ -541,11 +487,9 @@
 		</control>
 		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Category List Scrollbar Down Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>494</posy>
 			<width>16</width>
 			<height>16</height>
@@ -554,12 +498,10 @@
 		</control>
 		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="91">
 			<description>Category List Scrollbar Position Indicator</description>
-			<type>button</type>
-			<id>91</id>
 			<label>-</label>
-			<posx>637</posx>
+			<posx>657</posx>
 			<posy>137</posy>
 			<width>16</width>
 			<height>16</height>
@@ -571,7 +513,7 @@
 			<disabledcolor>00ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
 			<aligny>center</aligny>
-			<onleft>90</onleft>
+			<onleft>900</onleft>
 			<onright>210</onright>
 			<onup>91</onup>
 			<ondown>91</ondown>
@@ -579,14 +521,12 @@
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control>
+		<control type="list" id="0">
 			<description>Category List Backdrop</description>
-			<type>listcontrol</type>
-			<id>0</id>
 			<font>font13</font>
 			<posx>211</posx>
 			<posy>121</posy>
-			<width>425</width>
+			<width>445</width>
 			<height>425</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>d0ffffff</selectedcolor>
@@ -624,14 +564,12 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="110">
 			<description>Category List</description>
-			<type>listcontrol</type>
-			<id>110</id>
 			<font>font13</font>
 			<posx>211</posx>
 			<posy>121</posy>
-			<width>425</width>
+			<width>445</width>
 			<height>425</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>d0ffffff</selectedcolor>
@@ -653,17 +591,15 @@
 			<onup>110</onup>
 			<ondown>110</ondown>
 			<onleft>100</onleft>
-			<onright>90</onright>
+			<onright>900</onright>
 			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="1">
 			<description>Category List Count Label</description>
-			<type>label</type>
-			<id>1</id>
 			<width>100</width>
-			<posx>635</posx>
+			<posx>655</posx>
 			<posy>520</posy>
 			<align>right</align>
 			<label>-</label>
@@ -675,11 +611,9 @@
 		<!-- info controls -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="200">
 			<description>Poster Backdrop</description>
-			<type>image</type>
-			<id>200</id>
-			<posx>498</posx>
+			<posx>518</posx>
 			<posy>118</posy>
 			<width>174</width>
 			<height>254</height>
@@ -690,11 +624,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="201">
 			<description>Trailer Poster</description>
-			<type>image</type>
-			<id>201</id>
-			<posx>500</posx>
+			<posx>520</posx>
 			<posy>120</posy>
 			<width>170</width>
 			<height>250</height>
@@ -705,11 +637,9 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="202">
 			<description>Trailer Rating</description>
-			<type>image</type>
-			<id>202</id>
-			<posx>510</posx>
+			<posx>540</posx>
 			<posy>350</posy>
 			<width>66</width>
 			<height>15</height>
@@ -720,10 +650,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
-			<type>image</type>
-			<id>203</id>
 			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
@@ -735,10 +663,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="204">
 			<description>Trailer Watched Overlay</description>
-			<type>image</type>
-			<id>204</id>
 			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
@@ -750,10 +676,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="205">
 			<description>Trailer Saved Overlay</description>
-			<type>image</type>
-			<id>205</id>
 			<posx>645</posx>
 			<posy>350</posy>
 			<width>16</width>
@@ -765,12 +689,10 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control>
+		<control type="label" id="206">
 			<description>Trailer Title</description>
-			<type>label</type>
-			<id>206</id>
 			<width>400</width>
-			<posx>245</posx>
+			<posx>240</posx>
 			<posy>375</posy>
 			<align>left</align>
 			<label>-</label>
@@ -781,10 +703,8 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="210">
 			<description>Plot Button</description>
-			<type>button</type>
-			<id>210</id>
 			<label>215</label>
 			<posx>211</posx>
 			<posy>370</posy>
@@ -809,10 +729,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="211">
 			<description>Cast Button</description>
-			<type>button</type>
-			<id>211</id>
 			<label>216</label>
 			<posx>211</posx>
 			<posy>370</posy>
@@ -837,10 +755,8 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="textbox" id="215">
 			<description>Trailer Plot</description>
-			<type>textbox</type>
-			<id>215</id>
 			<posx>211</posx>
 			<posy>400</posy>
 			<width>445</width>
@@ -860,10 +776,8 @@
 		</control>
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Cast List Scrollbar Up Arrow</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>647</posx>
 			<posy>403</posy>
 			<width>16</width>
@@ -873,10 +787,8 @@
 		</control>
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Cast List Scrollbar Up Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>647</posx>
 			<posy>403</posy>
 			<width>16</width>
@@ -886,10 +798,8 @@
 		</control>
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Cast List Scrollbar Middle</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>647</posx>
 			<posy>419</posy>
 			<width>16</width>
@@ -899,10 +809,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Cast List Scrollbar Down Arrow</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>647</posx>
 			<posy>490</posy>
 			<width>16</width>
@@ -912,10 +820,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="1">
 			<description>Cast List Scrollbar Down Arrow NA</description>
-			<type>image</type>
-			<id>1</id>
 			<posx>647</posx>
 			<posy>490</posy>
 			<width>16</width>
@@ -925,10 +831,8 @@
 		</control>
 		
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control>
+		<control type="button" id="95">
 			<description>Cast List Scrollbar Position Indicator</description>
-			<type>button</type>
-			<id>95</id>
 			<label>-</label>
 			<posx>647</posx>
 			<posy>419</posy>
@@ -950,10 +854,8 @@
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control>
+		<control type="list" id="0">
 			<description>Cast List Backdrop</description>
-			<type>listcontrol</type>
-			<id>0</id>
 			<posx>211</posx>
 			<posy>403</posy>
 			<width>435</width>
@@ -980,10 +882,8 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control>
+		<control type="list" id="216">
 			<description>Cast List</description>
-			<type>listcontrol</type>
-			<id>216</id>
 			<posx>211</posx>
 			<posy>403</posy>
 			<width>435</width>
@@ -1012,10 +912,8 @@
 		<!-- special controls for media playing info -->
 		
 		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control>
+		<control type="image" id="300">
 			<description>X Button On</description>
-			<id>300</id>
-			<type>image</type>
 			<posx>82</posx>
 			<posy>525</posy>
 			<width>21</width>
@@ -1026,10 +924,8 @@
 		</control>
 
 		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control>
-			<id>301</id>
+		<control type="image" id="301">
 			<description>X Button Off</description>
-			<type>image</type>
 			<posx>82</posx>
 			<posy>525</posy>
 			<width>21</width>
@@ -1040,10 +936,8 @@
 		</control>
 
 		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="302">
 			<description>Full-Screen Visualisation Label</description>
-			<id>302</id>
-			<type>label</type>
 			<font>font12</font>
 			<posx>115</posx>
 			<posy>528</posy>
@@ -1057,10 +951,8 @@
 		</control>
 
 		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control>
+		<control type="label" id="303">
 			<description>Full-Screen Video Label</description>
-			<id>303</id>
-			<type>label</type>
 			<font>font12</font>
 			<posx>50</posx>
 			<posy>500</posy>

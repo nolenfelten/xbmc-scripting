@@ -22,13 +22,14 @@ class GUI( xbmcgui.WindowDialog ):
         self.saved = self.win.trailers.movies[self.trailer].saved != ''
         
     def setupGUI( self ):
-        skin_path = os.path.join( self.cwd, 'extras', 'skins', self.win.skin )
+        current_skin = xbmc.getSkinDir()
+        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ) ) ): current_skin = 'default'
+        skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
-        res = self.getResolution()
-        if ( res == 0 or res % 2 ): skin = 'context_menu_16x9.xml'
-        else: skin = 'context_menu.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, skin ) ) ): skin = 'context_menu.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, skin ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
+        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'context_menu_16x9.xml'
+        else: xml_file = 'context_menu.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ) ) ): xml_file = 'context_menu.xml'
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def showContextMenu( self ):
         try:
