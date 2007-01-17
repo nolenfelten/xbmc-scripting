@@ -545,6 +545,8 @@ class Tetris(xbmcgui.WindowDialog):
 				self.updatePiece()
 			else:
 				self.state = STATE_QUITTING
+				self.close()
+			LOG('PE after GO - '+str(self.state))
 		elif entryEvent == EVENT_LEVEL_UP:
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 			self.updateBlocks()
@@ -608,6 +610,9 @@ class Tetris(xbmcgui.WindowDialog):
 
 	def onActionProc(self, action):
 		lock.acquire()
+		if self.state == STATE_QUITTING:
+			lock.release()
+			return
 		LOG('   OnAct lock acquired!!')
 		event = 0
 		rows = 0
@@ -635,6 +640,7 @@ class Tetris(xbmcgui.WindowDialog):
 	 		self.togglePause()
 		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
+			self.state = STATE_QUITTING
 			lock.release()
 			self.close()
 			return
@@ -643,8 +649,6 @@ class Tetris(xbmcgui.WindowDialog):
 		LOG('OA: lock released')
 		lock.release()
 		LOG('<- OnAction')
-		if self.state == STATE_QUITTING:
-			self.close()
 
 			
 	def saveSettings(self):
