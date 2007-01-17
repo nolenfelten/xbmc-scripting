@@ -359,6 +359,7 @@ class Tetris(xbmcgui.WindowDialog):
 		self.dlgPause = PauseDialog(parent=self)
 		self.dlgGame= scores.GameDialog(gamename='Tetris',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
+		self.gravityDelay = time.clock() 
 		self.state = STATE_READY
 		
 		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, IMAGE_DIR+'background.png'))
@@ -592,12 +593,8 @@ class Tetris(xbmcgui.WindowDialog):
 		# The scroll actions have a very high freq
 		# decrease this frequency so we dont get bogged down with extra threads		
 		if action == ACTION_SCROLL_DOWN or action == ACTION_SCROLL_UP:  
-			LOG ("ASD - " + str(self.gravityControl) +"="+ str(time.clock()+GRAVITY_SPEED_DELAY-self.gravityControl))
-			if self.gravityControl >= GRAVITY_SPEED_DELAY: 
-				#self.gravityControl -= 1
-				if time.clock() + GRAVITY_SPEED_DELAY - self.gravityControl < GRAVITY_NEW_PIECE_DELAY:
-					return
-				self.gravityControl = 0
+			if time.clock() < self.gravityDelay: 
+				return
 			else: 
 				# this slows down the frequency			
 				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
@@ -610,9 +607,10 @@ class Tetris(xbmcgui.WindowDialog):
 
 	def onActionProc(self, action):
 		lock.acquire()
-		if self.state == STATE_QUITTING:
+		if self.state == STATE_QUITTING or self.state == STATE_PAUSED:
 			lock.release()
 			return
+
 		LOG('   OnAct lock acquired!!')
 		event = 0
 		rows = 0
@@ -633,16 +631,16 @@ class Tetris(xbmcgui.WindowDialog):
 		elif action == ACTION_SCROLL_DOWN:
 			event,rows = controller.dropPiece()
 			# give it a break after you hit bottom
-			if event == EVENT_NEW_PIECE:
+			if event == EVENT_NEW_PIECE or event == EVENT_LEVEL_UP:
 				# if we hit the ground give gravity a break for a bit 			
-				self.gravityControl = time.clock() + GRAVITY_NEW_PIECE_DELAY + GRAVITY_SPEED_DELAY
+				self.gravityDelay = time.clock() + GRAVITY_NEW_PIECE_DELAY
 		elif action == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
 	 		self.togglePause()
 		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
 			self.state = STATE_QUITTING
-			lock.release()
 			self.close()
+			lock.release()
 			return
 		LOG('OA2')
 		self.processEvent(event,rows)

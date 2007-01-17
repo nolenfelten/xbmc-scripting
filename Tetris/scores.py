@@ -387,7 +387,8 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR, ACTION_STOP):
 			self.close()
 	
-WINDOW_GAME = 0
+WINDOW_NONE = 0
+WINDOW_GAME = 3
 WINDOW_HIGHSCORE = 1
 WINDOW_SUBMIT = 2
 class GameDialog(xbmcgui.WindowDialog):
@@ -441,6 +442,7 @@ class GameDialog(xbmcgui.WindowDialog):
 		self.dlgHighScores.addScore(self.username,str(score))
 		self.gameID = self.getGameID(self.gamename)
 		xbmc.enableNavSounds(True)
+		self.focusWindow = WINDOW_GAME
 		self.doModal() #leaves xbmcgui locked
 		xbmc.enableNavSounds(False)
 		LOG("SD7")
@@ -499,5 +501,8 @@ class GameDialog(xbmcgui.WindowDialog):
 		LOG('OC6')
 
 	def onAction(self, action):
+		if not self.focusWindow == WINDOW_GAME:
+			return
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR, ACTION_STOP):
+			self.focusWindow = WINDOW_NONE
 			self.close()
