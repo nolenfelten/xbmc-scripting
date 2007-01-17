@@ -13,6 +13,8 @@
 
 import sys, email, xbmcgui, xbmc
 import string, time, mimetypes, re, os
+import poplib
+import shutil
 
 Root_Dir = os.getcwd().replace(";","")+"\\"
 SRC_Dir = Root_Dir + "Src\\"
@@ -26,8 +28,7 @@ VERSION = "(V.0.1)"
 
 scriptpath = sys.path[0]
 sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
-import poplib
-import shutil
+
 
 
 
@@ -200,8 +201,7 @@ class xbmcmail(xbmcgui.Window):
         try:
             fh = open(Root_Dir + SETTINGS_FILE)
             for line in fh.readlines():
-                theLine = line.lower()
-                theLine = theLine.strip()
+                theLine = line.strip()
                 if theLine.count("<masterpassenable>") > 0:
                     self.MasterPassEnable = theLine[18:-19]
                 if theLine.count("<masterpass>") > 0:
@@ -241,8 +241,7 @@ class xbmcmail(xbmcgui.Window):
         try:
             fh = open(DATA_DIR + "tally.sss")
             for line in fh.readlines():
-                theLine = line.lower()
-                theLine = theLine.strip()
+                theLine = line.strip()
                 if theLine.count("<tally>") > 0:
                     self.tally = theLine[7:-8]    
                     fh.close()
@@ -285,6 +284,23 @@ class xbmcmail(xbmcgui.Window):
 
     def writeconfig(self):
             f = open(Root_Dir + SETTINGS_FILE, "wb")
+            f.write("<settings>\n")
+            f.write("\t<masterpassenable>"+ self.MasterPassEnable +"</masterpassenable>\n")
+            f.write("\t<masterpass>"+ self.masterpass +"</masterpass>\n")
+            f.write("\t<server1>"+ self.server1 +"</server1>\n")
+            f.write("\t<user1>"+ self.user1 +"</user1>\n")
+            f.write("\t<pass1>"+ self.pass1 +"</pass1>\n")
+            f.write("\t<ssl1>"+ self.ssl1 +"</ssl1>\n")
+            f.write("\t<server2>"+ self.server2 +"</server2>\n")
+            f.write("\t<user2>"+ self.user2 +"</user2>\n")
+            f.write("\t<pass2>"+ self.pass2 +"</pass2>\n")
+            f.write("\t<ssl2>"+ self.ssl2 +"</ssl2>\n")
+            f.write("</settings>\n")
+            f.close() 
+            return
+
+    def writetempconfig(self):
+            f = open(TEMPFOLDER + "TEMPFILE.xml", "wb")
             f.write("<settings>\n")
             f.write("\t<masterpassenable>"+ self.MasterPassEnable +"</masterpassenable>\n")
             f.write("\t<masterpass>"+ self.masterpass +"</masterpass>\n")
@@ -370,7 +386,6 @@ class xbmcmail(xbmcgui.Window):
         self.settingsmenu()
         
     def mainmenu(self):	
-        self.settingssaved = 0
         self.readconfig()
         self.setFocus(self.cmButton)
 
@@ -395,6 +410,9 @@ class xbmcmail(xbmcgui.Window):
         return
         
     def settingsmenu(self):
+        fh = open(Root_Dir + SETTINGS_FILE)
+        self.comparesettings1 = fh.read()
+        fh.close()
         self.settings = True
         self.readconfig()
         self.addControl(self.seoverlay)
@@ -563,7 +581,6 @@ class xbmcmail(xbmcgui.Window):
                     self.bingo = 0
                     self.track = 0
                     self.idme = mail.uidl(i)  
-                    self.idme = self.idme.lower()
                     self.idme = re.sub(str(i), '', self.idme)
                     self.readid()
                     self.readid2()
@@ -583,7 +600,6 @@ class xbmcmail(xbmcgui.Window):
                             dome = self.newmail[count]
                             mailMsg = mail.retr(dome)[1]
                             self.idme = mail.uidl(dome)  
-                            self.idme = self.idme.lower()
                             self.idme = re.sub(str(dome), '', self.idme)
                             tempStr = ''
                             for line in mailMsg:
@@ -664,7 +680,6 @@ class xbmcmail(xbmcgui.Window):
                     self.bingo = 0
                     self.track = 0
                     self.idme = mail.uidl(i)  
-                    self.idme = self.idme.lower()
                     self.idme = re.sub(str(i), '', self.idme)
                     self.readid()
                     self.readid2()
@@ -684,7 +699,6 @@ class xbmcmail(xbmcgui.Window):
                             dome = self.newmail[count]
                             mailMsg = mail.retr(dome)[1]
                             self.idme = mail.uidl(dome)  
-                            self.idme = self.idme.lower()
                             self.idme = re.sub(str(dome), '', self.idme)
                             tempStr = ''
                             for line in mailMsg:
@@ -722,7 +736,6 @@ class xbmcmail(xbmcgui.Window):
             try:
                 fh = open(self.EMAILFOLDER + str(self.count) +".id")
                 self.testmeid = fh.read()
-                self.testmeid = self.testmeid.lower()
                 fh.close()
                 if self.testmeid == self.idme:
                     self.bingo = 1
@@ -743,7 +756,6 @@ class xbmcmail(xbmcgui.Window):
             try:
                 fh = open(self.EMAILFOLDER + DELETEFOLDER + str(self.count) +".id")
                 self.testmeid = fh.read()
-                self.testmeid = self.testmeid.lower()
                 fh.close()
                 if self.testmeid == self.idme:
                     self.bingo = 1
@@ -994,7 +1006,6 @@ class xbmcmail(xbmcgui.Window):
         elif control == self.theList:
             lstPos = self.theList.getSelectedPosition()
             if lstPos == 0:
-                self.settingssaved = 0
                 if self.server1 == "-":
                     keyboard = xbmc.Keyboard("", "Enter Server1")
                 else:
@@ -1009,7 +1020,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return
             if lstPos == 1:
-                self.settingssaved = 0
                 if self.user1 == "-":
                     keyboard = xbmc.Keyboard("", "Enter Username1")
                 else:
@@ -1024,7 +1034,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return
             if lstPos == 2:
-                self.settingssaved = 0
                 if self.pass1 == "-":
                     keyboard = xbmc.Keyboard("", "Enter Password1")
                 else:
@@ -1047,7 +1056,6 @@ class xbmcmail(xbmcgui.Window):
                 return
             if lstPos == 3:
                 dialog = xbmcgui.Dialog()
-                self.settingssaved = 0
                 if self.ssl1 == "-":
                     keyboard = xbmc.Keyboard("", "Enter SSL1")
                 else:
@@ -1067,7 +1075,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return
             if lstPos == 4:
-                self.settingssaved = 0
                 if self.server2 == "-":
                     keyboard = xbmc.Keyboard("", "Enter Server2 Address")
                 else:
@@ -1082,7 +1089,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return
             if lstPos == 5:
-                self.settingssaved = 0
                 if self.user2 == "-":
                     keyboard = xbmc.Keyboard("", "Enter User2 name")
                 else:
@@ -1097,7 +1103,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return
             if lstPos == 6:
-                self.settingssaved = 0
                 if self.pass2 == "-":
                     keyboard = xbmc.Keyboard("", "Enter Password2")
                 else:
@@ -1120,7 +1125,6 @@ class xbmcmail(xbmcgui.Window):
                 return
             if lstPos == 7:
                 dialog = xbmcgui.Dialog()
-                self.settingssaved = 0
                 if self.ssl2 == "-":
                     keyboard = xbmc.Keyboard("", "Enter SSL2")
                 else:
@@ -1140,7 +1144,6 @@ class xbmcmail(xbmcgui.Window):
                 del keyboard
                 return 
             if lstPos == 8:
-                self.settingssaved = 0
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno("Master Password Setup", "Enable a Master Password on startup?"):
                     if self.masterpass == "-":
@@ -1159,7 +1162,6 @@ class xbmcmail(xbmcgui.Window):
                     self.theList.getSelectedItem(lstPos).setLabel(self.MasterPassEnable)
                     return
             if lstPos == 9:
-                self.settingssaved = 0
                 dialog = xbmcgui.Dialog()
                 if self.masterpass == "-":
                     self.setting1 = 1
@@ -1182,22 +1184,36 @@ class xbmcmail(xbmcgui.Window):
                     else:
                         return
             if lstPos == 10:
-                self.settingssaved = 1
                 self.writeconfig()
+                self.settingssaved = 1
                 dialog = xbmcgui.DialogProgress()
                 dialog.create("Settings Saved")
                 time.sleep(1)
                 dialog.close()
                 return
             elif lstPos == 11:
-                dialog = xbmcgui.Dialog()
-                if self.settingssaved != 1: 
-                    if dialog.yesno("Warning!", "Exit without saving settings?"):
+                if self.settingssaved != 1:
+                    self.writetempconfig()
+                    fh = open(TEMPFOLDER + "TEMPFILE.xml")
+                    self.comparesettings2 = fh.read()
+                    fh.close()
+                    dialog = xbmcgui.Dialog()
+                    if self.comparesettings1 != self.comparesettings2: 
+                        if dialog.yesno("Warning!", "Exit without saving settings?"):
+                            self.settings = False
+                            self.settingssaved = 0
+                            self.reset()
+                            return
+                        else:
+                            return
+                    else:
+                        self.settingssaved = 0
+                        self.settings = False
                         self.reset()
                         return
-                    else:
-                        return
                 else:
+                    self.settingssaved = 0
+                    self.settings = False
                     self.reset()
                     return
 
