@@ -505,13 +505,14 @@ class xbmcmail(xbmcgui.Window):
         self.emails = []
         self.count = 0
         self.count2 = 0
+        self.count3 = self.tally
         self.addme()
         return
 
     def addme(self):
         for self.count in range(self.tally):
             try:
-                fh = open(self.EMAILFOLDER + str(self.count) +".sss")
+                fh = open(self.EMAILFOLDER + str(self.count3) +".sss")
                 tempStr = fh.read()
                 fh.close()
                 self.emails.append(email.message_from_string(tempStr))
@@ -525,8 +526,10 @@ class xbmcmail(xbmcgui.Window):
                     self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
                 self.count = self.count+1
                 self.count2 = self.count2+1
+                self.count3 = self.count3-1
             except:
                 self.count = self.count+1
+                self.count3 = self.count3-1
                 pass
         return
 
