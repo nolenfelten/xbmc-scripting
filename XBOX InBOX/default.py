@@ -1067,7 +1067,7 @@ class xbmcmail(xbmcgui.Window):
                 else:
                     test = 0
                     self.close()
-            elif action == 18: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
+            elif action == 9: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
                 try:
                     if self.getFocus() == self.listControl:
                         self.deletemail()
