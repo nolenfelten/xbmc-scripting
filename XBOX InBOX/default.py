@@ -15,10 +15,12 @@ import sys, email, xbmcgui, xbmc
 import string, time, mimetypes, re, os
 import poplib
 import shutil
+import threading
 
 Root_Dir = os.getcwd().replace(";","")+"\\"
 SRC_Dir = Root_Dir + "Src\\"
 DATA_DIR = SRC_Dir + "Data\\"
+path = DATA_DIR
 DELETEFOLDER = "Deleted\\"
 
 SETTINGS_FILE = "settings.xml"
@@ -27,7 +29,48 @@ TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
 
 scriptpath = sys.path[0]
+sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
+import skin
 
+
+class minis(xbmcgui.WindowDialog):
+    def __init__(self):                               
+            global minimssg
+            try:
+                w = self.getWidth()
+                h = self.getHeight()
+            except:
+                print "stuck on hw"
+                    
+                
+            skin.skin(self,path,'mini.xml')
+            self.info.setLabel(minimssg)
+            try:
+                DELAY =5
+                self.a = -1
+                self.shown = 1
+            except:
+                print "var"
+           
+            subThread = threading.Thread(target=self.SubthreadProc, args=())
+            subThread.start()
+          
+    def SubthreadProc(self):
+            time.sleep(10)
+            if self.shown:
+                    self.close()
+
+    def onAction(self, action):
+            global minimssg, openmail, test
+            if action == 10: #
+                self.close()
+                test = 0
+                m = xbmcmail()
+                m.imback()
+                m.doModal()
+                del m
+            else:
+                self.close()
 
 
 class xbmcmail(xbmcgui.Window):
@@ -49,6 +92,7 @@ class xbmcmail(xbmcgui.Window):
             self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
             self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
             self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
+            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
             self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14')
             self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14')
             self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
@@ -64,6 +108,7 @@ class xbmcmail(xbmcgui.Window):
             self.fsButton = xbmcgui.ControlButton(64, 226, 290, 30, "Fullscreen")
             self.vaButton = xbmcgui.ControlButton(64, 260, 290, 30, "Attachments")
             self.seButton = xbmcgui.ControlButton(64, 294, 290, 30, "Settings")
+            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
             self.listControl = xbmcgui.ControlList(238, 120, 958, 260, 'font14')
             self.attachlist = xbmcgui.ControlList(238, 410, 958, 260, 'font14')
             self.msgbody = xbmcgui.ControlTextBox(216, 410, 978, 260, 'font13')
@@ -79,6 +124,7 @@ class xbmcmail(xbmcgui.Window):
             self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
             self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
             self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
+            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
             self.listControl = xbmcgui.ControlList(238, 120, 434, 160, 'font14')
             self.attachlist = xbmcgui.ControlList(238, 300, 434, 160, 'font14')
             self.msgbody = xbmcgui.ControlTextBox(216, 300, 456, 160, 'font13')
@@ -94,6 +140,7 @@ class xbmcmail(xbmcgui.Window):
             self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
             self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
             self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
+            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
             self.listControl = xbmcgui.ControlList(238, 120, 434, 160, 'font14')
             self.attachlist = xbmcgui.ControlList(238, 300, 434, 160, 'font14')
             self.msgbody = xbmcgui.ControlTextBox(216, 300, 456, 160, 'font13')
@@ -102,7 +149,7 @@ class xbmcmail(xbmcgui.Window):
         self.addControl(self.bgpanel)
         self.addControl(self.panel)
         self.addControl(self.title)
-    
+        self.mmButton.setLabel("Mini Mode", "font14")
         self.cmButton.setLabel("XBOX InBOX 1", "font14")
         self.csButton.setLabel("XBOX InBOX 2", "font14")
         self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
@@ -128,6 +175,109 @@ class xbmcmail(xbmcgui.Window):
         self.setFocus(self.cmButton)
         self.show()
         return
+
+    def imback(self):
+        global button, user, Inbox
+        self.__init__()
+        self.gettally()
+        self.define()
+        self.readconfig()
+        self.writeconfig()
+        if user == self.user1:
+            Inbox = 1
+            button = self.cmButton
+        elif user == self.user2:
+            Inbox = 2
+            button = self.csButton
+        self.openinbox()
+            
+        
+        
+    def gogogo(self):
+        global test
+        test = 1
+        self.close()
+        self.run()
+
+    def run(self):
+        global user, server, passw, ssl, test
+        while test == 1:
+            try:
+                user = self.user1
+                server = self.server1
+                passw = self.pass1
+                ssl = self.ssl1
+                self.checkmail()
+            except:pass
+            try:
+                user = self.user2
+                server = self.server2
+                passw = self.pass2
+                ssl = self.ssl2
+                self.checkmail()
+            except:pass
+        self.close()
+
+
+    def checkmail(self):
+        global minimssg, user, server, passw, ssl, test
+        self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
+        self.nummails = 0
+        if ssl == "-": 
+            mail = poplib.POP3(server)
+        else:
+            mail = poplib.POP3_SSL(server, ssl)
+        mail.user(user)
+        mail.pass_(passw)
+        self.numEmails = mail.stat()[0]
+        self.newmail = []
+        for i in range(1, self.numEmails+1):                     
+            self.bingo = 0
+            self.track = 0
+            self.idme = mail.uidl(i)  
+            self.idme = re.sub(str(i), '', self.idme)
+            self.readid()
+            self.readid2()
+            if self.bingo == 0:                
+                self.newmail.append(i)
+                self.nummails = self.nummails + 1                          
+        if self.nummails == 0:
+            return
+        else:
+            count = 0
+            count2 = 1
+            for i in range(1, self.nummails+1):
+                try: 
+                    dome = self.newmail[count]
+                    mailMsg = mail.retr(dome)[1]
+                    self.idme = mail.uidl(dome)  
+                    self.idme = re.sub(str(dome), '', self.idme)
+                    tempStr = ''
+                    for line in mailMsg:
+                        if line == '':
+                            line = ' '
+                        tempStr = tempStr + line + '\n'
+                    self.email = (email.message_from_string(tempStr))
+                    f = open(self.EMAILFOLDER + str(self.tally) +".sss", "wb")
+                    f.write(str(self.email))
+                    f.close()
+                    f = open(self.EMAILFOLDER + str(self.tally) +".id", "wb")
+                    f.write(str(self.idme))
+                    f.close()
+                    f = open(self.EMAILFOLDER + str(self.tally) +".new", "wb")
+                    f.write(str(self.tally))
+                    f.close()
+                    self.tally = self.tally+1
+                    count = count + 1
+                    count2 = count2 + 1
+                    self.writetally()
+                    minimssg =  "   Inbox -" + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open inbox"
+                    wi = minis()
+                    wi.doModal()
+                    del wi
+                except:
+                    return
+        
     
     def masterpasscheck(self):
         self.readconfig()
@@ -169,6 +319,7 @@ class xbmcmail(xbmcgui.Window):
             self.masspasswsetup()
 
     def define(self):
+        global Inbox
         self.MasterPassEnable = "-"
         self.masterpass = "-"
         self.server1 = "-" 
@@ -179,7 +330,7 @@ class xbmcmail(xbmcgui.Window):
         self.user2 = "-" 
         self.pass2 = "-" 
         self.ssl2 = "-"
-        self.Inbox = 0
+        Inbox = 0
         self.settingssaved = 0
         self.firsttime = 0
         return      
@@ -500,6 +651,7 @@ class xbmcmail(xbmcgui.Window):
         self.csButton.controlRight(self.listControl)
         self.seButton.controlUp(self.csButton)
         self.seButton.controlRight(self.listControl)
+        self.mmButton.controlRight(self.listControl)
         self.listControl.reset()
         self.emails = []
         self.count = 0
@@ -512,6 +664,7 @@ class xbmcmail(xbmcgui.Window):
             self.cmButton.controlRight(self.cmButton)
             self.csButton.controlRight(self.csButton)
             self.seButton.controlRight(self.seButton)
+            self.mmButton.controlRight(self.mmButton)
         return
 
     def addme(self):
@@ -565,45 +718,62 @@ class xbmcmail(xbmcgui.Window):
         return
 
 
+
+
+    
+
     def openinbox(self):
+        global user, server, passw, ssl, button
+        try:
+            self.addControl(self.mmButton)
+            self.seButton.controlDown(self.mmButton)
+            self.mmButton.controlUp(self.seButton)
+            self.mmButton.controlRight(self.listControl)
+        except: pass
         self.listControl.reset()
         self.removeControl(self.title)
-        self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XBOX InBOX - "+ self.user, "font18", "FFB2D4F5")
+        self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XBOX InBOX - "+ user, "font18", "FFB2D4F5")
         self.addControl(self.title)
-        self.Button.setLabel("Check For New", "font14")
-        self.EMAILFOLDER = DATA_DIR + self.user + "@" + self.server + "\\"
+        button.setLabel("Check For New", "font14")
+        self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
         try:
             os.mkdir(self.EMAILFOLDER)
             os.mkdir(self.EMAILFOLDER + DELETEFOLDER)
         except:
             pass
+        if Inbox == 1:
+            self.setFocus(self.cmButton)
+        elif Inbox == 2:
+            self.setFocus(self.csButton)  
         self.openmail()
 
         
     def comparemail(self):
+        global user, server, passw, ssl
+        self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
         dialog = xbmcgui.DialogProgress()
-        dialog.create("Inbox - " + self.user, "Logging in...")
+        dialog.create("Inbox - " + user, "Logging in...")
         self.cmButton.controlRight(self.listControl)
         self.csButton.controlRight(self.listControl)
         try:
-            if self.ssl == "-": 
-                mail = poplib.POP3(self.server)
+            if ssl == "-": 
+                mail = poplib.POP3(server)
             else:
-                mail = poplib.POP3_SSL(self.server, self.ssl)
-            mail.user(self.user)
-            mail.pass_(self.passw)
+                mail = poplib.POP3_SSL(server, ssl)
+            mail.user(user)
+            mail.pass_(passw)
             self.numEmails = mail.stat()[0]
             
             print "You have", self.numEmails, "new emails"
             dialog.close()
             if self.numEmails==0:
-                dialog.create("Inbox - " + self.user,"You have no new emails")
+                dialog.create("Inbox - " + user,"You have no new emails")
                 mail.quit()
                 time.sleep(2)
                 dialog.close()
                 return
             else:
-                dialog.create("Inbox - " + self.user)
+                dialog.create("Inbox - " + user)
                 self.nummails = 0
                 self.newmail = []
                 for i in range(1, self.numEmails+1):                     
@@ -618,7 +788,7 @@ class xbmcmail(xbmcgui.Window):
                         self.newmail.append(i)
                         self.nummails = self.nummails + 1                          
                 if self.nummails == 0:
-                    dialog.create("Inbox - " + self.user,"You have no new emails")
+                    dialog.create("Inbox - " + user,"You have no new emails")
                     time.sleep(3)
                     dialog.close()
                 else:
@@ -658,7 +828,7 @@ class xbmcmail(xbmcgui.Window):
                 
         except:
             dialog.close()
-            dialog.create("Inbox - " + self.user, "Problem connecting to server")
+            dialog.create("Inbox - " + user, "Problem connecting to server")
             time.sleep(2)
             dialog.close()
             return
@@ -718,6 +888,7 @@ class xbmcmail(xbmcgui.Window):
         self.openmail()
         if self.addeditems == 0:
             self.setFocus(self.cmButton)
+            self.mmButton.controlRight(self.mmButton)
         return
 
     def getemailnum(self):
@@ -894,8 +1065,9 @@ class xbmcmail(xbmcgui.Window):
                     self.reset()
                     return
                 else:
+                    test = 0
                     self.close()
-            elif action == 9: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
+            elif action == 18: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
                 try:
                     if self.getFocus() == self.listControl:
                         self.deletemail()
@@ -904,8 +1076,9 @@ class xbmcmail(xbmcgui.Window):
         return
             
     def onControl(self, control):
+        global user, server, passw, ssl, button, Inbox
         if control == self.cmButton:
-            if self.Inbox == 2:
+            if Inbox == 2:
                 self.csButton.setLabel("XBOX InBOX 2", "font14")
             if self.user1 == "-":
                 self.warning()
@@ -913,18 +1086,18 @@ class xbmcmail(xbmcgui.Window):
                 self.warning()
             elif self.server1 == "-":
                 self.warning()
-            elif self.Inbox == 1:
+            elif Inbox == 1:
                 self.comparemail()
             else:
-                self.Inbox = 1
-                self.Button = self.cmButton
-                self.user = self.user1
-                self.server = self.server1
-                self.passw = self.pass1
-                self.ssl = self.ssl1
+                Inbox = 1
+                button = self.cmButton
+                user = self.user1
+                server = self.server1
+                passw = self.pass1
+                ssl = self.ssl1
                 self.openinbox()
         elif control == self.csButton:
-            if self.Inbox == 1:
+            if Inbox == 1:
                 self.cmButton.setLabel("XBOX InBOX 1", "font14")
             if self.user2 == "-":
                 self.warning()
@@ -932,18 +1105,20 @@ class xbmcmail(xbmcgui.Window):
                 self.warning()
             elif self.server2 == "-":
                 self.warning()
-            elif self.Inbox == 2:
+            elif Inbox == 2:
                 self.comparemail()
             else:
-                self.Inbox = 2
-                self.Button = self.csButton
-                self.user = self.user2
-                self.server = self.server2
-                self.passw = self.pass2
-                self.ssl = self.ssl2
+                Inbox = 2
+                button = self.csButton
+                user = self.user2
+                server = self.server2
+                passw = self.pass2
+                ssl = self.ssl2
                 self.openinbox()
         elif control == self.seButton:
             self.settingsmenu()
+        elif control == self.mmButton:
+            self.gogogo()         
         elif control == self.listControl:
             self.fsButton.setLabel("Fullscreen", "font14", "ffffffff")
             self.listControl.controlLeft(self.cmButton)
