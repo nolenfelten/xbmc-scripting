@@ -63,7 +63,7 @@ class xbmcmail(xbmcgui.Window):
             self.csButton = xbmcgui.ControlButton(64, 192, 290, 30, "Check Email 2")
             self.fsButton = xbmcgui.ControlButton(64, 226, 290, 30, "Fullscreen")
             self.vaButton = xbmcgui.ControlButton(64, 260, 290, 30, "Attachments")
-            self.seButton = xbmcgui.ControlButton(64, 294, 290, 30, "Settings") 
+            self.seButton = xbmcgui.ControlButton(64, 294, 290, 30, "Settings")
             self.listControl = xbmcgui.ControlList(238, 120, 958, 260, 'font14')
             self.attachlist = xbmcgui.ControlList(238, 410, 958, 260, 'font14')
             self.msgbody = xbmcgui.ControlTextBox(216, 410, 978, 260, 'font13')
@@ -103,7 +103,6 @@ class xbmcmail(xbmcgui.Window):
         self.addControl(self.panel)
         self.addControl(self.title)
     
-       
         self.cmButton.setLabel("XBOX InBOX 1", "font14")
         self.csButton.setLabel("XBOX InBOX 2", "font14")
         self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
@@ -180,7 +179,9 @@ class xbmcmail(xbmcgui.Window):
         self.user2 = "-" 
         self.pass2 = "-" 
         self.ssl2 = "-"
+        self.Inbox = 0
         self.settingssaved = 0
+        self.firsttime = 0
         return      
 
     def masspasswsetup(self):
@@ -387,7 +388,7 @@ class xbmcmail(xbmcgui.Window):
         self.readconfig()
         self.setFocus(self.cmButton)
 
-
+        
     def reset(self):
         self.removeControl(self.seoverlay)
         self.removeControl(self.one)
@@ -504,7 +505,13 @@ class xbmcmail(xbmcgui.Window):
         self.count = 0
         self.count2 = 0
         self.count3 = self.tally
+        self.addeditems = 0
         self.addme()
+        if self.addeditems == 0:
+            self.listControl.addItem("INBOX EMPTY")
+            self.cmButton.controlRight(self.cmButton)
+            self.csButton.controlRight(self.csButton)
+            self.seButton.controlRight(self.seButton)
         return
 
     def addme(self):
@@ -521,19 +528,25 @@ class xbmcmail(xbmcgui.Window):
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
                             self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                            self.addeditems = self.addeditems +1
                         else:
                             self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            self.addeditems = self.addeditems +1
                     except:
                         self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                        self.addeditems = self.addeditems +1
                 except:
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
                             self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                            self.addeditems = self.addeditems +1
                         else:
                             self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            self.addeditems = self.addeditems +1
                     except:
                         self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                        self.addeditems = self.addeditems +1
                 try:
                     os.remove(self.EMAILFOLDER + str(self.count3)+".new")
                 except:
@@ -552,49 +565,45 @@ class xbmcmail(xbmcgui.Window):
         return
 
 
-    def comparemail(self):
-        self.EMAILFOLDER = DATA_DIR + self.user1 + "@" + self.server1 + "\\"
+    def openinbox(self):
+        self.listControl.reset()
+        self.removeControl(self.title)
+        self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XBOX InBOX - "+ self.user, "font18", "FFB2D4F5")
+        self.addControl(self.title)
+        self.Button.setLabel("Check For New", "font14")
+        self.EMAILFOLDER = DATA_DIR + self.user + "@" + self.server + "\\"
         try:
             os.mkdir(self.EMAILFOLDER)
             os.mkdir(self.EMAILFOLDER + DELETEFOLDER)
         except:
             pass
         self.openmail()
-        self.listControl.controlLeft(self.cmButton)
-        self.vaButton.setLabel("Attachments", "font14", "60ffffff")
-        self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
-        self.msgbody.reset()
-        self.attachlist.setVisible(False)
-        self.cmButton.controlDown(self.csButton)
-        self.cmButton.controlRight(self.listControl)
-        self.csButton.controlUp(self.cmButton)
-        self.csButton.controlDown(self.seButton)
-        self.csButton.controlRight(self.listControl)
-        self.seButton.controlUp(self.csButton)
-        self.seButton.controlRight(self.listControl)
+
+        
+    def comparemail(self):
         dialog = xbmcgui.DialogProgress()
-        dialog.create("Inbox - " + self.user1, "Logging in...")
+        dialog.create("Inbox - " + self.user, "Logging in...")
         self.cmButton.controlRight(self.listControl)
         self.csButton.controlRight(self.listControl)
         try:
-            if self.ssl1 == "-": 
-                mail = poplib.POP3(self.server1)
+            if self.ssl == "-": 
+                mail = poplib.POP3(self.server)
             else:
-                mail = poplib.POP3_SSL(self.server1, self.ssl1)
-            mail.user(self.user1)
-            mail.pass_(self.pass1)
+                mail = poplib.POP3_SSL(self.server, self.ssl)
+            mail.user(self.user)
+            mail.pass_(self.passw)
             self.numEmails = mail.stat()[0]
             
             print "You have", self.numEmails, "new emails"
             dialog.close()
             if self.numEmails==0:
-                dialog.create("Inbox - " + self.user1,"You have no new emails")
+                dialog.create("Inbox - " + self.user,"You have no new emails")
                 mail.quit()
                 time.sleep(2)
                 dialog.close()
                 return
             else:
-                dialog.create("Inbox - " + self.user1)
+                dialog.create("Inbox - " + self.user)
                 self.nummails = 0
                 self.newmail = []
                 for i in range(1, self.numEmails+1):                     
@@ -609,7 +618,7 @@ class xbmcmail(xbmcgui.Window):
                         self.newmail.append(i)
                         self.nummails = self.nummails + 1                          
                 if self.nummails == 0:
-                    dialog.create("Inbox - " + self.user1,"You have no new emails")
+                    dialog.create("Inbox - " + self.user,"You have no new emails")
                     time.sleep(3)
                     dialog.close()
                 else:
@@ -649,109 +658,11 @@ class xbmcmail(xbmcgui.Window):
                 
         except:
             dialog.close()
-            dialog.create("Inbox - " + self.user1, "Problem connecting to server")
+            dialog.create("Inbox - " + self.user, "Problem connecting to server")
             time.sleep(2)
             dialog.close()
             return
 
-    def comparemail2(self):
-        self.EMAILFOLDER = DATA_DIR + self.user2 + "@" + self.server2 + "\\"
-        try:
-            os.mkdir(self.EMAILFOLDER)
-            os.mkdir(self.EMAILFOLDER + DELETEFOLDER)
-        except:
-            pass
-        self.openmail()
-        self.listControl.controlLeft(self.cmButton)
-        self.vaButton.setLabel("Attachments", "font14", "60ffffff")
-        self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
-        self.msgbody.reset()
-        self.attachlist.setVisible(False)
-        self.cmButton.controlDown(self.csButton)
-        self.cmButton.controlRight(self.listControl)
-        self.csButton.controlUp(self.cmButton)
-        self.csButton.controlDown(self.seButton)
-        self.csButton.controlRight(self.listControl)
-        self.seButton.controlUp(self.csButton)
-        self.seButton.controlRight(self.listControl)
-        dialog = xbmcgui.DialogProgress()
-        dialog.create("Inbox - " + self.user2, "Logging in...")
-        self.cmButton.controlRight(self.listControl)
-        self.csButton.controlRight(self.listControl)
-        try:
-            if self.ssl2 == "-": 
-                mail = poplib.POP3(self.server2)
-            else:
-                mail = poplib.POP3_SSL(self.server2, self.ssl2)
-            mail.user(self.user2)
-            mail.pass_(self.pass2)
-            self.numEmails = mail.stat()[0]
-            
-            print "You have", self.numEmails, "new emails"
-            dialog.close()
-            if self.numEmails==0:
-                dialog.create("Inbox - " + self.user2,"You have no new emails")
-                mail.quit()
-                time.sleep(2)
-                dialog.close()
-                return
-            else:
-                dialog.create("Inbox - " + self.user2)
-                self.nummails = 0
-                self.newmail = []
-                for i in range(1, self.numEmails+1):                     
-                    dialog.update((i*100)/self.numEmails,"Checking for new emails....")
-                    self.bingo = 0
-                    self.track = 0
-                    self.idme = mail.uidl(i)  
-                    self.idme = re.sub(str(i), '', self.idme)
-                    self.readid()
-                    self.readid2()
-                    if self.bingo == 0:                
-                        self.newmail.append(i)
-                        self.nummails = self.nummails + 1                          
-                if self.nummails == 0:
-                    dialog.create("Inbox - " + self.user2,"You have no new emails")
-                    time.sleep(3)
-                    dialog.close()
-                else:
-                    count = 0
-                    count2 = 1
-                    for i in range(1, self.nummails+1):
-                        try:
-                            dialog.update((i*100)/self.nummails,"You have " + str(self.nummails) + " new emails","Downloading new email #" + str(count2))
-                            dome = self.newmail[count]
-                            mailMsg = mail.retr(dome)[1]
-                            self.idme = mail.uidl(dome)  
-                            self.idme = re.sub(str(dome), '', self.idme)
-                            tempStr = ''
-                            for line in mailMsg:
-                                if line == '':
-                                    line = ' '
-                                tempStr = tempStr + line + '\n'
-                            self.email = (email.message_from_string(tempStr))
-                            f = open(self.EMAILFOLDER + str(self.tally) +".sss", "wb")
-                            f.write(str(self.email))
-                            f.close()
-                            f = open(self.EMAILFOLDER + str(self.tally) +".id", "wb")
-                            f.write(str(self.idme))
-                            f.close()
-                            self.tally = self.tally+1
-                            count = count + 1
-                            count2 = count2 + 1
-                        except:pass
-                    dialog.close()
-                if self.nummails != 0:
-                    self.play_sound("default")
-                self.openmail()
-                self.writetally()
-                
-        except:
-            dialog.close()
-            dialog.create("Inbox - " + self.user2, "Problem connecting to server")
-            time.sleep(2)
-            dialog.close()
-            return
 
     def readid(self):
         self.count = 0
@@ -805,6 +716,8 @@ class xbmcmail(xbmcgui.Window):
         time.sleep(2)
         dialog.close()
         self.openmail()
+        if self.addeditems == 0:
+            self.setFocus(self.cmButton)
         return
 
     def getemailnum(self):
@@ -992,23 +905,43 @@ class xbmcmail(xbmcgui.Window):
             
     def onControl(self, control):
         if control == self.cmButton:
+            if self.Inbox == 2:
+                self.csButton.setLabel("XBOX InBOX 2", "font14")
             if self.user1 == "-":
                 self.warning()
             elif self.pass1 == "-":
                 self.warning()
             elif self.server1 == "-":
                 self.warning()
-            else:
+            elif self.Inbox == 1:
                 self.comparemail()
+            else:
+                self.Inbox = 1
+                self.Button = self.cmButton
+                self.user = self.user1
+                self.server = self.server1
+                self.passw = self.pass1
+                self.ssl = self.ssl1
+                self.openinbox()
         elif control == self.csButton:
+            if self.Inbox == 1:
+                self.cmButton.setLabel("XBOX InBOX 1", "font14")
             if self.user2 == "-":
                 self.warning()
             elif self.pass2 == "-":
                 self.warning()
             elif self.server2 == "-":
                 self.warning()
+            elif self.Inbox == 2:
+                self.comparemail()
             else:
-                self.comparemail2()
+                self.Inbox = 2
+                self.Button = self.csButton
+                self.user = self.user2
+                self.server = self.server2
+                self.passw = self.pass2
+                self.ssl = self.ssl2
+                self.openinbox()
         elif control == self.seButton:
             self.settingsmenu()
         elif control == self.listControl:
@@ -1050,7 +983,8 @@ class xbmcmail(xbmcgui.Window):
                 else:
                     keyboard = xbmc.Keyboard(self.server1, "Enter Server1")
                 keyboard.doModal()
-                self.server1 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.server1 = keyboard.getText()
                 if self.server1 == "":
                     self.server1 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enter Server1 eg. pop.ihug.co.nz")
@@ -1064,7 +998,8 @@ class xbmcmail(xbmcgui.Window):
                 else:
                     keyboard = xbmc.Keyboard(self.user1, "Enter Username1")
                 keyboard.doModal()
-                self.user1 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.user1 = keyboard.getText()
                 if self.user1 == "":
                     self.user1 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enter User1 name eg. monkeyman2000")
@@ -1105,7 +1040,8 @@ class xbmcmail(xbmcgui.Window):
                     else:
                         return
                 keyboard.doModal()
-                self.ssl1 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.ssl1 = keyboard.getText()
                 if self.ssl1 == "":
                     self.ssl1 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server1?")
@@ -1119,7 +1055,8 @@ class xbmcmail(xbmcgui.Window):
                 else:
                     keyboard = xbmc.Keyboard(self.server2, "Enter Server2 Address")
                 keyboard.doModal()
-                self.server2 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.server2 = keyboard.getText()
                 if self.server2 == "":
                     self.server2 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enter Server2 eg. pop.uhug.co.nz")
@@ -1133,7 +1070,8 @@ class xbmcmail(xbmcgui.Window):
                 else:
                     keyboard = xbmc.Keyboard(self.user2, "Enter Username2")
                 keyboard.doModal()
-                self.user2 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.user2 = keyboard.getText()
                 if self.user2 == "":
                     self.user2 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enter User2 name eg. mrworm123")
@@ -1174,7 +1112,8 @@ class xbmcmail(xbmcgui.Window):
                     else:
                         return
                 keyboard.doModal()
-                self.ssl2 = keyboard.getText()
+                if (keyboard.isConfirmed()):
+                    self.ssl2 = keyboard.getText()
                 if self.ssl2 == "":
                     self.ssl2 = "-"
                     self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server2?")
