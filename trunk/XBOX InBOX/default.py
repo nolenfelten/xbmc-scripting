@@ -27,8 +27,6 @@ TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
 
 scriptpath = sys.path[0]
-sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
-
 
 
 
@@ -517,17 +515,37 @@ class xbmcmail(xbmcgui.Window):
                 fh.close()
                 self.emails.append(email.message_from_string(tempStr))
                 try:
-                    temp20 = self.emails[self.count2].get('subject')
-                    if temp20 == "":
-                        self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
-                    else:
-                        self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                    fh = open(self.EMAILFOLDER + str(self.count3) +".new")
+                    fh.close()
+                    try:
+                        temp20 = self.emails[self.count2].get('subject')
+                        if temp20 == "":
+                            self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                        else:
+                            self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                    except:
+                        self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
                 except:
-                    self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                    try:
+                        temp20 = self.emails[self.count2].get('subject')
+                        if temp20 == "":
+                            self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                        else:
+                            self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                    except:
+                        self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                try:
+                    os.remove(self.EMAILFOLDER + str(self.count3)+".new")
+                except:
+                    pass
                 self.count = self.count+1
                 self.count2 = self.count2+1
                 self.count3 = self.count3-1
             except:
+                try:
+                    os.remove(self.EMAILFOLDER + str(self.count3)+".new")
+                except:
+                    pass
                 self.count = self.count+1
                 self.count3 = self.count3-1
                 pass
@@ -615,6 +633,9 @@ class xbmcmail(xbmcgui.Window):
                             f.close()
                             f = open(self.EMAILFOLDER + str(self.tally) +".id", "wb")
                             f.write(str(self.idme))
+                            f.close()
+                            f = open(self.EMAILFOLDER + str(self.tally) +".new", "wb")
+                            f.write(str(self.tally))
                             f.close()
                             self.tally = self.tally+1
                             count = count + 1
@@ -812,12 +833,27 @@ class xbmcmail(xbmcgui.Window):
                     shutil.move(self.EMAILFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
                     return
                 else:
-                    self.count = self.count+1
-                    self.count2 = self.count2+1
+                    try:
+                        temp20 = self.emails5[self.count2].get('subject')
+                        if temp20 == "":
+                            self.test1 = "NEW! [No Subject] from " + self.emails5[self.count2].get('from')
+                        else:
+                            self.test1 = "NEW! "+self.emails5[self.count2].get('subject') + " from " + self.emails5[self.count2].get('from')
+                    except:
+                        self.test1 = "NEW! [No Subject] from " + self.emails5[self.count2].get('from')
+                    if self.test1 == self.test2:
+                        os.remove(self.EMAILFOLDER + str(self.count)+".sss")
+                        shutil.move(self.EMAILFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
+                        return
+                    else:
+                        self.count = self.count+1
+                        self.count2 = self.count2+1
             except:
                 self.count = self.count+1
                 pass
         return
+
+    
 
 
     def processEmail(self, selected):
