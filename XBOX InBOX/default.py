@@ -20,9 +20,12 @@ import threading
 Root_Dir = os.getcwd().replace(";","")+"\\"
 SRC_Dir = Root_Dir + "Src\\"
 DATA_DIR = SRC_Dir + "Data\\"
-path = DATA_DIR
 DELETEFOLDER = "Deleted\\"
 
+path = os.getcwd()
+if path[-1]== ";":
+    path=path[:-1]
+    
 SETTINGS_FILE = "settings.xml"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
@@ -31,6 +34,7 @@ VERSION = "(V.0.1)"
 scriptpath = sys.path[0]
 sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
 import skin
+
 
 
 class minis(xbmcgui.WindowDialog):
@@ -80,71 +84,24 @@ class xbmcmail(xbmcgui.Window):
         self.setting1 = 0
         screenheight = self.getHeight()
         self.settings = False
-        if screenheight==576: #pal
-            self.addControl(xbmcgui.ControlImage(0,0,720,576, 'background.png'))
-            self.fsoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
-            self.seoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
-            self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
-            self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
-            self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XBOX InBOX", "font18", "FFB2D4F5")
-            self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "Check Email")
-            self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "Check Email 2")
-            self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
-            self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
-            self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
-            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
-            self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14')
-            self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14')
-            self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
-            self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
-        elif screenheight==720: #720p
-            self.addControl(xbmcgui.ControlImage(0,0,1280,720, 'background.png'))
-            self.fsoverlay = xbmcgui.ControlImage(0,0,1280,720, 'background.png')
-            self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
-            self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
-            self.title = xbmcgui.ControlLabel(200, 80, 200, 100, "XBOX InBOX", "font14", "FFB2D4F5")
-            self.cmButton = xbmcgui.ControlButton(64, 158, 290, 30, "Check Email")
-            self.csButton = xbmcgui.ControlButton(64, 192, 290, 30, "Check Email 2")
-            self.fsButton = xbmcgui.ControlButton(64, 226, 290, 30, "Fullscreen")
-            self.vaButton = xbmcgui.ControlButton(64, 260, 290, 30, "Attachments")
-            self.seButton = xbmcgui.ControlButton(64, 294, 290, 30, "Settings")
-            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
-            self.listControl = xbmcgui.ControlList(238, 120, 958, 260, 'font14')
-            self.attachlist = xbmcgui.ControlList(238, 410, 958, 260, 'font14')
-            self.msgbody = xbmcgui.ControlTextBox(216, 410, 978, 260, 'font13')
-            self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 1160, 620, 'font13')
-        elif screenheight==1080: #1080i
-            self.addControl(xbmcgui.ControlImage(0,0,1920,1080, 'background.png'))
-            self.fsoverlay = xbmcgui.ControlImage(0,0,1920,1080, 'background.png')
-            self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
-            self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
-            self.title = xbmcgui.ControlLabel(200, 80, 50, 20, "XBOX InBOX", "font14", "FFB2D4F5")
-            self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "Check Email")
-            self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "Check Email 2")
-            self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
-            self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
-            self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
-            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
-            self.listControl = xbmcgui.ControlList(238, 120, 434, 160, 'font14')
-            self.attachlist = xbmcgui.ControlList(238, 300, 434, 160, 'font14')
-            self.msgbody = xbmcgui.ControlTextBox(216, 300, 456, 160, 'font13')
-            self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 400, 'font13')
-        else: #assume ntsc/480p
-            self.addControl(xbmcgui.ControlImage(0,0,720,576, 'background.png'))
-            self.fsoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
-            self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
-            self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
-            self.title = xbmcgui.ControlLabel(200, 80, 50, 20, "XBOX InBOX", "font14", "FFB2D4F5")
-            self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "Check Email")
-            self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "Check Email 2")
-            self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
-            self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
-            self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
-            self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
-            self.listControl = xbmcgui.ControlList(238, 120, 434, 160, 'font14')
-            self.attachlist = xbmcgui.ControlList(238, 300, 434, 160, 'font14')
-            self.msgbody = xbmcgui.ControlTextBox(216, 300, 456, 160, 'font13')
-            self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 400, 'font13')
+        self.setCoordinateResolution(6)
+        self.setResolution()
+        self.addControl(xbmcgui.ControlImage(0,0,720,576, 'background.png'))
+        self.fsoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
+        self.seoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
+        self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
+        self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
+        self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XBOX InBOX", "font18", "FFB2D4F5")
+        self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "Check Email")
+        self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "Check Email 2")
+        self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
+        self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
+        self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
+        self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
+        self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14')
+        self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14')
+        self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
+        self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
 
         self.addControl(self.bgpanel)
         self.addControl(self.panel)
@@ -175,6 +132,29 @@ class xbmcmail(xbmcgui.Window):
         self.setFocus(self.cmButton)
         self.show()
         return
+
+
+    def setResolution( self ):
+        #Thanks to Nuka for this function :-D
+        try:
+            offset = 0
+            resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
+            currentResolution = self.getResolution()
+            resolution = resolutions[self.getCoordinateResolution]
+            # if current and skinned resolutions differ and skinned resolution is not
+            # 1080i or 720p (they have no 4:3), calculate widescreen offset
+            if (( not ( currentResolution == resolution )) and resolution > 1 ):
+                # check if current resolution is 16x9
+                if ( currentResolution == 0 or currentResolution % 2 ): iCur16x9 = 1
+                else: iCur16x9 = 0
+                # check if skinned resolution is 16x9
+                if ( resolution % 2 ): i16x9 = 1
+                else: i16x9 = 0
+                # calculate widescreen offset
+                offset = iCur16x9 - i16x9
+            self.setCoordinateResolution( resolution + offset )
+        except: print 'ERROR: setting resolution'
+
 
     def imback(self):
         global button, user, Inbox
