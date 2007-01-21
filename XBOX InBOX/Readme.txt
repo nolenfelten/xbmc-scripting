@@ -41,7 +41,7 @@ Features:
 
 __________________________________________________________________________________________________________
 
-This project has a new name (XBOX InBOX) as supposed as to the old name (XBMCMail (SSS)).
+This project has a new name (XinBox) as supposed as to the old name (Xbox Inbox & XBMCMail (SSS)).
 
 _______________________________________________________________________________________________________
 
@@ -68,19 +68,12 @@ Also, make sure your Gmail POP settings are set up properly (do this via your Gm
 
 _________________________________________________________________________________________________________
 
-Installation: FRESH
-
-Just transfer XBOX InBOX folder to your XBMC/Scripts folder.
-Run default.py script from XBMC.
-
-
-Installation: UPDATE
-
-Just replace your old XBMCMail (SSS) or XBOX InBOX folder with the new one.
+Installation: 
+Run the build.bat file included, then transfer the XinBox folder in the /Build dir
+to your XBMC/Scripts folder.
 
 _______________________________________________________________________________________________________
 
-This script at present works best with PM III skin with screen res 576 x 720 (pal or ntsc)
 _______________________________________________________________________________________________________
 
 Enjoy.
@@ -104,7 +97,7 @@ ________________________________________________________________________________
 
 To change the email notification sound:
 
-Replace the file default.wav in "scripts/XBOX InBOX/Src/Sounds" folder with the new .wav file
+Replace the file default.wav in "scripts/XinBox/Src/Sounds" folder with the new .wav file
 
 _____________________________________________________________________________________________________
 
