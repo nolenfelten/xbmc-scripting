@@ -21,6 +21,7 @@ Root_Dir = os.getcwd().replace(";","")+"\\"
 SRC_Dir = Root_Dir + "Src\\"
 DATA_DIR = SRC_Dir + "Data\\"
 DELETEFOLDER = "Deleted\\"
+IMAGE_DIR = SRC_Dir + "Images\\"
 
 path = os.getcwd()
 if path[-1]== ";":
@@ -31,24 +32,18 @@ SETTINGS_FILE = "settings.xml"
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
 
-scriptpath = sys.path[0]
-sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
-import skin
-
-
 
 class minis(xbmcgui.WindowDialog):
     def __init__(self):                               
             global minimssg
-            try:
-                w = self.getWidth()
-                h = self.getHeight()
-            except:
-                print "stuck on hw"
-                    
-                
-            skin.skin(self,path,'mini.xml')
-            self.info.setLabel(minimssg)
+            self.setCoordinateResolution(6)
+            self.setResolution()
+            minibackground = xbmcgui.ControlImage(370,470,325,100, IMAGE_DIR + "ash4.png")
+            infoicon = xbmcgui.ControlImage(400,490,40,40, IMAGE_DIR + "infoicon.png")
+            info = xbmcgui.ControlLabel(370,485,300,300, minimssg, "font18", alignment=2)
+            self.addControl(minibackground)
+            self.addControl(infoicon)
+            self.addControl(info)
             try:
                 DELAY =5
                 self.a = -1
@@ -63,6 +58,29 @@ class minis(xbmcgui.WindowDialog):
             time.sleep(10)
             if self.shown:
                     self.close()
+
+    def setResolution( self ):
+        #Thanks to Nuka for this function :-D
+        global reso
+        try:
+            offset = 0
+            resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
+            currentResolution = self.getResolution()
+            resolution = resolutions[self.getCoordinateResolution]
+            # if current and skinned resolutions differ and skinned resolution is not
+            # 1080i or 720p (they have no 4:3), calculate widescreen offset
+            if (( not ( currentResolution == resolution )) and resolution > 1 ):
+                # check if current resolution is 16x9
+                if ( currentResolution == 0 or currentResolution % 2 ): iCur16x9 = 1
+                else: iCur16x9 = 0
+                # check if skinned resolution is 16x9
+                if ( resolution % 2 ): i16x9 = 1
+                else: i16x9 = 0
+                # calculate widescreen offset
+                offset = iCur16x9 - i16x9
+            self.setCoordinateResolution( resolution + offset )
+            reso = self.CoordinateResolution
+        except: print 'ERROR: setting resolution'
 
     def onAction(self, action):
             global minimssg, openmail, test
@@ -136,6 +154,7 @@ class xbmcmail(xbmcgui.Window):
 
     def setResolution( self ):
         #Thanks to Nuka for this function :-D
+        global reso
         try:
             offset = 0
             resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
@@ -153,6 +172,7 @@ class xbmcmail(xbmcgui.Window):
                 # calculate widescreen offset
                 offset = iCur16x9 - i16x9
             self.setCoordinateResolution( resolution + offset )
+            reso = self.CoordinateResolution
         except: print 'ERROR: setting resolution'
 
 
