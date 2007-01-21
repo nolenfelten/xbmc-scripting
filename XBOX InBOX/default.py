@@ -1,7 +1,7 @@
 # -*- coding: cp1252 -*-
       ##########################
       #                        #                      
-      #   XBOX InBOX (V.0.1)   #         
+      #   XinBox (V.0.1)       #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -23,6 +23,7 @@ DATA_DIR = SRC_Dir + "Data\\"
 DELETEFOLDER = "Deleted\\"
 IMAGE_DIR = SRC_Dir + "Images\\"
 
+
 path = os.getcwd()
 if path[-1]== ";":
     path=path[:-1]
@@ -36,7 +37,6 @@ VERSION = "(V.0.1)"
 class minis(xbmcgui.WindowDialog):
     def __init__(self):                               
             global minimssg
-            self.setCoordinateResolution(6)
             self.setResolution()
             minibackground = xbmcgui.ControlImage(370,470,325,100, IMAGE_DIR + "ash4.png")
             infoicon = xbmcgui.ControlImage(400,490,40,40, IMAGE_DIR + "infoicon.png")
@@ -66,7 +66,7 @@ class minis(xbmcgui.WindowDialog):
             offset = 0
             resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
             currentResolution = self.getResolution()
-            resolution = resolutions[self.getCoordinateResolution]
+            rresolution = resolutions[ 'pal' ]
             # if current and skinned resolutions differ and skinned resolution is not
             # 1080i or 720p (they have no 4:3), calculate widescreen offset
             if (( not ( currentResolution == resolution )) and resolution > 1 ):
@@ -102,16 +102,13 @@ class xbmcmail(xbmcgui.Window):
         self.setting1 = 0
         screenheight = self.getHeight()
         self.settings = False
-        self.setCoordinateResolution(6)
         self.setResolution()
         self.addControl(xbmcgui.ControlImage(0,0,720,576, 'background.png'))
         self.fsoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
         self.seoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
-        self.bgpanel = xbmcgui.ControlImage(55,60,0,0, 'panel-email.png')
-        self.panel = xbmcgui.ControlImage(50,135,180,200, 'panel.png')
-        self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XBOX InBOX", "font18", "FFB2D4F5")
-        self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "Check Email")
-        self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "Check Email 2")
+        self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XinBox", "font18", "FFB2D4F5")
+        self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "XinBox 1")
+        self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "XinBox 2")
         self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
         self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
         self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
@@ -121,12 +118,10 @@ class xbmcmail(xbmcgui.Window):
         self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
         self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
 
-        self.addControl(self.bgpanel)
-        self.addControl(self.panel)
         self.addControl(self.title)
         self.mmButton.setLabel("Mini Mode", "font14")
-        self.cmButton.setLabel("XBOX InBOX 1", "font14")
-        self.csButton.setLabel("XBOX InBOX 2", "font14")
+        self.cmButton.setLabel("XinBox 1", "font14")
+        self.csButton.setLabel("XinBox 2", "font14")
         self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
         self.vaButton.setLabel("Attachments", "font14", "60ffffff")
         self.seButton.setLabel("Settings", "font14")
@@ -159,7 +154,7 @@ class xbmcmail(xbmcgui.Window):
             offset = 0
             resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
             currentResolution = self.getResolution()
-            resolution = resolutions[self.getCoordinateResolution]
+            resolution = resolutions[ 'pal' ]
             # if current and skinned resolutions differ and skinned resolution is not
             # 1080i or 720p (they have no 4:3), calculate widescreen offset
             if (( not ( currentResolution == resolution )) and resolution > 1 ):
@@ -271,7 +266,7 @@ class xbmcmail(xbmcgui.Window):
                     count = count + 1
                     count2 = count2 + 1
                     self.writetally()
-                    minimssg =  "   Inbox -" + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open inbox"
+                    minimssg =  "   XinBox" + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open XinBox"
                     wi = minis()
                     wi.doModal()
                     del wi
@@ -577,8 +572,8 @@ class xbmcmail(xbmcgui.Window):
         self.fifteen = xbmcgui.ControlLabel(40,327,200,35,"SSL2","font13","0xFFFFFFFF")
         self.nine = xbmcgui.ControlLabel(40,354,200,35,"MastPasswordEnable","font13","0xFFFFFFFF")
         self.ten = xbmcgui.ControlLabel(40,383,200,35,"MasterPassword","font13","0xFFFFFFFF")
-        self.elleven = xbmcgui.ControlLabel(102,35, 200,35, "XBOX InBOX Settings", font="font20")
-        self.twelve = xbmcgui.ControlLabel(450,70, 300,35, "XBOX InBOX " + VERSION, font="font18")
+        self.elleven = xbmcgui.ControlLabel(102,35, 200,35, "XinBox Settings", font="font20")
+        self.twelve = xbmcgui.ControlLabel(450,70, 300,35, "XinBox " + VERSION, font="font18")
         self.thirteen = xbmcgui.ControlLabel(500,86, 300,35, "By Stanley87", font="font18")
         self.addControl(self.one)
         self.addControl(self.three)
@@ -657,10 +652,9 @@ class xbmcmail(xbmcgui.Window):
         self.count = 0
         self.count2 = 0
         self.count3 = self.tally
-        self.addeditems = 0
         self.addme()
-        if self.addeditems == 0:
-            self.listControl.addItem("INBOX EMPTY")
+        if self.listControl.size() == 0:
+            self.listControl.addItem("XinBox EMPTY")
             self.cmButton.controlRight(self.cmButton)
             self.csButton.controlRight(self.csButton)
             self.seButton.controlRight(self.seButton)
@@ -681,25 +675,19 @@ class xbmcmail(xbmcgui.Window):
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
                             self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
-                            self.addeditems = self.addeditems +1
                         else:
                             self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
-                            self.addeditems = self.addeditems +1
                     except:
                         self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
-                        self.addeditems = self.addeditems +1
                 except:
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
                             self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
-                            self.addeditems = self.addeditems +1
                         else:
                             self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
-                            self.addeditems = self.addeditems +1
                     except:
                         self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
-                        self.addeditems = self.addeditems +1
                 try:
                     os.remove(self.EMAILFOLDER + str(self.count3)+".new")
                 except:
@@ -732,7 +720,7 @@ class xbmcmail(xbmcgui.Window):
         except: pass
         self.listControl.reset()
         self.removeControl(self.title)
-        self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XBOX InBOX - "+ user, "font18", "FFB2D4F5")
+        self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XinBox - "+ user, "font18", "FFB2D4F5")
         self.addControl(self.title)
         button.setLabel("Check For New", "font14")
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
@@ -752,7 +740,7 @@ class xbmcmail(xbmcgui.Window):
         global user, server, passw, ssl
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
         dialog = xbmcgui.DialogProgress()
-        dialog.create("Inbox - " + user, "Logging in...")
+        dialog.create("XinBox - " + user, "Logging in...")
         self.cmButton.controlRight(self.listControl)
         self.csButton.controlRight(self.listControl)
         try:
@@ -767,13 +755,13 @@ class xbmcmail(xbmcgui.Window):
             print "You have", self.numEmails, "new emails"
             dialog.close()
             if self.numEmails==0:
-                dialog.create("Inbox - " + user,"You have no new emails")
+                dialog.create("XinBox - " + user,"You have no new emails")
                 mail.quit()
                 time.sleep(2)
                 dialog.close()
                 return
             else:
-                dialog.create("Inbox - " + user)
+                dialog.create("XinBox - " + user)
                 self.nummails = 0
                 self.newmail = []
                 for i in range(1, self.numEmails+1):                     
@@ -788,7 +776,7 @@ class xbmcmail(xbmcgui.Window):
                         self.newmail.append(i)
                         self.nummails = self.nummails + 1                          
                 if self.nummails == 0:
-                    dialog.create("Inbox - " + user,"You have no new emails")
+                    dialog.create("XinBox - " + user,"You have no new emails")
                     time.sleep(3)
                     dialog.close()
                 else:
@@ -828,7 +816,7 @@ class xbmcmail(xbmcgui.Window):
                 
         except:
             dialog.close()
-            dialog.create("Inbox - " + user, "Problem connecting to server")
+            dialog.create("XinBox - " + user, "Problem connecting to server")
             time.sleep(2)
             dialog.close()
             return
@@ -877,16 +865,16 @@ class xbmcmail(xbmcgui.Window):
         temp1 = self.listControl.getSelectedPosition()
         self.test2 = self.listControl.getSelectedItem(temp1).getLabel()
         dialog = xbmcgui.Dialog()
-        if dialog.yesno("WARNING!!", "Delete selected email from XBOX InBOX?"):
+        if dialog.yesno("WARNING!!", "Delete selected email from XinBox?"):
             self.getemailnum()
         else:
             return
         dialog = xbmcgui.DialogProgress()
-        dialog.create("WARNING!!","Email deleted from XBOX InBOX!")
+        dialog.create("WARNING!!","Email deleted from XinBox!")
         time.sleep(2)
         dialog.close()
         self.openmail()
-        if self.addeditems == 0:
+        if self.listControl.size() == 0:
             self.setFocus(self.cmButton)
             self.mmButton.controlRight(self.mmButton)
         return
@@ -1079,7 +1067,7 @@ class xbmcmail(xbmcgui.Window):
         global user, server, passw, ssl, button, Inbox
         if control == self.cmButton:
             if Inbox == 2:
-                self.csButton.setLabel("XBOX InBOX 2", "font14")
+                self.csButton.setLabel("XinBox 2", "font14")
             if self.user1 == "-":
                 self.warning()
             elif self.pass1 == "-":
@@ -1098,7 +1086,7 @@ class xbmcmail(xbmcgui.Window):
                 self.openinbox()
         elif control == self.csButton:
             if Inbox == 1:
-                self.cmButton.setLabel("XBOX InBOX 1", "font14")
+                self.cmButton.setLabel("XinBox 1", "font14")
             if self.user2 == "-":
                 self.warning()
             elif self.pass2 == "-":
