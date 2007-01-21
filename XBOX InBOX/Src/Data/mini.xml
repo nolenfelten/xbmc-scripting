@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<Skin id="MSN">
-       <item name="minibackground" type="ControlImage" location="[w-350,h-105,325,100]" path="ash4.png"></item>
-       <item name="infoicon" type="ControlImage" location="[w-318,h-80,40,40]" path="infoicon.png"></item>
-       <item name="info" type="ControlLabel" location="[w-290,h-90,300,300]" label="Message" font="font1" alignment="0"></item>
-
-     
-</Skin>
