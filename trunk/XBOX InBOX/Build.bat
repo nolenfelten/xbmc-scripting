@@ -1,6 +1,6 @@
  
 @Echo off
-SET ScriptName=XBOX InBOX
+SET ScriptName=XinBox
 :: Create Build folder
 Echo ------------------------------
 Echo Creating %ScriptName% Build Folder . . .
@@ -17,7 +17,7 @@ Echo Desktop.ini>>"BUILD\exclude.txt"
 Echo.
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
-xcopy src "BUILD\%ScriptName%\src" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+xcopy src "BUILD\%ScriptName%\Src" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 copy default.* "BUILD\%ScriptName%\"
 Echo.
 Echo Build Complete - Scroll Up to check for errors.
