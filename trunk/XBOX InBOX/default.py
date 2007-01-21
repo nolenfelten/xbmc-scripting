@@ -66,7 +66,7 @@ class minis(xbmcgui.WindowDialog):
             offset = 0
             resolutions = {'1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9}
             currentResolution = self.getResolution()
-            rresolution = resolutions[ 'pal' ]
+            resolution = resolutions[ 'pal' ]
             # if current and skinned resolutions differ and skinned resolution is not
             # 1080i or 720p (they have no 4:3), calculate widescreen offset
             if (( not ( currentResolution == resolution )) and resolution > 1 ):
@@ -266,7 +266,7 @@ class xbmcmail(xbmcgui.Window):
                     count = count + 1
                     count2 = count2 + 1
                     self.writetally()
-                    minimssg =  "   XinBox" + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open XinBox"
+                    minimssg =  "XinBox - " + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open XinBox"
                     wi = minis()
                     wi.doModal()
                     del wi
