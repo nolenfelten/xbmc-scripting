@@ -21,8 +21,10 @@ Root_Dir = os.getcwd().replace(";","")+"\\"
 SRC_Dir = Root_Dir + "Src\\"
 DATA_DIR = SRC_Dir + "Data\\"
 DELETEFOLDER = "Deleted\\"
+IDFOLDER = "IDS\\"
 IMAGE_DIR = SRC_Dir + "Images\\"
-
+LANGFOLDER = SRC_Dir+"Language\\"
+NEWFOLDER = "NEW\\"
 
 path = os.getcwd()
 if path[-1]== ";":
@@ -32,6 +34,45 @@ SETTINGS_FILE = "settings.xml"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
+
+
+class Language:
+	"""
+		Language Class
+			For reading in xml for automatiacall of the selected lanauge XBMC is running in
+			And for returning the string in the given Language for a specified id
+		Oringally Coded by Rockstar, Recoded by Donno :D
+	"""
+	def load(self,thepath):
+		self.strings = {}
+		tempstrings = []
+		self.language = xbmc.getLanguage().lower()
+		if os.path.exists(thepath+self.language+"\\strings.xml"):
+			self.foundlang = self.language
+		else:
+			self.foundlang = "english"
+		self.langdoc = thepath+self.foundlang+"\\strings.xml"
+		print "-Loading Language: " + self.foundlang
+		try:
+			f=open(self.langdoc,'r')
+			tempstrings=f.read()
+			f.close()
+		except:
+			print "Error: Languagefile "+self.langdoc+" cant be opened"
+			xbmcgui.Dialog().ok(__title__,"Error","Languagefile "+self.langdoc+" cant be opened")
+		self.exp='<string id="(.*?)">(.*?)</string>'
+		self.res=re.findall(self.exp,tempstrings)
+		for stringdat in self.res:
+			self.strings[int(stringdat[0])] = str(stringdat[1])
+
+	def string(self,number):
+		if int(number) in self.strings:
+			return self.strings[int(number)]
+		else:
+			return "unknown string id"
+
+
+
 
 
 class minis(xbmcgui.WindowDialog):
@@ -55,7 +96,7 @@ class minis(xbmcgui.WindowDialog):
             subThread.start()
           
     def SubthreadProc(self):
-            time.sleep(10)
+            time.sleep(8)
             if self.shown:
                     self.close()
 
@@ -97,6 +138,10 @@ class minis(xbmcgui.WindowDialog):
 
 class xbmcmail(xbmcgui.Window):
     def __init__(self):
+        global lang
+
+        lang = Language()
+        lang.load(LANGFOLDER)
         self.fullscreen = False
         self.showingimage = False
         self.setting1 = 0
@@ -119,12 +164,12 @@ class xbmcmail(xbmcgui.Window):
         self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
 
         self.addControl(self.title)
-        self.mmButton.setLabel("Mini Mode", "font14")
+        self.mmButton.setLabel(lang.string(0), "font14") #string id 0
         self.cmButton.setLabel("XinBox 1", "font14")
         self.csButton.setLabel("XinBox 2", "font14")
-        self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
-        self.vaButton.setLabel("Attachments", "font14", "60ffffff")
-        self.seButton.setLabel("Settings", "font14")
+        self.fsButton.setLabel(lang.string(1), "font14", "60ffffff") # string id 1
+        self.vaButton.setLabel(lang.string(2), "font14", "60ffffff")# string id 2
+        self.seButton.setLabel(lang.string(3), "font14")# string id 3
          
         
         self.addControl(self.cmButton)
@@ -217,6 +262,9 @@ class xbmcmail(xbmcgui.Window):
     def checkmail(self):
         global minimssg, user, server, passw, ssl, test
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
+        for root, dirs, files in os.walk(self.EMAILFOLDER + "\\NEW\\", topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
         self.nummails = 0
         if ssl == "-": 
             mail = poplib.POP3(server)
@@ -256,17 +304,17 @@ class xbmcmail(xbmcgui.Window):
                     f = open(self.EMAILFOLDER + str(self.tally) +".sss", "wb")
                     f.write(str(self.email))
                     f.close()
-                    f = open(self.EMAILFOLDER + str(self.tally) +".id", "wb")
+                    f = open(self.EMAILFOLDER + IDFOLDER + str(self.tally) +".id", "wb")
                     f.write(str(self.idme))
                     f.close()
-                    f = open(self.EMAILFOLDER + str(self.tally) +".new", "wb")
+                    f = open(self.EMAILFOLDER +NEWFOLDER+ str(self.tally) +".new", "wb")
                     f.write(str(self.tally))
                     f.close()
                     self.tally = self.tally+1
                     count = count + 1
                     count2 = count2 + 1
                     self.writetally()
-                    minimssg =  "XinBox - " + user +"\n" + "    New Email Recieved" + "\n   Press BACK now to open XinBox"
+                    minimssg =  "XinBox - " + user +"\n" + lang.string(4) + "\n"+lang.string(5) +" XinBox" #string id 4, 5
                     wi = minis()
                     wi.doModal()
                     del wi
@@ -277,7 +325,7 @@ class xbmcmail(xbmcgui.Window):
     def masterpasscheck(self):
         self.readconfig()
         passw = ""
-        keyboard = xbmc.Keyboard(passw, "Enter Password")
+        keyboard = xbmc.Keyboard(passw, lang.string(6)) #id 6
         try:
             keyboard.setHiddenInput(True)
         except:pass
@@ -286,7 +334,7 @@ class xbmcmail(xbmcgui.Window):
             passw = keyboard.getText()
             if passw != self.masterpass:
                 dialog = xbmcgui.DialogProgress()
-                dialog.create("Wrong Password, Please try again")
+                dialog.create(lang.string(7)) #id 7
                 time.sleep(1)
                 dialog.close()
                 self.masterpasscheck()
@@ -303,12 +351,12 @@ class xbmcmail(xbmcgui.Window):
         self.define()
         self.readconfig()
         self.writeconfig()
-        if self.MasterPassEnable == "yes":
+        if self.MasterPassEnable == "yes": 
             if self.masterpass != "-":
                 self.masterpasscheck()
             else:
                 self.mainmenu()
-        elif self.MasterPassEnable == "no":
+        elif self.MasterPassEnable == "no": 
             self.mainmenu()
         elif self.MasterPassEnable == "-":
             self.masspasswsetup()
@@ -333,7 +381,7 @@ class xbmcmail(xbmcgui.Window):
     def masspasswsetup(self):
         self.readconfig()
         dialog = xbmcgui.Dialog()
-        if dialog.yesno("Master Password Setup", "Enable a Master Password on startup?"):
+        if dialog.yesno(lang.string(8), lang.string(9)): #id 8, 9
             self.MasterPassEnable = "yes"
             self.writeconfig()
             self.getpassinput()
@@ -465,7 +513,7 @@ class xbmcmail(xbmcgui.Window):
     def getpassinput(self):
         dialog = xbmcgui.DialogProgress()
         mastpassw = ""
-        keyboard = xbmc.Keyboard(mastpassw, "Please Enter Password")
+        keyboard = xbmc.Keyboard(mastpassw, lang.string(10)) #id 10
         try:
             keyboard.setHiddenInput(True)
         except:pass
@@ -475,7 +523,7 @@ class xbmcmail(xbmcgui.Window):
         else:
             return
         if mastpassw == "":
-           dialog.create("No password entered, please try again")
+           dialog.create(lang.string(11)) #id 11
            time.sleep(1)
            dialog.close()
            self.getpassinput()
@@ -488,7 +536,7 @@ class xbmcmail(xbmcgui.Window):
 
     def confirmpassinput(self):
         mastpassw2 = ""
-        keyboard = xbmc.Keyboard(mastpassw2, "Please Confirm Password")
+        keyboard = xbmc.Keyboard(mastpassw2, lang.string(12)) #id 12
         try:
             keyboard.setHiddenInput(True)
         except:pass
@@ -501,7 +549,7 @@ class xbmcmail(xbmcgui.Window):
                     keyboard.setHiddenInput(False)
                 except:pass
                 dialog = xbmcgui.DialogProgress()
-                dialog.create("Thankyou, your password has been set")
+                dialog.create(lang.string(13)) #id 13
                 time.sleep(1)
                 dialog.close()
                 if self.setting1 == 1:
@@ -511,7 +559,7 @@ class xbmcmail(xbmcgui.Window):
                     self.mainmenu()
             else:
                 dialog = xbmcgui.DialogProgress()
-                dialog.create("The password didn't match")
+                dialog.create(lang.string(14)) #id 14
                 time.sleep(1)
                 dialog.close()
                 try:
@@ -525,14 +573,50 @@ class xbmcmail(xbmcgui.Window):
             return
     def warning (self):
         dialog = xbmcgui.DialogProgress()
-        dialog.create("Warning!","Please enter settings")
+        dialog.create(lang.string(15),lang.string(16)) #id 15, 16
         time.sleep(1)
         dialog.close()
         self.settingsmenu()
         
     def mainmenu(self):	
+        #self.media()
         self.readconfig()
         self.setFocus(self.cmButton)
+
+    def media(self):
+        if xbmc.Player().isPlayingAudio():
+            while xbmc.Player().isPlayingAudio():
+                self.fadelabel = xbmcgui.ControlFadeLabel(65, 525,130,109, "font10")
+                self.addControl(self.fadelabel)
+                musicrectangle = xbmcgui.ControlImage(60,381,110,120, "blue_rectangle_music.png")
+                self.addControl(musicrectangle)
+                playtimelabel = xbmcgui.ControlLabel(65, 500,100,109,'$INFO[MusicPlayer.Time]', "font13")
+                self.addControl(playtimelabel)
+                try:
+                    label = xbmc.getInfoImage("MusicPlayer.Cover")
+                except:
+                    label = "defaultAlbumCover.png"
+                musicinfo = xbmcgui.ControlImage(65,387,100,109,label)
+                self.addControl(musicinfo)
+                while xbmc.Player().isPlayingAudio():
+                    self.fadelabel.addLabel('$INFO[MusicPlayer.Artist]' + " | " + '$INFO[MusicPlayer.Title]' + " | " + '$INFO[MusicPlayer.Album]' + " | " + '$INFO[MusicPlayer.Year]')
+                return
+        elif xbmc.Player().isPlayingVideo():
+            while xbmc.Player().isPlayingVideo():
+                self.fadelabel = xbmcgui.ControlFadeLabel(65,525,130,109, "font10")
+                self.addControl(self.fadelabel)
+                musicrectangle = xbmcgui.ControlImage(60,380, 140,118, "blue_rectangle_video.png")
+                self.addControl(musicrectangle)
+                playtimelabel = xbmcgui.ControlLabel(65, 500,100,109,'$INFO[VideoPlayer.Time]', "font13")
+                self.addControl(playtimelabel)
+               # musicinfo = xbmcgui.videowindow(65,387,100,109)
+               # self.addControl(musicinfo)
+                while xbmc.Player().isPlayingAudio():
+                    self.fadelabel.addLabel('$INFO[VideoPlayer.Title]' + " | " + '$INFO[VideoPlayer.Year]')
+                return
+        else:
+            return
+
 
         
     def reset(self):
@@ -555,24 +639,25 @@ class xbmcmail(xbmcgui.Window):
         return
         
     def settingsmenu(self):
+
         fh = open(Root_Dir + SETTINGS_FILE)
         self.comparesettings1 = fh.read()
         fh.close()
         self.settings = True
         self.readconfig()
         self.addControl(self.seoverlay)
-        self.one = xbmcgui.ControlLabel(40,124,200,35,"Server1","font13","0xFFFFFFFF")
-        self.three = xbmcgui.ControlLabel(40,153,200,35,"User1","font13","0xFFFFFFFF")
+        self.one = xbmcgui.ControlLabel(40,124,200,35,lang.string(17)+"1","font13","0xFFFFFFFF") #id 17
+        self.three = xbmcgui.ControlLabel(40,153,200,35,lang.string(18)+"1","font13","0xFFFFFFFF")#id 18
         self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14')
-        self.four = xbmcgui.ControlLabel(40,182,200,35,"Password1","font13","0xFFFFFFFF")
+        self.four = xbmcgui.ControlLabel(40,182,200,35,lang.string(19)+"1","font13","0xFFFFFFFF")#id 19
         self.fourteen = xbmcgui.ControlLabel(40,211,200,35,"SSL1","font13","0xFFFFFFFF")
-        self.five = xbmcgui.ControlLabel(40,240,200,35,"Server2","font13","0xFFFFFFFF")
-        self.seven = xbmcgui.ControlLabel(40,269,200,35,"User2","font13","0xFFFFFFFF")
-        self.eight = xbmcgui.ControlLabel(40,298,200,35,"Password2","font13","0xFFFFFFFF")
+        self.five = xbmcgui.ControlLabel(40,240,200,35,lang.string(17)+"2","font13","0xFFFFFFFF")#id 17
+        self.seven = xbmcgui.ControlLabel(40,269,200,35,lang.string(18)+"2","font13","0xFFFFFFFF")#id 18
+        self.eight = xbmcgui.ControlLabel(40,298,200,35,lang.string(19)+"2","font13","0xFFFFFFFF")#id 19
         self.fifteen = xbmcgui.ControlLabel(40,327,200,35,"SSL2","font13","0xFFFFFFFF")
-        self.nine = xbmcgui.ControlLabel(40,354,200,35,"MastPasswordEnable","font13","0xFFFFFFFF")
-        self.ten = xbmcgui.ControlLabel(40,383,200,35,"MasterPassword","font13","0xFFFFFFFF")
-        self.elleven = xbmcgui.ControlLabel(102,35, 200,35, "XinBox Settings", font="font20")
+        self.nine = xbmcgui.ControlLabel(40,354,200,35,lang.string(25),"font13","0xFFFFFFFF")#id 25
+        self.ten = xbmcgui.ControlLabel(40,383,200,35,lang.string(26),"font13","0xFFFFFFFF")#id 26
+        self.elleven = xbmcgui.ControlLabel(102,35, 200,35, "XinBox " + lang.string(27), font="font20") #id 27
         self.twelve = xbmcgui.ControlLabel(450,70, 300,35, "XinBox " + VERSION, font="font18")
         self.thirteen = xbmcgui.ControlLabel(500,86, 300,35, "By Stanley87", font="font18")
         self.addControl(self.one)
@@ -590,53 +675,53 @@ class xbmcmail(xbmcgui.Window):
         self.addControl(self.fifteen)
         self.addControl(self.theList)
         if self.server1 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter Server1 eg. pop.ihug.co.nz"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(28)))#id 28
         else:
             self.theList.addItem(xbmcgui.ListItem(self.server1))
         if self.user1 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter User1 name eg. monkeyman2000"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(29)))#id 29
         else:
             self.theList.addItem(xbmcgui.ListItem(self.user1))
         if self.pass1 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter Password1 eg. shshsh123"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(30)))#id 30
         else:
             self.theList.addItem(xbmcgui.ListItem('*' * len(self.pass1)))
         if self.ssl1 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enable SSL for Server1?"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(31)))#id 31
         else:
             self.theList.addItem(xbmcgui.ListItem(self.ssl1))
         if self.server2 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter Server2 eg. pop.uhug.co.nz"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(32)))#id 32
         else:
             self.theList.addItem(xbmcgui.ListItem(self.server2))
         if self.user2 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter User2 name eg. mrworm123"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(33)))#id 33
         else:
             self.theList.addItem(xbmcgui.ListItem(self.user2))
         if self.pass2 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter Password2 eg. hushhush123"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(34)))#id 34
         else:
             self.theList.addItem(xbmcgui.ListItem('*' * len(self.pass2)))
         if self.ssl2 == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enable SSL for Server2?"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(35)))#id 35
         else:
             self.theList.addItem(xbmcgui.ListItem(self.ssl2))          
         if self.MasterPassEnable == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enable Master Password on startup?"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(36)))#id 36
         else:
             self.theList.addItem(xbmcgui.ListItem(self.MasterPassEnable))
         if self.masterpass == "-":
-            self.theList.addItem(xbmcgui.ListItem("Enter Master Password"))
+            self.theList.addItem(xbmcgui.ListItem(lang.string(37)))#id 37
         else:
             self.theList.addItem(xbmcgui.ListItem('*' * len(self.masterpass)))
-        self.theList.addItem(xbmcgui.ListItem("Save Settings"))
-        self.theList.addItem(xbmcgui.ListItem("Back"))
+        self.theList.addItem(xbmcgui.ListItem(lang.string(38)))#id 38
+        self.theList.addItem(xbmcgui.ListItem(lang.string(39)))#id 39
         self.setFocus(self.theList)
 
     def openmail(self):
         self.listControl.controlLeft(self.cmButton)
-        self.vaButton.setLabel("Attachments", "font14", "60ffffff")
-        self.fsButton.setLabel("Fullscreen", "font14", "60ffffff")
+        self.vaButton.setLabel(lang.string(2), "font14", "60ffffff")#id 2
+        self.fsButton.setLabel(lang.string(1), "font14", "60ffffff")#id 1
         self.msgbody.reset()
         self.attachlist.setVisible(False)
         self.cmButton.controlDown(self.csButton)
@@ -654,7 +739,7 @@ class xbmcmail(xbmcgui.Window):
         self.count3 = self.tally
         self.addme()
         if self.listControl.size() == 0:
-            self.listControl.addItem("XinBox EMPTY")
+            self.listControl.addItem("XinBox "+ lang.string(40)) #id 40
             self.cmButton.controlRight(self.cmButton)
             self.csButton.controlRight(self.csButton)
             self.seButton.controlRight(self.seButton)
@@ -669,37 +754,35 @@ class xbmcmail(xbmcgui.Window):
                 fh.close()
                 self.emails.append(email.message_from_string(tempStr))
                 try:
-                    fh = open(self.EMAILFOLDER + str(self.count3) +".new")
+                    fh = open(self.EMAILFOLDER + NEWFOLDER +str(self.count3) +".new")
                     fh.close()
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
-                            self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                            #self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                            self.listControl.addItem(lang.string(21) +" "+ lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
                         else:
-                            self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            #self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            self.listControl.addItem(lang.string(21) +" " + self.emails[self.count2].get('subject') +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
                     except:
-                        self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                        #self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
+                        self.listControl.addItem(lang.string(21) +" "+ lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
                 except:
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
-                            self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                            #self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                            self.listControl.addItem(lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
                         else:
-                            self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            #self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
+                            self.listControl.addItem(self.emails[self.count2].get('subject') +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
                     except:
-                        self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
-                try:
-                    os.remove(self.EMAILFOLDER + str(self.count3)+".new")
-                except:
-                    pass
+                        #self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
+                        self.listControl.addItem(lang.string(22)+" "+ lang.string(23)+ " " + self.emails[self.count2].get('from'))
                 self.count = self.count+1
                 self.count2 = self.count2+1
                 self.count3 = self.count3-1
             except:
-                try:
-                    os.remove(self.EMAILFOLDER + str(self.count3)+".new")
-                except:
-                    pass
                 self.count = self.count+1
                 self.count3 = self.count3-1
                 pass
@@ -722,11 +805,13 @@ class xbmcmail(xbmcgui.Window):
         self.removeControl(self.title)
         self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XinBox - "+ user, "font18", "FFB2D4F5")
         self.addControl(self.title)
-        button.setLabel("Check For New", "font14")
+        button.setLabel(lang.string(41), "font14")#id 41
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
         try:
             os.mkdir(self.EMAILFOLDER)
+            os.mkdir(self.EMAILFOLDER + IDFOLDER)
             os.mkdir(self.EMAILFOLDER + DELETEFOLDER)
+            os.mkdir(self.EMAILFOLDER + NEWFOLDER)   
         except:
             pass
         if Inbox == 1:
@@ -739,8 +824,11 @@ class xbmcmail(xbmcgui.Window):
     def comparemail(self):
         global user, server, passw, ssl
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
+        for root, dirs, files in os.walk(self.EMAILFOLDER + "\\NEW\\", topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
         dialog = xbmcgui.DialogProgress()
-        dialog.create("XinBox - " + user, "Logging in...")
+        dialog.create("XinBox - " + user, lang.string(42)+"...")#id 42
         self.cmButton.controlRight(self.listControl)
         self.csButton.controlRight(self.listControl)
         try:
@@ -755,7 +843,7 @@ class xbmcmail(xbmcgui.Window):
             print "You have", self.numEmails, "new emails"
             dialog.close()
             if self.numEmails==0:
-                dialog.create("XinBox - " + user,"You have no new emails")
+                dialog.create("XinBox - " + user,lang.string(43))#id 43
                 mail.quit()
                 time.sleep(2)
                 dialog.close()
@@ -765,7 +853,7 @@ class xbmcmail(xbmcgui.Window):
                 self.nummails = 0
                 self.newmail = []
                 for i in range(1, self.numEmails+1):                     
-                    dialog.update((i*100)/self.numEmails,"Checking for new emails....")
+                    dialog.update((i*100)/self.numEmails,lang.string(44)+"....")#id 44
                     self.bingo = 0
                     self.track = 0
                     self.idme = mail.uidl(i)  
@@ -776,7 +864,7 @@ class xbmcmail(xbmcgui.Window):
                         self.newmail.append(i)
                         self.nummails = self.nummails + 1                          
                 if self.nummails == 0:
-                    dialog.create("XinBox - " + user,"You have no new emails")
+                    dialog.create("XinBox - " + user,lang.string(43))#id 43
                     time.sleep(3)
                     dialog.close()
                 else:
@@ -784,7 +872,7 @@ class xbmcmail(xbmcgui.Window):
                     count2 = 1
                     for i in range(1, self.nummails+1):
                         try:
-                            dialog.update((i*100)/self.nummails,"You have " + str(self.nummails) + " new emails","Downloading new email #" + str(count2))
+                            dialog.update((i*100)/self.nummails,lang.string(45)+" " + str(self.nummails) + " "+lang.string(46),lang.string(47)+" #" + str(count2))#id 45, 46,47
                             dome = self.newmail[count]
                             mailMsg = mail.retr(dome)[1]
                             self.idme = mail.uidl(dome)  
@@ -798,10 +886,10 @@ class xbmcmail(xbmcgui.Window):
                             f = open(self.EMAILFOLDER + str(self.tally) +".sss", "wb")
                             f.write(str(self.email))
                             f.close()
-                            f = open(self.EMAILFOLDER + str(self.tally) +".id", "wb")
+                            f = open(self.EMAILFOLDER + IDFOLDER + str(self.tally) +".id", "wb")
                             f.write(str(self.idme))
                             f.close()
-                            f = open(self.EMAILFOLDER + str(self.tally) +".new", "wb")
+                            f = open(self.EMAILFOLDER + NEWFOLDER +str(self.tally)+".new", "wb")
                             f.write(str(self.tally))
                             f.close()
                             self.tally = self.tally+1
@@ -816,7 +904,7 @@ class xbmcmail(xbmcgui.Window):
                 
         except:
             dialog.close()
-            dialog.create("XinBox - " + user, "Problem connecting to server")
+            dialog.create("XinBox - " + user, lang.string(48))#id 48
             time.sleep(2)
             dialog.close()
             return
@@ -827,7 +915,7 @@ class xbmcmail(xbmcgui.Window):
         self.count2 = 0
         for self.count in range(self.tally):
             try:
-                fh = open(self.EMAILFOLDER + str(self.count) +".id")
+                fh = open(self.EMAILFOLDER + IDFOLDER + str(self.count) +".id")
                 self.testmeid = fh.read()
                 fh.close()
                 if self.testmeid == self.idme:
@@ -865,18 +953,18 @@ class xbmcmail(xbmcgui.Window):
         temp1 = self.listControl.getSelectedPosition()
         self.test2 = self.listControl.getSelectedItem(temp1).getLabel()
         dialog = xbmcgui.Dialog()
-        if dialog.yesno("WARNING!!", "Delete selected email from XinBox?"):
+        if dialog.yesno(lang.string(15), lang.string(49)+" XinBox?"):#id 15, 49
             self.getemailnum()
         else:
             return
         dialog = xbmcgui.DialogProgress()
-        dialog.create("WARNING!!","Email deleted from XinBox!")
+        dialog.create(lang.string(15),lang.string(50)+" XinBox!")#id 50
         time.sleep(2)
         dialog.close()
-        self.openmail()
-        if self.listControl.size() == 0:
+        if self.listControl.size() == 1:
             self.setFocus(self.cmButton)
             self.mmButton.controlRight(self.mmButton)
+        self.openmail()
         return
 
     def getemailnum(self):
@@ -895,27 +983,27 @@ class xbmcmail(xbmcgui.Window):
                 try:
                     temp20 = self.emails5[self.count2].get('subject')
                     if temp20 == "":
-                        self.test1 = "[No Subject] from " + self.emails5[self.count2].get('from')
+                        self.test1 = lang.string(22)+" "+ lang.string(23)+ " " + self.emails5[self.count2].get('from')
                     else:
-                        self.test1 = self.emails5[self.count2].get('subject') + " from " + self.emails5[self.count2].get('from')
+                        self.test1 = self.emails5[self.count2].get('subject') + " "+ lang.string(23)+ " " + self.emails5[self.count2].get('from')
                 except:
-                    self.test1 = "[No Subject] from " + self.emails5[self.count2].get('from')
+                    self.test1 = lang.string(22)+" " +lang.string(23)+" " + self.emails5[self.count2].get('from')
                 if self.test1 == self.test2:
                     os.remove(self.EMAILFOLDER + str(self.count)+".sss")
-                    shutil.move(self.EMAILFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
+                    shutil.move(self.EMAILFOLDER  + IDFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
                     return
                 else:
                     try:
                         temp20 = self.emails5[self.count2].get('subject')
                         if temp20 == "":
-                            self.test1 = "NEW! [No Subject] from " + self.emails5[self.count2].get('from')
+                            self.test1 = lang.string(21)+" "+ lang.string(22)+" "+ lang.string(23)+" " + self.emails5[self.count2].get('from')
                         else:
-                            self.test1 = "NEW! "+self.emails5[self.count2].get('subject') + " from " + self.emails5[self.count2].get('from')
+                            self.test1 = lang.string(21) + " " +self.emails5[self.count2].get('subject') + " "+lang.string(23)+" " + self.emails5[self.count2].get('from')
                     except:
-                        self.test1 = "NEW! [No Subject] from " + self.emails5[self.count2].get('from')
+                        self.test1 = lang.string(21) + " "+ lang.string(22)+" "+ lang.string(23)+" " + self.emails5[self.count2].get('from')
                     if self.test1 == self.test2:
                         os.remove(self.EMAILFOLDER + str(self.count)+".sss")
-                        shutil.move(self.EMAILFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
+                        shutil.move(self.EMAILFOLDER + IDFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
                         return
                     else:
                         self.count = self.count+1
@@ -1053,13 +1141,18 @@ class xbmcmail(xbmcgui.Window):
                     self.reset()
                     return
                 else:
+                    global TEST, TEST2
                     test = 0
+                    TEST = DATA_DIR + self.user1 + "@" + self.server1 + "\\NEW\\"
+                    TEST2 = DATA_DIR + self.user2 + "@" + self.server2 + "\\NEW\\"
                     self.close()
             elif action == 9: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
                 try:
                     if self.getFocus() == self.listControl:
                         self.deletemail()
                 except: pass
+            elif action == 18:
+                xbmc.executebuiltin("XBMC.ActivateWindow(PlayerControls)")
         except: return
         return
             
@@ -1106,9 +1199,9 @@ class xbmcmail(xbmcgui.Window):
         elif control == self.seButton:
             self.settingsmenu()
         elif control == self.mmButton:
-            self.gogogo()         
+            self.gogogo()
         elif control == self.listControl:
-            self.fsButton.setLabel("Fullscreen", "font14", "ffffffff")
+            self.fsButton.setLabel(lang.string(1), "font14", "ffffffff")#id 1
             self.listControl.controlLeft(self.cmButton)
             self.listControl.controlRight(self.msgbody)
             self.msgbody.controlUp(self.listControl)
@@ -1142,51 +1235,54 @@ class xbmcmail(xbmcgui.Window):
             lstPos = self.theList.getSelectedPosition()
             if lstPos == 0:
                 if self.server1 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter Server1")
+                    keyboard = xbmc.Keyboard("", lang.string(51))#id 51
                 else:
-                    keyboard = xbmc.Keyboard(self.server1, "Enter Server1")
+                    keyboard = xbmc.Keyboard(self.server1, lang.string(51))#id 51
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.server1 = keyboard.getText()
+                else:return
                 if self.server1 == "":
                     self.server1 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter Server1 eg. pop.ihug.co.nz")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(28))#id 28
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.server1)
                 del keyboard
                 return
             if lstPos == 1:
                 if self.user1 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter Username1")
+                    keyboard = xbmc.Keyboard("", lang.string(52))#id 52
                 else:
-                    keyboard = xbmc.Keyboard(self.user1, "Enter Username1")
+                    keyboard = xbmc.Keyboard(self.user1, lang.string(52))#id 52
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.user1 = keyboard.getText()
+                else:return
                 if self.user1 == "":
                     self.user1 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter User1 name eg. monkeyman2000")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(29))#id 29
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.user1)
                 del keyboard
                 return
             if lstPos == 2:
                 if self.pass1 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter Password1")
+                    keyboard = xbmc.Keyboard("", lang.string(6)+"1")#id 6
                 else:
-                    keyboard = xbmc.Keyboard(self.pass1, "Enter Password1")
+                    keyboard = xbmc.Keyboard(self.pass1, lang.string(6)+"1")#id 6
                 try:
                     keyboard.setHiddenInput(True)
                 except:pass
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.pass1 = keyboard.getText()
+                else:return
                 try:
                     keyboard.setHiddenInput(False)
                 except:pass
                 if self.pass1 == "":
                     self.pass1 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter Password1 eg. shshsh123")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(30))#id 30
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel('*' * len(self.pass1))
                 del keyboard
@@ -1194,71 +1290,75 @@ class xbmcmail(xbmcgui.Window):
             if lstPos == 3:
                 dialog = xbmcgui.Dialog()
                 if self.ssl1 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter SSL1")
+                    keyboard = xbmc.Keyboard("", lang.string(53))#id 53
                 else:
-                    if dialog.yesno("SSL Setup", "Remove SSL?"):
+                    if dialog.yesno(lang.string(54), lang.string(20)+" SSL1?"):#id 54,20
                         self.ssl1 = "-"
-                        self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server1?")
+                        self.theList.getSelectedItem(lstPos).setLabel(lang.string(31))#id 31
                         return
                     else:
                         return
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.ssl1 = keyboard.getText()
+                else:return
                 if self.ssl1 == "":
                     self.ssl1 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server1?")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(31))#id 31
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.ssl1)
                 del keyboard
                 return
             if lstPos == 4:
                 if self.server2 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter Server2 Address")
+                    keyboard = xbmc.Keyboard("", lang.string(55))#id 55
                 else:
-                    keyboard = xbmc.Keyboard(self.server2, "Enter Server2 Address")
+                    keyboard = xbmc.Keyboard(self.server2, lang.string(55))#id 55
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.server2 = keyboard.getText()
+                else:return
                 if self.server2 == "":
                     self.server2 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter Server2 eg. pop.uhug.co.nz")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(32))#id 32
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.server2)
                 del keyboard
                 return
             if lstPos == 5:
                 if self.user2 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter User2 name")
+                    keyboard = xbmc.Keyboard("", lang.string(56))#id 56
                 else:
-                    keyboard = xbmc.Keyboard(self.user2, "Enter Username2")
+                    keyboard = xbmc.Keyboard(self.user2, lang.string(56))#id 56
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.user2 = keyboard.getText()
+                else:return
                 if self.user2 == "":
                     self.user2 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter User2 name eg. mrworm123")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(33))#id 33
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.user2)
                 del keyboard
                 return
             if lstPos == 6:
                 if self.pass2 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter Password2")
+                    keyboard = xbmc.Keyboard("", lang.string(57))#id 57
                 else:
-                    keyboard = xbmc.Keyboard(self.pass2, "Enter Password2")
+                    keyboard = xbmc.Keyboard(self.pass2, lang.string(57))#id 57
                 try:
                     keyboard.setHiddenInput(True)
                 except:pass
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.pass2 = keyboard.getText()
+                else:return
                 try:
                     keyboard.setHiddenInput(False)
                 except:pass         
                 if self.pass2 == "":
                     self.pass2 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enter Password2 eg. hushhush123")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(34))#id 34
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel('*' * len(self.pass2))
                 del keyboard
@@ -1266,33 +1366,34 @@ class xbmcmail(xbmcgui.Window):
             if lstPos == 7:
                 dialog = xbmcgui.Dialog()
                 if self.ssl2 == "-":
-                    keyboard = xbmc.Keyboard("", "Enter SSL2")
+                    keyboard = xbmc.Keyboard("", lang.string(58))#id 58
                 else:
-                    if dialog.yesno("SSL Setup", "Remove SSL2?"):
+                    if dialog.yesno(lang.string(54), lang.string(20)+" SSL2?"):#id 54,20
                         self.ssl2 = "-"
-                        self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server2?")
+                        self.theList.getSelectedItem(lstPos).setLabel(lang.string(35))#id 35
                         return
                     else:
                         return
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.ssl2 = keyboard.getText()
+                else:return
                 if self.ssl2 == "":
                     self.ssl2 = "-"
-                    self.theList.getSelectedItem(lstPos).setLabel("Enable SSL for Server2?")
+                    self.theList.getSelectedItem(lstPos).setLabel(lang.string(35))#id 35
                 else:
                     self.theList.getSelectedItem(lstPos).setLabel(self.ssl2)
                 del keyboard
                 return 
             if lstPos == 8:
                 dialog = xbmcgui.Dialog()
-                if dialog.yesno("Master Password Setup", "Enable a Master Password on startup?"):
+                if dialog.yesno(lang.string(8), lang.string(9)): #id 8,9
                     if self.masterpass == "-":
                         self.setting1 = 1
                         self.getpassinput()
                         self.setting1 = 0
                         if self.masterpass == "-":
-                            self.theList.getSelectedItem(self.theList.selectItem(9)).setLabel("Enter Master Password")
+                            self.theList.getSelectedItem(self.theList.selectItem(9)).setLabel(lang.string(37))#id 37
                         else:
                             self.theList.getSelectedItem(self.theList.selectItem(9)).setLabel('*' * len(self.masterpass))
                     self.MasterPassEnable = "yes"
@@ -1309,17 +1410,17 @@ class xbmcmail(xbmcgui.Window):
                     self.getpassinput()
                     self.setting1 = 0
                     if self.masterpass == "-":
-                        self.theList.getSelectedItem(lstPos).setLabel("Enter Master Password")
+                        self.theList.getSelectedItem(lstPos).setLabel(lang.string(37))#id 37
                     else:
                         self.theList.getSelectedItem(lstPos).setLabel('*' * len(self.masterpass))
                     return
                 else:
-                    if dialog.yesno("Warning!", "Change master password?"):
+                    if dialog.yesno(lang.string(15), lang.string(59)):#id 15, 59
                         self.setting1 = 1
                         self.getpassinput()
                         self.setting1 = 0
                         if self.masterpass == "-":
-                            self.theList.getSelectedItem(lstPos).setLabel("Enter Master Password")
+                            self.theList.getSelectedItem(lstPos).setLabel(lang.string(37))#id 37
                         else:
                             self.theList.getSelectedItem(lstPos).setLabel('*' * len(self.masterpass))
                     else:
@@ -1328,9 +1429,10 @@ class xbmcmail(xbmcgui.Window):
                 self.writeconfig()
                 self.settingssaved = 1
                 dialog = xbmcgui.DialogProgress()
-                dialog.create("Settings Saved")
+                dialog.create(lang.string(60)) #id 60
                 time.sleep(1)
                 dialog.close()
+                self.readconfig()
                 return
             elif lstPos == 11:
                 if self.settingssaved != 1:
@@ -1340,9 +1442,10 @@ class xbmcmail(xbmcgui.Window):
                     fh.close()
                     dialog = xbmcgui.Dialog()
                     if self.comparesettings1 != self.comparesettings2: 
-                        if dialog.yesno("Warning!", "Exit without saving settings?"):
+                        if dialog.yesno(lang.string(15), lang.string(61)): #id 15, 61
                             self.settings = False
                             self.settingssaved = 0
+                            self.readconfig()
                             self.reset()
                             return
                         else:
@@ -1350,11 +1453,13 @@ class xbmcmail(xbmcgui.Window):
                     else:
                         self.settingssaved = 0
                         self.settings = False
+                        self.readconfig()
                         self.reset()
                         return
                 else:
                     self.settingssaved = 0
                     self.settings = False
+                    self.readconfig()
                     self.reset()
                     return
 

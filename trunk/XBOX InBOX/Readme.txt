@@ -10,7 +10,7 @@
 #                                    #
 ######################################
 
-
+THIS WILL BE CHANGED WITH OFFICIAL RELEASES ONLY! - see SVN change log
 
 Features:
 
