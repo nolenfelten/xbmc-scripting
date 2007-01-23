@@ -395,6 +395,7 @@ class GUIBuilder:
                 if ( not self.fastMethod ): self.dlg.update( int( ( float( self.pct1 ) / float( t ) * ( cnt + 1 ) ) + self.pct ), self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
                 
                 #if (self.includesExist): self.ResolveIncludes( control )
+                ctype = None
                 if ( control.hasAttributes() ):
                     ctype = control.getAttribute( 'type' )
                     cid = control.getAttribute( 'id' )
