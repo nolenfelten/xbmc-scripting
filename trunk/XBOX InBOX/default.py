@@ -35,7 +35,6 @@ SETTINGS_FILE = "settings.xml"
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
 
-
 class Language:
 	"""
 		Language Class
@@ -217,18 +216,18 @@ class xbmcmail(xbmcgui.Window):
 
 
     def imback(self):
-        global button, user, Inbox
+        global user, Inbox1, Inbox2
         self.__init__()
         self.gettally()
         self.define()
         self.readconfig()
         self.writeconfig()
         if user == self.user1:
-            Inbox = 1
-            button = self.cmButton
+            Inbox1 = "stage1"
+            Inbox2 = "stage0"
         elif user == self.user2:
-            Inbox = 2
-            button = self.csButton
+            Inbox1 = "stage0"
+            Inbox2 = "stage1"
         self.openinbox()
             
         
@@ -362,7 +361,7 @@ class xbmcmail(xbmcgui.Window):
             self.masspasswsetup()
 
     def define(self):
-        global Inbox
+        global Inbox1, Inbox2
         self.MasterPassEnable = "-"
         self.masterpass = "-"
         self.server1 = "-" 
@@ -373,9 +372,10 @@ class xbmcmail(xbmcgui.Window):
         self.user2 = "-" 
         self.pass2 = "-" 
         self.ssl2 = "-"
-        Inbox = 0
         self.settingssaved = 0
         self.firsttime = 0
+        Inbox1 = "stage0"
+        Inbox2 = "stage0"
         return      
 
     def masspasswsetup(self):
@@ -639,7 +639,6 @@ class xbmcmail(xbmcgui.Window):
         return
         
     def settingsmenu(self):
-
         fh = open(Root_Dir + SETTINGS_FILE)
         self.comparesettings1 = fh.read()
         fh.close()
@@ -744,6 +743,8 @@ class xbmcmail(xbmcgui.Window):
             self.csButton.controlRight(self.csButton)
             self.seButton.controlRight(self.seButton)
             self.mmButton.controlRight(self.mmButton)
+        else:
+            self.setFocus(self.listControl)
         return
 
     def addme(self):
@@ -794,7 +795,7 @@ class xbmcmail(xbmcgui.Window):
     
 
     def openinbox(self):
-        global user, server, passw, ssl, button
+        global user, server, passw, ssl, Inbox1, Inbox2
         try:
             self.addControl(self.mmButton)
             self.seButton.controlDown(self.mmButton)
@@ -805,7 +806,12 @@ class xbmcmail(xbmcgui.Window):
         self.removeControl(self.title)
         self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XinBox - "+ user, "font18", "FFB2D4F5")
         self.addControl(self.title)
-        button.setLabel(lang.string(41), "font14")#id 41
+        if Inbox1 == "stage1":
+            self.cmButton.setLabel(lang.string(41), "font14")#id 41
+            self.csButton.setLabel("XinBox 2", "font14")
+        elif Inbox2 == "stage1":
+            self.csButton.setLabel(lang.string(41), "font14")#id 41
+            self.cmButton.setLabel("XinBox 1", "font14")
         self.EMAILFOLDER = DATA_DIR + user + "@" + server + "\\"
         try:
             os.mkdir(self.EMAILFOLDER)
@@ -814,10 +820,6 @@ class xbmcmail(xbmcgui.Window):
             os.mkdir(self.EMAILFOLDER + NEWFOLDER)   
         except:
             pass
-        if Inbox == 1:
-            self.setFocus(self.cmButton)
-        elif Inbox == 2:
-            self.setFocus(self.csButton)  
         self.openmail()
 
         
@@ -1003,6 +1005,9 @@ class xbmcmail(xbmcgui.Window):
                         self.test1 = lang.string(21) + " "+ lang.string(22)+" "+ lang.string(23)+" " + self.emails5[self.count2].get('from')
                     if self.test1 == self.test2:
                         os.remove(self.EMAILFOLDER + str(self.count)+".sss")
+                        try:
+                            os.remove(self.EMAILFOLDER + NEWFOLDER + str(self.count)+".new")
+                        except:pass
                         shutil.move(self.EMAILFOLDER + IDFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
                         return
                     else:
@@ -1141,10 +1146,6 @@ class xbmcmail(xbmcgui.Window):
                     self.reset()
                     return
                 else:
-                    global TEST, TEST2
-                    test = 0
-                    TEST = DATA_DIR + self.user1 + "@" + self.server1 + "\\NEW\\"
-                    TEST2 = DATA_DIR + self.user2 + "@" + self.server2 + "\\NEW\\"
                     self.close()
             elif action == 9: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
                 try:
@@ -1157,44 +1158,46 @@ class xbmcmail(xbmcgui.Window):
         return
             
     def onControl(self, control):
-        global user, server, passw, ssl, button, Inbox
+        global user, server, passw, ssl, Inbox1, Inbox2
         if control == self.cmButton:
-            if Inbox == 2:
-                self.csButton.setLabel("XinBox 2", "font14")
             if self.user1 == "-":
                 self.warning()
+                Inbox1 = "stage0"
             elif self.pass1 == "-":
                 self.warning()
+                Inbox1 = "stage0"
             elif self.server1 == "-":
                 self.warning()
-            elif Inbox == 1:
+                Inbox1 = "stage0"
+            elif Inbox1 == "stage1":
                 self.comparemail()
             else:
-                Inbox = 1
-                button = self.cmButton
                 user = self.user1
                 server = self.server1
                 passw = self.pass1
                 ssl = self.ssl1
+                Inbox1 = "stage1"
+                Inbox2 = "stage0"
                 self.openinbox()
         elif control == self.csButton:
-            if Inbox == 1:
-                self.cmButton.setLabel("XinBox 1", "font14")
             if self.user2 == "-":
                 self.warning()
+                Inbox2 = "stage0"
             elif self.pass2 == "-":
                 self.warning()
+                Inbox2 = "stage0"
             elif self.server2 == "-":
                 self.warning()
-            elif Inbox == 2:
+                Inbox2 = "stage0"
+            elif Inbox2 == "stage1":
                 self.comparemail()
             else:
-                Inbox = 2
-                button = self.csButton
                 user = self.user2
                 server = self.server2
                 passw = self.pass2
                 ssl = self.ssl2
+                Inbox1 = "stage0"
+                Inbox2 = "stage1"
                 self.openinbox()
         elif control == self.seButton:
             self.settingsmenu()
