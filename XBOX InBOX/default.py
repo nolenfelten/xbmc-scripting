@@ -25,6 +25,7 @@ IDFOLDER = "IDS\\"
 IMAGE_DIR = SRC_Dir + "Images\\"
 LANGFOLDER = SRC_Dir+"Language\\"
 NEWFOLDER = "NEW\\"
+CORFOLDER = "COR\\"
 
 path = os.getcwd()
 if path[-1]== ";":
@@ -34,6 +35,9 @@ SETTINGS_FILE = "settings.xml"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
+scriptpath = sys.path[0]
+sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
+import xbmcClass
 
 class Language:
 	"""
@@ -760,26 +764,38 @@ class xbmcmail(xbmcgui.Window):
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
-                            #self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
                             self.listControl.addItem(lang.string(21) +" "+ lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
+                            f = open(self.EMAILFOLDER + CORFOLDER+ str(self.listControl.size() - 1) +".cor", "wb")
+                            f.write(str(self.count3))
+                            f.close()
                         else:
-                            #self.listControl.addItem("NEW! " + self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
                             self.listControl.addItem(lang.string(21) +" " + self.emails[self.count2].get('subject') +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
+                            f = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.size() - 1) +".cor", "wb")
+                            f.write(str(self.count3))
+                            f.close()
                     except:
-                        #self.listControl.addItem("NEW! [No Subject] from " + self.emails[self.count2].get('from'))
                         self.listControl.addItem(lang.string(21) +" "+ lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
+                        f = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.size() -1) +".cor", "wb")
+                        f.write(str(self.count3))
+                        f.close()
                 except:
                     try:
                         temp20 = self.emails[self.count2].get('subject')
                         if temp20 == "":
-                            #self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
                             self.listControl.addItem(lang.string(22) +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
+                            f = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.size()-1) +".cor", "wb")
+                            f.write(str(self.count3))
+                            f.close()
                         else:
-                            #self.listControl.addItem(self.emails[self.count2].get('subject') + " from " + self.emails[self.count2].get('from'))
                             self.listControl.addItem(self.emails[self.count2].get('subject') +" "+ lang.string(23) + " "+ self.emails[self.count2].get('from'))
+                            f = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.size()-1) +".cor", "wb")
+                            f.write(str(self.count3))
+                            f.close()
                     except:
-                        #self.listControl.addItem("[No Subject] from " + self.emails[self.count2].get('from'))
                         self.listControl.addItem(lang.string(22)+" "+ lang.string(23)+ " " + self.emails[self.count2].get('from'))
+                        f = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.size()-1) +".cor", "wb")
+                        f.write(str(self.count3))
+                        f.close()
                 self.count = self.count+1
                 self.count2 = self.count2+1
                 self.count3 = self.count3-1
@@ -817,7 +833,8 @@ class xbmcmail(xbmcgui.Window):
             os.mkdir(self.EMAILFOLDER)
             os.mkdir(self.EMAILFOLDER + IDFOLDER)
             os.mkdir(self.EMAILFOLDER + DELETEFOLDER)
-            os.mkdir(self.EMAILFOLDER + NEWFOLDER)   
+            os.mkdir(self.EMAILFOLDER + NEWFOLDER)
+            os.mkdir(self.EMAILFOLDER + CORFOLDER)
         except:
             pass
         self.openmail()
@@ -952,74 +969,27 @@ class xbmcmail(xbmcgui.Window):
 
 
     def deletemail(self):
-        temp1 = self.listControl.getSelectedPosition()
-        self.test2 = self.listControl.getSelectedItem(temp1).getLabel()
         dialog = xbmcgui.Dialog()
         if dialog.yesno(lang.string(15), lang.string(49)+" XinBox?"):#id 15, 49
-            self.getemailnum()
+            fh = open(self.EMAILFOLDER + CORFOLDER + str(self.listControl.getSelectedPosition())+ ".cor")
+            deleteme = fh.read()
+            fh.close()
+            os.remove(self.EMAILFOLDER + str(deleteme)+".sss")
+            try:
+                os.remove(self.EMAILFOLDER + NEWFOLDER + str(deleteme)+".new")
+            except:pass
+            shutil.move(self.EMAILFOLDER + IDFOLDER + str(deleteme)+".id", self.EMAILFOLDER + DELETEFOLDER)
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(lang.string(15),lang.string(50)+" XinBox!")#id 50
+            time.sleep(2)
+            dialog.close()
+            if self.listControl.size() == 1:
+                self.setFocus(self.cmButton)
+                self.mmButton.controlRight(self.mmButton)
+            self.openmail()
+            return
         else:
             return
-        dialog = xbmcgui.DialogProgress()
-        dialog.create(lang.string(15),lang.string(50)+" XinBox!")#id 50
-        time.sleep(2)
-        dialog.close()
-        if self.listControl.size() == 1:
-            self.setFocus(self.cmButton)
-            self.mmButton.controlRight(self.mmButton)
-        self.openmail()
-        return
-
-    def getemailnum(self):
-        self.emails5 = []
-        self.count = 0
-        self.count2 = 0
-        self.tryme()
-
-    def tryme(self):
-        for self.count in range(self.tally):
-            try:
-                fh = open(self.EMAILFOLDER + str(self.count) +".sss")
-                tempStr = fh.read()
-                fh.close()
-                self.emails5.append(email.message_from_string(tempStr)) 
-                try:
-                    temp20 = self.emails5[self.count2].get('subject')
-                    if temp20 == "":
-                        self.test1 = lang.string(22)+" "+ lang.string(23)+ " " + self.emails5[self.count2].get('from')
-                    else:
-                        self.test1 = self.emails5[self.count2].get('subject') + " "+ lang.string(23)+ " " + self.emails5[self.count2].get('from')
-                except:
-                    self.test1 = lang.string(22)+" " +lang.string(23)+" " + self.emails5[self.count2].get('from')
-                if self.test1 == self.test2:
-                    os.remove(self.EMAILFOLDER + str(self.count)+".sss")
-                    shutil.move(self.EMAILFOLDER  + IDFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
-                    return
-                else:
-                    try:
-                        temp20 = self.emails5[self.count2].get('subject')
-                        if temp20 == "":
-                            self.test1 = lang.string(21)+" "+ lang.string(22)+" "+ lang.string(23)+" " + self.emails5[self.count2].get('from')
-                        else:
-                            self.test1 = lang.string(21) + " " +self.emails5[self.count2].get('subject') + " "+lang.string(23)+" " + self.emails5[self.count2].get('from')
-                    except:
-                        self.test1 = lang.string(21) + " "+ lang.string(22)+" "+ lang.string(23)+" " + self.emails5[self.count2].get('from')
-                    if self.test1 == self.test2:
-                        os.remove(self.EMAILFOLDER + str(self.count)+".sss")
-                        try:
-                            os.remove(self.EMAILFOLDER + NEWFOLDER + str(self.count)+".new")
-                        except:pass
-                        shutil.move(self.EMAILFOLDER + IDFOLDER + str(self.count)+".id", self.EMAILFOLDER + DELETEFOLDER)
-                        return
-                    else:
-                        self.count = self.count+1
-                        self.count2 = self.count2+1
-            except:
-                self.count = self.count+1
-                pass
-        return
-
-    
-
 
     def processEmail(self, selected):
         self.msgbody.setVisible(True)
