@@ -35,9 +35,6 @@ SETTINGS_FILE = "settings.xml"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.1)"
-scriptpath = sys.path[0]
-sys.path.append( os.path.join( sys.path[0], 'Src\\lib' ) )
-import xbmcClass
 
 class Language:
 	"""
@@ -70,7 +67,7 @@ class Language:
 
 	def string(self,number):
 		if int(number) in self.strings:
-			return self.strings[int(number)]
+			return unicode (self.strings[int(number)], 'utf-8')
 		else:
 			return "unknown string id"
 
