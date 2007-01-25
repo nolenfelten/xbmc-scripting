@@ -1,36 +1,12 @@
-<window>
+<window id="1156">
 
-	<id>1156</id>
 	<allowoverlay>yes</allowoverlay>
    <defaultcontrol>10</defaultcontrol>
    <resolution>PAL</resolution>
 	<controls>
 
-		<control>
-			<type>visualisation</type>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<visible>!Skin.HasSetting(backgroundvis)</visible>
-			<animation effect="fade" time="100">WindowOpen</animation>
-			<animation effect="fade" delay="100" time="750" condition="Window.Next(12999)">WindowClose</animation>
-		</control>
-
-		<control>
-			<description>video preview window</description>
-			<type>videowindow</type>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<animation effect="fade" time="100">WindowOpen</animation>
-			<animation effect="fade" delay="100" time="750" condition="Window.Next(12999)">WindowClose</animation>
-		</control>
-
-		<control>
+		<control type="image" id="0">
 			<description>Orange Background Static Alpha</description>
-			<type>image</type>
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>720</width>
@@ -40,9 +16,8 @@
 			<animation effect="fade" delay="100" time="750" condition="Window.Next(12999)">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="0">
 			<description>XLink Custom Background Static</description>
-			<type>image</type>
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>720</width>
@@ -52,9 +27,8 @@
 			<animation effect="fade" delay="100" time="750" condition="Window.Next(12999)">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="0">
 			<description>Whitewash Glass Top Middle</description>
-			<type>image</type>
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>720</width>
@@ -64,9 +38,8 @@
 			<animation effect="fade" delay="100" time="500" condition="Window.Next(12999)">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="0">
 			<description>Whitewash Glass Bottom Middle</description>
-			<type>image</type>
 			<posx>0</posx>
 			<posy>512</posy>
 			<width>720</width>
@@ -76,9 +49,8 @@
 			<animation effect="fade" delay="100" time="500" condition="Window.Next(12999)">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="0">
 			<description>Whitewash Overlay Middle</description>
-			<type>image</type>
 			<posx>0</posx>
 			<posy>0</posy>
 			<width>720</width>
@@ -88,9 +60,8 @@
 		</control>
 
 <!-- Start Normal Window Controls -->
-		<control>
+		<control type="label" id="1">
 			<description>description label</description>
-			<type>label</type>
 			<posx>72</posx>
 			<posy>42</posy>
 			<width>250</width>
@@ -101,7 +72,7 @@
 			<font>font18</font>
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
-		<control>
+		<control type="label" id="1">
 			<description>description label</description>
 			<type>label</type>
 			<posx>650</posx>
@@ -113,9 +84,8 @@
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>button 1 top shadow</description>
-			<type>image</type>
 			<posx>50</posx>
 			<posy>78</posy>
 			<width>210</width>
@@ -124,9 +94,8 @@
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>Y Button</description>
-			<type>image</type>
 			<posx>95</posx>
 			<posy>505</posy>
 			<width>21</width>
@@ -135,9 +104,8 @@
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="label" id="1">
 			<description>Refresh Map Button</description>
-			<type>label</type>
 			<font>font12</font>
 			<posx>127</posx>
 			<posy>508</posy>
@@ -147,9 +115,8 @@
 			<shadowcolor>FF000000</shadowcolor>
 		</control>
 
-		<control>
+		<control type="image" id="1">
 			<description>B Button</description>
-			<type>image</type>
 			<posx>620</posx>
 			<posy>505</posy>
 			<width>21</width>
@@ -159,9 +126,8 @@
 		</control>
 
 
-		<control>
+		<control type="image" id="1">
 			<description>A Button</description>
-			<type>image</type>
 			<posx>633</posx>
 			<posy>525</posy>
 			<width>21</width>
@@ -170,9 +136,8 @@
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="label" id="1">
 			<description>Select Label</description>
-			<type>label</type>
 			<font>font12</font>
 			<posx>623</posx>
 			<posy>528</posy>
@@ -183,10 +148,8 @@
 		</control>
 
 <!--   Start of main controls, DO NOT change ID#'s -->
-		<control>
+		<control type="image" id="300">
 			<description>X Button</description>
-			<id>300</id>
-			<type>image</type>
 			<posx>82</posx>
 			<posy>525</posy>
 			<width>21</width>
@@ -196,10 +159,8 @@
 			<animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
-			<id>301</id>
+		<control type="image" id="301">
 			<description>X Button Off</description>
-			<type>image</type>
 			<posx>82</posx>
 			<posy>525</posy>
 			<width>21</width>
@@ -209,10 +170,8 @@
 			<visible>!Player.Hasmedia</visible>
 		</control>
 
-		<control>
+		<control type="label" id="302">
 			<description>Full-Screen Visualisation Label</description>
-			<id>302</id>
-			<type>label</type>
 			<font>font12</font>
 			<posx>115</posx>
 			<posy>528</posy>
@@ -224,10 +183,8 @@
 			<visible>Player.HasAudio</visible>
 		</control>
 		
-		<control>
+		<control type="label" id="303">
 			<description>Full-Screen Video Label</description>
-			<id>303</id>
-			<type>label</type>
 			<font>font12</font>
 			<posx>115</posx>
 			<posy>528</posy>
@@ -238,7 +195,7 @@
 			<visible>Player.HasVideo</visible>
 		</control>
 
-		<control>
+		<control type="fadelabel" id="20">
 			<description>RSS Feeds</description>
 			<type>fadelabel</type>
 			<id>20</id>
@@ -256,9 +213,8 @@
 			<!--visible>!Skin.HasSetting(rss-feeds)</visible-->
 		</control>
 
-		<control>
+		<control type="image" id="1">
 		  <description>button image 1</description>
-		  <type>image</type>
 		  <posx>35</posx>
 		  <posy>88</posy>
 		  <width>185</width>
@@ -266,10 +222,8 @@
 		  <texture>divider.png</texture>
 		  <animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
-		<control>
+		<control type="button" id="10">
 			<description>Category Button</description>
-			<type>button</type>
-			<id>10</id>
 			<posx>15</posx>
 			<posy>89</posy>
 			<width>220</width>
@@ -291,9 +245,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-		<control>
+		<control type="image" id="1">
 		  <description>button image 2</description>
-		  <type>image</type>
 		  <posx>35</posx>
 		  <posy>120</posy>
 		  <width>185</width>
@@ -301,10 +254,8 @@
 		  <texture>divider.png</texture>
 		  <animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
-		<control>
+		<control type="button" id="11">
 			<description>Level Button</description>
-			<type>button</type>
-			<id>11</id>
 			<posx>15</posx>
 			<posy>122</posy>
 			<width>220</width>
@@ -326,9 +277,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-		<control>
+		<control type="image" id="1">
 		  <description>button image 3</description>
-		  <type>image</type>
 		  <posx>35</posx>
 		  <posy>154</posy>
 		  <width>183</width>
@@ -337,10 +287,8 @@
 		  <animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="button" id="12">
 			<description>Type Button</description>
-			<type>button</type>
-			<id>12</id>
 			<posx>15</posx>
 			<posy>155</posy>
 			<width>220</width>
@@ -362,9 +310,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-		<control>
+		<control type="image" id="1">
 		  <description>button image 4</description>
-		  <type>image</type>
 		  <posx>35</posx>
 		  <posy>187</posy>
 		  <width>185</width>
@@ -372,9 +319,8 @@
 		  <texture>divider.png</texture>
 		  <animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
-		<control>
+		<control type="image" id="1">
 		  <description>button image 5</description>
-		  <type>image</type>
 		  <posx>35</posx>
 		  <posy>220</posy>
 		  <width>185</width>
@@ -383,10 +329,8 @@
 		  <animation effect="fade" end="0" time="100">WindowClose</animation>
 		</control>
 
-		<control>
+		<control type="button" id="13">
 			<description>Loop Button</description>
-			<type>button</type>
-			<id>13</id>
 			<posx>15</posx>
 			<posy>221</posy>
 			<width>220</width>
@@ -408,9 +352,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-    <control>
+		<control type="image" id="1">
       <description>button image 6</description>
-      <type>image</type>
       <posx>35</posx>
       <posy>252</posy>
       <width>185</width>
@@ -419,10 +362,8 @@
       <animation effect="fade" end="0" time="100">WindowClose</animation>
     </control>
 
-		<control>
+		<control type="button" id="14">
 			<description>Frame Button</description>
-			<type>button</type>
-			<id>14</id>
 			<posx>15</posx>
 			<posy>254</posy>
 			<width>220</width>
@@ -444,9 +385,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-    <control>
+		<control type="image" id="1">
       <description>button image 7</description>
-      <type>image</type>
       <posx>35</posx>
       <posy>286</posy>
       <width>185</width>
@@ -455,9 +395,8 @@
       <animation effect="fade" end="0" time="100">WindowClose</animation>
     </control>
     
-    <control>
+		<control type="image" id="1">
       <description>button image 8</description>
-      <type>image</type>
       <posx>35</posx>
       <posy>319</posy>
       <width>185</width>
@@ -466,10 +405,8 @@
       <animation effect="fade" end="0" time="100">WindowClose</animation>
     </control>
 
-		<control>
+		<control type="button" id="15">
 			<description>set as default Button</description>
-			<type>button</type>
-			<id>15</id>
 			<posx>25</posx>
 			<posy>320</posy>
 			<width>200</width>
@@ -491,9 +428,8 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<pulseonselect>no</pulseonselect>
 		</control>
-    <control>
+		<control type="image" id="1">
       <description>button image 9</description>
-      <type>image</type>
       <posx>35</posx>
       <posy>352</posy>
       <width>185</width>
@@ -502,84 +438,9 @@
       <animation effect="fade" end="0" time="100">WindowClose</animation>
     </control>
 
-
-	<!--control>
-		<description>default checkmark</description>
-		<id>40</id>
-		<type>checkmark</type>
-		<width>125</width>
-		<height>33</height>
-		<posx>30</posx>
-		<posy>370</posy>
-		<textcolor>FFFFFFFF</textcolor>
-		<disabledcolor>60FFFFFF</disabledcolor>
-		<font>font13</font>
-		<label>Hurricane Tracker</label>
-		<texturecheckmark>check-box.png</texturecheckmark>
-		<texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
-		<markwidth>20</markwidth>
-		<markheight>20</markheight>
-		<align>right</align>
-		<shadow>no</shadow>
-		<onup>15</onup>
-		<ondown>10</ondown>
-		<onleft>42</onleft>
-		<onright>41</onright>
-	</control-->
-	<!--control>
-		<description>default checkmark</description>
-		<id>41</id>
-		<type>checkmark</type>
-		<width>75</width>
-		<height>33</height>
-		<posx>105</posx>
-		<posy>370</posy>
-		<textcolor>FFFFFFFF</textcolor>
-		<disabledcolor>60FFFFFF</disabledcolor>
-		<font>font13</font>
-		<label>Canada</label>
-		<texturecheckmark>check-box.png</texturecheckmark>
-		<texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
-		<markwidth>20</markwidth>
-		<markheight>20</markheight>
-		<align>right</align>
-		<shadow>no</shadow>
-		<onup>15</onup>
-		<ondown>10</ondown>
-		<onleft>40</onleft>
-		<onright>42</onright>
-	</control-->
-	<!--control>
-		<description>default checkmark</description>
-		<id>42</id>
-		<type>checkmark</type>
-		<width>75</width>
-		<height>33</height>
-		<posx>180</posx>
-		<posy>370</posy>
-		<textcolor>FFFFFFFF</textcolor>
-		<disabledcolor>60FFFFFF</disabledcolor>
-		<font>font13</font>
-		<label>World</label>
-		<texturecheckmark>check-box.png</texturecheckmark>
-		<texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
-		<markwidth>20</markwidth>
-		<markheight>20</markheight>
-		<align>right</align>
-		<shadow>no</shadow>
-		<onup>15</onup>
-		<ondown>10</ondown>
-		<onleft>41</onleft>
-		<onright>40</onright>
-	</control-->
-
-
 	
-	
-		<control>
+		<control type="image" id="50">
 			<description>map frame</description>
-			<ID>50</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -588,10 +449,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="51">
 			<description>map frame</description>
-			<ID>51</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -600,10 +459,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="52">
 			<description>map frame</description>
-			<ID>52</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -612,10 +469,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="53">
 			<description>map frame</description>
-			<ID>53</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -624,10 +479,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="54">
 			<description>map frame</description>
-			<ID>54</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -636,10 +489,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="55">
 			<description>map frame</description>
-			<ID>55</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -648,10 +499,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="56">
 			<description>map frame</description>
-			<ID>56</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -660,10 +509,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="57">
 			<description>map frame</description>
-			<ID>57</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -672,10 +519,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="58">
 			<description>map frame</description>
-			<ID>58</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -684,10 +529,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="59">
 			<description>map frame</description>
-			<ID>59</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -697,10 +540,8 @@
 			<!--aspectratio>keep</aspectratio-->
 		</control>
 
-		<control>
+		<control type="image" id="200">
 			<description>Legend</description>
-			<ID>200</ID>
-			<type>image</type>
 			<posx>10</posx>
 			<posy>420</posy>
 			<width>260</width>
@@ -710,10 +551,8 @@
 			<!--aspectratio>keep</aspectratio-->
 		</control>
 
-		<control>
+		<control type="image" id="201">
 			<description>Roads</description>
-			<ID>201</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -722,10 +561,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="202">
 			<description>Cities</description>
-			<ID>202</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -734,10 +571,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="203">
 			<description>Markers</description>
-			<ID>203</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
@@ -746,10 +581,8 @@
 			<texture>-</texture>
 			<!--aspectratio>keep</aspectratio-->
 		</control>
-		<control>
+		<control type="image" id="204">
 			<description>Grid</description>
-			<ID>204</ID>
-			<type>image</type>
 			<posx>285</posx>
 			<posy>85</posy>
 			<width>400</width>
