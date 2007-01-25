@@ -40,24 +40,24 @@ You need to pass your Window or WindowDialog Class as self and a skin xml file. 
 class GUIBuilder:
 GUIBuilder(win, skinXML[, imagePath, useDescAsKey, title, line1, dlg, pct, fastMethod, debug])
 
-win                    : class - Your Window or WindowDialog class passed as self.
-skinXML                : string - The xml file including path you want to use.
-imagePath            : [opt] string - The path to any custom images.
-useDescAsKey        : [opt] bool - True=<description> as key / False=<id> for key.
-title                    : [opt] string - Title you want to use for a new progress dialog.
-line1                    : [opt] string - The first line of the progress dialog.
-dialog                : [opt] progress dialog - A current progress dialog.
-pct                    : [opt] integer - The percent already completed. (0-100)
-fastMethod            : [opt] bool - True=no dialogs, no <include> tags and no defaults from references.xml.
-useLocal                : [opt] bool - True=use a local language file / False=use XBMC language files
-debug                : [opt] bool - True=output debug information / False=no logging.
+win					: class - Your Window or WindowDialog class passed as self.
+skinXML				: string - The xml file including path you want to use.
+imagePath			: [opt] string - The path to any custom images.
+useDescAsKey		: [opt] bool - True=<description> as key / False=<id> for key.
+title					: [opt] string - Title you want to use for a new progress dialog.
+line1					: [opt] string - The first line of the progress dialog.
+dialog				: [opt] progress dialog - A current progress dialog.
+pct					: [opt] integer - The percent already completed. (0-100)
+fastMethod			: [opt] bool - True=no dialogs, no <include> tags and no defaults from references.xml.
+useLocal				: [opt] bool - True=use a local language file / False=use XBMC language files
+debug				: [opt] bool - True=output debug information / False=no logging.
 
-*Note,     You may use the above as keywords for arguments and skip certain optional arguments.
-            Once you use a keyword, all following arguments require the keyword.
+*Note,	You may use the above as keywords for arguments and skip certain optional arguments.
+			Once you use a keyword, all following arguments require the keyword.
 
 example:
-    - import guibuilder
-    - guibuilder.GUIBuilder(self,  'Project Mayhem III.xml', fastMethod=True)
+	- import guibuilder
+	- guibuilder.GUIBuilder(self,  'Project Mayhem III.xml', fastMethod=True)
 **************************************************************************************
 
 
@@ -65,38 +65,38 @@ GUI Builder sets self.SUCCEEDED to True if the window creation succeeded or Fals
 want to check this before the call to doModal().
 
 GUI Builder creates two variables: self.coordinates[x, y] and self.controls{key : {}}
-    1.    self.coordinates[x, y], a list variable of offsets, for a <coordinates> based window.
-        All control x, y positions will be based on these values if they exist. Defaults to [0, 0]
-    2.    self.controls[key] = { # a dictionary of your controls, with the controls <id> or <description> as the key.
-            'id'                : integer - <id> tag.
-            'controlId'    : integer - Id# XBMC uses for the control.
-            'control'         : <control object> - The control itself.
-            'posx'             : integer - x coordinate of control.
-            'posy'            : integer - y coordinate of control.
-            'width'        : integer - width of control.
-            'height'        : integer - height of control.
-            'visible'         : string - <visible> condition.
-            'animation'     : dictionary - <animation> (not used yet).
-            'onclick'         : string - <onclick> event. (eg <onclick>self.exitScript(True)</onclick>)
-            'onfocus'     : string - <onfocus> event (eg <onfocus>self.slidePad(True)</onfocus>)
-        }
+	1.	self.coordinates[x, y], a list variable of offsets, for a <coordinates> based window.
+		All control x, y positions will be based on these values if they exist. Defaults to [0, 0]
+	2.	self.controls[key] = { # a dictionary of your controls, with the controls <id> or <description> as the key.
+			'id'				: integer - <id> tag.
+			'controlId'	: integer - Id# XBMC uses for the control.
+			'control'		: <control object> - The control itself.
+			'posx'			: integer - x coordinate of control.
+			'posy'			: integer - y coordinate of control.
+			'width'		: integer - width of control.
+			'height'		: integer - height of control.
+			'visible'		: string - <visible> condition.
+			'animation'	: dictionary - <animation> (not used yet).
+			'onclick'		: string - <onclick> event. (eg <onclick>self.exitScript(True)</onclick>)
+			'onfocus'	: string - <onfocus> event (eg <onfocus>self.slidePad(True)</onfocus>)
+		}
 
-    example: How to center zoom a control 20%. w/useDescAsKey=True
-        width = self.controls['Play Button']['width'] * 1.2
-        height = self.controls['Play Button']['height'] * 1.2
-        widthOffset = int((width - self.controls['Play Button']['width']) / 2)
-        heightOffset = int((height - self.controls['Play Button']['height']) / 2)
-        x = self.controls['Play Button']['posx'] + self.coordinates[0] - widthOffset
-        y = self.controls['Play Button']['posy'] + self.coordinates[1] - heightOffset
-        self.controls['Play Button']['control'].setPosition(x, y)
-        self.controls['Play Button']['control'].setWidth(width)
-        self.controls['Play Button']['control'].setWidth(height)
+	example: How to center zoom a control 20%. w/useDescAsKey=True
+		width = self.controls['Play Button']['width'] * 1.2
+		height = self.controls['Play Button']['height'] * 1.2
+		widthOffset = int((width - self.controls['Play Button']['width']) / 2)
+		heightOffset = int((height - self.controls['Play Button']['height']) / 2)
+		x = self.controls['Play Button']['posx'] + self.coordinates[0] - widthOffset
+		y = self.controls['Play Button']['posy'] + self.coordinates[1] - heightOffset
+		self.controls['Play Button']['control'].setPosition(x, y)
+		self.controls['Play Button']['control'].setWidth(width)
+		self.controls['Play Button']['control'].setWidth(height)
 
-    example: [visible] w/useDescAsKey=False
-        - self.controls[300]['control'].setVisible(xbmc.getCondVisibility(self.controls[300]['visible']))
+	example: [visible] w/useDescAsKey=False
+		- self.controls[300]['control'].setVisible(xbmc.getCondVisibility(self.controls[300]['visible']))
 
-    example: [onclick] w/useDescAsKey=True
-        - exec self.controls['Play Button]['onclick']
+	example: [onclick] w/useDescAsKey=True
+		- exec self.controls['Play Button]['onclick']
 
 Post a message at http://www.xbmc.xbox-scene.com/forum/ with any suggestions.
 
@@ -409,9 +409,9 @@ class GUIBuilder:
                 vis = []
                 anim = {}
 
-                if ( cid ): ctl[ 'id' ] = cid
-                else: ctl[ 'id' ] = '0'
-                ctl[ 'type' ] = str( ctype )
+                if ( ctype != "" ): ctl[ 'type' ] = str( ctype )
+                if ( cid != "" ): ctl[ 'id' ] = cid
+                else: ctl[ 'id' ] = '1'
                 
                 # loop thru control and find all tags
                 node = self.FirstChildElement( control, None )
