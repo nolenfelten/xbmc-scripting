@@ -307,39 +307,13 @@
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
+		<control type="image" id="0">
 			<description>Trailer List Backdrop</description>
-			<font>font13</font>
-			<posx>211</posx>
-			<posy>121</posy>
-			<width>270</width>
-			<height>288</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<textureheight>30</textureheight>
-			<itemwidth>10</itemwidth>
-			<itemheight>22</itemheight>
-			<hidespinner>true</hidespinner>
-			<spacebetweenitems>2</spacebetweenitems>
-			<image>-</image>
-			<textxoff>3</textxoff>
-			<suffix>|</suffix>
-			<aligny>center</aligny>
-			<visible>false</visible>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
+			<posx>206</posx>
+			<posy>116</posy>
+			<width>280</width>
+			<height>266</height>
+			<texture>folder-nofocus.png</texture>
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -357,7 +331,7 @@
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
 			<textureheight>30</textureheight>
 			<itemwidth>10</itemwidth>
 			<itemheight>22</itemheight>
@@ -468,45 +442,13 @@
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
+		<control type="image" id="0">
 			<description>Category List Backdrop</description>
-			<font>font13</font>
-			<posx>211</posx>
-			<posy>121</posy>
-			<width>445</width>
-			<height>416</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<textureheight>30</textureheight>
-			<itemwidth>22</itemwidth>
-			<itemheight>22</itemheight>
-			<hidespinner>true</hidespinner>
-			<spacebetweenitems>2</spacebetweenitems>
-			<image>-</image>
-			<textxoff>3</textxoff>
-			<suffix>|</suffix>
-			<aligny>center</aligny>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
+			<posx>206</posx>
+			<posy>116</posy>
+			<width>455</width>
+			<height>394</height>
+			<texture>folder-nofocus.png</texture>
 			<visible>false</visible>
 		</control>
 
@@ -525,7 +467,7 @@
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
 			<textureheight>30</textureheight>
 			<itemwidth>22</itemwidth>
 			<itemheight>22</itemheight>
@@ -804,31 +746,14 @@
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
+		<control type="image" id="0">
 			<description>Cast List Backdrop</description>
-			<posx>211</posx>
-			<posy>428</posy>
-			<width>435</width>
-			<height>128</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
-			<textureup>scroll-up.png</textureup>
-			<texturedown>scroll-down.png</texturedown>
-			<textureupfocus>scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>list-nofocus.png</texturenofocus>
-			<textureheight>30</textureheight>
-			<itemwidth>16</itemwidth>
-			<itemheight>22</itemheight>
-			<hidespinner>true</hidespinner>
-			<spacebetweenitems>2</spacebetweenitems>
-			<!--visible>!Control.IsVisible(100)</visible-->
+			<posx>206</posx>
+			<posy>423</posy>
+			<width>445</width>
+			<height>106</height>
+			<texture>folder-nofocus.png</texture>
 			<visible>false</visible>
-			<label> </label>
-			<label> </label>
-			<label> </label>
-			<label> </label>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -845,7 +770,7 @@
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>list-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<texturenofocus>list-nofocus.png</texturenofocus>
 			<textureheight>30</textureheight>
 			<itemwidth>16</itemwidth>
 			<itemheight>22</itemheight>
