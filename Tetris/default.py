@@ -9,7 +9,13 @@
 import re, random, math, threading, time
 import xbmc, xbmcgui
 import threading, os, re
+sys.path.append( os.path.join( sys.path[0], 'extras', 'lib' ) )
 import scores
+import language
+
+_ = language.Language().string
+
+
 
 ACTION_MOVE_LEFT 	= 1	
 ACTION_MOVE_RIGHT	= 2
@@ -78,8 +84,8 @@ COORD_PAL60_4X3  = 8
 COORD_PAL60_16X9 = 9 
 
 ROOT_DIR = os.getcwd()[:-1]+'\\'    
-IMAGE_DIR = ROOT_DIR+"images\\"
-SOUND_DIR = ROOT_DIR+"sounds\\"
+IMAGE_DIR = ROOT_DIR+"extras\\themes\\modern\\images\\"
+SOUND_DIR = ROOT_DIR+"extras\\themes\\modern\\sounds\\"
 
 MAX_LENGTH 		= 4
 COLOR_NONE 		= 0
@@ -318,19 +324,36 @@ STATE_PAUSED = 1
 STATE_QUITTING = 2
 
 #avoid stretching on different pixel aspect ratios
+SX = 1.00
+SY = 1.00
+
 def noStretch(window):
-	if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
-	else: window.setCoordinateResolution(COORD_PAL_4X3)
+	displayModes = {0: (16,9,1920,1080),
+					1: (16,9,1280,720),
+					2: (4,3,720,480),
+					3: (16,9,720,480),
+					4: (4,3,720,480),
+					5: (16,9,720,480),
+					6: (4,3,720,576),
+					7: (16,9,720,576),
+					8: (4,3,720,480),
+					9: (16,9,720,480)}					
+	currMode = displayModes[window.getResolution()]
+	global SX,SY
+	SY = float(currMode[3])/576.0
+	SX = float(currMode[1])/float(currMode[0])*4.0/3.0*float(currMode[2])/720.0
+	#if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
+	#else: window.setCoordinateResolution(COORD_PAL_4X3)
 
 class PauseDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
 		noStretch(self)
 		self.parent = parent
-		self.addControl(xbmcgui.ControlImage(parent.blockX-20,parent.blockY+70,213,113, IMAGE_DIR+'pause.png'))
-		self.addControl(xbmcgui.ControlLabel(parent.blockX+10,parent.blockY+10, 100,25,"High Score:",'font14','FFFFFF00'))
-		self.lblHighScoreName = xbmcgui.ControlLabel(parent.blockX+30,parent.blockY+29, 100,25,"Asteron",'font14','FFFFFFFF')
-		self.lblHighScore = xbmcgui.ControlLabel(parent.blockX+170,parent.blockY+27, 100,25,"00000",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.chkGhostPiece = xbmcgui.ControlCheckMark(parent.blockX+25,parent.blockY+230, 100,25,"Ghost Piece",font='font14',focusTexture=IMAGE_DIR+"check-box.png",noFocusTexture=IMAGE_DIR+"check-box-nofocus.png",checkWidth=24,checkHeight=24)
+		self.addControl(xbmcgui.ControlImage(SX*(parent.blockX-20),SY*(parent.blockY+70),SX*213,SY*113, IMAGE_DIR+'pause.png'))
+		self.addControl(xbmcgui.ControlLabel(SX*(parent.blockX+10),SY*(parent.blockY+10), SX*100,SY*25,_(10),'font14','FFFFFF00'))
+		self.lblHighScoreName = xbmcgui.ControlLabel(SX*(parent.blockX+30),SY*(parent.blockY+29), SX*100,SY*25,"",'font14','FFFFFFFF')
+		self.lblHighScore = xbmcgui.ControlLabel(SX*(parent.blockX+170),SY*(parent.blockY+27), SX*100,SY*25,"",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.chkGhostPiece = xbmcgui.ControlCheckMark(SX*(parent.blockX+25),SY*(parent.blockY+230), SX*100,SY*25,_(11),font='font14',focusTexture=IMAGE_DIR+"check-box.png",noFocusTexture=IMAGE_DIR+"check-box-nofocus.png",checkWidth=24,checkHeight=24)
 		self.addControl(self.lblHighScoreName)
 		self.addControl(self.lblHighScore)
 		self.addControl(self.chkGhostPiece)
@@ -359,10 +382,9 @@ class Tetris(xbmcgui.WindowDialog):
 		self.dlgPause = PauseDialog(parent=self)
 		self.dlgGame= scores.GameDialog(gamename='Tetris',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
-		self.gravityDelay = time.clock() 
 		self.state = STATE_READY
 		
-		self.addControl(xbmcgui.ControlImage(self.blockX-111,self.blockY-20,320,445, IMAGE_DIR+'background.png'))
+		self.addControl(xbmcgui.ControlImage(SX*(self.blockX-111),SY*(self.blockY-20),SX*320,SY*445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
 		self.imgNextPiece = []
@@ -383,7 +405,7 @@ class Tetris(xbmcgui.WindowDialog):
 	def drawBloom(self,msg,x,y,duration=45,font='font12'):
 		def SubProc(window,msg,x,y,duration,font):
 			LOG("dsb 3a")
-			lbl = xbmcgui.ControlLabel(x,y,200,25,msg,font)
+			lbl = xbmcgui.ControlLabel(SX*x,SY*y,SX*200,SY*25,msg,font)
 			window.addControl(lbl)
 			amp = random.uniform(2,6)
 			if random.randint(0,1): amp = -amp
@@ -394,7 +416,7 @@ class Tetris(xbmcgui.WindowDialog):
 				if window.state == STATE_QUITTING:
 					lock.release()
 					return
-				lbl.setPosition(x+int(amp*math.sin((offset+float(i))/freq)),y-i)
+				lbl.setPosition(SX*(x+int(amp*math.sin((offset+float(i))/freq))),SY*(y-i))
 				lock.release()
 				time.sleep(.016)
 			window.removeControl(lbl)
@@ -448,18 +470,18 @@ class Tetris(xbmcgui.WindowDialog):
 	def renderLabels(self):
 		x = self.blockX - 100
 		y = self.blockY + 60
-		self.addControl(xbmcgui.ControlLabel(x,y,455,20,'Lines:','font12','FFFFFF00'))
-		self.lblLines   = xbmcgui.ControlLabel(x+80,y,40,20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.addControl(xbmcgui.ControlLabel(SX*x,SY*y,SX*455,SY*20,_(30),'font12','FFFFFF00'))
+		self.lblLines   = xbmcgui.ControlLabel(x+80,SY*y,SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
 		self.addControl(self.lblLines)
-		self.addControl(xbmcgui.ControlLabel(x,y+20,455,20,'Score:','font12','FFFFFF00'))
-		self.lblScore   = xbmcgui.ControlLabel(x+80,y+20,40,20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.addControl(xbmcgui.ControlLabel(SX*x,SY*(y+20),SX*455,SY*20,_(31),'font12','FFFFFF00'))
+		self.lblScore   = xbmcgui.ControlLabel(SX*(x+80),SY*(y+20),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
 		self.addControl(self.lblScore)
-		self.addControl(xbmcgui.ControlLabel(x,y+40,455,20,'Level:','font12','FFFFFF00'))
-		self.lblLevel   = xbmcgui.ControlLabel(x+80,y+40,40,20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.addControl(xbmcgui.ControlLabel(SX*(x),SY*(y+40),SX*455,SY*20,_(32),'font12','FFFFFF00'))
+		self.lblLevel   = xbmcgui.ControlLabel(SX*(x+80),SY*(y+40),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
 		self.addControl(self.lblLevel)
 		self.lblPieceCount = []
 		for i in range(len(PIECETYPE)):
-			self.lblPieceCount.append(xbmcgui.ControlLabel(x+80,self.blockY+130+40*i,40,20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT))
+			self.lblPieceCount.append(xbmcgui.ControlLabel(SX*(x+80),SY*(self.blockY+130+40*i),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT))
 			self.addControl(self.lblPieceCount[-1])
 			
  	
@@ -515,8 +537,8 @@ class Tetris(xbmcgui.WindowDialog):
 		
 
  	def blockImage(self,i,j,color,blockX,blockY,spacing,size):
- 		return xbmcgui.ControlImage(blockX + (size + spacing)*j, blockY + (size + spacing)*i,
-									size, size, IMAGE_DIR+"block_"+COLORS[color]+'.jpg')
+ 		return xbmcgui.ControlImage(SX*(blockX + (size + spacing)*j), SY*(blockY + (size + spacing)*i),
+									SX*size, SY*size, IMAGE_DIR+"block_"+COLORS[color]+'.jpg')
 
 	def processEvent(self,event,rows):
 		xbmcgui.lock()
@@ -593,8 +615,12 @@ class Tetris(xbmcgui.WindowDialog):
 		# The scroll actions have a very high freq
 		# decrease this frequency so we dont get bogged down with extra threads		
 		if action == ACTION_SCROLL_DOWN or action == ACTION_SCROLL_UP:  
-			if time.clock() < self.gravityDelay: 
-				return
+			LOG ("ASD - " + str(self.gravityControl) +"="+ str(time.clock()+GRAVITY_SPEED_DELAY-self.gravityControl))
+			if self.gravityControl >= GRAVITY_SPEED_DELAY: 
+				#self.gravityControl -= 1
+				if time.clock() + GRAVITY_SPEED_DELAY - self.gravityControl < GRAVITY_NEW_PIECE_DELAY:
+					return
+				self.gravityControl = 0
 			else: 
 				# this slows down the frequency			
 				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
@@ -607,10 +633,9 @@ class Tetris(xbmcgui.WindowDialog):
 
 	def onActionProc(self, action):
 		lock.acquire()
-		if self.state == STATE_QUITTING or self.state == STATE_PAUSED:
+		if self.state == STATE_QUITTING:
 			lock.release()
 			return
-
 		LOG('   OnAct lock acquired!!')
 		event = 0
 		rows = 0
@@ -631,16 +656,16 @@ class Tetris(xbmcgui.WindowDialog):
 		elif action == ACTION_SCROLL_DOWN:
 			event,rows = controller.dropPiece()
 			# give it a break after you hit bottom
-			if event == EVENT_NEW_PIECE or event == EVENT_LEVEL_UP:
+			if event == EVENT_NEW_PIECE:
 				# if we hit the ground give gravity a break for a bit 			
-				self.gravityDelay = time.clock() + GRAVITY_NEW_PIECE_DELAY
+				self.gravityControl = time.clock() + GRAVITY_NEW_PIECE_DELAY + GRAVITY_SPEED_DELAY
 		elif action == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
 	 		self.togglePause()
 		elif action == ACTION_PREVIOUS_MENU:
 			LOG('OA2: lock released')
 			self.state = STATE_QUITTING
-			self.close()
 			lock.release()
+			self.close()
 			return
 		LOG('OA2')
 		self.processEvent(event,rows)
