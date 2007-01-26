@@ -28,4 +28,5 @@ Echo Build Complete - Scroll Up to check for errors.
 Echo Final build is located in the BUILD folder.
 Echo copy: \%ScriptName%\ folder in the \BUILD\ folder.
 Echo to: /XBMC/scripts/ folder.
+
 pause
