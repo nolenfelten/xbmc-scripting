@@ -145,6 +145,7 @@ class GUIBuilder:
                 self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
                 self.pct1 = int( ( 100 - pct ) * 0.333 )
                 self.includesExist = self.LoadIncludes()
+                self.pct += self.pct1
             else:
                 self.includesExist = False
             self.pct1 = int( ( 100 - self.pct ) * 0.333 )
@@ -715,7 +716,6 @@ class GUIBuilder:
         if (not self.fastMethod):
             self.lines[self.lineno + 1]    = 'loading includes & defaults...'
             self.dlg.update(self.pct, self.lines[0], self.lines[1], self.lines[2])
-            self.pct += self.pct1
         # get the includes.xml file location if it exists
         includeFile = self.GetSkinPath( str( includeFile ) )
         # load and parse includes.xml file
