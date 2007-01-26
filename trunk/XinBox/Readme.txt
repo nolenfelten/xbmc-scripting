@@ -1,6 +1,6 @@
       ##########################
       #                        #                      
-      #   XinBox (V.0.2)       #         
+      #   XinBox (V.0.3)       #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -13,8 +13,13 @@
 
 THIS README WILL ONLY CHANGE WHEN A PUBLIC RELEASE IS RELEASED!
 
+
 Note: This is the old XBOX inBOX script - Please do a FRESH install!!
 					- Old settings.xml file should work tho.
+
+New V.0.3 Features:
+**FIXED - Script would crash on startup - caused by Data dir not being created
+**Added - French & Spanish language support :-D
 
 
 NEW FEATURES:
@@ -111,7 +116,8 @@ Thanks to the translators:
 		Swedish by blittan
 		German by Rockstarr
 		Dutch by jonkersm 
-		Spanish by El Piranna
+		French by solexalex
+		Spanish by El Piranna 
 Thanks to burriko for his original XBMCMail script.
 Thanks to blittan - emuLauncher script for some references
 Thanks to Donno - Space Invaders script for some references

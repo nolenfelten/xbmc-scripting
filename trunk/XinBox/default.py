@@ -1,7 +1,7 @@
 # -*- coding: cp1252 -*-
       ##########################
       #                        #                      
-      #   XinBox (V.0.1)       #         
+      #   XinBox (V.0.3)       #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -26,15 +26,11 @@ IMAGE_DIR = SRC_Dir + "Images\\"
 LANGFOLDER = SRC_Dir+"Language\\"
 NEWFOLDER = "NEW\\"
 CORFOLDER = "COR\\"
-
-path = os.getcwd()
-if path[-1]== ";":
-    path=path[:-1]
-    
+   
 SETTINGS_FILE = "settings.xml"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
-VERSION = "(V.0.1)"
+VERSION = "(V.0.3)"
 
 class Language:
 	"""
@@ -67,7 +63,12 @@ class Language:
 
 	def string(self,number):
 		if int(number) in self.strings:
-			return unicode (self.strings[int(number)], 'utf-8')
+                        if self.foundlang == "french":
+                                return self.strings[int(number)]
+                        elif self.foundlang == "english":
+                                return self.strings[int(number)]
+                        else:
+                                return unicode (self.strings[int(number)], 'utf-8')
 		else:
 			return "unknown string id"
 
@@ -139,7 +140,6 @@ class minis(xbmcgui.WindowDialog):
 class xbmcmail(xbmcgui.Window):
     def __init__(self):
         global lang
-
         lang = Language()
         lang.load(LANGFOLDER)
         self.fullscreen = False
@@ -347,8 +347,8 @@ class xbmcmail(xbmcgui.Window):
             del m
 
     def startup(self):
-        self.gettally()
         self.define()
+        self.gettally()
         self.readconfig()
         self.writeconfig()
         if self.MasterPassEnable == "yes": 
@@ -377,6 +377,10 @@ class xbmcmail(xbmcgui.Window):
         self.firsttime = 0
         Inbox1 = "stage0"
         Inbox2 = "stage0"
+        try:
+                os.mkdir(DATA_DIR)
+                os.mkdir(TEMPFOLDER)
+        except:pass
         return      
 
     def masspasswsetup(self):
@@ -580,46 +584,9 @@ class xbmcmail(xbmcgui.Window):
         self.settingsmenu()
         
     def mainmenu(self):	
-        #self.media()
         self.readconfig()
         self.setFocus(self.cmButton)
-
-    def media(self):
-        if xbmc.Player().isPlayingAudio():
-            while xbmc.Player().isPlayingAudio():
-                self.fadelabel = xbmcgui.ControlFadeLabel(65, 525,130,109, "font10")
-                self.addControl(self.fadelabel)
-                musicrectangle = xbmcgui.ControlImage(60,381,110,120, "blue_rectangle_music.png")
-                self.addControl(musicrectangle)
-                playtimelabel = xbmcgui.ControlLabel(65, 500,100,109,'$INFO[MusicPlayer.Time]', "font13")
-                self.addControl(playtimelabel)
-                try:
-                    label = xbmc.getInfoImage("MusicPlayer.Cover")
-                except:
-                    label = "defaultAlbumCover.png"
-                musicinfo = xbmcgui.ControlImage(65,387,100,109,label)
-                self.addControl(musicinfo)
-                while xbmc.Player().isPlayingAudio():
-                    self.fadelabel.addLabel('$INFO[MusicPlayer.Artist]' + " | " + '$INFO[MusicPlayer.Title]' + " | " + '$INFO[MusicPlayer.Album]' + " | " + '$INFO[MusicPlayer.Year]')
-                return
-        elif xbmc.Player().isPlayingVideo():
-            while xbmc.Player().isPlayingVideo():
-                self.fadelabel = xbmcgui.ControlFadeLabel(65,525,130,109, "font10")
-                self.addControl(self.fadelabel)
-                musicrectangle = xbmcgui.ControlImage(60,380, 140,118, "blue_rectangle_video.png")
-                self.addControl(musicrectangle)
-                playtimelabel = xbmcgui.ControlLabel(65, 500,100,109,'$INFO[VideoPlayer.Time]', "font13")
-                self.addControl(playtimelabel)
-               # musicinfo = xbmcgui.videowindow(65,387,100,109)
-               # self.addControl(musicinfo)
-                while xbmc.Player().isPlayingAudio():
-                    self.fadelabel.addLabel('$INFO[VideoPlayer.Title]' + " | " + '$INFO[VideoPlayer.Year]')
-                return
-        else:
-            return
-
-
-        
+      
     def reset(self):
         self.removeControl(self.seoverlay)
         self.removeControl(self.one)
@@ -1119,8 +1086,6 @@ class xbmcmail(xbmcgui.Window):
                     if self.getFocus() == self.listControl:
                         self.deletemail()
                 except: pass
-            elif action == 18:
-                xbmc.executebuiltin("XBMC.ActivateWindow(PlayerControls)")
         except: return
         return
             
