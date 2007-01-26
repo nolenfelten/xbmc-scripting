@@ -18,7 +18,7 @@
 	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
-		<posx>260</posx>
+		<posx>255</posx>
 		<posy>145</posy>
 	</coordinates>
 
@@ -26,29 +26,29 @@
 
 		<!-- context menu -->
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Context Menu Background Top</description>
 			<posx>-5</posx>
 			<posy>-20</posy>
 			<width>190</width>
 			<height>31</height>
-			<texture>\dialog-context-top.png</texture>
+			<texture>dialog-context-top.png</texture>
 			<visible>true</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Context Menu Background Middle</description>
 			<posx>-5</posx>
 			<posy>10</posy>
 			<width>190</width>
 			<height>170</height>
-			<texture>\dialog-context-middle.png</texture>
+			<texture>dialog-context-middle.png</texture>
 			<visible>true</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Context Menu Background Bottom</description>
 			<posx>-5</posx>
@@ -58,6 +58,17 @@
 			<texture>dialog-context-bottom.png</texture>
 			<visible>true</visible>
 		</control>
+
+        <!-- ** Optional ** Do not change <description> or <type> -->
+		<!--control type="image" id="1">
+			<description>Context Menu Background Middle</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>229</height>
+			<texture>\dialog-panel.png</texture>
+			<visible>true</visible>
+		</control-->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="1000">
@@ -73,8 +84,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1000</onleft>
 			<onright>1000</onright>
 			<onup>1050</onup>
@@ -96,8 +107,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1010</onleft>
 			<onright>1010</onright>
 			<onup>1000</onup>
@@ -119,8 +130,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1020</onleft>
 			<onright>1020</onright>
 			<onup>1010</onup>
@@ -142,8 +153,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1030</onleft>
 			<onright>1030</onright>
 			<onup>1020</onup>
@@ -165,8 +176,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1040</onleft>
 			<onright>1040</onright>
 			<onup>1030</onup>
@@ -188,8 +199,8 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<texturenofocus>button-nofocus.png</texturenofocus>
+			<texturefocus>button-focus.png</texturefocus>
 			<onleft>1050</onleft>
 			<onright>1050</onright>
 			<onup>1040</onup>

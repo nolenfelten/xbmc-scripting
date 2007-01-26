@@ -28,12 +28,34 @@
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="1">
-			<description>Context Menu Background</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>180</width>
-			<height>229</height>
-			<texture>\dialog-panel.png</texture>
+			<description>Context Menu Background Top</description>
+			<posx>-5</posx>
+			<posy>-20</posy>
+			<width>190</width>
+			<height>31</height>
+			<texture>\dialog-context-top.png</texture>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Context Menu Background Middle</description>
+			<posx>-5</posx>
+			<posy>10</posy>
+			<width>190</width>
+			<height>170</height>
+			<texture>\dialog-context-middle.png</texture>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Context Menu Background Bottom</description>
+			<posx>-5</posx>
+			<posy>180</posy>
+			<width>190</width>
+			<height>37</height>
+			<texture>dialog-context-bottom.png</texture>
 			<visible>true</visible>
 		</control>
 

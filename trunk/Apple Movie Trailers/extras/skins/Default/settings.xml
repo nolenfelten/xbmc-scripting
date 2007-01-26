@@ -368,9 +368,20 @@
 
 		<!-- credits dialog -->
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional ** Do not change <description> or <type> -->
 		<control type="image" id="600">
-			<description>Credits Image</description>
+			<description>Credits Image Top</description>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>280</width>
+			<height>290</height>
+			<texture>-</texture>
+			<visible>false</visible>
+		</control>
+		
+        <!-- ** Optional ** Do not change <description> or <type> -->
+		<control type="image" id="601">
+			<description>Credits Image Middle</description>
 			<posx>60</posx>
 			<posy>40</posy>
 			<width>280</width>
@@ -378,9 +389,20 @@
 			<texture>\dialog-panel.png</texture>
 			<visible>false</visible>
 		</control>
+		
+        <!-- ** Optional ** Do not change <description> or <type> -->
+		<control type="image" id="602">
+			<description>Credits Image Bottom</description>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>280</width>
+			<height>290</height>
+			<texture>-</texture>
+			<visible>false</visible>
+		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="601">
+		<control type="label" id="603">
 			<description>Credits Label</description>
 			<posx>75</posx>
 			<posy>48</posy>
@@ -393,7 +415,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="602">
+		<control type="label" id="604">
 			<description>Credits Version Label</description>
 			<posx>330</posx>
 			<posy>48</posy>
@@ -406,7 +428,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="603">
+		<control type="label" id="605">
 			<description>Team Credits Label</description>
 			<posx>85</posx>
 			<posy>80</posy>
@@ -419,7 +441,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="604">
+		<control type="list" id="606">
 			<description>Team Credits List</description>
 			<posx>73</posx>
 			<posy>100</posy>
@@ -450,7 +472,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="605">
+		<control type="label" id="607">
 			<description>Additional Credits Label</description>
 			<posx>85</posx>
 			<posy>170</posy>
@@ -463,7 +485,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="606">
+		<control type="list" id="608">
 			<description>Additional Credits List</description>
 			<posx>73</posx>
 			<posy>190</posy>
@@ -500,7 +522,7 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="607">
+		<control type="label" id="609">
 			<description>Skin Credits Label</description>
 			<posx>85</posx>
 			<posy>260</posy>
@@ -516,7 +538,7 @@
 		<!-- This control is where you add your credits.
 				( <label> for left column and <label2> for right column )
 				( you may have multiple <label> and <label2> tags )-->
-		<control type="list" id="608">
+		<control type="list" id="610">
 			<description>Skin Credits List</description>
 			<posx>73</posx>
 			<posy>280</posy>
