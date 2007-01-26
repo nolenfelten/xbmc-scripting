@@ -251,6 +251,7 @@ class GUI( xbmcgui.Window ):
             self.controls['%s Scrollbar Middle' % ( list_control, )]['control'].setVisible( visible or visible2 )
             self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible )
             self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setVisible( visible )
+            self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setEnabled( visible )
             self.controls['%s Scrollbar Up Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
             self.controls['%s Scrollbar Down Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
         except: pass
