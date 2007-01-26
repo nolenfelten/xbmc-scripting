@@ -192,7 +192,13 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setCreditsVisibility( self, visible ):
         try:
-            self.controls['Credits Image']['control'].setVisible( visible )
+            xbmcgui.lock()
+            try: self.controls['Credits Image Top']['control'].setVisible( visible )
+            except: pass
+            try: self.controls['Credits Image Middle']['control'].setVisible( visible )
+            except: pass
+            try: self.controls['Credits Image Bottom']['control'].setVisible( visible )
+            except: pass
             self.controls['Credits Label']['control'].setVisible( visible )
             self.controls['Credits Version Label']['control'].setVisible( visible )
             self.controls['Team Credits Label']['control'].setVisible( visible )
@@ -202,6 +208,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Skin Credits Label']['control'].setVisible( visible )
             self.controls['Skin Credits List']['control'].setVisible( visible )
         except: print 'Credits Removed'
+        xbmcgui.unlock()
             
     def updateScript( self ):
         import update

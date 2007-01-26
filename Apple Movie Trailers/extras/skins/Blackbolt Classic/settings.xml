@@ -16,7 +16,7 @@
 -->
 	
 	<defaultcontrol>10</defaultcontrol>
-	<resolution>PAL16x9</resolution>
+	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
@@ -34,38 +34,65 @@
 			<texture>\black.png</texture>
 		</control>
 
-		<control type="image" id="1">
-			<posx>-25</posx>
-			<posy>-11</posy>
-			<width>446</width>
-			<height>406</height>
-			<texture>\background-settings_16x9.png</texture>
+		<control type="image">
+			<description>Dialog Header</description>
+			<posx>-70</posx>
+			<posy>-42</posy>
+			<width>315</width>
+			<height>180</height>
+			<texture>dialog_top.png</texture>
+			<animation effect="slide" time="150" start="120,120" end="0,0" delay="0" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 		</control>
+		
+        <control type="image">
+			<description>Dialog Text Area</description>
+			<posx>-30</posx>
+			<posy>-2</posy>
+			<width>490</width>
+			<height>360</height>
+			<texture border="5">dialog_middle.png</texture>
+			<animation effect="zoom" time="150" start="137,127,250,120" end="40,40,490,360" delay="0" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+		</control>
+		
+        <control type="image">
+			<description>Dialog Footer</description>
+			<posx>183</posx>
+			<posy>237</posy>
+			<width>310</width>
+			<height>160</height>
+			<texture>dialog_bottom.png</texture>
+			<animation effect="slide" time="150" start="-120,-120" end="0,0" delay="0" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+		</control>
+
 
 		<!-- labels -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="1">
+		<control type="button" id="1">
 			<description>Title Label</description>
-			<posx>10</posx>
-			<posy>6</posy>
-			<width>280</width>
+			<posx>-15</posx>
+			<posy>3</posy>
+   			<font>font14</font>
+			<width>350</width>
 			<align>left</align>
-			<font>special13</font>
-			<textcolor>DDced8da</textcolor>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>0</label>
+            <texturenofocus>-</texturenofocus>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="1">
+		<control type="button" id="1">
 			<description>Version Label</description>
-			<posx>400</posx>
-			<posy>6</posy>
-			<width>150</width>
+			<posx>245</posx>
+			<posy>3</posy>
+			<font>font14</font>
+			<width>200</width>
 			<align>right</align>
-			<font>special13</font>
-			<textcolor>DDced8da</textcolor>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>-</label>
+            <texturenofocus>-</texturenofocus>
 		</control>
 
 		<!-- buttons -->
@@ -73,40 +100,44 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
 			<description>Skin Button</description>
-			<posx>0</posx>
-			<posy>70</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>65</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
-			<onup>200</onup>
+			<onup>60</onup>
 			<ondown>20</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
 			<description>Trailer Quality Button</description>
-			<posx>0</posx>
-			<posy>105</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>97</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
@@ -115,19 +146,21 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
 			<description>Mode Button</description>
-			<posx>0</posx>
-			<posy>140</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>129</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
@@ -136,20 +169,21 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Save Folder Button</description>
-			<posx>0</posx>
-			<posy>175</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>161</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
@@ -158,19 +192,21 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Startup Category Button</description>
-			<posx>0</posx>
-			<posy>210</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>193</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
@@ -179,108 +215,116 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
 			<description>Thumbnail Display Button</description>
-			<posx>0</posx>
-			<posy>245</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-15</posx>
+			<posy>225</posy>
+			<width>365</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>50</onup>
-			<ondown>200</ondown>
+			<ondown>10</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="200">
 			<description>Update Button</description>
-			<posx>-3</posx>
-			<posy>325</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>center</align>
+            <posx>355</posx>
+            <posy>145</posy>
+            <width>90</width>
+            <height>33</height>
+            <font>font12</font>
+            <align>center</align>
 			<aligny>center</aligny>
 			<label>208</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>150</onleft>
-			<onright>210</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>button-focus.png</texturefocus>
+            <texturenofocus>button-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>150</onup>
+			<ondown>210</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="210">
 			<description>Credits Button</description>
-			<posx>92</posx>
-			<posy>325</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>center</align>
+            <posx>355</posx>
+            <posy>185</posy>
+            <width>90</width>
+            <height>33</height>
+            <font>font12</font>
+            <align>center</align>
 			<aligny>center</aligny>
 			<label>209</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>200</onleft>
-			<onright>100</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>button-focus.png</texturefocus>
+            <texturenofocus>button-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>200</onup>
+			<ondown>100</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="100">
 			<description>Ok Button</description>
-			<posx>223</posx>
-			<posy>325</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>center</align>
+            <posx>355</posx>
+            <posy>65</posy>
+            <width>90</width>
+            <height>33</height>
+            <font>font12</font>
+            <align>center</align>
 			<aligny>center</aligny>
 			<label>210</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>210</onleft>
-			<onright>150</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>button-focus.png</texturefocus>
+            <texturenofocus>button-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>210</onup>
+			<ondown>150</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="150">
 			<description>Cancel Button</description>
-			<posx>318</posx>
-			<posy>325</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>center</align>
+            <posx>355</posx>
+            <posy>105</posy>
+            <width>90</width>
+            <height>33</height>
+            <font>font12</font>
+            <align>center</align>
 			<aligny>center</aligny>
 			<label>211</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>100</onleft>
-			<onright>200</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>button-focus.png</texturefocus>
+            <texturenofocus>button-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>100</onup>
+			<ondown>200</ondown>
 		</control>
 
 		<!-- skin selection dialog -->
@@ -292,19 +336,21 @@
 			<posy>70</posy>
 			<width>260</width>
 			<height>240</height>
-			<texture>\dialog-panel.png</texture>
+			<texture>dialog_middle.png</texture>
 			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="501">
+		<control type="button" id="501">
 			<description>Popup Label</description>
 			<posx>85</posx>
 			<posy>78</posy>
 			<width>150</width>
 			<align>left</align>
 			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
+            <textoffsetx>0</textoffsetx>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>214</label>
 			<visible>false</visible>
 		</control>
@@ -322,7 +368,7 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="503">
+		<control type="button" id="503">
 			<description>Popup Warning Label</description>
 			<posx>195</posx>
 			<posy>188</posy>
@@ -330,7 +376,9 @@
 			<height>20</height>
 			<align>center</align>
 			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
+            <textoffsetx>0</textoffsetx>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>212</label>
 			<visible>false</visible>
 		</control>
@@ -341,21 +389,22 @@
 			<posx>83</posx>
 			<posy>115</posy>
 			<width>110</width>
-			<height>170</height>
+			<height>208</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
-			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
 			<image>-</image>
-			<textureheight>20</textureheight>
+            <spacebetweenitems>2</spacebetweenitems>
+			<textureheight>24</textureheight>
 			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
@@ -368,74 +417,79 @@
 
 		<!-- credits dialog -->
 
-		<!-- ** Optional ** Do not change <description> or <type> -->
+        <!-- ** Optional ** Do not change <description> -->
 		<control type="image" id="600">
 			<description>Credits Image Top</description>
 			<posx>60</posx>
-			<posy>40</posy>
-			<width>280</width>
-			<height>290</height>
-			<texture>-</texture>
+			<posy>10</posy>
+			<width>300</width>
+			<height>31</height>
+			<texture>dialog-context-top.png</texture>
 			<visible>false</visible>
 		</control>
-		
+
         <!-- ** Optional ** Do not change <description> or <type> -->
 		<control type="image" id="601">
 			<description>Credits Image Middle</description>
 			<posx>60</posx>
 			<posy>40</posy>
-			<width>280</width>
+			<width>300</width>
 			<height>290</height>
-			<texture>\dialog-panel.png</texture>
+			<texture>dialog-context-middle.png</texture>
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Optional ** Do not change <description> or <type> -->
+        <!-- ** Optional ** Do not change <description> -->
 		<control type="image" id="602">
 			<description>Credits Image Bottom</description>
 			<posx>60</posx>
-			<posy>40</posy>
-			<width>280</width>
-			<height>290</height>
-			<texture>-</texture>
+            <posy>330</posy>
+			<width>300</width>
+			<height>37</height>
+			<texture>dialog-context-bottom.png</texture>
 			<visible>false</visible>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="603">
 			<description>Credits Label</description>
-			<posx>75</posx>
-			<posy>48</posy>
+			<posx>80</posx>
+			<posy>40</posy>
 			<width>175</width>
 			<align>left</align>
+            <textoffsetx>0</textoffsetx>
 			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>0</label>
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="604">
+		<!-- ** Required ** Do not change <description>-->
+		<control type="button" id="604">
 			<description>Credits Version Label</description>
-			<posx>330</posx>
-			<posy>48</posy>
+			<posx>200</posx>
+			<posy>40</posy>
 			<width>150</width>
 			<align>right</align>
+            <textoffsetx>0</textoffsetx>
 			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>-</label>
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="605">
+		<!-- ** Required ** Do not change <description> -->
+		<control type="button" id="605">
 			<description>Team Credits Label</description>
 			<posx>85</posx>
 			<posy>80</posy>
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
-			<textcolor>60ffffff</textcolor>
+            <textcolor>DDE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>101</label>
 			<visible>false</visible>
 		</control>
@@ -445,7 +499,7 @@
 			<description>Team Credits List</description>
 			<posx>73</posx>
 			<posy>100</posy>
-			<width>267</width>
+			<width>287</width>
 			<height>100</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
@@ -453,10 +507,10 @@
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
@@ -479,7 +533,8 @@
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
-			<textcolor>60ffffff</textcolor>
+            <textcolor>DDE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>102</label>
 			<visible>false</visible>
 		</control>
@@ -489,7 +544,7 @@
 			<description>Additional Credits List</description>
 			<posx>73</posx>
 			<posy>190</posy>
-			<width>267</width>
+			<width>287</width>
 			<height>100</height>
 			<label>Xbox Media Center</label>
 			<label2>Team XBMC</label2>
@@ -503,10 +558,10 @@
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
@@ -529,7 +584,8 @@
 			<width>200</width>
 			<align>left</align>
 			<font>font10</font>
-			<textcolor>60ffffff</textcolor>
+            <textcolor>DDE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<label>103</label>
 			<visible>false</visible>
 		</control>
@@ -542,20 +598,22 @@
 			<description>Skin Credits List</description>
 			<posx>73</posx>
 			<posy>280</posy>
-			<width>267</width>
+			<width>287</width>
 			<height>100</height>
 			<label>Graphics</label>
-			<label2>Chokemaniac</label2>
+			<label>XML &amp; layout</label>
+			<label2>Blackbolt &amp; Jezz_X</label2>
+			<label2>Nuka1195</label2>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>
 			<spinposy>404</spinposy>
 			<spincolor>ffffffff</spincolor>
 			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<image>-</image>
