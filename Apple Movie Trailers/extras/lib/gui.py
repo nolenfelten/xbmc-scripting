@@ -247,13 +247,11 @@ class GUI( xbmcgui.Window ):
 
     def showScrollbar( self, visible, visible2, list_control ):
         try:
-            self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible )
+            self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible or visible2 )
             self.controls['%s Scrollbar Middle' % ( list_control, )]['control'].setVisible( visible or visible2 )
-            self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible )
+            self.controls['%s Scrollbar Down Arrow' % ( list_control, )]['control'].setVisible( visible or visible2 )
             self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setVisible( visible )
             self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setEnabled( visible )
-            self.controls['%s Scrollbar Up Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
-            self.controls['%s Scrollbar Down Arrow NA' % ( list_control, )]['control'].setVisible( visible2 )
         except: pass
             
     def setScrollbarIndicator( self, list_control ):
