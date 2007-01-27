@@ -8,7 +8,7 @@
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
 	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
 	
-	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags.
+	<include> tags DO NOT work and the defaults.xml file WILL NOT be used for any missing tags.
 	
 	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
 	
@@ -106,12 +106,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>303</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
+			<ondown>20</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="11">
+			<description>Skin Button Value</description>
+			<posx>-15</posx>
+			<posy>65</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -129,12 +152,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>300</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="21">
+			<description>Trailer Quality Button Value</description>
+			<posx>-15</posx>
+			<posy>97</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -152,12 +198,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>301</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>20</onup>
+			<ondown>40</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="31">
+			<description>Mode Button Value</description>
+			<posx>-15</posx>
+			<posy>129</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -175,12 +244,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>302</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>30</onup>
+			<ondown>50</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="41">
+			<description>Save Folder Button Value</description>
+			<posx>-15</posx>
+			<posy>161</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -198,12 +290,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>304</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>40</onup>
+			<ondown>60</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="51">
+			<description>Startup Category Button Value</description>
+			<posx>-15</posx>
+			<posy>193</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -221,12 +336,35 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>-</label>
+			<label>305</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="61">
+			<description>Thumbnail Display Button Value</description>
+			<posx>-15</posx>
+			<posy>225</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
@@ -329,22 +467,46 @@
 
 		<!-- skin selection dialog -->
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="500">
-			<description>Popup Image</description>
-			<posx>70</posx>
-			<posy>70</posy>
-			<width>260</width>
-			<height>240</height>
-			<texture>dialog_middle.png</texture>
+        <!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="600">
+			<description>Popup Image Top</description>
+			<posx>60</posx>
+			<posy>10</posy>
+			<width>300</width>
+			<height>31</height>
+			<texture>dialog-context-top.png</texture>
 			<visible>false</visible>
 		</control>
 
-		<!-- ** Required ** Do not change <description> -->
-		<control type="button" id="501">
+        <!-- ** Optional ** Do not change <description> or <type> -->
+		<control type="image" id="601">
+			<description>Popup Image Middle</description>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>300</width>
+			<height>290</height>
+			<texture>dialog-context-middle.png</texture>
+			<visible>false</visible>
+		</control>
+
+        <!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="602">
+			<description>Popup Image Bottom</description>
+			<posx>60</posx>
+            <posy>330</posy>
+			<width>300</width>
+			<height>37</height>
+			<texture>dialog-context-bottom.png</texture>
+			<visible>false</visible>
+		</control>
+		
+		<!-- skin selection dialog -->
+
+    <!-- ** Required ** Do not change <description> -->
+		<control type="button" id="500">
 			<description>Popup Label</description>
-			<posx>85</posx>
-			<posy>78</posy>
+			<posx>80</posx>
+			<posy>40</posy>
 			<width>150</width>
 			<align>left</align>
 			<font>font10</font>
@@ -356,10 +518,10 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="502">
+		<control type="image" id="501">
 			<description>Popup Thumb</description>
-			<posx>195</posx>
-			<posy>113</posy>
+			<posx>220</posx>
+			<posy>80</posy>
 			<width>128</width>
 			<height>72</height>
 			<texture>-</texture>
@@ -368,10 +530,10 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control type="button" id="503">
+		<control type="button" id="502">
 			<description>Popup Warning Label</description>
-			<posx>195</posx>
-			<posy>188</posy>
+			<posx>220</posx>
+			<posy>155</posy>
 			<width>128</width>
 			<height>20</height>
 			<align>center</align>
@@ -384,11 +546,11 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="504">
+		<control type="list" id="503">
 			<description>Popup List</description>
 			<posx>83</posx>
-			<posy>115</posy>
-			<width>110</width>
+			<posy>80</posy>
+			<width>120</width>
 			<height>208</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
@@ -417,41 +579,8 @@
 
 		<!-- credits dialog -->
 
-        <!-- ** Optional ** Do not change <description> -->
-		<control type="image" id="600">
-			<description>Credits Image Top</description>
-			<posx>60</posx>
-			<posy>10</posy>
-			<width>300</width>
-			<height>31</height>
-			<texture>dialog-context-top.png</texture>
-			<visible>false</visible>
-		</control>
-
-        <!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="601">
-			<description>Credits Image Middle</description>
-			<posx>60</posx>
-			<posy>40</posy>
-			<width>300</width>
-			<height>290</height>
-			<texture>dialog-context-middle.png</texture>
-			<visible>false</visible>
-		</control>
-
-        <!-- ** Optional ** Do not change <description> -->
-		<control type="image" id="602">
-			<description>Credits Image Bottom</description>
-			<posx>60</posx>
-            <posy>330</posy>
-			<width>300</width>
-			<height>37</height>
-			<texture>dialog-context-bottom.png</texture>
-			<visible>false</visible>
-		</control>
-		
         <!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="603">
+		<control type="label" id="700">
 			<description>Credits Label</description>
 			<posx>80</posx>
 			<posy>40</posy>
@@ -466,7 +595,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description>-->
-		<control type="button" id="604">
+		<control type="button" id="701">
 			<description>Credits Version Label</description>
 			<posx>200</posx>
 			<posy>40</posy>
@@ -481,7 +610,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control type="button" id="605">
+		<control type="button" id="702">
 			<description>Team Credits Label</description>
 			<posx>85</posx>
 			<posy>80</posy>
@@ -495,7 +624,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="606">
+		<control type="list" id="703">
 			<description>Team Credits List</description>
 			<posx>73</posx>
 			<posy>100</posy>
@@ -526,7 +655,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="607">
+		<control type="label" id="704">
 			<description>Additional Credits Label</description>
 			<posx>85</posx>
 			<posy>170</posy>
@@ -540,7 +669,7 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="608">
+		<control type="list" id="705">
 			<description>Additional Credits List</description>
 			<posx>73</posx>
 			<posy>190</posy>
@@ -577,7 +706,7 @@
 		</control>
 		
 		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="609">
+		<control type="label" id="706">
 			<description>Skin Credits Label</description>
 			<posx>85</posx>
 			<posy>260</posy>
@@ -594,7 +723,7 @@
 		<!-- This control is where you add your credits.
 				( <label> for left column and <label2> for right column )
 				( you may have multiple <label> and <label2> tags )-->
-		<control type="list" id="610">
+		<control type="list" id="707">
 			<description>Skin Credits List</description>
 			<posx>73</posx>
 			<posy>280</posy>
@@ -603,7 +732,7 @@
 			<label>Graphics</label>
 			<label>XML &amp; layout</label>
 			<label2>Blackbolt &amp; Jezz_X</label2>
-			<label2>Nuka1195</label2>
+			<label2>Nuka1195 &amp; Jezz_X</label2>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>
