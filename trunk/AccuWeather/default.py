@@ -67,6 +67,8 @@ DefaultPath                                        = ExtrasPath + 'defaults\\'
 
 ACTION_MOVE_LEFT                             = 1
 ACTION_MOVE_RIGHT                        = 2
+ACTION_MOVE_UP       = 3
+ACTION_MOVE_DOWN     = 4
 ACTION_PARENT_DIR                        = 9
 ACTION_PREVIOUS_MENU                     = 10
 ACTION_WHITE_BUTTON                    = 117
@@ -111,7 +113,7 @@ class window(xbmcgui.Window):
         else: xml_file = 'skin.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey = False, 
-            title = __title__, line1 = __line1__, dlg = dialog, pct = pct, useLocal = False, debug = True )
+            title = __title__, line1 = __line1__, dlg = dialog, pct = pct, useLocal = False, debug = False )
         closeProgessDialog()
         if ( not self.SUCCEEDED ):
             xbmcgui.Dialog().ok( __title__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
@@ -824,6 +826,22 @@ class window(xbmcgui.Window):
         self.close()
 
 
+    def displayArrows( self, button ):
+        xbmcgui.lock()
+        try:
+            if ( button ):
+                left_x = self.controls[100]['control'].getPosition()[ 0 ]
+                right_x = self.controls[101]['control'].getPosition()[ 0 ]
+                y = self.controls[ button ][ 'control' ].getPosition()[1]
+                y += int( ( self.controls[ button ][ 'control' ].getHeight() - self.controls[ 100 ][ 'control' ].getHeight() ) / 2)
+                self.controls[100]['control'].setPosition( left_x, y )
+                self.controls[101]['control'].setPosition( right_x, y )
+            self.controls[100]['control'].setVisible( button )
+            self.controls[101]['control'].setVisible( button )
+        except: pass
+        xbmcgui.unlock()
+        
+        
     def onAction(self, action):
         if (action == ACTION_PARENT_DIR or action == ACTION_PREVIOUS_MENU): self.exitScript()
         elif (action == ACTION_WHITE_BUTTON or action == ACTION_Y_BUTTON): self.refreshMap()
@@ -835,6 +853,14 @@ class window(xbmcgui.Window):
             elif (c == self.controls[12]['control']): self.switchType(x)
             elif (c == self.controls[13]['control']): self.switchAnimate()
             elif (c == self.controls[14]['control']): self.switchFrame(x)
+        elif (action == ACTION_MOVE_UP or action == ACTION_MOVE_DOWN):
+            c = self.getFocus()
+            if (c == self.controls[10]['control']): self.displayArrows( 10 )#exec self.controls[10]['onfocus']
+            elif (c == self.controls[11]['control']): self.displayArrows( 11 )#exec self.controls[11]['onfocus']
+            elif (c == self.controls[12]['control']): self.displayArrows( 12 )#exec self.controls[12]['onfocus']
+            elif (c == self.controls[13]['control']): self.displayArrows( 13 )#exec self.controls[13]['onfocus']
+            elif (c == self.controls[14]['control']): self.displayArrows( 14 )#exec self.controls[14]['onfocus']
+            elif (c == self.controls[15]['control']): self.displayArrows( False )#exec self.controls[15]['onfocus']
 
 
     def onControl(self, control):

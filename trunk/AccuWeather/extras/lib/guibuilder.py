@@ -71,10 +71,7 @@ GUI Builder creates two variables: self.coordinates[x, y] and self.controls{key 
 			'id'				: integer - <id> tag.
 			'controlId'	: integer - Id# XBMC uses for the control.
 			'control'		: <control object> - The control itself.
-			'posx'			: integer - x coordinate of control.
-			'posy'			: integer - y coordinate of control.
-			'width'		: integer - width of control.
-			'height'		: integer - height of control.
+			'special'		: integer - Used for list control. (number of items per page)
 			'visible'		: string - <visible> condition.
 			'animation'	: dictionary - <animation> (not used yet).
 			'onclick'		: string - <onclick> event. (eg <onclick>self.exitScript(True)</onclick>)
@@ -82,15 +79,18 @@ GUI Builder creates two variables: self.coordinates[x, y] and self.controls{key 
 		}
 
 	example: How to center zoom a control 20%. w/useDescAsKey=True
-		width = self.controls['Play Button']['width'] * 1.2
-		height = self.controls['Play Button']['height'] * 1.2
-		widthOffset = int((width - self.controls['Play Button']['width']) / 2)
-		heightOffset = int((height - self.controls['Play Button']['height']) / 2)
-		x = self.controls['Play Button']['posx'] + self.coordinates[0] - widthOffset
-		y = self.controls['Play Button']['posy'] + self.coordinates[1] - heightOffset
+		width = self.controls['Play Button']['control'].getWidth()
+		height = self.controls['Play Button']['control'].getHeight()
+		zwidth = width * 1.2
+		zheight = height * 1.2
+		widthOffset = int((zwidth - width) / 2)
+		heightOffset = int((zheight - height) / 2)
+		x, y = self.controls['Play Button']['control'].getPosition()
+		x -= widthOffset
+		y -= heightOffset
 		self.controls['Play Button']['control'].setPosition(x, y)
-		self.controls['Play Button']['control'].setWidth(width)
-		self.controls['Play Button']['control'].setWidth(height)
+		self.controls['Play Button']['control'].setWidth(zwidth)
+		self.controls['Play Button']['control'].setHeight(zheight)
 
 	example: [visible] w/useDescAsKey=False
 		- self.controls[300]['control'].setVisible(xbmc.getCondVisibility(self.controls[300]['visible']))
@@ -300,12 +300,12 @@ class GUIBuilder:
                     'controlId'	: ctl.getId(),
                     'control'		: ctl,
                     'special'		: control[ 'special' ],
-                    'posx'			: int( control[ 'posx' ] ),
-                    'posy'			: int( control[ 'posy' ] ),
-                    'width'		: int( control[ 'width' ] ),
-                    'height'		: int( control[ 'height' ] ),
+                    #'posx'			: int( control[ 'posx' ] ),
+                    #'posy'			: int( control[ 'posy' ] ),
+                    #'width'		: int( control[ 'width' ] ),
+                    #'height'		: int( control[ 'height' ] ),
                     'visible'		: control[ 'visible' ].lower(),
-                    'animation'	: control[ 'animation' ],
+                    #'animation'	: control[ 'animation' ],
                     'onclick'		: control[ 'onclick' ],
                     'onfocus'	: control[ 'onfocus' ]
                 }
