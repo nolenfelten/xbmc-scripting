@@ -71,6 +71,7 @@ GUI Builder creates two variables: self.coordinates[x, y] and self.controls{key 
 			'id'				: integer - <id> tag.
 			'controlId'	: integer - Id# XBMC uses for the control.
 			'control'		: <control object> - The control itself.
+			'special'		: integer - Used for list control. (number of items per page)
 			'visible'		: string - <visible> condition.
 			'animation'	: dictionary - <animation> (not used yet).
 			'onclick'		: string - <onclick> event. (eg <onclick>self.exitScript(True)</onclick>)
