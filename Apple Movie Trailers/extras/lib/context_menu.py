@@ -52,14 +52,13 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Context Menu Button6']['control'].setLabel( self._( 509 ) )
     
     def setMenuPosition( self ):
-        button_height = self.controls['Context Menu Button1']['height'] + 2
-        height = ( 5 + self.saved ) * self.controls['Context Menu Button1']['height']
+        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight()#['height'] + 2
+        height = ( 5 + self.saved ) * self.controls['Context Menu Button1'][ 'control' ].getHeight()#['height']
         #height -=  ( button_height * ( not self.saved ) )
         self.controls['Context Menu Background Middle']['control'].setHeight( height )
-        x = self.controls['Context Menu Background Bottom']['posx'] + self.coordinates[ 0 ]
-        y = self.controls['Context Menu Background Middle']['posy'] + height + self.coordinates[ 1 ]
-        print self.coordinates
-        print x,y
+        
+        x = self.controls['Context Menu Background Bottom'][ 'control' ].getPosition()[ 0 ] #+ self.coordinates[ 0 ]
+        y = self.controls['Context Menu Background Middle'][ 'control' ].getPosition()[ 1 ] + height #+ self.coordinates[ 1 ]
         self.controls['Context Menu Background Bottom']['control'].setPosition( x, y )
     
     def setMenuVisibility( self ):
