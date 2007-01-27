@@ -234,7 +234,7 @@
 			<posx>485</posx>
 			<posy>121</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -243,9 +243,9 @@
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Middle</description>
 			<posx>485</posx>
-			<posy>137</posy>
+			<posy>141</posy>
 			<width>16</width>
-			<height>224</height>
+			<height>216</height>
 			<texture>scrollbar_background.png</texture>
 			<visible>false</visible>
 		</control>
@@ -254,9 +254,9 @@
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Down Arrow</description>
 			<posx>485</posx>
-			<posy>361</posy>
+			<posy>357</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -266,9 +266,9 @@
 			<description>Trailer List Scrollbar Position Indicator</description>
 			<label>-</label>
 			<posx>485</posx>
-			<posy>137</posy>
+			<posy>141</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texturefocus>scrollbar_focus.png</texturefocus>
 			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
 			<font>font13</font>
@@ -347,7 +347,7 @@
 			<posx>660</posx>
 			<posy>121</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -356,9 +356,9 @@
 		<control type="image" id="1">
 			<description>Category List Scrollbar Middle</description>
 			<posx>660</posx>
-			<posy>137</posy>
+			<posy>141</posy>
 			<width>16</width>
-			<height>352</height>
+			<height>344</height>
 			<texture>scrollbar_background.png</texture>
 			<visible>false</visible>
 		</control>
@@ -367,9 +367,9 @@
 		<control type="image" id="1">
 			<description>Category List Scrollbar Down Arrow</description>
 			<posx>660</posx>
-			<posy>489</posy>
+			<posy>485</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -379,9 +379,9 @@
 			<description>Category List Scrollbar Position Indicator</description>
 			<label>-</label>
 			<posx>660</posx>
-			<posy>137</posy>
+			<posy>141</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texturefocus>scrollbar_focus.png</texturefocus>
 			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
 			<font>font13</font>
@@ -456,19 +456,6 @@
 		<!-- info controls -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="200">
-			<description>Poster Backdrop</description>
-			<posx>515</posx>
-			<posy>110</posy>
-			<width>150</width>
-			<height>295</height>
-			<texture>setback.png</texture>
-			<aspectratio>stretch</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="201">
 			<description>Trailer Poster</description>
 			<posx>500</posx>
@@ -482,6 +469,20 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="200">
+			<description>Poster Backdrop</description>
+			<posx>515</posx>
+			<posy>110</posy>
+			<width>150</width>
+			<height>295</height>
+			<texture>setback.png</texture>
+			<aspectratio>stretch</aspectratio>
+			<colordiffuse>90FFFFFF</colordiffuse>
+            <!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="202">
 			<description>Trailer Rating</description>
 			<posx>520</posx>
@@ -629,7 +630,7 @@
 			<posx>650</posx>
 			<posy>428</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -638,9 +639,9 @@
 		<control type="image" id="1">
 			<description>Cast List Scrollbar Middle</description>
 			<posx>650</posx>
-			<posy>444</posy>
+			<posy>448</posy>
 			<width>16</width>
-			<height>64</height>
+			<height>56</height>
 			<texture>scrollbar_background.png</texture>
 			<visible>false</visible>
 		</control>
@@ -649,9 +650,9 @@
 		<control type="image" id="1">
 			<description>Cast List Scrollbar Down Arrow</description>
 			<posx>650</posx>
-			<posy>508</posy>
+			<posy>504</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
 			<visible>false</visible>
 		</control>
@@ -663,7 +664,7 @@
 			<posx>650</posx>
 			<posy>428</posy>
 			<width>16</width>
-			<height>16</height>
+			<height>20</height>
 			<texturefocus>scrollbar_focus.png</texturefocus>
 			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
 			<font>font13</font>
