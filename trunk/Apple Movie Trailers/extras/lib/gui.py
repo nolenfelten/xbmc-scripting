@@ -258,9 +258,9 @@ class GUI( xbmcgui.Window ):
         try:
             if ( self.controls[list_control]['special'] ):
                 if ( self.controls[list_control]['control'].size() > int( self.controls[list_control]['special'] ) ):
-                    offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )]['height'] - self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['height'] ) / float( self.controls[list_control]['control'].size() - 1 )
-                    posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )]['posy'] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
-                    self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['posx'] + self.coordinates[0], posy + self.coordinates[1] )
+                    offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getHeight() - self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getHeight() ) / float( self.controls[list_control]['control'].size() - 1 )
+                    posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getPosition()[ 1 ] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
+                    self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getPosition()[ 0 ], posy )
         except: pass
             
     def setSelection( self, list_control, pos = 0 ):
@@ -406,15 +406,15 @@ class GUI( xbmcgui.Window ):
             xbmcgui.unlock()
         
     def showOverlays( self, trailer ):
-        posx = self.controls['Trailer Favorite Overlay']['posx'] + self.coordinates[0]
-        posy = self.controls['Trailer Favorite Overlay']['posy'] + self.coordinates[1]
+        posx, posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()# + self.coordinates[0]
+        #posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()[ 1 ]# + self.coordinates[1]
         favorite = self.trailers.movies[trailer].favorite
         self.controls['Trailer Favorite Overlay']['control'].setVisible( favorite )
-        posx = posx - ( favorite * self.controls['Trailer Favorite Overlay']['width'] )
+        posx = posx - ( favorite * self.controls['Trailer Favorite Overlay'][ 'control' ].getWidth() )
         watched = self.trailers.movies[trailer].watched > 0
         self.controls['Trailer Watched Overlay']['control'].setPosition( posx, posy )
         self.controls['Trailer Watched Overlay']['control'].setVisible( watched )
-        posx = posx - ( watched * self.controls['Trailer Watched Overlay']['width'] )
+        posx = posx - ( watched * self.controls['Trailer Watched Overlay'][ 'control' ].getWidth() )
         saved = ( self.trailers.movies[trailer].saved != '' )
         self.controls['Trailer Saved Overlay']['control'].setPosition( posx, posy )
         self.controls['Trailer Saved Overlay']['control'].setVisible( saved )

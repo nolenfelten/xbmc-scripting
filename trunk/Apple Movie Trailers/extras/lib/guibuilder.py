@@ -300,12 +300,12 @@ class GUIBuilder:
                     'controlId'	: ctl.getId(),
                     'control'		: ctl,
                     'special'		: control[ 'special' ],
-                    'posx'			: int( control[ 'posx' ] ),
-                    'posy'			: int( control[ 'posy' ] ),
-                    'width'		: int( control[ 'width' ] ),
-                    'height'		: int( control[ 'height' ] ),
+                    #'posx'			: int( control[ 'posx' ] ),
+                    #'posy'			: int( control[ 'posy' ] ),
+                    #'width'		: int( control[ 'width' ] ),
+                    #'height'		: int( control[ 'height' ] ),
                     'visible'		: control[ 'visible' ].lower(),
-                    'animation'	: control[ 'animation' ],
+                    #'animation'	: control[ 'animation' ],
                     'onclick'		: control[ 'onclick' ],
                     'onfocus'	: control[ 'onfocus' ]
                 }
