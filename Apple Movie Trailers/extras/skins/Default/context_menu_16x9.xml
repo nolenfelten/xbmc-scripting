@@ -8,7 +8,7 @@
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
 	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
 	
-	<include> tags DO NOT work and the reference.xml file WILL NOT be used for any missing tags.
+	<include> tags DO NOT work and the defaults.xml file WILL NOT be used for any missing tags.
 	
 	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
 	

@@ -1,8 +1,8 @@
 <window>
 
 <!--
-    The <resolution> tag is used for the setCoordinateResolution() function.
-    
+	The <resolution> tag is used for the setCoordinateResolution() function.
+	
 	You may move, add or delete any controls you want as long as they're not Required.
 	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
@@ -14,7 +14,7 @@
 	<type>list</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
 	in place of the spinner control.
 	
-	<include> tags work and the reference.xml file will be used for any missing tags.
+	<include> tags work and the defaults.xml file will be used for any missing tags.
 	
 	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
 	
@@ -34,7 +34,7 @@
 			<texture>background.png</texture>
 		</control>
 
-        <include>Anakin_Image</include>
+		<include>Anakin_Image</include>
 		<include>XBMC_Logo_Image</include>
 
 		<!-- labels -->
@@ -49,8 +49,8 @@
 			<font>font14</font>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            <textoffsetx>0</textoffsetx>
-            <include>textcolor-yellow</include>
+			<textoffsetx>0</textoffsetx>
+			<include>textcolor-yellow</include>
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
@@ -65,36 +65,36 @@
 			<font>font14</font>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            <textoffsetx>0</textoffsetx>
+			<textoffsetx>0</textoffsetx>
 			<include>textcolor-yellow</include>
 		</control>
 
-        <control type="image">
-            <description>panel</description>
-            <posx>45</posx>
-            <posy>115</posy>
-            <height>390</height>
-            <width>150</width>
-            <texture>panel.png</texture>
-        </control>
-        <control type="image">
-            <description>Middle panel Bar</description>
-            <posx>45</posx>
-            <posy>231</posy>
-            <height>20</height>
-            <width>150</width>
-            <texture>middle-bar.png</texture>
-        </control>
-        <control type="image">
-            <description>Middle panel Bar</description>
-            <posx>45</posx>
-            <posy>371</posy>
-            <height>20</height>
-            <width>150</width>
-            <texture>middle-bar.png</texture>
-        </control>
+		<control type="image">
+			<description>panel</description>
+			<posx>45</posx>
+			<posy>115</posy>
+			<height>390</height>
+			<width>150</width>
+			<texture>panel.png</texture>
+		</control>
+		<control type="image">
+			<description>Middle panel Bar</description>
+			<posx>45</posx>
+			<posy>231</posy>
+			<height>20</height>
+			<width>150</width>
+			<texture>middle-bar.png</texture>
+		</control>
+		<control type="image">
+			<description>Middle panel Bar</description>
+			<posx>45</posx>
+			<posy>371</posy>
+			<height>20</height>
+			<width>150</width>
+			<texture>middle-bar.png</texture>
+		</control>
 
-        <!-- Buttons -->
+		<!-- Buttons -->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
@@ -227,7 +227,7 @@
 		</control>
 
 		<!-- Trailer list controls -->
-        
+		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Up Arrow</description>
@@ -324,8 +324,8 @@
 			<posy>121</posy>
 			<width>270</width>
 			<height>288</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
+			<include>textcolor-white</include>
+			<include>textcolor-selected</include>
 			<textureup>scroll-up.png</textureup>
 			<texturedown>scroll-down.png</texturedown>
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
@@ -361,8 +361,8 @@
 			<visible>false</visible>
 		</control>
 
-        <!-- Category list controls -->
-        
+		<!-- Category list controls -->
+		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Category List Scrollbar Up Arrow</description>
@@ -460,8 +460,8 @@
 			<posy>121</posy>
 			<width>445</width>
 			<height>416</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
+			<include>textcolor-white</include>
+			<include>textcolor-selected</include>
 			<textureup>scroll-up.png</textureup>
 			<texturedown>scroll-down.png</texturedown>
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
@@ -588,8 +588,8 @@
 			<font>font13</font>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            <textoffsetx>0</textoffsetx>
-            <include>textcolor-yellow</include>
+			<textoffsetx>0</textoffsetx>
+			<include>textcolor-yellow</include>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
@@ -763,8 +763,8 @@
 			<posy>428</posy>
 			<width>435</width>
 			<height>128</height>
-            <include>textcolor-white</include>
-            <include>textcolor-selected</include>
+			<include>textcolor-white</include>
+			<include>textcolor-selected</include>
 			<textureup>scroll-up.png</textureup>
 			<texturedown>scroll-down.png</texturedown>
 			<textureupfocus>scroll-up-focus.png</textureupfocus>
