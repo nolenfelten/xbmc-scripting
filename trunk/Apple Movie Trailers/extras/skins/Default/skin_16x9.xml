@@ -293,17 +293,6 @@
 
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
-			<description>Trailer List Scrollbar Up Arrow NA</description>
-			<posx>502</posx>
-			<posy>121</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-up-arrow-na.png</texture>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
 			<description>Trailer List Scrollbar Middle</description>
 			<posx>502</posx>
 			<posy>137</posy>
@@ -321,17 +310,6 @@
 			<width>16</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
-			<visible>false</visible>
-		</control>
-		
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Trailer List Scrollbar Down Arrow NA</description>
-			<posx>502</posx>
-			<posy>338</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-down-arrow-na.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -455,17 +433,6 @@
 
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
-			<description>Category List Scrollbar Up Arrow NA</description>
-			<posx>657</posx>
-			<posy>121</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-up-arrow-na.png</texture>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
 			<description>Category List Scrollbar Middle</description>
 			<posx>657</posx>
 			<posy>137</posy>
@@ -483,17 +450,6 @@
 			<width>16</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
-			<visible>false</visible>
-		</control>
-		
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Category List Scrollbar Down Arrow NA</description>
-			<posx>657</posx>
-			<posy>494</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-down-arrow-na.png</texture>
 			<visible>false</visible>
 		</control>
 		
@@ -788,17 +744,6 @@
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
-			<description>Cast List Scrollbar Up Arrow NA</description>
-			<posx>647</posx>
-			<posy>403</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-up-arrow-na.png</texture>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
 			<description>Cast List Scrollbar Middle</description>
 			<posx>647</posx>
 			<posy>419</posy>
@@ -816,17 +761,6 @@
 			<width>16</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
-			<visible>false</visible>
-		</control>
-		
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Cast List Scrollbar Down Arrow NA</description>
-			<posx>647</posx>
-			<posy>490</posy>
-			<width>16</width>
-			<height>16</height>
-			<texture>\scrollbar-down-arrow-na.png</texture>
 			<visible>false</visible>
 		</control>
 		
