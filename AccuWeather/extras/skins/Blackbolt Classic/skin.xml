@@ -43,7 +43,7 @@
 				<description>panel</description>
 				<posx>40</posx>
 				<posy>115</posy>
-				<height>300</height>
+				<height>310</height>
 				<width>210</width>
 				<texture>panel.png</texture>
 			</control>

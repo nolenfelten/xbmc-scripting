@@ -71,6 +71,23 @@
 			<!--visible>!Skin.HasSetting(rss-feeds)</visible-->
 		</control>
 
+    <!--control type="image" id="100">
+        <description>Button Left Arrow</description>
+        <posx>36</posx>
+        <posy>126</posy>
+        <height>21</height>
+        <width>21</width>
+        <texture>scroll-left-focus.png</texture>
+    </control>
+    <control type="image" id="101">
+        <description>Button Right Arrow</description>
+        <posx>232</posx>
+        <posy>126</posy>
+        <height>21</height>
+        <width>21</width>
+        <texture>scroll-right-focus.png</texture>
+    </control-->
+
     <control type="button" id="10">
 			<description>Category Button</description>
 			<posx>45</posx>
