@@ -273,12 +273,10 @@ class HTTPProgressSave( HTTPProgress ):
     def on_finished( self, url, filepath, filesize, is_completed ):
         if is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
             try:
-                print '.conf creation', filepath
                 if ( not os.path.isfile( filepath + '.conf' ) ):
                     f = open( filepath + '.conf' , 'w' )
                     f.write( 'nocache=1' )
                     f.close()
-                print '.conf creation succeeded'
             except:
                 traceback.print_exc()
                 pass
