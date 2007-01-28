@@ -30,7 +30,8 @@
 			<posy>-300</posy>
 			<width>1300</width>
 			<height>1300</height>
-			<texture>\black.png</texture>
+			<texture>dialog_middle.png</texture>
+            <colordiffuse>90FFFFFF</colordiffuse>
 		</control>
 
 		<control type="image">
