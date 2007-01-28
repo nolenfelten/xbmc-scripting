@@ -16,7 +16,7 @@ def setControllerAction():
     return {
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',
-                61488 : 'Keyboard Backspace Button',
+                61448 : 'Keyboard Backspace Button',
                 61533 : 'Keyboard Menu Button',
                 61467 : 'Keyboard ESC Button',
                     216 : 'Remote Back Button',
