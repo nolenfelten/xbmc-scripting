@@ -1,7 +1,7 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
-#import trailers
+import credits
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -22,7 +22,7 @@ class GUI( xbmcgui.WindowDialog ):
     ##        if ( genre.title == self.settings.startup_category_id ):
     ##            self.startup_id = cnt
     ##            break
-            #self.startup.append( genre.title )
+    ##        self.startup.append( genre.title )
     
     def setupGUI( self ):
         current_skin = xbmc.getSkinDir()
@@ -39,7 +39,6 @@ class GUI( xbmcgui.WindowDialog ):
         self.controller_action = amt_util.setControllerAction()
         self.quality = amt_util.setQuality( self._ )
         self.mode = amt_util.setMode( self._ )
-        #self.startup = amt_util.setStartupCategory( self._ )
         self.thumbnail = amt_util.setThumbnailDisplay( self._ )
         ##self.getGenreCategories()
         
@@ -73,28 +72,23 @@ class GUI( xbmcgui.WindowDialog ):
         tq = self.settings.trailer_quality + 1
         if ( tq > 2 ): tq = 0
         self.settings.trailer_quality = tq
-        #self.controls['Trailer Quality Button']['control'].setLabel( 'Trailer Quality: [%s]' % ( self.quality[tq], ) )
         self.setControlsValues()
       
     def toggleMode( self ):
         m = self.settings.mode + 1
         if ( m > 2 ): m = 0
         self.settings.mode = m
-        #self.controls['Mode Button']['control'].setLabel( 'Mode: [%s]' % ( self.mode[m], ) )
         self.setControlsValues()
 
     def toggleStartupCategory( self ):
         self.settings.startup_category_id += 1
         if ( self.settings.startup_category_id == ( len( self.genres ) ) ): self.settings.startup_category_id = 0
-        #self.settings.startup_category_id = self.genres[self.startup_category_id].title
-        #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
         
     def toggleThumbnailDisplay( self ):
         t = self.settings.thumbnail_display + 1
         if ( t > 2 ): t = 0
         self.settings.thumbnail_display = t
-        #self.controls['Startup Category Button'].setLabel( 'Startup Category: [%s]' % ( self.startup[c], ) )
         self.setControlsValues()
     
     def browseForFolder( self ):
@@ -102,7 +96,6 @@ class GUI( xbmcgui.WindowDialog ):
         folder = dialog.browse( 3, 'a save folder', 'files' )
         if ( folder ):
             self.settings.save_folder = folder
-            #self.controls['Save Folder Button']['control'].setLabel( 'Save Folder: [%s]' % ( folder, ) )
             self.setControlsValues()
 
     def chooseSkin( self ):
@@ -150,7 +143,6 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setPopupVisibility( self, visible ):
         self.setPopupBGVisibility( visible )
-        #self.controls['Popup Image']['control'].setVisible( visible )
         self.controls['Popup Label']['control'].setVisible( visible )
         self.controls['Popup Thumb']['control'].setVisible( visible )
         self.controls['Popup Warning Label']['control'].setVisible( visible )
@@ -158,7 +150,6 @@ class GUI( xbmcgui.WindowDialog ):
         
     def setSkinSelection( self ):
         self.settings.skin = self.controls['Popup List']['control'].getSelectedItem().getLabel().replace( '*', '' )
-        #self.controls['Skin Button']['control'].setLabel( 'Skin: [%s]' % (self.settings['skin'], ) )
         self.setControlsValues()
         self.hidePopup()
     
@@ -175,52 +166,10 @@ class GUI( xbmcgui.WindowDialog ):
     #    self.controls['Credits Button']['control'].controlDown( control )
 
     def showCredits( self ):
-        try:
-            # Team credits
-            self.controls['Credits Label']['control'].setLabel( self._(0) )
-            self.controls['Credits Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
-            self.controls['Team Credits Label']['control'].setLabel( self._(101) )
-            self.controls['Team Credits List']['control'].reset()
-            l = xbmcgui.ListItem( default.__credits_l1__, default.__credits_r1__ )
-            self.controls['Team Credits List']['control'].addItem( l )
-            l = xbmcgui.ListItem( default.__credits_l2__, default.__credits_r2__ )
-            self.controls['Team Credits List']['control'].addItem( l )
-            l = xbmcgui.ListItem( default.__credits_l3__, default.__credits_r3__ )
-            self.controls['Team Credits List']['control'].addItem( l )
-            
-            # Additional credits
-            self.controls['Additional Credits Label']['control'].setLabel( self._(102) )
-            self.controls['Additional Credits List']['control'].reset()
-            l = xbmcgui.ListItem( default.__acredits_l1__, default.__acredits_r1__ )
-            self.controls['Additional Credits List']['control'].addItem( l )
-            l = xbmcgui.ListItem( default.__acredits_l2__, default.__acredits_r2__ )
-            self.controls['Additional Credits List']['control'].addItem( l )
-            l = xbmcgui.ListItem( default.__acredits_l3__, default.__acredits_r3__ )
-            self.controls['Additional Credits List']['control'].addItem( l )
-            
-            self.setCreditsVisibility( True )
-            self.setFocus( self.controls['Skin Credits List']['control'] )
-        except: print 'Credits Removed'
-            
-    def hideCredits( self ):
-        self.setCreditsVisibility( False )
-        self.setFocus( self.controls['Credits Button']['control'] )
+        cw = credits.GUI( language=self._ )
+        cw.doModal()
+        del cw
 
-    def setCreditsVisibility( self, visible ):
-        try:
-            xbmcgui.lock()
-            self.setPopupBGVisibility( visible )
-            self.controls['Credits Label']['control'].setVisible( visible )
-            self.controls['Credits Version Label']['control'].setVisible( visible )
-            self.controls['Team Credits Label']['control'].setVisible( visible )
-            self.controls['Team Credits List']['control'].setVisible( visible )
-            self.controls['Additional Credits Label']['control'].setVisible( visible )
-            self.controls['Additional Credits List']['control'].setVisible( visible )
-            self.controls['Skin Credits Label']['control'].setVisible( visible )
-            self.controls['Skin Credits List']['control'].setVisible( visible )
-        except: print 'Credits Removed'
-        xbmcgui.unlock()
-            
     def updateScript( self ):
         import update
         updt = update.Update( language = self._, script = default.__scriptname__, version = default.__version__ )
@@ -258,11 +207,9 @@ class GUI( xbmcgui.WindowDialog ):
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
         if ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.hidePopup()
-            elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.closeDialog()
         elif ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
-            elif ( control == self.controls['Skin Credits List']['control'] ): self.hideCredits()
             else: self.saveSettings()
         elif ( control == self.controls['Popup List']['control'] ):
             self.getThumb( control.getSelectedItem() )
