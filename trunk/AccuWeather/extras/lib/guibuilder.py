@@ -156,7 +156,7 @@ class GUIBuilder:
                 if (self.defaultControl and self.win.controls.has_key( self.navigation[ self.defaultControl ][ 0 ] ) ):
                     self.win.setFocus( self.win.controls[ self.navigation[ self.defaultControl ][ 0 ] ][ 'control' ] )
                 self.setCondVisibility()
-                #if (self.includesExist): self.incdoc.unlink()
+                ####if (self.includesExist): self.incdoc.unlink()
                 self.clearVariables()
             if ( not self.fastMethod ): self.dlg.close()
         except:
@@ -190,6 +190,7 @@ class GUIBuilder:
         self.resolutions = { '1080i' : 0, '720p' : 1, '480p' : 2, '480p16x9' : 3, 'ntsc' : 4, 'ntsc16x9' : 5, 'pal' : 6, 'pal16x9' : 7, 'pal60' : 8, 'pal6016x9' : 9 }
         for key, value in self.resolutions.items(): self.resPath[ value ] = key
         self.currentResolution = self.win.getResolution()
+        self.include_doc = []
         self.resolution = self.resolutions[ 'pal' ]
         self.debugWrite( 'initVariables', True )
 
@@ -201,7 +202,10 @@ class GUIBuilder:
         self.resPath = None
         self.currentResolution = None
         self.resolution = None
-        
+        for doc in self.include_doc:
+            try: doc.unlink()
+            except: pass
+
     def GetConditionalVisibility( self, conditions ):
         if ( len( conditions ) == 0 ): return 'true'
         if ( len( conditions ) == 1 ): return conditions[ 0 ]
@@ -720,12 +724,12 @@ class GUIBuilder:
         includeFile = self.GetSkinPath( str( includeFile ) )
         # load and parse includes.xml file
         try: 
-            doc = xml.dom.minidom.parse( includeFile )
+            self.include_doc.append( xml.dom.minidom.parse( includeFile ) )
         except:
             self.debugWrite('LoadIncludes', False)
             return False
         # success, load the tags
-        if ( self.LoadIncludesFromXML( doc.documentElement ) ):
+        if ( self.LoadIncludesFromXML( self.include_doc[-1].documentElement ) ):
             self.m_files.append( includeFile )
             self.debugWrite('LoadIncludes', True)
             return True

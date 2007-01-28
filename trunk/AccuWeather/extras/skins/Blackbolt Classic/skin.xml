@@ -67,9 +67,9 @@
     <control type="fadelabel" id="20">
 			<description>RSS Feeds</description>
 			<posx>40</posx>
-			<posy>520</posy>
+			<posy>540</posy>
 			<width>640</width>
-			<font>font13</font>
+			<font>font12</font>
 			<scroll>true</scroll>
 			<include>textcolor-green</include>
 			<!--shadowcolor>FF000000</shadowcolor-->
