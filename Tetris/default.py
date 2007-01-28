@@ -471,7 +471,7 @@ class Tetris(xbmcgui.WindowDialog):
 		x = self.blockX - 100
 		y = self.blockY + 60
 		self.addControl(xbmcgui.ControlLabel(SX*x,SY*y,SX*455,SY*20,_(30),'font12','FFFFFF00'))
-		self.lblLines   = xbmcgui.ControlLabel(x+80,SY*y,SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
+		self.lblLines   = xbmcgui.ControlLabel(SX*(x+80),SY*y,SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
 		self.addControl(self.lblLines)
 		self.addControl(xbmcgui.ControlLabel(SX*x,SY*(y+20),SX*455,SY*20,_(31),'font12','FFFFFF00'))
 		self.lblScore   = xbmcgui.ControlLabel(SX*(x+80),SY*(y+20),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
