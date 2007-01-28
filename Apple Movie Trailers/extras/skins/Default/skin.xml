@@ -119,7 +119,7 @@
 			<aligny>center</aligny>
 			<onleft>95</onleft>
 			<onright>100</onright>
-			<onup>60</onup>
+			<onup>70</onup>
 			<ondown>20</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -170,10 +170,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="35">
-			<description>Genre Button</description>
-			<label>202</label>
+			<description>Downloaded Button</description>
+			<label>226</label>
 			<posx>50</posx>
-			<posy>260</posy>
+			<posy>231</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -192,10 +192,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
-			<description>Studio Button</description>
-			<label>222</label>
+			<description>Genre Button</description>
+			<label>202</label>
 			<posx>50</posx>
-			<posy>297</posy>
+			<posy>300</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -212,12 +212,12 @@
 			<onclick>-</onclick>
 		</control>
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
-			<description>Actor Button</description>
-			<label>224</label>
+			<description>Studio Button</description>
+			<label>222</label>
 			<posx>50</posx>
-			<posy>334</posy>
+			<posy>337</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -236,10 +236,10 @@
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
-			<description>Search Button</description>
-			<label>203</label>
+			<description>Actor Button</description>
+			<label>224</label>
 			<posx>50</posx>
-			<posy>400</posy>
+			<posy>374</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -255,13 +255,13 @@
 			<ondown>60</ondown>
 			<onclick>-</onclick>
 		</control>
-
+		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
-			<description>Settings Button</description>
-			<label>204</label>
+			<description>Search Button</description>
+			<label>203</label>
 			<posx>50</posx>
-			<posy>466</posy>
+			<posy>443</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -274,6 +274,28 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>50</onup>
+			<ondown>70</ondown>
+			<onclick>-</onclick>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="70">
+			<description>Settings Button</description>
+			<label>204</label>
+			<posx>50</posx>
+			<posy>480</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
 			<ondown>10</ondown>
 			<onclick>-</onclick>
 		</control>

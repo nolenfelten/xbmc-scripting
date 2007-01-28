@@ -73,14 +73,14 @@
 			<description>panel</description>
 			<posx>45</posx>
 			<posy>115</posy>
-			<height>390</height>
+			<height>409</height>
 			<width>150</width>
 			<texture>panel.png</texture>
 		</control>
 		<control type="image">
 			<description>Middle panel Bar</description>
 			<posx>45</posx>
-			<posy>231</posy>
+			<posy>272</posy>
 			<height>20</height>
 			<width>150</width>
 			<texture>middle-bar.png</texture>
@@ -88,7 +88,7 @@
 		<control type="image">
 			<description>Middle panel Bar</description>
 			<posx>45</posx>
-			<posy>371</posy>
+			<posy>415</posy>
 			<height>20</height>
 			<width>150</width>
 			<texture>middle-bar.png</texture>
@@ -107,7 +107,7 @@
 			<!--aligny>center</aligny-->
 			<onleft>95</onleft>
 			<onright>100</onright>
-			<onup>60</onup>
+			<onup>70</onup>
 			<ondown>20</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -146,10 +146,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="35">
-			<description>Genre Button</description>
-			<label>202</label>
+			<description>Downloaded Button</description>
+			<label>226</label>
 			<posx>50</posx>
-			<posy>260</posy>
+			<posy>231</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -162,10 +162,10 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
-			<description>Studio Button</description>
-			<label>222</label>
+			<description>Genre Button</description>
+			<label>202</label>
 			<posx>50</posx>
-			<posy>297</posy>
+			<posy>300</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -175,13 +175,13 @@
 			<ondown>45</ondown>
 			<onclick>-</onclick>
 		</control>
-		
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
-			<description>Actor Button</description>
-			<label>224</label>
+			<description>Studio Button</description>
+			<label>222</label>
 			<posx>50</posx>
-			<posy>334</posy>
+			<posy>337</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -194,12 +194,10 @@
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
-			<description>Search Button</description>
-			<label>203</label>
+			<description>Actor Button</description>
+			<label>224</label>
 			<posx>50</posx>
-			<posy>400</posy>
-			<width>150</width>
-			<height>33</height>
+			<posy>374</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -209,19 +207,35 @@
 			<ondown>60</ondown>
 			<onclick>-</onclick>
 		</control>
-
+		
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
-			<description>Settings Button</description>
-			<label>204</label>
+			<description>Search Button</description>
+			<label>203</label>
 			<posx>50</posx>
-			<posy>437</posy>
+			<posy>443</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>50</onup>
+			<ondown>70</ondown>
+			<onclick>-</onclick>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="70">
+			<description>Settings Button</description>
+			<label>204</label>
+			<posx>50</posx>
+			<posy>480</posy>
+			<texturenofocus>-</texturenofocus>
+			<font>font13</font>
+			<!--aligny>center</aligny-->
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
 			<ondown>10</ondown>
 			<onclick>-</onclick>
 		</control>

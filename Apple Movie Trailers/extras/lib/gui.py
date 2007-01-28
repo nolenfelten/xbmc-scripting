@@ -160,6 +160,9 @@ class GUI( xbmcgui.Window ):
             if ( category_id == -6 ):
                 sql = 'SELECT * FROM Movies WHERE favorite=? ORDER BY title'
                 params = ( 1, )
+            elif ( category_id == -7 ):
+                sql = 'SELECT * FROM "Movies" WHERE saved_location != ?'
+                params = ( '', )
             elif ( self.main_category == -1 ):
                 sql = 'SELECT * FROM Movies WHERE %s&genre>? ORDER BY title' % ( self.trailers.categories[category_id].id, )
                 params = ( 0, )
@@ -533,6 +536,8 @@ class GUI( xbmcgui.Window ):
                 self.setCategory( -2 )
             elif ( control is self.controls['Actor Button']['control'] ):
                 self.setCategory( -3 )
+            elif ( control is self.controls['Downloaded Button']['control'] ):
+                self.setCategory( -7 )
             elif ( control is self.controls['Favorites Button']['control'] ):
                 self.setCategory( -6 )
             elif ( control is self.controls['Search Button']['control'] ):
@@ -604,6 +609,8 @@ class GUI( xbmcgui.Window ):
                 self.setControlNavigation( 'Search Button' )
             elif ( control is self.controls['Settings Button']['control'] ):
                 self.setControlNavigation( 'Settings Button' )
+            elif ( control is self.controls['Downloaded Button']['control'] ):
+                self.setControlNavigation( 'Downloaded Button' )
         except: traceback.print_exc()
         
     def debugWrite( self, function, action, lines=[], values=[] ):
