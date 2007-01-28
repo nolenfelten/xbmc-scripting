@@ -109,7 +109,9 @@ class GUI( xbmcgui.WindowDialog ):
             success = self.win.trailers.updateRecord( ( 'saved_location', ), 'Movies', ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
             if ( success ):
                 self.win.trailers.movies[self.trailer].saved = ''
-                self.win.showTrailers( self.win.sql, self.win.params, choice = self.trailer )
+                if ( self.win.category_id == -7 ): force_update = True
+                else: force_update = False
+                self.win.showTrailers( self.win.sql, self.win.params, choice = self.trailer, force_update = force_update )
             self.closeDialog()
 
     def closeDialog( self ):
