@@ -158,16 +158,16 @@ class GUI( xbmcgui.Window ):
         self.category_id = category_id
         if ( category_id >= 0 or category_id <= -6 ):
             if ( category_id == -6 ):
-                sql = 'SELECT * FROM Movies WHERE favorite=? ORDER BY title'
+                sql = 'SELECT * FROM Movies WHERE favorite = ? ORDER BY title'
                 params = ( 1, )
             elif ( category_id == -7 ):
-                sql = 'SELECT * FROM "Movies" WHERE saved_location != ?'
+                sql = 'SELECT * FROM "Movies" WHERE saved_location != ? ORDER BY title'
                 params = ( '', )
             elif ( self.main_category == -1 ):
-                sql = 'SELECT * FROM Movies WHERE %s&genre>? ORDER BY title' % ( self.trailers.categories[category_id].id, )
+                sql = 'SELECT * FROM Movies WHERE %s&genre > ? ORDER BY title' % ( self.trailers.categories[category_id].id, )
                 params = ( 0, )
             elif ( self.main_category == -2 ):
-                sql = 'SELECT * FROM Movies WHERE studio=? ORDER BY title'
+                sql = 'SELECT * FROM Movies WHERE studio = ? ORDER BY title'
                 params = ( self.trailers.categories[category_id].title, )
             elif ( self.main_category == -3 ):
                 sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
