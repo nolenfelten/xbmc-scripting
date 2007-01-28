@@ -359,6 +359,8 @@ class GUI( xbmcgui.Window ):
             category = _( 225 )
         elif ( self.category_id == -6 ):
             category = _( 217 )
+        elif ( self.category_id == -7 ):
+            category = _( 226 )
         elif ( self.category_id >= 0 and self.main_category == -99 ):
             category = self.actor
         elif ( self.category_id >= 0 ):
