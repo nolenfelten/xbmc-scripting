@@ -1,7 +1,7 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
-import credits
+#import credits
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -166,6 +166,7 @@ class GUI( xbmcgui.WindowDialog ):
     #    self.controls['Credits Button']['control'].controlDown( control )
 
     def showCredits( self ):
+        import credits
         cw = credits.GUI( language=self._ )
         cw.doModal()
         del cw
