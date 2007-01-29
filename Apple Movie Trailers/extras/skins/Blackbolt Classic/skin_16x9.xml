@@ -472,37 +472,37 @@
 		<!-- info controls -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="201">
-			<description>Trailer Poster</description>
-			<posx>500</posx>
-			<posy>135</posy>
-			<width>170</width>
-			<height>250</height>
-			<texture>-</texture>
-			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="200">
 			<description>Poster Backdrop</description>
-			<posx>515</posx>
-			<posy>110</posy>
-			<width>150</width>
-			<height>295</height>
-			<texture>setback.png</texture>
+			<posx>530</posx>
+			<posy>121</posy>
+			<width>136</width>
+			<height>280</height>
+			<texture>dialog_middle.png</texture>
 			<aspectratio>stretch</aspectratio>
 			<colordiffuse>90FFFFFF</colordiffuse>
             <!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
 		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="201">
+			<description>Trailer Poster</description>
+			<posx>508</posx>
+			<posy>128</posy>
+			<width>180</width>
+			<height>265</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+        
         <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="202">
 			<description>Trailer Rating</description>
-			<posx>520</posx>
-			<posy>362</posy>
+			<posx>528</posx>
+			<posy>372</posy>
 			<width>66</width>
 			<height>15</height>
 			<texture>-</texture>
@@ -514,8 +514,8 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
-			<posx>625</posx>
-			<posy>362</posy>
+			<posx>645</posx>
+			<posy>372</posy>
 			<width>16</width>
 			<height>16</height>
 			<texture>buddyitem-ping.png</texture>
@@ -527,11 +527,11 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="204">
 			<description>Trailer Watched Overlay</description>
-			<posx>625</posx>
-			<posy>362</posy>
+			<posx>645</posx>
+			<posy>372</posy>
 			<width>16</width>
 			<height>16</height>
-			<texture>OverlayWatched.png</texture>
+			<texture>defaultVideoBig.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
@@ -540,8 +540,8 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="205">
 			<description>Trailer Saved Overlay</description>
-			<posx>625</posx>
-			<posy>362</posy>
+			<posx>645</posx>
+			<posy>372</posy>
 			<width>16</width>
 			<height>16</height>
 			<texture>OverlayRAR.png</texture>

@@ -397,7 +397,7 @@
 			<posx>660</posx>
 			<posy>141</posy>
 			<width>20</width>
-			<height>16</height>
+			<height>20</height>
 			<texturefocus>scrollbar_focus.png</texturefocus>
 			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
 			<font>font13</font>
@@ -472,37 +472,37 @@
 		<!-- info controls -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="201">
-			<description>Trailer Poster</description>
-			<posx>510</posx>
-			<posy>139</posy>
-			<width>150</width>
-			<height>220</height>
-			<texture>-</texture>
-			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="200">
 			<description>Poster Backdrop</description>
-			<posx>505</posx>
-			<posy>115</posy>
-			<width>170</width>
-			<height>265</height>
-			<texture>setback.png</texture>
+			<posx>514</posx>
+			<posy>121</posy>
+			<width>158</width>
+			<height>250</height>
+			<texture>dialog_middle.png</texture>
 			<aspectratio>stretch</aspectratio>
 			<colordiffuse>90FFFFFF</colordiffuse>
             <!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
 		</control>
-
+		
 		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="201">
+			<description>Trailer Poster</description>
+			<posx>513</posx>
+			<posy>128</posy>
+			<width>160</width>
+			<height>236</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+        
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="202">
 			<description>Trailer Rating</description>
 			<posx>520</posx>
-			<posy>340</posy>
+			<posy>345</posy>
 			<width>66</width>
 			<height>15</height>
 			<texture>-</texture>
@@ -514,8 +514,8 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
-			<posx>635</posx>
-			<posy>340</posy>
+			<posx>648</posx>
+			<posy>345</posy>
 			<width>16</width>
 			<height>16</height>
 			<texture>buddyitem-ping.png</texture>
@@ -527,11 +527,11 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="204">
 			<description>Trailer Watched Overlay</description>
-			<posx>635</posx>
-			<posy>340</posy>
+			<posx>648</posx>
+			<posy>345</posy>
 			<width>16</width>
 			<height>16</height>
-			<texture>OverlayWatched.png</texture>
+			<texture>defaultVideoBig.png</texture>
 			<aspectratio>keep</aspectratio>
 			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible>false</visible>
@@ -540,8 +540,8 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="205">
 			<description>Trailer Saved Overlay</description>
-			<posx>635</posx>
-			<posy>340</posy>
+			<posx>648</posx>
+			<posy>345</posy>
 			<width>16</width>
 			<height>16</height>
 			<texture>OverlayRAR.png</texture>
@@ -680,7 +680,7 @@
 			<posx>650</posx>
 			<posy>428</posy>
 			<width>20</width>
-			<height>16</height>
+			<height>20</height>
 			<texturefocus>scrollbar_focus.png</texturefocus>
 			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
 			<font>font13</font>
@@ -706,7 +706,7 @@
 			<texture>folder-nofocus.png</texture>
 			<visible>false</visible>
 		</control>
-		
+
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="list" id="216">
 			<description>Cast List</description>
