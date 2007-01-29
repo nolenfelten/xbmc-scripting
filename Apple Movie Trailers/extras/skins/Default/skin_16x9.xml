@@ -300,6 +300,39 @@
 			<onclick>-</onclick>
 		</control>
 
+        <!-- 
+            Uncomment the following control and uncomment the pair of <label> and <onclick> you prefer 
+            and add them to the control. Don't forget to adjust you <on*> tags.
+        -->
+			<!--label>209</label
+			<onclick>self.showCredits()</onclick-->
+			<!--label>228</label>
+			<onclick>self.updateScript()</onclick-->
+			<!--label>227</label>
+			<onclick>self.exitScript()</onclick-->
+
+		<!-- ** Optional ** Do not change <description> or <type> -->
+		<!--control type="button" id="80">
+			<description>Optional Button</description>
+			<label>228</label>
+			<onclick>self.updateScript()</onclick>
+            <posx>50</posx>
+			<posy>517</posy>
+			<width>150</width>
+			<height>33</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>70</onup>
+			<ondown>10</ondown>
+		</control-->
+
 		<!-- Trailer list controls -->
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->

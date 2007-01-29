@@ -44,7 +44,7 @@ try:
     updateProgressDialog( '%s cacheurl' % ( _( 52 ), ))
     import cacheurl
     updateProgressDialog( '%s shutil' % ( _( 52 ), ))
-    import shutil, datetime
+    import shutil, datetime, default
 
 
 except:
@@ -443,7 +443,7 @@ class GUI( xbmcgui.Window ):
                 choice = len( trailer_urls ) - 1
             else:
                 choice = self.settings.trailer_quality
-            if ( 'p.mov' in trailer_urls[choice] ): choice -= 1
+            while ( 'p.mov' in trailer_urls[ choice ] ): choice -= 1
             if ( self.settings.mode == 0 ):
                 filename = trailer_urls[choice]
             elif ( self.settings.mode == 1):
@@ -506,6 +506,17 @@ class GUI( xbmcgui.Window ):
             trailer = self.controls['Trailer List']['control'].getSelectedPosition()
             self.showTrailers( self.sql, self.params, choice = trailer )
     
+    def showCredits( self ):
+        import credits
+        cw = credits.GUI( language=_ )
+        cw.doModal()
+        del cw
+
+    def updateScript( self ):
+        import update
+        updt = update.Update( language=_, script=default.__scriptname__, version=default.__version__ )
+        del update
+        
     def exitScript( self ):
         #self.debugWrite( 'exitScript', 2 )
         try:
@@ -555,6 +566,11 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Cast List']['control'] ):
                 self.main_category = -99
                 self.getActorChoice()
+            else:
+                try:
+                    if ( control is self.controls[ 'Optional Button' ][ 'control' ] ):
+                        exec self.controls[ 'Optional Button' ][ 'onclick' ]
+                except: pass
         except: traceback.print_exc()
         
     def onAction( self, action ):
@@ -613,6 +629,11 @@ class GUI( xbmcgui.Window ):
                 self.setControlNavigation( 'Settings Button' )
             elif ( control is self.controls['Downloaded Button']['control'] ):
                 self.setControlNavigation( 'Downloaded Button' )
+            else:
+                try:
+                    if ( control is self.controls[ 'Optional Button' ][ 'control' ] ):
+                        self.setControlNavigation( 'Optional Button' )
+                except: pass
         except: traceback.print_exc()
         
     def debugWrite( self, function, action, lines=[], values=[] ):

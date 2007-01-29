@@ -86,6 +86,8 @@
   <string id="224">Actor...</string>
   <string id="225">Actor</string>
   <string id="226">Downloaded</string>
+  <string id="227">Exit script</string>
+  <string id="228">Check for update</string>
   
   <!-- Settings -->
   <string id="300">Trailer Quality</string>
