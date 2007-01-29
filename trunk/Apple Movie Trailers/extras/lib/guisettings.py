@@ -1,29 +1,20 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
-#import credits
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         self.cwd = os.path.dirname( sys.modules['default'].__file__ )
         self.getSettings()
         self._ = kwargs['language']
-        #self.skin = kwargs['skin']
-        self.genres = kwargs['genres']
+        self.skin = kwargs['skin']
         self.setupGUI()
         if ( not self.SUCCEEDED ): self.close()
         else:
+            self.setStartupCategories( kwargs['genres'] )
             self.setupVariables()
-            #self.getGenreCategories()
             self.setControlsValues()
 
-    ##def getGenreCategories( self ):
-    ##    for cnt, genre in enumerate( self.genres ):
-    ##        if ( genre.title == self.settings.startup_category_id ):
-    ##            self.startup_id = cnt
-    ##            break
-    ##        self.startup.append( genre.title )
-    
     def setupGUI( self ):
         current_skin = xbmc.getSkinDir()
         if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ) ) ): current_skin = 'default'
@@ -34,12 +25,45 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ) ) ): xml_file = 'settings.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
+    def setStartupCategories( self, genres ):
+        self.startup_categories = []
+        self.startup_category = [ 0, 0, 0, 0]
+        for count, genre in enumerate( genres ):
+            self.startup_categories.append( ( str( genre.title ), count ) )
+        self.startup_categories.append( ( self._( 217 ), -6 ) )
+        self.startup_categories.append( ( self._( 226 ), -7 ) )
+        if ( self.settings.startup_category_id == -6 ):
+            self.startup_category[ 0 ] = len( self.startup_categories ) -2
+        elif ( self.settings.startup_category_id == -7 ):
+            self.startup_category[ 0 ] = len( self.startup_categories ) -1
+        else:
+            self.startup_category[ 0 ] = self.settings.startup_category_id
+        if ( self.settings.shortcut1 == -6 ):
+            self.startup_category[ 1 ] = len( self.startup_categories ) -2
+        elif ( self.settings.shortcut1 == -7 ):
+            self.startup_category[ 1 ] = len( self.startup_categories ) -1
+        else:
+            self.startup_category[ 1 ] = self.settings.shortcut1
+        if ( self.settings.shortcut2 == -6 ):
+            self.startup_category[ 2 ] = len( self.startup_categories ) -2
+        elif ( self.settings.shortcut2 == -7 ):
+            self.startup_category[ 2 ] = len( self.startup_categories ) -1
+        else:
+            self.startup_category[ 2 ] = self.settings.shortcut2
+        if ( self.settings.shortcut3 == -6 ):
+            self.startup_category[ 3 ] = len( self.startup_categories ) -2
+        elif ( self.settings.shortcut3 == -7 ):
+            self.startup_category[ 3 ] = len( self.startup_categories ) -1
+        else:
+            self.startup_category[ 3 ] = self.settings.shortcut3
+        
     def setupVariables( self ):
         self.controls['Version Label']['control'].setLabel( '%s: %s' % ( self._(100), default.__version__, ) )
         self.controller_action = amt_util.setControllerAction()
         self.quality = amt_util.setQuality( self._ )
         self.mode = amt_util.setMode( self._ )
         self.thumbnail = amt_util.setThumbnailDisplay( self._ )
+        self.current_setting_control = None
         ##self.getGenreCategories()
         
     def setControlsValues( self ):
@@ -50,22 +74,39 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode == 2 )
         self.controls['Save Folder Button Value']['control'].setLabel( '%s' % ( self.settings.save_folder, ) )
         self.controls['Save Folder Button Value']['control'].setEnabled( self.settings.mode == 2 )
-        self.controls['Startup Category Button Value']['control'].setLabel( '%s' % ( self.genres[self.settings.startup_category_id].title ) )
+        self.controls['Startup Category Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[0]][0], ) )
         self.controls['Thumbnail Display Button Value']['control'].setLabel( '%s' % ( self.thumbnail[self.settings.thumbnail_display], ) )
+        self.controls['Shortcut1 Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[1]][0], ) )
+        self.controls['Shortcut2 Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[2]][0], ) )
+        self.controls['Shortcut3 Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[3]][0], ) )
+        '''settings_changed = ( 
+            self.settings.trailer_quality != self.settings_start.trailer_quality or
+            self.settings.mode != self.settings_start.mode or
+            self.settings.skin != self.settings_start.skin or
+            self.settings.save_folder != self.settings_start.save_folder or
+            self.settings.thumbnail_display != self.settings_start.thumbnail_display or
+            self.settings.startup_category_id != self.settings_start.startup_category_id or
+            self.settings.shortcut1 != self.settings_start.shortcut1 or
+            self.settings.shortcut2 != self.settings_start.shortcut2 or
+            self.settings.shortcut3 != self.settings_start.shortcut3
+            )
+        self.controls['Ok Button'][ 'control' ].setEnabled( settings_changed )
+        '''
         xbmcgui.unlock()
         
     def getSettings( self ):
         self.settings = amt_util.Settings()
-
+        self.settings_start = amt_util.Settings()
+        
     def saveSettings( self ):
         ret = self.settings.saveSettings()
         if ( not ret ):
             dialog = xbmcgui.Dialog()
             ok = dialog.ok( self._(0), self._(55) )
         else:
-            #if ( self.skin != self.settings.skin):
-            #    dialog = xbmcgui.Dialog()
-            #    ok = dialog.ok( self._(0), self._(56)  )
+            if ( self.skin != self.settings.skin):
+                dialog = xbmcgui.Dialog()
+                ok = dialog.ok( self._(0), self._(56)  )
             self.closeDialog()
 
     def toggleTrailerQuality( self ):
@@ -80,10 +121,25 @@ class GUI( xbmcgui.WindowDialog ):
         self.settings.mode = m
         self.setControlsValues()
 
-    def toggleStartupCategory( self ):
-        self.settings.startup_category_id += 1
-        if ( self.settings.startup_category_id == ( len( self.genres ) ) ): self.settings.startup_category_id = 0
+    def toggleCategory( self, category ):
+        self.startup_category[ category ] += 1
+        if ( self.startup_category[ category ] == len( self.startup_categories ) ): self.startup_category[ category ] = 0
         self.setControlsValues()
+        if ( self.startup_category[ category ] == ( len( self.startup_categories ) - 1 ) ):
+            if ( category == 0 ): self.settings.startup_category_id = -7
+            elif ( category == 1 ): self.settings.shortcut1 = -7
+            elif ( category == 2 ): self.settings.shortcut2 = -7
+            elif ( category == 3 ): self.settings.shortcut3 = -7
+        elif ( self.startup_category[ category ] == ( len( self.startup_categories ) - 2 ) ):
+            if ( category == 0 ): self.settings.startup_category_id = -6
+            elif ( category == 1 ): self.settings.shortcut1 = -6
+            elif ( category == 2 ): self.settings.shortcut2 = -6
+            elif ( category == 3 ): self.settings.shortcut3 = -6
+        else: 
+            if ( category == 0 ): self.settings.startup_category_id = self.startup_category[ category ]
+            elif ( category == 1 ): self.settings.shortcut1 = self.startup_category[ category ]
+            elif ( category == 2 ): self.settings.shortcut2 = self.startup_category[ category ]
+            elif ( category == 3 ): self.settings.shortcut3 = self.startup_category[ category ]
         
     def toggleThumbnailDisplay( self ):
         t = self.settings.thumbnail_display + 1
@@ -102,7 +158,8 @@ class GUI( xbmcgui.WindowDialog ):
         skin_path = os.path.join( self.cwd, 'extras', 'skins' )
         skins = os.listdir( skin_path )
         skins.sort()
-        self.showPopup( 'choose your skin', skins )
+        self.showPopup( 'choose your skin' )
+        self.fillListSkins( skins )
         
     def getThumb( self, choice ):
         thumbnail = os.path.join( self.cwd, 'extras', 'skins', choice.getLabel().replace( '*','' ), 'thumbnail.tbn' )
@@ -114,38 +171,49 @@ class GUI( xbmcgui.WindowDialog ):
 
     def hidePopup( self ):
         xbmcgui.lock()
-        self.setPopupVisibility( False )
-        self.setFocus( self.controls['Skin Button']['control'] )
+        self.setPopupVisibility( False, False )
+        self.setFocus( self.current_setting_control )
         xbmcgui.unlock()
         
-    def showPopup( self, title, items ):
-        xbmcgui.lock()
+    def showPopup( self, title ):
+        #xbmcgui.lock()
         self.controls['Popup Label']['control'].setLabel( title )
         self.controls['Popup List']['control'].reset()
+    
+    def fillListSkins( self, items ):
+        #xbmcgui.lock()
         for item in items:
             if ( os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'skin.xml' )) and
-                os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'settings.xml' ))):
+                os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'settings.xml' )) and
+                os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'credits.xml' )) and
+                os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'context_menu.xml' ))):
                 if ( os.path.isfile( os.path.join( self.cwd, 'extras', 'skins', item, 'warning.txt' ))):
                     warning = '*'
                 else: warning = ''
-                self.controls['Popup List']['control'].addItem( '%s%s' % ( warning, item, ))
-        self.setPopupVisibility( True )
+                self.controls['Popup List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( warning, item, ), '', '', '' ) )
+        self.setPopupVisibility( True, True )
         self.setFocus( self.controls['Popup List']['control'] )
-        xbmcgui.unlock()
+        #xbmcgui.unlock()
 
-    def setPopupBGVisibility( self, visible ):
+    #def setPopupBGVisibility( self, visible ):
+    #    try: self.controls['Popup Image Top']['control'].setVisible( visible )
+    #    except: pass
+    #    try: self.controls['Popup Image Middle']['control'].setVisible( visible )
+    #    except: pass
+    #    try: self.controls['Popup Image Bottom']['control'].setVisible( visible )
+    #    except: pass
+
+    def setPopupVisibility( self, visible=False, visible2=False ):
+        #self.setPopupBGVisibility( visible )
         try: self.controls['Popup Image Top']['control'].setVisible( visible )
         except: pass
         try: self.controls['Popup Image Middle']['control'].setVisible( visible )
         except: pass
         try: self.controls['Popup Image Bottom']['control'].setVisible( visible )
         except: pass
-
-    def setPopupVisibility( self, visible ):
-        self.setPopupBGVisibility( visible )
         self.controls['Popup Label']['control'].setVisible( visible )
-        self.controls['Popup Thumb']['control'].setVisible( visible )
-        self.controls['Popup Warning Label']['control'].setVisible( visible )
+        self.controls['Popup Thumb']['control'].setVisible( visible2 )
+        self.controls['Popup Warning Label']['control'].setVisible( visible2 )
         self.controls['Popup List']['control'].setVisible( visible )
         
     def setSkinSelection( self ):
@@ -156,14 +224,16 @@ class GUI( xbmcgui.WindowDialog ):
     
     def setButtonNavigation( self, control ):
         pass
-    #    self.controls['Ok Button']['control'].controlUp( control )
-    #    self.controls['Cancel Button']['control'].controlUp( control )
-    #    self.controls['Update Button']['control'].controlUp( control )
-    #    self.controls['Credits Button']['control'].controlUp( control )
-    #    self.controls['Ok Button']['control'].controlDown( control )
-    #    self.controls['Cancel Button']['control'].controlDown( control )
-    #    self.controls['Update Button']['control'].controlDown( control )
-    #    self.controls['Credits Button']['control'].controlDown( control )
+        '''
+        self.controls['Ok Button']['control'].controlRight( control )
+        self.controls['Cancel Button']['control'].controlRight( control )
+        self.controls['Update Button']['control'].controlRight( control )
+        self.controls['Credits Button']['control'].controlRight( control )
+        self.controls['Ok Button']['control'].controlLeft( control )
+        self.controls['Cancel Button']['control'].controlLeft( control )
+        self.controls['Update Button']['control'].controlLeft( control )
+        self.controls['Credits Button']['control'].controlLeft( control )
+        '''
 
     def showCredits( self ):
         import credits
@@ -195,11 +265,18 @@ class GUI( xbmcgui.WindowDialog ):
         elif ( control is self.controls['Save Folder Button']['control'] ):
             self.browseForFolder()
         elif ( control is self.controls['Skin Button']['control'] ):
+            self.current_setting_control = control
             self.chooseSkin()
         elif ( control is self.controls['Startup Category Button']['control'] ):
-            self.toggleStartupCategory()
+            self.toggleCategory( 0 )
         elif ( control is self.controls['Thumbnail Display Button']['control'] ):
             self.toggleThumbnailDisplay()
+        elif ( control is self.controls['Shortcut1 Button']['control'] ):
+            self.toggleCategory( 1 )
+        elif ( control is self.controls['Shortcut2 Button']['control'] ):
+            self.toggleCategory( 2 )
+        elif ( control is self.controls['Shortcut3 Button']['control'] ):
+            self.toggleCategory( 3 )
         elif ( control is self.controls['Popup List']['control'] ):
             self.setSkinSelection()
             
@@ -212,7 +289,9 @@ class GUI( xbmcgui.WindowDialog ):
         elif ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if ( control == self.controls['Popup List']['control'] ): self.setSkinSelection()
             else: self.saveSettings()
-        elif ( control == self.controls['Popup List']['control'] ):
+        elif ( control == self.controls['Popup List']['control'] and self.current_setting_control == self.controls['Skin Button']['control'] ):
             self.getThumb( control.getSelectedItem() )
-        #elif ( control != self.controls['Ok Button']['control'] and control != self.controls['Cancel Button']['control'] ):
+        #elif ( control != self.controls['Ok Button']['control'] and control != self.controls['Cancel Button']['control'] and
+        #    control != self.controls['Update Button']['control'] and control != self.controls['Credits Button']['control'] and
+        #    control != self.controls['Popup List']['control']):
         #    self.setButtonNavigation( control )
