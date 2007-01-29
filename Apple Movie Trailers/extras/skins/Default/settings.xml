@@ -34,9 +34,9 @@
 		</control>
 
 		<control type="image" id="1">
-			<posx>-25</posx>
+			<posx>-45</posx>
 			<posy>-11</posy>
-			<width>446</width>
+			<width>486</width>
 			<height>406</height>
 			<texture>\background-settings.png</texture>
 		</control>
@@ -46,7 +46,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="1">
 			<description>Title Label</description>
-			<posx>10</posx>
+			<posx>-10</posx>
 			<posy>6</posy>
 			<width>280</width>
 			<align>left</align>
@@ -58,7 +58,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="1">
 			<description>Version Label</description>
-			<posx>400</posx>
+			<posx>420</posx>
 			<posy>6</posy>
 			<width>150</width>
 			<align>right</align>
@@ -72,35 +72,35 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
 			<description>Skin Button</description>
-			<posx>0</posx>
-			<posy>70</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>60</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>303</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+			<onleft>100</onleft>
 			<onright>100</onright>
-			<onup>200</onup>
+			<onup>90</onup>
 			<ondown>20</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="11">
 			<description>Skin Button Value</description>
-			<posx>150</posx>
-			<posy>70</posy>
-			<width>250</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>60</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
@@ -114,19 +114,19 @@
         <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
 			<description>Trailer Quality Button</description>
-			<posx>0</posx>
-			<posy>105</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>92</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>300</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
@@ -135,14 +135,14 @@
         <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="21">
 			<description>Trailer Quality Button Value</description>
-			<posx>150</posx>
-			<posy>105</posy>
-			<width>250</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>92</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
@@ -156,19 +156,19 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
 			<description>Mode Button</description>
-			<posx>0</posx>
-			<posy>140</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>124</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>301</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
@@ -177,14 +177,14 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="31">
 			<description>Mode Button Value</description>
-			<posx>150</posx>
-			<posy>140</posy>
-			<width>250</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>124</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
@@ -198,20 +198,20 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Save Folder Button</description>
-			<posx>0</posx>
-			<posy>175</posy>
-			<width>400</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>156</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>302</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
@@ -220,14 +220,14 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="41">
 			<description>Save Folder Button Value</description>
-			<posx>150</posx>
-			<posy>175</posy>
-			<width>250</width>
-			<height>32</height>
+			<posx>-20</posx>
+			<posy>156</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>10</textoffsetx>
@@ -241,20 +241,20 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
-			<description>Startup Category Button</description>
-			<posx>0</posx>
-			<posy>210</posy>
-			<width>400</width>
-			<height>32</height>
+			<description>Thumbnail Display Button</description>
+			<posx>-20</posx>
+			<posy>188</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>304</label>
-			<font>font10</font>
+			<label>305</label>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
+			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
@@ -262,15 +262,15 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="51">
-			<description>Startup Category Button Value</description>
-			<posx>150</posx>
-			<posy>210</posy>
-			<width>250</width>
-			<height>32</height>
+			<description>Thumbnail Display Button Value</description>
+			<posx>-20</posx>
+			<posy>188</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
@@ -283,18 +283,39 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
-			<description>Thumbnail Display Button</description>
-			<posx>0</posx>
-			<posy>245</posy>
-			<width>400</width>
-			<height>32</height>
+			<description>Startup Category Button</description>
+			<posx>-20</posx>
+			<posy>220</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>305</label>
-			<font>font10</font>
+			<label>304</label>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>70</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="61">
+			<description>Startup Category Button Value</description>
+			<posx>-20</posx>
+			<posy>220</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
@@ -303,16 +324,121 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="61">
-			<description>Thumbnail Display Button Value</description>
-			<posx>150</posx>
-			<posy>245</posy>
-			<width>250</width>
-			<height>32</height>
+		<control type="button" id="70">
+			<description>Shortcut1 Button</description>
+			<posx>-20</posx>
+			<posy>252</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>306</label>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
+			<ondown>80</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="71">
+			<description>Shortcut1 Button Value</description>
+			<posx>-20</posx>
+			<posy>252</posy>
+			<width>350</width>
+			<height>30</height>
 			<align>right</align>
 			<aligny>center</aligny>
 			<label>-</label>
-			<font>font10</font>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>200</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="80">
+			<description>Shortcut2 Button</description>
+			<posx>-20</posx>
+			<posy>284</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>307</label>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>70</onup>
+			<ondown>90</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="81">
+			<description>Shortcut2 Button Value</description>
+			<posx>-20</posx>
+			<posy>284</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>200</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="90">
+			<description>Shortcut3 Button</description>
+			<posx>-20</posx>
+			<posy>316</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>308</label>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>80</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="91">
+			<description>Shortcut3 Button Value</description>
+			<posx>-20</posx>
+			<posy>316</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
@@ -326,8 +452,8 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="200">
 			<description>Update Button</description>
-			<posx>-3</posx>
-			<posy>325</posy>
+			<posx>340</posx>
+			<posy>130</posy>
 			<width>90</width>
 			<height>32</height>
 			<align>center</align>
@@ -339,17 +465,17 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>150</onleft>
-			<onright>210</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>150</onup>
+			<ondown>210</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="210">
 			<description>Credits Button</description>
-			<posx>92</posx>
-			<posy>325</posy>
+			<posx>340</posx>
+			<posy>165</posy>
 			<width>90</width>
 			<height>32</height>
 			<align>center</align>
@@ -361,17 +487,17 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>200</onleft>
-			<onright>100</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>200</onup>
+			<ondown>100</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="100">
 			<description>Ok Button</description>
-			<posx>223</posx>
-			<posy>325</posy>
+			<posx>340</posx>
+			<posy>60</posy>
 			<width>90</width>
 			<height>32</height>
 			<align>center</align>
@@ -382,17 +508,17 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>210</onleft>
-			<onright>150</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>210</onup>
+			<ondown>150</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="150">
 			<description>Cancel Button</description>
-			<posx>318</posx>
-			<posy>325</posy>
+			<posx>340</posx>
+			<posy>95</posy>
 			<width>90</width>
 			<height>32</height>
 			<align>center</align>
@@ -403,10 +529,10 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>100</onleft>
-			<onright>200</onright>
-			<onup>60</onup>
-			<ondown>10</ondown>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>100</onup>
+			<ondown>200</ondown>
 		</control>
 
 		<!-- popup selection dialog -->

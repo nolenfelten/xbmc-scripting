@@ -37,8 +37,8 @@ try:
     import threading
     updateProgressDialog( '%s guibuilder' % ( _( 52 ), ))
     import guibuilder
-    updateProgressDialog( '%s guisettings' % ( _( 52 ), ))
-    import guisettings
+    #updateProgressDialog( '%s guisettings' % ( _( 52 ), ))
+    #import guisettings
     updateProgressDialog( '%s amt_util' % ( _( 52 ), ))
     import amt_util, context_menu
     updateProgressDialog( '%s cacheurl' % ( _( 52 ), ))
@@ -89,7 +89,8 @@ class GUI( xbmcgui.Window ):
         self.settings = amt_util.Settings()
 
     def setupGUI( self ):
-        current_skin = xbmc.getSkinDir()
+        if ( self.settings.skin == 'Default' ): current_skin = xbmc.getSkinDir()
+        else: current_skin = self.settings.skin
         if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
         skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         self.image_path = os.path.join( skin_path, 'gfx' )
@@ -105,7 +106,7 @@ class GUI( xbmcgui.Window ):
     def setupVariables( self ):
         import trailers
         self.trailers = trailers.Trailers()
-        #self.skin = self.settings.skin
+        self.skin = self.settings.skin
         self.sql = None
         self.params = None
         self.display_cast = False
@@ -146,11 +147,13 @@ class GUI( xbmcgui.Window ):
         self.params_category = None
         self.main_category = -1
         self.genres = self.trailers.categories
-        
+        self.setShortcutLabels()
+
     def setStartupCategory( self ):
-        startup_button = 'Genre'
-        if ( self.settings.startup_category_id == self.settings.category_newest ): startup_button = 'Newest'
-        elif ( self.settings.startup_category_id == self.settings.category_exclusives ): startup_button = 'Exclusives'
+        startup_button = 'Shortcut1'
+        if ( self.settings.startup_category_id == self.settings.shortcut1 ): startup_button = 'Shortcut1'
+        elif ( self.settings.startup_category_id == self.settings.shortcut2 ): startup_button = 'Shortcut2'
+        elif ( self.settings.startup_category_id == self.settings.shortcut3 ): startup_button = 'Shortcut3'
         self.setControlNavigation( '%s Button' % ( startup_button, ) )
         self.setCategory( self.settings.startup_category_id )
 
@@ -347,11 +350,11 @@ class GUI( xbmcgui.Window ):
 
     def setCategoryLabel( self ):
         #self.debugWrite('setCategoryLabel', 2)
-        if ( self.category_id == self.settings.category_newest and self.main_category == -1 ):
-            category = _( 200 )
-        elif ( self.category_id == self.settings.category_exclusives and self.main_category == -1 ):
-            category = _( 201 )
-        elif ( self.category_id == -1 ):
+        #if ( self.category_id == self.settings.shortcut1 and self.main_category == -1 ):
+        #    category = _( 200 )
+        #elif ( self.category_id == self.settings.shortcut2 and self.main_category == -1 ):
+        #    category = _( 201 )
+        if ( self.category_id == -1 ):
             category = _( 219 )
         elif ( self.category_id == -2 ):
             category = _( 223 )
@@ -496,16 +499,38 @@ class GUI( xbmcgui.Window ):
             self.showTrailers( self.sql, self.params, choice = index )
         
     def changeSettings( self ):
+        import guisettings
         #self.debugWrite('changeSettings', 2)
         thumbnail_display = self.settings.thumbnail_display
-        settings = guisettings.GUI( language=_ , genres=self.genres )
+        settings = guisettings.GUI( language=_ , genres=self.genres, skin=self.skin )
         settings.doModal()
         del settings
         self.getSettings()
         if ( thumbnail_display != self.settings.thumbnail_display and self.category_id != -1 ):
             trailer = self.controls['Trailer List']['control'].getSelectedPosition()
             self.showTrailers( self.sql, self.params, choice = trailer )
-    
+        self.setShortcutLabels()
+        
+    def setShortcutLabels( self ):
+        if ( self.settings.shortcut1 == -6 ):
+            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 217 ) )
+        elif ( self.settings.shortcut1 == -7 ):
+            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 226 ) )
+        else:
+            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut1 ].title ) )
+        if ( self.settings.shortcut2 == -6 ):
+            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 217 ) )
+        elif ( self.settings.shortcut2 == -7 ):
+            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 226 ) )
+        else:
+            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut2 ].title ) )
+        if ( self.settings.shortcut3 == -6 ):
+            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 217 ) )
+        elif ( self.settings.shortcut3 == -7 ):
+            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 226 ) )
+        else:
+            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut3 ].title ) )
+
     def showCredits( self ):
         import credits
         cw = credits.GUI( language=_ )
@@ -533,26 +558,24 @@ class GUI( xbmcgui.Window ):
             self.main_category = -1
             #self.trailers.getCategories( self.sql_category, self.params_category )
             self.trailers.categories = self.genres
-        #print self.trailers.categories[shortcut].title
-        #print self.trailers.categories[shortcut].id
         self.setCategory( shortcut )
 
     def onControl( self, control ):
         try:
-            if ( control is self.controls['Newest Button']['control'] ):
-                self.setShortcut( self.settings.category_newest )
-            elif ( control is self.controls['Exclusives Button']['control'] ):
-                self.setShortcut( self.settings.category_exclusives )
+            if ( control is self.controls['Shortcut1 Button']['control'] ):
+                #self.setShortcut( self.settings.shortcut1 )
+                self.setCategory( self.settings.shortcut1 )
+            elif ( control is self.controls['Shortcut2 Button']['control'] ):
+                #self.setShortcut( self.settings.shortcut2 )
+                self.setCategory( self.settings.shortcut2 )
+            elif ( control is self.controls['Shortcut3 Button']['control'] ):
+                self.setCategory( self.settings.shortcut3 )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setCategory( -1 )
             elif ( control is self.controls['Studio Button']['control'] ):
                 self.setCategory( -2 )
             elif ( control is self.controls['Actor Button']['control'] ):
                 self.setCategory( -3 )
-            elif ( control is self.controls['Downloaded Button']['control'] ):
-                self.setCategory( -7 )
-            elif ( control is self.controls['Favorites Button']['control'] ):
-                self.setCategory( -6 )
             elif ( control is self.controls['Search Button']['control'] ):
                 pass#self.search
             elif ( control is self.controls['Settings Button']['control'] ):
@@ -611,24 +634,22 @@ class GUI( xbmcgui.Window ):
                     self.pageIndicator( 'Cast List', -1 )
                 elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Cast List', 1 )
-            elif ( control is self.controls['Newest Button']['control'] ):
-                self.setControlNavigation( 'Newest Button' )
-            elif ( control is self.controls['Exclusives Button']['control'] ):
-                self.setControlNavigation( 'Exclusives Button' )
+            elif ( control is self.controls['Shortcut1 Button']['control'] ):
+                self.setControlNavigation( 'Shortcut1 Button' )
+            elif ( control is self.controls['Shortcut2 Button']['control'] ):
+                self.setControlNavigation( 'Shortcut2 Button' )
+            elif ( control is self.controls['Shortcut3 Button']['control'] ):
+                self.setControlNavigation( 'Shortcut3 Button' )
             elif ( control is self.controls['Genre Button']['control'] ):
                 self.setControlNavigation( 'Genre Button' )
             elif ( control is self.controls['Studio Button']['control'] ):
                 self.setControlNavigation( 'Studio Button' )
-            elif ( control is self.controls['Favorites Button']['control'] ):
-                self.setControlNavigation( 'Favorites Button' )
             elif ( control is self.controls['Actor Button']['control'] ):
                 self.setControlNavigation( 'Actor Button' )
             elif ( control is self.controls['Search Button']['control'] ):
                 self.setControlNavigation( 'Search Button' )
             elif ( control is self.controls['Settings Button']['control'] ):
                 self.setControlNavigation( 'Settings Button' )
-            elif ( control is self.controls['Downloaded Button']['control'] ):
-                self.setControlNavigation( 'Downloaded Button' )
             else:
                 try:
                     if ( control is self.controls[ 'Optional Button' ][ 'control' ] ):

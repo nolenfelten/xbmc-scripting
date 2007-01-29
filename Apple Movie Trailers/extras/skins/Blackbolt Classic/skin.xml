@@ -69,7 +69,9 @@
 			<include>textcolor-yellow</include>
 		</control>
 
-		<control type="image">
+		<!-- Left Panel -->
+		
+        <control type="image">
 			<description>panel</description>
 			<posx>45</posx>
 			<posy>115</posy>
@@ -80,7 +82,7 @@
 		<control type="image">
 			<description>Middle panel Bar</description>
 			<posx>45</posx>
-			<posy>272</posy>
+			<posy>234</posy>
 			<height>20</height>
 			<width>150</width>
 			<texture>middle-bar.png</texture>
@@ -88,7 +90,7 @@
 		<control type="image">
 			<description>Middle panel Bar</description>
 			<posx>45</posx>
-			<posy>415</posy>
+			<posy>378</posy>
 			<height>20</height>
 			<width>150</width>
 			<texture>middle-bar.png</texture>
@@ -98,8 +100,8 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
-			<description>Newest Button</description>
-			<label>200</label>
+			<description>Shortcut1 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>120</posy>
 			<texturenofocus>-</texturenofocus>
@@ -107,15 +109,15 @@
 			<!--aligny>center</aligny-->
 			<onleft>95</onleft>
 			<onright>100</onright>
-			<onup>70</onup>
+			<onup>80</onup>
 			<ondown>20</ondown>
 			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
-			<description>Exclusives Button</description>
-			<label>201</label>
+			<description>Shortcut2 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>157</posy>
 			<texturenofocus>-</texturenofocus>
@@ -130,8 +132,8 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
-			<description>Favorites Button</description>
-			<label>217</label>
+			<description>Shortcut3 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>194</posy>
 			<texturenofocus>-</texturenofocus>
@@ -140,22 +142,6 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
-			<ondown>35</ondown>
-			<onclick>-</onclick>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="35">
-			<description>Downloaded Button</description>
-			<label>226</label>
-			<posx>50</posx>
-			<posy>231</posy>
-			<texturenofocus>-</texturenofocus>
-			<font>font13</font>
-			<!--aligny>center</aligny-->
-			<onleft>95</onleft>
-			<onright>100</onright>
-			<onup>30</onup>
 			<ondown>40</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -165,13 +151,13 @@
 			<description>Genre Button</description>
 			<label>202</label>
 			<posx>50</posx>
-			<posy>300</posy>
+			<posy>264</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
 			<onleft>95</onleft>
 			<onright>100</onright>
-			<onup>35</onup>
+			<onup>30</onup>
 			<ondown>45</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -181,7 +167,7 @@
 			<description>Studio Button</description>
 			<label>222</label>
 			<posx>50</posx>
-			<posy>337</posy>
+			<posy>301</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -197,7 +183,7 @@
 			<description>Actor Button</description>
 			<label>224</label>
 			<posx>50</posx>
-			<posy>374</posy>
+			<posy>338</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -213,7 +199,7 @@
 			<description>Search Button</description>
 			<label>203</label>
 			<posx>50</posx>
-			<posy>443</posy>
+			<posy>408</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
@@ -229,15 +215,31 @@
 			<description>Settings Button</description>
 			<label>204</label>
 			<posx>50</posx>
-			<posy>480</posy>
+			<posy>445</posy>
 			<texturenofocus>-</texturenofocus>
 			<font>font13</font>
 			<!--aligny>center</aligny-->
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>60</onup>
-			<ondown>10</ondown>
+			<ondown>80</ondown>
 			<onclick>-</onclick>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="80">
+			<description>Optional Button</description>
+			<label>209</label>
+			<posx>50</posx>
+			<posy>482</posy>
+			<texturenofocus>-</texturenofocus>
+			<font>font13</font>
+			<!--aligny>center</aligny-->
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>70</onup>
+			<ondown>10</ondown>
+			<onclick>self.showCredits()</onclick>
 		</control>
 
 		<!-- Trailer list controls -->

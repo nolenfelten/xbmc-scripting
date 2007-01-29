@@ -104,8 +104,8 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
-			<description>Newest Button</description>
-			<label>200</label>
+			<description>Shortcut1 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>120</posy>
 			<width>150</width>
@@ -126,8 +126,8 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
-			<description>Exclusives Button</description>
-			<label>201</label>
+			<description>Shortcut2 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>157</posy>
 			<width>150</width>
@@ -148,8 +148,8 @@
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
-			<description>Favorites Button</description>
-			<label>217</label>
+			<description>Shortcut3 Button</description>
+			<label>-</label>
 			<posx>50</posx>
 			<posy>194</posy>
 			<width>150</width>
@@ -164,16 +164,16 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>20</onup>
-			<ondown>35</ondown>
+			<ondown>40</ondown>
 			<onclick>-</onclick>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="35">
-			<description>Downloaded Button</description>
-			<label>226</label>
+		<control type="button" id="40">
+			<description>Genre Button</description>
+			<label>202</label>
 			<posx>50</posx>
-			<posy>231</posy>
+			<posy>264</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -186,28 +186,6 @@
 			<onleft>95</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
-			<ondown>40</ondown>
-			<onclick>-</onclick>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="40">
-			<description>Genre Button</description>
-			<label>202</label>
-			<posx>50</posx>
-			<posy>300</posy>
-			<width>150</width>
-			<height>33</height>
-			<texturefocus>\button-focus.png</texturefocus>
-			<texturenofocus>\button-nofocus.png</texturenofocus>
-			<font>font13</font>
-			<textcolor>FFFFFFFF</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<aligny>center</aligny>
-			<onleft>95</onleft>
-			<onright>100</onright>
-			<onup>35</onup>
 			<ondown>45</ondown>
 			<onclick>-</onclick>
 		</control>
@@ -217,7 +195,7 @@
 			<description>Studio Button</description>
 			<label>222</label>
 			<posx>50</posx>
-			<posy>337</posy>
+			<posy>301</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -239,7 +217,7 @@
 			<description>Actor Button</description>
 			<label>224</label>
 			<posx>50</posx>
-			<posy>374</posy>
+			<posy>338</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -261,7 +239,7 @@
 			<description>Search Button</description>
 			<label>203</label>
 			<posx>50</posx>
-			<posy>443</posy>
+			<posy>408</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>
@@ -283,7 +261,7 @@
 			<description>Settings Button</description>
 			<label>204</label>
 			<posx>50</posx>
-			<posy>480</posy>
+			<posy>478</posy>
 			<width>150</width>
 			<height>33</height>
 			<texturefocus>\button-focus.png</texturefocus>

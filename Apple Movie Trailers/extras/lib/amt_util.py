@@ -1,4 +1,4 @@
-import xbmcgui
+import xbmcgui, xbmc
 import os, sys, default
 
 COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
@@ -40,11 +40,12 @@ def setControllerAction():
                 }
 
 class Settings:
-    def __init__( self ):
+    def __init__( self, *args, **kwargs ):
         self.getSettings()
         
     def getSettings( self ):
         try:
+            self.usedDefaults = False
             f = open( os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', 'settings.txt' ), 'r' )
             s = f.read().split('|')
             f.close()
@@ -55,8 +56,9 @@ class Settings:
             self.save_folder = s[4]
             self.startup_category_id = int( s[5] )
             self.thumbnail_display = int( s[6] )
-            self.category_newest = int( s[7] )
-            self.category_exclusives = int( s[8] )
+            self.shortcut1 = int( s[7] )
+            self.shortcut2 = int( s[8] )
+            self.shortcut3 = int( s[9] )
             if ( version not in COMPATIBLE_VERSIONS ):
                 self.setDefaults( True )
         except:
@@ -69,16 +71,18 @@ class Settings:
         self.skin = 'Default'
         self.save_folder = 'f:\\'
         self.thumbnail_display = 1
-        self.category_newest = 10
-        self.category_exclusives = 4
-        self.startup_category_id = self.category_newest
+        self.shortcut1 = 10
+        self.shortcut2 = 4
+        self.shortcut3 = -6
+        self.startup_category_id = self.shortcut1
         success = self.saveSettings()
-        if ( success and show_dialog ):
-            xbmcgui.Dialog().ok( 'Apple Movie Trailers', 'Settings incompatible, using default values.' )
+        self.usedDefaults = True
+        #if ( success and show_dialog ):
+        #    xbmcgui.Dialog().ok( 'Apple Movie Trailers', 'Settings incompatible, using default values.' )
         
     def saveSettings( self ):
         try:
-            strSettings = '%s|%d|%d|%s|%s|%d|%d|%d|%d' % ( 
+            strSettings = '%s|%d|%d|%s|%s|%d|%d|%d|%d|%d' % ( 
                 default.__version__,
                 self.trailer_quality,
                 self.mode, 
@@ -86,8 +90,9 @@ class Settings:
                 self.save_folder,
                 self.startup_category_id,
                 self.thumbnail_display,
-                self.category_newest,
-                self.category_exclusives, )
+                self.shortcut1,
+                self.shortcut2,
+                self.shortcut3, )
             f = open( os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', 'settings.txt' ), 'w' )
             f.write(strSettings)
             f.close()
