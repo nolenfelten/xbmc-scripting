@@ -533,7 +533,7 @@ class GUI( xbmcgui.Window ):
 
     def showCredits( self ):
         import credits
-        cw = credits.GUI( language=_ )
+        cw = credits.GUI( language=_, skin=self.skin )
         cw.doModal()
         del cw
 

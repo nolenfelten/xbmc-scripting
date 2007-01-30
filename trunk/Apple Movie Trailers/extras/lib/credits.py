@@ -7,6 +7,7 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             self.cwd = os.path.dirname( sys.modules['default'].__file__ )
             self._ = kwargs['language']
+            self.skin = kwargs['skin']
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
             else:
@@ -19,13 +20,14 @@ class GUI( xbmcgui.WindowDialog ):
         self.controller_action = amt_util.setControllerAction()
         
     def setupGUI( self ):
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ) ) ): current_skin = 'default'
+        if ( self.skin == 'Default' ): current_skin = xbmc.getSkinDir()
+        else: current_skin = self.skin
+        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
         skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'credits_16x9.xml'
         else: xml_file = 'credits.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ) ) ): xml_file = 'credits.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'credits.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
         
     def showCredits( self ):
