@@ -217,8 +217,8 @@ class GUI( xbmcgui.Window ):
 
     def showTrailers( self, sql, params = None, choice = 0, force_update = False ):
         try:
-            xbmcgui.lock()
             if ( sql != self.sql or params != self.params or force_update ): self.trailers.getMovies( sql, params )
+            xbmcgui.lock()
             self.sql = sql
             self.params = params
             self.controls['Trailer List']['control'].reset()
@@ -477,7 +477,7 @@ class GUI( xbmcgui.Window ):
             if ( not os.path.isfile( new_filename ) ):
                 shutil.copyfile( poster, new_filename )
             if ( self.trailers.movies[trailer].saved == '' ):
-                success = self.trailers.updateRecord( ( 'saved_location', ), 'Movies', ( filename, ), key_value = self.trailers.movies[trailer].title)
+                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( filename, ), key_value = self.trailers.movies[trailer].title)
                 if ( success ): self.trailers.movies[trailer].saved = filename
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
@@ -493,7 +493,7 @@ class GUI( xbmcgui.Window ):
     def markAsWatched( self, watched, trailer, index ):
         if ( watched ): date = datetime.date.today()
         else: date = ''
-        success = self.trailers.updateRecord( ( 'times_watched', 'last_watched', ), 'Movies', ( watched, date, ), key_value = trailer )
+        success = self.trailers.updateRecord( 'Movies', ( 'times_watched', 'last_watched', ), ( watched, date, ), key_value = trailer )
         if ( success ):
             self.trailers.movies[index].watched = watched
             self.showTrailers( self.sql, self.params, choice = index )
@@ -552,7 +552,6 @@ class GUI( xbmcgui.Window ):
 
     def setShortcut( self, shortcut ):
         if ( self.main_category != -1 ):
-            #print 'NOPE'
             self.sql_category = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
             self.params_category = None
             self.main_category = -1

@@ -2,13 +2,16 @@
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbox media center</string>
 
-
   <!-- Dialog Messages -->
+  <string id="40">All info is fetched, search is available. (30 - 90 minutes)</string>
+  <string id="41">Info is updated per genre. (10 - 20 minutes)</string>
+  <string id="42">Save movie info to database...</string>
+  
   <string id="50">Setting up script:</string>
   <string id="51">Importing modules &amp; initializing...</string>
   <string id="52">module:</string>
   <string id="53">No database found!</string>
-  <string id="54">You must Update all genre and movie information.</string>
+  <string id="54">You must update all genre and movie information.</string>
   <string id="55">There was an error saving your settings.</string>
   <string id="56">The skin change won't take effect until you restart.</string>
   <string id="57">There was an error setting up your GUI.</string>
@@ -39,6 +42,11 @@
   <string id="82">Are you sure you want to delete</string>
   <string id="83">Loading database...</string>
   <string id="84">Saving database...</string>
+  <string id="85">Executing query...</string>
+  <string id="86">The operation was cancelled.</string>
+  <string id="87">Current genre</string>
+  <string id="88">Current trailer</string>
+  <string id="89">There was an error creating the database.</string>
 
   <string id="90">Fetching current tagged versions...</string>
   <string id="91">is newer</string>
@@ -88,6 +96,8 @@
   <string id="226">Downloaded</string>
   <string id="227">Exit script</string>
   <string id="228">Check for update</string>
+  <string id="229">Full</string>
+  <string id="230">Minimal</string>
   
   <!-- Settings -->
   <string id="300">Trailer Quality</string>

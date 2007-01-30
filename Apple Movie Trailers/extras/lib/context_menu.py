@@ -27,9 +27,9 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
         skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'context_16x9.xml'
-        else: xml_file = 'context.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'context.xml'
+        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'context_menu_16x9.xml'
+        else: xml_file = 'context_menu.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'context_menu.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def showContextMenu( self ):
@@ -74,7 +74,7 @@ class GUI( xbmcgui.WindowDialog ):
   
     def toggleAsFavorite( self ):
         favorite = not self.win.trailers.movies[self.trailer].favorite
-        success = self.win.trailers.updateRecord( ( 'favorite', ), 'Movies', ( favorite, ), key_value = self.win.trailers.movies[self.trailer].title )
+        success = self.win.trailers.updateRecord( 'Movies', ( 'favorite', ), ( favorite, ), key_value = self.win.trailers.movies[self.trailer].title )
         if ( success ):
             self.win.trailers.movies[self.trailer].favorite = favorite
             if ( self.win.category_id == -3 ):
@@ -107,7 +107,7 @@ class GUI( xbmcgui.WindowDialog ):
                 os.remove( '%s.conf' % ( saved_trailer, ) )
             if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
                 os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-            success = self.win.trailers.updateRecord( ( 'saved_location', ), 'Movies', ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
+            success = self.win.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
             if ( success ):
                 self.win.trailers.movies[self.trailer].saved = ''
                 if ( self.win.category_id == -7 ): force_update = True
