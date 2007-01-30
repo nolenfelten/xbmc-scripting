@@ -16,13 +16,14 @@ class GUI( xbmcgui.WindowDialog ):
             self.setControlsValues()
 
     def setupGUI( self ):
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ) ) ): current_skin = 'default'
+        if ( self.skin == 'Default' ): current_skin = xbmc.getSkinDir()
+        else: current_skin = self.skin
+        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
         skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'settings_16x9.xml'
         else: xml_file = 'settings.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ) ) ): xml_file = 'settings.xml'
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'settings.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
 
     def setStartupCategories( self, genres ):
@@ -245,7 +246,7 @@ class GUI( xbmcgui.WindowDialog ):
 
     def showCredits( self ):
         import credits
-        cw = credits.GUI( language=self._ )
+        cw = credits.GUI( language=self._, skin=self.skin )
         cw.doModal()
         del cw
 
