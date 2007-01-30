@@ -6,10 +6,10 @@ import default
 import language
 import pil_util
 import database
-DB = database.Database()
 
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
+DB = database.Database( language=_ )
 
 class Movie:
     def __init__( self, *args, **kwargs ):
@@ -103,7 +103,7 @@ class Trailers:
                     self.categories += [Category( genre )]
             else:
                 self.dialog = xbmcgui.DialogProgress()
-                self.dialog.create('Loading genre info into database...')
+                self.dialog.create(_( 66 ))
                 
                 base_xml = fetcher.urlopen( self.BASEXML )
                 base_xml = ET.fromstring( base_xml )
@@ -151,12 +151,12 @@ class Trailers:
                 total_cnt = len( genres )
                 pct_sect = float( 100 ) / total_cnt
                 for cnt, genre in enumerate( genres ):
-                    self.dialog.update( int( cnt * pct_sect ), 'Current genre: %s - (%d of %d)' % (genre, cnt + 1, total_cnt, ), '', '' )
+                    self.dialog.update( int( cnt * pct_sect ), '%s %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
                     trailer_urls = self.loadGenreInfo( genre, 2**genre_id, genre_dict[genre], cnt, total_cnt, pct_sect )
                     if ( trailer_urls ):
-                        success = DB.addRecord( ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls) ), 'Genres' )
+                        success = DB.addRecord( 'Genres', ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls) ) )
                         self.categories += [Category( ( genre, len( trailer_urls), genre_dict[genre], 2**genre_id, 0 ) )]
-                        ##success = DB.addRecord( ( genre, genre_dict[genre], 2**genre_id, 0, repr( [] ) ), 'Genres' )
+                        ##success = DB.addRecord( 'Genres', ( genre, genre_dict[genre], 2**genre_id, 0, repr( [] ) ) )
                     genre_id += 1
                 self.dialog.close()
 
@@ -180,7 +180,6 @@ class Trailers:
             trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre, ) )
             #columns = 'trailer_urls', table = 'Genres', condition = 'title=', values = ( genre, ) )
             if ( trailer_urls ):
-                #print 'trailer_urls',trailer_urls
                 return eval( trailer_urls[0] )
             else:
                 if url[:7] != 'http://':
@@ -258,11 +257,11 @@ class Trailers:
             if ( genre.loaded == 0 ):
                 total_cnt += genre.count
                 total_genre_cnt += 1
-        if ( total_cnt > 0 ):
-            self.load_all = xbmcgui.Dialog().yesno('Create the movie trailers database', 'Complete: thumbnails, actor, studio and search works. (20 - 60 minutes)', 'Minimal: movie information is loaded as needed. (5 - 10 minutes)', 'USE COMPLETE!!!', 'Minimal', 'Complete' )
+        if ( total_cnt > 0 and DB.created == True ):
+            self.load_all = xbmcgui.Dialog().yesno( _( 53 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), '', _( 230 ), _( 229 ) )
             try:
                 dialog = xbmcgui.DialogProgress()
-                dialog.create('Loading movie info into database...')
+                dialog.create( _( 70 ) )
                 pct_sect = float( 100 ) / total_cnt
                 cnt = 0
                 genre_cnt = 0
@@ -273,16 +272,16 @@ class Trailers:
                         #DB.getRecords( columns = 'trailer_urls', table = 'Genres', condition = 'title=?', values = ( genre.title, ) )
                         for movie in eval( trailer_urls[0] ):
                             cnt += 1
-                            dialog.update( int( cnt * pct_sect ) , 'Current genre: %s - (%d of %d)' % (genre.title, genre_cnt, total_genre_cnt, ), '', 'Current trailer: %s' % movie[0] )
+                            dialog.update( int( cnt * pct_sect ) , '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '', '%s: %s' % ( movie[0], _( 88 ), ) )
                             self.loadMovieInfo( movie[0], genre.id, movie[1] )
                             if ( dialog.iscanceled() ): raise
                         if ( self.load_all ):
-                            success = DB.updateRecord( columns = ( 'loaded', ), table = 'Genres', values = ( genre.count, ), key_value = genre.title )
+                            success = DB.updateRecord( table = 'Genres', columns = ( 'loaded', ), values = ( genre.count, ), key_value = genre.title )
                 dialog.close()
             except:
                 dialog.close()
                 traceback.print_exc()
-                xbmcgui.Dialog().ok( 'Loading movie info into database...', 'The operation was aborted.' )
+                xbmcgui.Dialog().ok( _( 70 ), _( 86 ) )
                 
     def loadMovieInfo( self, title, genre_id, url ):
         try:
@@ -296,14 +295,15 @@ class Trailers:
             self.rating = ''
             self.rating_url = ''
             genre = DB.getRecords( 'SELECT genre FROM Movies WHERE title=?', ( title, ) )
-            if ( genre ):
+            if ( genre and genre_id != -1 ):
                 if ( not genre_id&genre[0] > 0 ):
                     genre_id += genre[0]
-                    success = DB.updateRecord( columns = ( 'genre', ), table = 'Movies', values = ( genre_id, ), key_value = title )
+                    success = DB.updateRecord( table = 'Movies', columns = ( 'genre', ), values = ( genre_id, ), key_value = title )
             else:
                 if ( self.load_all ):
                     if url[:7] != 'http://':
                         url = self.BASEURL + url
+
                     # xml parsing
                     element = fetcher.urlopen( url )
                     element = ET.fromstring( element )
@@ -336,9 +336,9 @@ class Trailers:
                                 actors += [ actor ]
                                 actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
                                 if ( actor_exists ):
-                                    success = DB.updateRecord( ( 'count', ) , 'Actors', ( actor_exists[0] + 1, ), key = 'name', key_value = actor )
+                                    success = DB.updateRecord( 'Actors', ( 'count', ), ( actor_exists[0] + 1, ), key = 'name', key_value = actor )
                                 else:
-                                    success = DB.addRecord( ( actor, 1, ) , 'Actors' )
+                                    success = DB.addRecord( 'Actors', ( actor, 1, ) )
                     except:
                         pass
                     self.actors = actors
@@ -350,9 +350,9 @@ class Trailers:
                         self.studio = studio.strip()
                         studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
                         if ( studio_exists ):
-                            success = DB.updateRecord( ( 'count', ) , 'Studios', ( studio_exists[0] + 1, ), key_value = self.studio )
+                            success = DB.updateRecord( 'Studios', ( 'count', ), ( studio_exists[0] + 1, ), key_value = self.studio )
                         else:
-                            success = DB.addRecord( ( self.studio, 1, ) , 'Studios' )
+                            success = DB.addRecord( 'Studios', ( self.studio, 1, ) )
 
                     # -- rating --2
                     temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
@@ -396,49 +396,64 @@ class Trailers:
                             trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
                         self.trailer_urls = trailer_urls
                 
-                info_list = [title]
-                info_list += [url]
-                info_list += [repr( self.trailer_urls )]
-                info_list += [genre_id]
-                info_list += [self.poster]
-                info_list += [self.__thumbnail__]
-                info_list += [self.__thumbnail_watched__]
-                info_list += [self.plot]
-                info_list += [repr( self.actors )]
-                info_list += [self.studio]
-                info_list += [self.rating]
-                info_list += [self.rating_url]
-                info_list += [0]
-                info_list += [0]
-                info_list += ['']
-                info_list += [0]
-                info_list += ['']
-                success = DB.addRecord( info_list, 'Movies' )
-
+                info_list = (title,)
+                info_list += (url,)
+                info_list += (repr( self.trailer_urls ),)
+                if ( genre ): info_list += (genre[ 0 ],)
+                else: info_list += (genre_id,)
+                info_list += (self.poster,)
+                info_list += (self.__thumbnail__,)
+                info_list += (self.__thumbnail_watched__,)
+                info_list += (self.plot,)
+                info_list += (repr( self.actors ),)
+                info_list += (self.studio,)
+                info_list += (self.rating,)
+                info_list += (self.rating_url,)
+                info_list += (0,)
+                info_list += (0,)
+                info_list += ('',)
+                info_list += (0,)
+                info_list += ('',)
+                if ( genre ):
+                    columns = ( '*', )#'title', 'url', 'trailer_urls', 'genre', 'poster', 'thumbnail', 'thumbnail_watched', 'plot', 'actors', 'studio', 'rating', 'rating_url', 'year', 'times_watched', 'last_watched', 'favorite', 'saved_location', )
+                    success = DB.updateRecord( table = 'Movies', columns = columns, values = info_list, key = 'title', key_value = title )
+                    return info_list
+                else:  success = DB.addRecord( 'Movies', info_list )
         except:
-            pass#traceback.print_exc()
+            pass#print traceback.print_exc()
             
-    def updateRecord( self, columns, table, values, key = 'title', key_value = None ):
-        success = DB.updateRecord( columns = columns, table = table, values = values, key = key, key_value = key_value )
+    def updateRecord( self, table, columns, values, key = 'title', key_value = None ):
+        success = DB.updateRecord( table = table, columns = columns, values = values, key = key, key_value = key_value )
         return success
         
     def getMovies( self, sql, params = None, all = True ):
         try:
+            self.load_all = True
             dialog = xbmcgui.DialogProgress()
-            dialog.create( 'Executing query...', 'Please wait a moment.' )
-            dialog.update( -1 )
+            dialog.create( _( 85 ) )
+            dialog.update( -1, _( 67 ) )
             movie_list = DB.getRecords( sql, params, all )
-            self.movies = []
-            for movie in movie_list:
-                self.movies += [Movie( movie )]
+            if ( movie_list ):
+                self.movies = []
+                info_missing = False
+                total_cnt = len( movie_list )
+                pct_sect = float( 100 ) / total_cnt
+                for cnt, movie in enumerate( movie_list ):
+                    if ( eval( movie[ 2 ] ) == [] ):
+                        info_missing = True
+                        movie = self.loadMovieInfo( movie[ 0 ], -1, str( movie[ 1 ] ) )
+                    if ( info_missing ):
+                        dialog.update( int( cnt * pct_sect ), _( 67 ), '%s' % ( _( 70 ), ), '%s: %s' % ( _( 88 ), movie[0], ) )
+                    self.movies += [Movie( movie )]
+            else: self.movies = [ None ]
         finally:
             dialog.close()
             
     def getCategories( self, sql, params = None, all = True ):
         try:
             dialog = xbmcgui.DialogProgress()
-            dialog.create( 'Executing query...', 'Please wait a moment.' )
-            dialog.update( -1 )
+            dialog.create( _( 85 ) )
+            dialog.update( -1, _( 67 ) )
             category_list = DB.getRecords( sql, params, all )
             self.categories = []
             for category in category_list:

@@ -7,7 +7,8 @@ import traceback
 COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
 
 class Database:
-    def __init__( self ):
+    def __init__( self, *args, **kwargs ):
+        self._ = kwargs[ 'language' ]
         if ( not os.path.isdir( os.path.join( cwd, 'extras', 'data' ) ) ):
             os.makedirs( os.path.join( cwd, 'extras', 'data' ) )
         db = os.path.join( cwd, 'extras', 'data', 'AMT.db' )
@@ -16,13 +17,14 @@ class Database:
         self.db_version = self.getVersion()
         #print 'version', self.db_version[0]
         if ( not self.db_version ): 
-            print 'no database exists'
+            print 'no database exists', default.__version__
             #cleanup database
             #del self.con
             #remove db if exists
             
     def getVersion( self ):
         version = self.getRecords( 'SELECT version FROM Version' )
+        self.created = False
         if ( not version ): version = self.createDatabase()
         elif ( version not in COMPATIBLE_VERSIONS ): version = self.convertDatabase( version )
         return version
@@ -82,6 +84,7 @@ class Database:
 
     def createDatabase( self ):
         try:
+            self.created = True
             dialog = xbmcgui.DialogProgress()
             dialog.create('Creating database...')
             for table in self.tables.keys():
@@ -89,13 +92,13 @@ class Database:
                 success = self.createTable( table )
                 if ( not success ):
                     raise
-            success = self.addRecord( ( default.__version__, ),  'Version' )
+            success = self.addRecord( 'Version', ( default.__version__, ) )
             dialog.close()
             if ( success ): return default.__version__
             else: return None
         except:
             dialog.close()
-            xbmcgui.Dialog().ok( 'Apple Movie Trailers', 'There was a problem creating the database' )
+            xbmcgui.Dialog().ok( self._( 0 ), self._( 89 ) )
             return None
 
     def createTable( self, table ):
@@ -121,23 +124,28 @@ class Database:
     #    else:
     #        success = self.addRecord( columns, table )
             
-    def addRecord( self, columns, table ):
+    def addRecord( self, table, values ):
         try:
             cur = self.con.cursor()
             sql='INSERT INTO %s (' % ( table, )
             for item in self.tables[table]:
                 sql += '%s, ' % item[0]
-            sql = sql[:-2] + ') VALUES (' + ( '?, '*len( columns ) )
+            sql = sql[:-2] + ') VALUES (' + ( '?, '*len( values ) )
             sql = sql[:-2] + ')'
             #print sql
-            cur.execute( sql, columns )
+            cur.execute( sql, values )
             self.con.commit()
             return True
         except:
             return False
             
-    def updateRecord( self, columns, table, values, key = 'title', key_value = None ):
+    def updateRecord( self, table, columns, values, key = 'title', key_value = None ):
         try:
+            if ( columns[0] == '*' ):
+                columns = ()
+                for item in self.tables[table]:
+                    columns += ( item[0], )
+            #print 'got to updateRecord'
             cur = self.con.cursor()
             sql = "UPDATE %s SET " % ( table, )
             for col in columns:
