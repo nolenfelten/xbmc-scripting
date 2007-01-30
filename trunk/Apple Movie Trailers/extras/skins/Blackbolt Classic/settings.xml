@@ -717,5 +717,39 @@
 			<visible>false</visible>
 		</control>
 
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="504">
+			<description>Popup List2</description>
+			<posx>83</posx>
+			<posy>80</posy>
+			<width>260</width>
+			<height>286</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+            <hidespinners>false</hidespinners>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+			<image>-</image>
+            <spacebetweenitems>2</spacebetweenitems>
+			<textureheight>24</textureheight>
+			<itemwidth>0</itemwidth>
+			<itemheight>20</itemheight>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-5</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+
 	</controls>
 </window>

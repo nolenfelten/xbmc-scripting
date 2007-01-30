@@ -578,7 +578,7 @@
 			<description>Popup Label</description>
 			<posx>65</posx>
 			<posy>48</posy>
-			<width>150</width>
+			<width>250</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
@@ -633,6 +633,38 @@
 			<texturenofocus>\list-nofocus.png</texturenofocus>
 			<image>-</image>
 			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>0</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>false</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="504">
+			<description>Popup List2</description>
+			<posx>63</posx>
+			<posy>100</posy>
+			<width>275</width>
+			<height>234</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>\list-focus.png</texturefocus>
+			<texturenofocus>\list-nofocus.png</texturenofocus>
+			<image>-</image>
+			<textureheight>24</textureheight>
+            <spacebetweenitems>2</spacebetweenitems>
 			<itemwidth>0</itemwidth>
 			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
