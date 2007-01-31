@@ -2,6 +2,11 @@ import xbmcgui, xbmc
 import os, sys, default
 
 COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
+GENRES				= -1
+STUDIOS			= -2
+ACTORS				= -3
+FAVORITES			= -6
+DOWNLOADED		= -7
 
 def setThumbnailDisplay( _ ):
     return [_(310), _(311), _(312)]
@@ -42,7 +47,7 @@ def setControllerAction():
 class Settings:
     def __init__( self, *args, **kwargs ):
         self.getSettings()
-        
+
     def getSettings( self ):
         try:
             self.usedDefaults = False

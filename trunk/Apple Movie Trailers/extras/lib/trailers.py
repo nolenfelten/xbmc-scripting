@@ -151,7 +151,7 @@ class Trailers:
                 total_cnt = len( genres )
                 pct_sect = float( 100 ) / total_cnt
                 for cnt, genre in enumerate( genres ):
-                    self.dialog.update( int( cnt * pct_sect ), '%s %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
+                    self.dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
                     trailer_urls = self.loadGenreInfo( genre, 2**genre_id, genre_dict[genre], cnt, total_cnt, pct_sect )
                     if ( trailer_urls ):
                         success = DB.addRecord( 'Genres', ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls) ) )
@@ -443,11 +443,12 @@ class Trailers:
                         info_missing = True
                         movie = self.loadMovieInfo( movie[ 0 ], -1, str( movie[ 1 ] ) )
                     if ( info_missing ):
-                        dialog.update( int( cnt * pct_sect ), _( 67 ), '%s' % ( _( 70 ), ), '%s: %s' % ( _( 88 ), movie[0], ) )
+                        dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 67 ), '%s (%d of %d)' % ( _( 70 ), cnt + 1, total_cnt ), '%s: %s' % ( _( 88 ), movie[0], ) )
+                        if ( dialog.iscanceled() ): raise
                     self.movies += [Movie( movie )]
-            else: self.movies = [ None ]
-        finally:
-            dialog.close()
+            else: self.movies = None
+        except: pass
+        dialog.close()
             
     def getCategories( self, sql, params = None, all = True ):
         try:
@@ -455,8 +456,10 @@ class Trailers:
             dialog.create( _( 85 ) )
             dialog.update( -1, _( 67 ) )
             category_list = DB.getRecords( sql, params, all )
-            self.categories = []
-            for category in category_list:
-                self.categories += [Category( category )]
+            if ( category_list ):
+                self.categories = []
+                for category in category_list:
+                    self.categories += [Category( category )]
+            else: self.categories = None
         finally:
             dialog.close()
