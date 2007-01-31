@@ -15,6 +15,7 @@ import sys, email, xbmcgui, xbmc
 import string, time, mimetypes, re, os
 import shutil
 SLEEPTIME = 2 #seconds
+WINDOWRESUME = 1 # 1 = yes, 0 = no
 
 Root_Dir = os.getcwd().replace(";","")+"\\"
    
@@ -30,7 +31,8 @@ class main:
                         self.opendata()
                 except:
                         self.saver()
-                xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
+                if WINDOWRESUME == 1:
+                        xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                 xbmc.executebuiltin("XBMC.SetVolume("+self.volume+")")
                 time.sleep(1)
                 if self.plsize == False: #there is no playlist
