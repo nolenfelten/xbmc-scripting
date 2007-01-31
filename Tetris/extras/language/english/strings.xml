@@ -5,12 +5,16 @@
 
   <string id="10">High Score:</string>
   <string id="11">Ghost Piece</string>
+  <string id="12">Change Controls</string>
 
   <string id="30">Lines:</string>
   <string id="31">Score:</string>
   <string id="32">Level:</string>
 
 
+  <string id="47">Username</string>
+  <string id="48">Password</string>
+  <string id="49">Submit</string>
   <string id="50">Enter Username</string>
   <string id="51">Enter Password</string>
   <string id="52">Enter Password for %s</string>

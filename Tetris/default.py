@@ -1,12 +1,12 @@
 ###################################################################
 #
-#   Tetris v1.0
+#   Tetris v1.1
 #		by asteron  
 #
 #	
 ###################################################################
 
-import re, random, math, threading, time
+import re, random, math, threading, time, traceback
 import xbmc, xbmcgui
 import threading, os, re
 sys.path.append( os.path.join( sys.path[0], 'extras', 'lib' ) )
@@ -64,6 +64,54 @@ KEY_BUTTON_LEFT_THUMB_STICK_UP      = 280 # left thumb stick  directions
 KEY_BUTTON_LEFT_THUMB_STICK_DOWN    = 281 # for defining different actions per direction
 KEY_BUTTON_LEFT_THUMB_STICK_LEFT    = 282
 KEY_BUTTON_LEFT_THUMB_STICK_RIGHT   = 283
+
+BUTTON_NAMES={
+	256 : 'A',
+	257 : 'B',
+	258 : 'X',
+	259 : 'Y',
+	260 : 'Black',
+	261 : 'White',
+	270 : 'DPad Up',
+	271 : 'DPad Down',
+	272 : 'DPad Left',
+	273 : 'DPad Right',
+	266 : 'RThumb Up',
+	267 : 'RThumb Down',
+	268 : 'RThumb Left',
+    269 : 'RThumb Right',
+	280 : 'LThumb Up',
+	281 : 'LThumb Down',
+	282 : 'LThumb Left',
+    283 : 'LThumb Right',
+	278 : 'L Trig',
+    279 : 'R Trig'}
+GAME_ACTIONS = ['Move Left', 'Move Right', 'Turn Right', 'Turn Left', 
+			    'Gravity', 'Drop', 'Near Drop', 'Pause']
+GAME_QUIT = -1
+GAME_NONE = -2
+GAME_MOVE_LEFT, GAME_MOVE_RIGHT, GAME_ROTATE_CCW, GAME_ROTATE_CW, GAME_GRAVITY, GAME_DROP, GAME_NEAR_DROP, GAME_PAUSE = range(len(GAME_ACTIONS))
+
+DEFAULT_KEYMAP = {
+	256: GAME_DROP, 
+	257: GAME_ROTATE_CCW, 
+	258: GAME_ROTATE_CW, 
+	259: GAME_PAUSE, 
+	270: GAME_NEAR_DROP, 
+	271: GAME_DROP, 
+	272: GAME_MOVE_LEFT, 
+	273: GAME_MOVE_RIGHT, 
+	279: GAME_GRAVITY}
+ACTION_MAP = {
+	ACTION_MOVE_LEFT : GAME_MOVE_LEFT,
+	ACTION_MOVE_RIGHT : GAME_MOVE_RIGHT,
+	ACTION_MOVE_UP: GAME_NEAR_DROP,
+	ACTION_MOVE_DOWN: GAME_DROP,
+	ACTION_SELECT_ITEM: GAME_DROP,
+	ACTION_PARENT_DIR: GAME_ROTATE_CW,
+	ACTION_SCROLL_DOWN: GAME_GRAVITY,
+	ACTION_PAUSE: GAME_PAUSE,
+	ACTION_PREVIOUS_MENU: GAME_QUIT}
 
 
 XBFONT_LEFT       = 0x00000000
@@ -345,28 +393,121 @@ def noStretch(window):
 	#if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
 	#else: window.setCoordinateResolution(COORD_PAL_4X3)
 
+class ConfigControlsDialog(xbmcgui.WindowDialog):
+	def __init__(self,parent=None):
+		self.parent = parent
+		self.listen = True		
+		self.posX = parent.blockX - 20
+		self.posY = parent.blockY - 20
+		self.currAction = 0
+		self.pickButton = False
+		self.buildGui()
+		self.populateLabels()
+		self.setFocus(self.controls[0][0])
+		
+	def buildGui(self):
+		self.addControl(xbmcgui.ControlImage(SX*self.posX,SY*self.posY,SX*270,SY*355, IMAGE_DIR+'highscore.png'))
+		self.controls = []
+		for i, action in enumerate(GAME_ACTIONS):
+			button = xbmcgui.ControlButton(SX*(self.posX+25), SY*(self.posY+25 + i * 40), SX*100, SY*25, action, textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")
+			label = xbmcgui.ControlButton(SX*(self.posX+145), SY*(self.posY+25 + i * 40), SX*100, SY*25, "",font='font14',disabledColor='FFFFFFFF',textXOffset=0,focusTexture="",noFocusTexture="") #blank button = label
+			self.addControl(button)
+			self.addControl(label)
+			label.setEnabled(False)
+			self.controls.append((button,label))
+		for i in range(len(self.controls)):
+			self.controls[i][0].controlUp(self.controls[(i-1)%len(self.controls)][0])
+			self.controls[i][0].controlDown(self.controls[(i+1)%len(self.controls)][0])			
+
+	def populateLabels(self):
+		for action in range(len(GAME_ACTIONS)):
+			buttons = [BUTTON_NAMES[button] for button in self.parent.keymap.keys() if self.parent.keymap[button] == action]
+			self.controls[action][1].setLabel(' ,'.join(buttons))
+			
+	def colorButtons(self):
+		for i in range(len(self.controls)):
+			if not i == self.currAction:
+				self.controls[i][0].setEnabled(not self.pickButton)		
+			
+	def onControl(self, control):
+		if not self.listen or self.pickButton:
+			return
+		for i in range(len(self.controls)):
+			if control == self.controls[i][0]:
+				self.currAction = i
+				self.pickButton = True
+				self.controls[i][1].setDisabledColor('FFFFFF00')
+		self.colorButtons()
+
+	def exitPickButtonMode(self):
+		self.pickButton = False
+		self.colorButtons()
+		self.populateLabels()
+		self.controls[self.currAction][1].setDisabledColor('FFFFFFFF')			
+			
+	def onAction(self, action):
+		if not self.listen:
+			return
+		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE):
+			if self.pickButton:
+				self.exitPickButtonMode()
+			else:
+				self.close()
+		if self.pickButton:
+			buttoncode = action.getButtonCode()
+			if buttoncode in self.parent.keymap:
+				if self.parent.keymap[buttoncode] == self.currAction:
+					self.parent.keymap[buttoncode] = GAME_NONE #clear mapping if already there
+				else:
+					self.parent.keymap[buttoncode] = self.currAction
+				self.exitPickButtonMode()
+			
+		
+			
+		
+		
+
+
+
 class PauseDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
 		noStretch(self)
 		self.parent = parent
+		self.listen = True
 		self.addControl(xbmcgui.ControlImage(SX*(parent.blockX-20),SY*(parent.blockY+70),SX*213,SY*113, IMAGE_DIR+'pause.png'))
-		self.addControl(xbmcgui.ControlLabel(SX*(parent.blockX+10),SY*(parent.blockY+10), SX*100,SY*25,_(10),'font14','FFFFFF00'))
+		self.addControl(xbmcgui.ControlLabel(SX*(parent.blockX+10),SY*(parent.blockY+10), SX*150,SY*25,_(10),'font14','FFFFFF00'))
 		self.lblHighScoreName = xbmcgui.ControlLabel(SX*(parent.blockX+30),SY*(parent.blockY+29), SX*100,SY*25,"",'font14','FFFFFFFF')
 		self.lblHighScore = xbmcgui.ControlLabel(SX*(parent.blockX+170),SY*(parent.blockY+27), SX*100,SY*25,"",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
 		self.chkGhostPiece = xbmcgui.ControlCheckMark(SX*(parent.blockX+25),SY*(parent.blockY+230), SX*100,SY*25,_(11),font='font14',focusTexture=IMAGE_DIR+"check-box.png",noFocusTexture=IMAGE_DIR+"check-box-nofocus.png",checkWidth=24,checkHeight=24)
+		self.btnConfigControls = xbmcgui.ControlButton(SX*(parent.blockX+25), SY*(parent.blockY+260), SX*100, SY*25, _(12), textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")
+		self.dlgConfigControls = ConfigControlsDialog(parent=self.parent)
 		self.addControl(self.lblHighScoreName)
 		self.addControl(self.lblHighScore)
 		self.addControl(self.chkGhostPiece)
+		self.addControl(self.btnConfigControls)
+		self.controls = [self.btnConfigControls, self.chkGhostPiece]
+		for i in range(len(self.controls)):
+			self.controls[i].controlUp(self.controls[(i-1)%len(self.controls)])
+			self.controls[i].controlDown(self.controls[(i+1)%len(self.controls)])
 		self.setFocus(self.chkGhostPiece)
 	
 	def onControl(self,control):
 		LOG("PW - Oc -->")
+		if not self.listen:
+			return
 		if control == self.chkGhostPiece:
 			self.parent.drawGhostPiece = self.chkGhostPiece.getSelected()
+		if control == self.btnConfigControls:
+			self.listen = False
+			self.dlgConfigControls.doModal()
+			self.listen = True
+		
 		LOG("PW - Oc <--")
 	
 	def onAction(self, action):
 		LOG("PW - OA")
+		if not self.listen:
+			return
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE) or action.getButtonCode() == KEY_BUTTON_START:
 			xbmcgui.lock()
 			self.close()
@@ -379,11 +520,12 @@ class Tetris(xbmcgui.WindowDialog):
 		self.blockX = 400
 		self.blockY = 70
 		self.drawGhostPiece = False
+		self.keymap = {}		
 		self.dlgPause = PauseDialog(parent=self)
 		self.dlgGame= scores.GameDialog(gamename='Tetris',imagedir=IMAGE_DIR,x=self.blockX -20, y=self.blockY)
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
+		self.version = "1.1"
 		self.state = STATE_READY
-		
 		self.addControl(xbmcgui.ControlImage(SX*(self.blockX-111),SY*(self.blockY-20),SX*320,SY*445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
@@ -501,6 +643,21 @@ class Tetris(xbmcgui.WindowDialog):
 	def removeBlocks(self, blocks):
 		for img in blocks:
  			self.removeControl(img)
+
+ 	def movePieces(self):
+ 		if self.imgGhostPiece:
+ 			self.movePiece(self.controller.getDroppedPieceCopy(),self.imgGhostPiece)
+ 		self.movePiece(self.controller.curPiece,self.imgPiece)
+
+ 	def movePiece(self, piece, imagepiece):
+		mask = piece.getCollisionMask(piece.rotation)
+		k = 0
+ 		for i in range(len(mask)):
+ 			for j in range(len(mask[0])):
+ 				if mask[i][j]:
+ 					imagepiece[k].setPosition(SX*(self.blockX + (self.blockSize+self.spacing)*(j+piece.x)),SY*(self.blockY + (self.blockSize+self.spacing)*(i+piece.y)))
+					k+=1
+
  		
  	def updatePiece(self):
  		LOG('-> Update Piece')
@@ -521,7 +678,6 @@ class Tetris(xbmcgui.WindowDialog):
 		for i in range(len(PIECETYPE)):
 			self.lblPieceCount[i].setLabel(str(self.controller.nPieceCount[i]))
  		LOG('<- Update Piece')
- 		
 
 	def rasterPiece(self,piece,blockX,blockY,spacing,size):
 		LOG('RasterPiece ->')
@@ -543,10 +699,10 @@ class Tetris(xbmcgui.WindowDialog):
 	def processEvent(self,event,rows):
 		xbmcgui.lock()
 		LOG('ProcessEvent-> ' + str(event)+ ' ' + str(rows))
-		self.updatePiece()
 		entryEvent = event
 		clearLev = bloomX = bloomY = 0
 		if event == EVENT_NEW_PIECE or event == EVENT_LEVEL_UP:
+			self.movePieces()			
 			if rows>0 or True:
 				clearLev = self.controller.nLevel - (event == EVENT_LEVEL_UP)
 				bloomX = self.controller.curPiece.x+self.controller.curPiece.type.size/2 -1
@@ -582,10 +738,13 @@ class Tetris(xbmcgui.WindowDialog):
 		elif entryEvent == EVENT_NEW_PIECE:
 			xbmc.playSFX(SOUND_DIR+"lock.wav")
 		elif entryEvent == EVENT_MOVE:
+			self.movePieces()
 			xbmc.playSFX(SOUND_DIR+"move.wav")
 		elif entryEvent == EVENT_ROTATE:
+			self.movePieces()			
 			xbmc.playSFX(SOUND_DIR+"rotate.wav")
 		elif entryEvent == EVENT_DROP:
+			self.movePieces()			
 			xbmc.playSFX(SOUND_DIR+"drop.wav")
 		LOG('ProcessEvent<-')
 		xbmcgui.unlock()
@@ -604,13 +763,12 @@ class Tetris(xbmcgui.WindowDialog):
 		self.state = STATE_READY
 		for img in (self.imgBlocks + self.imgPiece + self.imgNextPiece + self.imgGhostPiece):
 			self.addControl(img)
+		self.updatePiece() #clears/enables ghost piece
 		xbmcgui.unlock()
 		
 	# I had huge freezing problems with the incoming thread not being able to wait properly on a lock.  XBMC really want the
 	# thread to return quickly so we spawn a child thread immediately
 	def onAction(self, action):
-		def SubProc(view,action):
-			view.onActionProc(action)
 
 		# The scroll actions have a very high freq
 		# decrease this frequency so we dont get bogged down with extra threads		
@@ -626,8 +784,20 @@ class Tetris(xbmcgui.WindowDialog):
 				self.gravityControl = (1 + self.gravityControl) % GRAVITY_SPEED_DELAY 
 				if not self.gravityControl == 0:
 					return
+				
+		code = action.getButtonCode()
+		gameAction = 0
+		if code in self.keymap:
+			gameAction = self.keymap[code]
+		else: #supplemental actions for non-mappable keys/remote/keyboard
+			gameAction = ACTION_MAP.get(action.getId(),GAME_NONE)
+		if action == GAME_NONE:
+			return	
 		
-		thread = threading.Thread(target=SubProc, args=(self,action))
+		#launch thread
+		def SubProc(view,action):
+			view.onActionProc(action)		
+		thread = threading.Thread(target=SubProc, args=(self,gameAction))
 		thread.setDaemon(True)
 		thread.start()
 
@@ -639,29 +809,31 @@ class Tetris(xbmcgui.WindowDialog):
 		LOG('   OnAct lock acquired!!')
 		event = 0
 		rows = 0
-	 	if action == ACTION_MOVE_LEFT:
+	 	if action == GAME_MOVE_LEFT: 
 	 		event = controller.movePiece(-1)
-	 	elif action == ACTION_MOVE_RIGHT:
+	 	elif action == GAME_MOVE_RIGHT: 
 	 		event = controller.movePiece(1)
-	 	elif action == ACTION_MOVE_UP:
+	 	elif action == GAME_NEAR_DROP: 
 	 		event,rows = controller.quickDrop(fromGround=2)
 	 		if event == EVENT_DROP:
 	 			event = EVENT_MOVE
-	 	elif action == ACTION_MOVE_DOWN or action == ACTION_SELECT_ITEM:
+	 	elif action == GAME_DROP: 
 	 		event,rows = controller.quickDrop(fromGround=0)
-	 	elif action == ACTION_SHOW_GUI:
+	 	elif action == GAME_ROTATE_CW: 
 			event = controller.rotatePiece(1)
-	  	elif action == ACTION_PARENT_DIR:
+	  	elif action == GAME_ROTATE_CCW: 
 			event = controller.rotatePiece(-1)
-		elif action == ACTION_SCROLL_DOWN:
+		elif action == GAME_GRAVITY: 
 			event,rows = controller.dropPiece()
+			if event == EVENT_DROP:
+	 			event = EVENT_MOVE
 			# give it a break after you hit bottom
 			if event == EVENT_NEW_PIECE:
 				# if we hit the ground give gravity a break for a bit 			
 				self.gravityControl = time.clock() + GRAVITY_NEW_PIECE_DELAY + GRAVITY_SPEED_DELAY
-		elif action == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
+		elif action == GAME_PAUSE: 
 	 		self.togglePause()
-		elif action == ACTION_PREVIOUS_MENU:
+		elif action == GAME_QUIT: 
 			LOG('OA2: lock released')
 			self.state = STATE_QUITTING
 			lock.release()
@@ -677,13 +849,18 @@ class Tetris(xbmcgui.WindowDialog):
 	def saveSettings(self):
 		if not os.path.exists("P:\\Scripts\\"):
 			os.mkdir("P:\\Scripts\\")
+		keymap = DEFAULT_KEYMAP
 		dict = {"username":self.dlgGame.dlgSubmit.username,
 				"password":self.dlgGame.dlgSubmit.password,
 				"userid":self.dlgGame.dlgSubmit.userID,
 				"nickname":self.dlgGame.username,
 				"gameid":self.dlgGame.gameID,
-				"ghost":(self.drawGhostPiece and "True") or "False"  # like ? : operator
+				"ghost":(self.drawGhostPiece and "True") or "False",  # like ? : operator
+				"version":self.version
 				}
+		for button, action in keymap.items():
+			if button in BUTTON_NAMES.keys() and action in range(len(GAME_ACTIONS)):
+				dict["button"+str(button)]=str(action)
 		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">" for key in dict.keys()])+ "\n</tetris>"
 		LOG("Save settings : " + curdat)
 		fb = open("P:\\Scripts\\tetris_settings.xml",'w')
@@ -699,9 +876,18 @@ class Tetris(xbmcgui.WindowDialog):
 		LOG("LoadSettings: reading" + indat)
 		regp = '<([^<]*)>([^</]*)</'
 		save_info = re.compile(regp,re.IGNORECASE).findall(indat)
-		dict = {"username":'',"password":'',"userid":'',"nickname":'',"gameid":'',"ghost":'False'}
+		dict = {"username":'',"password":'',"userid":'',"nickname":'',"gameid":'',"ghost":'False', "version":"0.0"}
+		keymap = DEFAULT_KEYMAP
 		for x in save_info:
 			dict[x[0]] = x[1]
+			if x[0].startswith("button"):
+				try:
+					button = int(x[0][len("button"):])
+					if button in keymap and int(x[1]) in range(len(GAME_ACTIONS)):
+						keymap[button] = int(x[1])	
+				except: pass	
+		self.keymap.update(keymap)
+		self.dlgPause.dlgConfigControls.populateLabels()
 		self.dlgGame.dlgSubmit.setUsername(dict["username"])
 		self.dlgGame.dlgSubmit.setPassword(dict["password"])
 		self.dlgGame.dlgSubmit.userID=dict["userid"]
@@ -709,19 +895,29 @@ class Tetris(xbmcgui.WindowDialog):
 		self.dlgGame.gameID=dict["gameid"]
 		self.drawGhostPiece=dict["ghost"]=="True"
 		self.dlgPause.chkGhostPiece.setSelected(self.drawGhostPiece)
+		if self.version > dict["version"]:
+			pass
+			#TODO: Show about screen
 
-xbmc.enableNavSounds(False)
-lock = threading.Lock()
-random.seed(time.time())
-board = Board(10,20)
-controller = BoardController(board)
-t = Tetris()
-t.loadSettings()
-t.setController(controller)
-t.startTimer()
-t.doModal()
-t.stopTimer()
-t.saveSettings()
-del t,controller,board
-xbmc.enableNavSounds(True)
+
+if __name__ == '__main__':
+    try:
+		#sys.stderr = open("T:\\err.txt",'w')
+		xbmc.enableNavSounds(False)
+		lock = threading.Lock()
+		random.seed(time.time())
+		board = Board(10,20)
+		controller = BoardController(board)
+		t = Tetris()
+		t.loadSettings()
+		t.setController(controller)
+		t.startTimer()
+		t.doModal()
+		t.stopTimer()
+		t.saveSettings()
+		del t,controller,board
+		xbmc.enableNavSounds(True)
+    except:
+        pass#traceback.print_exc()
+
 LOGCLOSE()
