@@ -885,7 +885,7 @@ class Tetris(xbmcgui.WindowDialog):
 			if x[0].startswith("button"):
 				try:
 					button = int(x[0][len("button"):])
-					if button in keymap and int(x[1]) in range(len(GAME_ACTIONS)):
+					if button in BUTTON_NAMES and int(x[1]) in range(len(GAME_ACTIONS)):
 						keymap[button] = int(x[1])	
 				except: pass	
 		self.keymap.update(keymap)
