@@ -85,26 +85,26 @@ class SafeOnlineHighScores:
 	def get_user_id(self,u,p):
 		LOG("GUI! - " + u+'-'+p)
 		try:
-			return self.ohs.get_user_id(u,p)
+			return str(self.ohs.get_user_id(u,p))
 		except Exception:
 			return "0"
 	def create_new_user(self,u,p):
 		LOG("CNU! -"+u+"|"+p)
 		try:
-			return self.ohs.create_new_user(u,p)
+			return str(self.ohs.create_new_user(u,p))
 		except Exception:
 			return "0"
 	def insert_new_highscore(self,gi,ui,sc):
 		LOG("INH!")
 		try:
-			return self.ohs.insert_new_highscore(gi,ui,sc)
+			return str(self.ohs.insert_new_highscore(gi,ui,sc))
 		except Exception:
 			traceback.print_exc()
 			return "0"
 	def get_highscore(self,i):
 		LOG("GHS - " + str(i))
 		try:
-			return self.ohs.get_highscore(i)
+			return str(self.ohs.get_highscore(i,quantity=10,hold=1))
 		except Exception:
 			LOG("GHS error")
 			traceback.print_exc()
@@ -112,14 +112,14 @@ class SafeOnlineHighScores:
 	def get_game_id(self,g):
 		LOG("GGID - " + g)
 		try:
-			return self.ohs.get_game_id(g)
+			return str(self.ohs.get_game_id(g))
 		except Exception:
 			traceback.print_exc()
 			return "0"
 	def create_new_game(self,g):
 		LOG("CNG! - " +g)
 		try:
-			return self.ohs.create_new_game(g)
+			return str(self.ohs.create_new_game(g))
 		except Exception:
 			traceback.print_exc()
 			return "0"
@@ -134,11 +134,11 @@ class SubmitDialog(xbmcgui.WindowDialog):
 		y = self.parent.posY + 130
 		imagedir = self.parent.imagedir
 		self.addControl(xbmcgui.ControlImage(SX*(x),SY*y,SX*243,SY*113, imagedir+'submit.png'))
-		self.btnUsername = xbmcgui.ControlButton(SX*(x + 20), SY*(y+10), SX*100, SY*25, 'Username:', textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
-		self.btnPassword = xbmcgui.ControlButton(SX*(x + 20), SY*(y+40), SX*100, SY*25, 'Password:', textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
+		self.btnUsername = xbmcgui.ControlButton(SX*(x + 20), SY*(y+10), SX*100, SY*25, _(47), textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
+		self.btnPassword = xbmcgui.ControlButton(SX*(x + 20), SY*(y+40), SX*100, SY*25, _(48), textYOffset=3,focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
 		self.lblUsername = xbmcgui.ControlLabel(SX*(x+135), SY*(y+10+3), SX*100, SY*25, '')
 		self.lblPassword = xbmcgui.ControlLabel(SX*(x+135), SY*(y+40+3), SX*100, SY*25, '')
-		self.btnSubmit = xbmcgui.ControlButton(SX*(x+20), SY*(y+75), SX*100, SY*25, 'Submit',focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
+		self.btnSubmit = xbmcgui.ControlButton(SX*(x+20), SY*(y+75), SX*100, SY*25, _(49),focusTexture=imagedir+"button-focus.png",noFocusTexture=imagedir+"button-nofocus.png")
 		
 		for control in (self.btnUsername, self.btnPassword, self.btnSubmit, self.lblUsername, self.lblPassword):
 			self.addControl(control)
@@ -194,7 +194,7 @@ class SubmitDialog(xbmcgui.WindowDialog):
 	
 	def	submitScore(self,score):
 		LOG("SS " + str(score) + '-'+str(self.userID))
-		if self.userID == "0":
+		if self.userID in ("0","-1"):
 			self.userID = self.getUserID()
 		LOG("SS2 " + self.userID)
 		if self.userID == "0":
