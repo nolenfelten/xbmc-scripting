@@ -232,5 +232,4 @@ class main:
 
 m = main()
 m.loader()
-m.doModal()
 del m
