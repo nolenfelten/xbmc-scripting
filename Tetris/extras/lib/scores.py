@@ -97,7 +97,7 @@ class SafeOnlineHighScores:
 	def insert_new_highscore(self,gi,ui,sc):
 		LOG("INH!")
 		try:
-			return str(self.ohs.insert_new_highscore(gi,ui,sc))
+			return str(self.ohs.insert_new_highscore(gi,ui,sc+"|correct"))
 		except Exception:
 			traceback.print_exc()
 			return "0"
