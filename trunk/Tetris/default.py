@@ -79,13 +79,13 @@ BUTTON_NAMES={
 	266 : 'RThumb Up',
 	267 : 'RThumb Down',
 	268 : 'RThumb Left',
-    269 : 'RThumb Right',
+	269 : 'RThumb Right',
 	280 : 'LThumb Up',
 	281 : 'LThumb Down',
 	282 : 'LThumb Left',
-    283 : 'LThumb Right',
+	283 : 'LThumb Right',
 	278 : 'L Trig',
-    279 : 'R Trig'}
+	279 : 'R Trig'}
 GAME_ACTIONS = ['Move Left', 'Move Right', 'Turn Right', 'Turn Left', 
 			    'Gravity', 'Drop', 'Near Drop', 'Pause']
 GAME_QUIT = -1
@@ -401,6 +401,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 		self.posY = parent.blockY - 20
 		self.currAction = 0
 		self.pickButton = False
+		self.discardNextAction = False
 		self.buildGui()
 		self.populateLabels()
 		self.setFocus(self.controls[0][0])
@@ -437,6 +438,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 				self.currAction = i
 				self.pickButton = True
 				self.controls[i][1].setDisabledColor('FFFFFF00')
+				self.discardNextAction = True
 		self.colorButtons()
 
 	def exitPickButtonMode(self):
@@ -448,6 +450,9 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 	def onAction(self, action):
 		if not self.listen:
 			return
+		if self.discardNextAction:
+			self.discardNextAction = False
+			return
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE):
 			if self.pickButton:
 				self.exitPickButtonMode()
@@ -455,18 +460,12 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 				self.close()
 		if self.pickButton:
 			buttoncode = action.getButtonCode()
-			if buttoncode in self.parent.keymap:
-				if self.parent.keymap[buttoncode] == self.currAction:
+			if buttoncode in BUTTON_NAMES:
+				if buttoncode in self.parent.keymap and self.parent.keymap[buttoncode] == self.currAction:
 					self.parent.keymap[buttoncode] = GAME_NONE #clear mapping if already there
 				else:
 					self.parent.keymap[buttoncode] = self.currAction
 				self.exitPickButtonMode()
-			
-		
-			
-		
-		
-
 
 
 class PauseDialog(xbmcgui.WindowDialog):
@@ -789,7 +788,10 @@ class Tetris(xbmcgui.WindowDialog):
 		gameAction = 0
 		if code in self.keymap:
 			gameAction = self.keymap[code]
-		else: #supplemental actions for non-mappable keys/remote/keyboard
+		elif code == KEY_BUTTON_START:
+			gameAction = GAME_PAUSE
+			#supplemental actions for non-mappable keys/remote/keyboard
+		else:
 			gameAction = ACTION_MAP.get(action.getId(),GAME_NONE)
 		if action == GAME_NONE:
 			return	
@@ -849,7 +851,7 @@ class Tetris(xbmcgui.WindowDialog):
 	def saveSettings(self):
 		if not os.path.exists("P:\\Scripts\\"):
 			os.mkdir("P:\\Scripts\\")
-		keymap = DEFAULT_KEYMAP
+		keymap = self.keymap
 		dict = {"username":self.dlgGame.dlgSubmit.username,
 				"password":self.dlgGame.dlgSubmit.password,
 				"userid":self.dlgGame.dlgSubmit.userID,
