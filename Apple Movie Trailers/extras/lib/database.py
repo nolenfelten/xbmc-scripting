@@ -116,13 +116,12 @@ class Database:
             return True
         except: return False
             
-    #def saveRecord( self, columns, table, condition = ('title='), value = (None) ):
-    #    if ( not value ): value = columns[0]
-    #    exists = self.getRecords( 'title', table, condition, value )
-    #    if ( exists ):
-    #        success = self.updateRecord( columns, table, condition, value )
-    #    else:
-    #        success = self.addRecord( columns, table )
+    def saveRecord( self, table, columns = None, key = None, key_value = None ):
+        exists = self.getRecords( 'title', table, condition, value )
+        if ( exists ):
+            success = self.updateRecord( columns, table, condition, value )
+        else:
+            success = self.addRecord( columns, table )
             
     def addRecord( self, table, values ):
         try:
@@ -145,35 +144,22 @@ class Database:
                 columns = ()
                 for item in self.tables[table]:
                     columns += ( item[0], )
-            #print 'got to updateRecord'
             cur = self.con.cursor()
             sql = "UPDATE %s SET " % ( table, )
             for col in columns:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?" % ( key, )
-            #print sql
-            cur.execute( sql, values + ( key_value, ) )
+            values += ( key_value, )
+            cur.execute( sql, values )#+ ( key_value, ) )
             self.con.commit()
             return True
         except:
             traceback.print_exc()
             return False
 
-    #def getRecords( self, columns, table = 'Movies', condition = None, values = None, orderby = None, all = False ):
     def getRecords( self, sql, params = None, all = False ):
         try:
             cur = self.con.cursor()
-            ##sql = "SELECT %s FROM %s" % ( columns, table, )
-            ##if ( condition != None and values != None ):
-            ##    sql += ' WHERE %s' % ( condition, )
-            ##if ( orderby ):
-            ##    sql += ' ORDER BY %s' % ( orderby, )
-            ###print sql
-            ##if ( condition != None and values != None ):
-            ##    cur.execute( sql , values )
-            ##else: 
-            ##    cur.execute( sql )
-            #print sql, params
             if ( params != None ):
                 cur.execute( sql , params )
             else: 
@@ -186,59 +172,3 @@ class Database:
             if ( all ): retval = []
             else: retval = None
         return retval
-'''
-UPDATE Person SET FirstName = 'Nina'
-WHERE LastName = 'Rasmussen'
-
-#cur.execute("insert into Movies(title, genre) values (?, ?)", ('Ultraviolet', 3))
-#cur.execute("insert into Movies(title, genre) values (?, ?)", ('Flushed Away', 5))
-#con.commit()
-
-#sqlite.enable_callback_tracebacks(True)
-db = database()
-##db.createDatabase()
-
-
-table ='Movies'
-record = ( 'Ultraviolet', '1', 'HTTP://1', 'HTTP://2', 'HTTP://3', 'HTTP://4', 'HTTP://5', 'HTTP://6',
-                '2', 'F:\\poster', 'F:\\Thumbnail', 'F:\\Thumbnail_watched', 'plot', 'actor1', 'actor2',
-                'actor3','actor4','actor5','Fox Studios','2005','3','10-21-2006','1','F:\\Trailers' )
-#db.addRecord( table, record )
-
-cur = db.con.cursor()
-cur.execute("select title, genre from Movies where (?&genre)>0", (1,))
-print cur.fetchall()
-cur.execute( 'SELECT * FROM Movies' )
-print len(cur.fetchall())
-cur.execute("select genre from Movies where (title)=?", ('Flushed Away',))
-print cur.fetchone()
-
-
-##k = [(key,value) for key, value in l.items() if value['controlId'] == Id]
-
-
-headings = 'insert into %s (%s%s)' % (table, '%s, '*(len(db.tables[table]) - 1), '%s',)
-print headings
-print
-print db.tables[table]
-
-print headings % (heading for heading in db.tables[table])
-#headings_sql = headings % (heading for heading in db.tables[table])
-#print headings_sql
-print
-
-values = 'values (%s%s)' % ('%s, '*(len(record) - 1), '%s',)
-values_sql = values % record
-print values_sql
-
-
-
-#db.addRecord( table, record )
-#db.con.row_factory = sqlite.Row
-
-#cur =db.con.cursor()
-#cur.execute("select * from Movies where (?&genre)>0", (4,))
-#records = cur.fetchall()
-#for record in records:
-#    print record['saved_location'].replace('\\\\', '\\')
-'''

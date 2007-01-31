@@ -77,7 +77,7 @@ class GUI( xbmcgui.WindowDialog ):
         success = self.win.trailers.updateRecord( 'Movies', ( 'favorite', ), ( favorite, ), key_value = self.win.trailers.movies[self.trailer].title )
         if ( success ):
             self.win.trailers.movies[self.trailer].favorite = favorite
-            if ( self.win.category_id == -3 ):
+            if ( self.win.category_id == amt_util.FAVORITES ):
                 params = ( 1, )
                 choice = self.trailer - 1 + ( self.trailer == 0 )
                 force_update = True
@@ -110,7 +110,7 @@ class GUI( xbmcgui.WindowDialog ):
             success = self.win.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
             if ( success ):
                 self.win.trailers.movies[self.trailer].saved = ''
-                if ( self.win.category_id == -7 ): force_update = True
+                if ( self.win.category_id == amt_util.DOWNLOADED ): force_update = True
                 else: force_update = False
                 self.win.showTrailers( self.win.sql, self.win.params, choice = self.trailer, force_update = force_update )
             self.closeDialog()

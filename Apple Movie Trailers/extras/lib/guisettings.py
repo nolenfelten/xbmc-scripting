@@ -31,8 +31,8 @@ class GUI( xbmcgui.WindowDialog ):
         self.startup_category = [ 0, 0, 0, 0]
         for count, genre in enumerate( genres ):
             self.startup_categories.append( ( str( genre.title ), count ) )
-        self.startup_categories.append( ( self._( 217 ), -6 ) )
-        self.startup_categories.append( ( self._( 226 ), -7 ) )
+        self.startup_categories.append( ( self._( 217 ), amt_util.FAVORITES ) )
+        self.startup_categories.append( ( self._( 226 ), amt_util.DOWNLOADED ) )
         for count, item in enumerate( self.startup_categories ):
             if ( self.settings.startup_category_id == item[ 1 ] ):
                 self.startup_category[ 0 ] = count

@@ -67,7 +67,6 @@ class GUI( xbmcgui.Window ):
                 self.controls['Search Button']['control'].setEnabled( False )
                 self.setControlsDisabled()
                 self.setupVariables()
-                #if ( self.checkForDB() ):
                 self.setStartupChoices()
                 self.setStartupCategory()
                 #else:
@@ -136,61 +135,60 @@ class GUI( xbmcgui.Window ):
         #    self.currently_playing_movie = -1
         #    self.currently_playing_genre = -1
 
-    ## Remove if no DB used ##
-    def checkForDB( self ):
-        #self.debugWrite( 'checkForDB', 2 )
-        if ( os.path.isfile( os.path.join( self.cwd, 'data', 'AMT.pk' ))): return True
-        else: return False
-
     def setStartupChoices( self ):
-        self.sql_category = ''#SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
+        self.sql_category = ''#'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
         self.params_category = None
-        self.main_category = -1
+        self.main_category = amt_util.GENRES
         self.genres = self.trailers.categories
         self.setShortcutLabels()
 
     def setStartupCategory( self ):
         startup_button = 'Shortcut1'
-        if ( self.settings.startup_category_id == self.settings.shortcut1 ): startup_button = 'Shortcut1'
-        elif ( self.settings.startup_category_id == self.settings.shortcut2 ): startup_button = 'Shortcut2'
+        if ( self.settings.startup_category_id == self.settings.shortcut2 ): startup_button = 'Shortcut2'
         elif ( self.settings.startup_category_id == self.settings.shortcut3 ): startup_button = 'Shortcut3'
         self.setControlNavigation( '%s Button' % ( startup_button, ) )
-        self.setCategory( self.settings.startup_category_id )
+        self.setCategory( self.settings.startup_category_id, 1 )
 
-    def setCategory( self, category_id = -1 ):
+    def setCategory( self, category_id = amt_util.GENRES, list_category = 0 ):
+        #print 'setcategory:', category_id, list_category, self.main_category
         self.category_id = category_id
-        if ( category_id >= 0 or category_id <= -6 ):
-            if ( category_id == -6 ):
+        self.list_category = list_category
+        #if ( category_id >= 0 or category_id <= amt_util.FAVORITES ):
+        if ( list_category > 0 ):
+            if ( category_id == amt_util.FAVORITES ):
                 sql = 'SELECT * FROM Movies WHERE favorite = ? ORDER BY title'
                 params = ( 1, )
-            elif ( category_id == -7 ):
-                sql = 'SELECT * FROM "Movies" WHERE saved_location != ? ORDER BY title'
+            elif ( category_id == amt_util.DOWNLOADED ):
+                sql = 'SELECT * FROM Movies WHERE saved_location != ? ORDER BY title'
                 params = ( '', )
-            elif ( self.main_category == -1 ):
-                sql = 'SELECT * FROM Movies WHERE %s&genre > ? ORDER BY title' % ( self.trailers.categories[category_id].id, )
+            elif ( list_category == 1 ):
+                sql = 'SELECT * FROM Movies WHERE %s&genre > ? ORDER BY title' % ( self.genres[category_id].id, )
                 params = ( 0, )
-            elif ( self.main_category == -2 ):
+            elif ( list_category == 2 ):
                 sql = 'SELECT * FROM Movies WHERE studio = ? ORDER BY title'
                 params = ( self.trailers.categories[category_id].title, )
-            elif ( self.main_category == -3 ):
+            elif ( list_category == 3 ):
                 sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
-                params = ( '%%%s%%' % ( self.trailers.categories[category_id].title, ), )
-            elif ( self.main_category == -99 ):
-                sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
-                params = ( '%%%s%%' % ( self.controls['Cast List']['control'].getSelectedItem().getLabel(), ), )
+                params = ( '%%%s%%' % ( self.actor, ), )
+            #elif ( list_category == 2 ):
+            #    sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
+            #    params = ( '%%%s%%' % ( self.controls['Cast List']['control'].getSelectedItem().getLabel(), ), )
+            ##print sql
             self.showTrailers( sql, params )
         else:
-            if ( category_id == -1 ):
-                sql = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
-            elif ( category_id == -2 ):
-                sql = 'SELECT title, count FROM Studios ORDER BY title'
-            elif ( category_id == -3 ):
-                sql = 'SELECT name, count FROM Actors ORDER BY name'
             self.main_category = category_id
+            if ( category_id == amt_util.GENRES ):
+                sql = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
+            elif ( category_id == amt_util.STUDIOS ):
+                sql = 'SELECT title, count FROM Studios ORDER BY title'
+            elif ( category_id == amt_util.ACTORS ):
+                sql = 'SELECT name, count FROM Actors ORDER BY name'
             self.showCategories( sql )
-        self.showControls( self.category_id <= -1 and self.category_id >= -5 )
-        if ( self.category_id <= -1 and self.category_id >= -5 ): self.setFocus( self.controls['Category List']['control'] )
-        else: self.setFocus( self.controls['Trailer List']['control'] )
+        self.showControls( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES )
+        if ( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES ):
+            if ( self.trailers.categories ): self.setFocus( self.controls['Category List']['control'] )
+        else:
+            if ( self.trailers.movies ): self.setFocus( self.controls['Trailer List']['control'] )
 
     def showCategories( self, sql, params = None, choice = 0, force_update = False ):
         try:
@@ -201,19 +199,20 @@ class GUI( xbmcgui.Window ):
                 self.sql_category = sql
                 self.params_category = params
                 self.controls['Category List']['control'].reset()
-                for category in self.trailers.categories:
-                    if ( self.category_id ) == -1: thumb_category = 'genre'
-                    elif ( self.category_id ) == -2: thumb_category = 'studio'
-                    else: thumb_category = 'actor'
-                    thumbnail = os.path.join( self.image_path, '%s.tbn' % ( category.title, ))
-                    if ( not os.path.isfile( thumbnail )):
-                        thumbnail = os.path.join( self.image_path, 'generic-%s.tbn' % ( thumb_category, ) )
-                    count = '(%d)' % ( category.count, )
-                    self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
-            xbmcgui.unlock()
-        except:
-            xbmcgui.unlock()
-            traceback.print_exc()
+                if ( self.trailers.categories ):
+                    for category in self.trailers.categories:
+                        if ( self.category_id ) == amt_util.GENRES: thumb_category = 'genre'
+                        elif ( self.category_id ) == amt_util.STUDIOS: thumb_category = 'studio'
+                        else: thumb_category = 'actor'
+                        thumbnail = os.path.join( self.image_path, '%s.tbn' % ( category.title, ))
+                        if ( not os.path.isfile( thumbnail )):
+                            thumbnail = os.path.join( self.image_path, 'generic-%s.tbn' % ( thumb_category, ) )
+                        count = '(%d)' % ( category.count, )
+                        self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
+                    ################
+                    #self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
+        except: pass #traceback.print_exc()
+        xbmcgui.unlock()
 
     def showTrailers( self, sql, params = None, choice = 0, force_update = False ):
         try:
@@ -222,26 +221,26 @@ class GUI( xbmcgui.Window ):
             self.sql = sql
             self.params = params
             self.controls['Trailer List']['control'].reset()
-            for movie in self.trailers.movies: # now fill the list control
-                if ( self.settings.thumbnail_display == 0 ): 
-                    if ( movie.watched ): thumbnail = movie.thumbnail_watched
-                    else: thumbnail = movie.thumbnail
-                elif ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
-                else: thumbnail = ''
-                favorite = ['','*'][movie.favorite]
-                if ( movie.rating ): rating = '[%s]' % movie.rating
-                else: rating = ''
-                self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), rating, thumbnail, thumbnail ) )
-            xbmcgui.unlock()
-            self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
+            if ( self.trailers.movies ):
+                for movie in self.trailers.movies: # now fill the list control
+                    if ( self.settings.thumbnail_display == 0 ): 
+                        if ( movie.watched ): thumbnail = movie.thumbnail_watched
+                        else: thumbnail = movie.thumbnail
+                    elif ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
+                    else: thumbnail = ''
+                    favorite = ['','*'][movie.favorite]
+                    if ( movie.rating ): rating = '[%s]' % movie.rating
+                    else: rating = ''
+                    self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), rating, thumbnail, thumbnail ) )
+                self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
         except:
             traceback.print_exc()
-            xbmcgui.unlock()
+        xbmcgui.unlock()
 
     def calcScrollbarVisibilty( self, list_control ):
         if ( self.controls[list_control]['special'] ):
-            if ( ( ( self.category_id >= 0 or self.category_id <= -6 ) and list_control != 'Category List' ) or 
-                  ( self.category_id <= -1 and self.category_id >= -5 and list_control == 'Category List' ) ):
+            if ( ( ( self.category_id >= 0 or self.category_id <= amt_util.FAVORITES ) and list_control != 'Category List' ) or 
+                  ( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES and list_control == 'Category List' ) ):
                 visible = ( self.controls[list_control]['control'].size() > self.controls[list_control]['special'] )
                 visible2 = not visible
                 if ( list_control == 'Cast List' and not self.display_cast ):
@@ -302,12 +301,12 @@ class GUI( xbmcgui.Window ):
             try: self.controls['Category List Backdrop']['control'].setVisible( category )
             except: pass
             self.controls['Category List']['control'].setVisible( category )
-            self.controls['Category List']['control'].setEnabled( category )
+            self.controls['Category List']['control'].setEnabled( category and self.trailers.categories != None )
             self.controls['Category List Count Label']['control'].setVisible( category )
             try: self.controls['Trailer List Backdrop']['control'].setVisible( not category )
             except: pass
             self.controls['Trailer List']['control'].setVisible( not category )
-            self.controls['Trailer List']['control'].setEnabled( not category )
+            self.controls['Trailer List']['control'].setEnabled( not category and self.trailers.movies != None )
             self.controls['Trailer List Count Label']['control'].setVisible( not category )
             self.controls['Poster Backdrop']['control'].setVisible( not category )
             self.controls['Trailer Poster']['control'].setVisible( not category )
@@ -349,25 +348,24 @@ class GUI( xbmcgui.Window ):
         else: self.setFocus( self.controls['Cast Button']['control'] )
 
     def setCategoryLabel( self ):
-        #self.debugWrite('setCategoryLabel', 2)
-        #if ( self.category_id == self.settings.shortcut1 and self.main_category == -1 ):
-        #    category = _( 200 )
-        #elif ( self.category_id == self.settings.shortcut2 and self.main_category == -1 ):
-        #    category = _( 201 )
-        if ( self.category_id == -1 ):
+        category= 'oops'
+        if ( self.category_id == amt_util.GENRES ):
             category = _( 219 )
-        elif ( self.category_id == -2 ):
+        elif ( self.category_id == amt_util.STUDIOS ):
             category = _( 223 )
-        elif ( self.category_id == -3 ):
+        elif ( self.category_id == amt_util.ACTORS ):
             category = _( 225 )
-        elif ( self.category_id == -6 ):
+        elif ( self.category_id == amt_util.FAVORITES ):
             category = _( 217 )
-        elif ( self.category_id == -7 ):
+        elif ( self.category_id == amt_util.DOWNLOADED ):
             category = _( 226 )
-        elif ( self.category_id >= 0 and self.main_category == -99 ):
-            category = self.actor
         elif ( self.category_id >= 0 ):
-            category = self.trailers.categories[self.category_id].title
+            if ( self.list_category == 3 ):
+                category = self.actor
+            elif ( self.list_category == 2 ):
+                category = self.trailers.categories[self.category_id].title
+            elif ( self.list_category == 1 ):
+                category = self.genres[self.category_id].title
         self.controls['Category Label']['control'].setLabel( category )
             
     def setCountLabel( self, list_control ):
@@ -385,10 +383,8 @@ class GUI( xbmcgui.Window ):
             poster = self.trailers.movies[trailer].poster
             if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
             self.controls['Trailer Poster']['control'].setImage( poster )
-            #rating = self.trailers.movies[trailer].rating_url
             self.controls['Trailer Rating']['control'].setImage( self.trailers.movies[trailer].rating_url )
             self.controls['Trailer Title']['control'].setLabel( self.trailers.movies[trailer].title )
-            #print 'showTrailerInfo: %s' % self.trailers.genres[self.category_id].movies[trailer].title
             # Plot
             self.controls['Trailer Plot']['control'].reset()
             plot = self.trailers.movies[trailer].plot
@@ -410,12 +406,11 @@ class GUI( xbmcgui.Window ):
             #self.calcScrollbarVisibilty( 'Cast List' )
             self.setScrollbarIndicator( 'Trailer List' )
             self.showOverlays( trailer )
-        finally:
-            xbmcgui.unlock()
+        except: pass
+        xbmcgui.unlock()
         
     def showOverlays( self, trailer ):
         posx, posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()# + self.coordinates[0]
-        #posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()[ 1 ]# + self.coordinates[1]
         favorite = self.trailers.movies[trailer].favorite
         self.controls['Trailer Favorite Overlay']['control'].setVisible( favorite )
         posx = posx - ( favorite * self.controls['Trailer Favorite Overlay'][ 'control' ].getWidth() )
@@ -430,12 +425,19 @@ class GUI( xbmcgui.Window ):
     def getTrailerGenre( self ):
         #self.debugWrite('getTrailerGenre', 2)
         genre = self.controls['Category List']['control'].getSelectedPosition()
-        self.setCategory( genre )
+        if ( self.main_category == amt_util.STUDIOS ): 
+            list_category = 2
+        elif ( self.main_category == amt_util.ACTORS ): 
+            list_category = 3
+            self.actor = self.controls['Category List']['control'].getSelectedItem().getLabel()
+        else: list_category = 1
+        self.setCategory( genre, list_category )
 
     def getActorChoice( self ):
         choice = self.controls['Cast List']['control'].getSelectedPosition()
         self.actor = self.controls['Cast List']['control'].getSelectedItem().getLabel()
-        self.setCategory( choice )
+        
+        self.setCategory( choice, 3 )
 
     def playTrailer( self ):
         try:
@@ -455,7 +457,7 @@ class GUI( xbmcgui.Window ):
                 filename = str( fetcher.urlretrieve( url ) )
             elif ( self.settings.mode == 2):
                 url = trailer_urls[choice]
-                ext = os.path.splitext( url )[1]
+                ext = os.path.splitext( url )[ 1 ]
                 title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
                 fetcher = cacheurl.HTTPProgressSave( self.settings.save_folder, title )
                 filename = str( fetcher.urlretrieve( url ) )
@@ -464,9 +466,9 @@ class GUI( xbmcgui.Window ):
                     if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
                     self.saveThumbnail( filename, trailer, poster, )
             if ( filename ):
-                self.MyPlayer.play( filename)
-                xbmc.sleep(500)
-                self.markAsWatched( self.trailers.movies[trailer].watched + 1, self.trailers.movies[trailer].title, trailer )
+                self.MyPlayer.play( filename )
+                xbmc.sleep( 500 )
+                self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, self.trailers.movies[ trailer ].title, trailer )
                 #self.changed_trailers = False
         except: traceback.print_exc()
 
@@ -476,9 +478,9 @@ class GUI( xbmcgui.Window ):
             new_filename = '%s.tbn' % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
                 shutil.copyfile( poster, new_filename )
-            if ( self.trailers.movies[trailer].saved == '' ):
-                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( filename, ), key_value = self.trailers.movies[trailer].title)
-                if ( success ): self.trailers.movies[trailer].saved = filename
+            if ( self.trailers.movies[ trailer ].saved == '' ):
+                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( filename, ), key_value = self.trailers.movies[ trailer ].title )
+                if ( success ): self.trailers.movies[ trailer ].saved = filename
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
     
@@ -512,21 +514,21 @@ class GUI( xbmcgui.Window ):
         self.setShortcutLabels()
         
     def setShortcutLabels( self ):
-        if ( self.settings.shortcut1 == -6 ):
+        if ( self.settings.shortcut1 == amt_util.FAVORITES ):
             self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 217 ) )
-        elif ( self.settings.shortcut1 == -7 ):
+        elif ( self.settings.shortcut1 == amt_util.DOWNLOADED ):
             self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 226 ) )
         else:
             self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut1 ].title ) )
-        if ( self.settings.shortcut2 == -6 ):
+        if ( self.settings.shortcut2 == amt_util.FAVORITES ):
             self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 217 ) )
-        elif ( self.settings.shortcut2 == -7 ):
+        elif ( self.settings.shortcut2 == amt_util.DOWNLOADED ):
             self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 226 ) )
         else:
             self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut2 ].title ) )
-        if ( self.settings.shortcut3 == -6 ):
+        if ( self.settings.shortcut3 == amt_util.FAVORITES ):
             self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 217 ) )
-        elif ( self.settings.shortcut3 == -7 ):
+        elif ( self.settings.shortcut3 == amt_util.DOWNLOADED ):
             self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 226 ) )
         else:
             self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings.shortcut3 ].title ) )
@@ -551,30 +553,30 @@ class GUI( xbmcgui.Window ):
             self.close()
 
     def setShortcut( self, shortcut ):
-        if ( self.main_category != -1 ):
+        if ( self.main_category == -1 ):
             self.sql_category = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
             self.params_category = None
             self.main_category = -1
             #self.trailers.getCategories( self.sql_category, self.params_category )
             self.trailers.categories = self.genres
-        self.setCategory( shortcut )
+        self.setCategory( shortcut, 1 )
 
     def onControl( self, control ):
         try:
             if ( control is self.controls['Shortcut1 Button']['control'] ):
                 #self.setShortcut( self.settings.shortcut1 )
-                self.setCategory( self.settings.shortcut1 )
+                self.setCategory( self.settings.shortcut1, 1 )
             elif ( control is self.controls['Shortcut2 Button']['control'] ):
                 #self.setShortcut( self.settings.shortcut2 )
-                self.setCategory( self.settings.shortcut2 )
+                self.setCategory( self.settings.shortcut2, 1 )
             elif ( control is self.controls['Shortcut3 Button']['control'] ):
-                self.setCategory( self.settings.shortcut3 )
+                self.setCategory( self.settings.shortcut3, 1 )
             elif ( control is self.controls['Genre Button']['control'] ):
-                self.setCategory( -1 )
+                self.setCategory( amt_util.GENRES, 0 )
             elif ( control is self.controls['Studio Button']['control'] ):
-                self.setCategory( -2 )
+                self.setCategory( amt_util.STUDIOS, 0 )
             elif ( control is self.controls['Actor Button']['control'] ):
-                self.setCategory( -3 )
+                self.setCategory( amt_util.ACTORS, 0 )
             elif ( control is self.controls['Search Button']['control'] ):
                 pass#self.search
             elif ( control is self.controls['Settings Button']['control'] ):
@@ -586,7 +588,6 @@ class GUI( xbmcgui.Window ):
             elif ( control is self.controls['Trailer List']['control'] ):
                 self.playTrailer()
             elif ( control is self.controls['Cast List']['control'] ):
-                self.main_category = -99
                 self.getActorChoice()
             else:
                 try:
@@ -605,8 +606,8 @@ class GUI( xbmcgui.Window ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
                     pass#self.toggleAsFavorite()##change to queue
                 elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
-                    if ( self.main_category == -99 ): self.main_category = -3
-                    self.setCategory( self.main_category )
+                    #if ( self.main_category == -99 ): self.main_category = amt_util.ACTORS
+                    self.setCategory( self.main_category, 0 )
                 elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
                     self.showContextMenu()
                 else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):
