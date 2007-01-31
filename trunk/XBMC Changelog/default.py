@@ -26,49 +26,52 @@ CHANGELOG = 'http://appliedcuriosity.cc/xbox/changelog.txt'
 # how many lines of changes to show
 
 sys.path.append(sys.path[0] +  '\\extras\\lib')
-SkinPath			= sys.path[0] +  '\\extras\\skins\\'
+SkinPath = sys.path[0] +  '\\extras\\skins\\'
 
 def get_changes():
-	# get the actual changelog.txt from sourceforge
-	data = urllib.urlopen( CHANGELOG )
-	data = data.read()
+    # get the actual changelog.txt from sourceforge
+    data = urllib.urlopen( CHANGELOG )
+    data = data.read()
 
-	# ignore the top 7 lines, as they contain nothing useful
-	changes = data.split('\n')[8:]
+    # ignore the top 7 lines, as they contain nothing useful
+    changes = data.split('\n')[8:]
 
-	# search each line to determine if it has a hyphen as the second
-	# character, meaning that it is a new change, and not a multiline
-	# change
-	changelog = []
-	for each in changes:
-		# ignore empty lines
-		if not len( each ):
-			continue
-		changelog += [ each ]
-	changes = '\n'.join( changelog )
-	return changes
+    # search each line to determine if it has a hyphen as the second
+    # character, meaning that it is a new change, and not a multiline
+    # change
+    changelog = []
+    for each in changes:
+        # ignore empty lines
+        if not len( each ):
+            continue
+        changelog += [ each ]
+    changes = '\n'.join( changelog )
+    return changes
 
 class windowOverlay( xbmcgui.Window ):
-	def __init__( self ):
-		dialog.update(50, 'Setting up GUI')
-		import  guibuilder
-		skin = xbmc.getSkinDir()
-		if (not path.exists(SkinPath + skin + '\\skin.xml')): skin = 'Project Mayhem III'
-		guibuilder.GUIBuilder(self, skinXML=SkinPath + skin + '\\skin.xml', fastMethod=True)
-		if (not self.SUCCEEDED): 
-			dialog.close()
-			self.close()
-		else: 
-			dialog.update(75, 'Downloading changelog', 'Please wait...' )
-			try:
-				change_text = get_changes()
-			finally:
-				dialog.update(100)
-				dialog.close()
-			self.controls[200].setText( change_text )
+    def __init__( self ):
+        global dialog
+        import  guibuilder
+        skin = xbmc.getSkinDir()
+        if (not path.exists(SkinPath + skin + '\\skin.xml')): skin = 'Default'
+        guibuilder.GUIBuilder(self, skinXML=SkinPath + skin + '\\skin.xml', imagePath=SkinPath + skin + '\\gfx',
+            title='XBMC Changelog', useDescAsKey=True, dlg=dialog, pct=50 )
+        if (not self.SUCCEEDED): 
+            #dialog.close()
+            self.close()
+        else: 
+            dialog.close()
+            dialog = xbmcgui.DialogProgress()
+            dialog.create('XBMC Changelog')
+            dialog.update(-1, 'Downloading changelog', 'Please wait...' )
+            try:
+                change_text = get_changes()
+            finally:
+                dialog.close()
+            self.controls[ 'textarea' ]['control'].setText( change_text )
 
-	def onAction( self, action ):
-		if action == 10: self.close()
+    def onAction( self, action ):
+        if action == 10: self.close()
 
 
 MyDisplay = windowOverlay()

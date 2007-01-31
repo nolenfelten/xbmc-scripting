@@ -6,43 +6,26 @@
 
  <controls>
 
-  <control>
+  <control type="image">
    <description>background image</description>
-   <type>image</type>
-   <id>1</id>
    <posx>0</posx>
    <posy>0</posy>
    <width>720</width>
    <height>576</height>
-   <texture>background-apps.png</texture>
+   <texture>\background-apps.png</texture>
   </control>
 
-  <!--control>
+  <control type="image">
    <description>contentpanel slice</description>
-   <type>image</type>
-   <id>0</id>
-   <posx>160</posx>
-   <posy>108</posy>
-   <width>64</width>
-   <height>468</height>
-   <texture>contentpanel_left.png</texture>
-  </control-->
-
-  <control>
-   <description>contentpanel slice</description>
-   <type>image</type>
-   <id>0</id>
    <posx>0</posx>
    <posy>108</posy>
    <width>720</width>
    <height>468</height>
-   <texture>contentpanel.png</texture>
+   <texture>\contentpanel.png</texture>
   </control>
 
-  <control>
+  <control type="label">
    <description>xbox media center label</description>
-   <type>label</type>
-   <id>1</id>
    <posx>200</posx>
    <posy>63</posy>
    <align>right</align>
@@ -52,10 +35,8 @@
    <textcolor>FFFFFFFF</textcolor>
   </control>
 
-  <control>
+  <control type="label">
    <description>description label</description>
-   <type>label</type>
-   <id>1</id>
    <posx>207</posx>
    <posy>63</posy>
    <align>left</align>
@@ -65,23 +46,19 @@
    <textcolor>FFFFFFFF</textcolor>
   </control>
 
-  <control>
+  <control type="label">
    <description>date label</description>
-   <type>label</type>
-   <id>100</id>
    <posx>640</posx>
    <posy>63</posy>
    <align>right</align>
-   <label>$INFO[System.Date] - $INFO[System.Time]</label>
+   <label>$INFO[System.Date]</label>
    <width>500</width>
    <font>font13</font>
    <textcolor>FFFFFFFF</textcolor>
   </control>
 
-  <control>
+  <control type="textbox" id="200">
    <description>textarea</description>
-   <type>textbox</type>
-   <id>200</id>
    <posx>50</posx>
    <posy>120</posy>
    <width>630</width>
