@@ -74,7 +74,7 @@ class GUI( xbmcgui.WindowDialog ):
   
     def toggleAsFavorite( self ):
         favorite = not self.win.trailers.movies[self.trailer].favorite
-        success = self.win.trailers.updateRecord( 'Movies', ( 'favorite', ), ( favorite, ), key_value = self.win.trailers.movies[self.trailer].title )
+        success = self.win.trailers.updateRecord( 'Movies', ( 'favorite', ), ( ( favorite, self.win.trailers.movies[self.trailer].title, ), ), 'title' )
         if ( success ):
             self.win.trailers.movies[self.trailer].favorite = favorite
             if ( self.win.category_id == amt_util.FAVORITES ):
@@ -107,7 +107,7 @@ class GUI( xbmcgui.WindowDialog ):
                 os.remove( '%s.conf' % ( saved_trailer, ) )
             if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
                 os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-            success = self.win.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( '', ), key_value = self.win.trailers.movies[self.trailer].title )
+            success = self.win.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( '', self.win.trailers.movies[self.trailer].title, ), ), 'title' )
             if ( success ):
                 self.win.trailers.movies[self.trailer].saved = ''
                 if ( self.win.category_id == amt_util.DOWNLOADED ): force_update = True

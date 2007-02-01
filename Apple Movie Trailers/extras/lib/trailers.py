@@ -95,15 +95,13 @@ class Trailers:
             '''
            
             genre_list = DB.getRecords( 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title', all = True )
-            #columns = 'title, url, id, count, loaded', table = 'Genres', orderby = 'title', all = True )
             self.categories = []
             if (genre_list):
-                #self.categories = genre_list
                 for genre in genre_list:
                     self.categories += [Category( genre )]
             else:
-                self.dialog = xbmcgui.DialogProgress()
-                self.dialog.create(_( 66 ))
+                dialog = xbmcgui.DialogProgress()
+                dialog.create(_( 66 ))
                 
                 base_xml = fetcher.urlopen( self.BASEXML )
                 base_xml = ET.fromstring( base_xml )
@@ -120,7 +118,6 @@ class Trailers:
                     for view in view_matrix:
                         if view in url:
                             url = '/moviesxml/h/' + url
-                            #self.dialog.update( -1, 'Current genre: %s' % view_matrix[view] )
                             genre_dict.update( { view_matrix[view]: url } )
                 elements = base_xml.getiterator( self.ns('GotoURL') )
                 for each in elements:
@@ -150,18 +147,20 @@ class Trailers:
                 genres.sort()
                 total_cnt = len( genres )
                 pct_sect = float( 100 ) / total_cnt
+                genre_records = ()
                 for cnt, genre in enumerate( genres ):
-                    self.dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
+                    dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
                     trailer_urls = self.loadGenreInfo( genre, 2**genre_id, genre_dict[genre], cnt, total_cnt, pct_sect )
                     if ( trailer_urls ):
-                        success = DB.addRecord( 'Genres', ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls) ) )
+                        genre_records += ( ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls), ), )
                         self.categories += [Category( ( genre, len( trailer_urls), genre_dict[genre], 2**genre_id, 0 ) )]
-                        ##success = DB.addRecord( 'Genres', ( genre, genre_dict[genre], 2**genre_id, 0, repr( [] ) ) )
                     genre_id += 1
-                self.dialog.close()
+                dialog.update( 100, _( 43 ) )
+                success = DB.addRecords( 'Genres', genre_records )
+                dialog.close()
 
         except:
-            #dialog.close()
+            dialog.close()
             traceback.print_exc()
             #return []
     
@@ -178,7 +177,6 @@ class Trailers:
                 )
             '''
             trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre, ) )
-            #columns = 'trailer_urls', table = 'Genres', condition = 'title=', values = ( genre, ) )
             if ( trailer_urls ):
                 return eval( trailer_urls[0] )
             else:
@@ -241,7 +239,6 @@ class Trailers:
                 for cnt, key in enumerate( keys ):
                     try:
                         trailer_urls.append( ( key, reordered_dict[key] ) )
-                        #self.saveMovieGenre( key, genre_id )
                     except:
                         continue
                 return trailer_urls
@@ -258,10 +255,12 @@ class Trailers:
                 total_cnt += genre.count
                 total_genre_cnt += 1
         if ( total_cnt > 0 and DB.created == True ):
-            self.load_all = xbmcgui.Dialog().yesno( _( 53 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), '', _( 230 ), _( 229 ) )
+            self.load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), '', _( 230 ), _( 229 ) )
+            import time
+            start_time = time.time()
             try:
                 dialog = xbmcgui.DialogProgress()
-                dialog.create( _( 70 ) )
+                dialog.create( '%s   (%s)' % ( _( 70 ), _( 229 + ( not self.load_all ) ), ) )
                 pct_sect = float( 100 ) / total_cnt
                 cnt = 0
                 genre_cnt = 0
@@ -269,20 +268,25 @@ class Trailers:
                     if ( genre.loaded == 0 ):
                         genre_cnt += 1
                         trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre.title, ) )
-                        #DB.getRecords( columns = 'trailer_urls', table = 'Genres', condition = 'title=?', values = ( genre.title, ) )
+                        ##self.clearRecordVariables()
                         for movie in eval( trailer_urls[0] ):
                             cnt += 1
-                            dialog.update( int( cnt * pct_sect ) , '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '', '%s: %s' % ( movie[0], _( 88 ), ) )
-                            self.loadMovieInfo( movie[0], genre.id, movie[1] )
+                            dialog.update( int( cnt * pct_sect ) , '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '%s' % ( movie[0], ) )
+                            success = self.loadMovieInfo( movie[0], genre.id, movie[1] )
                             if ( dialog.iscanceled() ): raise
-                        if ( self.load_all ):
-                            success = DB.updateRecord( table = 'Genres', columns = ( 'loaded', ), values = ( genre.count, ), key_value = genre.title )
+                        dialog.update( int( cnt * pct_sect ), '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), _( 43 ) )
+                        ##self.writeMovieInfo()
+                        #if ( self.load_all ):
+                        success = DB.updateRecords( 'Genres', ( 'loaded', ), ( ( genre.count, genre.title, ), ), 'title' )
                 dialog.close()
+                end_time = time.time()
+                minutes =  float( end_time - start_time ) / 60
+                print "*** Start time: %s - End Time: %s - Total time: %d minutes" % ( time.ctime( start_time ), time.ctime( end_time ), minutes, )
             except:
                 dialog.close()
                 traceback.print_exc()
                 xbmcgui.Dialog().ok( _( 70 ), _( 86 ) )
-                
+
     def loadMovieInfo( self, title, genre_id, url ):
         try:
             self.trailer_urls = []
@@ -298,7 +302,7 @@ class Trailers:
             if ( genre and genre_id != -1 ):
                 if ( not genre_id&genre[0] > 0 ):
                     genre_id += genre[0]
-                    success = DB.updateRecord( table = 'Movies', columns = ( 'genre', ), values = ( genre_id, ), key_value = title )
+                    success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
             else:
                 if ( self.load_all ):
                     if url[:7] != 'http://':
@@ -317,43 +321,40 @@ class Trailers:
                         self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
 
                     # -- plot --
-                    plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' )
-                    plot = plot.strip()
-                    # remove any linefeeds so we can wrap properly to the text control this is displayed in
-                    plot = plot.replace( '\r\n', ' ' )
-                    plot = plot.replace( '\r', ' ' )
-                    plot = plot.replace( '\n', ' ' )
+                    plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
                     if plot:
+                        # remove any linefeeds so we can wrap properly to the text control this is displayed in
+                        plot = plot.replace( '\r\n', ' ' )
+                        plot = plot.replace( '\r', ' ' )
+                        plot = plot.replace( '\n', ' ' )
                         self.plot = plot
 
                     # -- actors --
                     SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
                     actors = list()
-                    try:
-                        for i in range( 5, 10 ):
-                            actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).strip()
-                            if len( actor ):
-                                actors += [ actor ]
-                                actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
-                                if ( actor_exists ):
-                                    success = DB.updateRecord( 'Actors', ( 'count', ), ( actor_exists[0] + 1, ), key = 'name', key_value = actor )
-                                else:
-                                    success = DB.addRecord( 'Actors', ( actor, 1, ) )
-                    except:
-                        pass
+                    for i in range( 5, 10 ):
+                        #actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).replace( '(voice)', '' ).title().strip()
+                        actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
+                        if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
+                            actors += [ actor ]
+                            #actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
+                            #if ( actor_exists ):
+                            #    success = DB.updateRecords( 'Actors', ( 'count', ), ( ( actor_exists[0] + 1, actor, ), ), 'name' )
+                            #else:
+                            #    success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
                     self.actors = actors
                     self.actors.sort()
                     
                     # -- studio --
-                    studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' )
+                    studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                     if studio:
-                        self.studio = studio.strip()
-                        studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
-                        if ( studio_exists ):
-                            success = DB.updateRecord( 'Studios', ( 'count', ), ( studio_exists[0] + 1, ), key_value = self.studio )
-                        else:
-                            success = DB.addRecord( 'Studios', ( self.studio, 1, ) )
-
+                        self.studio = studio#.strip()
+                        #studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
+                        #if ( studio_exists ):
+                        #    success = DB.updateRecords( 'Studios', ( 'count', ), ( ( studio_exists[0] + 1, self.studio, ), ), 'title' )
+                        #else:
+                        #    success = DB.addRecords( 'Studios', ( ( self.studio, 1, ), ) )
+                        
                     # -- rating --2
                     temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
                     if temp_url:
@@ -415,19 +416,48 @@ class Trailers:
                 info_list += (0,)
                 info_list += ('',)
                 if ( genre ):
-                    columns = ( '*', )#'title', 'url', 'trailer_urls', 'genre', 'poster', 'thumbnail', 'thumbnail_watched', 'plot', 'actors', 'studio', 'rating', 'rating_url', 'year', 'times_watched', 'last_watched', 'favorite', 'saved_location', )
-                    success = DB.updateRecord( table = 'Movies', columns = columns, values = info_list, key = 'title', key_value = title )
-                    return info_list
-                else:  success = DB.addRecord( 'Movies', info_list )
+                    ##self.movie_records_update += ( ( info_list[ 2: ] ) + ( title, ), )
+                    success = DB.updateRecords( 'Movies', ( '*', 2 ), ( ( info_list[ 2 : ] ) + ( title, ), ), 'title' )
+                else:
+                    ##self.movie_records_add += ( info_list, )
+                    success = DB.addRecords( 'Movies', ( info_list, ) )
+                if ( success ):
+                    if ( self.actors ):
+                        for actor in self.actors:
+                            count = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
+                            if ( count ):
+                                success = DB.updateRecords( 'Actors', ( 'count', ), ( ( count[0] + 1, actor, ), ), 'name' )
+                            else:
+                                success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
+                    if ( self.studio ):
+                        count = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
+                        if ( count ):
+                            success = DB.updateRecords( 'Studios', ( 'count', ), ( ( count[0] + 1, self.studio, ), ), 'title' )
+                        else:
+                            success = DB.addRecords( 'Studios', ( ( self.studio, 1, ), ) )
+                if ( genre ): return info_list
         except:
-            pass#print traceback.print_exc()
+            return None
+            print traceback.print_exc()
             
-    def updateRecord( self, table, columns, values, key = 'title', key_value = None ):
-        success = DB.updateRecord( table = table, columns = columns, values = values, key = key, key_value = key_value )
+    ##def writeMovieInfo( self ):
+    ##    # add records
+    ##    if ( self.movie_records_add ):
+    ##        success = DB.addRecords( 'Movies', self.movie_records_add )
+    ##    if ( self.movie_records_update ):
+    ##        success = DB.updateRecords( 'Movies', ( '*', 2 ), self.movie_records_update, 'title' )
+        
+    def updateRecord( self, table, columns, values, key = 'title' ):
+        success = DB.updateRecords( table, columns, values, key )
         return success
         
+    ##def clearRecordVariables( self ):
+    ##    self.movie_records_add = ()
+    ##    self.movie_records_update = ()
+    
     def getMovies( self, sql, params = None, all = True ):
         try:
+            ##self.clearRecordVariables()
             self.load_all = True
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 85 ) )
@@ -443,9 +473,12 @@ class Trailers:
                         info_missing = True
                         movie = self.loadMovieInfo( movie[ 0 ], -1, str( movie[ 1 ] ) )
                     if ( info_missing ):
-                        dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 67 ), '%s (%d of %d)' % ( _( 70 ), cnt + 1, total_cnt ), '%s: %s' % ( _( 88 ), movie[0], ) )
+                        dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), movie[0], )
                         if ( dialog.iscanceled() ): raise
-                    self.movies += [Movie( movie )]
+                    if ( movie ): self.movies += [Movie( movie )]
+                if ( info_missing ): 
+                    dialog.update( 100, _( 43 ) )
+                    ##self.writeMovieInfo()
             else: self.movies = None
         except: pass
         dialog.close()

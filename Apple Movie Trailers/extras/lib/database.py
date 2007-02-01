@@ -15,7 +15,6 @@ class Database:
         self.setupTables()
         self.con = sqlite.connect( db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
         self.db_version = self.getVersion()
-        #print 'version', self.db_version[0]
         if ( not self.db_version ): 
             print 'no database exists', default.__version__
             #cleanup database
@@ -92,7 +91,7 @@ class Database:
                 success = self.createTable( table )
                 if ( not success ):
                     raise
-            success = self.addRecord( 'Version', ( default.__version__, ) )
+            success = self.addRecords( 'Version', ( ( default.__version__, ), ) )
             dialog.close()
             if ( success ): return default.__version__
             else: return None
@@ -116,44 +115,48 @@ class Database:
             return True
         except: return False
             
-    def saveRecord( self, table, columns = None, key = None, key_value = None ):
-        exists = self.getRecords( 'title', table, condition, value )
-        if ( exists ):
-            success = self.updateRecord( columns, table, condition, value )
-        else:
-            success = self.addRecord( columns, table )
+    #def saveRecord( self, table, columns = None, key = None, key_value = None ):
+    #    exists = self.getRecords( 'title', table, condition, value )
+    #    if ( exists ):
+    #        success = self.updateRecord( columns, table, condition, value )
+    #    else:
+    #        success = self.addRecords( columns, table )
             
-    def addRecord( self, table, values ):
+    def addRecords( self, table, values  ):
         try:
-            cur = self.con.cursor()
             sql='INSERT INTO %s (' % ( table, )
             for item in self.tables[table]:
                 sql += '%s, ' % item[0]
-            sql = sql[:-2] + ') VALUES (' + ( '?, '*len( values ) )
+            sql = sql[:-2] + ') VALUES (' + ( '?, '*len( self.tables[ table ] ) )
             sql = sql[:-2] + ')'
-            #print sql
-            cur.execute( sql, values )
+            cur = self.con.cursor()
+            cur.executemany( sql, values )
             self.con.commit()
             return True
         except:
+            print sql
+            print values
+            traceback.print_exc()
             return False
             
-    def updateRecord( self, table, columns, values, key = 'title', key_value = None ):
+    def updateRecords( self, table, columns, values, key ):
         try:
             if ( columns[0] == '*' ):
+                start_column = columns[ 1 ]
                 columns = ()
-                for item in self.tables[table]:
+                for item in self.tables[table][ start_column : ]:
                     columns += ( item[0], )
-            cur = self.con.cursor()
             sql = "UPDATE %s SET " % ( table, )
             for col in columns:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?" % ( key, )
-            values += ( key_value, )
-            cur.execute( sql, values )#+ ( key_value, ) )
+            cur = self.con.cursor()
+            cur.executemany( sql, values )
             self.con.commit()
             return True
         except:
+            print sql
+            print values[0]
             traceback.print_exc()
             return False
 
