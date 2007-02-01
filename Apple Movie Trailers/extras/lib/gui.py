@@ -170,9 +170,10 @@ class GUI( xbmcgui.Window ):
             elif ( list_category == 3 ):
                 sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
                 names = self.actor.split( ' ' )[:2]
-                #print '%s %s'.strip() % ( names[0], names[1] )
-                params = ( '%%%s %s%%'.strip() % ( names[0], names[1], ), )
-                print params
+                if ( len( names ) == 1 ):
+                    params = ( '%%%s%%' % ( names[0], ), )
+                else:
+                    params = ( '%%%s %s%%' % ( names[0], names[1], ), )
             #elif ( list_category == 2 ):
             #    sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
             #    params = ( '%%%s%%' % ( self.controls['Cast List']['control'].getSelectedItem().getLabel(), ), )
