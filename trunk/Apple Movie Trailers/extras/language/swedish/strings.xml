@@ -2,22 +2,25 @@
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbox media center</string>
 
-
   <!-- Dialog Messages -->
+  <string id="40">All info h„mtas, s”kning „r tillg„nglig. (30 - 90 minuter)</string>
+  <string id="41">Info uppdateras per genre. (10 - 20 minuter)</string>
+  <string id="42">Spara filminfo till databas...</string>
+  
   <string id="50">Konfigurerar skript:</string>
   <string id="51">Importerar moduler &amp; startar...</string>
   <string id="52">modul:</string>
   <string id="53">Ingen databas funnen!</string>
-  <string id="54">Du måste Uppdatera all genre- och film-information.</string>
-  <string id="55">Ett fel uppstod när inställningarna skulle sparas.</string>
-  <string id="56">Skalet kommer inte att ändras förrän du startar om.</string>
-  <string id="57">Ett fel uppstod när gränssnittet skulle skapas.</string>
+  <string id="54">Du m†ste Uppdatera all genre- och film-information.</string>
+  <string id="55">Ett fel uppstod n„r inst„llningarna skulle sparas.</string>
+  <string id="56">Skalet kommer inte att „ndras f”rr„n du startar om.</string>
+  <string id="57">Ett fel uppstod n„r gr„nssnittet skulle skapas.</string>
   <string id="58">Kontrollera en fil i skalet:</string>
-  <string id="59">Databasfilen är ogiltig...</string>
-  <string id="60">Din databasfil är inkompatibel med denna|versionen av AMT. Den kommer nu att återskapas.</string>
+  <string id="59">Databasfilen „r ogiltig...</string>
+  <string id="60">Din databasfil „r inkompatibel med denna|versionen av AMT. Den kommer nu att †terskapas.</string>
   <string id="61">Uppdaterar all genre- och film-information...</string>
-  <string id="62">Är du säker på att du vill göra detta?</string>
-  <string id="63">Uppdateringen kan ta allt från 5 till 15 minuter,|beroende på din anslutningshastighet.</string>
+  <string id="62">Žr du s„ker p† att du vill g”ra detta?</string>
+  <string id="63">Uppdateringen kan ta allt fr†n 5 till 15 minuter,|beroende p† din anslutningshastighet.</string>
   <string id="64">Fel</string>
   <string id="65">Kan ej uppdatera AMT.pk</string>
   <string id="66">Hämtar kategori- och genre-information...</string>
@@ -34,7 +37,27 @@
   <string id="77">Fritt</string>
   <string id="78">Krävt utrymme</string>
   <string id="79">Laddar ner...</string>
+  <string id="80">KB/s</string>
+  <string id="81">All the required modules could not be found!</string>
+  <string id="82">Are you sure you want to delete</string>
+  <string id="83">Loading database...</string>
+  <string id="84">Saving database...</string>
+  <string id="85">Executing query...</string>
+  <string id="86">The operation was cancelled.</string>
+  <string id="87">Current genre</string>
+  <string id="88">Current trailer</string>
+  <string id="89">There was an error creating the database.</string>
 
+  <string id="90">Fetching current tagged versions...</string>
+  <string id="91">is newer</string>
+  <string id="92">Would you like to upgrade?</string>
+  <string id="93">Fetching file list...</string>
+  <string id="94">Please wait...</string>
+  <string id="95">Your version is up to date.</string>
+  <string id="96">There was an error upgrading.</string>
+  <string id="97">Path:</string>
+  <string id="98">File:</string>
+  <string id="99">Your new version was saved to:</string>
   
   <!-- Credits -->
   <string id="100">Version</string>
@@ -61,8 +84,20 @@
   <string id="214">välj skal</string>
   <string id="215">Handling</string>
   <string id="216">Rollbesättning</string>
+  <string id="217">Favorites</string>
+  <string id="218">Playlist</string>
+  <string id="219">Genre</string>
   <string id="220">Fullskärms Visualisering</string>
   <string id="221">Fullskärmsbild</string>
+  <string id="222">Studio...</string>
+  <string id="223">Studio</string>
+  <string id="224">Actor...</string>
+  <string id="225">Actor</string>
+  <string id="226">Downloaded</string>
+  <string id="227">Exit script</string>
+  <string id="228">Check for update</string>
+  <string id="229">Full</string>
+  <string id="230">Minimal</string>
   
   <!-- Settings -->
   <string id="300">Trailer Kvalitet</string>
@@ -71,6 +106,9 @@
   <string id="303">Skal</string>
   <string id="304">Uppstarts Kategori</string>
   <string id="305">Visa Miniatyrbilder</string>
+  <string id="306">Shortcut #1</string>
+  <string id="307">Shortcut #2</string>
+  <string id="308">Shortcut #3</string>
   <string id="310">Film Affisch</string>
   <string id="311">Generiska Minibilder</string>
   <string id="312">Av</string>
@@ -84,6 +122,18 @@
 
   <!-- Movie/Genre Information -->
   <string id="400">Ingen beskrivning kunde hämtas för denna filmtiteln.</string>
+  <string id="401">*No cast listing could be retrieved for this title.</string>
 
+  <!-- Context Menu -->
+  <string id="500">Add to Playlist</string>
+  <string id="501">Remove from Playlist</string>
+  <string id="502">Add to Favorites</string>
+  <string id="503">Remove from Favorites</string>
+  <string id="504">Mark as Watched</string>
+  <string id="505">Mark as Unwatched</string>
+  <string id="506">Refresh Movie Info</string>
+  <string id="507">Refresh Genre</string>
+  <string id="508">Refresh Genre List</string>
+  <string id="509">Delete Saved Trailer</string>
 
 </strings>
