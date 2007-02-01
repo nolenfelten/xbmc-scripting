@@ -203,7 +203,7 @@ class window(xbmcgui.Window):
     def getLocation(self):
         t = 0
         while t < 5:
-            location = xbmc.getInfoLabel('Weather.Location')
+            location = xbmc.getInfoLabel('Weather.Location').split( '(' )[ 0 ]
             if location.lower() != 'busy': break
             t += 1
             xbmc.sleep(500)
