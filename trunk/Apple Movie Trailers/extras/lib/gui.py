@@ -169,7 +169,10 @@ class GUI( xbmcgui.Window ):
                 params = ( self.trailers.categories[category_id].title, )
             elif ( list_category == 3 ):
                 sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
-                params = ( '%%%s%%' % ( self.actor, ), )
+                names = self.actor.split( ' ' )[:2]
+                #print '%s %s'.strip() % ( names[0], names[1] )
+                params = ( '%%%s %s%%'.strip() % ( names[0], names[1], ), )
+                print params
             #elif ( list_category == 2 ):
             #    sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
             #    params = ( '%%%s%%' % ( self.controls['Cast List']['control'].getSelectedItem().getLabel(), ), )
@@ -479,7 +482,7 @@ class GUI( xbmcgui.Window ):
             if ( not os.path.isfile( new_filename ) ):
                 shutil.copyfile( poster, new_filename )
             if ( self.trailers.movies[ trailer ].saved == '' ):
-                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( filename, ), key_value = self.trailers.movies[ trailer ].title )
+                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( filename, self.trailers.movies[ trailer ].title, ), ), 'title' )
                 if ( success ): self.trailers.movies[ trailer ].saved = filename
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
@@ -495,7 +498,7 @@ class GUI( xbmcgui.Window ):
     def markAsWatched( self, watched, trailer, index ):
         if ( watched ): date = datetime.date.today()
         else: date = ''
-        success = self.trailers.updateRecord( 'Movies', ( 'times_watched', 'last_watched', ), ( watched, date, ), key_value = trailer )
+        success = self.trailers.updateRecord( 'Movies', ( 'times_watched', 'last_watched', ), ( ( watched, date, trailer, ), ), 'title' )
         if ( success ):
             self.trailers.movies[index].watched = watched
             self.showTrailers( self.sql, self.params, choice = index )

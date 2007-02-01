@@ -358,6 +358,16 @@ class GUIBuilder:
             root = skindoc.documentElement
             # make sure this is a valid <window> xml file
             if ( not root or root.tagName != 'window' ): raise
+            
+            # check for an overide fastMethod if fastMethod is on
+            if ( self.fastMethod ):
+                overide_fastMethod = self.FirstChildElement( root, 'useincludes' )
+                if ( overide_fastMethod and overide_fastMethod.firstChild ): 
+                    overide = overide_fastMethod.firstChild.nodeValue.lower()
+                    if ( overide == '1' or overide == 'true' or overide == 'yes' ):
+                        self.includesExist = self.LoadIncludes()
+            
+            #resolve xml file
             if ( self.includesExist ): self.ResolveIncludes( root )
 
             self.posx = 0
