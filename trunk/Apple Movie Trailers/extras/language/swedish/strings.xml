@@ -3,27 +3,29 @@
   <string id="1">xbox media center</string>
 
   <!-- Dialog Messages -->
-  <string id="40">All info hämtas, sökning är tillgänglig. (30 - 90 minuter)</string>
-  <string id="41">Info uppdateras per genre. (10 - 20 minuter)</string>
+  <string id="40">All info hämtas, sökning är tillgänglig. (20 - 60 minuter)</string>
+  <string id="41">Info uppdateras per genre. (5 - 15 minuter)</string>
   <string id="42">Spara filminfo till databas...</string>
+  <string id="43">Skriver register till databas...</string>
+  <string id="44">Databasen skapas...</string>
 
   <string id="50">Konfigurerar skript:</string>
   <string id="51">Importerar moduler &amp; startar...</string>
   <string id="52">modul:</string>
-  <string id="53">Ingen databas funnen!</string>
-  <string id="54">Du måste Uppdatera all genre- och film-information.</string>
+  <string id="53">Ingen databas hittad!</string>
+  <string id="54">Du måste uppdatera all genre- och film-information.</string>
   <string id="55">Ett fel uppstod när inställningarna skulle sparas.</string>
   <string id="56">Skalet kommer inte att ändras förrän du startar om.</string>
   <string id="57">Ett fel uppstod när gränssnittet skulle skapas.</string>
   <string id="58">Kontrollera en fil i skalet:</string>
-  <string id="59">Databasfilen är ogiltig...</string>
+  <string id="59">Databasenfilen är ogiltig...</string>
   <string id="60">Din databasfil är inkompatibel med denna|versionen av AMT. Den kommer nu att återskapas.</string>
   <string id="61">Uppdaterar all genre- och film-information...</string>
   <string id="62">Är du säker på att du vill göra detta?</string>
   <string id="63">Uppdateringen kan ta allt från 5 till 15 minuter,|beroende på din anslutningshastighet.</string>
   <string id="64">Fel</string>
   <string id="65">Kan ej uppdatera AMT.pk</string>
-  <string id="66">Hämtar kategori- och genre-information...</string>
+  <string id="66">Hämtar genre-information...</string>
   <string id="67">Vänligen vänta ett ögonblick.</string>
   <string id="68">Hämtar:</string>
   <string id="69">Fel vid hämtning av en eller flera genres.</string>
@@ -69,12 +71,12 @@
   <!-- Buttons and Labels -->
   <string id="200">Nyaste</string>
   <string id="201">Exklusiva</string>
-  <string id="202">Genre</string>
-  <string id="203">Sök</string>
-  <string id="204">Inställningar</string>
-  <string id="205">Uppdatera Alla</string>
-  <string id="206">Uppdatera Genre</string>
-  <string id="207">Uppdatera Trailer</string>
+  <string id="202">Genre...</string>
+  <string id="203">Sök...</string>
+  <string id="204">Inställningar...</string>
+  <string id="205">Uppdatera alla</string>
+  <string id="206">Uppdatera genre</string>
+  <string id="207">Uppdatera trailer</string>
   <string id="208">Uppdatera</string>
   <string id="209">Om AMT</string>
   <string id="210">Ok</string>
@@ -83,11 +85,11 @@
   <string id="213">Version</string>
   <string id="214">välj skal</string>
   <string id="215">Handling</string>
-  <string id="216">Rollbesättning</string>
+  <string id="216">Rollsättning</string>
   <string id="217">Favoriter</string>
   <string id="218">Spellista</string>
   <string id="219">Genre</string>
-  <string id="220">Fullskärms Visualisering</string>
+  <string id="220">Fullskärmsvisualisering</string>
   <string id="221">Fullskärmsbild</string>
   <string id="222">Studio...</string>
   <string id="223">Studio</string>
@@ -100,24 +102,24 @@
   <string id="230">Minimal</string>
 
   <!-- Settings -->
-  <string id="300">Trailer Kvalitet</string>
+  <string id="300">Trailerkvalitet</string>
   <string id="301">Läge</string>
   <string id="302">Nerladdningsfolder</string>
   <string id="303">Skal</string>
-  <string id="304">Uppstarts Kategori</string>
-  <string id="305">Visa Miniatyrbilder</string>
+  <string id="304">Uppstartskategori</string>
+  <string id="305">Visa miniatyrbilder</string>
   <string id="306">Genväg #1</string>
   <string id="307">Genväg #2</string>
   <string id="308">Genväg #3</string>
-  <string id="310">Film Affisch</string>
-  <string id="311">Generiska Minibilder</string>
+  <string id="310">Filmaffisch</string>
+  <string id="311">Generiska minibilder</string>
   <string id="312">Av</string>
   <string id="320">Låg</string>
   <string id="321">Medium</string>
   <string id="322">Hög</string>
   <string id="330">Strömma</string>
-  <string id="331">Ladda Ner</string>
-  <string id="332">Ladda Ner &amp; Spara</string>
+  <string id="331">Ladda ner</string>
+  <string id="332">Ladda ner &amp; spara</string>
   <string id="340">Kontrollera version vid uppstart</string>
 
   <!-- Movie/Genre Information -->
@@ -135,5 +137,9 @@
   <string id="507">Uppdatera genre</string>
   <string id="508">Uppdatera genrelista</string>
   <string id="509">Ta bort sparad trailer</string>
+  <string id="510">Spela trailer</string>
+  <string id="511">Visa denna genre</string>
+  <string id="512">Visa denna studio</string>
+  <string id="513">View denna skådespelare</string>
 
 </strings>
