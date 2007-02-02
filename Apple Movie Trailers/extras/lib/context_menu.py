@@ -1,6 +1,7 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
+import copy##############################
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -9,6 +10,7 @@ class GUI( xbmcgui.WindowDialog ):
             self._ = kwargs['language']
             self.win = kwargs['win']
             self.list_control = kwargs['list_control']
+            #print '*******', self.list_control
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
             else:
@@ -125,6 +127,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.close()
         
     def onControl( self, control ):
+        self.closeDialog()
         if ( control is self.controls['Context Menu Button1']['control'] ):
             if ( self.list_control == 'Trailer List' ):
                 self.win.playTrailer()
@@ -147,7 +150,6 @@ class GUI( xbmcgui.WindowDialog ):
             if ( self.list_control == 'Trailer List' ):
                 self.win.deleteSavedTrailer()
         #elif ( control is self.controls['Context Menu Button6']['control'] ):
-        self.closeDialog()
         
     def onAction( self, action ):
         control = self.getFocus()
