@@ -66,6 +66,9 @@ class GUI( xbmcgui.WindowDialog ):
     
     def setMenuPosition( self ):
         # calculate position
+        bg_posx = self.controls['Context Menu Background Middle']['control'].getPosition()[0]
+        button_posx = self.controls['Context Menu Button1'][ 'control' ].getPosition()[0]
+        buttonx_offset = button_posx - bg_posx
         button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight() + 2
         middle_height = ( self.buttons * button_height ) - 2
         try: top_height = self.controls['Context Menu Background Top']['control'].getHeight()
@@ -80,7 +83,7 @@ class GUI( xbmcgui.WindowDialog ):
         menu_posx = int( float( list_width - menu_width ) / 2 ) + posx
         menu_posy = int( float( list_height - menu_height ) / 2 ) + posy
         button_width = self.controls['Context Menu Button1']['control'].getWidth()
-        button_posx = int( float( menu_width - button_width ) / 1.5 + menu_posx )
+        button_posx = menu_posx + buttonx_offset
         buttony_offset =int( float( bottom_height - top_height ) / 2 )
         # position menu
         self.controls['Context Menu Background Middle']['control'].setHeight( middle_height )
