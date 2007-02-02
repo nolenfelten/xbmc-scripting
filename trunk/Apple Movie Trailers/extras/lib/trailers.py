@@ -287,23 +287,33 @@ class Trailers:
                 traceback.print_exc()
                 xbmcgui.Dialog().ok( _( 70 ), _( 86 ) )
 
+    def setDefaultMovieInfo( self, title, url, record ):
+        if ( not record ):
+            record = ( '', '', [], 0, '', '', '', '', [], '', '', '', 0, 0, '', 0, '', )
+        self.trailer_urls = record[ 2 ]
+        self.poster = record[ 4 ]
+        self.__thumbnail__ = record[ 5 ]
+        self.__thumbnail_watched__ = record[ 6 ]
+        self.plot = record[ 7 ]
+        self.actors = record[ 8 ]
+        self.studio = record[ 9 ]
+        self.rating = record[ 10 ]
+        self.rating_url = record[ 11 ]
+        self.year = record[ 12 ]
+        self.times_watched = record[ 13 ]
+        self.last_watched = record[ 14 ]
+        self.favorite = record[ 15 ]
+        self.saved_location = record[ 16 ]
+        
     def loadMovieInfo( self, title, genre_id, url ):
         try:
-            self.trailer_urls = []
-            self.poster = ''
-            self.__thumbnail__ = ''
-            self.__thumbnail_watched__ = ''
-            self.plot = ''
-            self.actors = []
-            self.studio = ''
-            self.rating = ''
-            self.rating_url = ''
-            genre = DB.getRecords( 'SELECT genre FROM Movies WHERE title=?', ( title, ) )
-            if ( genre and genre_id != -1 ):
-                if ( not genre_id&genre[0] > 0 ):
-                    genre_id += genre[0]
+            record = DB.getRecords( 'SELECT * FROM Movies WHERE title=?', ( title, ) )
+            if ( record and genre_id != -1 ):
+                if ( not genre_id&record[ 3 ] > 0 ):
+                    genre_id += record[ 3 ]
                     success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
             else:
+                self.setDefaultMovieInfo( title, url, record )
                 if ( self.load_all ):
                     if url[:7] != 'http://':
                         url = self.BASEURL + url
@@ -337,11 +347,6 @@ class Trailers:
                         actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
                         if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
                             actors += [ actor ]
-                            #actor_exists = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
-                            #if ( actor_exists ):
-                            #    success = DB.updateRecords( 'Actors', ( 'count', ), ( ( actor_exists[0] + 1, actor, ), ), 'name' )
-                            #else:
-                            #    success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
                     self.actors = actors
                     self.actors.sort()
                     
@@ -349,12 +354,7 @@ class Trailers:
                     studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                     if studio:
                         self.studio = studio#.strip()
-                        #studio_exists = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
-                        #if ( studio_exists ):
-                        #    success = DB.updateRecords( 'Studios', ( 'count', ), ( ( studio_exists[0] + 1, self.studio, ), ), 'title' )
-                        #else:
-                        #    success = DB.addRecords( 'Studios', ( ( self.studio, 1, ), ) )
-                        
+                    
                     # -- rating --2
                     temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
                     if temp_url:
@@ -396,11 +396,11 @@ class Trailers:
                                 continue
                             trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
                         self.trailer_urls = trailer_urls
-                
+
                 info_list = (title,)
                 info_list += (url,)
                 info_list += (repr( self.trailer_urls ),)
-                if ( genre ): info_list += (genre[ 0 ],)
+                if ( record ): info_list += (record[ 3 ],)
                 else: info_list += (genre_id,)
                 info_list += (self.poster,)
                 info_list += (self.__thumbnail__,)
@@ -410,35 +410,45 @@ class Trailers:
                 info_list += (self.studio,)
                 info_list += (self.rating,)
                 info_list += (self.rating_url,)
-                info_list += (0,)
-                info_list += (0,)
-                info_list += ('',)
-                info_list += (0,)
-                info_list += ('',)
-                if ( genre ):
+                info_list += (self.year,)
+                info_list += (self.times_watched,)
+                info_list += (self.last_watched,)
+                info_list += (self.favorite,)
+                info_list += (self.saved_location,)
+
+                if ( record ):
                     ##self.movie_records_update += ( ( info_list[ 2: ] ) + ( title, ), )
                     success = DB.updateRecords( 'Movies', ( '*', 2 ), ( ( info_list[ 2 : ] ) + ( title, ), ), 'title' )
                 else:
                     ##self.movie_records_add += ( info_list, )
                     success = DB.addRecords( 'Movies', ( info_list, ) )
                 if ( success ):
-                    if ( self.actors ):
+                    if ( record ):
+                        actor = record[ 8 ]
+                        studio = record[ 9 ]
+                    else:
+                        actor = None
+                        studio = None
+                    if ( self.actors and not actor ):
                         for actor in self.actors:
                             count = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
                             if ( count ):
                                 success = DB.updateRecords( 'Actors', ( 'count', ), ( ( count[0] + 1, actor, ), ), 'name' )
                             else:
                                 success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
-                    if ( self.studio ):
+                    if ( self.studio and not studio ):
                         count = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
                         if ( count ):
                             success = DB.updateRecords( 'Studios', ( 'count', ), ( ( count[0] + 1, self.studio, ), ), 'title' )
                         else:
                             success = DB.addRecords( 'Studios', ( ( self.studio, 1, ), ) )
-                if ( genre ): return info_list
+                
+                if ( record ): return info_list
+                else: return ( title, )
         except:
-            return None
-            print traceback.print_exc()
+            #print traceback.print_exc()
+            print 'Trailer XML %s: %s is corrupt' % ( title, url, )
+            return ( title, )
             
     ##def clearRecordVariables( self ):
     ##    self.movie_records_add = ()
@@ -475,10 +485,11 @@ class Trailers:
                     if ( info_missing ):
                         dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), movie[0], )
                         if ( dialog.iscanceled() ): raise
-                    if ( movie ): self.movies += [Movie( movie )]
-                #if ( info_missing ): 
-                #    dialog.update( 100, _( 43 ) )
-                #    ##self.writeMovieInfo()
+                    if ( len( movie ) > 1 ): 
+                        self.movies += [Movie( movie )]
+                ##if ( info_missing ): 
+                ##    dialog.update( 100, _( 43 ) )
+                ##    self.writeMovieInfo()
             else: self.movies = None
         except: pass
         dialog.close()

@@ -285,7 +285,7 @@ class GUIBuilder:
                 ctl.setPageControlVisible( not control['hidespinner'] )
                 if (control['hidespinner']):
                     height = int(control['textureheight']) + int(control['spacebetweenitems'])
-                    totalheight = int(control['height']) - 20
+                    totalheight = int(control['height']) - height#########20
                     control['special'] = int(float(totalheight) / float(height))
                 if (control.has_key('label')):
                     for cnt, item in enumerate(control['label']):

@@ -199,6 +199,7 @@ class GUI( xbmcgui.Window ):
             #self.debugWrite('getGenreCategories', 2)
             xbmcgui.lock()
             if ( sql != self.sql_category or params != self.params_category or force_update ):
+                self.list_control_pos = 0
                 self.trailers.getCategories( sql, params )
                 self.sql_category = sql
                 self.params_category = params
@@ -214,6 +215,7 @@ class GUI( xbmcgui.Window ):
                         count = '(%d)' % ( category.count, )
                         self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
                     ################
+                    self.setSelection( 'Category List', self.list_control_pos )
                     #self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
         except: pass #traceback.print_exc()
         xbmcgui.unlock()
@@ -251,7 +253,7 @@ class GUI( xbmcgui.Window ):
                     visible = False
                     visible2 = False
                 self.showScrollbar( visible, visible2, list_control )
-                self.setSelection( list_control )
+                ######self.setSelection( list_control )
             else: self.showScrollbar( False, False, list_control )
 
     def showScrollbar( self, visible, visible2, list_control ):
@@ -271,6 +273,7 @@ class GUI( xbmcgui.Window ):
                     posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getPosition()[ 1 ] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
                     self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getPosition()[ 0 ], posy )
         except: pass
+        self.list_control_pos = self.controls[list_control]['control'].getSelectedPosition()
             
     def setSelection( self, list_control, pos = 0 ):
         #self.debugWrite('setSelection', 2)
