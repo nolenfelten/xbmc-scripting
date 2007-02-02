@@ -8,6 +8,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.cwd = os.path.dirname( sys.modules['default'].__file__ )
             self._ = kwargs['language']
             self.win = kwargs['win']
+            self.list_control = kwargs['list_control']
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
             else:
@@ -18,8 +19,8 @@ class GUI( xbmcgui.WindowDialog ):
                 
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
-        self.trailer = self.win.controls['Trailer List']['control'].getSelectedPosition()
-        self.saved = self.win.trailers.movies[self.trailer].saved != ''
+        self.list_item = self.win.controls[ self.list_control ][ 'control' ].getSelectedPosition()
+        self.saved = self.win.trailers.movies[ self.list_item ].saved != ''
         
     def setupGUI( self ):
         if ( self.win.skin == 'Default' ): current_skin = xbmc.getSkinDir()
@@ -36,101 +37,109 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             xbmcgui.lock()
             self.setButtonLabels()
-            self.setMenuPosition()
             self.setMenuVisibility()
+            self.setMenuPosition()
         finally:
             xbmcgui.unlock()
-        
+            
     def setButtonLabels( self ):
-        self.controls['Context Menu Button1']['control'].setLabel( self._( 500 ) )
-        self.controls['Context Menu Button2']['control'].setLabel( self._( 502 + self.win.trailers.movies[self.trailer].favorite ) )
-        watched = self.win.trailers.movies[self.trailer].watched
-        if ( watched ): watched_lbl = '  (%d)' % ( watched, )
-        else: watched_lbl = ''
-        self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
-        self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
-        self.controls['Context Menu Button5']['control'].setLabel( self._( 507 ) )
-        self.controls['Context Menu Button6']['control'].setLabel( self._( 509 ) )
+        if ( self.list_control == 'Trailer List' ):
+            self.controls['Context Menu Button1']['control'].setLabel( self._( 510 ) )
+            self.controls['Context Menu Button2']['control'].setLabel( self._( 502 + self.win.trailers.movies[self.list_item].favorite ) )
+            watched = self.win.trailers.movies[self.list_item].watched
+            if ( watched ): watched_lbl = '  (%d)' % ( watched, )
+            else: watched_lbl = ''
+            self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
+            self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
+            self.controls['Context Menu Button5']['control'].setLabel( self._( 509 ) )
+            #self.controls['Context Menu Button6']['control'].setLabel( self._( 510 ) )
+        elif ( self.list_control == 'Category List' ):
+            if ( self.win.category_id == amt_util.GENRES ):
+                self.controls['Context Menu Button1']['control'].setLabel( self._( 511 ) )
+                self.controls['Context Menu Button2']['control'].setLabel( self._( 507 ) )
+            elif ( self.win.category_id ==  amt_util.STUDIOS ):
+                self.controls['Context Menu Button1']['control'].setLabel( self._( 512 ) )
+            elif ( self.win.category_id ==  amt_util.ACTORS ):
+                self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
+        elif ( self.list_control == 'Cast List' ):
+                self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
     
     def setMenuPosition( self ):
-        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight()#['height'] + 2
-        height = ( 5 + self.saved ) * self.controls['Context Menu Button1'][ 'control' ].getHeight()#['height']
-        #height -=  ( button_height * ( not self.saved ) )
-        self.controls['Context Menu Background Middle']['control'].setHeight( height )
-        
-        x = self.controls['Context Menu Background Bottom'][ 'control' ].getPosition()[ 0 ] #+ self.coordinates[ 0 ]
-        y = self.controls['Context Menu Background Middle'][ 'control' ].getPosition()[ 1 ] + height #+ self.coordinates[ 1 ]
-        self.controls['Context Menu Background Bottom']['control'].setPosition( x, y )
-    
+        # calculate position
+        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight() + 2
+        middle_height = ( self.buttons * button_height ) - 2
+        try: top_height = self.controls['Context Menu Background Top']['control'].getHeight()
+        except: top_height = 0
+        try: bottom_height = self.controls['Context Menu Background Bottom']['control'].getHeight()
+        except: bottom_height = 0
+        menu_width = self.controls['Context Menu Background Middle']['control'].getWidth()
+        menu_height = middle_height + top_height + bottom_height
+        posx, posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
+        list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight()
+        list_width = self.win.controls[ self.list_control ][ 'control' ].getWidth()
+        menu_posx = int( float( list_width - menu_width ) / 2 ) + posx
+        menu_posy = int( float( list_height - menu_height ) / 2 ) + posy
+        button_width = self.controls['Context Menu Button1']['control'].getWidth()
+        button_posx = int( float( menu_width - button_width ) / 1.5 + menu_posx )
+        buttony_offset =int( float( bottom_height - top_height ) / 2 )
+        # position menu
+        self.controls['Context Menu Background Middle']['control'].setHeight( middle_height )
+        try: self.controls['Context Menu Background Top']['control'].setPosition( menu_posx, menu_posy )
+        except: pass
+        self.controls['Context Menu Background Middle']['control'].setPosition( menu_posx, top_height + menu_posy - 1 )
+        for button in range( 6 ):
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setPosition( button_posx, top_height + ( button_height * button ) + menu_posy - buttony_offset )
+        try: self.controls['Context Menu Background Bottom']['control'].setPosition( menu_posx, top_height + middle_height + menu_posy - 1 )
+        except: pass
+   
     def setMenuVisibility( self ):
-        self.controls['Context Menu Button6']['control'].setVisible( self.saved )
-        self.controls['Context Menu Button6']['control'].setEnabled( self.saved )
+        self.controls['Context Menu Button1']['control'].setVisible( True )
+        self.controls['Context Menu Button1']['control'].setEnabled( True )
+        visible = ( ( self.win.category_id == amt_util.GENRES and self.list_control == 'Category List' ) or self.list_control == 'Trailer List' )
+        self.buttons = visible + 1
+        self.controls['Context Menu Button2']['control'].setVisible( visible )
+        self.controls['Context Menu Button2']['control'].setEnabled( visible )
+        visible = ( self.list_control == 'Trailer List' )
+        self.buttons += ( visible * 2 )
+        self.controls['Context Menu Button3']['control'].setVisible( visible )
+        self.controls['Context Menu Button3']['control'].setEnabled( visible )
+        self.controls['Context Menu Button4']['control'].setVisible( visible )
+        self.controls['Context Menu Button4']['control'].setEnabled( visible )
+        visible = ( self.list_control == 'Trailer List' and self.saved )
+        self.buttons += visible
+        self.controls['Context Menu Button5']['control'].setVisible( visible )
+        self.controls['Context Menu Button5']['control'].setEnabled( visible )
+        self.controls['Context Menu Button6']['control'].setVisible( False )
+        self.controls['Context Menu Button6']['control'].setEnabled( False )
         self.setFocus( self.controls['Context Menu Button1']['control'] )
         
-    def toggleAsWatched( self ):
-        watched = not ( self.win.trailers.movies[self.trailer].watched > 0 )
-        self.win.markAsWatched( watched, self.win.trailers.movies[self.trailer].title, self.trailer )
-        self.closeDialog()
-  
-    def toggleAsFavorite( self ):
-        favorite = not self.win.trailers.movies[self.trailer].favorite
-        success = self.win.trailers.updateRecord( 'Movies', ( 'favorite', ), ( ( favorite, self.win.trailers.movies[self.trailer].title, ), ), 'title' )
-        if ( success ):
-            self.win.trailers.movies[self.trailer].favorite = favorite
-            if ( self.win.category_id == amt_util.FAVORITES ):
-                params = ( 1, )
-                choice = self.trailer - 1 + ( self.trailer == 0 )
-                force_update = True
-            else: 
-                params = self.win.params
-                choice = self.trailer
-                force_update = False
-            self.win.showTrailers( self.win.sql, params = params, choice = choice, force_update = force_update )
-        self.closeDialog()
-    
-    def refreshInfo( self, refresh_all ):
-        self.closeDialog()
-        '''
-        if ( refresh_all ):
-            self.win.trailers.update_all( force_update = True )
-        else:
-            self.win.trailers.movies[self.trailer].__update__()
-        self.win.showTrailers( self.win.sql, choice = self.trailer )
-        '''
-        
-    def deleteSavedTrailer( self ):
-        saved_trailer = self.win.trailers.movies[self.trailer].saved
-        if ( xbmcgui.Dialog().yesno( '%s?' % ( self._( 509 ), ), self._( 82 ), saved_trailer ) ):
-            if ( os.path.isfile( saved_trailer ) ):
-                os.remove( saved_trailer )
-            if ( os.path.isfile( '%s.conf' % ( saved_trailer, ) ) ):
-                os.remove( '%s.conf' % ( saved_trailer, ) )
-            if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
-                os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-            success = self.win.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( '', self.win.trailers.movies[self.trailer].title, ), ), 'title' )
-            if ( success ):
-                self.win.trailers.movies[self.trailer].saved = ''
-                if ( self.win.category_id == amt_util.DOWNLOADED ): force_update = True
-                else: force_update = False
-                self.win.showTrailers( self.win.sql, self.win.params, choice = self.trailer, force_update = force_update )
-            self.closeDialog()
-
     def closeDialog( self ):
         self.close()
         
     def onControl( self, control ):
         if ( control is self.controls['Context Menu Button1']['control'] ):
-            pass#self.addPlaylist()
+            if ( self.list_control == 'Trailer List' ):
+                self.win.playTrailer()
+            elif ( self.list_control == 'Category List' ):
+                self.win.getTrailerGenre()
+            elif ( self.list_control == 'Cast List' ):
+                self.win.getActorChoice()
         elif ( control is self.controls['Context Menu Button2']['control'] ):
-            self.toggleAsFavorite()
+            if ( self.list_control == 'Trailer List' ):
+                self.win.toggleAsFavorite()
+            elif ( self.list_control == 'Category List' ):
+                self.win.refreshInfo( True )
         elif ( control is self.controls['Context Menu Button3']['control'] ):
-            self.toggleAsWatched()
+            if ( self.list_control == 'Trailer List' ):
+                self.win.toggleAsWatched()
         elif ( control is self.controls['Context Menu Button4']['control'] ):
-            self.refreshInfo( False )
+            if ( self.list_control == 'Trailer List' ):
+                self.win.refreshInfo( False )
         elif ( control is self.controls['Context Menu Button5']['control'] ):
-            self.refreshInfo( True )
-        elif ( control is self.controls['Context Menu Button6']['control'] ):
-            self.deleteSavedTrailer()
+            if ( self.list_control == 'Trailer List' ):
+                self.win.deleteSavedTrailer()
+        #elif ( control is self.controls['Context Menu Button6']['control'] ):
+        self.closeDialog()
         
     def onAction( self, action ):
         control = self.getFocus()

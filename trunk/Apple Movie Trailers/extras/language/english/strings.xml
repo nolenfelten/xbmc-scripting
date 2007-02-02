@@ -123,19 +123,23 @@
   <string id="340">Check version on startup</string>
 
   <!-- Movie/Genre Information -->
-  <string id="400">*No description could be retrieved for this title.</string>
+  <string id="400">*No plot could be retrieved for this title.</string>
   <string id="401">*No cast listing could be retrieved for this title.</string>
 
   <!-- Context Menu -->
-  <string id="500">Add to Playlist</string>
-  <string id="501">Remove from Playlist</string>
+  <string id="500">Theater Showtimes</string>
+  <string id="501">-</string>
   <string id="502">Add to Favorites</string>
   <string id="503">Remove from Favorites</string>
   <string id="504">Mark as Watched</string>
   <string id="505">Mark as Unwatched</string>
-  <string id="506">Refresh Movie Info</string>
+  <string id="506">Refresh Trailer Info</string>
   <string id="507">Refresh Genre</string>
-  <string id="508">Refresh Genre List</string>
+  <string id="508">-</string>
   <string id="509">Delete Saved Trailer</string>
+  <string id="510">Play Trailer</string>
+  <string id="511">View this Genre</string>
+  <string id="512">View this Studio</string>
+  <string id="513">View this Actor</string>
 
 </strings>
