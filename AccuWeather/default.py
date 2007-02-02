@@ -203,10 +203,11 @@ class window(xbmcgui.Window):
     def getLocation(self):
         t = 0
         while t < 5:
-            location = xbmc.getInfoLabel('Weather.Location').split( '(' )[ 0 ]
+            location = xbmc.getInfoLabel('Weather.Location').split( '(' )[ 0 ].strip()
             if location.lower() != 'busy': break
             t += 1
             xbmc.sleep(500)
+        print 'Location:', location
         tmp = location.replace(', ', '%2C').replace(' ', '%20')
         if (tmp.split('%2C')[1].lower() == 'canada'): URL_Location = 'Canada'
         #elif (location.split('%2C')[1].lower() == 'united%20kingdom'): URL_Location = 'UK'
