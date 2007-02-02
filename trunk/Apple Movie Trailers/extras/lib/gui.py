@@ -443,7 +443,6 @@ class GUI( xbmcgui.Window ):
     def getActorChoice( self ):
         choice = self.controls['Cast List']['control'].getSelectedPosition()
         self.actor = self.controls['Cast List']['control'].getSelectedItem().getLabel()
-        
         self.setCategory( choice, 3 )
 
     def playTrailer( self ):
@@ -496,9 +495,6 @@ class GUI( xbmcgui.Window ):
         cm.doModal()
         del cm
 
-    def addToPlaylist( self ):
-        pass
-        
     def markAsWatched( self, watched, trailer, index ):
         if ( watched ): date = datetime.date.today()
         else: date = ''
@@ -515,7 +511,7 @@ class GUI( xbmcgui.Window ):
         settings.doModal()
         del settings
         self.getSettings()
-        if ( thumbnail_display != self.settings.thumbnail_display and self.category_id != -1 ):
+        if ( thumbnail_display != self.settings.thumbnail_display and self.category_id != amt_util.GENRES and self.category_id != amt_util.STUDIOS and self.category_id != amt_util.ACTORS ):
             trailer = self.controls['Trailer List']['control'].getSelectedPosition()
             self.showTrailers( self.sql, self.params, choice = trailer )
         self.setShortcutLabels()
