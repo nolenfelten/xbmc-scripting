@@ -2,7 +2,7 @@ import os, sys, traceback
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
-import default
+#import default
 import language
 import pil_util
 import database
@@ -440,6 +440,10 @@ class Trailers:
             return None
             print traceback.print_exc()
             
+    ##def clearRecordVariables( self ):
+    ##    self.movie_records_add = ()
+    ##    self.movie_records_update = ()
+
     ##def writeMovieInfo( self ):
     ##    # add records
     ##    if ( self.movie_records_add ):
@@ -450,11 +454,7 @@ class Trailers:
     def updateRecord( self, table, columns, values, key = 'title' ):
         success = DB.updateRecords( table, columns, values, key )
         return success
-        
-    ##def clearRecordVariables( self ):
-    ##    self.movie_records_add = ()
-    ##    self.movie_records_update = ()
-    
+
     def getMovies( self, sql, params = None, all = True ):
         try:
             ##self.clearRecordVariables()
@@ -476,9 +476,9 @@ class Trailers:
                         dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), movie[0], )
                         if ( dialog.iscanceled() ): raise
                     if ( movie ): self.movies += [Movie( movie )]
-                if ( info_missing ): 
-                    dialog.update( 100, _( 43 ) )
-                    ##self.writeMovieInfo()
+                #if ( info_missing ): 
+                #    dialog.update( 100, _( 43 ) )
+                #    ##self.writeMovieInfo()
             else: self.movies = None
         except: pass
         dialog.close()

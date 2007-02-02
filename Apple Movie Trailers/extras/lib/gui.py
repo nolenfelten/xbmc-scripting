@@ -488,8 +488,8 @@ class GUI( xbmcgui.Window ):
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
     
-    def showContextMenu( self ):
-        cm = context_menu.GUI( win = self, language=_ )
+    def showContextMenu( self, list_control ):
+        cm = context_menu.GUI( win=self, language=_, list_control=list_control )
         cm.doModal()
         del cm
 
@@ -548,6 +548,54 @@ class GUI( xbmcgui.Window ):
         updt = update.Update( language=_, script=default.__scriptname__, version=default.__version__ )
         del update
         
+    def toggleAsWatched( self ):
+        trailer = self.setCountLabel( 'Trailer List' )
+        watched = not ( self.trailers.movies[ trailer ].watched > 0 )
+        self.markAsWatched( watched, self.trailers.movies[ trailer ].title, trailer )
+  
+    def toggleAsFavorite( self ):
+        trailer = self.setCountLabel( 'Trailer List' )
+        favorite = not self.trailers.movies[ trailer ].favorite
+        success = self.trailers.updateRecord( 'Movies', ( 'favorite', ), ( ( favorite, self.trailers.movies[ trailer ].title, ), ), 'title' )
+        if ( success ):
+            self.trailers.movies[ trailer ].favorite = favorite
+            if ( self.category_id == amt_util.FAVORITES ):
+                params = ( 1, )
+                choice = trailer - 1 + ( trailer == 0 )
+                force_update = True
+            else: 
+                params = self.params
+                choice = trailer
+                force_update = False
+            self.showTrailers( self.sql, params = params, choice = choice, force_update = force_update )
+    
+    def refreshInfo( self, refresh_all ):
+        xbmc.sleep(200)
+        '''
+        if ( refresh_all ):
+            self.trailers.update_all( force_update = True )
+        else:
+            self.trailers.movies[self.list_item].__update__()
+        self.showTrailers( self.sql, choice = self.list_item )
+        '''
+        
+    def deleteSavedTrailer( self ):
+        trailer = self.setCountLabel( 'Trailer List' )
+        saved_trailer = self.trailers.movies[ trailer ].saved
+        if ( xbmcgui.Dialog().yesno( '%s?' % ( _( 509 ), ), _( 82 ), saved_trailer ) ):
+            if ( os.path.isfile( saved_trailer ) ):
+                os.remove( saved_trailer )
+            if ( os.path.isfile( '%s.conf' % ( saved_trailer, ) ) ):
+                os.remove( '%s.conf' % ( saved_trailer, ) )
+            if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
+                os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
+            success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( '', self.trailers.movies[ trailer ].title, ), ), 'title' )
+            if ( success ):
+                self.trailers.movies[ trailer ].saved = ''
+                if ( self.category_id == amt_util.DOWNLOADED ): force_update = True
+                else: force_update = False
+                self.showTrailers( self.sql, self.params, choice = trailer, force_update = force_update )
+
     def exitScript( self ):
         #self.debugWrite( 'exitScript', 2 )
         try:
@@ -613,7 +661,7 @@ class GUI( xbmcgui.Window ):
                     #if ( self.main_category == -99 ): self.main_category = amt_util.ACTORS
                     self.setCategory( self.main_category, 0 )
                 elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
-                    self.showContextMenu()
+                    self.showContextMenu( 'Trailer List' )
                 else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):
                     self.showTrailerInfo()
             elif ( control is self.controls['Trailer List Scrollbar Position Indicator']['control'] ):
@@ -622,8 +670,11 @@ class GUI( xbmcgui.Window ):
                 elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Trailer List', 1 )
             elif ( control is self.controls['Category List']['control'] ):
-                self.setScrollbarIndicator( 'Category List' )
-                choice = self.setCountLabel( 'Category List' )
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
+                    self.showContextMenu( 'Category List' )
+                else:
+                    self.setScrollbarIndicator( 'Category List' )
+                    choice = self.setCountLabel( 'Category List' )
             elif ( control is self.controls['Category List Scrollbar Position Indicator']['control'] ):
                 if ( button_key == 'Keyboard Up Arrow' or button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Category List', -1 )
@@ -632,7 +683,10 @@ class GUI( xbmcgui.Window ):
                     self.pageIndicator( 'Category List', 1 )
                     choice = self.setCountLabel( 'Category List' )
             elif ( control is self.controls['Cast List']['control'] ):
-                self.setScrollbarIndicator( 'Cast List' )
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
+                    self.showContextMenu( 'Cast List' )
+                else:
+                    self.setScrollbarIndicator( 'Cast List' )
             elif ( control is self.controls['Cast List Scrollbar Position Indicator']['control'] ):
                 if ( button_key == 'Keyboard Up Arrow' or button_key == 'Remote Up' or button_key == 'DPad Up' ):
                     self.pageIndicator( 'Cast List', -1 )

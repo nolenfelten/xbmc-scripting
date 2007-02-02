@@ -47,9 +47,9 @@ class Database:
                                             ('title', 'text', True),
                                             ( 'count', 'integer', None ),
                                         )
-        self.tables['Playlist'] = ( 
-                                            ('title', 'text', True),
-                                        )
+        #self.tables['Playlist'] = ( 
+        #                                    ('title', 'text', True),
+        #                                )
         self.tables['Version'] = (
                                             ( 'version', 'text', None ),
                                         )
