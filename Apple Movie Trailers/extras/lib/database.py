@@ -14,6 +14,7 @@ class Database:
         db = os.path.join( cwd, 'extras', 'data', 'AMT.db' )
         self.setupTables()
         self.con = sqlite.connect( db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        self.cur = self.con.cursor()
         self.db_version = self.getVersion()
         if ( not self.db_version ): 
             print 'no database exists', default.__version__
@@ -129,8 +130,8 @@ class Database:
                 sql += '%s, ' % item[0]
             sql = sql[:-2] + ') VALUES (' + ( '?, '*len( self.tables[ table ] ) )
             sql = sql[:-2] + ')'
-            cur = self.con.cursor()
-            cur.executemany( sql, values )
+            #cur = self.con.cursor()
+            self.cur.executemany( sql, values )
             self.con.commit()
             return True
         except:
@@ -150,8 +151,8 @@ class Database:
             for col in columns:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?" % ( key, )
-            cur = self.con.cursor()
-            cur.executemany( sql, values )
+            #cur = self.con.cursor()
+            self.cur.executemany( sql, values )
             self.con.commit()
             return True
         except:
@@ -162,15 +163,15 @@ class Database:
 
     def getRecords( self, sql, params = None, all = False ):
         try:
-            cur = self.con.cursor()
+            #cur = self.con.cursor()
             if ( params != None ):
-                cur.execute( sql , params )
+                self.cur.execute( sql , params )
             else: 
-                cur.execute( sql )
+                self.cur.execute( sql )
             if ( all ):
-                retval = cur.fetchall()
+                retval = self.cur.fetchall()
             else:
-                retval = cur.fetchone()
+                retval = self.cur.fetchone()
         except: 
             if ( all ): retval = []
             else: retval = None
