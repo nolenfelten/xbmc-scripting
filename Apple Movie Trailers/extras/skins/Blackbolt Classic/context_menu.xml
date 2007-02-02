@@ -74,7 +74,7 @@
 		<control type="button" id="1000">
 			<description>Context Menu Button1</description>
 			<posx>10</posx>
-			<posy>8</posy>
+			<posy>6</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
@@ -97,7 +97,7 @@
 		<control type="button" id="1010">
 			<description>Context Menu Button2</description>
 			<posx>10</posx>
-			<posy>42</posy>
+			<posy>40</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
@@ -120,7 +120,7 @@
 		<control type="button" id="1020">
 			<description>Context Menu Button3</description>
 			<posx>10</posx>
-			<posy>76</posy>
+			<posy>74</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
@@ -143,7 +143,7 @@
 		<control type="button" id="1030">
 			<description>Context Menu Button4</description>
 			<posx>10</posx>
-			<posy>110</posy>
+			<posy>108</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
@@ -166,7 +166,7 @@
 		<control type="button" id="1040">
 			<description>Context Menu Button5</description>
 			<posx>10</posx>
-			<posy>144</posy>
+			<posy>142</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
@@ -189,7 +189,7 @@
 		<control type="button" id="1050">
 			<description>Context Menu Button6</description>
 			<posx>10</posx>
-			<posy>178</posy>
+			<posy>176</posy>
 			<width>165</width>
 			<height>32</height>
 			<align>center</align>
