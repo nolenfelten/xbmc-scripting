@@ -65,35 +65,40 @@ class GUI( xbmcgui.WindowDialog ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
     
     def setMenuPosition( self ):
-        # calculate position
-        bg_posx = self.controls['Context Menu Background Middle']['control'].getPosition()[0]
-        button_posx = self.controls['Context Menu Button1'][ 'control' ].getPosition()[0]
-        buttonx_offset = button_posx - bg_posx
-        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight() + 2
-        middle_height = ( self.buttons * button_height ) - 2
+        # get positions and dimensions
         try: top_height = self.controls['Context Menu Background Top']['control'].getHeight()
         except: top_height = 0
         try: bottom_height = self.controls['Context Menu Background Bottom']['control'].getHeight()
         except: bottom_height = 0
         menu_width = self.controls['Context Menu Background Middle']['control'].getWidth()
-        menu_height = middle_height + top_height + bottom_height
-        posx, posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
-        list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight()
         list_width = self.win.controls[ self.list_control ][ 'control' ].getWidth()
+        list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight()
+        button_width = self.controls['Context Menu Button1']['control'].getWidth()
+        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight()
+        bg_posx, bg_posy = self.controls['Context Menu Background Middle']['control'].getPosition()
+        button_posx, button_posy = self.controls['Context Menu Button1'][ 'control' ].getPosition()
+        button2_posy = self.controls['Context Menu Button2'][ 'control' ].getPosition()[ 1 ]
+        posx, posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
+
+        # calculate position
+        buttonx_offset = button_posx - bg_posx
+        buttony_offset = button_posy - bg_posy
+        button_gap = button2_posy - button_posy - button_height
+        middle_height = ( self.buttons * button_height ) - button_gap
+        menu_height = middle_height + top_height + bottom_height
         menu_posx = int( float( list_width - menu_width ) / 2 ) + posx
         menu_posy = int( float( list_height - menu_height ) / 2 ) + posy
-        button_width = self.controls['Context Menu Button1']['control'].getWidth()
         button_posx = menu_posx + buttonx_offset
-        buttony_offset =int( float( bottom_height - top_height ) / 2 )
-        # position menu
+        
+        # position and size menu
         self.controls['Context Menu Background Middle']['control'].setHeight( middle_height )
         try: self.controls['Context Menu Background Top']['control'].setPosition( menu_posx, menu_posy )
         except: pass
         self.controls['Context Menu Background Middle']['control'].setPosition( menu_posx, top_height + menu_posy - 1 )
-        for button in range( 6 ):
-            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setPosition( button_posx, top_height + ( button_height * button ) + menu_posy - buttony_offset )
         try: self.controls['Context Menu Background Bottom']['control'].setPosition( menu_posx, top_height + middle_height + menu_posy - 1 )
         except: pass
+        for button in range( 6 ):
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setPosition( button_posx, top_height + ( ( button_height + button_gap ) * button ) + menu_posy + buttony_offset - 1 )
    
     def setMenuVisibility( self ):
         self.controls['Context Menu Button1']['control'].setVisible( True )
