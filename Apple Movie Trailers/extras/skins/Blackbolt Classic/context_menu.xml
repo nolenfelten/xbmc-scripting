@@ -1,5 +1,4 @@
-<window>
-
+﻿<window id="106">
 <!--
     The <resolution> tag is used for the setCoordinateResolution() function.
     
@@ -14,200 +13,142 @@
 	
 -->
 
-	<defaultcontrol always="true">1000</defaultcontrol>
-	<resolution>PAL</resolution>
+
+	<defaultcontrol>1001</defaultcontrol>
+    <resolution>PAL</resolution>
+	<!--include>Fade_Dialog_OpenClose_Animation</include-->
 	<coordinates>
 		<system>1</system>
-		<posx>255</posx>
-		<posy>145</posy>
+		<posx>0</posx>
+		<posy>0</posy>
 	</coordinates>
-
 	<controls>
-
-		<!-- context menu -->
-
         <!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="1">
+		<control type="image" id="997">
 			<description>Context Menu Background Top</description>
-			<posx>-5</posx>
-			<posy>-20</posy>
-			<width>190</width>
+			<posx>5</posx>
+			<posy>-30</posy>
+			<width>200</width>
 			<height>31</height>
 			<texture>dialog-context-top.png</texture>
-			<visible>true</visible>
 		</control>
-
         <!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="1">
+		<control type="image" id="999">
 			<description>Context Menu Background Middle</description>
-			<posx>-5</posx>
-			<posy>10</posy>
-			<width>190</width>
-			<height>170</height>
+			<posx>5</posx>
+			<posy>0</posy>
+			<width>200</width>
 			<texture>dialog-context-middle.png</texture>
-			<visible>true</visible>
 		</control>
-
         <!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="1">
+		<control type="image" id="998">
 			<description>Context Menu Background Bottom</description>
-			<posx>-5</posx>
-			<posy>180</posy>
-			<width>190</width>
+			<posx>5</posx>
+			<width>200</width>
 			<height>37</height>
 			<texture>dialog-context-bottom.png</texture>
-			<visible>true</visible>
 		</control>
-
-        <!-- ** Optional ** Do not change <description> or <type> -->
-		<!--control type="image" id="1">
-			<description>Context Menu Background Middle</description>
-			<posx>0</posx>
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1001">
+			<description>Context Menu Button1</description>
+			<posx>18</posx>
 			<posy>0</posy>
 			<width>180</width>
-			<height>229</height>
-			<texture>\dialog-panel.png</texture>
-			<visible>true</visible>
-		</control-->
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1000">
-			<description>Context Menu Button1</description>
-			<posx>10</posx>
-			<posy>6</posy>
-			<width>165</width>
-			<height>32</height>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1000</onleft>
-			<onright>1000</onright>
-			<onup>1050</onup>
-			<ondown>1010</ondown>
-			<visible>true</visible>
+            <ondown>1002</ondown>
+            <onup>1006</onup>
 		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1010">
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1002">
 			<description>Context Menu Button2</description>
-			<posx>10</posx>
-			<posy>40</posy>
-			<width>165</width>
-			<height>32</height>
+			<posx>18</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1010</onleft>
-			<onright>1010</onright>
-			<onup>1000</onup>
-			<ondown>1020</ondown>
-			<visible>true</visible>
+            <ondown>1003</ondown>
+            <onup>1001</onup>
 		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1020">
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1003">
 			<description>Context Menu Button3</description>
-			<posx>10</posx>
-			<posy>74</posy>
-			<width>165</width>
-			<height>32</height>
+			<posx>18</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1020</onleft>
-			<onright>1020</onright>
-			<onup>1010</onup>
-			<ondown>1030</ondown>
-			<visible>true</visible>
+            <ondown>1004</ondown>
+            <onup>1002</onup>
 		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1030">
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1004">
 			<description>Context Menu Button4</description>
-			<posx>10</posx>
-			<posy>108</posy>
-			<width>165</width>
-			<height>32</height>
+			<posx>18</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1030</onleft>
-			<onright>1030</onright>
-			<onup>1020</onup>
-			<ondown>1040</ondown>
-			<visible>true</visible>
+            <ondown>1005</ondown>
+            <onup>1003</onup>
 		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1040">
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1005">
 			<description>Context Menu Button5</description>
-			<posx>10</posx>
-			<posy>142</posy>
-			<width>165</width>
-			<height>32</height>
+			<posx>18</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1040</onleft>
-			<onright>1040</onright>
-			<onup>1030</onup>
-			<ondown>1050</ondown>
-			<visible>true</visible>
+            <ondown>1006</ondown>
+            <onup>1004</onup>
 		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="1050">
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1006">
 			<description>Context Menu Button6</description>
-			<posx>10</posx>
-			<posy>176</posy>
-			<width>165</width>
-			<height>32</height>
+			<posx>18</posx>
+			<posy>0</posy>
+			<width>180</width>
+			<height>28</height>
+			<font>font12</font>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>10</textoffsetx>
 			<texturenofocus>button-nofocus.png</texturenofocus>
 			<texturefocus>button-focus.png</texturefocus>
-			<onleft>1050</onleft>
-			<onright>1050</onright>
-			<onup>1040</onup>
-			<ondown>1000</ondown>
-			<visible>false</visible>
+            <ondown>1001</ondown>
+            <onup>1005</onup>
 		</control>
-
 	</controls>
-
 </window>

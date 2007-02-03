@@ -155,7 +155,8 @@ class Trailers:
                         genre_records += ( ( genre, genre_dict[genre], 2**genre_id, len( trailer_urls), 0, repr( trailer_urls), ), )
                         self.categories += [Category( ( genre, len( trailer_urls), genre_dict[genre], 2**genre_id, 0 ) )]
                     genre_id += 1
-                dialog.update( 100, _( 43 ) )
+                #dialog.update( 100, _( 43 ) )
+                dialog.update( 100, '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '-----> %s <-----' % (_( 43 ), ) )
                 success = DB.addRecords( 'Genres', genre_records )
                 dialog.close()
 
@@ -243,7 +244,7 @@ class Trailers:
                         continue
                 return trailer_urls
         except:
-            ##dialog.close()
+            dialog.close()#####
             traceback.print_exc()
             return []
 
@@ -268,14 +269,14 @@ class Trailers:
                     if ( genre.loaded == 0 ):
                         genre_cnt += 1
                         trailer_urls = DB.getRecords( 'SELECT trailer_urls FROM Genres WHERE title=?', ( genre.title, ) )
-                        ##self.clearRecordVariables()
+                        self.clearRecordVariables()#####
                         for movie in eval( trailer_urls[0] ):
                             cnt += 1
                             dialog.update( int( cnt * pct_sect ) , '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '%s' % ( movie[0], ) )
                             success = self.loadMovieInfo( movie[0], genre.id, movie[1] )
                             if ( dialog.iscanceled() ): raise
-                        dialog.update( int( cnt * pct_sect ), '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), _( 43 ) )
-                        ##self.writeMovieInfo()
+                        dialog.update( int( cnt * pct_sect ), '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '-----> %s <-----' % ( _( 43 ), ) )
+                        self.writeMovieInfo()#####
                         #if ( self.load_all ):
                         success = DB.updateRecords( 'Genres', ( 'loaded', ), ( ( genre.count, genre.title, ), ), 'title' )
                 dialog.close()
@@ -314,6 +315,8 @@ class Trailers:
                     success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
             else:
                 self.setDefaultMovieInfo( title, url, record )
+                if ( self.actors ): update_other = False
+                else: update_other = True
                 if ( self.load_all ):
                     if url[:7] != 'http://':
                         url = self.BASEURL + url
@@ -417,49 +420,55 @@ class Trailers:
                 info_list += (self.saved_location,)
 
                 if ( record ):
-                    ##self.movie_records_update += ( ( info_list[ 2: ] ) + ( title, ), )
-                    success = DB.updateRecords( 'Movies', ( '*', 2 ), ( ( info_list[ 2 : ] ) + ( title, ), ), 'title' )
+                    self.movie_records_update += ( ( info_list[ 2: ] ) + ( title, ), )#####
+                    #success = DB.updateRecords( 'Movies', ( '*', 2 ), ( ( info_list[ 2 : ] ) + ( title, ), ), 'title' )
                 else:
-                    ##self.movie_records_add += ( info_list, )
-                    success = DB.addRecords( 'Movies', ( info_list, ) )
-                if ( success ):
-                    if ( record ):
-                        actor = record[ 8 ]
-                        studio = record[ 9 ]
-                    else:
-                        actor = None
-                        studio = None
-                    if ( self.actors and not actor ):
+                    self.movie_records_add += ( info_list, )#####
+                    #success = DB.addRecords( 'Movies', ( info_list, ) )
+                
+                if ( self.load_all and update_other ):
+                    if ( self.actors ):#not actor ):
+                        #print 'actors for ', title
+                        actor_records_add = ()
+                        actor_records_update = ()
                         for actor in self.actors:
                             count = DB.getRecords( 'SELECT count FROM Actors WHERE name=?', ( actor, ) )
                             if ( count ):
-                                success = DB.updateRecords( 'Actors', ( 'count', ), ( ( count[0] + 1, actor, ), ), 'name' )
+                                actor_records_update += ( ( count[0] + 1, actor, ), )
+                                #success = DB.updateRecords( 'Actors', ( 'count', ), ( ( count[0] + 1, actor, ), ), 'name' )
                             else:
-                                success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
-                    if ( self.studio and not studio ):
+                                actor_records_add += ( ( actor, 1, ), )
+                                #success = DB.addRecords( 'Actors', ( ( actor, 1, ), ) )
+                        if ( actor_records_add ):
+                            success = DB.addRecords( 'Actors', actor_records_add )
+                        if ( actor_records_update ):
+                            success = DB.updateRecords( 'Actors', ( '*', 1 ), actor_records_update, 'name' )
+                    
+                    if ( self.studio ):#not studio ):
                         count = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
                         if ( count ):
                             success = DB.updateRecords( 'Studios', ( 'count', ), ( ( count[0] + 1, self.studio, ), ), 'title' )
                         else:
                             success = DB.addRecords( 'Studios', ( ( self.studio, 1, ), ) )
                 
-                if ( record ): return info_list
-                else: return ( title, )
+                #if ( record ): 
+                return info_list###############################
+                #else: return ( title, )
         except:
             #print traceback.print_exc()
             print 'Trailer XML %s: %s is corrupt' % ( title, url, )
             return ( title, )
             
-    ##def clearRecordVariables( self ):
-    ##    self.movie_records_add = ()
-    ##    self.movie_records_update = ()
+    def clearRecordVariables( self ):#####
+        self.movie_records_add = ()
+        self.movie_records_update = ()
 
-    ##def writeMovieInfo( self ):
-    ##    # add records
-    ##    if ( self.movie_records_add ):
-    ##        success = DB.addRecords( 'Movies', self.movie_records_add )
-    ##    if ( self.movie_records_update ):
-    ##        success = DB.updateRecords( 'Movies', ( '*', 2 ), self.movie_records_update, 'title' )
+    def writeMovieInfo( self ):#####
+        # add records
+        if ( self.movie_records_add ):
+            success = DB.addRecords( 'Movies', self.movie_records_add )
+        if ( self.movie_records_update ):
+            success = DB.updateRecords( 'Movies', ( '*', 2 ), self.movie_records_update, 'title' )
         
     def updateRecord( self, table, columns, values, key = 'title' ):
         success = DB.updateRecords( table, columns, values, key )
@@ -467,7 +476,7 @@ class Trailers:
 
     def getMovies( self, sql, params = None, all = True ):
         try:
-            ##self.clearRecordVariables()
+            self.clearRecordVariables()#####
             self.load_all = True
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 85 ) )
@@ -487,9 +496,9 @@ class Trailers:
                         if ( dialog.iscanceled() ): raise
                     if ( len( movie ) > 1 ): 
                         self.movies += [Movie( movie )]
-                ##if ( info_missing ): 
-                ##    dialog.update( 100, _( 43 ) )
-                ##    self.writeMovieInfo()
+                if ( info_missing ): #####
+                    dialog.update( 100, _( 43 ) )#####
+                    self.writeMovieInfo()#####
             else: self.movies = None
         except: pass
         dialog.close()

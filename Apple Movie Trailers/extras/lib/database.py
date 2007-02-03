@@ -11,10 +11,10 @@ class Database:
         self._ = kwargs[ 'language' ]
         if ( not os.path.isdir( os.path.join( cwd, 'extras', 'data' ) ) ):
             os.makedirs( os.path.join( cwd, 'extras', 'data' ) )
-        db = os.path.join( cwd, 'extras', 'data', 'AMT.db' )
+        self.db = os.path.join( cwd, 'extras', 'data', 'AMT.db' )
         self.setupTables()
-        self.con = sqlite.connect( db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
-        self.cur = self.con.cursor()
+        #self.con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        #self.cur = self.con.cursor()
         self.db_version = self.getVersion()
         if ( not self.db_version ): 
             print 'no database exists', default.__version__
@@ -108,11 +108,14 @@ class Database:
             for item in self.tables[table]:
                 sql += '%s %s, ' % ( item[0], item[1], )
             sql = sql[:-2] + ')'
-            self.con.execute( sql )
+            con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            cur = con.cursor()
+            con.execute( sql )
             for item in self.tables[table]:
                 if ( item[2] != None ):
                     sql = 'CREATE %s INDEX %s_%s_idx ON %s (%s)' % ( index[item[2]], table, item[0], table, item[0], )
-                    self.con.execute( sql )
+                    con.execute( sql )
+            con.close()
             return True
         except: return False
             
@@ -123,7 +126,7 @@ class Database:
     #    else:
     #        success = self.addRecords( columns, table )
             
-    def addRecords( self, table, values  ):
+    def addRecords( self, table, values, commit=False  ):
         try:
             sql='INSERT INTO %s (' % ( table, )
             for item in self.tables[table]:
@@ -131,8 +134,11 @@ class Database:
             sql = sql[:-2] + ') VALUES (' + ( '?, '*len( self.tables[ table ] ) )
             sql = sql[:-2] + ')'
             #cur = self.con.cursor()
-            self.cur.executemany( sql, values )
-            self.con.commit()
+            con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            cur = con.cursor()
+            cur.executemany( sql, values )
+            con.commit()
+            con.close()
             return True
         except:
             print sql
@@ -140,7 +146,7 @@ class Database:
             traceback.print_exc()
             return False
             
-    def updateRecords( self, table, columns, values, key ):
+    def updateRecords( self, table, columns, values, key, commit=False ):
         try:
             if ( columns[0] == '*' ):
                 start_column = columns[ 1 ]
@@ -152,27 +158,34 @@ class Database:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?" % ( key, )
             #cur = self.con.cursor()
-            self.cur.executemany( sql, values )
-            self.con.commit()
+            con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            cur = con.cursor()
+            cur.executemany( sql, values )
+            con.commit()
+            con.close()
             return True
         except:
             print sql
             print values[0]
             traceback.print_exc()
+            con.close()
             return False
 
     def getRecords( self, sql, params = None, all = False ):
         try:
+            con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            cur = con.cursor()
             #cur = self.con.cursor()
             if ( params != None ):
-                self.cur.execute( sql , params )
+                cur.execute( sql , params )
             else: 
-                self.cur.execute( sql )
+                cur.execute( sql )
             if ( all ):
-                retval = self.cur.fetchall()
+                retval = cur.fetchall()
             else:
-                retval = self.cur.fetchone()
+                retval = cur.fetchone()
         except: 
             if ( all ): retval = []
             else: retval = None
+        con.close()
         return retval
