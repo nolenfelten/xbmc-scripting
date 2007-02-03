@@ -1,7 +1,6 @@
 import xbmc, xbmcgui
 import os, guibuilder, sys
 import amt_util, default
-import copy##############################
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -10,15 +9,13 @@ class GUI( xbmcgui.WindowDialog ):
             self._ = kwargs['language']
             self.win = kwargs['win']
             self.list_control = kwargs['list_control']
-            #print '*******', self.list_control
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
             else:
                 self.setupVariables()
                 self.showContextMenu()
-        except: 
-            self.close()
-                
+        except: self.close()
+            
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
         self.list_item = self.win.controls[ self.list_control ][ 'control' ].getSelectedPosition()
@@ -38,13 +35,15 @@ class GUI( xbmcgui.WindowDialog ):
     def showContextMenu( self ):
         try:
             xbmcgui.lock()
+            self.hideButtons()
             self.setButtonLabels()
-            self.setMenuVisibility()
             self.setMenuPosition()
-        finally:
-            xbmcgui.unlock()
+            self.setFocus( self.controls['Context Menu Button1']['control'] )
+        except: pass
+        xbmcgui.unlock()
             
     def setButtonLabels( self ):
+        self.buttons = 1
         if ( self.list_control == 'Trailer List' ):
             self.controls['Context Menu Button1']['control'].setLabel( self._( 510 ) )
             self.controls['Context Menu Button2']['control'].setLabel( self._( 502 + self.win.trailers.movies[self.list_item].favorite ) )
@@ -54,11 +53,13 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
             self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
             self.controls['Context Menu Button5']['control'].setLabel( self._( 509 ) )
+            self.buttons = 4 + self.saved
             #self.controls['Context Menu Button6']['control'].setLabel( self._( 510 ) )
         elif ( self.list_control == 'Category List' ):
             if ( self.win.category_id == amt_util.GENRES ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 511 ) )
                 self.controls['Context Menu Button2']['control'].setLabel( self._( 507 ) )
+                self.buttons = 2
             elif ( self.win.category_id ==  amt_util.STUDIOS ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 512 ) )
             elif ( self.win.category_id ==  amt_util.ACTORS ):
@@ -68,62 +69,46 @@ class GUI( xbmcgui.WindowDialog ):
     
     def setMenuPosition( self ):
         # get positions and dimensions
-        try: top_height = self.controls['Context Menu Background Top']['control'].getHeight()
-        except: top_height = 0
-        try: bottom_height = self.controls['Context Menu Background Bottom']['control'].getHeight()
-        except: bottom_height = 0
-        menu_width = self.controls['Context Menu Background Middle']['control'].getWidth()
+        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight()
+        button_posx, button_posy = self.controls['Context Menu Button1'][ 'control' ].getPosition()
+        dialog_width = self.controls['Context Menu Background Top']['control'].getWidth()
+        dialog_top_height = self.controls['Context Menu Background Top']['control'].getHeight()
+        dialog_bottom_height = self.controls['Context Menu Background Bottom']['control'].getHeight()
+        dialog_top_posx, dialog_top_posy = self.controls['Context Menu Background Top']['control'].getPosition()
+        dialog_middle_posy = self.controls['Context Menu Background Middle']['control'].getPosition()[ 1 ]
+        dialog_middle_offsety = dialog_middle_posy - dialog_top_posy
         list_width = self.win.controls[ self.list_control ][ 'control' ].getWidth()
         list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight()
-        button_width = self.controls['Context Menu Button1']['control'].getWidth()
-        button_height = self.controls['Context Menu Button1'][ 'control' ].getHeight()
-        bg_posx, bg_posy = self.controls['Context Menu Background Middle']['control'].getPosition()
-        button_posx, button_posy = self.controls['Context Menu Button1'][ 'control' ].getPosition()
-        button2_posy = self.controls['Context Menu Button2'][ 'control' ].getPosition()[ 1 ]
-        posx, posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
-
+        list_posx, list_posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
+        
         # calculate position
-        buttonx_offset = button_posx - bg_posx
-        buttony_offset = button_posy - bg_posy
-        button_gap = button2_posy - button_posy - button_height
-        middle_height = ( self.buttons * button_height ) - button_gap
-        menu_height = middle_height + top_height + bottom_height
-        menu_posx = int( float( list_width - menu_width ) / 2 ) + posx
-        menu_posy = int( float( list_height - menu_height ) / 2 ) + posy
-        button_posx = menu_posx + buttonx_offset
+        button_offsetx = button_posx - dialog_top_posx
+        button_offsety = button_posy - dialog_top_posy
+        button_gap = 2
+        dialog_middle_height = ( self.buttons * ( button_height + button_gap ) ) - button_gap
+        dialog_height = dialog_middle_height + dialog_top_height + dialog_bottom_height
+        dialog_posx = int( float( list_width - dialog_width ) / 2 ) + list_posx
+        dialog_posy = int( float( list_height - dialog_height ) / 2 ) + list_posy
+        button_posx = dialog_posx + button_offsetx
+        button_posy = dialog_posy + button_offsety
         
         # position and size menu
-        self.controls['Context Menu Background Middle']['control'].setHeight( middle_height )
-        try: self.controls['Context Menu Background Top']['control'].setPosition( menu_posx, menu_posy )
-        except: pass
-        self.controls['Context Menu Background Middle']['control'].setPosition( menu_posx, top_height + menu_posy - 1 )
-        try: self.controls['Context Menu Background Bottom']['control'].setPosition( menu_posx, top_height + middle_height + menu_posy - 1 )
-        except: pass
+        self.controls['Context Menu Background Middle']['control'].setHeight( dialog_middle_height )
+        self.controls['Context Menu Background Top']['control'].setPosition( dialog_posx, dialog_posy )
+        self.controls['Context Menu Background Middle']['control'].setPosition( dialog_posx, dialog_posy + dialog_middle_offsety )
+        self.controls['Context Menu Background Bottom']['control'].setPosition( dialog_posx, dialog_posy + dialog_middle_offsety + dialog_middle_height )
+        for button in range( self.buttons ):
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setPosition( button_posx, button_posy + ( ( button_height + button_gap ) * button ) )
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setVisible( True )
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setEnabled( True )
+            
+    def hideButtons( self ):
         for button in range( 6 ):
-            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setPosition( button_posx, top_height + ( ( button_height + button_gap ) * button ) + menu_posy + buttony_offset - 1 )
-   
-    def setMenuVisibility( self ):
-        self.controls['Context Menu Button1']['control'].setVisible( True )
-        self.controls['Context Menu Button1']['control'].setEnabled( True )
-        visible = ( ( self.win.category_id == amt_util.GENRES and self.list_control == 'Category List' ) or self.list_control == 'Trailer List' )
-        self.buttons = visible + 1
-        self.controls['Context Menu Button2']['control'].setVisible( visible )
-        self.controls['Context Menu Button2']['control'].setEnabled( visible )
-        visible = ( self.list_control == 'Trailer List' )
-        self.buttons += ( visible * 2 )
-        self.controls['Context Menu Button3']['control'].setVisible( visible )
-        self.controls['Context Menu Button3']['control'].setEnabled( visible )
-        self.controls['Context Menu Button4']['control'].setVisible( visible )
-        self.controls['Context Menu Button4']['control'].setEnabled( visible )
-        visible = ( self.list_control == 'Trailer List' and self.saved )
-        self.buttons += visible
-        self.controls['Context Menu Button5']['control'].setVisible( visible )
-        self.controls['Context Menu Button5']['control'].setEnabled( visible )
-        self.controls['Context Menu Button6']['control'].setVisible( False )
-        self.controls['Context Menu Button6']['control'].setEnabled( False )
-        self.setFocus( self.controls['Context Menu Button1']['control'] )
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setVisible( False )
+            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setEnabled( False )
         
     def closeDialog( self ):
+        #del self.win
         self.close()
         
     def onControl( self, control ):
@@ -150,7 +135,7 @@ class GUI( xbmcgui.WindowDialog ):
             if ( self.list_control == 'Trailer List' ):
                 self.win.deleteSavedTrailer()
         #elif ( control is self.controls['Context Menu Button6']['control'] ):
-        
+
     def onAction( self, action ):
         control = self.getFocus()
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )

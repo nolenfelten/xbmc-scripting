@@ -234,11 +234,13 @@ class GUI( xbmcgui.Window ):
                         else: thumbnail = movie.thumbnail
                     elif ( self.settings.thumbnail_display == 1 ): thumbnail = os.path.join( self.image_path, 'generic-trailer.tbn' )
                     else: thumbnail = ''
-                    favorite = ['','*'][movie.favorite]
+                    favorite = [ '', '*' ][ movie.favorite ]
+                    favorite = [ favorite, '!' ][ not movie.trailer_urls ]
                     if ( movie.rating ): rating = '[%s]' % movie.rating
                     else: rating = ''
                     self.controls['Trailer List']['control'].addItem( xbmcgui.ListItem( '%s%s' % ( favorite, movie.title, ), rating, thumbnail, thumbnail ) )
                 self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
+            else: self.clearTrailerInfo()
         except:
             traceback.print_exc()
         xbmcgui.unlock()
@@ -380,6 +382,16 @@ class GUI( xbmcgui.Window ):
         self.controls['%s Count Label' % list_control]['control'].setLabel( '%d of %d' % ( pos + 1, self.controls['%s' % list_control]['control'].size(), ))
         return pos
     
+    def clearTrailerInfo( self ):
+        self.controls['Trailer Poster']['control'].setImage( '' )
+        self.controls['Trailer Rating']['control'].setImage( '' )
+        self.controls['Trailer Title']['control'].setLabel( '' )
+        # Plot
+        self.controls['Trailer Plot']['control'].reset()
+        self.controls['Trailer Plot']['control'].setText( '' )#_( 400 ) )
+        # Cast
+        self.controls['Cast List']['control'].reset()
+        
     def showTrailerInfo( self ):
         try:
             #self.debugWrite('showTrailerInfo', 2)
@@ -454,23 +466,26 @@ class GUI( xbmcgui.Window ):
                 choice = len( trailer_urls ) - 1
             else:
                 choice = self.settings.trailer_quality
-            while ( 'p.mov' in trailer_urls[ choice ] ): choice -= 1
-            if ( self.settings.mode == 0 ):
-                filename = trailer_urls[choice]
-            elif ( self.settings.mode == 1):
-                url = trailer_urls[choice]
-                fetcher = cacheurl.HTTPProgressSave()
-                filename = str( fetcher.urlretrieve( url ) )
-            elif ( self.settings.mode == 2):
-                url = trailer_urls[choice]
-                ext = os.path.splitext( url )[ 1 ]
-                title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
-                fetcher = cacheurl.HTTPProgressSave( self.settings.save_folder, title )
-                filename = str( fetcher.urlretrieve( url ) )
-                if ( filename ):
-                    poster = self.trailers.movies[trailer].poster
-                    if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
-                    self.saveThumbnail( filename, trailer, poster, )
+            while ( 'p.mov' in trailer_urls[ choice ] or choice == -1 ): choice -= 1
+            
+            if ( choice >= 0 ):
+                if ( self.settings.mode == 0 ):
+                    filename = trailer_urls[choice]
+                elif ( self.settings.mode == 1):
+                    url = trailer_urls[choice]
+                    fetcher = cacheurl.HTTPProgressSave()
+                    filename = str( fetcher.urlretrieve( url ) )
+                elif ( self.settings.mode == 2):
+                    url = trailer_urls[choice]
+                    ext = os.path.splitext( url )[ 1 ]
+                    title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
+                    fetcher = cacheurl.HTTPProgressSave( self.settings.save_folder, title )
+                    filename = str( fetcher.urlretrieve( url ) )
+                    if ( filename ):
+                        poster = self.trailers.movies[trailer].poster
+                        if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
+                        self.saveThumbnail( filename, trailer, poster, )
+            else: filename = None
             if ( filename ):
                 self.MyPlayer.play( filename )
                 xbmc.sleep( 500 )
