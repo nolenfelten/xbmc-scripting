@@ -124,6 +124,7 @@ class window(xbmcgui.Window):
             ############ Import settings ###########
             updateProgressDialog(__line1__, 'Importing main script settings...')
             curLocation, curURL_Location = self.getLocation()
+            if ( curURL_Location != 'US' ): raise
             settings                                = configmgr.ReadSettings(ExtrasPath + curURL_Location + '_CfgFile.xml')
             self.codeURL                        = settings['codeURL']
             self.worldCodeURL                = settings['worldCodeURL']
@@ -163,7 +164,10 @@ class window(xbmcgui.Window):
         except:
             closeProgessDialog()
             dlg = xbmcgui.Dialog()
-            dlg.ok(__title__, 'There was an error importing your settings.', 'Check your configuration files.')
+            if ( curURL_Location != 'US' ):
+                dlg.ok(__title__, "You can't use this script, it currently is only for residents in USA", "World and Canada support coming.")
+            else:
+                dlg.ok(__title__, 'There was an error importing your settings.', 'Check your configuration files.')
             self.exitScript()
 
 
