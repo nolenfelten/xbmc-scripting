@@ -392,6 +392,7 @@ class GUI( xbmcgui.Window ):
         self.controls['Trailer Plot']['control'].setText( '' )#_( 400 ) )
         # Cast
         self.controls['Cast List']['control'].reset()
+        self.controls['Trailer List Count Label']['control'].setLabel( '' )
         
     def showTrailerInfo( self ):
         try:
