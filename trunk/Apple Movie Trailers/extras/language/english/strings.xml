@@ -8,11 +8,15 @@
   <string id="42">Save movie info to database...</string>
   <string id="43">Writing records to database...</string>
   <string id="44">Database creation...</string>
+  <string id="45">Converting record</string>
+  <string id="46">database conversion failed...</string>
+  <string id="47">Current table</string>
+  <string id="48">Fetching records...</string>
   
   <string id="50">Setting up script:</string>
   <string id="51">Importing modules &amp; initializing...</string>
   <string id="52">module:</string>
-  <string id="53">No database found!</string>
+  <string id="53">Database version incompatable!</string>
   <string id="54">You must update all genre and movie information.</string>
   <string id="55">There was an error saving your settings.</string>
   <string id="56">The skin change won't take effect until you restart.</string>

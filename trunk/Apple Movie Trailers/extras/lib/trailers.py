@@ -2,7 +2,7 @@ import os, sys, traceback
 import xbmc, xbmcgui
 import cacheurl
 import elementtree.ElementTree as ET
-#import default
+import default
 import language
 import pil_util
 import database
@@ -10,6 +10,8 @@ import database
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
 DB = database.Database( language=_ )
+
+cwd = os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', '.cache\\' )
 
 class Movie:
     def __init__( self, *args, **kwargs ):
@@ -35,15 +37,15 @@ class Movie:
         self.title = args[0][0]
         self.trailer_urls = eval( args[0][2] )
         self.genre = args[0][3]
-        self.poster = args[0][4]
+        self.poster = os.path.join( cwd, args[0][4] )
         #self.thumbnail = args[0][4 + ( self.watched > 0 )]
-        self.thumbnail = args[0][5]
-        self.thumbnail_watched = args[0][6]
+        self.thumbnail = os.path.join( cwd, args[0][5] )
+        self.thumbnail_watched = os.path.join( cwd, args[0][6] )
         self.plot = args[0][7]
         self.cast = eval( args[0][8] )
         self.studio = args[0][9]
         self.rating = args[0][10]
-        self.rating_url = args[0][11]
+        self.rating_url = os.path.join( cwd, args[0][11] )
         self.year = args[0][12]
         self.watched = args[0][13]
         self.watched_date = args[0][14]
@@ -315,7 +317,7 @@ class Trailers:
                     success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
             else:
                 self.setDefaultMovieInfo( title, url, record )
-                if ( self.actors ): update_other = False
+                if ( eval( self.actors ) or self.studio ): update_other = False
                 else: update_other = True
                 if ( self.load_all ):
                     if url[:7] != 'http://':
@@ -405,14 +407,14 @@ class Trailers:
                 info_list += (repr( self.trailer_urls ),)
                 if ( record ): info_list += (record[ 3 ],)
                 else: info_list += (genre_id,)
-                info_list += (self.poster,)
-                info_list += (self.__thumbnail__,)
-                info_list += (self.__thumbnail_watched__,)
+                info_list += (self.poster.replace( cwd, '' ),)
+                info_list += (self.__thumbnail__.replace( cwd, '' ),)
+                info_list += (self.__thumbnail_watched__.replace( cwd, '' ),)
                 info_list += (self.plot,)
                 info_list += (repr( self.actors ),)
                 info_list += (self.studio,)
                 info_list += (self.rating,)
-                info_list += (self.rating_url,)
+                info_list += (self.rating_url.replace( cwd, '' ),)
                 info_list += (self.year,)
                 info_list += (self.times_watched,)
                 info_list += (self.last_watched,)
@@ -443,7 +445,6 @@ class Trailers:
                             success = DB.addRecords( 'Actors', actor_records_add )
                         if ( actor_records_update ):
                             success = DB.updateRecords( 'Actors', ( '*', 1 ), actor_records_update, 'name' )
-                    
                     if ( self.studio ):#not studio ):
                         count = DB.getRecords( 'SELECT count FROM Studios WHERE title=?', ( self.studio, ) )
                         if ( count ):
@@ -488,16 +489,16 @@ class Trailers:
                 total_cnt = len( movie_list )
                 pct_sect = float( 100 ) / total_cnt
                 for cnt, movie in enumerate( movie_list ):
-                    if ( eval( movie[ 2 ] ) == [] ):
-                        info_missing = True
-                        movie = self.loadMovieInfo( movie[ 0 ], -1, str( movie[ 1 ] ) )
-                    if ( info_missing ):
-                        dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), movie[0], )
+                    if ( info_missing or eval( movie[ 2 ] ) == [] ):
+                        dialog.update( int( ( cnt + 1 ) * pct_sect ), _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), movie[0] )
                         if ( dialog.iscanceled() ): raise
+                        if ( eval( movie[ 2 ] ) == [] ):
+                            info_missing = True
+                            movie = self.loadMovieInfo( movie[ 0 ], -1, str( movie[ 1 ] ) )
                     if ( len( movie ) > 1 ): 
                         self.movies += [Movie( movie )]
                 if ( info_missing ): #####
-                    dialog.update( 100, _( 43 ) )#####
+                    dialog.update( 100, _( 70 ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt ), '-----> %s <-----' % (_( 43 ), ) )
                     self.writeMovieInfo()#####
             else: self.movies = None
         except: pass

@@ -1,7 +1,7 @@
 import xbmcgui, xbmc
 import os, sys, default
 
-COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
+COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95', 'pre-0.95.1', '0.95.1' ]
 GENRES				= -1
 STUDIOS			= -2
 ACTORS				= -3
