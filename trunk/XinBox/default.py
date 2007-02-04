@@ -80,7 +80,7 @@ class minis(xbmcgui.WindowDialog):
     def __init__(self):                               
             global minimssg
             self.setResolution()
-            minibackground = xbmcgui.ControlImage(370,470,325,100, IMAGE_DIR + "ash4.png")
+            minibackground = xbmcgui.ControlImage(370,470,325,100, IMAGE_DIR + "pop.png")
             infoicon = xbmcgui.ControlImage(400,490,40,40, IMAGE_DIR + "infoicon.png")
             info = xbmcgui.ControlLabel(370,485,300,300, minimssg, "font18", alignment=2)
             self.addControl(minibackground)
@@ -148,18 +148,18 @@ class xbmcmail(xbmcgui.Window):
         screenheight = self.getHeight()
         self.settings = False
         self.setResolution()
-        self.addControl(xbmcgui.ControlImage(0,0,720,576, 'background.png'))
-        self.fsoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
-        self.seoverlay = xbmcgui.ControlImage(0,0,720,576, 'background.png')
+        self.addControl(xbmcgui.ControlImage(0,0,720,576, IMAGE_DIR+'background.png'))
+        self.fsoverlay = xbmcgui.ControlImage(0,0,720,576,IMAGE_DIR+ 'background.png')
+        self.seoverlay = xbmcgui.ControlImage(0,0,720,576,IMAGE_DIR+ 'background.png')
         self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XinBox", "font18", "FFB2D4F5")
-        self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "XinBox 1")
-        self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "XinBox 2")
-        self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen")
-        self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments")
-        self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings")
-        self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode")
-        self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14')
-        self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14')
+        self.cmButton = xbmcgui.ControlButton(64, 158, 135, 30, "XinBox 1",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.csButton = xbmcgui.ControlButton(64, 192, 135, 30, "XinBox 2",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.fsButton = xbmcgui.ControlButton(64, 226, 135, 30, "Fullscreen",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
+        self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14',buttonFocusTexture=IMAGE_DIR+"focus.png")
+        self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14',buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
         self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
 
@@ -615,7 +615,7 @@ class xbmcmail(xbmcgui.Window):
         self.addControl(self.seoverlay)
         self.one = xbmcgui.ControlLabel(40,124,200,35,lang.string(17)+"1","font13","0xFFFFFFFF") #id 17
         self.three = xbmcgui.ControlLabel(40,153,200,35,lang.string(18)+"1","font13","0xFFFFFFFF")#id 18
-        self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14')
+        self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=0, buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.four = xbmcgui.ControlLabel(40,182,200,35,lang.string(19)+"1","font13","0xFFFFFFFF")#id 19
         self.fourteen = xbmcgui.ControlLabel(40,211,200,35,"SSL1","font13","0xFFFFFFFF")
         self.five = xbmcgui.ControlLabel(40,240,200,35,lang.string(17)+"2","font13","0xFFFFFFFF")#id 17
