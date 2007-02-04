@@ -165,15 +165,15 @@ class GUI( xbmcgui.Window ):
                 sql = 'SELECT * FROM Movies WHERE %s&genre > ? ORDER BY title' % ( self.genres[category_id].id, )
                 params = ( 0, )
             elif ( list_category == 2 ):
-                sql = 'SELECT * FROM Movies WHERE studio = ? ORDER BY title'
-                params = ( self.trailers.categories[category_id].title, )
+                sql = 'SELECT * FROM Movies WHERE upper(studio) = ? ORDER BY title'
+                params = ( self.trailers.categories[category_id].title.upper(), )
             elif ( list_category == 3 ):
-                sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
+                sql = 'SELECT * FROM Movies WHERE upper(actors) LIKE ? ORDER BY title'
                 names = self.actor.split( ' ' )[:2]
                 if ( len( names ) == 1 ):
-                    params = ( '%%%s%%' % ( names[0], ), )
+                    params = ( '%%%s%%' % ( names[0].upper(), ), )
                 else:
-                    params = ( '%%%s %s%%' % ( names[0], names[1], ), )
+                    params = ( '%%%s %s%%' % ( names[0].upper(), names[1].upper(), ), )
             self.current_display = [ self.current_display[ 0 ], [ category_id, list_category ] ]
             self.showTrailers( sql, params )
         else:
