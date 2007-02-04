@@ -292,13 +292,13 @@ class Trailers:
 
     def setDefaultMovieInfo( self, title, url, record ):
         if ( not record ):
-            record = ( '', '', [], 0, '', '', '', '', [], '', '', '', 0, 0, '', 0, '', )
-        self.trailer_urls = record[ 2 ]
+            record = ( '', '', repr( [] ), 0, '', '', '', '', repr( [] ), '', '', '', 0, 0, '', 0, '', )
+        self.trailer_urls = eval( record[ 2 ] )
         self.poster = record[ 4 ]
         self.__thumbnail__ = record[ 5 ]
         self.__thumbnail_watched__ = record[ 6 ]
         self.plot = record[ 7 ]
-        self.actors = record[ 8 ]
+        self.actors = eval( record[ 8 ] )
         self.studio = record[ 9 ]
         self.rating = record[ 10 ]
         self.rating_url = record[ 11 ]
@@ -317,7 +317,7 @@ class Trailers:
                     success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
             else:
                 self.setDefaultMovieInfo( title, url, record )
-                if ( eval( self.actors ) or self.studio ): update_other = False
+                if ( self.actors or self.studio ): update_other = False
                 else: update_other = True
                 if ( self.load_all ):
                     if url[:7] != 'http://':
@@ -401,7 +401,6 @@ class Trailers:
                                 continue
                             trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
                         self.trailer_urls = trailer_urls
-
                 info_list = (title,)
                 info_list += (url,)
                 info_list += (repr( self.trailer_urls ),)
@@ -427,10 +426,8 @@ class Trailers:
                 else:
                     self.movie_records_add += ( info_list, )#####
                     #success = DB.addRecords( 'Movies', ( info_list, ) )
-                
                 if ( self.load_all and update_other ):
                     if ( self.actors ):#not actor ):
-                        #print 'actors for ', title
                         actor_records_add = ()
                         actor_records_update = ()
                         for actor in self.actors:

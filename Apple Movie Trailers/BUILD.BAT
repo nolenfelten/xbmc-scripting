@@ -22,7 +22,8 @@ Echo.
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
 xcopy extras "BUILD\%ScriptName%\extras" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-copy default.* "BUILD\%ScriptName%\"
+copy default.tbn "BUILD\%ScriptName%\"
+copy default.py "BUILD\%ScriptName%\"
 Echo.
 
 :: Notify user of completion
