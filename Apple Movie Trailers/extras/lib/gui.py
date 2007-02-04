@@ -113,7 +113,8 @@ class GUI( xbmcgui.Window ):
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function = self.myPlayerChanged )
         self.controller_action = amt_util.setControllerAction()
         self.update_method = 0
-        
+        self.list_control_pos = [ 0, 0, 0, 0 ]
+
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def dummy( self ):
@@ -140,6 +141,7 @@ class GUI( xbmcgui.Window ):
         self.params_category = None
         self.main_category = amt_util.GENRES
         self.genres = self.trailers.categories
+        self.current_display = [ [ amt_util.GENRES , 0 ], [ 0, 1 ] ]
         self.setShortcutLabels()
 
     def setStartupCategory( self ):
@@ -150,10 +152,8 @@ class GUI( xbmcgui.Window ):
         self.setCategory( self.settings.startup_category_id, 1 )
 
     def setCategory( self, category_id = amt_util.GENRES, list_category = 0 ):
-        #print 'setcategory:', category_id, list_category, self.main_category
         self.category_id = category_id
         self.list_category = list_category
-        #if ( category_id >= 0 or category_id <= amt_util.FAVORITES ):
         if ( list_category > 0 ):
             if ( category_id == amt_util.FAVORITES ):
                 sql = 'SELECT * FROM Movies WHERE favorite = ? ORDER BY title'
@@ -174,10 +174,7 @@ class GUI( xbmcgui.Window ):
                     params = ( '%%%s%%' % ( names[0], ), )
                 else:
                     params = ( '%%%s %s%%' % ( names[0], names[1], ), )
-            #elif ( list_category == 2 ):
-            #    sql = 'SELECT * FROM Movies WHERE actors LIKE ? ORDER BY title'
-            #    params = ( '%%%s%%' % ( self.controls['Cast List']['control'].getSelectedItem().getLabel(), ), )
-            ##print sql
+            self.current_display = [ self.current_display[ 0 ], [ category_id, list_category ] ]
             self.showTrailers( sql, params )
         else:
             self.main_category = category_id
@@ -187,6 +184,7 @@ class GUI( xbmcgui.Window ):
                 sql = 'SELECT title, count FROM Studios ORDER BY title'
             elif ( category_id == amt_util.ACTORS ):
                 sql = 'SELECT name, count FROM Actors ORDER BY name'
+            self.current_display = [ [ category_id, list_category ], self.current_display[ 1 ] ]
             self.showCategories( sql )
         self.showControls( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES )
         if ( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES ):
@@ -199,7 +197,7 @@ class GUI( xbmcgui.Window ):
             #self.debugWrite('getGenreCategories', 2)
             xbmcgui.lock()
             if ( sql != self.sql_category or params != self.params_category or force_update ):
-                self.list_control_pos = 0
+                self.list_control_pos[ self.list_category ]  = 0
                 self.trailers.getCategories( sql, params )
                 self.sql_category = sql
                 self.params_category = params
@@ -215,14 +213,17 @@ class GUI( xbmcgui.Window ):
                         count = '(%d)' % ( category.count, )
                         self.controls['Category List']['control'].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
                     ################
-                    self.setSelection( 'Category List', self.list_control_pos )
+                    self.setSelection( 'Category List', self.list_control_pos[ self.list_category ] )
                     #self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
         except: pass #traceback.print_exc()
         xbmcgui.unlock()
 
     def showTrailers( self, sql, params = None, choice = 0, force_update = False ):
         try:
-            if ( sql != self.sql or params != self.params or force_update ): self.trailers.getMovies( sql, params )
+            if ( sql != self.sql or params != self.params or force_update ):
+                self.list_control_pos[ self.list_category ]  = choice
+                self.trailers.getMovies( sql, params )
+            else: choice = self.list_control_pos[ self.list_category ]
             xbmcgui.lock()
             self.sql = sql
             self.params = params
@@ -275,7 +276,7 @@ class GUI( xbmcgui.Window ):
                     posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getPosition()[ 1 ] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
                     self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getPosition()[ 0 ], posy )
         except: pass
-        self.list_control_pos = self.controls[list_control]['control'].getSelectedPosition()
+        if ( list_control != 'Cast List' ): self.list_control_pos[ self.list_category ] = self.controls[list_control]['control'].getSelectedPosition()
             
     def setSelection( self, list_control, pos = 0 ):
         #self.debugWrite('setSelection', 2)
@@ -668,12 +669,11 @@ class GUI( xbmcgui.Window ):
             control = self.getFocus()
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitScript()
+            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
+                self.setCategory( self.current_display[ self.list_category == 0 ][ 0 ], self.current_display[ self.list_category == 0 ][ 1 ] )
             elif ( control is self.controls['Trailer List']['control'] ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
                     pass#self.toggleAsFavorite()##change to queue
-                elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
-                    #if ( self.main_category == -99 ): self.main_category = amt_util.ACTORS
-                    self.setCategory( self.main_category, 0 )
                 elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
                     self.showContextMenu( 'Trailer List' )
                 else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):

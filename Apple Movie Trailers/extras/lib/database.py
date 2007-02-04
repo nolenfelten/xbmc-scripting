@@ -4,7 +4,7 @@ cwd = os.path.dirname( sys.modules['default'].__file__ )
 from pysqlite2 import dbapi2 as sqlite
 import traceback
 
-COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95' ]
+COMPATIBLE_VERSIONS = [ 'pre-0.95.1', '0.95.1' ]
 
 class Database:
     def __init__( self, *args, **kwargs ):
@@ -26,18 +26,45 @@ class Database:
         version = self.getRecords( 'SELECT version FROM Version' )
         self.created = False
         if ( not version ): version = self.createDatabase()
-        elif ( version not in COMPATIBLE_VERSIONS ): version = self.convertDatabase( version )
+        elif ( version[ 0 ] not in COMPATIBLE_VERSIONS ): version = self.convertDatabase( version )
         return version
-
+    
     def convertDatabase( self, version ):
-        #print version
-        #print default.__version__
-        #succeeded = self.updateRecord( ( 'version', ), 'Version', ( default.__version__, ), 'version', version[0] )
-        #xbmcgui.Dialog().ok( 'Converted database...', 'The conversion succeeded %s' % ( succeeded, ) )
-        #if ( succeeded ): return ( default.__version__, )
-        #else: return version
-        return version
-        
+        if ( version[ 0 ] == 'pre-0.95' ):
+            try:
+                dialog = xbmcgui.DialogProgress()
+                dialog.create( self._( 53 ) )
+                replace_string = os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', '.cache\\' )
+                sql = 'SELECT title, poster, thumbnail, thumbnail_watched, rating_url FROM Movies WHERE poster != ?'
+                dialog.update( -1, self._( 48 ) )
+                records = self.getRecords( sql, params=( '', ), all=True )
+                if ( records ):
+                    changed_records = ()
+                    total_cnt = len( records )
+                    pct_sect = float( 100 ) / total_cnt
+                    for cnt, record in enumerate( records ):
+                        #xbmc.sleep(100)
+                        new_field = ()
+                        dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: (%d of %d)' % ( self._( 45 ), cnt + 1, total_cnt, ), '%s: %s' % ( self._( 88 ), record[ 0 ], ), '' )
+                        for item in record[ 1 : 5 ]:
+                            new_field += ( item.replace( replace_string, '' ), )
+                        new_field += ( record[ 0 ], )
+                        changed_records += ( new_field, )
+                        if ( dialog.iscanceled == True ): raise
+                    dialog.update( 100 , '%s: (%d of %d)' % ( self._( 45 ), cnt + 1, total_cnt, ), '%s: %s' % ( self._( 88 ), record[ 0 ], ), '-----> %s <-----' % ( self._( 43 ), ) )
+                    succeeded = self.updateRecords( 'Movies', ( 'poster', 'thumbnail', 'thumbnail_watched', 'rating_url', ), changed_records, 'title' )
+                    if ( succeeded ): self.updateRecords( 'Version', ( 'version', ), ( ( default.__version__, version[ 0 ], ), ), 'version' )
+                    #xbmc.sleep(1000)
+                    dialog.close()
+                    if ( succeeded ): return ( default.__version__, )
+                    else: return version
+            except:
+                traceback.print_exc()
+                dialog.close()
+                xbmcgui.Dialog().ok( self._( 53 ), self._( 46 ) )
+                return version
+                
+                
     def setupTables( self ):
         self.tables = {}
         self.tables['Actors'] = (
@@ -86,9 +113,9 @@ class Database:
         try:
             self.created = True
             dialog = xbmcgui.DialogProgress()
-            dialog.create('Creating database...')
+            dialog.create( self._( 44 ) )
             for table in self.tables.keys():
-                dialog.update( -1, 'Table: %s' % table )
+                dialog.update( -1, '%s: %s' % ( self._( 47 ), table, ) )
                 success = self.createTable( table )
                 if ( not success ):
                     raise
