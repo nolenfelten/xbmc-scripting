@@ -1,0 +1,145 @@
+﻿<strings>
+  <string id="0">Apple Movie Trailers</string>
+  <string id="1">xbox media center</string>
+
+  <!-- Dialog Messages -->
+  <string id="40">All info hämtas, sökning är tillgänglig. (20 - 60 minuter)</string>
+  <string id="41">Info uppdateras per genre. (5 - 15 minuter)</string>
+  <string id="42">Spara filminfo till databas...</string>
+  <string id="43">Skriver register till databas...</string>
+  <string id="44">Databasen skapas...</string>
+
+  <string id="50">Konfigurerar skript:</string>
+  <string id="51">Importerar moduler &amp; startar...</string>
+  <string id="52">modul:</string>
+  <string id="53">Ingen databas hittad!</string>
+  <string id="54">Du måste uppdatera all genre- och film-information.</string>
+  <string id="55">Ett fel uppstod när inställningarna skulle sparas.</string>
+  <string id="56">Skalet kommer inte att ändras förrän du startar om.</string>
+  <string id="57">Ett fel uppstod när gränssnittet skulle skapas.</string>
+  <string id="58">Kontrollera en fil i skalet:</string>
+  <string id="59">Databasenfilen är ogiltig...</string>
+  <string id="60">Din databasfil är inkompatibel med denna|versionen av AMT. Den kommer nu att återskapas.</string>
+  <string id="61">Uppdaterar all genre- och film-information...</string>
+  <string id="62">Är du säker på att du vill göra detta?</string>
+  <string id="63">Uppdateringen kan ta allt från 5 till 15 minuter,|beroende på din anslutningshastighet.</string>
+  <string id="64">Fel</string>
+  <string id="65">Kan ej uppdatera AMT.pk</string>
+  <string id="66">Hämtar genre-information...</string>
+  <string id="67">Vänligen vänta ett ögonblick.</string>
+  <string id="68">Hämtar:</string>
+  <string id="69">Fel vid hämtning av en eller flera genres.</string>
+  <string id="70">Hämtar film-information...</string>
+  <string id="71">Genre:</string>
+  <string id="72">Fel vid hämtning av en eller flera filmtitlar.</string>
+  <string id="73">Rensa cache folder...</string>
+  <string id="74">Om du inte rensar din cache, så går uppdateringen|fortare, men visst gammalt innehåll kan kvarstå.</string>
+  <string id="75">Inte tillräckligt med utrymme på målenheten.</string>
+  <string id="76">Enhet</string>
+  <string id="77">Fritt</string>
+  <string id="78">Krävt utrymme</string>
+  <string id="79">Laddar ner...</string>
+  <string id="80">KB/s</string>
+  <string id="81">Alla nödvändiga moduler kunde inte hittas!</string>
+  <string id="82">Är du säker på att du vill ta bort</string>
+  <string id="83">Laddar databas...</string>
+  <string id="84">Sparar databas...</string>
+  <string id="85">Utför fråga...</string>
+  <string id="86">Funktionen avbröts.</string>
+  <string id="87">Nuvarande genre</string>
+  <string id="88">Nuvarande trailer</string>
+  <string id="89">Ett fel uppstod vid skapande av databasen.</string>
+
+  <string id="90">Hämtar nuvarande taggade versioner...</string>
+  <string id="91">är nyare</string>
+  <string id="92">Vill du uppgradera?</string>
+  <string id="93">Hämtar fillista...</string>
+  <string id="94">Var god vänta...</string>
+  <string id="95">Din version är aktuell.</string>
+  <string id="96">Ett fel uppstod under uppgraderingen.</string>
+  <string id="97">Sökväg:</string>
+  <string id="98">Fil:</string>
+  <string id="99">Din nya version sparades som:</string>
+
+  <!-- Credits -->
+  <string id="100">Version</string>
+  <string id="101">Team:</string>
+  <string id="102">Annat:</string>
+  <string id="103">Designer:</string>
+  <string id="104">Utvecklare</string>
+
+  <!-- Buttons and Labels -->
+  <string id="200">Nyaste</string>
+  <string id="201">Exklusiva</string>
+  <string id="202">Genre...</string>
+  <string id="203">Sök...</string>
+  <string id="204">Inställningar...</string>
+  <string id="205">Uppdatera alla</string>
+  <string id="206">Uppdatera genre</string>
+  <string id="207">Uppdatera trailer</string>
+  <string id="208">Uppdatera</string>
+  <string id="209">Om AMT</string>
+  <string id="210">Ok</string>
+  <string id="211">Avbryt</string>
+  <string id="212">* Skalberoende</string>
+  <string id="213">Version</string>
+  <string id="214">välj skal</string>
+  <string id="215">Handling</string>
+  <string id="216">Rollsättning</string>
+  <string id="217">Favoriter</string>
+  <string id="218">Spellista</string>
+  <string id="219">Genre</string>
+  <string id="220">Fullskärmsvisualisering</string>
+  <string id="221">Fullskärmsbild</string>
+  <string id="222">Studio...</string>
+  <string id="223">Studio</string>
+  <string id="224">Skådespelare...</string>
+  <string id="225">Skådespelare</string>
+  <string id="226">Nedladdade</string>
+  <string id="227">Avsluta skript</string>
+  <string id="228">Kontrollera uppdateringar</string>
+  <string id="229">Full</string>
+  <string id="230">Minimal</string>
+
+  <!-- Settings -->
+  <string id="300">Trailerkvalitet</string>
+  <string id="301">Läge</string>
+  <string id="302">Nerladdningsfolder</string>
+  <string id="303">Skal</string>
+  <string id="304">Uppstartskategori</string>
+  <string id="305">Visa miniatyrbilder</string>
+  <string id="306">Genväg #1</string>
+  <string id="307">Genväg #2</string>
+  <string id="308">Genväg #3</string>
+  <string id="310">Filmaffisch</string>
+  <string id="311">Generiska minibilder</string>
+  <string id="312">Av</string>
+  <string id="320">Låg</string>
+  <string id="321">Medium</string>
+  <string id="322">Hög</string>
+  <string id="330">Strömma</string>
+  <string id="331">Ladda ner</string>
+  <string id="332">Ladda ner &amp; spara</string>
+  <string id="340">Kontrollera version vid uppstart</string>
+
+  <!-- Movie/Genre Information -->
+  <string id="400">Ingen beskrivning kunde hämtas för denna filmtiteln.</string>
+  <string id="401">*Ingen rollsättning kunde hämtas för denna titel.</string>
+
+  <!-- Context Menu -->
+  <string id="500">Lägg till i spellista</string>
+  <string id="501">Ta bort från spellista</string>
+  <string id="502">Lägg till i favoriter</string>
+  <string id="503">Ta bort från favoriter</string>
+  <string id="504">Markera som Sedd</string>
+  <string id="505">Markera som Inte sedd</string>
+  <string id="506">Updatera filminfo</string>
+  <string id="507">Uppdatera genre</string>
+  <string id="508">Uppdatera genrelista</string>
+  <string id="509">Ta bort sparad trailer</string>
+  <string id="510">Spela trailer</string>
+  <string id="511">Visa denna genre</string>
+  <string id="512">Visa denna studio</string>
+  <string id="513">View denna skådespelare</string>
+
+</strings>
