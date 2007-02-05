@@ -8,6 +8,10 @@
   <string id="42">Spara filminfo till databas...</string>
   <string id="43">Skriver register till databas...</string>
   <string id="44">Databasen skapas...</string>
+  <string id="45">Konverterar register</string>
+  <string id="46">databaskonvertering misslyckades...</string>
+  <string id="47">Nuvarande tabell</string>
+  <string id="48">Hämtar register...</string>
 
   <string id="50">Konfigurerar skript:</string>
   <string id="51">Importerar moduler &amp; startar...</string>
