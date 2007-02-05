@@ -8,7 +8,7 @@ import gui
 __scriptname__ = 'Apple Movie Trailers'
 __author__ = 'Apple Movie Trailers (AMT) Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
-__credits__ = 'XBMC TEAM, efnet/#xbmc-scripting'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
 __version__ = '0.95.1'
 
 __credits_l1__ = 'Head Developer & Coder'
