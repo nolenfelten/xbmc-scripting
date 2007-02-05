@@ -181,9 +181,9 @@ class GUI( xbmcgui.Window ):
             if ( category_id == amt_util.GENRES ):
                 sql = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
             elif ( category_id == amt_util.STUDIOS ):
-                sql = 'SELECT title, count FROM Studios ORDER BY title'
+                sql = "SELECT * FROM Studios ORDER BY title"
             elif ( category_id == amt_util.ACTORS ):
-                sql = 'SELECT name, count FROM Actors ORDER BY name'
+                sql = 'SELECT * FROM Actors ORDER BY name'
             self.current_display = [ [ category_id, list_category ], self.current_display[ 1 ] ]
             self.showCategories( sql )
         self.showControls( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES )
@@ -330,8 +330,8 @@ class GUI( xbmcgui.Window ):
             self.calcScrollbarVisibilty( 'Category List' )
             self.showPlotCastControls( category )
             self.setCategoryLabel()
-        finally:
-            xbmcgui.unlock()
+        except: pass
+        xbmcgui.unlock()
             
     def showPlotCastControls( self, category ):
         try:
@@ -347,8 +347,8 @@ class GUI( xbmcgui.Window ):
             self.controls['Cast List']['control'].setVisible( self.display_cast and not category )
             self.controls['Cast List']['control'].setEnabled( self.display_cast and not category and self.cast_exists )
             self.calcScrollbarVisibilty( 'Cast List' )
-        finally:
-            xbmcgui.unlock()
+        except: pass
+        xbmcgui.unlock()
             
     def togglePlotCast( self ):
         #self.debugWrite('togglePlotCast', 2)
@@ -512,6 +512,13 @@ class GUI( xbmcgui.Window ):
         cm.doModal()
         del cm
 
+    def force_full_update( self ):
+        categories = self.trailers.categories
+        self.trailers.categories = self.genres
+        #self.setCategory( shortcut, 1 )
+        self.trailers.loadMovies( force_full=True )
+        self.trailers.categories = categories
+
     def markAsWatched( self, watched, trailer, index ):
         if ( watched ): date = datetime.date.today()
         else: date = ''
@@ -614,11 +621,8 @@ class GUI( xbmcgui.Window ):
 
     def exitScript( self ):
         #self.debugWrite( 'exitScript', 2 )
-        try:
-            pass
-        finally:
-            if ( self.Timer ): self.Timer.cancel()
-            self.close()
+        if ( self.Timer ): self.Timer.cancel()
+        self.close()
 
     def setShortcut( self, shortcut ):
         if ( self.main_category == -1 ):

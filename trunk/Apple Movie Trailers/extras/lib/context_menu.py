@@ -53,19 +53,33 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
             self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
             self.controls['Context Menu Button5']['control'].setLabel( self._( 509 ) )
-            self.buttons = 4 + self.saved
+            if ( not self.win.trailers.completed ):
+                self.controls['Context Menu Button%s' % ( self.saved + 5, ) ]['control'].setLabel( self._( 508 ) )
+            self.buttons = 4 + self.saved + ( not self.win.trailers.completed )
             #self.controls['Context Menu Button6']['control'].setLabel( self._( 510 ) )
         elif ( self.list_control == 'Category List' ):
             if ( self.win.category_id == amt_util.GENRES ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 511 ) )
                 self.controls['Context Menu Button2']['control'].setLabel( self._( 507 ) )
-                self.buttons = 2
+                if ( not self.win.trailers.completed ): 
+                    self.controls['Context Menu Button3']['control'].setLabel( self._( 508 ) )
+                    self.buttons = 3
+                else: self.buttons = 2
             elif ( self.win.category_id ==  amt_util.STUDIOS ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 512 ) )
+                if ( not self.win.trailers.completed ): 
+                    self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
+                    self.buttons = 2
             elif ( self.win.category_id ==  amt_util.ACTORS ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
+                if ( not self.win.trailers.completed ): 
+                    self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
+                    self.buttons = 2
         elif ( self.list_control == 'Cast List' ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
+                if ( not self.win.trailers.completed ): 
+                    self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
+                    self.buttons = 2
     
     def setMenuPosition( self ):
         # get positions and dimensions
@@ -113,29 +127,38 @@ class GUI( xbmcgui.WindowDialog ):
         
     def onControl( self, control ):
         self.closeDialog()
-        if ( control is self.controls['Context Menu Button1']['control'] ):
-            if ( self.list_control == 'Trailer List' ):
-                self.win.playTrailer()
-            elif ( self.list_control == 'Category List' ):
-                self.win.getTrailerGenre()
-            elif ( self.list_control == 'Cast List' ):
-                self.win.getActorChoice()
-        elif ( control is self.controls['Context Menu Button2']['control'] ):
-            if ( self.list_control == 'Trailer List' ):
-                self.win.toggleAsFavorite()
-            elif ( self.list_control == 'Category List' ):
-                self.win.refreshInfo( True )
-        elif ( control is self.controls['Context Menu Button3']['control'] ):
-            if ( self.list_control == 'Trailer List' ):
-                self.win.toggleAsWatched()
-        elif ( control is self.controls['Context Menu Button4']['control'] ):
-            if ( self.list_control == 'Trailer List' ):
-                self.win.refreshInfo( False )
-        elif ( control is self.controls['Context Menu Button5']['control'] ):
-            if ( self.list_control == 'Trailer List' ):
-                self.win.deleteSavedTrailer()
-        #elif ( control is self.controls['Context Menu Button6']['control'] ):
-
+        try:
+            if ( control is self.controls['Context Menu Button1']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    self.win.playTrailer()
+                elif ( self.list_control == 'Category List' ):
+                    self.win.getTrailerGenre()
+                elif ( self.list_control == 'Cast List' ):
+                    self.win.getActorChoice()
+            elif ( control is self.controls['Context Menu Button2']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    self.win.toggleAsFavorite()
+                elif ( self.list_control == 'Category List' and self.win.category_id == amt_util.GENRES ):
+                    self.win.refreshInfo( True )
+                else:# ( self.list_control == 'Cast List' ):
+                    self.win.force_full_update()
+            elif ( control is self.controls['Context Menu Button3']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    self.win.toggleAsWatched()
+                elif ( self.list_control == 'Category List' ):
+                    self.win.force_full_update()
+            elif ( control is self.controls['Context Menu Button4']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    self.win.refreshInfo( False )
+            elif ( control is self.controls['Context Menu Button5']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    if ( self.saved ): self.win.deleteSavedTrailer()
+                    else: self.win.force_full_update()
+            elif ( control is self.controls['Context Menu Button6']['control'] ):
+                if ( self.list_control == 'Trailer List' ):
+                    self.win.force_full_update()
+        except: pass
+            
     def onAction( self, action ):
         control = self.getFocus()
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )

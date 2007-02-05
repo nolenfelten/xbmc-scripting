@@ -250,15 +250,18 @@ class Trailers:
             traceback.print_exc()
             return []
 
-    def loadMovies( self ):
+    def loadMovies( self, force_full = False ):
+        self.load_all = force_full
         total_cnt = 0
         total_genre_cnt = 0
+        self.completed = True
         for genre in self.categories:
             if ( genre.loaded == 0 ):
                 total_cnt += genre.count
                 total_genre_cnt += 1
-        if ( total_cnt > 0 and DB.created == True ):
-            self.load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), '', _( 230 ), _( 229 ) )
+                self.completed = False
+        if ( total_cnt > 0 and ( DB.created == True or force_full == True ) ):
+            if ( not force_full ): self.load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), '', _( 230 ), _( 229 ) )
             import time
             start_time = time.time()
             try:
@@ -275,17 +278,23 @@ class Trailers:
                         for movie in eval( trailer_urls[0] ):
                             cnt += 1
                             dialog.update( int( cnt * pct_sect ) , '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '%s' % ( movie[0], ) )
-                            success = self.loadMovieInfo( movie[0], genre.id, movie[1] )
-                            if ( dialog.iscanceled() ): raise
+                            success = self.loadMovieInfo( movie[0], genre.id, movie[1], force_full )
+                            if ( dialog.iscanceled() ):
+                                dialog.update( int( cnt * pct_sect ), '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '-----> %s <-----' % ( _( 43 ), ) )
+                                self.writeMovieInfo()#####
+                                raise
                         dialog.update( int( cnt * pct_sect ), '%s: %s - (%d of %d)' % ( _( 87 ), genre.title, genre_cnt, total_genre_cnt, ), '%s: (%d of %d)' % ( _( 88 ), cnt, total_cnt, ), '-----> %s <-----' % ( _( 43 ), ) )
                         self.writeMovieInfo()#####
-                        #if ( self.load_all ):
-                        success = DB.updateRecords( 'Genres', ( 'loaded', ), ( ( genre.count, genre.title, ), ), 'title' )
+                        if ( self.load_all ):
+                            success = DB.updateRecords( 'Genres', ( 'loaded', ), ( ( genre.count, genre.title, ), ), 'title' )
+                            if ( self.categories[genre_cnt - 1].loaded == 0 ): self.categories[genre_cnt - 1].loaded = genre.count
+                            
                 dialog.close()
                 end_time = time.time()
                 minutes =  float( end_time - start_time ) / 60
                 print "*** Start time: %s - End Time: %s - Total time: %d minutes" % ( time.ctime( start_time ), time.ctime( end_time ), minutes, )
             except:
+                self.writeMovieInfo()#####
                 dialog.close()
                 traceback.print_exc()
                 xbmcgui.Dialog().ok( _( 70 ), _( 86 ) )
@@ -308,10 +317,10 @@ class Trailers:
         self.favorite = record[ 15 ]
         self.saved_location = record[ 16 ]
         
-    def loadMovieInfo( self, title, genre_id, url ):
+    def loadMovieInfo( self, title, genre_id, url, force_full = False ):
         try:
             record = DB.getRecords( 'SELECT * FROM Movies WHERE title=?', ( title, ) )
-            if ( record and genre_id != -1 ):
+            if ( record and genre_id != -1 and not force_full ):
                 if ( not genre_id&record[ 3 ] > 0 ):
                     genre_id += record[ 3 ]
                     success = DB.updateRecords( 'Movies', ( 'genre', ), ( ( genre_id, title, ), ), 'title' )
@@ -328,79 +337,91 @@ class Trailers:
                     element = ET.fromstring( element )
 
                     # -- thumbnail --
-                    poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
-                    # download the actual poster to the local filesystem (or get the cached filename)
-                    poster = fetcher.urlretrieve( poster )
-                    if poster:
-                        self.poster = poster
-                        self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
+                    if ( not self.poster ):
+                        #print 'poster', self.poster
+                        poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
+                        # download the actual poster to the local filesystem (or get the cached filename)
+                        poster = fetcher.urlretrieve( poster )
+                        if poster:
+                            self.poster = poster
+                            self.__thumbnail__, self.__thumbnail_watched__ = pil_util.makeThumbnails( poster )
 
                     # -- plot --
-                    plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
-                    if plot:
-                        # remove any linefeeds so we can wrap properly to the text control this is displayed in
-                        plot = plot.replace( '\r\n', ' ' )
-                        plot = plot.replace( '\r', ' ' )
-                        plot = plot.replace( '\n', ' ' )
-                        self.plot = plot
+                    if ( not self.plot ):
+                        #print 'plot'
+                        plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
+                        if plot:
+                            # remove any linefeeds so we can wrap properly to the text control this is displayed in
+                            plot = plot.replace( '\r\n', ' ' )
+                            plot = plot.replace( '\r', ' ' )
+                            plot = plot.replace( '\n', ' ' )
+                            self.plot = plot
 
-                    # -- actors --
-                    SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
-                    actors = list()
-                    for i in range( 5, 10 ):
-                        #actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).replace( '(voice)', '' ).title().strip()
-                        actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
-                        if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
-                            actors += [ actor ]
-                    self.actors = actors
-                    self.actors.sort()
+                    if ( not self.actors ):
+                        #print 'actors',self.actors
+                        # -- actors --
+                        SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
+                        actors = list()
+                        for i in range( 5, 10 ):
+                            #actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).replace( '(voice)', '' ).title().strip()
+                            actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
+                            if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
+                                actors += [ actor ]
+                        self.actors = actors
+                        self.actors.sort()
                     
-                    # -- studio --
-                    studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
-                    if studio:
-                        self.studio = studio#.strip()
+                    if ( not self.studio ):
+                        #print 'studio', self.studio
+                        # -- studio --
+                        studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
+                        if studio:
+                            self.studio = studio#.strip()
                     
-                    # -- rating --2
-                    temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
-                    if temp_url:
-                        if '/mpaa' in temp_url:
-                            rating_url = fetcher.urlretrieve( temp_url )
-                            if rating_url:
-                                self.rating_url = rating_url
-                                self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
+                    if ( not self.rating ):
+                        #print 'rating',self.rating
+                        # -- rating --2
+                        temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
+                        if temp_url:
+                            if '/mpaa' in temp_url:
+                                rating_url = fetcher.urlretrieve( temp_url )
+                                if rating_url:
+                                    self.rating_url = rating_url
+                                    self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
                                 
-                    # -- trailer urls --
-                    urls = list()
-                    for each in element.getiterator( self.ns('GotoURL') ):
-                        temp_url = each.get( 'url' )
-                        if 'index_1' in temp_url:
-                            continue
-                        if '/moviesxml/g' in temp_url:
-                            continue
-                        if temp_url[0] != '/':
-                            continue
-                        if temp_url in urls:
-                            continue
-                        urls += [ temp_url ]
-                    if len( urls ):
-                        temp_url = self.BASEURL + urls[0]
-                        element = fetcher.urlopen( temp_url )
-                        element = ET.fromstring( element )
-                        trailer_urls = list()
-                        for each in element.getiterator( self.ns('string') ):
-                            text = each.text
-                            if text == None:
+                    if ( not self.trailer_urls ):
+                        #print 'trailer_urls', self.trailer_urls
+                        # -- trailer urls --
+                        urls = list()
+                        for each in element.getiterator( self.ns('GotoURL') ):
+                            temp_url = each.get( 'url' )
+                            if 'index_1' in temp_url:
                                 continue
-                            if 'http' not in text:
+                            if '/moviesxml/g' in temp_url:
                                 continue
-                            if 'movies.apple.com' not in text:
+                            if temp_url[0] != '/':
                                 continue
-                            if text[-3:] == 'm4v':
+                            if temp_url in urls:
                                 continue
-                            if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
-                                continue
-                            trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
-                        self.trailer_urls = trailer_urls
+                            urls += [ temp_url ]
+                        if len( urls ):
+                            temp_url = self.BASEURL + urls[0]
+                            element = fetcher.urlopen( temp_url )
+                            element = ET.fromstring( element )
+                            trailer_urls = list()
+                            for each in element.getiterator( self.ns('string') ):
+                                text = each.text
+                                if text == None:
+                                    continue
+                                if 'http' not in text:
+                                    continue
+                                if 'movies.apple.com' not in text:
+                                    continue
+                                if text[-3:] == 'm4v':
+                                    continue
+                                if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
+                                    continue
+                                trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
+                            self.trailer_urls = trailer_urls
                 info_list = (title,)
                 info_list += (url,)
                 info_list += (repr( self.trailer_urls ),)
