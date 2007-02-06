@@ -23,16 +23,24 @@ class main:
         self.passme = 0
         dialog = xbmcgui.Dialog()
         if dialog.yesno("ResumeX","Enable ResumeX?"):
-            self.enable = "yes"
+            self.enable = "yes"          
         else:
             self.enable = "no"
             self.winresume = "-"
             self.passme = 1
+            dialog = xbmcgui.DialogProgress()
+            dialog.create("ResumeX Disabled - OK!")
+            time.sleep(2)
+            dialog.close()
         if self.passme !=1:
             if dialog.yesno("ResumeX","Enable window resume?"):
                 self.winresume = "yes"
             else:
-                self.winresume = "no"  
+                self.winresume = "no"
+            dialog = xbmcgui.DialogProgress()
+            dialog.create("ResumeX Enabled - OK!")
+            time.sleep(2)
+            dialog.close()
         self.writesettings()
 
             
@@ -44,10 +52,6 @@ class main:
         f.write("\t<WINRESUME>"+self.winresume+"</WINRESUME>\n")
         f.write("</settings>\n")
         f.close()
-        dialog = xbmcgui.DialogProgress()
-        dialog.create("ResumeX Configured - OK!")
-        time.sleep(2)
-        dialog.close()
         
 m = main()
 m.gui()
