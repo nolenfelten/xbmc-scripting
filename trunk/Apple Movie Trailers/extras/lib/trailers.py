@@ -134,7 +134,7 @@ class Trailers:
                 self.start_time = time.localtime()
                 #####################################
                 
-                dialog.create(_( 66 ))
+                dialog.create( '%s   (%s)' % ( _( 66 ), _( 229 + ( not load_all ) ), ) )
                 
                 base_xml = fetcher.urlopen( self.BASEXML )
                 base_xml = ET.fromstring( base_xml )
@@ -199,9 +199,11 @@ class Trailers:
                 self.records.close()
                 if ( load_all ): self.loadMovies()
                 else: 
-                    end_time = time.time()
-                    minutes =  float( end_time - self.start_time ) / 60
-                    print "*** (MINIMAL) - Start time: %s - End Time: %s - Total time: %d minutes" % ( time.ctime( self.start_time ), time.ctime( end_time ), minutes, )
+                    #########################################
+                    end_time = time.localtime()
+                    seconds = time.mktime(end_time) - time.mktime( self.start_time )
+                    print "*** (MINIMAL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
+                    #########################################
 
         except:
             dialog.close()
@@ -303,7 +305,7 @@ class Trailers:
                 #########################################
                 end_time = time.localtime()
                 seconds = time.mktime(end_time) - time.mktime( self.start_time )
-                print "*** (FULL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', seconds ), )
+                print "*** (FULL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
                 #########################################
             except:
                 self.complete = False
@@ -313,7 +315,7 @@ class Trailers:
         self.records.close()
 
     def setDefaultMovieInfo( self, record ):
-        self.idMovie = records[ 0 ]
+        self.idMovie = record[ 0 ]
         self.title = record[ 1 ]
         self.url = record[ 2 ]
         self.trailer_urls = eval( record[ 3 ] )
@@ -344,7 +346,9 @@ class Trailers:
                 studio = self.records.fetchone( self.query[ 'studio_by_movie_id' ], ( record[ 0 ], ) )
                 if ( studio ): record += ( studio[ 0 ], )
                 else: record += ( '', )
+                
                 self.setDefaultMovieInfo( record )
+                
                 if url[:7] != 'http://':
                     url = self.BASEURL + url
 
@@ -414,6 +418,7 @@ class Trailers:
                             if rating_url:
                                 self.rating_url = rating_url.replace( cwd, '' )
                                 self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
+                
                 # -- trailer urls --
                 if ( not self.trailer_urls ):
                     #print 'trailer_urls', self.trailer_urls
