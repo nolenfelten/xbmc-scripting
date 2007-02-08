@@ -53,31 +53,31 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Context Menu Button3']['control'].setLabel( '%s' % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
             self.controls['Context Menu Button4']['control'].setLabel( self._( 506 ) )
             self.controls['Context Menu Button5']['control'].setLabel( self._( 509 ) )
-            if ( not self.win.trailers.completed ):
+            if ( not self.win.trailers.complete ):
                 self.controls['Context Menu Button%s' % ( self.saved + 5, ) ]['control'].setLabel( self._( 508 ) )
-            self.buttons = 4 + self.saved + ( not self.win.trailers.completed )
+            self.buttons = 4 + self.saved + ( not self.win.trailers.complete )
             #self.controls['Context Menu Button6']['control'].setLabel( self._( 510 ) )
         elif ( self.list_control == 'Category List' ):
             if ( self.win.category_id == amt_util.GENRES ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 511 ) )
                 self.controls['Context Menu Button2']['control'].setLabel( self._( 507 ) )
-                if ( not self.win.trailers.completed ): 
+                if ( not self.win.trailers.complete ): 
                     self.controls['Context Menu Button3']['control'].setLabel( self._( 508 ) )
                     self.buttons = 3
                 else: self.buttons = 2
             elif ( self.win.category_id ==  amt_util.STUDIOS ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 512 ) )
-                if ( not self.win.trailers.completed ): 
+                if ( not self.win.trailers.complete ): 
                     self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
                     self.buttons = 2
             elif ( self.win.category_id ==  amt_util.ACTORS ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
-                if ( not self.win.trailers.completed ): 
+                if ( not self.win.trailers.complete ): 
                     self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
                     self.buttons = 2
         elif ( self.list_control == 'Cast List' ):
                 self.controls['Context Menu Button1']['control'].setLabel( self._( 513 ) )
-                if ( not self.win.trailers.completed ): 
+                if ( not self.win.trailers.complete ): 
                     self.controls['Context Menu Button2']['control'].setLabel( self._( 508 ) )
                     self.buttons = 2
     
