@@ -103,8 +103,9 @@ class GUI( xbmcgui.Window ):
             xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
 
     def setupVariables( self ):
-        import trailers
+        import trailers, database
         self.trailers = trailers.Trailers()
+        self.query= database.Query()
         self.skin = self.settings.skin
         self.sql = None
         self.params = None
@@ -156,19 +157,19 @@ class GUI( xbmcgui.Window ):
         self.list_category = list_category
         if ( list_category > 0 ):
             if ( category_id == amt_util.FAVORITES ):
-                sql = 'SELECT * FROM Movies WHERE favorite = ? ORDER BY title'
+                sql = self.query[ 'favorites' ]#'SELECT * FROM Movies WHERE favorite = ? ORDER BY title'
                 params = ( 1, )
             elif ( category_id == amt_util.DOWNLOADED ):
-                sql = 'SELECT * FROM Movies WHERE saved_location != ? ORDER BY title'
+                sql = self.query[ 'downloaded' ]#'SELECT * FROM Movies WHERE saved_location != ? ORDER BY title'
                 params = ( '', )
             elif ( list_category == 1 ):
-                sql = 'SELECT * FROM Movies WHERE %s&genre > ? ORDER BY title' % ( self.genres[category_id].id, )
-                params = ( 0, )
+                sql = self.query[ 'movies_by_genre_id' ]
+                params = ( self.genres[category_id].id, )
             elif ( list_category == 2 ):
-                sql = 'SELECT * FROM Movies WHERE upper(studio) = ? ORDER BY title'
+                sql = self.query[ 'movies_by_studio_name' ]#'SELECT * FROM Movies WHERE upper(studio) = ? ORDER BY title'
                 params = ( self.trailers.categories[category_id].title.upper(), )
             elif ( list_category == 3 ):
-                sql = 'SELECT * FROM Movies WHERE upper(actors) LIKE ? ORDER BY title'
+                sql = self.query[ 'movies_by_actor_name' ]#'SELECT * FROM Movies WHERE upper(actors) LIKE ? ORDER BY title'
                 names = self.actor.split( ' ' )[:2]
                 if ( len( names ) == 1 ):
                     params = ( '%%%s%%' % ( names[0].upper(), ), )
@@ -179,11 +180,11 @@ class GUI( xbmcgui.Window ):
         else:
             self.main_category = category_id
             if ( category_id == amt_util.GENRES ):
-                sql = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
+                sql = self.query[ 'genre_category_list' ]#'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
             elif ( category_id == amt_util.STUDIOS ):
-                sql = "SELECT * FROM Studios ORDER BY title"
+                sql = self.query[ 'studio_category_list' ]#"SELECT * FROM Studios ORDER BY title"
             elif ( category_id == amt_util.ACTORS ):
-                sql = 'SELECT * FROM Actors ORDER BY name'
+                sql = self.query[ 'actor_category_list' ]#'SELECT * FROM Actors ORDER BY name'
             self.current_display = [ [ category_id, list_category ], self.current_display[ 1 ] ]
             self.showCategories( sql )
         self.showControls( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES )
@@ -192,7 +193,7 @@ class GUI( xbmcgui.Window ):
         else:
             if ( self.trailers.movies ): self.setFocus( self.controls['Trailer List']['control'] )
 
-    def showCategories( self, sql, params = None, choice = 0, force_update = False ):
+    def showCategories( self, sql, params = False, choice = 0, force_update = False ):
         try:
             #self.debugWrite('getGenreCategories', 2)
             xbmcgui.lock()
@@ -486,12 +487,12 @@ class GUI( xbmcgui.Window ):
                     if ( filename ):
                         poster = self.trailers.movies[trailer].poster
                         if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
-                        self.saveThumbnail( filename, trailer, poster, )
+                        self.saveThumbnail( filename, trailer, poster )
             else: filename = None
             if ( filename ):
                 self.MyPlayer.play( filename )
                 xbmc.sleep( 500 )
-                self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, self.trailers.movies[ trailer ].title, trailer )
+                self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                 #self.changed_trailers = False
         except: traceback.print_exc()
 
@@ -502,7 +503,7 @@ class GUI( xbmcgui.Window ):
             if ( not os.path.isfile( new_filename ) ):
                 shutil.copyfile( poster, new_filename )
             if ( self.trailers.movies[ trailer ].saved == '' ):
-                success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( filename, self.trailers.movies[ trailer ].title, ), ), 'title' )
+                success = self.trailers.updateRecord( 'movies', ( 'saved_location', ), ( filename, self.trailers.movies[ trailer ].idMovie, ), 'idMovie' )
                 if ( success ): self.trailers.movies[ trailer ].saved = filename
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
@@ -516,17 +517,17 @@ class GUI( xbmcgui.Window ):
         categories = self.trailers.categories
         self.trailers.categories = self.genres
         #self.setCategory( shortcut, 1 )
-        self.trailers.loadMovies( force_full=True )
+        self.trailers.loadMovies()
         self.trailers.categories = categories
 
-    def markAsWatched( self, watched, trailer, index ):
+    def markAsWatched( self, watched, trailer ):
         if ( watched ): date = datetime.date.today()
         else: date = ''
-        success = self.trailers.updateRecord( 'Movies', ( 'times_watched', 'last_watched', ), ( ( watched, date, trailer, ), ), 'title' )
+        success = self.trailers.updateRecord( 'movies', ( 'times_watched', 'last_watched', ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), 'idMovie' )
         if ( success ):
-            self.trailers.movies[index].watched = watched
-            self.showTrailers( self.sql, self.params, choice = index )
-        
+            self.trailers.movies[trailer].watched = watched
+            self.showTrailers( self.sql, self.params, choice = trailer )
+
     def changeSettings( self ):
         import guisettings
         #self.debugWrite('changeSettings', 2)
@@ -574,12 +575,12 @@ class GUI( xbmcgui.Window ):
     def toggleAsWatched( self ):
         trailer = self.setCountLabel( 'Trailer List' )
         watched = not ( self.trailers.movies[ trailer ].watched > 0 )
-        self.markAsWatched( watched, self.trailers.movies[ trailer ].title, trailer )
+        self.markAsWatched( watched, trailer )
   
     def toggleAsFavorite( self ):
         trailer = self.setCountLabel( 'Trailer List' )
         favorite = not self.trailers.movies[ trailer ].favorite
-        success = self.trailers.updateRecord( 'Movies', ( 'favorite', ), ( ( favorite, self.trailers.movies[ trailer ].title, ), ), 'title' )
+        success = self.trailers.updateRecord( 'movies', ( 'favorite', ), ( favorite, self.trailers.movies[ trailer ].idMovie, ), 'idMovie' )
         if ( success ):
             self.trailers.movies[ trailer ].favorite = favorite
             if ( self.category_id == amt_util.FAVORITES ):
@@ -612,7 +613,7 @@ class GUI( xbmcgui.Window ):
                 os.remove( '%s.conf' % ( saved_trailer, ) )
             if ( os.path.isfile( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) ) ):
                 os.remove( '%s.tbn' % ( os.path.splitext( saved_trailer )[0], ) )
-            success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( ( '', self.trailers.movies[ trailer ].title, ), ), 'title' )
+            success = self.trailers.updateRecord( 'Movies', ( 'saved_location', ), ( '', self.trailers.movies[ trailer ].idMovie, ), 'idMovie' )
             if ( success ):
                 self.trailers.movies[ trailer ].saved = ''
                 if ( self.category_id == amt_util.DOWNLOADED ): force_update = True
