@@ -136,7 +136,6 @@ class Database:
                 sql += '%s %s, ' % ( item[0], item[1], )
             sql = sql[:-2] + ')'
             con = sqlite.connect( self.db )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
-            cur = con.cursor()
             con.execute( sql )
             for item in self.tables[table]:
                 if ( item[2] != None ):
