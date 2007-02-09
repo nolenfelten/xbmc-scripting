@@ -1,8 +1,7 @@
-﻿<strings>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbox media center</string>
-
-  <!-- Dialog Messages -->
   <string id="40">All info hämtas, sökning är tillgänglig. (20 - 60 minuter)</string>
   <string id="41">Info uppdateras per genre. (5 - 15 minuter)</string>
   <string id="42">Spara filminfo till databas...</string>
@@ -12,7 +11,7 @@
   <string id="46">databaskonvertering misslyckades...</string>
   <string id="47">Nuvarande tabell</string>
   <string id="48">Hämtar register...</string>
-
+  <string id="49">*Du kan göra en skapa en komplett när du vill.</string>
   <string id="50">Konfigurerar skript:</string>
   <string id="51">Importerar moduler &amp; startar...</string>
   <string id="52">modul:</string>
@@ -53,7 +52,6 @@
   <string id="87">Nuvarande genre</string>
   <string id="88">Nuvarande trailer</string>
   <string id="89">Ett fel uppstod vid skapande av databasen.</string>
-
   <string id="90">Hämtar nuvarande taggade versioner...</string>
   <string id="91">är nyare</string>
   <string id="92">Vill du uppgradera?</string>
@@ -64,15 +62,11 @@
   <string id="97">Sökväg:</string>
   <string id="98">Fil:</string>
   <string id="99">Din nya version sparades som:</string>
-
-  <!-- Credits -->
   <string id="100">Version</string>
   <string id="101">Team:</string>
   <string id="102">Annat:</string>
   <string id="103">Designer:</string>
   <string id="104">Utvecklare</string>
-
-  <!-- Buttons and Labels -->
   <string id="200">Nyaste</string>
   <string id="201">Exklusiva</string>
   <string id="202">Genre...</string>
@@ -85,7 +79,7 @@
   <string id="209">Om AMT</string>
   <string id="210">Ok</string>
   <string id="211">Avbryt</string>
-  <string id="212">* Skalberoende</string>
+  <string id="212">*Skalberoende</string>
   <string id="213">Version</string>
   <string id="214">välj skal</string>
   <string id="215">Handling</string>
@@ -104,8 +98,6 @@
   <string id="228">Kontrollera uppdateringar</string>
   <string id="229">Full</string>
   <string id="230">Minimal</string>
-
-  <!-- Settings -->
   <string id="300">Trailerkvalitet</string>
   <string id="301">Läge</string>
   <string id="302">Nerladdningsfolder</string>
@@ -125,19 +117,15 @@
   <string id="331">Ladda ner</string>
   <string id="332">Ladda ner &amp; spara</string>
   <string id="340">Kontrollera version vid uppstart</string>
-
-  <!-- Movie/Genre Information -->
-  <string id="400">Ingen beskrivning kunde hämtas för denna filmtiteln.</string>
+  <string id="400">*Ingen beskrivning kunde hämtas för denna filmtiteln.</string>
   <string id="401">*Ingen rollsättning kunde hämtas för denna titel.</string>
-
-  <!-- Context Menu -->
-  <string id="500">Lägg till i spellista</string>
-  <string id="501">Ta bort från spellista</string>
+  <string id="500">Theater Showtimes</string>
+  <string id="501">-</string>
   <string id="502">Lägg till i favoriter</string>
   <string id="503">Ta bort från favoriter</string>
   <string id="504">Markera som Sedd</string>
   <string id="505">Markera som Inte sedd</string>
-  <string id="506">Updatera filminfo</string>
+  <string id="506">Uppdatera filminfo</string>
   <string id="507">Uppdatera genre</string>
   <string id="508">Uppdatera genrelista</string>
   <string id="509">Ta bort sparad trailer</string>
@@ -145,5 +133,4 @@
   <string id="511">Visa denna genre</string>
   <string id="512">Visa denna studio</string>
   <string id="513">View denna skådespelare</string>
-
 </strings>
