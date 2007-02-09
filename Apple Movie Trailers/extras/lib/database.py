@@ -98,10 +98,10 @@ class Tables( dict ):
     def __init__( self, *args, **kwargs ):
         #{ column name, type, auto increment, index , index columns }
         self['version'] = (
-                ( 'idVersion', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
-                ( 'version', 'text', '', '', '' ),
-                ( 'complete', 'integer', '', '', '' ),
-            )
+            ( 'idVersion', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
+            ( 'version', 'text', '', '', '' ),
+            ( 'complete', 'integer', '', '', '' ),
+        )
         self['genres'] = (
             ( 'idGenre', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
             ( 'genre', 'text', '', '', '' ),
@@ -122,8 +122,6 @@ class Tables( dict ):
             ( 'url', 'text',  '', '', '' ),
             ( 'trailer_urls', 'text', '', '', '' ),
             ( 'poster', 'text', '', '', '' ),
-            ( 'thumbnail', 'text', '', '', '' ),
-            ( 'thumbnail_watched', 'text', '', '', '' ),
             ( 'plot', 'text', '', '', '' ),
             ( 'rating', 'text', '', '', '' ),
             ( 'rating_url', 'text', '', '', '' ),
@@ -302,37 +300,33 @@ class Query( dict ):
         self[ 'genre_table_list' ]			= 'SELECT idGenre, genre, url FROM genres ORDER BY genre;'
         
         self[ 'movie_exists' ]				= 'SELECT idMovie FROM movies WHERE upper(title)=?;'
-        self[ 'actor_exists' ]					= "SELECT idActor FROM actors WHERE actor=?;"
-        self[ 'studio_exists' ]				= "SELECT idStudio FROM studios WHERE studio=?;"
+        self[ 'actor_exists' ]					= "SELECT idActor FROM actors WHERE upper(actor)=?;"
+        self[ 'studio_exists' ]				= "SELECT idStudio FROM studios WHERE upper(studio)=?;"
 
         self[ 'favorites' ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ 'downloaded' ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
 
 
 
+'''
+SELECT movies.*, actors.actor, studios.studio FROM movies, actors, actor_link_movie, studios, studio_link_movie WHERE movies.idMovie = ? AND actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie = movies.idmovie AND studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie = movies.idMovie;
+SELECT movies.*, actors.actor FROM movies, genres, genre_link_movie, actors, actor_link_movie WHERE genres.idGenre = ? AND genre_link_movie.idGenre=genres.idGenre AND movies.idMovie=genre_link_movie.idMovie and actor_link_movie.idActor = actors.idActor and actor_link_movie.idMovie = movies.idMovie order BY movies.title;
+select movies.* from movies, genres, genre_link_movie
+where genres.idGenre = 11 and genre_link_movie.idGenre=genres.idGenre
+and movies.idMovie = genre_link_movie.idMovie order by movies.title;
 
-#self[ 'movie' ]						= 'SELECT movies.*, actors.actor, studios.studio FROM movies, actors, actor_link_movie, studios, studio_link_movie WHERE movies.idMovie = ? AND actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie = movies.idmovie AND studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie = movies.idMovie;'
-
-
-
-
-#                                                    "SELECT movies.*, actors.actor FROM movies, genres, genre_link_movie, actors, actor_link_movie WHERE genres.idGenre = ? AND genre_link_movie.idGenre=genres.idGenre AND movies.idMovie=genre_link_movie.idMovie and actor_link_movie.idActor = actors.idActor and actor_link_movie.idMovie = movies.idMovie order BY movies.title;"
-        #select movies.* from movies, genres, genre_link_movie
-#where genres.idGenre = 11 and genre_link_movie.idGenre=genres.idGenre
-#and movies.idMovie = genre_link_movie.idMovie order by movies.title;
-        '''
-        select genre_link_movie.idMovie,
-        movies.title, movies.url
-        from genre_link_movie, movies, genres
-        where genre_link_movie.idMovie = movies.idMovie and
-        genre_link_movie.idGenre = genres.idGenre and movies.trailer_urls is Null
-        order by movies.title;
+select genre_link_movie.idMovie,
+ movies.title, movies.url
+ from genre_link_movie, movies, genres
+ where genre_link_movie.idMovie = movies.idMovie and
+ genre_link_movie.idGenre = genres.idGenre and movies.trailer_urls is Null
+ order by movies.title;
         
-        select actors.actor from actors, actor_link_movie, movies
-where actor_link_movie.idMovie = movies.idMovie
-and actors.idActor = actor_link_movie.idActor
-and movies.idMovie=100 order by actors.actor;
+select actors.actor from actors, actor_link_movie, movies
+ where actor_link_movie.idMovie = movies.idMovie
+ and actors.idActor = actor_link_movie.idActor
+ and movies.idMovie=100 order by actors.actor;
         
         
-        '''
+ '''
         

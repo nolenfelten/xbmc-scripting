@@ -15,6 +15,6 @@ def makeThumbnails( poster ):
         alpha = ImageEnhance.Brightness(alpha).enhance(0.2)
         im.putalpha(alpha)
         im.save(watched_thumbnail, 'PNG')
-        return thumbnail, watched_thumbnail
+        return True
     except:
-        return None, None
+        return False

@@ -420,7 +420,7 @@ class GUI( xbmcgui.Window ):
                 self.cast_exists = True
                 for actor in cast:
                     thumbnail = os.path.join( self.image_path, 'generic-actor.tbn' )
-                    self.controls['Cast List']['control'].addItem( xbmcgui.ListItem( actor, '', thumbnail, thumbnail ) )
+                    self.controls['Cast List']['control'].addItem( xbmcgui.ListItem( actor[ 0 ], '', thumbnail, thumbnail ) )
             else: 
                 self.cast_exists = False
                 self.controls['Cast List']['control'].addItem( _( 401 ) )
@@ -517,7 +517,7 @@ class GUI( xbmcgui.Window ):
         categories = self.trailers.categories
         self.trailers.categories = self.genres
         #self.setCategory( shortcut, 1 )
-        self.trailers.loadMovies()
+        self.trailers.fullUpdate()
         self.trailers.categories = categories
 
     def markAsWatched( self, watched, trailer ):
