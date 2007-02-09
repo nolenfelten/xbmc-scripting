@@ -3,8 +3,8 @@
   <string id="1">xbox media center</string>
 
   <!-- Dialog Messages -->
-  <string id="40">All info is fetched, search is available. (20 - 60 minutes)</string>
-  <string id="41">Info is updated per genre. (5 - 15 minutes)</string>
+  <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
+  <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
   <string id="42">Save movie info to database...</string>
   <string id="43">committing records to database...</string>
   <string id="44">Database creation...</string>
