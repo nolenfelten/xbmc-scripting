@@ -151,7 +151,7 @@ COLOR_ORANGE 	= 7
 COLOR_GHOST 	= 8
 COLORS = ['none','blu','red','gre','yel','cya','mag','ora','ghost']
 
-DO_LOGGING = 1
+DO_LOGGING = 0
 try:
 	LOG_FILE.close()
 except Exception:
@@ -443,7 +443,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 			buttons = [button for button in self.parent.keymap.keys() if self.parent.keymap[button] == action]
 			for idx in range(len(buttons)):
 				deltaX = min(30,100/len(buttons))
-				image = xbmcgui.ControlImage(SX*(self.posX+225-idx*deltaX), SY*(self.posY+25 + action * 40), SX*32, SY*32, ROOT_DIR+"extras\\media\\"+str(buttons[idx])+".png", aspectRatio=2)
+				image = xbmcgui.ControlImage(SX*(self.posX+225-idx*deltaX), SY*(self.posY+25 + action * 40), SX*32, SY*32, ROOT_DIR+"extras\\media\\buttons\\"+str(buttons[idx])+".png")#, aspectRatio=2)
 				self.addControl(image)
 				self.imgButtons.append(image)				
 		xbmcgui.unlock()
@@ -990,7 +990,6 @@ if __name__ == '__main__':
 		board = Board(10,20)
 		controller = BoardController(board)
 		t = Tetris()
-		LOG("WTF?")		
 		t.loadSettings()
 		t.setController(controller)
 		t.startTimer()
