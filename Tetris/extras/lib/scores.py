@@ -72,8 +72,14 @@ def noStretch(window):
 					9: (16,9,720,480)}					
 	currMode = displayModes[window.getResolution()]
 	global SX,SY
-	SY = float(currMode[3])/576.0
-	SX = float(currMode[1])/float(currMode[0])*4.0/3.0*float(currMode[2])/720.0
+	class C:
+		def __init__(self, v): self.value = v
+		def __mul__(self, r): return int(self.value * r)
+	SY = C(float(currMode[3])/576.0)
+	SX = C(float(currMode[1])/float(currMode[0])*4.0/3.0*float(currMode[2])/720.0)
+	#stupid pal 16x9
+	if (currMode[0] == 16) and (currMode[2] == 720):
+		SX = C(1.0)	
 	#if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
 	#else: window.setCoordinateResolution(COORD_PAL_4X3)
 	
@@ -381,7 +387,6 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		LOG('HS - OC1 - ' + str(control.getId()))
 		if control == self.btnLocal:
 			self.populateList(0)
-			#self.btnRefresh.setVisible(False)
 			self.btnRefresh.setEnabled(False)
 		LOG('HS - OC2')
 		if control == self.btnOnline:
@@ -390,7 +395,6 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 				self.onlineHighScores = self.loadOnlineHighScores()
 			LOG('HS - OC2.2')
 			self.populateList(1)
-			#self.btnRefresh.setVisible(True)
 			self.btnRefresh.setEnabled(True)
 		LOG('HS - OC3')
 		if control == self.btnRefresh:
@@ -413,8 +417,8 @@ class GameDialog(xbmcgui.WindowDialog):
 		self.posX = x
 		self.posY = y
 		# I had a problem with different window dialogs having duplicate  ControlIDs
-		# This generated two differen onControl events,  use self.focusWindow as a lock
-		self.focusWindow = WINDOW_GAME 
+		# This generated two differen onControl events,  use self.listen as a lock
+		self.listen = True 
 		self.imagedir = imagedir
 		self.score = "0"
 		self.buildGui()
@@ -459,6 +463,7 @@ class GameDialog(xbmcgui.WindowDialog):
 		self.gameID = self.getGameID(self.gamename)
 		self.btnSubmit.setEnabled(True)
 		xbmc.enableNavSounds(True)
+		self.listen = True
 		self.doModal() #leaves xbmcgui locked
 		xbmc.enableNavSounds(False)
 		LOG("SD7")
@@ -484,7 +489,7 @@ class GameDialog(xbmcgui.WindowDialog):
 		self.lblUsername.setLabel(username)
 	
 	def onControl(self, control):
-		if not self.focusWindow == WINDOW_GAME:
+		if not self.listen:
 			return
 		LOG('OC1 - ' + str(control.getId()))
 		if control == self.btnUsername:
@@ -506,16 +511,18 @@ class GameDialog(xbmcgui.WindowDialog):
 			self.close()
 		LOG('OC4')
 		if control == self.btnSubmit:
-			self.focusWindow = WINDOW_SUBMIT
+			self.listen = False
 			self.dlgSubmit.doModal()
-			self.focusWindow = WINDOW_GAME
+			self.listen = True
 		LOG('OC5')
 		if control == self.btnHighScores:
-			self.focusWindow = WINDOW_HIGHSCORE
+			self.listen = False
 			self.dlgHighScores.doModal()
-			self.focusWindow = WINDOW_GAME
+			self.listen = True
 		LOG('OC6')
 
 	def onAction(self, action):
+		if not self.listen:
+			return
 		if action in (ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR, ACTION_STOP):
 			self.close()
