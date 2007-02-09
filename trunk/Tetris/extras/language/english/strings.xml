@@ -38,7 +38,7 @@
 
   <string id="89">Update Script</string>        
   <string id="90">Fetching current tagged versions...</string>
-  <string id="91">is newer</string>
+  <string id="91">Version %s is newer</string>
   <string id="92">Would you like to upgrade?</string>
   <string id="93">Fetching file list...</string>
   <string id="94">Please wait...</string>
@@ -46,8 +46,7 @@
   <string id="96">There was an error upgrading.</string>
   <string id="97">Path:</string>
   <string id="98">File:</string>
-  <string id="99">Your new version was saved to:</string>
-  <string id="100">Version</string>  
+  <string id="99">You will not be asked again for version %s</string>
   <string id="101">Fetching:</string>
   
 
