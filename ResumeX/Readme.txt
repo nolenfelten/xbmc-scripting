@@ -1,6 +1,6 @@
       ##########################
       #                        #                      
-      #   ResumeX (V.0.2)      #         
+      #   ResumeX (V.0.3)      #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -9,6 +9,10 @@
 #   An Auto Resume script for XBMC   #
 #                                    #
 ######################################
+
+Fixed V.0.3:
+**Fixed playlist problems
+**Clean up script a little
 
 
 Fixed V.0.2:
