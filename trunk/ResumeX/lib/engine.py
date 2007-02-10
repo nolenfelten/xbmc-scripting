@@ -1,7 +1,7 @@
 # -*- coding: cp1252 -*-
       ##########################
       #                        #                      
-      #   ResumeX (V.0.1)      #         
+      #   ResumeX (V.0.2)      #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -15,8 +15,6 @@ import sys, email, xbmcgui, xbmc
 import string, time, mimetypes, re, os
 import shutil
 SLEEPTIME = 2 #seconds
-WINDOWRESUME = 1 # 1 = yes, 0 = no
-
 Root_Dir = os.getcwd().replace(";","")+"\\"
 TEST = Root_Dir + "lib\\"
 SETTINGFILE = Root_Dir + "settings.xml"
@@ -42,9 +40,9 @@ class main:
                 time.sleep(1)
                 
                 if self.plsize == False: #there is no playlist
-                        if self.playing == False:  #no other song is playing
+                        if self.playing == False:  #no other song/vid is playing
                                 self.saver()
-                        else:  #song is playing but no playlist
+                        else:  #song/vid is playing but no playlist
                               xbmc.Player().play(self.playing)
                               try:
                                       xbmc.Player().seekTime(self.time)
@@ -53,7 +51,10 @@ class main:
                  #there must be a playlist present from now on
                 self.testme()
                 count = 0
-                self.plist = xbmc.PlayList(0)
+                if self.media == "music":
+                        self.plist = xbmc.PlayList(0)
+                else:
+                        self.plist = xbmc.PlayList(1)
                 self.plist.clear()
                 if self.playing == False: #there is playlist but no media is playing
                         for count in range (0, self.plsize):
@@ -149,7 +150,7 @@ class main:
 
         def opendata(self):
                 self.playlist = []
-                tag = ["<window>", "<volume>", "<time>", "<plspos>", "<plsize>","<playing>"]
+                tag = ["<window>", "<volume>", "<time>", "<plspos>", "<plsize>","<playing>","<media>"]
                 fh = open(DATAFILE)
                 count = 0
                 for line in fh.readlines():
@@ -180,6 +181,10 @@ class main:
                               self.playing = theLine[9:-10]
                               if self.playing == "-":
                                       self.playing = False
+                        if theLine.count(tag[6]) > 0:
+                              self.media = theLine[7:-8]
+                              if self.media == "-":
+                                      self.media = False
                 fh.close()
                 fh = open(DATAFILE)
                 if self.plsize != 0:
@@ -213,6 +218,7 @@ class main:
                         self.volume = re.sub("dB", '', self.volume)
                         self.volume = 100.00 + float(self.volume)/60.00*100.00
                         if xbmc.Player().isPlayingAudio():
+                                self.media = "audio"
                                 self.time = xbmc.Player().getTime()
                                 self.plist = xbmc.PlayList(0)
                                 self.plsize = self.plist.size()
@@ -223,6 +229,7 @@ class main:
                                 self.place = self.plist.getposition()
                                 self.writedata()
                         elif xbmc.Player().isPlayingVideo():
+                                self.media = "video"
                                 self.time = xbmc.Player().getTime()
                                 self.plist = xbmc.PlayList(1)
                                 self.plsize = self.plist.size()
@@ -234,6 +241,7 @@ class main:
                                 self.writedata()
                         else:
                                self.checkme()
+                               self.media = "-"
                                self.time = "-"
                                self.playing = "-"
                                self.place = "-"
@@ -263,6 +271,7 @@ class main:
         def writedata(self):
                 f = open(DATAFILE, "wb")
                 f.write("<data>\n")
+                f.write("\t<media>"+self.media+"</media>\n")
                 f.write("\t<window>"+str(self.window)+"</window>\n")
                 f.write("\t<volume>"+str(self.volume)+"</volume>\n")
                 f.write("\t<time>"+str(self.time)+"</time>\n")
