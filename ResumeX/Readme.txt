@@ -1,6 +1,6 @@
       ##########################
       #                        #                      
-      #   ResumeX (V.0.1)      #         
+      #   ResumeX (V.0.2)      #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -11,12 +11,16 @@
 ######################################
 
 
+Fixed V.0.2:
+**Fixed Video resume problems :-D
+
+
 Features:
 
-**Resume on xbmc startup the last song XBMC was playing on exit
+**Resume on xbmc startup the last song/video XBMC was playing on exit
 **Resume on xbmc startup the last window XBMC was in on exit (optional)
 **Resume on xbmc startup the last playlist XBMC was playing on exit
-**Resume on xbmc startup the song position XBMC was playing on exit
+**Resume on xbmc startup the song/video position XBMC was playing on exit
 **Disable/Enable ResumeX via ResumeX gui script
 **Disable/Enable Window Resume via ResumeX gui script
 
