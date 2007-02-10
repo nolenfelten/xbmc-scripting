@@ -33,33 +33,37 @@ class main:
                         self.opendata()
                 except:
                         self.saver()
-                        
-                if self.winresume == "yes":
-                        xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                 xbmc.executebuiltin("XBMC.SetVolume("+self.volume+")")
-                time.sleep(1)
-                
+                time.sleep(0.5)
                 if self.plsize == False: #there is no playlist
                         if self.playing == False:  #no other song/vid is playing
+                                if self.winresume == "yes":
+                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                                 self.saver()
                         else:  #song/vid is playing but no playlist
                               xbmc.Player().play(self.playing)
                               try:
                                       xbmc.Player().seekTime(self.time)
                               except:pass
+                              if self.winresume == "yes":
+                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                               self.saver()
                  #there must be a playlist present from now on
                 self.testme()
                 count = 0
-                if self.media == "music":
+                if self.media == "audio":
                         self.plist = xbmc.PlayList(0)
-                else:
+                elif self.media == "video":
                         self.plist = xbmc.PlayList(1)
+                else:
+                       self.plist = xbmc.PlayList(0) 
                 self.plist.clear()
                 if self.playing == False: #there is playlist but no media is playing
                         for count in range (0, self.plsize):
                              self.plist.add(self.playlist[count])
                              count = count + 1
+                        if self.winresume == "yes":
+                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()                        
                 if self.bingo == 1:#there is a playlist and the current playing song is in this playlist
                         for count in range (0, self.plsize):
@@ -70,6 +74,8 @@ class main:
                         try:
                                 xbmc.Player().seekTime(self.time)
                         except:pass
+                        if self.winresume == "yes":
+                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()
                 else:#there is a playlist that is loaded but a different file is playing over the top (need to make this so the file doesnt need to be added)
                         for count in range (0, self.place+1):
@@ -86,6 +92,8 @@ class main:
                                 xbmc.Player().seekTime(self.time)
                         except:pass
                         self.plist.remove(self.playing)
+                        if self.winresume == "yes":
+                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()
 
 
