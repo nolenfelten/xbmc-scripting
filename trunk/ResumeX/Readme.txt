@@ -1,6 +1,6 @@
       ##########################
       #                        #                      
-      #   ResumeX (V.0.3)      #         
+      #   ResumeX (V.0.4)      #         
       #     By Stanley87       #         
       #                        #
 #######                        #######             
@@ -9,6 +9,12 @@
 #   An Auto Resume script for XBMC   #
 #                                    #
 ######################################
+
+Fixed V.0.4:
+**Fixed - Problem with Video playlist wrongly being loaded as music playlist on
+startup.
+**Updated - Script won't replace window if window ID = 10000 (main window)
+
 
 Fixed V.0.3:
 **Fixed playlist problems
