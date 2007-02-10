@@ -38,7 +38,8 @@ class main:
                 if self.plsize == False: #there is no playlist
                         if self.playing == False:  #no other song/vid is playing
                                 if self.winresume == "yes":
-                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
+                                      if self.window != "10000":
+                                              xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                                 self.saver()
                         else:  #song/vid is playing but no playlist
                               xbmc.Player().play(self.playing)
@@ -46,7 +47,8 @@ class main:
                                       xbmc.Player().seekTime(self.time)
                               except:pass
                               if self.winresume == "yes":
-                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
+                                      if self.window != "10000":
+                                              xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                               self.saver()
                  #there must be a playlist present from now on
                 self.testme()
@@ -63,7 +65,8 @@ class main:
                              self.plist.add(self.playlist[count])
                              count = count + 1
                         if self.winresume == "yes":
-                                      xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
+                                if self.window != "10000":
+                                        xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()                        
                 if self.bingo == 1:#there is a playlist and the current playing song is in this playlist
                         for count in range (0, self.plsize):
@@ -75,6 +78,7 @@ class main:
                                 xbmc.Player().seekTime(self.time)
                         except:pass
                         if self.winresume == "yes":
+                                if self.window != "10000":
                                       xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()
                 else:#there is a playlist that is loaded but a different file is playing over the top (need to make this so the file doesnt need to be added)
@@ -93,6 +97,7 @@ class main:
                         except:pass
                         self.plist.remove(self.playing)
                         if self.winresume == "yes":
+                                if self.window != "10000":
                                       xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()
 
@@ -249,7 +254,6 @@ class main:
                                 self.writedata()
                         else:
                                self.checkme()
-                               self.media = "-"
                                self.time = "-"
                                self.playing = "-"
                                self.place = "-"
@@ -259,6 +263,7 @@ class main:
                 self.plist = xbmc.PlayList(0)
                 self.plsize = self.plist.size()
                 if self.plsize !=0:
+                        self.media = "audio"
                         for i in range (0 , self.plsize):
                                 temp = self.plist[i]
                                 self.playlist.append(xbmc.PlayListItem.getfilename(temp))
@@ -267,11 +272,13 @@ class main:
                 self.plist = xbmc.PlayList(1)
                 self.plsize = self.plist.size()                
                 if self.plsize !=0:
+                        self.media = "video"
                         for i in range (0 , self.plsize):
                                 temp = self.plist[i]
                                 self.playlist.append(xbmc.PlayListItem.getfilename(temp))
                         return
                 else:
+                        self.media = "-"
                         self.plsize = "-"
                         self.playlist = "-"
                         return
