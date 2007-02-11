@@ -5,7 +5,7 @@ import socket
 
 # timeout in seconds
 timeout = 10
-socket.setdefaulttimeout(timeout)
+socket.setdefaulttimeout( timeout )
 
 class Parser( SGMLParser ):
     def reset( self ):
@@ -26,8 +26,8 @@ class Parser( SGMLParser ):
             self.url = text.replace( ' ', '%20' )
             self.url_found = False
             
-    def unknown_starttag(self, tag, attrs):
-        if (tag == 'h2'):
+    def unknown_starttag( self, tag, attrs ):
+        if ( tag == 'h2' ):
             self.url_found = True
 
 class Update:
@@ -37,9 +37,9 @@ class Update:
         self.version = version
         self.base_url = 'http://xbmc-scripting.googlecode.com/svn'
         self.dialog = xbmcgui.DialogProgress()
-        if ( self.checkForNewVersion() ):
-            self.updateScript()
-        else: xbmcgui.Dialog().ok( self.script, self._( 95 ) )
+        new = self.checkForNewVersion()
+        if ( new ): self.updateScript()
+        else: xbmcgui.Dialog().ok( self.script, self._( 95 + ( new == None ) ) )
             
     def checkForNewVersion( self ):
         self.dialog.create( self.script, self._( 90 ) )
@@ -49,7 +49,7 @@ class Update:
             self.versions, url = self.parseHTMLSource( htmlsource )
             self.url = url[url.find( ':%20' ) + 4:]
             new = ( self.version < self.versions[-1][:-1] or ( self.version[:4] == 'pre-' and self.version.replace( 'pre-', '' ) <= self.versions[-1][:-1] ) )
-        else: new = False
+        else: new = None
         self.dialog.close()
         return new
                 
