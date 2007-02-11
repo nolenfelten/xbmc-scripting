@@ -198,7 +198,7 @@ class GUI( xbmcgui.Window ):
             #self.debugWrite('getGenreCategories', 2)
             xbmcgui.lock()
             if ( sql != self.sql_category or params != self.params_category or force_update ):
-                self.list_control_pos[ self.list_category ]  = 0
+                self.list_control_pos[ self.list_category ] = 0
                 self.trailers.getCategories( sql, params )
                 self.sql_category = sql
                 self.params_category = params
@@ -216,7 +216,7 @@ class GUI( xbmcgui.Window ):
                     ################
                     self.setSelection( 'Category List', self.list_control_pos[ self.list_category ] )
                     #self.setSelection( 'Trailer List', choice + ( choice == -1 ) )
-        except: pass #traceback.print_exc()
+        except: traceback.print_exc()
         xbmcgui.unlock()
 
     def showTrailers( self, sql, params = None, choice = 0, force_update = False ):
@@ -250,8 +250,8 @@ class GUI( xbmcgui.Window ):
     def calcScrollbarVisibilty( self, list_control ):
         if ( self.controls[list_control]['special'] ):
             if ( ( ( self.category_id >= 0 or self.category_id <= amt_util.FAVORITES ) and list_control != 'Category List' ) or 
-                  ( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES and list_control == 'Category List' ) ):
-                visible = ( self.controls[list_control]['control'].size() > self.controls[list_control]['special'] )
+                ( self.category_id <= amt_util.GENRES and self.category_id > amt_util.FAVORITES and list_control == 'Category List' ) ):
+                visible = ( self.controls[list_control]['control'].size() > self.getListControlItemsPerPage( list_control ) )
                 visible2 = not visible
                 if ( list_control == 'Cast List' and not self.display_cast ):
                     visible = False
@@ -260,6 +260,12 @@ class GUI( xbmcgui.Window ):
                 ######self.setSelection( list_control )
             else: self.showScrollbar( False, False, list_control )
 
+    def getListControlItemsPerPage( self, list_control ):
+        height = self.controls[ list_control ][ 'control' ].getItemHeight() + self.controls[ list_control ][ 'control' ].getSpace()
+        totalheight = self.controls[ list_control ][ 'control' ].getHeight() - height
+        items_per_page = int(float(totalheight) / float(height))
+        return items_per_page
+        
     def showScrollbar( self, visible, visible2, list_control ):
         try:
             self.controls['%s Scrollbar Up Arrow' % ( list_control, )]['control'].setVisible( visible or visible2 )
@@ -272,7 +278,7 @@ class GUI( xbmcgui.Window ):
     def setScrollbarIndicator( self, list_control ):
         try:
             if ( self.controls[list_control]['special'] ):
-                if ( self.controls[list_control]['control'].size() > int( self.controls[list_control]['special'] ) ):
+                if ( self.controls[list_control]['control'].size() > self.getListControlItemsPerPage( list_control ) ):
                     offset = float( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getHeight() - self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getHeight() ) / float( self.controls[list_control]['control'].size() - 1 )
                     posy = int( self.controls['%s Scrollbar Middle' % ( list_control, )][ 'control' ].getPosition()[ 1 ] + ( offset * self.controls[list_control]['control'].getSelectedPosition() ) )
                     self.controls['%s Scrollbar Position Indicator' % ( list_control, )]['control'].setPosition( self.controls['%s Scrollbar Position Indicator' % ( list_control, )][ 'control' ].getPosition()[ 0 ], posy )
@@ -291,7 +297,7 @@ class GUI( xbmcgui.Window ):
         #self.debugWrite('pageIndicator', 2)
         current_pos = self.controls[list_control]['control'].getSelectedPosition()
         total_items = self.controls[list_control]['control'].size()
-        items_per_page = self.controls[list_control]['special']
+        items_per_page = self.getListControlItemsPerPage( list_control )
         current_pos += page * items_per_page
         if ( current_pos < 0 ): current_pos = 0
         elif ( current_pos >= total_items ): current_pos = total_items - 1
@@ -427,6 +433,7 @@ class GUI( xbmcgui.Window ):
             self.showPlotCastControls( False )
             #self.calcScrollbarVisibilty( 'Cast List' )
             self.setScrollbarIndicator( 'Trailer List' )
+            self.setScrollbarIndicator( 'Cast List' )
             self.showOverlays( trailer )
         except: pass
         xbmcgui.unlock()
