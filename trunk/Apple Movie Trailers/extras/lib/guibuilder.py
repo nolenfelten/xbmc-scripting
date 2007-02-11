@@ -220,7 +220,7 @@ class GUIBuilder:
 
     def addCtl( self, control ):
         try:
-            control[ 'special' ] = ''
+            control[ 'special' ] = False
             if ( self.useDescAsKey ): key = control[ 'description' ]
             else: key = int( control[ 'id' ] )
             if ( control[ 'type' ] == 'image' ):
@@ -283,10 +283,7 @@ class GUIBuilder:
                     itemHeight=int(control['textureheight']), space=int(control['spacebetweenitems'])))#, shadowColor=control['shadowcolor']))
                 self.win.addControl(ctl)
                 ctl.setPageControlVisible( not control['hidespinner'] )
-                if (control['hidespinner']):
-                    height = int(control['textureheight']) + int(control['spacebetweenitems'])
-                    totalheight = int(control['height']) - height#########20
-                    control['special'] = int(float(totalheight) / float(height))
+                control['special'] = control['hidespinner']
                 if (control.has_key('label')):
                     for cnt, item in enumerate(control['label']):
                         if (item != ''): 
@@ -304,10 +301,6 @@ class GUIBuilder:
                     'controlId'	: ctl.getId(),
                     'control'		: ctl,
                     'special'		: control[ 'special' ],
-                    #'posx'			: int( control[ 'posx' ] ),
-                    #'posy'			: int( control[ 'posy' ] ),
-                    #'width'		: int( control[ 'width' ] ),
-                    #'height'		: int( control[ 'height' ] ),
                     'visible'		: control[ 'visible' ].lower(),
                     #'animation'	: control[ 'animation' ],
                     'onclick'		: control[ 'onclick' ],
