@@ -161,13 +161,8 @@ class Trailers:
                         # only prevent capitalization of these words if they aren't the leading word in the genre name
                         # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
                         cap = True
-                        if word != name[0]:
-                            if word == 'and' or word == 'of' or word == 'a':
-                                cap = False
-                            #if word == 'of':
-                            #    cap = False
-                            #if word == 'a':
-                            #    cap = False
+                        if word != name[0] and ( word == 'and' or word == 'of' or word == 'a' ):
+                            cap = False
                         if cap:
                             genre_caps += [ word.capitalize() ]
                         else:
