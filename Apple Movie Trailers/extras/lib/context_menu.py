@@ -19,8 +19,9 @@ class GUI( xbmcgui.WindowDialog ):
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
         self.list_item = self.win.controls[ self.list_control ][ 'control' ].getSelectedPosition()
-        self.saved = self.win.trailers.movies[ self.list_item ].saved != ''
-        
+        if ( self.list_control == 'Trailer List' ):
+            self.saved = self.win.trailers.movies[ self.list_item ].saved != ''
+            
     def setupGUI( self ):
         if ( self.win.skin == 'Default' ): current_skin = xbmc.getSkinDir()
         else: current_skin = self.win.skin
