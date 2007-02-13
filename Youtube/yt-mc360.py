@@ -5,7 +5,7 @@
     BackButton by BlackBolt
     Version: 1.8
 
-    THIS IS THE MC360 PORT
+    THIS IS THE MC360 Version
 
 """
 saves_folder = "e:\\youtube_downloads\\"
@@ -53,7 +53,7 @@ base_v_url = "http://youtube.com/get_video?video_id="
 base_t_url =    "http://youtube.com/watch?v="
 base_api = "http://www.youtube.com/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s"   # usage   base_api %( method, extra)   eg base_api %( youtube.videos.get_detail, video_id=yyPHkJMlD0Q)
 
-the_re  =  re.compile('<title>([^<]*)</title>\n[^<]*<link>http://youtube.com/[?]v=([^<]*)</link>')
+the_re  =  re.compile("<title>([^<]*)</title>\n[^<]*<link>.'http://youtube.com/[?]v=([^']*)',.</link>")
 #the_re  =  re.compile('<author>rss@youtube.com \((.*)\)</author>\n[^<]*<title>([^<]*)</title>\n[^<]*<link>http://youtube.com/[?]v=([^<]*)</link>\n[^<]*<description>\n[^<]*<!\[CDATA\[\n[^<]*<img src="([^"]*)"')
 the_t_reg = str('var fo = new SWFObject\("\/player2.swf[?]video_id=.*[&]l=(.*)[&]t=([^"]*)')
 
