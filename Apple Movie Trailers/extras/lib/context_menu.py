@@ -92,7 +92,7 @@ class GUI( xbmcgui.WindowDialog ):
         dialog_middle_posy = self.controls['Context Menu Background Middle']['control'].getPosition()[ 1 ]
         dialog_middle_offsety = dialog_middle_posy - dialog_top_posy
         list_width = self.win.controls[ self.list_control ][ 'control' ].getWidth()
-        list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight()
+        list_height = self.win.controls[ self.list_control ][ 'control' ].getHeight() - self.win.controls[ self.list_control ][ 'control' ].getItemHeight()
         list_posx, list_posy = self.win.controls[ self.list_control ][ 'control' ].getPosition()
         
         # calculate position
@@ -117,9 +117,9 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setEnabled( True )
             
     def hideButtons( self ):
-        for button in range( 6 ):
-            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setVisible( False )
-            self.controls['Context Menu Button%d' % ( button + 1, ) ]['control'].setEnabled( False )
+        for button in range( 1, 7 ):
+            self.controls['Context Menu Button%d' % ( button, ) ]['control'].setVisible( False )
+            self.controls['Context Menu Button%d' % ( button, ) ]['control'].setEnabled( False )
         
     def closeDialog( self ):
         #del self.win

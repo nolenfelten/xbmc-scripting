@@ -111,8 +111,7 @@ class Update:
             parser.feed( htmlsource )
             parser.close()
             return parser.tags, parser.url
-        except:
-            return None
+        except: return None
             
     def parseItems( self, items ):
         folders = []
