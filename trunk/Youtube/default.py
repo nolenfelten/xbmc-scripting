@@ -3,8 +3,10 @@
     Using RSS Feed for the Data
     Coding By Donno [darkdonno@gmail.com]
     BackButton by BlackBolt
-    Version: 1.8b
+    Version: 1.9
 
+    Changes Since 1.9
+        - Youtube Changed the <link> 
     Changes Since 1.8
         - Fixed little bug reguarding playvide on list
         USER Screen
@@ -89,7 +91,8 @@ base_v_url = "http://youtube.com/get_video?video_id="
 base_t_url =    "http://youtube.com/watch?v="
 base_api = "http://www.youtube.com/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s"   # usage   base_api %( method, extra)   eg base_api %( youtube.videos.get_detail, video_id=yyPHkJMlD0Q)
 
-the_re  =  re.compile('<title>([^<]*)</title>\n[^<]*<link>http://youtube.com/[?]v=([^<]*)</link>')
+the_re_old  =  re.compile('<title>([^<]*)</title>\n[^<]*<link>http://youtube.com/[?]v=([^<]*)</link>')
+the_re  =  re.compile("<title>([^<]*)</title>\n[^<]*<link>.'http://youtube.com/[?]v=([^']*)',.</link>")
 #the_re  =  re.compile('<author>rss@youtube.com \((.*)\)</author>\n[^<]*<title>([^<]*)</title>\n[^<]*<link>http://youtube.com/[?]v=([^<]*)</link>\n[^<]*<description>\n[^<]*<!\[CDATA\[\n[^<]*<img src="([^"]*)"')
 the_t_reg = str('var fo = new SWFObject\("\/player2.swf[?]video_id=.*[&]l=(.*)[&]t=([^"]*)')
 
