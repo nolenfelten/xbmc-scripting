@@ -162,12 +162,12 @@ class Trailers:
                         # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
                         cap = True
                         if word != name[0]:
-                            if word == 'and':
+                            if word == 'and' or word == 'of' or word == 'a':
                                 cap = False
-                            if word == 'of':
-                                cap = False
-                            if word == 'a':
-                                cap = False
+                            #if word == 'of':
+                            #    cap = False
+                            #if word == 'a':
+                            #    cap = False
                         if cap:
                             genre_caps += [ word.capitalize() ]
                         else:
@@ -461,7 +461,7 @@ class Trailers:
             self.records = database.Records()
             movie_list = self.records.fetchall( sql, params )
             if ( movie_list ):
-                self.movies = []
+                if ( not full ): self.movies = []
                 total_cnt = len( movie_list )
                 pct_sect = float( 100 ) / total_cnt
                 commit = info_missing = False
@@ -477,7 +477,7 @@ class Trailers:
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
                         self.records.commit()
                         commit = False
-                        if ( self.dialog.iscanceled() ): raise
+                        if ( self.dialog.iscanceled() ): break
             else: self.movies = None
         except: traceback.print_exc()#pass
         self.records.close()

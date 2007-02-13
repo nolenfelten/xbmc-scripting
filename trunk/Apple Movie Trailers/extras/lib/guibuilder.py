@@ -223,6 +223,7 @@ class GUIBuilder:
             control[ 'special' ] = False
             if ( self.useDescAsKey ): key = control[ 'description' ]
             else: key = int( control[ 'id' ] )
+            # image control
             if ( control[ 'type' ] == 'image' ):
                 if ( control.has_key( 'info' ) ): 
                     if ( control[ 'info' ][ 0 ] != '' ): control[ 'texture' ] = xbmc.getInfoImage( control[ 'info' ][ 0 ] )
@@ -231,6 +232,7 @@ class GUIBuilder:
                     filename=control[ 'texture' ], colorKey=control[ 'colorkey' ], aspectRatio=int( control[ 'aspectratio' ] ),\
                     colorDiffuse=control[ 'colordiffuse' ] ) )
                 self.win.addControl( ctl )
+            # label control
             elif (control['type'] == 'label'):
                 if (control.has_key('info')):
                     if (control['info'][0] != ''): control['label'][0] = xbmc.getInfoLabel(control['info'][0])
@@ -239,15 +241,17 @@ class GUIBuilder:
                     font=control['font'], textColor=control['textcolor'], disabledColor=control['disabledcolor'], alignment=control['align'],\
                     hasPath=control['haspath'], angle=int(control['angle'])))#, shadowColor=control['shadowcolor']))
                 self.win.addControl(ctl)
+            # button control
             elif (control['type'] == 'button'):
                 if (control.has_key('info')):
                     if (control['info'][0] != ''): control['label'][0] = xbmc.getInfoLabel(control['info'][0])
                 ctl = (xbmcgui.ControlButton(x=int(control['posx']) + self.posx,\
                     y=int(control['posy']) + self.posy, width=int(control['width']), height=int(control['height']), label=control['label'][0],\
-                    font=control['font'], textColor=control['textcolor'], disabledColor=control['disabledcolor'], alignment=control['align'],\
+                    font=control['font'], textColor=control['textcolor'], focusedColor=control['focusedcolor'], disabledColor=control['disabledcolor'], alignment=control['align'],\
                     angle=int(control['angle']), shadowColor=control['shadowcolor'], focusTexture=control['texturefocus'],\
                     noFocusTexture=control['texturenofocus'], textXOffset=int(control['textoffsetx']), textYOffset=int(control['textoffsety'])))
                 self.win.addControl(ctl)
+            # checkmark control
             elif (control['type'] == 'checkmark'):
                 if (control.has_key('info')):
                     if (control['info'][0] != ''): control['label'][0] = xbmc.getInfoLabel(control['info'][0])
@@ -257,12 +261,14 @@ class GUIBuilder:
                     focusTexture=control['texturecheckmark'], noFocusTexture=control['texturecheckmarknofocus'],\
                     checkWidth=int(control['markwidth']), checkHeight=int(control['markheight'])))
                 self.win.addControl(ctl)
+            # textbox control
             elif (control['type'] == 'textbox'):
                 ctl = (xbmcgui.ControlTextBox(x=int(control['posx']) + self.posx,\
                     y=int(control['posy']) + self.posy, width=int(control['width']), height=int(control['height']), font=control['font'],\
                     textColor=control['textcolor']))
                 self.win.addControl(ctl)
                 if (control.has_key('label')): ctl.setText(control['label'][0])
+            #fadelabel control
             elif (control['type'] == 'fadelabel'):
                 ctl = (xbmcgui.ControlFadeLabel(x=int(control['posx']) + self.posx,\
                     y=int(control['posy']) + self.posy, width=int(control['width']), height=int(control['height']), font=control['font'],\
@@ -274,6 +280,7 @@ class GUIBuilder:
                 if (control.has_key('label')):
                     for item in control['label']:
                         if (item != ''): ctl.addLabel(item)
+            # list control
             elif (control['type'] == 'list' or control['type'] == 'listcontrol'):
                 ctl = (xbmcgui.ControlList(x=int(control['posx']) + self.posx,\
                     y=int(control['posy']) + self.posy, width=int(control['width']), height=int(control['height']), font=control['font'],\
@@ -545,6 +552,7 @@ class GUIBuilder:
                     if (ctype == 'button'):
                         if (not ctl.has_key('textoffsetx')): ctl['textoffsetx'] = '0'
                         if (not ctl.has_key('textoffsety')): ctl['textoffsety'] = '0'
+                        if (not ctl.has_key('focusedcolor')): ctl['focusedcolor'] = ctl['textcolor']
 
                     if (ctype == 'checkmark'):
                         if (not ctl.has_key('texturecheckmark')): ctl['texturecheckmark'] = ''
