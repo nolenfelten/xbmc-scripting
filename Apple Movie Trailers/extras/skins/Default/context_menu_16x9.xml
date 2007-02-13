@@ -15,7 +15,7 @@
 
 
 	<defaultcontrol>1001</defaultcontrol>
-    <resolution>PAL</resolution>
+    <resolution>PAL16x9</resolution>
 	<coordinates>
 		<system>1</system>
 		<posx>0</posx>

@@ -6,8 +6,8 @@ class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         try:
             self.cwd = os.path.dirname( sys.modules['default'].__file__ )
-            self._ = kwargs['language']
             self.win = kwargs['win']
+            self._ = kwargs['language']
             self.list_control = kwargs['list_control']
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
