@@ -277,8 +277,9 @@ class Trailers:
         
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create( '%s   (%s)' % ( _( 70 ), _( 229 ), ) )
-        self.getMovieList( self.query[ 'incomplete_movies' ], full = True )
-        
+        full = self.getMovieList( self.query[ 'incomplete_movies' ], full = True )
+        if ( full ): self.complete = self.updateRecord( 'version', ( 'complete', ), ( full, 1, ), 'idVersion' )
+
         #########################################
         end_time = time.localtime()
         seconds = time.mktime(end_time) - time.mktime( self.start_time )
@@ -440,7 +441,7 @@ class Trailers:
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create( _( 85 ) )
         self.dialog.update( -1, _( 67 ) )
-        self.getMovieList( sql, params )
+        full = self.getMovieList( sql, params )
 
     def getActorStudio( self, movie ):
         actor_list = self.records.fetchall( self.query[ 'actors_by_movie_id' ], ( movie[ 0 ], ) )
@@ -472,11 +473,14 @@ class Trailers:
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
                         self.records.commit()
                         commit = False
-                        if ( self.dialog.iscanceled() ): break
+                        if ( self.dialog.iscanceled() ):
+                            full = False
+                            break
             else: self.movies = None
         except: traceback.print_exc()#pass
         self.records.close()
         self.dialog.close()
+        return full
             
     def getCategories( self, sql, params = False ):
         try:
