@@ -169,8 +169,8 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.controls[100 + self.pointer].setPosition(int(self.mousePos[self.pointer][0]) + self.coordinates[0] + self.positions[50][0], int(self.mousePos[self.pointer][1]) + self.coordinates[1]    + self.positions[50][1])
             self.controls[110 + self.pointer].setPosition(int(self.mousePos[self.pointer][0]) + self.coordinates[0] + self.positions[50][0] + (self.positions[110 + self.pointer][0] - self.positions[100 + self.pointer][0]), int(self.mousePos[self.pointer][1]) + self.coordinates[1] + self.positions[50][1] + (self.positions[110 + self.pointer][1] - self.positions[100 + self.pointer][1]))
             self.getColor(self.mousePos[self.pointer])
-        finally:
-            xbmcgui.unlock()
+        except: pass
+        xbmcgui.unlock()
         if (self.autoPWM): self.timerPWMCommand()
 
     def timerPWMCommand(self):
@@ -231,8 +231,8 @@ class windowOverlay(xbmcgui.WindowDialog):
                 for x in range(6):
                     posx[x] += step
                     self.controls[500 + x].setPosition(posx[x] + self.coordinates[0], self.positions[500 + x][1] + self.coordinates[1])
-            finally:
-                xbmcgui.unlock()
+            except: pass
+            xbmcgui.unlock()
             xbmc.sleep(5)
         self.demoPadToggling = False
         if (self.demoPadClosed): self.stopDemo()
