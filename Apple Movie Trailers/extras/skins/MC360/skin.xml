@@ -1,0 +1,678 @@
+<window>
+	<!--
+	The <resolution> tag is used for the setCoordinateResolution() function.
+	
+	You may move, add or delete any controls you want as long as they're not Required.
+	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+		
+	There are four special controls that are displayed based on if media is playing. You may set their
+	tag <visible>false</visible> if you don't want them, but DO NOT delete them.
+	
+	<type>list</type> have an additional tag <hidespinner>, if set to true, a scrollbar will be used
+	in place of the spinner control.
+	
+	<include> tags work and the defaults.xml file will be used for any missing tags.
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
+-->
+	<defaultcontrol always="true">10</defaultcontrol>
+	<resolution>PAL</resolution>
+	<controls>
+		<include>MediaIconBackGroundWhiteWash</include>
+		<include>ProgramCommonsKeymaps</include>
+		<include>MediaCommonsBlades</include>
+		<!-- labels -->
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="1">
+			<description>Title Label</description>
+			<width>250</width>
+			<posx>102</posx>
+			<posy>42</posy>
+			<label>0</label>
+			<align>left</align>
+			<font>font18</font>
+		</control>
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="1">
+			<description>Category Label</description>
+			<posx>650</posx>
+			<posy>42</posy>
+			<width>300</width>
+			<height>35</height>
+			<align>right</align>
+			<label>-</label>
+			<font>font18</font>
+		</control>
+		<control type="image">
+			<description>Top Button Divider</description>
+			<posx>90</posx>
+			<posy>60</posy>
+			<height>33</height>
+			<width>120</width>
+			<texture>button-nofocus.png</texture>
+		</control>
+		<!-- Buttons -->
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="10">
+			<description>Shortcut1 Button</description>
+			<label>200</label>
+			<posy>90</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>211</onup>
+			<ondown>20</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="20">
+			<description>Shortcut2 Button</description>
+			<label>201</label>
+			<posy>120</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="30">
+			<description>Shortcut3 Button</description>
+			<label>217</label>
+			<posy>150</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>20</onup>
+			<ondown>40</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="40">
+			<description>Genre Button</description>
+			<label>202</label>
+			<posy>180</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>30</onup>
+			<ondown>45</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="45">
+			<description>Studio Button</description>
+			<label>222</label>
+			<posy>210</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>40</onup>
+			<ondown>50</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="50">
+			<description>Actor Button</description>
+			<label>224</label>
+			<posy>240</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>45</onup>
+			<ondown>60</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="60">
+			<description>Search Button</description>
+			<label>203</label>
+			<posy>270</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>70</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="70">
+			<description>Settings Button</description>
+			<label>204</label>
+			<posy>300</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>60</onup>
+			<ondown>80</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="80">
+			<description>Optional Button</description>
+			<label>209</label>
+			<posy>330</posy>
+			<width>120</width>
+			<include>SystemInfoButton</include>
+			<onleft>95</onleft>
+			<onright>100</onright>
+			<onup>70</onup>
+			<ondown>210</ondown>
+			<onclick>self.showCredits()</onclick>
+		</control>
+		<!-- Trailer list controls -->
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Trailer List Scrollbar Up Arrow</description>
+			<posx>485</posx>
+			<posy>85</posy>
+			<width>15</width>
+			<height>20</height>
+			<texture>scrollbar-up-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Trailer List Scrollbar Middle</description>
+			<posx>485</posx>
+			<posy>105</posy>
+			<width>15</width>
+			<height>245</height>
+			<texture>scrollbar-middle.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Trailer List Scrollbar Down Arrow</description>
+			<posx>485</posx>
+			<posy>350</posy>
+			<width>15</width>
+			<height>20</height>
+			<texture>scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="button" id="900">
+			<description>Trailer List Scrollbar Position Indicator</description>
+			<label>-</label>
+			<posx>485</posx>
+			<posy>141</posy>
+			<width>15</width>
+			<height>20</height>
+			<texturefocus>scrollbar-indicator-focus.png</texturefocus>
+			<texturenofocus>scrollbar-indicator-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
+			<disabledcolor>00ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>110</onleft>
+			<onright>91</onright>
+			<onup>900</onup>
+			<ondown>900</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="0">
+			<description>Trailer List Backdrop</description>
+			<posx>206</posx>
+			<posy>116</posy>
+			<width>280</width>
+			<height>266</height>
+			<texture>-</texture>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="100">
+			<description>Trailer List</description>
+			<font>font13</font>
+			<posx>211</posx>
+			<posy>85</posy>
+			<width>270</width>
+			<height>320</height>
+			<include>textcolor-white</include>
+			<include>textcolor-selected</include>
+			<textureup>sortup-nofocus.png</textureup>
+			<texturedown>sortdown-nofocus.png</texturedown>
+			<textureupfocus>sortup-focus.png</textureupfocus>
+			<texturedownfocus>sortdown-focus.png</texturedownfocus>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>iconlist-nofocus.png</texturenofocus>
+			<textureheight>30</textureheight>
+			<itemwidth>10</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>true</hidespinner>
+			<spacebetweenitems>2</spacebetweenitems>
+			<image>-</image>
+			<textxoff>3</textxoff>
+			<suffix>|</suffix>
+			<aligny>center</aligny>
+			<onup>100</onup>
+			<ondown>100</ondown>
+			<onleft>10</onleft>
+			<onright>110</onright>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="1">
+			<description>Trailer List Count Label</description>
+			<width>100</width>
+			<posx>475</posx>
+			<posy>377</posy>
+			<align>right</align>
+			<label>-</label>
+			<font>font10</font>
+			<include>textcolor-yellow</include>
+			<visible>false</visible>
+		</control>
+		<!-- Category list controls -->
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Category List Scrollbar Up Arrow</description>
+			<posx>660</posx>
+			<posy>121</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>scrollbar_uparrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Category List Scrollbar Middle</description>
+			<posx>660</posx>
+			<posy>141</posy>
+			<width>20</width>
+			<height>344</height>
+			<texture>scrollbar_background.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Category List Scrollbar Down Arrow</description>
+			<posx>660</posx>
+			<posy>485</posy>
+			<width>20</width>
+			<height>20</height>
+			<texture>scrollbar_downarrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="button" id="91">
+			<description>Category List Scrollbar Position Indicator</description>
+			<label>-</label>
+			<posx>660</posx>
+			<posy>141</posy>
+			<width>20</width>
+			<height>16</height>
+			<texturefocus>scrollbar_focus.png</texturefocus>
+			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
+			<disabledcolor>00ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>900</onleft>
+			<onright>210</onright>
+			<onup>91</onup>
+			<ondown>91</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="0">
+			<description>Category List Backdrop</description>
+			<posx>206</posx>
+			<posy>116</posy>
+			<width>455</width>
+			<height>394</height>
+			<texture>folder-nofocus.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="110">
+			<description>Category List</description>
+			<font>font13</font>
+			<posx>211</posx>
+			<posy>90</posy>
+			<width>445</width>
+			<height>416</height>
+			<include>textcolor-selected</include>
+			<textureup>sortup-nofocus.png</textureup>
+			<texturedown>sortdown-nofocus.png</texturedown>
+			<textureupfocus>sortup-focus.png</textureupfocus>
+			<texturedownfocus>sortdown-focus.png</texturedownfocus>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>iconlist-nofocus.png</texturenofocus>
+			<textureheight>30</textureheight>
+			<itemwidth>22</itemwidth>
+			<itemheight>22</itemheight>
+			<hidespinner>false</hidespinner>
+			<spacebetweenitems>1</spacebetweenitems>
+			<image>-</image>
+			<textxoff>3</textxoff>
+			<suffix>|</suffix>
+			<aligny>center</aligny>
+			<onup>110</onup>
+			<ondown>110</ondown>
+			<onleft>100</onleft>
+			<onright>900</onright>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="1">
+			<description>Category List Count Label</description>
+			<width>100</width>
+			<posx>650</posx>
+			<posy>470</posy>
+			<align>right</align>
+			<label>-</label>
+			<font>font13</font>
+			<visible>false</visible>
+		</control>
+		<!-- info controls -->
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="201">
+			<description>Trailer Poster</description>
+			<posx>510</posx>
+			<posy>120</posy>
+			<width>150</width>
+			<height>220</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="200">
+			<description>Poster Backdrop</description>
+			<posx>505</posx>
+			<posy>110</posy>
+			<width>160</width>
+			<height>240</height>
+			<texture>middle-panel.png</texture>
+			<aspectratio>stretch</aspectratio>
+			<colordiffuse>90FFFFFF</colordiffuse>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="202">
+			<description>Trailer Rating</description>
+			<posx>520</posx>
+			<posy>320</posy>
+			<width>66</width>
+			<height>15</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="203">
+			<description>Trailer Favorite Overlay</description>
+			<posx>635</posx>
+			<posy>320</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>buddyitem-ping.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="204">
+			<description>Trailer Watched Overlay</description>
+			<posx>635</posx>
+			<posy>320</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>OverlayWatched.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="205">
+			<description>Trailer Saved Overlay</description>
+			<posx>635</posx>
+			<posy>320</posy>
+			<width>16</width>
+			<height>16</height>
+			<texture>OverlayRAR.png</texture>
+			<aspectratio>keep</aspectratio>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="206">
+			<description>Trailer Title</description>
+			<width>400</width>
+			<posx>145</posx>
+			<posy>375</posy>
+			<align>left</align>
+			<label>-</label>
+			<font>font13</font>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="210">
+			<description>Plot Button</description>
+			<label>215</label>
+			<posx>100</posx>
+			<posy>370</posy>
+			<width>32</width>
+			<height>32</height>
+			<texturefocus>icon-appletrailers.png</texturefocus>
+			<texturenofocus>icon-appletrailers.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<align>center</align>
+			<aligny>center</aligny>
+			<onleft>210</onleft>
+			<onright>211</onright>
+			<onup>80</onup>
+			<ondown>211</ondown>
+			<!--visible>Control.IsVisible(215)</visible-->
+			<visible>false</visible>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="211">
+			<description>Cast Button</description>
+			<label>216</label>
+			<posx>100</posx>
+			<posy>370</posy>
+			<width>32</width>
+			<height>32</height>
+			<texturefocus>icon-friends.png</texturefocus>
+			<texturenofocus>icon-friends.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<align>center</align>
+			<aligny>center</aligny>
+			<onleft>210</onleft>
+			<onright>215</onright>
+			<onup>210</onup>
+			<ondown>10</ondown>
+			<!--visible>Control.IsVisible(216)</visible-->
+			<visible>false</visible>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="textbox" id="215">
+			<description>Trailer Plot</description>
+			<posx>100</posx>
+			<posy>405</posy>
+			<width>550</width>
+			<height>100</height>
+			<font>font12</font>
+			<include>TextcolorBlack</include>
+			<onup>215</onup>
+			<ondown>215</ondown>
+			<onleft>211</onleft>
+			<onright>216</onright>
+			<textureup>sortup-nofocus.png</textureup>
+			<texturedown>sortdown-nofocus.png</texturedown>
+			<textureupfocus>sortup-focus.png</textureupfocus>
+			<texturedownfocus>sortdown-focus.png</texturedownfocus>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Cast List Scrollbar Up Arrow</description>
+			<posx>655</posx>
+			<posy>405</posy>
+			<width>16</width>
+			<height>20</height>
+			<texture>scrollbar-up-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Cast List Scrollbar Middle</description>
+			<posx>655</posx>
+			<posy>425</posy>
+			<width>16</width>
+			<height>50</height>
+			<texture>scrollbar-middle.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="image" id="1">
+			<description>Cast List Scrollbar Down Arrow</description>
+			<posx>655</posx>
+			<posy>475</posy>
+			<width>16</width>
+			<height>20</height>
+			<texture>scrollbar-down-arrow.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
+		<control type="button" id="95">
+			<description>Cast List Scrollbar Position Indicator</description>
+			<label>-</label>
+			<posx>655</posx>
+			<posy>428</posy>
+			<width>16</width>
+			<height>16</height>
+			<texturefocus>scrollbar-indicator-focus.png</texturefocus>
+			<texturenofocus>scrollbar-indicator-nofocus.png</texturenofocus>
+			<font>font13</font>
+			<textcolor>00FFFFFF</textcolor>
+			<shadowcolor>00FFFFFF</shadowcolor>
+			<disabledcolor>00ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>216</onleft>
+			<onright>10</onright>
+			<onup>95</onup>
+			<ondown>95</ondown>
+			<onclick>-</onclick>
+		</control>
+		<!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="0">
+			<description>Cast List Backdrop</description>
+			<posx>206</posx>
+			<posy>423</posy>
+			<width>445</width>
+			<height>106</height>
+			<texture>folder-nofocus.png</texture>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="216">
+			<description>Cast List</description>
+			<posx>100</posx>
+			<posy>405</posy>
+			<width>550</width>
+			<height>120</height>
+			<include>textcolor-selected</include>
+			<textureup>sortup-nofocus.png</textureup>
+			<texturedown>sortdown-nofocus.png</texturedown>
+			<textureupfocus>sortup-focus.png</textureupfocus>
+			<texturedownfocus>sortdown-focus.png</texturedownfocus>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>iconlist-nofocus.png</texturenofocus>
+			<textureheight>30</textureheight>
+			<itemwidth>16</itemwidth>
+			<itemheight>30</itemheight>
+			<hidespinner>true</hidespinner>
+			<spacebetweenitems>0</spacebetweenitems>
+			<!--visible>!Control.IsVisible(100)</visible-->
+			<onup>216</onup>
+			<ondown>216</ondown>
+			<onleft>215</onleft>
+			<onright>216</onright>
+			<visible>false</visible>
+		</control>
+		<!-- special controls for media playing info -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="image" id="300">
+			<description>X Button On</description>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>-</texture>
+			<!--visible>Player.HasMedia</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="image" id="301">
+			<description>X Button Off</description>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>-</texture>
+			<!--visible>!Player.Hasmedia</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="label" id="302">
+			<description>Full-Screen Visualisation Label</description>
+			<font>font12</font>
+			<posx>115</posx>
+			<posy>528</posy>
+			<label>220</label>
+			<align>left</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>Player.HasAudio</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="label" id="303">
+			<description>Full-Screen Video Label</description>
+			<font>font12</font>
+			<posx>50</posx>
+			<posy>500</posy>
+			<label>221</label>
+			<align>center</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>Player.HasVideo</visible-->
+			<visible>false</visible>
+		</control>
+	</controls>
+</window>
