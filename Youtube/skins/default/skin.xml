@@ -155,7 +155,7 @@
 
 		<control type="button" id="24">
 			<description>Most Viewed Button</description>
-			<label>Most Viewed Rated</label>
+			<label>Most Viewed</label>
 			<posx>40</posx>
 			<posy>235</posy>
 			<width>150</width>
@@ -179,5 +179,59 @@
 			<visible>false</visible>
 		</control>
 		<!-- END: Feeds menu buttons -->
+
+		<!-- START: Time frame buttons -->
+		<control type="button" id="30">
+			<description>Today Button</description>
+			<label>Today</label>
+			<posx>40</posx>
+			<posy>325</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>33</onup>
+			<ondown>31</ondown>
+			<visible>false</visible>
+		</control>
+
+		<control type="button" id="31">
+			<description>This Week Button</description>
+			<label>This Week</label>
+			<posx>40</posx>
+			<posy>355</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>30</onup>
+			<ondown>32</ondown>
+			<visible>false</visible>
+		</control>
+
+		<control type="button" id="32">
+			<description>This Month Button</description>
+			<label>This Month</label>
+			<posx>40</posx>
+			<posy>385</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>31</onup>
+			<ondown>33</ondown>
+			<visible>false</visible>
+		</control>
+
+		<control type="button" id="33">
+			<description>All Time Button</description>
+			<label>All Time</label>
+			<posx>40</posx>
+			<posy>415</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>32</onup>
+			<ondown>30</ondown>
+			<visible>false</visible>
+		</control>
+		<!-- END: Time frame buttons -->
 	</controls>
 </window>

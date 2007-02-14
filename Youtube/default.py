@@ -59,8 +59,8 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_MAIN = 1
 	STATE_FEEDS = 2
 	STATE_USERS = 4
-	STATE_MOST_VIEWED = STATE_FEEDS | 8 
-	STATE_MOST_DISCUSSED = STATE_FEEDS | 16
+	STATE_MOST_DISCUSSED = STATE_FEEDS | 8
+	STATE_MOST_VIEWED = STATE_MOST_DISCUSSED | 16
 
 	def __init__(self):
 		try: 
@@ -186,6 +186,8 @@ class YouTubeGUI(xbmcgui.Window):
 			if action == ACTION_PREVIOUS_MENU:
 				if self.state is YouTubeGUI.STATE_MAIN:
 					self.close()
+				elif self.state & ~YouTubeGUI.STATE_FEEDS & YouTubeGUI.STATE_MOST_DISCUSSED:
+					self.set_button_state(YouTubeGUI.STATE_FEEDS)
 				else:
 					self.set_button_state(YouTubeGUI.STATE_MAIN)
 		except:
@@ -198,10 +200,14 @@ class YouTubeGUI(xbmcgui.Window):
 		try: 
 			if ctrl is self.controls['Content List']['control']:
 				self.play_clip()
-			elif self.state & YouTubeGUI.STATE_MAIN:
+			elif self.state is YouTubeGUI.STATE_MAIN:
 				self.on_control_main(ctrl)
-			elif self.state & YouTubeGUI.STATE_FEEDS:
+			elif self.state is YouTubeGUI.STATE_FEEDS:
 				self.on_control_feeds(ctrl)
+			elif self.state is YouTubeGUI.STATE_MOST_VIEWED:
+				self.on_control_most_viewed(ctrl)
+			elif self.state is YouTubeGUI.STATE_MOST_DISCUSSED:
+				self.on_control_most_discussed(ctrl)
 		except:
 			xbmc.log('Exception (onControl): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
@@ -230,8 +236,28 @@ class YouTubeGUI(xbmcgui.Window):
 			self.list_contents('top_favorites')
 		elif ctrl is self.controls['Top Rated Button']['control']:
 			self.list_contents('top_rated')
-		else:
-			self.not_implemented()
+		elif ctrl is self.controls['Most Viewed Button']['control']:
+			self.set_button_state(YouTubeGUI.STATE_MOST_VIEWED)
+		elif ctrl is self.controls['Most Discussed Button']['control']:
+			self.set_button_state(YouTubeGUI.STATE_MOST_DISCUSSED)
+
+	def on_control_most_viewed(self, ctrl):
+		if ctrl is self.controls['Today Button']['control']:
+			self.list_contents('top_viewed_today')
+		elif ctrl is self.controls['This Week Button']['control']:
+			self.list_contents('top_viewed_week')
+		elif ctrl is self.controls['This Month Button']['control']:
+			self.list_contents('top_viewed_month')
+		elif ctrl is self.controls['All Time Button']['control']:
+			self.list_contents('top_viewed')
+
+	def on_control_most_discussed(self, ctrl):
+		if ctrl is self.controls['Today Button']['control']:
+			self.list_contents('most_discussed_today')
+		elif ctrl is self.controls['This Week Button']['control']:
+			self.list_contents('most_discussed_week')
+		elif ctrl is self.controls['This Month Button']['control']:
+			self.list_contents('most_discussed_month')
 
 	# Update what buttons are to be shown.
 	# TODO: Add support for Most Viewed, Most Discussed.
@@ -261,6 +287,21 @@ class YouTubeGUI(xbmcgui.Window):
 
 		if visible:
 			dominant = self.controls['Recently Added Button']['control']
+
+		# Are we in the most viewed menu?
+		visible = bool(state & ~YouTubeGUI.STATE_FEEDS & YouTubeGUI.STATE_MOST_DISCUSSED)
+
+		self.controls['Today Button']['control'].setVisible(visible)
+		self.controls['This Week Button']['control'].setVisible(visible)
+		self.controls['This Month Button']['control'].setVisible(visible)
+
+		if visible:
+			dominant = self.controls['Today Button']['control']
+
+		# Are we in the most viewed menu?
+		visible = bool(state & ~YouTubeGUI.STATE_MOST_DISCUSSED & YouTubeGUI.STATE_MOST_VIEWED)
+
+		self.controls['All Time Button']['control'].setVisible(visible)
 
 		# Set focus to the top-most visible button, and move
 		# to that when leaving the list.
