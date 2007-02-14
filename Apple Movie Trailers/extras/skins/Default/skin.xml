@@ -681,7 +681,7 @@
 		<control type="label" id="206">
 			<description>Trailer Title</description>
 			<width>400</width>
-			<posx>240</posx>
+			<posx>248</posx>
 			<posy>375</posy>
 			<align>left</align>
 			<label>-</label>
@@ -697,7 +697,7 @@
 			<label>215</label>
 			<posx>211</posx>
 			<posy>370</posy>
-			<width>24</width>
+			<width>32</width>
 			<height>32</height>
 			<texturefocus>\plot-button-focus.png</texturefocus>
 			<texturenofocus>\plot-button-nofocus.png</texturenofocus>
@@ -723,7 +723,7 @@
 			<label>216</label>
 			<posx>211</posx>
 			<posy>370</posy>
-			<width>24</width>
+			<width>32</width>
 			<height>32</height>
 			<texturefocus>\cast-button-focus.png</texturefocus>
 			<texturenofocus>\cast-button-nofocus.png</texturenofocus>

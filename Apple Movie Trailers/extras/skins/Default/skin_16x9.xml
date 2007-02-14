@@ -318,7 +318,7 @@
 			<description>Trailer List Scrollbar Up Arrow</description>
 			<posx>502</posx>
 			<posy>121</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
@@ -329,7 +329,7 @@
 			<description>Trailer List Scrollbar Middle</description>
 			<posx>502</posx>
 			<posy>137</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>201</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
@@ -340,7 +340,7 @@
 			<description>Trailer List Scrollbar Down Arrow</description>
 			<posx>502</posx>
 			<posy>338</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
@@ -352,7 +352,7 @@
 			<label>-</label>
 			<posx>502</posx>
 			<posy>137</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
 			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
@@ -458,7 +458,7 @@
 			<description>Category List Scrollbar Up Arrow</description>
 			<posx>657</posx>
 			<posy>121</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
@@ -469,7 +469,7 @@
 			<description>Category List Scrollbar Middle</description>
 			<posx>657</posx>
 			<posy>137</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>357</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
@@ -480,7 +480,7 @@
 			<description>Category List Scrollbar Down Arrow</description>
 			<posx>657</posx>
 			<posy>494</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
@@ -492,7 +492,7 @@
 			<label>-</label>
 			<posx>657</posx>
 			<posy>137</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
 			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
@@ -769,7 +769,7 @@
 			<description>Cast List Scrollbar Up Arrow</description>
 			<posx>647</posx>
 			<posy>403</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
@@ -780,7 +780,7 @@
 			<description>Cast List Scrollbar Middle</description>
 			<posx>647</posx>
 			<posy>419</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>71</height>
 			<texture>\scrollbar-middle.png</texture>
 			<visible>false</visible>
@@ -791,7 +791,7 @@
 			<description>Cast List Scrollbar Down Arrow</description>
 			<posx>647</posx>
 			<posy>490</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texture>\scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
@@ -803,7 +803,7 @@
 			<label>-</label>
 			<posx>647</posx>
 			<posy>419</posy>
-			<width>16</width>
+			<width>12</width>
 			<height>16</height>
 			<texturefocus>\scrollbar-indicator-focus.png</texturefocus>
 			<texturenofocus>\scrollbar-indicator-nofocus.png</texturenofocus>
