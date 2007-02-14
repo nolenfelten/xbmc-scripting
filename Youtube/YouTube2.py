@@ -33,6 +33,7 @@ from xml.sax.saxutils import escape
 timeout = 30
 socket.setdefaulttimeout(timeout)
 
+# TODO: Add support for browsing users, and perhaps even adding stuff to profile.
 class YouTube2:
 	DIR = 0
 	VIDEO = 1
@@ -47,20 +48,18 @@ class YouTube2:
 	search_url = 'http://youtube.com/rss/search/%s.rss'
 
 	def __init__(self):
-		#self.base_url = 'http://svt.se/svt/road/Classic/shared/mediacenter/'
-		#self.default_url = self.base_url+'navigation.jsp?&frameset=true'
 		pass
 
-	def parse_feed(self, feed):
+	def get_feed(self, feed):
 		url = YouTube2.feed_url % feed
-		return self._parse_feed(url)
+		return self.parse_rss(url)
 	
-	def parse_search(self, term):
+	def search(self, term):
 		friendly_term = escape(term).replace(' ', '+')
 		url = YouTube2.search_url % friendly_term
-		return self._parse_feed(url)
+		return self.parse_rss(url)
 
-	def _parse_feed(self, url):
+	def parse_rss(self, url):
 		list = []
 
 		d = feedparser.parse(url)
@@ -77,10 +76,12 @@ class YouTube2:
 			session = res.group(1)
 			return YouTube2.stream_url % (id, session)
 		else:
+			# TODO: Throw exception or something.
 			print "ERROR!!!!!!!!"
 			print data
 			return None
 
+	# TODO: Get rid of most of this crap.
 	def fetch_data(url, func=None, udata=None):
 		print "Fetching url: " + url
 		req = urllib2.Request(unescape(url))
