@@ -150,7 +150,7 @@
 			<posy>95</posy>
 			<height>21</height>
 			<width>18</width>
-			<texture>left_arrow.png</texture>
+			<texture>selectarrow-left.png</texture>
 		</control>
 		<control type="image" id="101">
 			<description>Button Right Arrow</description>
@@ -158,7 +158,7 @@
 			<posy>95</posy>
 			<height>21</height>
 			<width>18</width>
-			<texture>right-arrow.png</texture>
+			<texture>selectarrow-right.png</texture>
 		</control>
 		<control type="image" id="1">
 			<description>Divider</description>
