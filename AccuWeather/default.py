@@ -812,11 +812,12 @@ class window(xbmcgui.Window):
 
 
     def playerChk(self):
-        self.controls[300]['control'].setVisible(xbmc.getCondVisibility(self.visibility[300]))
-        self.controls[301]['control'].setVisible(xbmc.getCondVisibility(self.visibility[301]))
-        self.controls[302]['control'].setVisible(xbmc.getCondVisibility(self.visibility[302]))
-        self.controls[303]['control'].setVisible(xbmc.getCondVisibility(self.visibility[303]))
-
+        try:
+            self.controls[300]['control'].setVisible(xbmc.getCondVisibility(self.controls[300]['visible']))
+            self.controls[301]['control'].setVisible(xbmc.getCondVisibility(self.controls[301]['visible']))
+            self.controls[302]['control'].setVisible(xbmc.getCondVisibility(self.controls[302]['visible']))
+            self.controls[303]['control'].setVisible(xbmc.getCondVisibility(self.controls[303]['visible']))
+        except: pass
 
     def exitScript(self):
         self.ANIMATE = False
