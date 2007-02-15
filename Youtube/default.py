@@ -21,7 +21,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-from YouTube2 import YouTube2
+from YouTube2 import YouTube2, YouTubeUrlOpener
 import xbmcgui
 import xbmc
 import os
@@ -113,6 +113,33 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg = xbmcgui.Dialog()
 		dlg.ok('YouTube', 'Not Implemented, check back later')
 
+	# Update the progress dialog. If the user presses
+	# 'Cancel', then abort the download.
+	def progress_handler(self, done, total, dlg):
+		percent = int((done * 100.0) / total)
+		dlg.update(percent)
+		return not dlg.iscanceled()
+	
+	# Show an error dialog if the url could not be opened.
+	def error_handler(self, code, message, udata):
+		msg = '%d - %s' % (code, message)
+		dlg = xbmcgui.Dialog()
+		dlg.ok('YouTube', 'There was an error.', msg)
+
+	# Download data while showing a progress dialog
+	def download_data(self, arg, func):
+		dlg = xbmcgui.DialogProgress()
+		dlg.create('YouTube', 'Downloading content')
+
+		opener = YouTubeUrlOpener(self.error_handler, None,
+		                          self.progress_handler, dlg)
+		data = func(arg, opener)
+
+		dlg.close()
+
+		return data
+		
+
 	# Fire up the virtual keyboard and gather some text to search for.
 	# TODO: Add search history in some strange way
 	#       perhaps add a STATE_SEARCH with a history
@@ -146,30 +173,30 @@ class YouTubeGUI(xbmcgui.Window):
 		try:
 			desc, id = self.data[pos]
 		except IndexError, e:
+			# If this happens something is terribly wrong
 			print 'Index out of bounds'
-			# TODO: Show some error dialog.
+			self.close()
 			return
 
-		file = self.yt.parse_video(id)
-		if file == None:
-			print 'Nothing to play'
-			# TODO: Show some error dialog.
-			return
-
-		self.player.play(str(file))
+		file = self.download_data(id, self.yt.parse_video)
+		if file is not None:
+			self.player.play(str(file))
 
 	# Lists contents of some browsing result.
 	# TODO: Do something prettier to search.
-	#       Add progressbar for downloads.
 	def list_contents(self, url, search=False):
 		if search:
-			self.data = self.yt.search(url)
+			data = self.download_data(url, self.yt.search)
 		else:
-			self.data = self.yt.get_feed(url)
+			data = self.download_data(url, self.yt.get_feed)
 
-		if self.data == None:
-			# TODO: Show some error dialog.
+		# Either an error dialog has been shown, or the user
+		# aborted the download. Anyway, there's no new data
+		# to put in the list, so lets just keep the old.
+		if data == None or len(data) == 0:
 			return
+
+		self.data = data
 
 		list = self.controls['Content List']['control']
 
@@ -226,7 +253,6 @@ class YouTubeGUI(xbmcgui.Window):
 			self.not_implemented()
 
 	# Feeds menu events.
-	# TODO: Add support for Most Viewed, Most Discussed.
 	def on_control_feeds(self, ctrl):
 		if ctrl is self.controls['Recently Added Button']['control']:
 			self.list_contents('recently_added')
@@ -241,6 +267,7 @@ class YouTubeGUI(xbmcgui.Window):
 		elif ctrl is self.controls['Most Discussed Button']['control']:
 			self.set_button_state(YouTubeGUI.STATE_MOST_DISCUSSED)
 
+	# Most viewed time frame events
 	def on_control_most_viewed(self, ctrl):
 		if ctrl is self.controls['Today Button']['control']:
 			self.list_contents('top_viewed_today')
@@ -251,6 +278,7 @@ class YouTubeGUI(xbmcgui.Window):
 		elif ctrl is self.controls['All Time Button']['control']:
 			self.list_contents('top_viewed')
 
+	# Most discussed time frame events
 	def on_control_most_discussed(self, ctrl):
 		if ctrl is self.controls['Today Button']['control']:
 			self.list_contents('most_discussed_today')
@@ -260,7 +288,6 @@ class YouTubeGUI(xbmcgui.Window):
 			self.list_contents('most_discussed_month')
 
 	# Update what buttons are to be shown.
-	# TODO: Add support for Most Viewed, Most Discussed.
 	def set_button_state(self, state):
 		xbmcgui.lock()
 
@@ -303,7 +330,8 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.controls['All Time Button']['control'].setVisible(visible)
 
-		# Set focus to the top-most visible button, and move
+
+		# Set focus to the top-most relevant button, and move
 		# to that when leaving the list.
 		self.setFocus(dominant)
 		self.controls['Content List']['control'].controlLeft(dominant)
