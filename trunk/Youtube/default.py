@@ -88,7 +88,7 @@ class YouTubeGUI(xbmcgui.Window):
 		if not name:
 			name = 'default'
 
-		skin_path = os.path.join(os.getcwd()[:-1], 'skins', name)
+		skin_path = os.path.join(os.getcwd().replace(';',''), 'skins', name)
 		skin = os.path.join(skin_path, 'skin.xml')
 
 		self.img_path = os.path.join(skin_path, 'gfx')
