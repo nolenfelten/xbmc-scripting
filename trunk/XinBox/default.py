@@ -28,6 +28,8 @@ NEWFOLDER = "NEW\\"
 CORFOLDER = "COR\\"
    
 SETTINGS_FILE = "settings.xml"
+MMSETTINGS_FILE = "mmsettings.xml"
+AUTOEXEC_FILE = "auto.dat"
 
 TEMPFOLDER = SRC_Dir + "temp\\"
 VERSION = "(V.0.3)"
@@ -62,15 +64,15 @@ class Language:
 			self.strings[int(stringdat[0])] = str(stringdat[1])
 
 	def string(self,number):
-		if int(number) in self.strings:
+                if int(number) in self.strings:
                         if self.foundlang == "french":
                                 return self.strings[int(number)]
                         elif self.foundlang == "english":
                                 return self.strings[int(number)]
                         else:
                                 return unicode (self.strings[int(number)], 'utf-8')
-		else:
-			return "unknown string id"
+                else:
+                        return "unknown string id"
 
 
 
@@ -147,8 +149,11 @@ class xbmcmail(xbmcgui.Window):
         self.setting1 = 0
         screenheight = self.getHeight()
         self.settings = False
+        self.mmsetting = False
         self.setResolution()
         self.addControl(xbmcgui.ControlImage(0,0,720,576, IMAGE_DIR+'background.png'))
+        self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=1, buttonFocusTexture=IMAGE_DIR+"focus.png")
+        self.mmsList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=1, buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.fsoverlay = xbmcgui.ControlImage(0,0,720,576,IMAGE_DIR+ 'background.png')
         self.seoverlay = xbmcgui.ControlImage(0,0,720,576,IMAGE_DIR+ 'background.png')
         self.title = xbmcgui.ControlLabel(250, 80, 200, 100, "XinBox", "font18", "FFB2D4F5")
@@ -158,7 +163,7 @@ class xbmcmail(xbmcgui.Window):
         self.vaButton = xbmcgui.ControlButton(64, 260, 135, 30, "Attachments",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
         self.seButton = xbmcgui.ControlButton(64, 294, 135, 30, "Settings",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
         self.mmButton = xbmcgui.ControlButton(64, 328, 135, 30, "Mini Mode",focusTexture=IMAGE_DIR+ 'button-focus.png',noFocusTexture=IMAGE_DIR+ 'button-nofocus.png')
-        self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14',buttonFocusTexture=IMAGE_DIR+"focus.png")
+        self.listControl = xbmcgui.ControlList(238, 120, 434, 200, 'font14',space=1,buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.attachlist = xbmcgui.ControlList(238, 340, 434, 200, 'font14',buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.msgbody = xbmcgui.ControlTextBox(216, 340, 456, 200, 'font13')
         self.fsmsgbody = xbmcgui.ControlTextBox(60, 50, 600, 500, 'font13')
@@ -177,6 +182,7 @@ class xbmcmail(xbmcgui.Window):
         self.addControl(self.fsButton)
         self.addControl(self.vaButton)
         self.addControl(self.seButton)
+        self.addControl(self.mmButton)
         self.addControl(self.listControl)
         self.addControl(self.attachlist)
         self.attachlist.setVisible(False)
@@ -187,11 +193,13 @@ class xbmcmail(xbmcgui.Window):
         self.csButton.controlUp(self.cmButton)
         self.csButton.controlDown(self.seButton)
         self.seButton.controlUp(self.csButton)
+        self.seButton.controlDown(self.mmButton)
+        self.mmButton.controlUp(self.seButton)
         self.setFocus(self.cmButton)
         self.show()
         return
 
-
+        
     def setResolution( self ):
         #Thanks to Nuka for this function :-D
         global reso
@@ -240,22 +248,30 @@ class xbmcmail(xbmcgui.Window):
         self.run()
 
     def run(self):
-        global user, server, passw, ssl, test
+        global user, server, passw, ssl, test, mmxb1en, mmxb2en
         while test == 1:
-            try:
-                user = self.user1
-                server = self.server1
-                passw = self.pass1
-                ssl = self.ssl1
-                self.checkmail()
-            except:pass
-            try:
-                user = self.user2
-                server = self.server2
-                passw = self.pass2
-                ssl = self.ssl2
-                self.checkmail()
-            except:pass
+            if mmxb1en == 1:
+                    try:
+                        user = self.user1
+                        server = self.server1
+                        passw = self.pass1
+                        ssl = self.ssl1
+                        if user == "-" or server == "-":
+                                pass
+                        else:
+                                self.checkmail()
+                    except:pass
+            if mmxb2en == 1:
+                    try:
+                        user = self.user2
+                        server = self.server2
+                        passw = self.pass2
+                        ssl = self.ssl2
+                        if user == "-" or server == "-":
+                                pass
+                        else:
+                                self.checkmail()
+                    except:pass
         self.close()
 
 
@@ -345,12 +361,40 @@ class xbmcmail(xbmcgui.Window):
                 keyboard.setHiddenInput(False)
             except:pass
             del m
+    def getglobal(self):
+        global mmxb1en, mmxb2en
+        self.readmmconfig()
+        if self.mmxb1 == "yes":
+                mmxb1en = 1  
+        elif self.mmxb1 == "no" or self.mmxb1 == "-":
+                mmxb1en = 0
+        if self.mmxb2 == "yes":
+                mmxb2en = 1  
+        elif self.mmxb2 == "no" or self.mmxb2 == "-":
+                mmxb2en = 0
+        if mmxb2en == 0 and mmxb1en == 0:
+                dialog = xbmcgui.DialogProgress()
+                dialog.create("WARNING!", "Please Enter Mini Mode Settings!")
+                time.sleep(1)
+                dialog.close()
+                self.mmsettings()
+        else:
+                self.gogogo()
 
     def startup(self):
+        global mmxb1en, mmxb2en
         self.define()
+        self.readmmconfig()
+        self.writemmconfig()         
         self.gettally()
         self.readconfig()
         self.writeconfig()
+        try:
+                fh = open(DATA_DIR + AUTOEXEC_FILE)
+                fh.close()
+                os.remove(DATA_DIR + AUTOEXEC_FILE)
+                self.getglobal()
+        except:pass
         if self.MasterPassEnable == "yes": 
             if self.masterpass != "-":
                 self.masterpasscheck()
@@ -361,8 +405,20 @@ class xbmcmail(xbmcgui.Window):
         elif self.MasterPassEnable == "-":
             self.masspasswsetup()
 
+    def enablesmm (self):
+            try:
+                    shutil.move(DATA_DIR + "autoexec.py", "Q:\\scripts\\")
+            except:pass
+            return
+
+    def disablesmm (self):
+            try:
+                    shutil.move("Q:\\scripts\\" + "autoexec.py", DATA_DIR)
+            except:pass
+            return
+
     def define(self):
-        global Inbox1, Inbox2
+        global Inbox1, Inbox2, mmxb1en, mmxb2en, auto
         self.MasterPassEnable = "-"
         self.masterpass = "-"
         self.server1 = "-" 
@@ -373,10 +429,16 @@ class xbmcmail(xbmcgui.Window):
         self.user2 = "-" 
         self.pass2 = "-" 
         self.ssl2 = "-"
+        self.mmxb1 = "-"
+        self.mmxb2 = "-"
+        self.mmsten = "-"
         self.settingssaved = 0
+        self.mmsettingssaved = 0
         self.firsttime = 0
         Inbox1 = "stage0"
         Inbox2 = "stage0"
+        mmxb1en = 0
+        mmxb2en = 0
         try:
                 os.mkdir(DATA_DIR)
                 os.mkdir(TEMPFOLDER)
@@ -427,6 +489,25 @@ class xbmcmail(xbmcgui.Window):
             self.readconfig()
             return
 
+
+    def readmmconfig(self):
+        try:
+            fh = open(Root_Dir + MMSETTINGS_FILE)
+            for line in fh.readlines():
+                theLine = line.strip()
+                if theLine.count("<enable1>") > 0:
+                    self.mmxb1 = theLine[9:-10]
+                if theLine.count("<enable2>") > 0:
+                    self.mmxb2 = theLine[9:-10]               
+                if theLine.count("<startupenable>") > 0:
+                    self.mmsten = theLine[15:-16]  
+                    fh.close()
+            return
+        except IOError:
+            self.createmmconfig()
+            self.readmmconfig()
+            return
+        
     def gettally(self):
         self.readtally()
         if self.tally == "-":
@@ -480,6 +561,15 @@ class xbmcmail(xbmcgui.Window):
             f.close()
             return
 
+    def createmmconfig(self):
+            f = open(Root_Dir + MMSETTINGS_FILE, "wb")
+            f.write("<mmsettings>\n")
+            f.write("\t<enable1>-</enable1>\n")
+            f.write("\t<enable2>-</enable2>\n")
+            f.write("\t<startupenable>-</startupenable>\n")
+            f.write("</mmsettings>\n")
+            f.close()
+            return
     def writeconfig(self):
             f = open(Root_Dir + SETTINGS_FILE, "wb")
             f.write("<settings>\n")
@@ -497,6 +587,16 @@ class xbmcmail(xbmcgui.Window):
             f.close() 
             return
 
+    def writemmconfig(self):
+            f = open(Root_Dir + MMSETTINGS_FILE, "wb")
+            f.write("<mmsettings>\n")
+            f.write("\t<enable1>"+ self.mmxb1 +"</enable1>\n")
+            f.write("\t<enable2>"+ self.mmxb2 +"</enable2>\n")
+            f.write("\t<startupenable>"+ self.mmsten +"</startupenable>\n")
+            f.write("</mmsettings>\n")
+            f.close() 
+            return
+        
     def writetempconfig(self):
             f = open(TEMPFOLDER + "TEMPFILE.xml", "wb")
             f.write("<settings>\n")
@@ -513,7 +613,15 @@ class xbmcmail(xbmcgui.Window):
             f.write("</settings>\n")
             f.close() 
             return
-
+    def writemmtempconfig(self):
+            f = open(TEMPFOLDER + "MMTEMPFILE.xml", "wb")
+            f.write("<mmsettings>\n")
+            f.write("\t<enable1>"+ self.mmxb1 +"</enable1>\n")
+            f.write("\t<enable2>"+ self.mmxb2 +"</enable2>\n")
+            f.write("\t<startupenable>"+ self.mmsten +"</startupenable>\n")
+            f.write("</mmsettings>\n")
+            f.close() 
+            return
 
     def getpassinput(self):
         dialog = xbmcgui.DialogProgress()
@@ -576,6 +684,7 @@ class xbmcmail(xbmcgui.Window):
                 keyboard.setHiddenInput(False)
             except:pass
             return
+
     def warning (self):
         dialog = xbmcgui.DialogProgress()
         dialog.create(lang.string(15),lang.string(16)) #id 15, 16
@@ -605,6 +714,49 @@ class xbmcmail(xbmcgui.Window):
         self.removeControl(self.theList)
         self.setFocus(self.cmButton)
         return
+
+    def resetmm(self):
+        self.removeControl(self.seoverlay)
+        self.removeControl(self.mmsList)
+        self.removeControl(self.mmone)
+        self.removeControl(self.mmtwo)
+        self.removeControl(self.mmthree)
+        return
+
+    #def enablesmm(self):
+        
+    def mmsettings (self):
+        fh = open(Root_Dir + MMSETTINGS_FILE)
+        self.comparesettings3 = fh.read()
+        fh.close()
+        self.readmmconfig()
+        self.mmsetting = True
+        self.addControl(self.seoverlay)
+        self.mmsList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=1, buttonFocusTexture=IMAGE_DIR+"focus.png")
+        self.addControl(self.mmsList)
+        self.mmone = xbmcgui.ControlLabel(40,124,200,35,"Mini Mode for Xinbox 1","font13","0xFFFFFFFF")
+        self.mmtwo = xbmcgui.ControlLabel(40,153,200,35,"Mini Mode for Xinbox 2","font13","0xFFFFFFFF")
+        self.mmthree = xbmcgui.ControlLabel(40,182,200,35,"Mini Mode on Startup","font13","0xFFFFFFFF")
+        if self.mmxb1 == "-":
+            self.mmsList.addItem(xbmcgui.ListItem("Enabel Mini Mode for Xinbox1?"))
+        else:
+            self.mmsList.addItem(xbmcgui.ListItem(self.mmxb1))
+        if self.mmxb2 == "-":
+            self.mmsList.addItem(xbmcgui.ListItem("Enabel Mini Mode for Xinbox2?"))
+        else:
+            self.mmsList.addItem(xbmcgui.ListItem(self.mmxb2))
+        if self.mmsten  == "-":
+            self.mmsList.addItem(xbmcgui.ListItem("Enabel Mini Mode on Startup?"))
+        else:
+            self.mmsList.addItem(xbmcgui.ListItem(self.mmsten ))
+        self.mmsList.addItem(xbmcgui.ListItem("Save Settings"))
+        self.mmsList.addItem(xbmcgui.ListItem("Back"))
+        self.addControl(self.mmone)
+        self.addControl(self.mmtwo)
+        self.addControl(self.mmthree)
+        self.setFocus(self.mmsList)
+
+
         
     def settingsmenu(self):
         fh = open(Root_Dir + SETTINGS_FILE)
@@ -613,9 +765,9 @@ class xbmcmail(xbmcgui.Window):
         self.settings = True
         self.readconfig()
         self.addControl(self.seoverlay)
+        self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=1, buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.one = xbmcgui.ControlLabel(40,124,200,35,lang.string(17)+"1","font13","0xFFFFFFFF") #id 17
         self.three = xbmcgui.ControlLabel(40,153,200,35,lang.string(18)+"1","font13","0xFFFFFFFF")#id 18
-        self.theList = xbmcgui.ControlList(205, 120, 470, 600, 'font14',space=0, buttonFocusTexture=IMAGE_DIR+"focus.png")
         self.four = xbmcgui.ControlLabel(40,182,200,35,lang.string(19)+"1","font13","0xFFFFFFFF")#id 19
         self.fourteen = xbmcgui.ControlLabel(40,211,200,35,"SSL1","font13","0xFFFFFFFF")
         self.five = xbmcgui.ControlLabel(40,240,200,35,lang.string(17)+"2","font13","0xFFFFFFFF")#id 17
@@ -681,6 +833,7 @@ class xbmcmail(xbmcgui.Window):
             self.theList.addItem(xbmcgui.ListItem(lang.string(37)))#id 37
         else:
             self.theList.addItem(xbmcgui.ListItem('*' * len(self.masterpass)))
+        self.theList.addItem(xbmcgui.ListItem("Mini Mode Settings"))
         self.theList.addItem(xbmcgui.ListItem(lang.string(38)))#id 38
         self.theList.addItem(xbmcgui.ListItem(lang.string(39)))#id 39
         self.setFocus(self.theList)
@@ -776,12 +929,7 @@ class xbmcmail(xbmcgui.Window):
 
     def openinbox(self):
         global user, server, passw, ssl, Inbox1, Inbox2
-        try:
-            self.addControl(self.mmButton)
-            self.seButton.controlDown(self.mmButton)
-            self.mmButton.controlUp(self.seButton)
-            self.mmButton.controlRight(self.listControl)
-        except: pass
+        self.mmButton.controlRight(self.listControl)
         self.listControl.reset()
         self.removeControl(self.title)
         self.title = xbmcgui.ControlLabel(250, 80, 300, 300, "XinBox - "+ user, "font18", "FFB2D4F5")
@@ -1079,6 +1227,10 @@ class xbmcmail(xbmcgui.Window):
                     self.settings = False
                     self.reset()
                     return
+                elif self.mmsetting:
+                    self.mmsetting = False
+                    self.resetmm()
+                    self.settingsmenu()
                 else:
                     self.close()
             elif action == 9: # CHANGE BACK TO "9" - B Button  #18 is used for PC TAB button
@@ -1134,7 +1286,7 @@ class xbmcmail(xbmcgui.Window):
         elif control == self.seButton:
             self.settingsmenu()
         elif control == self.mmButton:
-            self.gogogo()
+            self.getglobal()
         elif control == self.listControl:
             self.fsButton.setLabel(lang.string(1), "font14", "ffffffff")#id 1
             self.listControl.controlLeft(self.cmButton)
@@ -1164,8 +1316,7 @@ class xbmcmail(xbmcgui.Window):
             if lcfiletype=="jpg" or lcfiletype=="jpeg" or lcfiletype=="gif" or lcfiletype=="png" or lcfiletype=="bmp":
                 self.ShowImage(self.attachments[selected])
             else:
-                self.PlayMedia(self.attachments[selected])
-
+                self.PlayMedia(self.attachments[selected]) 
         elif control == self.theList:
             lstPos = self.theList.getSelectedPosition()
             if lstPos == 0:
@@ -1361,6 +1512,10 @@ class xbmcmail(xbmcgui.Window):
                     else:
                         return
             if lstPos == 10:
+                self.reset()
+                self.settings = False
+                self.mmsettings()
+            if lstPos == 11:
                 self.writeconfig()
                 self.settingssaved = 1
                 dialog = xbmcgui.DialogProgress()
@@ -1369,7 +1524,7 @@ class xbmcmail(xbmcgui.Window):
                 dialog.close()
                 self.readconfig()
                 return
-            elif lstPos == 11:
+            elif lstPos == 12:
                 if self.settingssaved != 1:
                     self.writetempconfig()
                     fh = open(TEMPFOLDER + "TEMPFILE.xml")
@@ -1397,6 +1552,107 @@ class xbmcmail(xbmcgui.Window):
                     self.readconfig()
                     self.reset()
                     return
+
+
+        elif control == self.mmsList:
+            dialog = xbmcgui.Dialog()
+            stPos = self.mmsList.getSelectedPosition()
+            if stPos == 0:
+                if self.mmxb1 == "-" or self.mmxb1 == "no":
+                    if dialog.yesno("Mini Mode Setup", "Enable Mini Mode for XinBox 1?"):
+                         self.mmxb1 = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")
+                    else:
+                         self.mmxb1 = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                elif self.mmxb1 == "yes":
+                    if dialog.yesno("Mini Mode Setup", "Disable Mini Mode for XinBox 1?"):
+                         self.mmxb1 = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                    else:
+                         self.mmxb1 = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")
+            elif stPos == 1:
+                if self.mmxb2 == "-" or self.mmxb2 == "no":
+                    if dialog.yesno("Mini Mode Setup", "Enable Mini Mode for XinBox 2?"):
+                         self.mmxb2 = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")
+                    else:
+                         self.mmxb2 = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                elif self.mmxb2 == "yes":
+                    if dialog.yesno("Mini Mode Setup", "Disable Mini Mode for XinBox 2?"):
+                         self.mmxb2 = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                    else:
+                         self.mmxb2 = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")
+            elif stPos == 2:
+                if self.mmsten == "-" or self.mmsten == "no":
+                    if dialog.yesno("Mini Mode Setup", "Enable Mini Mode On Start Up?"):
+                         self.mmsten = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")
+                    else:
+                         self.mmsten = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                elif self.mmsten == "yes":
+                    if dialog.yesno("Mini Mode Setup", "Disable Mini Mode On Start Up?"):
+                         self.mmsten = "no"
+                         self.mmsList.getSelectedItem(stPos).setLabel("no")
+                    else:
+                         self.mmsten = "yes"
+                         self.mmsList.getSelectedItem(stPos).setLabel("yes")                   
+            elif stPos == 3:
+                if self.mmsten == "yes":
+                    if (self.mmxb1 == "-" or self.mmxb1 == "no")  and (self.mmxb2 == "-" or self.mmxb2 == "no"):
+                            dialog = xbmcgui.DialogProgress()
+                            dialog.create("Mini Mode Setup","You can not enable Mini Mode with out at lease one XinBox to monitor!", "Settings Not Saved")
+                            time.sleep(3)
+                            dialog.close()
+                            return
+                    else:
+                            self.enablesmm()
+                elif self.mmsten == "no":
+                       self.disablesmm()
+                else:
+                       self.disablesmm()
+                self.writemmconfig()
+                self.readmmconfig()
+                self.mmsettingssaved = 1
+                dialog = xbmcgui.DialogProgress()
+                dialog.create(lang.string(60)) #id 60
+                time.sleep(1)
+                dialog.close()
+                self.readmmconfig()
+
+            elif stPos == 4:
+                if self.mmsettingssaved != 1:
+                    self.writemmtempconfig()
+                    fh = open(TEMPFOLDER + "MMTEMPFILE.xml")
+                    self.comparesettings4 = fh.read()
+                    fh.close()
+                    dialog = xbmcgui.Dialog()
+                    if self.comparesettings3 != self.comparesettings4: 
+                        if dialog.yesno(lang.string(15), lang.string(61)): #id 15, 61
+                            self.mmsetting = False
+                            self.mmsettingssaved = 0
+                            self.readmmconfig()
+                            self.resetmm()
+                            self.settingsmenu()
+                        else:
+                            return
+                    else:
+                        self.mmsettingssaved = 0
+                        self.mmsetting = False
+                        self.readmmconfig()
+                        self.resetmm()
+                        self.settingsmenu()
+                else:
+                    self.mmsettingssaved = 0
+                    self.mmsetting = False
+                    self.readmmconfig()
+                    self.resetmm()
+                    self.settingsmenu()
 
                 
 if os.access(TEMPFOLDER, os.F_OK)==0: #if folder doesn't exist
