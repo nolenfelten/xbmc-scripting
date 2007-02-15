@@ -812,9 +812,9 @@ class GUIBuilder:
                 # remove the <include>tagName</include> element
                 result = node.removeChild( include )
                 include.unlink()
+                include = self.FirstChildElement( node, "include" )
             else:
                 # invalid include
                 self.debugWrite( 'ResolveIncludes', False, [ 'Skin has invalid include: %s' ], [ ( str( tagName ), ) ] )
-                return
-            include = self.FirstChildElement( node, "include" )
+                include = self.NextSiblingElement( node, "include" )
         self.debugWrite( 'ResolveIncludes', True )
