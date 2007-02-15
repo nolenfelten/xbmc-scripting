@@ -1,0 +1,124 @@
+<window>
+
+ <id>1156</id>
+ <allowoverlay>no</allowoverlay>
+ <defaultcontrol always="false">4</defaultcontrol>
+ <resolution>PAL</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>-50</posx>
+		<posy>-30</posy>
+	</coordinates>
+
+ <controls>
+
+  <control type="image" id="1">
+   <description>background image</description>
+   <posx>168</posx>
+   <posy>80</posy>
+   <width>315</width>
+   <height>180</height>
+   <texture>dialog_top.png</texture>
+  </control>
+
+  <control type="image" id="1">
+   <description>background image</description>
+   <posx>208</posx>
+   <posy>120</posy>
+   <width>460</width>
+   <height>392</height>
+   <texture>dialog_middle.png</texture>
+  </control>
+
+  <control type="image" id="1">
+   <description>background image</description>
+   <posx>390</posx>
+   <posy>390</posy>
+   <width>310</width>
+   <height>160</height>
+   <texture>dialog_bottom.png</texture>
+  </control>
+
+  <control type="fadelabel" id="3">
+   <description>artist and title</description>
+   <posx>220</posx>
+   <posy>128</posy>
+   <width>345</width>
+   <height>25</height>
+   <label>$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Title]</label>
+   <font>font14</font>
+   <textcolor>FFE7FF00</textcolor>
+  </control>
+
+  <control type="textbox" id="4">
+   <description>textarea</description>
+   <posx>235</posx>
+   <posy>170</posy>
+   <width>420</width>
+   <height>347</height>
+   <onup>4</onup>
+   <ondown>4</ondown>
+   <onleft>4</onleft>
+   <onright>4</onright>
+   <spinposx>410</spinposx>
+   <spinposy>345</spinposy>
+    <spincolor>ffffffff</spincolor>
+    <textureup>scroll-up.png</textureup>
+    <texturedown>scroll-down.png</texturedown>
+    <textureupfocus>scroll-up-focus.gif</textureupfocus>
+    <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+    <image>icon-folder.png</image>
+    <font>font13</font>
+    <textcolor>DDFFFFFF</textcolor>
+    <colordiffuse>ffffffff</colordiffuse>
+    <visible>True</visible>
+  </control>
+
+  <control type="list" id="5">
+   <description>link list</description>
+   <posx>220</posx>
+   <posy>170</posy>
+   <width>436</width>
+   <height>335</height>
+   <onleft>5</onleft>
+   <onright>5</onright>
+   <onup>5</onup>
+   <ondown>5</ondown>
+   <spinposx>410</spinposx>
+   <spinposy>345</spinposy>
+    <spincolor>ddffffff</spincolor>
+    <textureup>scroll-up.png</textureup>
+    <texturedown>scroll-down.png</texturedown>
+    <textureupfocus>scroll-up-focus.gif</textureupfocus>
+    <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+    <texturefocus>list-focus.png</texturefocus>
+    <texturenofocus>list-nofocus.png</texturenofocus>
+    <image>icon-folder.png</image>
+    <textureheight>32</textureheight>
+    <spacebetweenitems>3</spacebetweenitems>  
+    <font>font13</font>
+    <selectedcolor>ffffffff</selectedcolor>
+    <textcolor>DDFFFFFF</textcolor>
+    <textcolor2>ddffffff</textcolor2>
+    <colordiffuse>ffffffff</colordiffuse>
+    <suffix> |</suffix>
+    <textxoff>3</textxoff>
+    <textxoff2>0</textxoff2>
+    <aligny>center</aligny>
+   <visible>False</visible>
+  </control>
+
+  <control type="image" id="6">
+    <description>Cover</description>
+    <posx>570</posx>
+    <posy>130</posy>
+    <width>100</width>
+    <height>100</height>
+    <texture>-</texture>
+    <info>MusicPlayer.Cover</info>
+    <aspectratio>keep</aspectratio>
+  </control>
+
+ </controls>
+
+</window>
