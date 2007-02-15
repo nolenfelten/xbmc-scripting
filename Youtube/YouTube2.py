@@ -119,7 +119,14 @@ class YouTube2:
 		filename = opener.fetch(url)
 		d = feedparser.parse(filename)
 
-		list = [(x.title, x.link[-11:]) for x in d.entries]
+		for entry in d.entries:
+			# Dump exotic characters so we don't have to watch ugly boxes
+			str = ''.join([x for x in entry.title if ord(x) < 256])
+			if str != entry.title:
+				if len(str) != 0:
+					str = str + ' '
+				str = str + '[invalid characters]'
+			list.append((str, entry.link[-11:]))
 
 		return list
 	
@@ -160,18 +167,12 @@ if __name__ == '__main__':
 	print "--------------------------------------"
 	list = yt.get_feed('recently_featured', opener)
 	for (desc, id) in list:
-		d = ''.join([x for x in desc if ord(x) < 256])
-		if d != desc:
-			d += '[invalid chars] (%s)' % (desc)
-		print "%s %s" % (id, d)
+		print "%s %s" % (id, desc)
 
 	print "--------------------------------------"
-	list = yt.search('karate', opener)
+	list = yt.search('bejing', opener)
 	for (desc, id) in list:
-		d = ''.join([x for x in desc if ord(x) <= 256])
-		if d != desc:
-			d += '[invalid chars] (%s)' % (desc)
-		print "%s %s" % (id, d)
+		print "%s %s" % (id, desc)
 
 	print "--------------------------------------"
 	print yt.parse_video('S2n1_h3Bvt0', opener)
