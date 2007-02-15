@@ -1,0 +1,102 @@
+<window>
+
+ <id>1156</id>
+ <allowoverlay>no</allowoverlay>
+ <defaultcontrol always="false">4</defaultcontrol>
+ <resolution>PAL</resolution>
+
+ <controls>
+
+  <control type="image" id="1">
+   <description>background image</description>
+   <posx>178</posx>
+   <posy>25</posy>
+   <width>520</width>
+   <height>500</height>
+   <texture>\lyricspanel.png</texture>
+  </control>
+
+  <control type="fadelabel" id="3">
+   <description>artist and title</description>
+   <posx>290</posx>
+   <posy>95</posy>
+   <width>255</width>
+   <height>25</height>
+   <label>$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Title]</label>
+   <font>font14</font>
+   <textcolor>ffb2d4f5</textcolor>
+  </control>
+
+  <control type="textbox" id="4">
+   <description>textarea</description>
+   <posx>210</posx>
+   <posy>130</posy>
+   <width>400</width>
+   <height>335</height>
+   <onup>4</onup>
+   <ondown>4</ondown>
+   <onleft>4</onleft>
+   <onright>4</onright>
+   <spinposx>410</spinposx>
+   <spinposy>345</spinposy>
+    <spincolor>ffffffff</spincolor>
+    <textureup>scroll-up.png</textureup>
+    <texturedown>scroll-down.png</texturedown>
+    <textureupfocus>scroll-up-focus.gif</textureupfocus>
+    <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+    <image>icon-folder.png</image>
+    <font>font13</font>
+    <textcolor>0xffb2d4f5</textcolor>
+    <colordiffuse>ffffffff</colordiffuse>
+    <visible>True</visible>
+  </control>
+
+  <control type="list" id="5">
+   <description>link list</description>
+   <posx>210</posx>
+   <posy>130</posy>
+   <width>400</width>
+   <height>335</height>
+   <onleft>5</onleft>
+   <onright>5</onright>
+   <onup>5</onup>
+   <ondown>5</ondown>
+   <spinposx>410</spinposx>
+   <spinposy>345</spinposy>
+    <spincolor>ddffffff</spincolor>
+    <textureup>scroll-up.png</textureup>
+    <texturedown>scroll-down.png</texturedown>
+    <textureupfocus>scroll-up-focus.gif</textureupfocus>
+    <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+    <texturefocus>list-focus.png</texturefocus>
+    <texturenofocus>list-nofocus.png</texturenofocus>
+    <image>icon-folder.png</image>
+    <textureheight>26</textureheight>
+    <font>font13</font>
+    <selectedcolor>ffffffff</selectedcolor>
+    <textcolor>ffb2d4f5</textcolor>
+    <textcolor2>ddffffff</textcolor2>
+    <colordiffuse>ffffffff</colordiffuse>
+    <suffix> |</suffix>
+    <textxoff>3</textxoff>
+    <textxoff2>0</textxoff2>
+    <aligny>center</aligny>
+   <visible>False</visible>
+  </control>
+
+  <control type="image" id="6">
+    <description>Cover</description>
+    <type>image</type>
+    <posx>150</posx>
+    <posy>92</posy>
+    <width>25</width>
+    <height>25</height>
+    <texture>-</texture>
+    <info>MusicPlayer.Cover</info>
+    <aspectratio>keep</aspectratio>
+    <visible>false</visible>
+  </control>
+
+ </controls>
+
+</window>
