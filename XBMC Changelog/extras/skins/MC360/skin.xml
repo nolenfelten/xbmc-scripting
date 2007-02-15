@@ -5,82 +5,39 @@
 	<resolution>PAL</resolution>
 
 	<controls>
+        <include>LiveBackGroundWhitewash</include>
+        <include>LiveCommonsBlades</include>
+		<include>ProgramCommonsKeymaps</include>
 
-		<control>
-			<description>background image</description>
-			<type>image</type>
-			<id>1</id>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<texture>background-orange-alpha.png</texture>
-		</control>
-
-		<control>
-			<type>image</type>
-			<description>Whitewash Glass Top Middle</description>
-			<id>1</id>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>64</height>
-			<texture>bkgd-whitewash-glass-top-middle.png</texture>
-		</control>
-		<control>
-			<type>image</type>
-			<description>Whitewash Glass Bottom Middle</description>
-			<id>1</id>
-			<posx>0</posx>
-			<posy>512</posy>
-			<width>720</width>
-			<height>64</height>
-			<texture>bkgd-whitewash-glass-bottom-middle.png</texture>
-		</control>
-		<control>
-			<type>image</type>
-			<description>Whitewash Overlay Middle</description>
-			<id>1</id>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<texture>background-overlay-whitewash-centertile.png</texture>
-		</control>
-		<control>
-			<description>description label</description>
-			<type>label</type>
-			<id>1</id>
-			<posx>60</posx>
+        <control type="label" id="10">
+			<description>Window Heading</description>
+			<posx>102</posx>
 			<posy>42</posy>
+			<width>400</width>
+			<align>left</align>
 			<align>left</align>
 			<label>XBMC Changelog</label>
-			<width>200</width>
-			<textcolor>FFFFFFFF</textcolor>
+			<include>TextcolorWhite</include>
 			<font>font18</font>
 		</control>
 
-		<control>
+		<control type="label">
 			<description>date label</description>
-			<type>label</type>
-			<id>100</id>
-			<posx>670</posx>
-			<posy>47</posy>
+			<posx>650</posx>
+			<posy>45</posy>
+			<width>250</width>
 			<align>right</align>
 			<label>$INFO[System.Date]</label>
-			<width>500</width>
-			<font>font14</font>
-			<textcolor>FFFFFFFF</textcolor>
+			<font>font16</font>
+			<include>TextcolorWhite</include>
 		</control>
 
-		<control>
+		<control type="textbox" id="200">
 			<description>textarea</description>
-			<type>textbox</type>
-			<id>200</id>
-			<posx>50</posx>
+			<posx>100</posx>
 			<posy>90</posy>
-			<width>630</width>
-			<height>410</height>
+			<width>550</width>
+			<height>415</height>
 			<font>font10</font>
 			<textcolor>FF000000</textcolor>
 			<spinposx>410</spinposx>
