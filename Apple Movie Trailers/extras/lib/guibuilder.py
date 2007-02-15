@@ -483,7 +483,7 @@ class GUIBuilder:
                     if (not ctl.has_key('description')): ctl['description'] = ctype
                     if (not ctl.has_key('posx')): ctl['posx'] = '0'
                     if (not ctl.has_key('posy')): ctl['posy'] = '0'
-                    if (not ctl.has_key('width')): ctl['width'] = '100'
+                    if (not ctl.has_key('width')): ctl['width'] = '250'
                     if (not ctl.has_key('height')): ctl['height'] = '100'
                     if (not ctl.has_key('onup')): ctl['onup'] = ctl['id']
                     if (not ctl.has_key('ondown')): ctl['ondown'] = ctl['id']
