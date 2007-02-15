@@ -625,54 +625,5 @@
 			<onright>216</onright>
 			<visible>false</visible>
 		</control>
-		<!-- special controls for media playing info -->
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="300">
-			<description>X Button On</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<!--visible>Player.HasMedia</visible-->
-			<visible>false</visible>
-		</control>
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="301">
-			<description>X Button Off</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<!--visible>!Player.Hasmedia</visible-->
-			<visible>false</visible>
-		</control>
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="302">
-			<description>Full-Screen Visualisation Label</description>
-			<font>font12</font>
-			<posx>115</posx>
-			<posy>528</posy>
-			<label>220</label>
-			<align>left</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<!--visible>Player.HasAudio</visible-->
-			<visible>false</visible>
-		</control>
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="303">
-			<description>Full-Screen Video Label</description>
-			<font>font12</font>
-			<posx>50</posx>
-			<posy>500</posy>
-			<label>221</label>
-			<align>center</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<!--visible>Player.HasVideo</visible-->
-			<visible>false</visible>
-		</control>
 	</controls>
 </window>
