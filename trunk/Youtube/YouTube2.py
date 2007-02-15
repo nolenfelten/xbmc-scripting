@@ -22,26 +22,80 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 import socket
-import urllib2
 import re
 import feedparser
+import os
+
+from urllib import FancyURLopener
 
 from xml.sax.saxutils import unescape
 from xml.sax.saxutils import escape
 
-# http request timeout in seconds
+# http request timeout in seconds.
 timeout = 30
 socket.setdefaulttimeout(timeout)
+
+# Custom url opener that handles user defined callbacks
+# for error reporting and download progress.
+class YouTubeUrlOpener(FancyURLopener):
+	def __init__(self, errhook=None, errhook_udata=None,
+	             rhook=None, rhook_udata=None):
+		FancyURLopener.__init__(self)
+
+		self.errhook = errhook
+		self.errhook_udata = errhook_udata
+
+		self.rhook = rhook
+		self.rhook_udata = rhook_udata
+
+	# Called on error.
+	def http_error_default(self, url, fp, errcode, errmsg, headers):
+		if self.errhook is not None:
+			self.errhook(errcode, errmsg, self.errhook_udata)
+
+	# Periodically called while downloading.
+	def report_hook(self, count, blocksize, totalsize):
+		if self.rhook is not None:
+			done = min(count * blocksize, totalsize)
+			keep_going = self.rhook(done, totalsize, self.rhook_udata)
+			if keep_going is not None and not keep_going:
+				raise StopIteration
+
+	# Fetch an url and return the data.
+	def fetch(self, url):
+		ret = None
+		info = None
+
+		filename = os.path.join(os.getcwd().replace(';',''), 'download.tmp')
+
+		try:
+			info = self.retrieve(url, filename=filename, reporthook=self.report_hook)
+		except AttributeError, e:
+			# TODO: Investigate why this happens.
+			# <urlyhack>
+			# This happens on http errors, but I don't think 
+			# it should, so this is probably my fault.
+			# </urlyhack>
+			return None
+		except StopIteration, e:
+			# The users aborted the download.
+			return None
+
+		if info is not None:
+			ret = info[0]
+
+		return ret
+
 
 # TODO: Add support for browsing users, and perhaps even adding stuff to profile.
 class YouTube2:
 	DIR = 0
 	VIDEO = 1
 
-	# regexp for the youtube video session id
+	# regexp for the youtube video session id.
 	session_pattern = re.compile('&t=([0-9a-zA-Z-_]{32})')
 
-	# various urls
+	# various urls.
 	stream_url = 'http://youtube.com/get_video?video_id=%s&t=%s'
 	video_url = 'http://youtube.com/?v=%s'
 	feed_url = 'http://youtube.com/rss/global/%s.rss'
@@ -50,101 +104,75 @@ class YouTube2:
 	def __init__(self):
 		pass
 
-	def get_feed(self, feed):
+	def get_feed(self, feed, opener):
 		url = YouTube2.feed_url % feed
-		return self.parse_rss(url)
+		return self.parse_rss(url, opener)
 	
-	def search(self, term):
+	def search(self, term, opener):
 		friendly_term = escape(term).replace(' ', '+')
 		url = YouTube2.search_url % friendly_term
-		return self.parse_rss(url)
+		return self.parse_rss(url, opener)
 
-	def parse_rss(self, url):
+	def parse_rss(self, url, opener):
 		list = []
 
-		d = feedparser.parse(url)
+		filename = opener.fetch(url)
+		d = feedparser.parse(filename)
+
 		list = [(x.title, x.link[-11:]) for x in d.entries]
 
 		return list
 	
-	def parse_video(self, id):
+	def parse_video(self, id, opener):
+		ret = None
+
 		url = YouTube2.video_url % id
-		data = YouTube2.fetch_data(url)
 
-		res = YouTube2.session_pattern.search(data)
-		if res != None and len(res.groups()) == 1:
-			session = res.group(1)
-			return YouTube2.stream_url % (id, session)
-		else:
-			# TODO: Throw exception or something.
-			print "ERROR!!!!!!!!"
-			print data
-			return None
+		filename = opener.fetch(url)
 
-	# TODO: Get rid of most of this crap.
-	def fetch_data(url, func=None, udata=None):
-		print "Fetching url: " + url
-		req = urllib2.Request(unescape(url))
+		if filename is not None:
 
-		try:
-			s = urllib2.urlopen(req)
-		except urllib2.HTTPError, e:
-			print 'Unable to open url (%s)' % e
-			return None
+			fd = open(filename)
+			data = fd.read()
+			fd.close()
 
-		data = ''
-		
-		# if content-length is known, pull data progressively
-		# to be able to update the progressbar
-		hdr = s.info()
-		if hdr.has_key('Content-length'):
-			len = int(hdr['Content-length'])
-			chunk = max(50, int(len / 100.0))
-			done = 0
-			tmp = ''
-			while len > done:
-				try:
-					tmp = s.read(chunk)
-				except IOError, e:
-					print 'Incremental download failed (%s)' % e
-					data = None
-					break
+			if data is not None:
+				match = YouTube2.session_pattern.search(data)
 
-				data += tmp
-				done += chunk
+				if match != None and len(match.groups()) == 1:
+					session = match.group(1)
+					ret = YouTube2.stream_url % (id, session)
 
-				# call the notifier function
-				if func != None:
-					pos = int((done / len) * 100.0)
-					ret = func(pos, udata)
-					# cancel transfer
-					if ret != None and ret == True:
-						data = None
-						break
-
-		else:
-			try:
-				data = s.read()
-			except IOError, e:
-				print 'One chunk download failed (%s)' % e
-
-		if func != None:
-			func(100, udata)
-
-		s.close()
-
-		return data
-	fetch_data = staticmethod(fetch_data)
+		return ret
 
 if __name__ == '__main__':
 	yt = YouTube2()
-	list = yt.parse_feed('top_viewed_week')
-	for (desc, id) in list:
-		print id, desc
 
-	list = yt.parse_search('karate')
-	for (desc, id) in list:
-		print id, desc
+	def progress_handler(done, total, dlg):
+		t = int((done*100.0)/(total))
+		print t
+	
+	def error_handler(code, message, udata):
+		print '%d - %s' % (code, message)
 
-	print yt.parse_video('S2n1_h3Bvt0')
+	opener = YouTubeUrlOpener(errhook=error_handler, rhook=progress_handler)
+
+	print "--------------------------------------"
+	list = yt.get_feed('recently_featured', opener)
+	for (desc, id) in list:
+		d = ''.join([x for x in desc if ord(x) < 256])
+		if d != desc:
+			d += '[invalid chars] (%s)' % (desc)
+		print "%s %s" % (id, d)
+
+	print "--------------------------------------"
+	list = yt.search('karate', opener)
+	for (desc, id) in list:
+		d = ''.join([x for x in desc if ord(x) <= 256])
+		if d != desc:
+			d += '[invalid chars] (%s)' % (desc)
+		print "%s %s" % (id, d)
+
+	print "--------------------------------------"
+	print yt.parse_video('S2n1_h3Bvt0', opener)
 
