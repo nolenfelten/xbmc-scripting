@@ -35,9 +35,12 @@ from xml.sax.saxutils import escape
 timeout = 30
 socket.setdefaulttimeout(timeout)
 
-# Custom url opener that handles user defined callbacks
-# for error reporting and download progress.
 class YouTubeUrlOpener(FancyURLopener):
+	"""
+	Custom url opener that handles user defined callbacks
+	for error reporting and download progress.
+	"""
+
 	def __init__(self, errhook=None, errhook_udata=None,
 	             rhook=None, rhook_udata=None):
 		FancyURLopener.__init__(self)
@@ -48,30 +51,32 @@ class YouTubeUrlOpener(FancyURLopener):
 		self.rhook = rhook
 		self.rhook_udata = rhook_udata
 
-	# Called on error.
 	def http_error_default(self, url, fp, errcode, errmsg, headers):
+		"""Call the error hook if exists."""
 		if self.errhook is not None:
 			self.errhook(errcode, errmsg, self.errhook_udata)
 
-	# Periodically called while downloading.
 	def report_hook(self, count, blocksize, totalsize):
+		"""Call report hook if exists, and check for abort requests."""
 		if self.rhook is not None:
 			done = min(count * blocksize, totalsize)
+
 			keep_going = self.rhook(done, totalsize, self.rhook_udata)
 			if keep_going is not None and not keep_going:
 				raise StopIteration
 
-	# Fetch an url and return the data.
 	def fetch(self, url):
+		"""Fetch an url to a temp file and return the filename."""
+
 		ret = None
 		info = None
 
 		filename = os.path.join(os.getcwd().replace(';',''), 'download.tmp')
 
 		try:
-			info = self.retrieve(url, filename=filename, reporthook=self.report_hook)
+			info = self.retrieve(url, filename=filename,
+			                     reporthook=self.report_hook)
 		except AttributeError, e:
-			# TODO: Investigate why this happens.
 			# <urlyhack>
 			# This happens on http errors, but I don't think 
 			# it should, so this is probably my fault.
@@ -87,8 +92,9 @@ class YouTubeUrlOpener(FancyURLopener):
 		return ret
 
 
-# TODO: Add support for browsing users, and perhaps even adding stuff to profile.
 class YouTube2:
+	"""YouTube dataminer class."""
+
 	DIR = 0
 	VIDEO = 1
 
@@ -105,15 +111,23 @@ class YouTube2:
 		pass
 
 	def get_feed(self, feed, opener):
+		"""Assemble feed url and return a (desc, id) list."""
+
 		url = YouTube2.feed_url % feed
+
 		return self.parse_rss(url, opener)
 	
 	def search(self, term, opener):
+		"""Assemble a search query and return a (desc, id) list."""
+
 		friendly_term = escape(term).replace(' ', '+')
 		url = YouTube2.search_url % friendly_term
+
 		return self.parse_rss(url, opener)
 
 	def parse_rss(self, url, opener):
+		"""Fetch an url, strip invalid chars and return a (desc, id) list."""
+		
 		list = []
 
 		filename = opener.fetch(url)
@@ -131,12 +145,13 @@ class YouTube2:
 		return list
 	
 	def parse_video(self, id, opener):
+		"""Return a proper playback url for some YouTube id."""
+
 		ret = None
 
 		url = YouTube2.video_url % id
 
 		filename = opener.fetch(url)
-
 		if filename is not None:
 
 			fd = open(filename)
@@ -152,6 +167,8 @@ class YouTube2:
 
 		return ret
 
+
+# Just for testing.
 if __name__ == '__main__':
 	yt = YouTube2()
 

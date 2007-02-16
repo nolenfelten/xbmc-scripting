@@ -54,6 +54,7 @@ sys.stdout = Logger
 sys.stderr = Logger
 
 class YouTubeGUI(xbmcgui.Window):
+	"""YouTube browser GUI."""
 
 	# GUI States.
 	STATE_MAIN = 1
@@ -63,6 +64,8 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_MOST_VIEWED = STATE_MOST_DISCUSSED | 16
 
 	def __init__(self):
+		"""Setup the default skin, state and load 'recently_featured' feed"""
+
 		try: 
 			if not self.load_skin('default'):
 				self.close()
@@ -71,7 +74,6 @@ class YouTubeGUI(xbmcgui.Window):
 			self.yt = YouTube2()
 			self.state = YouTubeGUI.STATE_MAIN
 
-			# TODO: Save this to file.
 			self.last_search_term = ''
 
 			self.player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
@@ -82,9 +84,9 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	# Lodads the GUI skin.
-	# TODO: Take resolution into account when choosing skin.
 	def load_skin(self, name=None):
+		"""Loads the GUI skin."""
+
 		if not name:
 			name = 'default'
 
@@ -98,36 +100,38 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return self.SUCCEEDED
 
-	# About dialog.
-	# TODO: Make this not a dialog but a window with possibility
-	#       to add contribution authors.
 	def show_about(self):
+		"""Show an 'About' dialog."""
+
 		dlg = xbmcgui.Dialog()
 		dlg.ok('About', 'By: Daniel Svensson, 2007',
 		       'Paypal: dsvensson@gmail.com',
 		       'Bugs: XBMC Forum - Python Script Development')
 	
-	# Just shows a 'not implemented' dialog.
-	# TODO: Get rid of this one.
 	def not_implemented(self):
+		"""Show a 'not implemented' dialog."""
 		dlg = xbmcgui.Dialog()
 		dlg.ok('YouTube', 'Not Implemented, check back later')
 
-	# Update the progress dialog. If the user presses
-	# 'Cancel', then abort the download.
 	def progress_handler(self, done, total, dlg):
+		"""Update progress dialog percent and return abort status."""
+
 		percent = int((done * 100.0) / total)
+
 		dlg.update(percent)
 		return not dlg.iscanceled()
 	
-	# Show an error dialog if the url could not be opened.
 	def error_handler(self, code, message, udata):
+		"""Shows an error dialog with the HTTP error code and a message."""
+
 		msg = '%d - %s' % (code, message)
+
 		dlg = xbmcgui.Dialog()
 		dlg.ok('YouTube', 'There was an error.', msg)
 
-	# Download data while showing a progress dialog
 	def download_data(self, arg, func):
+		"""Show a progress dialog while downloading and return the data."""
+
 		dlg = xbmcgui.DialogProgress()
 		dlg.create('YouTube', 'Downloading content')
 
@@ -140,19 +144,19 @@ class YouTubeGUI(xbmcgui.Window):
 		return data
 		
 
-	# Fire up the virtual keyboard and gather some text to search for.
-	# TODO: Add search history in some strange way
-	#       perhaps add a STATE_SEARCH with a history
-	#       button that fills the content list with
-	#       old search terms.
 	def search(self):
+		"""Get user input and perform a search."""
+
 		term = self.get_input(self.last_search_term, 'Search')
+		
+		# Only update the list if the user entered something.
 		if term != None:
 			self.list_contents(term, True)
 			self.last_search_term = term
 
-	# Collect text input from the virtual keyboard.
 	def get_input(self, default, title):
+		"""Show a virtual keyboard and return the entered text."""
+
 		ret = None
 
 		keyboard = xbmc.Keyboard(default, title)
@@ -163,9 +167,9 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return ret
 
-	# Plays a clip based on some id ('Jb76RTQBWQc' for example).
 	def play_clip(self):
-		print "Trying to play clip"
+		"""Get the url to the selected list item and start playback."""
+
 		list = self.controls['Content List']['control']
 
 		pos = list.getSelectedPosition()
@@ -182,9 +186,9 @@ class YouTubeGUI(xbmcgui.Window):
 		if file is not None:
 			self.player.play(str(file))
 
-	# Lists contents of some browsing result.
-	# TODO: Do something prettier to search.
 	def list_contents(self, url, search=False):
+		"""Lists contents of some browsing result."""
+
 		if search:
 			data = self.download_data(url, self.yt.search)
 		else:
@@ -207,8 +211,9 @@ class YouTubeGUI(xbmcgui.Window):
 			list.addItem(item)
 		xbmcgui.unlock()
 
-	# Handle user input events.
 	def onAction(self, action):
+		"""Handle user input events."""
+
 		try: 
 			if action == ACTION_PREVIOUS_MENU:
 				if self.state is YouTubeGUI.STATE_MAIN:
@@ -222,8 +227,9 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	# Handle widget events.
 	def onControl(self, ctrl):
+		"""Handle widget events."""
+
 		try: 
 			if ctrl is self.controls['Content List']['control']:
 				self.play_clip()
@@ -240,9 +246,9 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	# Main menu events.
-	# TODO: Add support for Users view.
 	def on_control_main(self, ctrl):
+		"""Handle main menu events."""
+
 		if ctrl is self.controls['Feeds Button']['control']:
 			self.set_button_state(YouTubeGUI.STATE_FEEDS)
 		elif ctrl is self.controls['Search Button']['control']:
@@ -252,8 +258,9 @@ class YouTubeGUI(xbmcgui.Window):
 		else:
 			self.not_implemented()
 
-	# Feeds menu events.
 	def on_control_feeds(self, ctrl):
+		"""Handle feeds menu events."""
+
 		if ctrl is self.controls['Recently Added Button']['control']:
 			self.list_contents('recently_added')
 		elif ctrl is self.controls['Recently Featured Button']['control']:
@@ -267,8 +274,9 @@ class YouTubeGUI(xbmcgui.Window):
 		elif ctrl is self.controls['Most Discussed Button']['control']:
 			self.set_button_state(YouTubeGUI.STATE_MOST_DISCUSSED)
 
-	# Most viewed time frame events
 	def on_control_most_viewed(self, ctrl):
+		"""Handle most viewed time frame events."""
+
 		if ctrl is self.controls['Today Button']['control']:
 			self.list_contents('top_viewed_today')
 		elif ctrl is self.controls['This Week Button']['control']:
@@ -278,8 +286,9 @@ class YouTubeGUI(xbmcgui.Window):
 		elif ctrl is self.controls['All Time Button']['control']:
 			self.list_contents('top_viewed')
 
-	# Most discussed time frame events
 	def on_control_most_discussed(self, ctrl):
+		"""Handle most discussed time frame events."""
+
 		if ctrl is self.controls['Today Button']['control']:
 			self.list_contents('most_discussed_today')
 		elif ctrl is self.controls['This Week Button']['control']:
@@ -287,8 +296,9 @@ class YouTubeGUI(xbmcgui.Window):
 		elif ctrl is self.controls['This Month Button']['control']:
 			self.list_contents('most_discussed_month')
 
-	# Update what buttons are to be shown.
 	def set_button_state(self, state):
+		"""Update button visibility, current state and focused widget."""
+
 		xbmcgui.lock()
 
 		# Are we in the main menu?
@@ -315,8 +325,9 @@ class YouTubeGUI(xbmcgui.Window):
 		if visible:
 			dominant = self.controls['Recently Added Button']['control']
 
-		# Are we in the most viewed menu?
-		visible = bool(state & ~YouTubeGUI.STATE_FEEDS & YouTubeGUI.STATE_MOST_DISCUSSED)
+		# Are we in the most discussed menu?
+		visible = bool(state & ~YouTubeGUI.STATE_FEEDS &
+		               YouTubeGUI.STATE_MOST_DISCUSSED)
 
 		self.controls['Today Button']['control'].setVisible(visible)
 		self.controls['This Week Button']['control'].setVisible(visible)
@@ -326,7 +337,8 @@ class YouTubeGUI(xbmcgui.Window):
 			dominant = self.controls['Today Button']['control']
 
 		# Are we in the most viewed menu?
-		visible = bool(state & ~YouTubeGUI.STATE_MOST_DISCUSSED & YouTubeGUI.STATE_MOST_VIEWED)
+		visible = bool(state & ~YouTubeGUI.STATE_MOST_DISCUSSED &
+		               YouTubeGUI.STATE_MOST_VIEWED)
 
 		self.controls['All Time Button']['control'].setVisible(visible)
 
