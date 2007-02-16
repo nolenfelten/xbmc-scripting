@@ -159,7 +159,11 @@ class YouTubeGUI(xbmcgui.Window):
 	def get_feed(self, feed):
 		"""Get rss data and update the list."""
 		data = self.download_data(feed, self.yt.get_feed)
-		self.update_list(data)
+		if self.update_list(data):
+			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
+			self.controls['Feed Label']['control'].setLabel(lbl)
+
+
 		
 	def search(self):
 		"""Get user input and perform a search. On success update the list."""
@@ -168,9 +172,11 @@ class YouTubeGUI(xbmcgui.Window):
 		
 		# Only update the list if the user entered something.
 		if term != None:
-			data = self.download_data(term, self.yt.search)
-			self.update_list(data)
 			self.last_search_term = term
+			data = self.download_data(term, self.yt.search)
+			if self.update_list(data):
+				lbl = 'Search: %s' % term
+				self.controls['Feed Label']['control'].setLabel(lbl)
 
 	def update_list(self, data):
 		"""Updates the list widget with new data."""
