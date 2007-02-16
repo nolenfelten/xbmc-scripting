@@ -23,10 +23,8 @@ SETTINGFILE = Root_Dir + "settings.xml"
 
 class main:
         def loader(self):
+                print "debug"
                 self.readsettings()
-                try:
-                        shutil.move(Root_Dir + "autoexec.py", "Q:\\scripts\\")
-                except:pass
                 try:
                         fh = open(DATAFILE)
                         fh.close()
@@ -101,27 +99,6 @@ class main:
                                       xbmc.executebuiltin("XBMC.ReplaceWindow("+self.window+")")
                         self.saver()
 
-
-
-        def editauto(self):
-                print "1"
-                fh = open("Q:\\scripts\\autoexec.py")
-                count = 0
-                line = []
-                for line in fh.readlines():
-                     theLine = line.strip()
-                     line.append(theline)
-                     count = count + 1
-                     print str(line[1])
-                fh.close()
-                line.append("xbmc.executescript('Q:\scripts\ResumeX\lib\engine.py')")
-                count = count + 1
-                f = open(Root_Dir + "autoexec.py", "wb")
-                for i in range (0 , count):
-                        f.write(line[i]+"\n")
-                f.close()
-                return
-                
                 
         def readsettings(self):
                 fh = open(SETTINGFILE)
@@ -220,9 +197,6 @@ class main:
                 while 1:
                         self.readsettings()
                         if self.enable == "no":
-                                try:
-                                        shutil.move("Q:\\scripts\\autoexec.py", "Q:\\scripts\\ResumeX\\lib\\")
-                                except:pass
                                 os.remove(DATAFILE)
                                 break
                         self.playlist = []
