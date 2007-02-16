@@ -108,6 +108,11 @@ class YouTubeGUI(xbmcgui.Window):
 		       'Paypal: dsvensson@gmail.com',
 		       'Bugs: XBMC Forum - Python Script Development')
 
+	def get_control(self, desc):
+		"""Return the control that matches the widget description."""
+
+		return self.controls[desc]['control']
+
 	def get_input(self, default, title):
 		"""Show a virtual keyboard and return the entered text."""
 
@@ -161,9 +166,7 @@ class YouTubeGUI(xbmcgui.Window):
 		data = self.download_data(feed, self.yt.get_feed)
 		if self.update_list(data):
 			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
-			self.controls['Feed Label']['control'].setLabel(lbl)
-
-
+			self.get_control('Feed Label').setLabel(lbl)
 		
 	def search(self):
 		"""Get user input and perform a search. On success update the list."""
@@ -176,7 +179,7 @@ class YouTubeGUI(xbmcgui.Window):
 			data = self.download_data(term, self.yt.search)
 			if self.update_list(data):
 				lbl = 'Search: %s' % term
-				self.controls['Feed Label']['control'].setLabel(lbl)
+				self.get_control('Feed Label').setLabel(lbl)
 
 	def update_list(self, data):
 		"""Updates the list widget with new data."""
@@ -189,7 +192,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.data = data
 
-		list = self.controls['Content List']['control']
+		list = self.get_control('Content List')
 
 		xbmcgui.lock()
 		list.reset()
@@ -203,7 +206,7 @@ class YouTubeGUI(xbmcgui.Window):
 	def play_clip(self):
 		"""Get the url to the selected list item and start playback."""
 
-		list = self.controls['Content List']['control']
+		list = self.get_control('Content List')
 
 		pos = list.getSelectedPosition()
 
@@ -239,7 +242,7 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Handle widget events."""
 
 		try: 
-			if ctrl is self.controls['Content List']['control']:
+			if ctrl is self.get_control('Content List'):
 				self.play_clip()
 			elif self.state is YouTubeGUI.STATE_MAIN:
 				self.on_control_main(ctrl)
@@ -257,11 +260,11 @@ class YouTubeGUI(xbmcgui.Window):
 	def on_control_main(self, ctrl):
 		"""Handle main menu events."""
 
-		if ctrl is self.controls['Feeds Button']['control']:
+		if ctrl is self.get_control('Feeds Button'):
 			self.set_button_state(YouTubeGUI.STATE_FEEDS)
-		elif ctrl is self.controls['Search Button']['control']:
+		elif ctrl is self.get_control('Search Button'):
 			self.search()
-		elif ctrl is self.controls['About Button']['control']:
+		elif ctrl is self.get_control('About Button'):
 			self.show_about()
 		else:
 			self.not_implemented()
@@ -269,39 +272,39 @@ class YouTubeGUI(xbmcgui.Window):
 	def on_control_feeds(self, ctrl):
 		"""Handle feeds menu events."""
 
-		if ctrl is self.controls['Recently Added Button']['control']:
+		if ctrl is self.get_control('Recently Added Button'):
 			self.get_feed('recently_added')
-		elif ctrl is self.controls['Recently Featured Button']['control']:
+		elif ctrl is self.get_control('Recently Featured Button'):
 			self.get_feed('recently_featured')
-		elif ctrl is self.controls['Top Favorites Button']['control']:
+		elif ctrl is self.get_control('Top Favorites Button'):
 			self.get_feed('top_favorites')
-		elif ctrl is self.controls['Top Rated Button']['control']:
+		elif ctrl is self.get_control('Top Rated Button'):
 			self.get_feed('top_rated')
-		elif ctrl is self.controls['Most Viewed Button']['control']:
+		elif ctrl is self.get_control('Most Viewed Button'):
 			self.set_button_state(YouTubeGUI.STATE_MOST_VIEWED)
-		elif ctrl is self.controls['Most Discussed Button']['control']:
+		elif ctrl is self.get_control('Most Discussed Button'):
 			self.set_button_state(YouTubeGUI.STATE_MOST_DISCUSSED)
 
 	def on_control_most_viewed(self, ctrl):
 		"""Handle most viewed time frame events."""
 
-		if ctrl is self.controls['Today Button']['control']:
+		if ctrl is self.get_control('Today Button'):
 			self.get_feed('top_viewed_today')
-		elif ctrl is self.controls['This Week Button']['control']:
+		elif ctrl is self.get_control('This Week Button'):
 			self.get_feed('top_viewed_week')
-		elif ctrl is self.controls['This Month Button']['control']:
+		elif ctrl is self.get_control('This Month Button'):
 			self.get_feed('top_viewed_month')
-		elif ctrl is self.controls['All Time Button']['control']:
+		elif ctrl is self.get_control('All Time Button'):
 			self.get_feed('top_viewed')
 
 	def on_control_most_discussed(self, ctrl):
 		"""Handle most discussed time frame events."""
 
-		if ctrl is self.controls['Today Button']['control']:
+		if ctrl is self.get_control('Today Button'):
 			self.get_feed('most_discussed_today')
-		elif ctrl is self.controls['This Week Button']['control']:
+		elif ctrl is self.get_control('This Week Button'):
 			self.get_feed('most_discussed_week')
-		elif ctrl is self.controls['This Month Button']['control']:
+		elif ctrl is self.get_control('This Month Button'):
 			self.get_feed('most_discussed_month')
 
 	def set_button_state(self, state):
@@ -312,49 +315,49 @@ class YouTubeGUI(xbmcgui.Window):
 		# Are we in the main menu?
 		visible = bool(state & YouTubeGUI.STATE_MAIN)
 
-		self.controls['Feeds Button']['control'].setVisible(visible)
-		self.controls['Users Button']['control'].setVisible(visible)
-		self.controls['Search Button']['control'].setVisible(visible)
-		self.controls['About Button']['control'].setVisible(visible)
+		self.get_control('Feeds Button').setVisible(visible)
+		self.get_control('Users Button').setVisible(visible)
+		self.get_control('Search Button').setVisible(visible)
+		self.get_control('About Button').setVisible(visible)
 
 		if visible:
-			dominant = self.controls['Feeds Button']['control']
+			dominant = self.get_control('Feeds Button')
 
 		# Are we in the feeds menu?
 		visible = bool(state & YouTubeGUI.STATE_FEEDS)
 
-		self.controls['Recently Added Button']['control'].setVisible(visible)
-		self.controls['Recently Featured Button']['control'].setVisible(visible)
-		self.controls['Top Favorites Button']['control'].setVisible(visible)
-		self.controls['Top Rated Button']['control'].setVisible(visible)
-		self.controls['Most Viewed Button']['control'].setVisible(visible)
-		self.controls['Most Discussed Button']['control'].setVisible(visible)
+		self.get_control('Recently Added Button').setVisible(visible)
+		self.get_control('Recently Featured Button').setVisible(visible)
+		self.get_control('Top Favorites Button').setVisible(visible)
+		self.get_control('Top Rated Button').setVisible(visible)
+		self.get_control('Most Viewed Button').setVisible(visible)
+		self.get_control('Most Discussed Button').setVisible(visible)
 
 		if visible:
-			dominant = self.controls['Recently Added Button']['control']
+			dominant = self.get_control('Recently Added Button')
 
 		# Are we in the most discussed menu?
 		visible = bool(state & ~YouTubeGUI.STATE_FEEDS &
 		               YouTubeGUI.STATE_MOST_DISCUSSED)
 
-		self.controls['Today Button']['control'].setVisible(visible)
-		self.controls['This Week Button']['control'].setVisible(visible)
-		self.controls['This Month Button']['control'].setVisible(visible)
+		self.get_control('Today Button').setVisible(visible)
+		self.get_control('This Week Button').setVisible(visible)
+		self.get_control('This Month Button').setVisible(visible)
 
 		if visible:
-			dominant = self.controls['Today Button']['control']
+			dominant = self.get_control('Today Button')
 
 		# Are we in the most viewed menu?
 		visible = bool(state & ~YouTubeGUI.STATE_MOST_DISCUSSED &
 		               YouTubeGUI.STATE_MOST_VIEWED)
 
-		self.controls['All Time Button']['control'].setVisible(visible)
+		self.get_control('All Time Button').setVisible(visible)
 
 
 		# Set focus to the top-most relevant button, and move
 		# to that when leaving the list.
 		self.setFocus(dominant)
-		self.controls['Content List']['control'].controlLeft(dominant)
+		self.get_control('Content List').controlLeft(dominant)
 		
 		self.state = state
 
