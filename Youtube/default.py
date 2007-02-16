@@ -135,7 +135,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.img_path = os.path.join(skin_path, 'gfx')
 
-		guibuilder.GUIBuilder(self, skin, self.img_path,
+		guibuilder.GUIBuilder(self, skin, self.img_path, title='YouTube',
 		                      useDescAsKey=True, debug=True)
 
 		return self.SUCCEEDED
