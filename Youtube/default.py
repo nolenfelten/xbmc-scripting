@@ -62,11 +62,14 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_USERS = 4
 	STATE_MOST_DISCUSSED = STATE_FEEDS | 8
 	STATE_MOST_VIEWED = STATE_MOST_DISCUSSED | 16
+	STATE_SEARCH = 32
 
 	def __init__(self):
 		"""Setup the default skin, state and load 'recently_featured' feed"""
 
 		try: 
+			self.base_path = os.getcwd().replace(';','')
+
 			if not self.load_skin('default'):
 				self.close()
 
@@ -74,7 +77,12 @@ class YouTubeGUI(xbmcgui.Window):
 			self.yt = YouTube2()
 			self.state = YouTubeGUI.STATE_MAIN
 
-			self.last_search_term = ''
+			# Get the last search term
+			history = self.get_search_history()
+			if history is not None and len(history) > 0:
+				self.last_search_term = history[0]
+			else:
+				self.last_search_term = ''
 
 			self.player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
 
@@ -84,13 +92,45 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
+	def get_search_history(self):
+		"""Return a list of old search terms."""
+
+		list = []
+		try:
+			path = os.path.join(self.base_path, 'history.txt')
+			f = open(path)
+			list = [x.strip() for x in f.readlines()]
+			f.close()
+		except IOError, e:
+			pass
+
+		return list
+
+	def add_search_history(self, term):
+		"""Append a term, and trim the search history to max 50 entries."""
+
+		list = self.get_search_history()
+		list = filter(lambda x: x != term, list)
+		list.insert(0, term)
+
+		if len(list) > 50:
+			list = list[:50]
+
+		data = '\n'.join(list)
+		
+		path = os.path.join(self.base_path, 'history.txt')
+		f = open(path, 'w+')
+		f.write(data)
+		f.flush()
+		f.close()
+
 	def load_skin(self, name=None):
 		"""Loads the GUI skin."""
 
 		if not name:
 			name = 'default'
 
-		skin_path = os.path.join(os.getcwd().replace(';',''), 'skins', name)
+		skin_path = os.path.join(self.base_path, 'skins', name)
 		skin = os.path.join(skin_path, 'skin.xml')
 
 		self.img_path = os.path.join(skin_path, 'gfx')
@@ -168,10 +208,11 @@ class YouTubeGUI(xbmcgui.Window):
 			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
 			self.get_control('Feed Label').setLabel(lbl)
 		
-	def search(self):
+	def search(self, term=None):
 		"""Get user input and perform a search. On success update the list."""
 
-		term = self.get_input(self.last_search_term, 'Search')
+		if term is None:
+			term = self.get_input(self.last_search_term, 'Search')
 		
 		# Only update the list if the user entered something.
 		if term != None:
@@ -180,6 +221,14 @@ class YouTubeGUI(xbmcgui.Window):
 			if self.update_list(data):
 				lbl = 'Search: %s' % term
 				self.get_control('Feed Label').setLabel(lbl)
+				self.add_search_history(term)
+
+	def search_history(self):
+		"""Get search history and update the list."""
+
+		data = [(x,None) for x in self.get_search_history()]
+		if self.update_list(data):
+			self.get_control('Feed Label').setLabel('Search History')
 
 	def update_list(self, data):
 		"""Updates the list widget with new data."""
@@ -203,20 +252,8 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return True
 
-	def play_clip(self):
-		"""Get the url to the selected list item and start playback."""
-
-		list = self.get_control('Content List')
-
-		pos = list.getSelectedPosition()
-
-		try:
-			desc, id = self.data[pos]
-		except IndexError, e:
-			# If this happens something is terribly wrong
-			print 'Index out of bounds'
-			self.close()
-			return
+	def play_clip(self, id):
+		"""Get the url for the id and start playback."""
 
 		file = self.download_data(id, self.yt.parse_video)
 		if file is not None:
@@ -243,9 +280,11 @@ class YouTubeGUI(xbmcgui.Window):
 
 		try: 
 			if ctrl is self.get_control('Content List'):
-				self.play_clip()
+				self.on_control_list(ctrl)
 			elif self.state is YouTubeGUI.STATE_MAIN:
 				self.on_control_main(ctrl)
+			elif self.state is YouTubeGUI.STATE_SEARCH:
+				self.on_control_search(ctrl)
 			elif self.state is YouTubeGUI.STATE_FEEDS:
 				self.on_control_feeds(ctrl)
 			elif self.state is YouTubeGUI.STATE_MOST_VIEWED:
@@ -257,17 +296,41 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
+	def on_control_list(self, ctrl):
+		"""Handle content list events."""
+		pos = ctrl.getSelectedPosition()
+
+		try:
+			desc, id = self.data[pos]
+		except IndexError, e:
+			# If this happens something is terribly wrong
+			print 'Index out of bounds'
+			self.close()
+			return
+
+		if id is not None:
+			self.play_clip(id)
+		else:
+			self.search(desc)
+
 	def on_control_main(self, ctrl):
 		"""Handle main menu events."""
 
 		if ctrl is self.get_control('Feeds Button'):
 			self.set_button_state(YouTubeGUI.STATE_FEEDS)
 		elif ctrl is self.get_control('Search Button'):
-			self.search()
+			self.set_button_state(YouTubeGUI.STATE_SEARCH)
 		elif ctrl is self.get_control('About Button'):
 			self.show_about()
 		else:
 			self.not_implemented()
+
+	def on_control_search(self, ctrl):
+		"""Handle search menu events."""
+		if ctrl is self.get_control('Search Entry Button'):
+			self.search()
+		elif ctrl is self.get_control('Search History Button'):
+			self.search_history()
 
 	def on_control_feeds(self, ctrl):
 		"""Handle feeds menu events."""
@@ -352,7 +415,15 @@ class YouTubeGUI(xbmcgui.Window):
 		               YouTubeGUI.STATE_MOST_VIEWED)
 
 		self.get_control('All Time Button').setVisible(visible)
+		
+		# Are we in the search menu?
+		visible = bool(state & YouTubeGUI.STATE_SEARCH)
 
+		self.get_control('Search Entry Button').setVisible(visible)
+		self.get_control('Search History Button').setVisible(visible)
+
+		if visible:
+			dominant = self.get_control('Search Entry Button')
 
 		# Set focus to the top-most relevant button, and move
 		# to that when leaving the list.
