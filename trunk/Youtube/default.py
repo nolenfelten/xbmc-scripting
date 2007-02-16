@@ -78,7 +78,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 			self.player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
 
-			self.list_contents('recently_featured')
+			self.get_feed('recently_featured')
 		except:
 			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
@@ -107,6 +107,19 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg.ok('About', 'By: Daniel Svensson, 2007',
 		       'Paypal: dsvensson@gmail.com',
 		       'Bugs: XBMC Forum - Python Script Development')
+
+	def get_input(self, default, title):
+		"""Show a virtual keyboard and return the entered text."""
+
+		ret = None
+
+		keyboard = xbmc.Keyboard(default, title)
+		keyboard.doModal()
+
+		if keyboard.isConfirmed():
+			ret = keyboard.getText()
+
+		return ret
 	
 	def not_implemented(self):
 		"""Show a 'not implemented' dialog."""
@@ -142,30 +155,44 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg.close()
 
 		return data
-		
 
+	def get_feed(self, feed):
+		"""Get rss data and update the list."""
+		data = self.download_data(feed, self.yt.get_feed)
+		self.update_list(data)
+		
 	def search(self):
-		"""Get user input and perform a search."""
+		"""Get user input and perform a search. On success update the list."""
 
 		term = self.get_input(self.last_search_term, 'Search')
 		
 		# Only update the list if the user entered something.
 		if term != None:
-			self.list_contents(term, True)
+			data = self.download_data(term, self.yt.search)
+			self.update_list(data)
 			self.last_search_term = term
 
-	def get_input(self, default, title):
-		"""Show a virtual keyboard and return the entered text."""
+	def update_list(self, data):
+		"""Updates the list widget with new data."""
 
-		ret = None
+		# Either an error dialog has been shown, or the user
+		# aborted the download. Anyway, there's no new data
+		# to put in the list, so lets just keep the old.
+		if data == None or len(data) == 0:
+			return False
 
-		keyboard = xbmc.Keyboard(default, title)
-		keyboard.doModal()
+		self.data = data
 
-		if keyboard.isConfirmed():
-			ret = keyboard.getText()
+		list = self.controls['Content List']['control']
 
-		return ret
+		xbmcgui.lock()
+		list.reset()
+		for desc, id in self.data:
+			item = xbmcgui.ListItem (label=desc)
+			list.addItem(item)
+		xbmcgui.unlock()
+
+		return True
 
 	def play_clip(self):
 		"""Get the url to the selected list item and start playback."""
@@ -185,31 +212,6 @@ class YouTubeGUI(xbmcgui.Window):
 		file = self.download_data(id, self.yt.parse_video)
 		if file is not None:
 			self.player.play(str(file))
-
-	def list_contents(self, url, search=False):
-		"""Lists contents of some browsing result."""
-
-		if search:
-			data = self.download_data(url, self.yt.search)
-		else:
-			data = self.download_data(url, self.yt.get_feed)
-
-		# Either an error dialog has been shown, or the user
-		# aborted the download. Anyway, there's no new data
-		# to put in the list, so lets just keep the old.
-		if data == None or len(data) == 0:
-			return
-
-		self.data = data
-
-		list = self.controls['Content List']['control']
-
-		xbmcgui.lock()
-		list.reset()
-		for desc, id in self.data:
-			item = xbmcgui.ListItem (label=desc)
-			list.addItem(item)
-		xbmcgui.unlock()
 
 	def onAction(self, action):
 		"""Handle user input events."""
@@ -262,13 +264,13 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Handle feeds menu events."""
 
 		if ctrl is self.controls['Recently Added Button']['control']:
-			self.list_contents('recently_added')
+			self.get_feed('recently_added')
 		elif ctrl is self.controls['Recently Featured Button']['control']:
-			self.list_contents('recently_featured')
+			self.get_feed('recently_featured')
 		elif ctrl is self.controls['Top Favorites Button']['control']:
-			self.list_contents('top_favorites')
+			self.get_feed('top_favorites')
 		elif ctrl is self.controls['Top Rated Button']['control']:
-			self.list_contents('top_rated')
+			self.get_feed('top_rated')
 		elif ctrl is self.controls['Most Viewed Button']['control']:
 			self.set_button_state(YouTubeGUI.STATE_MOST_VIEWED)
 		elif ctrl is self.controls['Most Discussed Button']['control']:
@@ -278,23 +280,23 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Handle most viewed time frame events."""
 
 		if ctrl is self.controls['Today Button']['control']:
-			self.list_contents('top_viewed_today')
+			self.get_feed('top_viewed_today')
 		elif ctrl is self.controls['This Week Button']['control']:
-			self.list_contents('top_viewed_week')
+			self.get_feed('top_viewed_week')
 		elif ctrl is self.controls['This Month Button']['control']:
-			self.list_contents('top_viewed_month')
+			self.get_feed('top_viewed_month')
 		elif ctrl is self.controls['All Time Button']['control']:
-			self.list_contents('top_viewed')
+			self.get_feed('top_viewed')
 
 	def on_control_most_discussed(self, ctrl):
 		"""Handle most discussed time frame events."""
 
 		if ctrl is self.controls['Today Button']['control']:
-			self.list_contents('most_discussed_today')
+			self.get_feed('most_discussed_today')
 		elif ctrl is self.controls['This Week Button']['control']:
-			self.list_contents('most_discussed_week')
+			self.get_feed('most_discussed_week')
 		elif ctrl is self.controls['This Month Button']['control']:
-			self.list_contents('most_discussed_month')
+			self.get_feed('most_discussed_month')
 
 	def set_button_state(self, state):
 		"""Update button visibility, current state and focused widget."""
