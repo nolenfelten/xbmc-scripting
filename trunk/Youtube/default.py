@@ -327,7 +327,6 @@ class YouTubeGUI(xbmcgui.Window):
 			self.set_button_state(YouTubeGUI.STATE_SEARCH)
 		elif ctrl is self.get_control('About Button'):
 			self.show_about()
-		print self.state
 
 	def on_control_search(self, ctrl):
 		"""Handle search menu events."""
@@ -337,7 +336,12 @@ class YouTubeGUI(xbmcgui.Window):
 			self.search_history()
 
 	def on_control_users(self, ctrl):
-		self.not_implemented()
+		if ctrl is self.get_control('User Favorites Button'):
+			self.not_implemented()
+		elif ctrl is self.get_control('User Videos Button'):
+			self.not_implemented()
+		elif ctrl is self.get_control('User Friends Button'):
+			self.not_implemented()
 
 	def on_control_feeds(self, ctrl):
 		"""Handle feeds menu events."""
