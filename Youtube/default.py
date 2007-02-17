@@ -63,6 +63,7 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_MOST_DISCUSSED = STATE_FEEDS | 8
 	STATE_MOST_VIEWED = STATE_MOST_DISCUSSED | 16
 	STATE_SEARCH = 32
+	STATE_USERS = 64
 
 	def __init__(self):
 		"""Setup the default skin, state and load 'recently_featured' feed"""
@@ -285,6 +286,8 @@ class YouTubeGUI(xbmcgui.Window):
 				self.on_control_main(ctrl)
 			elif self.state is YouTubeGUI.STATE_SEARCH:
 				self.on_control_search(ctrl)
+			elif self.state is YouTubeGUI.STATE_USERS:
+				self.on_control_users(ctrl)
 			elif self.state is YouTubeGUI.STATE_FEEDS:
 				self.on_control_feeds(ctrl)
 			elif self.state is YouTubeGUI.STATE_MOST_VIEWED:
@@ -318,12 +321,13 @@ class YouTubeGUI(xbmcgui.Window):
 
 		if ctrl is self.get_control('Feeds Button'):
 			self.set_button_state(YouTubeGUI.STATE_FEEDS)
+		elif ctrl is self.get_control('Users Button'):
+			self.set_button_state(YouTubeGUI.STATE_USERS)
 		elif ctrl is self.get_control('Search Button'):
 			self.set_button_state(YouTubeGUI.STATE_SEARCH)
 		elif ctrl is self.get_control('About Button'):
 			self.show_about()
-		else:
-			self.not_implemented()
+		print self.state
 
 	def on_control_search(self, ctrl):
 		"""Handle search menu events."""
@@ -331,6 +335,9 @@ class YouTubeGUI(xbmcgui.Window):
 			self.search()
 		elif ctrl is self.get_control('Search History Button'):
 			self.search_history()
+
+	def on_control_users(self, ctrl):
+		self.not_implemented()
 
 	def on_control_feeds(self, ctrl):
 		"""Handle feeds menu events."""
@@ -417,6 +424,16 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.get_control('All Time Button').setEnabled(visible)
 
+		# Are we in the users menu?
+		visible = bool(state & YouTubeGUI.STATE_USERS)
+
+		self.get_control('User Favorites Button').setVisible(visible)
+		self.get_control('User Videos Button').setVisible(visible)
+		self.get_control('User Friends Button').setVisible(visible)
+
+		if visible:
+			dominant = self.get_control('User Favorites Button')
+
 		# Are we in the search menu?
 		visible = bool(state & YouTubeGUI.STATE_SEARCH)
 
@@ -425,6 +442,8 @@ class YouTubeGUI(xbmcgui.Window):
 
 		if visible:
 			dominant = self.get_control('Search Entry Button')
+
+
 
 		# Set focus to the top-most relevant button, and move
 		# to that when leaving the list.
