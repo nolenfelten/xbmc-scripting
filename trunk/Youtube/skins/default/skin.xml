@@ -275,5 +275,46 @@
 			<visible>false</visible>
 		</control>
 		<!-- END: Search menu buttons -->
+
+		<!-- START: User menu buttons -->
+		<control type="button" id="50">
+			<description>User Favorites Button</description>
+			<label>User Favorites</label>
+			<posx>40</posx>
+			<posy>115</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>52</onup>
+			<ondown>51</ondown>
+			<visible>false</visible>
+		</control>
+
+		<control type="button" id="51">
+			<description>User Videos Button</description>
+			<label>User Videos</label>
+			<posx>40</posx>
+			<posy>145</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>50</onup>
+			<ondown>52</ondown>
+			<visible>false</visible>
+		</control>
+
+		<control type="button" id="52">
+			<description>User Friends Button</description>
+			<label>User Friends</label>
+			<posx>40</posx>
+			<posy>175</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>0</onright>
+			<onup>51</onup>
+			<ondown>50</ondown>
+			<visible>false</visible>
+		</control>
+		<!-- END: User menu buttons -->
 	</controls>
 </window>
