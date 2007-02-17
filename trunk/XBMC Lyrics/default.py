@@ -10,25 +10,27 @@
 # Smuto mod: July 27th 2006
 # Thanks to Nuka1195 and Rocko (Rockstar)
 
-SAVE_LYRICS = True
+SAVE_LYRICS = False
+LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
+PARSER = 'lyricwiki'
+#PARSER = 'lyrc.com.ar'
 
 ########## IMPORTS ###############
 import xbmc, xbmcgui
-import os
-import urllib
-import re
-import glob
-import string
+import os, sys
 import threading
+import traceback
+
 
 ########## STANDARDS ###############
 
-ExtrasPath =    sys.path[0] +  '\\extras\\'
+ExtrasPath = sys.path[0] +  '\\extras\\'
 sys.path.append(ExtrasPath + '\\lib')
-import lang
+sys.path.append(ExtrasPath + '\\parsers\\' + PARSER)
+import lyrics_parser
+import language
+_ = language.Language().string
 
-LangPath = ExtrasPath + 'languages\\'
-LyricsPath = 'Q:\\UserData\\lyrics\\'
 
 ######### KEY - FUNCTIONS ################
 
@@ -43,7 +45,6 @@ ACTION_HIGHLIGHT_ITEM		= 8
 ACTION_PARENT_DIR			= 9
 ACTION_PREVIOUS_MENU		= 10
 ACTION_SHOW_INFO			= 11
-
 ACTION_PAUSE					= 12
 ACTION_STOP						= 13
 ACTION_NEXT_ITEM				= 14
@@ -51,79 +52,29 @@ ACTION_PREV_ITEM				= 15
 
 ########## Functions ##############
 
-if ( not os.path.isdir( LyricsPath ) ): #if folder doesn't exist
+if ( not os.path.isdir( LYRICS_PATH ) ): #if folder doesn't exist
     try:
-        os.makedirs(LyricsPath)
+        os.makedirs(LYRICS_PATH)
     except Exception:
         pass
         
 
-class Main:
-    def lyrc_search(self, artist, song):
-        params = urllib.urlencode({'artist': artist, 'songname': song, 'procesado2': '1', 'Submit': ' S E A R C H '})
-        f = urllib.urlopen("http://lyrc.com.ar/en/tema1en.php", params)
-        Page = f.read()
-        if string.find(Page, "Nothing found :") != -1:
-            print "Couldn't find artist/song"
-        elif string.find(Page, "Suggestions :") != -1:
-            links_query = re.compile('<br><a href=\"(.*?)\"><font color=\'white\'>(.*?)</font></a>', re.IGNORECASE)
-            urls = re.findall(links_query, Page)
-            links = []
-            for x in urls:
-                link = Links(x[0], x[1])
-                links.append(link)
-            return links
-        else:
-            return Page
-    
-    def lyrc_download(self, link):
-        self.url = "http://lyrc.com.ar/en/" + link
-        data = urllib.urlopen(self.url)
-        Page = data.read()
-        return Page
-    
-    def parse_lyrics(self, lyrics):
-        try:
-            query = re.compile('</script></td></tr></table>(.*)<p><hr size=1', re.IGNORECASE | re.DOTALL)
-            full_lyrics = re.findall(query, lyrics)
-            final = full_lyrics[0].replace("<br />\r\n","\n ")
-        except:
-            try:
-                query = re.compile('</script></td></tr></table>(.*)<br><br><a href="#', re.IGNORECASE | re.DOTALL)
-                full_lyrics = re.findall(query, lyrics)
-                final = full_lyrics[0].replace("<br />\r\n","\n ")
-            except:
-                final = glob.language.string(1)
-        return str(final)
-         
-class Links:
-    def __init__(self, link, linkname):
-        self.link = link
-        self.linkname = linkname
-                       
-    def get_link(self):
-        return self.link
-        
-    def get_linkname(self):
-        return self.linkname
-
-####GUI START####
-
 class Overlay(xbmcgui.WindowDialog):
     def __init__(self):
-        self.song = None
-        self.artist = None
-        self.setupGUI()
-        if (not self.SUCCEEDED): self.exitScript()
-        else:
-            self.dummy()
-            self.load_language()
-            self.main = Main()
-            self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
-            self.myPlayerChanged( 2 )
+        try:
+            self.artist = None
+            self.song = None
+            self.setupGUI()
+            if (not self.SUCCEEDED): self.exitScript()
+            else:
+                self.dummy()
+                self.lyrics_fetcher = lyrics_parser.Lyrics_Fetcher()
+                self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
+                self.myPlayerChanged( 2 )
+        except: traceback.print_exc()
         
     def setupGUI( self ):
-        import  guibuilder
+        import guibuilder
         cwd = sys.path[ 0 ]
         current_skin = xbmc.getSkinDir()
         if ( not os.path.exists( os.path.join( cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
@@ -138,10 +89,91 @@ class Overlay(xbmcgui.WindowDialog):
         if ( self.Timer ): self.Timer.cancel()
         self.close()
 
-    def load_language(self):
-        glob.language = lang.Language()
-        glob.language.load(LangPath)
+    def show_control( self, control ):
+        self.controls[ 4 ][ 'control' ].setVisible( control == 4 )
+        self.controls[ 5 ][ 'control' ].setVisible( control == 5 )
+        self.setFocus( self.controls[ control ][ 'control' ] )
+    
+    def get_lyrics(self, artist, song):
+        try:
+            self.controls[4]['control'].reset()
+            self.controls[5]['control'].reset()
+            self.menu_items = []
+            self.artist_filename = self.make_fatx_compatible( artist, False )
+            self.song_filename = self.make_fatx_compatible( song + '.txt', True )
+            lyrics = self.get_lyrics_from_file()
+            if ( lyrics ):
+                self.show_lyrics( lyrics )
+            else:
+                test = self.lyrics_fetcher.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
+                if type( test ) == str:
+                    self.show_lyrics( test )
+                elif type( test ) == list:
+                    if ( test ):
+                        for song in test:
+                            self.controls[5]['control'].addItem( song[ 0 ] )
+                        self.menu_items = test
+                        self.show_control( 5 )
+                    else:
+                        self.controls[4]['control'].setText( _( 2 ) )
+                        self.show_control( 4 )
+        except: pass
+        
+    def get_lyrics_from_list( self, item ):
+        try:
+            self.controls[4]['control'].reset()
+            self.controls[5]['control'].reset()
+            lyrics = self.lyrics_fetcher.get_lyrics_from_list( self.menu_items[ item ] )
+            self.show_lyrics( lyrics )
+        except: traceback.print_exc()
 
+    def get_lyrics_from_file( self ):
+        try:
+            song_path = os.path.join( LYRICS_PATH, self.artist_filename, self.song_filename )
+            lyrics_file = open( song_path, 'r' )
+            lyrics = lyrics_file.read()
+            lyrics_file.close()
+            return lyrics
+        except: return None
+
+    def save_lyrics_to_file( self, lyrics ):
+        try:
+            song_path = os.path.join( LYRICS_PATH, self.artist_filename, self.song_filename )
+            if ( not os.path.isdir( os.path.join( LYRICS_PATH, self.artist_filename ) ) ):
+                os.makedirs( os.path.join( LYRICS_PATH, self.artist_filename ) )
+            lyrics_file = open( song_path, 'w' )
+            lyrics_file.write( lyrics )
+            lyrics_file.close()
+            return True
+        except: return False
+        
+    def make_fatx_compatible( self, name, extension ):
+        if len( name ) > 42:
+            if ( extension ): name = '%s_%s' % ( name[ : 37 ], name[ -4 : ], )
+            else: name = name[ : 42 ]
+        name = name.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
+        name = name.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
+        name = name.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
+        return name
+        
+    def show_lyrics( self, lyrics ):
+        #Checking whether some idiot has submitted empty lyrics or not:
+        if ( len( lyrics ) < 2 ):
+            self.controls[4]['control'].setText( _( 3 ) )
+        #If not, we show whatever results we got:
+        else:
+            self.controls[4]['control'].setText( lyrics )
+            if ( SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
+        self.show_control( 4 )
+       
+    def onAction(self, action):
+        if action == ACTION_PREVIOUS_MENU:
+            self.exitScript()
+    
+    def onControl(self, control):
+        if control == self.controls[5]['control']:
+            self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
+            
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def dummy( self ):
@@ -153,107 +185,16 @@ class Overlay(xbmcgui.WindowDialog):
         if ( event < 2 ): 
             self.exitScript()
         else:
-            try:
+            song = self.song
+            for cnt in range( 5 ):
+                if ( xbmc.getInfoLabel( 'MusicPlayer.Title' ) != self.song ): break
                 xbmc.sleep( 50 )
-                print '----------------------'
-                print self.artist, self.song
-                artist = xbmc.getInfoLabel( 'MusicPlayer.Artist' )
-                song = xbmc.getInfoLabel( 'MusicPlayer.Title' )
-                print artist, song
-                print '----------------------'
-                self.artist = artist
-                self.song = song
-                
-                self.controls[ 6 ][ 'control' ].setImage( xbmc.getInfoImage( 'MusicPlayer.Cover' ) )
-                self.lyrics( artist, song )
-            except: pass
-            
-    def show_text(self):
-        self.controls[5]['control'].setVisible(False)
-        self.controls[4]['control'].setVisible(True)
-        self.setFocus(self.controls[4]['control'])
-    
-    def show_list(self):
-        self.controls[4]['control'].setVisible(False)
-        self.controls[5]['control'].setVisible(True)
-        self.setFocus(self.controls[5]['control'])
-        
-    def getLyrics( self ):
-        try:
-            song_path = os.path.join( LyricsPath, self.artist_filename, self.song_filename )
-            lyrics_file = open( song_path, 'r' )
-            lyrics = lyrics_file.read()
-            lyrics_file.close()
-            return lyrics
-        except: return None
-
-    def saveLyrics( self, lyrics ):
-        try:
-            song_path = os.path.join( LyricsPath, self.artist_filename, self.song_filename )
-            if ( not os.path.isdir( os.path.join( LyricsPath, self.artist_filename ) ) ):
-                os.makedirs( os.path.join( LyricsPath, self.artist_filename ) )
-            #print song_path
-            lyrics_file = open( song_path, 'w' )
-            lyrics_file.write( lyrics )
-            lyrics_file.close()
-            return True
-        except: return False
-        
-    def lyrics(self, artist, song):
-        try:
-            self.artist_filename = self.makeFatXCompatible( artist, False )
-            self.song_filename = self.makeFatXCompatible( song + '.txt', True )
-            lyrics = self.getLyrics()
-            if ( lyrics ):
-                self.controls[4]['control'].setText( lyrics )
-                self.show_text()
-            else:
-                test = self.main.lyrc_search( artist, song )
-                self.controls[4]['control'].reset()
-                self.controls[5]['control'].reset()
-                if type(test) == str:
-                    self.show_lyrics( test )
-                elif type(test) == list:
-                    for x in test:
-                       try:
-                           self.controls[5]['control'].addItem(x.get_linkname())
-                       except:
-                           self.controls[5]['control'].addItem(glob.language.string(2))
-                    self.menu_items = test
-                    self.show_list()
-                elif test == None:
-                    self.controls[4]['control'].setText(glob.language.string(3))
-                    self.show_text()
-        except: pass
-            
-    def makeFatXCompatible( self, name, extension ):
-        if len( name ) > 42:
-            if ( extension ): name = '%s_%s' % ( name[ : 37 ], name[ -4 : ], )
-            else: name = name[ : 42 ]
-        name = name.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
-        name = name.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
-        name = name.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
-        return name
-        
-    def show_lyrics( self, lyrics ):
-        final_lyrics = self.main.parse_lyrics( lyrics )
-        #Checking whether some idiot has submitted empty lyrics or not:
-        if ( len( final_lyrics ) < 2 ):
-            self.controls[4]['control'].setText(glob.language.string(4))
-        #If not, we show whatever results we got:
-        else:
-            self.controls[4]['control'].setText(' ' + final_lyrics)
-            if ( SAVE_LYRICS ): success = self.saveLyrics( final_lyrics )
-        self.show_text()
-       
-    def onAction(self, action):
-        if action == ACTION_PREVIOUS_MENU:
-            self.exitScript()
-    
-    def onControl(self, control):
-        if control == self.controls[5]['control']:
-            templyrc = self.main.lyrc_download(self.menu_items[self.controls[5]['control'].getSelectedPosition()].get_link())
-            self.show_lyrics(templyrc)
+            self.song = xbmc.getInfoLabel( 'MusicPlayer.Title' )
+            self.artist = xbmc.getInfoLabel( 'MusicPlayer.Artist' )
+            #self.artist = artist
+            #self.song = song
+            self.controls[ 6 ][ 'control' ].setImage( xbmc.getInfoImage( 'MusicPlayer.Cover' ) )
+            self.get_lyrics( self.artist, self.song )
             
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
@@ -261,8 +202,6 @@ class MyPlayer( xbmc.Player ):
         if ( kwargs.has_key( 'function' ) ): 
             self.function = kwargs[ 'function' ]
             xbmc.Player.__init__( self )
-        if ( self.isPlayingAudio() ):
-            xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
 
     def onPlayBackStopped( self ):
         self.function( 0 )
@@ -272,8 +211,13 @@ class MyPlayer( xbmc.Player ):
     
     def onPlayBackStarted( self ):
         self.function( 2 )
-    
-            
-w = Overlay()
-if ( w.SUCCEEDED ): w.doModal()
-del w
+
+
+if ( __name__ == '__main__' ):
+    if ( xbmc.Player().isPlayingAudio() ):
+        xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
+        w = Overlay()
+        if ( w.SUCCEEDED ): w.doModal()
+        del w
+    else:
+        xbmcgui.Dialog().ok( _( 0 ), _( 10 ), _( 11 ) )
