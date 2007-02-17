@@ -406,6 +406,7 @@ class YouTubeGUI(xbmcgui.Window):
 		self.get_control('Today Button').setVisible(visible)
 		self.get_control('This Week Button').setVisible(visible)
 		self.get_control('This Month Button').setVisible(visible)
+		self.get_control('All Time Button').setVisible(visible)
 
 		if visible:
 			dominant = self.get_control('Today Button')
@@ -414,8 +415,8 @@ class YouTubeGUI(xbmcgui.Window):
 		visible = bool(state & ~YouTubeGUI.STATE_MOST_DISCUSSED &
 		               YouTubeGUI.STATE_MOST_VIEWED)
 
-		self.get_control('All Time Button').setVisible(visible)
-		
+		self.get_control('All Time Button').setEnabled(visible)
+
 		# Are we in the search menu?
 		visible = bool(state & YouTubeGUI.STATE_SEARCH)
 
