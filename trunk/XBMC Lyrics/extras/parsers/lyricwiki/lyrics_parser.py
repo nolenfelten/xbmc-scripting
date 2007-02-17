@@ -1,7 +1,7 @@
 import urllib
 from sgmllib import SGMLParser
 import sys
-debug = True
+debug = False
 debugWrite = False
 
 class Song_List_Parser( SGMLParser ):
