@@ -285,7 +285,7 @@
 			<posy>121</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>scrollbar_uparrow.png</texture>
+			<texture>scrollbar-up-arrow.png</texture>
 			<visible>false</visible>
 		</control>
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -295,7 +295,7 @@
 			<posy>141</posy>
 			<width>20</width>
 			<height>344</height>
-			<texture>scrollbar_background.png</texture>
+			<texture>-</texture>
 			<visible>false</visible>
 		</control>
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -305,7 +305,7 @@
 			<posy>485</posy>
 			<width>20</width>
 			<height>20</height>
-			<texture>scrollbar_downarrow.png</texture>
+			<texture>scrollbar-down-arrow.png</texture>
 			<visible>false</visible>
 		</control>
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -316,8 +316,8 @@
 			<posy>141</posy>
 			<width>20</width>
 			<height>16</height>
-			<texturefocus>scrollbar_focus.png</texturefocus>
-			<texturenofocus>scrollbar_nofocus.png</texturenofocus>
+			<texturefocus>scrollbar-indicator-focus.png</texturefocus>
+			<texturenofocus>scrollbar-indicator-nofocus.png</texturenofocus>
 			<font>font13</font>
 			<textcolor>00FFFFFF</textcolor>
 			<shadowcolor>00FFFFFF</shadowcolor>
@@ -337,7 +337,7 @@
 			<posy>116</posy>
 			<width>455</width>
 			<height>394</height>
-			<texture>folder-nofocus.png</texture>
+			<texture>-</texture>
 			<visible>false</visible>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -596,7 +596,7 @@
 			<posy>423</posy>
 			<width>445</width>
 			<height>106</height>
-			<texture>folder-nofocus.png</texture>
+			<texture>-</texture>
 			<visible>false</visible>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -623,6 +623,55 @@
 			<ondown>216</ondown>
 			<onleft>215</onleft>
 			<onright>216</onright>
+			<visible>false</visible>
+		</control>
+		<!-- special controls for media playing info -->
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="image" id="300">
+			<description>X Button On</description>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>-</texture>
+			<!--visible>Player.HasMedia</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="image" id="301">
+			<description>X Button Off</description>
+			<posx>82</posx>
+			<posy>525</posy>
+			<width>21</width>
+			<height>21</height>
+			<texture>-</texture>
+			<!--visible>!Player.Hasmedia</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="label" id="302">
+			<description>Full-Screen Visualisation Label</description>
+			<font>font12</font>
+			<posx>115</posx>
+			<posy>528</posy>
+			<label>220</label>
+			<align>left</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>Player.HasAudio</visible-->
+			<visible>false</visible>
+		</control>
+		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
+		<control type="label" id="303">
+			<description>Full-Screen Video Label</description>
+			<font>font12</font>
+			<posx>50</posx>
+			<posy>500</posy>
+			<label>221</label>
+			<align>center</align>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+			<!--visible>Player.HasVideo</visible-->
 			<visible>false</visible>
 		</control>
 	</controls>
