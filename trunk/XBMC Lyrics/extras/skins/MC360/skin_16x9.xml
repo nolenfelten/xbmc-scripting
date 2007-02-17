@@ -3,7 +3,7 @@
 	<id>1156</id>
 	<defaultcontrol>4</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
-	<resolution>PAL</resolution>
+	<resolution>PAL16x9</resolution>
 
 	<controls>
 
@@ -20,9 +20,9 @@
 
         <control type="image" id="1">
 			<description>Guide Blade Background</description>
-			<posx>30</posx>
+			<posx>85</posx>
 			<posy>0</posy>
-			<width>690</width>
+			<width>635</width>
 			<height>576</height>
 			<visible>!Skin.String(GuidePanel)</visible>
 			<colordiffuse>BEFFFFFF</colordiffuse>
@@ -33,9 +33,9 @@
 
         <control type="image" id="1">
 			<description>Custom Guide Blade Background</description>
-			<posx>30</posx>
+			<posx>85</posx>
 			<posy>0</posy>
-			<width>690</width>
+			<width>635</width>
 			<height>576</height>
 			<texture>-</texture>
 			<colordiffuse>BEFFFFFF</colordiffuse>
@@ -47,9 +47,9 @@
 
         <control type="image" id="1">
 			<description>Guide Blade Overlay</description>
-			<posx>128</posx>
+			<posx>160</posx>
 			<posy>0</posy>
-			<width>592</width>
+			<width>560</width>
 			<height>576</height>
 			<colordiffuse>FFFFFFFF</colordiffuse>
 			<texture>guide-blade-overlay-tile.png</texture>
@@ -58,9 +58,9 @@
 		</control>
         <control type="image" id="1">
 			<description>Guide Edge Overlay</description>
-			<posx>0</posx>
+			<posx>60</posx>
 			<posy>0</posy>
-			<width>128</width>
+			<width>100</width>
 			<height>576</height>
 			<colordiffuse>FFFFFFFF</colordiffuse>
 			<texture>guide-blade-overlay-edge-right.png</texture>
@@ -70,9 +70,9 @@
 
         <control type="image" id="1">
 			<description>Back Button</description>
-			<posx>630</posx>
+			<posx>650</posx>
 			<posy>475</posy>
-			<width>21</width>
+			<width>18</width>
 			<height>21</height>
 			<texture>button-Back.png</texture>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -81,9 +81,9 @@
 
         <control type="image" id="1">
 			<description>A Button</description>
-			<posx>645</posx>
+			<posx>665</posx>
 			<posy>498</posy>
-			<width>21</width>
+			<width>18</width>
 			<height>21</height>
 			<texture>button-A.png</texture>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -92,9 +92,9 @@
 
         <control type="image" id="1">
 			<description>Y Button</description>
-			<posx>110</posx>
+			<posx>150</posx>
 			<posy>475</posy>
-			<width>21</width>
+			<width>18</width>
 			<height>21</height>
 			<texture>button-Y-turnedoff.png</texture>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -103,9 +103,9 @@
 
         <control type="image" id="1">
 			<description>X Button</description>
-			<posx>95</posx>
+			<posx>135</posx>
 			<posy>498</posy>
-			<width>21</width>
+			<width>18</width>
 			<height>21</height>
 			<texture>button-X-turnedoff.png</texture>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -114,10 +114,10 @@
 
         <control type="label" id="1">
 			<description>Back Label</description>
-			<posx>589</posx>
+			<posx>642</posx>
 			<posy>479</posy>
 			<label>Back</label>
-			<align>left</align>
+			<align>right</align>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -126,10 +126,10 @@
 
         <control type="label" id="1">
 			<description>Select Label</description>
-			<posx>594</posx>
+			<posx>656</posx>
 			<posy>501</posy>
 			<label>Select</label>
-			<align>left</align>
+			<align>right</align>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
@@ -139,7 +139,7 @@
 
         <control type="label" id="1">
             <description>description label</description>
-            <posx>80</posx>
+            <posx>120</posx>
             <posy>200</posy>
             <align>left</align>
             <label>Lyrics</label>
@@ -153,7 +153,7 @@
 
         <control type="fadelabel" id="3">
 			<description>Album Title value</description>
-			<posx>115</posx>
+			<posx>145</posx>
 			<posy>35</posy>
 			<width>580</width>
 			<align>left</align>
@@ -228,9 +228,9 @@
 
         <control type="image" id="6">
 			<description>Cover</description>
-			<posx>130</posx>
+			<posx>160</posx>
 			<posy>92</posy>
-			<width>161</width>
+			<width>128</width>
 			<height>176</height>
 			<texture>-</texture>
 			<info>MusicPlayer.Cover</info>
@@ -240,9 +240,9 @@
 
         <control type="image" id="1">
 			<description>Jewel CD Case</description>
-			<posx>98</posx>
+			<posx>135</posx>
 			<posy>82</posy>
-			<width>205</width>
+			<width>164</width>
 			<height>203</height>
 			<texture>music-overlay-cdcase.png</texture>
 			<animation effect="fade" delay="450" time="200">WindowOpen</animation>
@@ -251,9 +251,9 @@
 
         <control type="fadelabel" id="1">
 			<description>Music - Time</description>
-			<posx>105</posx>
+			<posx>140</posx>
 			<posy>285</posy>
-			<width>170</width>
+			<width>160</width>
 			<label>Time : $INFO[MusicPlayer.Time] - $INFO[MusicPlayer.Duration]</label>
 			<align>left</align>
 			<font>font12</font>
@@ -264,9 +264,9 @@
 
         <control type="label" id="1">
 			<description>Music - Album</description>
-			<posx>105</posx>
+			<posx>140</posx>
 			<posy>307</posy>
-			<width>170</width>
+			<width>160</width>
 			<label>Album : $INFO[MusicPlayer.Album]</label>
 			<align>left</align>
 			<font>font12</font>
@@ -277,9 +277,9 @@
 
         <control type="fadelabel" id="1">
 			<description>Music - Codec</description>
-			<posx>105</posx>
+			<posx>140</posx>
 			<posy>329</posy>
-			<width>170</width>
+			<width>160</width>
 			<label>Codec : $INFO[MusicPlayer.Codec]</label>
 			<align>left</align>
 			<font>font12</font>
@@ -290,9 +290,9 @@
 
         <control type="fadelabel" id="1">
 			<description>Music - Bitrate</description>
-			<posx>105</posx>
+			<posx>140</posx>
 			<posy>351</posy>
-			<width>170</width>
+			<width>160</width>
 			<label>Bitrate : $INFO[MusicPlayer.Bitrate] kbps</label>
 			<align>left</align>
 			<font>font12</font>
