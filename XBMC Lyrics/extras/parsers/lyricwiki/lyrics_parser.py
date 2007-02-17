@@ -1,7 +1,7 @@
 import urllib
 from sgmllib import SGMLParser
 import sys
-debug = False
+debug = True
 debugWrite = False
 
 class Song_List_Parser( SGMLParser ):
@@ -37,7 +37,9 @@ class Lyrics_Parser( SGMLParser ):
         if ( self.lyrics_found ):
             self.lyrics += text
 
-        
+    def start_pre( self, attrs ):
+        self.lyrics_found = True
+
 class Lyrics_Fetcher:
     def get_lyrics( self, artist, song ):
         url = 'http://www.lyricwiki.org/%s:%s'
@@ -121,8 +123,8 @@ class Lyrics_Fetcher:
         return self.clean_text( lyrics )
         
 if ( __name__ == '__main__' ):
-    artist = "KISS"
-    song = "I Love it Loud"
+    artist = "Queen"
+    song = "I Want it All"
     lyrics = Lyrics_Fetcher().get_lyrics( artist, song )
     if ( type( lyrics ) == str ):
         print lyrics
