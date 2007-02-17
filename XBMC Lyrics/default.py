@@ -177,11 +177,11 @@ class Overlay(xbmcgui.WindowDialog):
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def dummy( self ):
-        #self.debugWrite('dummy', 2)
         self.Timer = threading.Timer( 60*60*60, self.dummy,() )
         self.Timer.start()
     
     def myPlayerChanged( self, event ):
+        #print [ 'stopped', 'ended', 'started'][ event ]
         if ( event < 2 ): 
             self.exitScript()
         else:
@@ -191,8 +191,6 @@ class Overlay(xbmcgui.WindowDialog):
                 xbmc.sleep( 50 )
             self.song = xbmc.getInfoLabel( 'MusicPlayer.Title' )
             self.artist = xbmc.getInfoLabel( 'MusicPlayer.Artist' )
-            #self.artist = artist
-            #self.song = song
             self.controls[ 6 ][ 'control' ].setImage( xbmc.getInfoImage( 'MusicPlayer.Cover' ) )
             self.get_lyrics( self.artist, self.song )
             
@@ -212,7 +210,7 @@ class MyPlayer( xbmc.Player ):
     def onPlayBackStarted( self ):
         self.function( 2 )
 
-
+    
 if ( __name__ == '__main__' ):
     if ( xbmc.Player().isPlayingAudio() ):
         xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )

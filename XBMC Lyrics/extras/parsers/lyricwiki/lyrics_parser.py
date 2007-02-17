@@ -16,8 +16,8 @@ class Song_List_Parser( SGMLParser ):
             if ( key == 'href' and not value[ 0 ] == '#' and not value[ : 10 ] =='/Category:' and
                 not value[ : 11 ] == '/LyricWiki:' and not value == '/Main_Page' ):
                 self.url = value
-            elif ( key == 'title' and self.url[ 1 : ] == value.replace( ' ', '_' ) ):
-                self.song_list += [ ( value, self.url, ) ]
+            elif ( key == 'title' and urllib.unquote( self.url[ 1 : ] ) == urllib.unquote( value.replace( ' ', '_' ) ) ):
+                self.song_list += [ ( urllib.unquote( value ), self.url, ) ]
             else:
                 self.url = 'None'
 
@@ -71,7 +71,7 @@ class Lyrics_Fetcher:
     def format_param( self, param, caps = True):
         retVal = ''
         for word in param.split():
-            if ( caps ): word = word.capitalize()
+            if ( caps ): word = word.replace( '&', 'and' ).capitalize()
             word = word.replace( '/', '_' ).replace( 'Ac_dc', 'AC_DC' )
             retVal += urllib.quote( word ) + '_'
         return retVal[ : -1 ]
@@ -124,7 +124,7 @@ class Lyrics_Fetcher:
         
 if ( __name__ == '__main__' ):
     artist = "Queen"
-    song = "I Want it All"
+    song = "I want it al"
     lyrics = Lyrics_Fetcher().get_lyrics( artist, song )
     if ( type( lyrics ) == str ):
         print lyrics
