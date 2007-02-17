@@ -16,22 +16,22 @@ import string, time, mimetypes, re, os
 import shutil
 SLEEPTIME = 2 #seconds
 Root_Dir = os.getcwd().replace(";","")+"\\"
-TEST = Root_Dir + "lib\\"
-SETTINGFILE = Root_Dir + "settings.xml"
-DATAFILE = Root_Dir + "data.xml"
-SETTINGFILE = Root_Dir + "settings.xml"
-
+profile = xbmc.getInfoLabel("system.profilename")
+profile = str(profile)
+if profile != "Master user":
+        if os.access("P:\\scripts\\", os.F_OK)==0:
+                os.mkdir("P:\\scripts\\")
+        SETTINGFILE = "P:\\scripts\\resxsettings.xml"
+        DATAFILE = "P:\\scripts\\resxdata.xml"
 class main:
         def loader(self):
                 print "debug"
                 self.readsettings()
-                try:
-                        fh = open(DATAFILE)
-                        fh.close()
+                if os.path.exists(DATAFILE):
                         self.opendata()
-                except:
+                else:
                         self.saver()
-                xbmc.executebuiltin("XBMC.SetVolume("+self.volume+")")
+                xbmc.executebuiltin('XBMC.SetVolume('+self.volume+')')
                 time.sleep(0.5)
                 if self.plsize == False: #there is no playlist
                         if self.playing == False:  #no other song/vid is playing
@@ -197,7 +197,9 @@ class main:
                 while 1:
                         self.readsettings()
                         if self.enable == "no":
-                                os.remove(DATAFILE)
+                                try:
+                                        os.remove(DATAFILE)
+                                except:pass
                                 break
                         self.playlist = []
                         self.window = xbmcgui.getCurrentWindowId()
