@@ -26,8 +26,8 @@ import traceback
 
 ExtrasPath = sys.path[0] +  '\\extras\\'
 sys.path.append(ExtrasPath + '\\lib')
-sys.path.append(ExtrasPath + '\\parsers\\' + PARSER)
-import lyrics_parser
+sys.path.append(ExtrasPath + '\\scrapers\\' + PARSER)
+import lyricsScraper
 import language
 _ = language.Language().string
 
@@ -68,7 +68,7 @@ class Overlay(xbmcgui.WindowDialog):
             if (not self.SUCCEEDED): self.exitScript()
             else:
                 self.dummy()
-                self.lyrics_fetcher = lyrics_parser.Lyrics_Fetcher()
+                self.LyricsScraper = lyricsScraper.LyricsFetcher()
                 self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
                 self.myPlayerChanged( 2 )
         except: traceback.print_exc()
@@ -105,7 +105,7 @@ class Overlay(xbmcgui.WindowDialog):
             if ( lyrics ):
                 self.show_lyrics( lyrics )
             else:
-                test = self.lyrics_fetcher.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
+                test = self.LyricsScraper.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
                 if type( test ) == str:
                     self.show_lyrics( test )
                 elif type( test ) == list:
@@ -123,7 +123,7 @@ class Overlay(xbmcgui.WindowDialog):
         try:
             self.controls[4]['control'].reset()
             self.controls[5]['control'].reset()
-            lyrics = self.lyrics_fetcher.get_lyrics_from_list( self.menu_items[ item ] )
+            lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
             self.show_lyrics( lyrics )
         except: traceback.print_exc()
 
