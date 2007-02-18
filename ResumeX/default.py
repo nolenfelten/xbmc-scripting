@@ -31,6 +31,7 @@ class main:
             if dialog.yesno("ResumeX","Enable ResumeX?"):
                 self.enable = "yes"
                 enabled = 1
+                xbmc.executebuiltin("Skin.SetBool(resumex)")
                 self.addauto()
             else:
                 self.enable = "no"
@@ -40,6 +41,7 @@ class main:
         else:
             if dialog.yesno("ResumeX","Disable ResumeX?"):
                 self.enable = "no"
+                xbmc.executebuiltin("Skin.ToggleSetting(resumex)")
                 self.removeauto()
                 self.winresume = "-"
                 self.passme = 1
@@ -49,7 +51,6 @@ class main:
                 dialog.close()
             else:
                 self.enable = "yes"
-                enable = "no"
                 self.passme = 1
         if self.passme !=1:
             if dialog.yesno("ResumeX","Enable window resume?"):
