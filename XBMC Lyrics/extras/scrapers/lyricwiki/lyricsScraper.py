@@ -1,3 +1,4 @@
+# coding: utf-8
 import urllib
 from sgmllib import SGMLParser
 import sys
@@ -141,8 +142,8 @@ class LyricsFetcher:
 if ( __name__ == '__main__' ):
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "Kim Mitchell"
-    song = "Go for Soda"
+    artist = "Blue Öyster Cult"#"Kim Mitchell"
+    song = "Godzilla"#"Go for Soda"
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     

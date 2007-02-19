@@ -12,8 +12,8 @@
 
 SAVE_LYRICS = False
 LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
-PARSER = 'lyricwiki'
-#PARSER = 'lyrc.com.ar'
+SCRAPER = 'lyricwiki'
+#SCRAPER = 'lyrc.com.ar'
 
 ########## IMPORTS ###############
 import xbmc, xbmcgui
@@ -26,7 +26,7 @@ import traceback
 
 ExtrasPath = sys.path[0] +  '\\extras\\'
 sys.path.append(ExtrasPath + '\\lib')
-sys.path.append(ExtrasPath + '\\scrapers\\' + PARSER)
+sys.path.append(ExtrasPath + '\\scrapers\\' + SCRAPER)
 import lyricsScraper
 import language
 _ = language.Language().string
@@ -145,6 +145,7 @@ class Overlay(xbmcgui.WindowDialog):
         except: return False
         
     def make_fatx_compatible( self, name, extension ):
+        #name = name.decode( 'utf-8', 'replace' ).encode( 'ascii', 'replace' )
         if len( name ) > 42:
             if ( extension ): name = '%s_%s' % ( name[ : 37 ], name[ -4 : ], )
             else: name = name[ : 42 ]

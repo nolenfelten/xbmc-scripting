@@ -1,3 +1,4 @@
+# coding: utf-8
 import os
 import urllib
 import re
@@ -46,10 +47,11 @@ class LyricsFetcher:
 if ( __name__ == '__main__' ):
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "Kim Mitchell"
-    song = "Go for Soda"
+    artist = "Blue Öyster Cult"#"Kim Mitchell"
+    song = "Godzilla"#"Go for Soda"
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
+    
     # --------------------------------------------------------------------#
     # Used to test get_lyrics_from_list() 
     #url = ('Big and rich - Save a horse, ride a cowboy', 'tema1en.php?hash=776d8fa28c4621dc943dc3a8caa81a32')
