@@ -92,8 +92,12 @@ class Overlay(xbmcgui.WindowDialog):
     def show_control( self, control ):
         self.controls[ 4 ][ 'control' ].setVisible( control == 4 )
         self.controls[ 5 ][ 'control' ].setVisible( control == 5 )
+        try:
+            self.controls[ 7 ][ 'control' ].setVisible( control == 5 or ( control == 4 and str( self.controls[4]['control'] ).find( 'ControlTextBox' ) == -1 ) )
+        except: pass
         self.setFocus( self.controls[ control ][ 'control' ] )
-    
+        self.update_label()
+        
     def get_lyrics(self, artist, song):
         try:
             self.controls[4]['control'].reset()
@@ -106,23 +110,16 @@ class Overlay(xbmcgui.WindowDialog):
                 self.show_lyrics( lyrics )
             else:
                 test = self.LyricsScraper.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
-                if type( test ) == str:
+                if ( type( test ) == str ):
                     self.show_lyrics( test )
-                elif type( test ) == list:
-                    if ( test ):
-                        for song in test:
-                            self.controls[5]['control'].addItem( song[ 0 ] )
-                        self.menu_items = test
-                        self.show_control( 5 )
-                    else:
-                        self.controls[4]['control'].setText( _( 2 ) )
-                        self.show_control( 4 )
+                elif ( type( test ) == list and test ):
+                    self.show_choices( test )
+                else:
+                    self.show_lyrics( _( 2 ) )
         except: pass
         
     def get_lyrics_from_list( self, item ):
         try:
-            self.controls[4]['control'].reset()
-            self.controls[5]['control'].reset()
             lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
             self.show_lyrics( lyrics )
         except: traceback.print_exc()
@@ -157,18 +154,55 @@ class Overlay(xbmcgui.WindowDialog):
         return name
         
     def show_lyrics( self, lyrics ):
+        xbmcgui.lock()
+        self.controls[4]['control'].reset()
+        self.controls[5]['control'].reset()
+        control_is_TextBox = str( self.controls[4]['control'] ).find( 'ControlTextBox' ) != -1
         #Checking whether some idiot has submitted empty lyrics or not:
         if ( len( lyrics ) < 2 ):
-            self.controls[4]['control'].setText( _( 3 ) )
+            if ( control_is_TextBox ):
+                self.controls[ 4 ][ 'control' ].setText( _( 3 ) )
+            else:
+                self.controls[ 4 ][ 'control' ].addItem( _( 3 ) )
         #If not, we show whatever results we got:
         else:
-            self.controls[4]['control'].setText( lyrics )
+            if ( control_is_TextBox ):
+                self.controls[ 4 ][ 'control' ].setText( lyrics )
+            else:
+                for x in lyrics.split( '\n' ):
+                    self.controls[ 4 ][ 'control' ].addItem( x )
             if ( SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
         self.show_control( 4 )
-       
+        xbmcgui.unlock()
+        
+    def show_choices( self, choices ):
+        xbmcgui.lock()
+        self.controls[ 4 ][ 'control' ].reset()
+        self.controls[ 5 ][ 'control' ].reset()
+        for song in choices:
+            self.controls[ 5 ][ 'control' ].addItem( song[ 0 ] )
+        self.menu_items = choices
+        self.show_control( 5 )
+        xbmcgui.unlock()
+    
+    def update_label( self ):
+        xbmcgui.lock()
+        try:
+            current_control = self.getFocus()
+            item_height = current_control.getItemHeight() + current_control.getSpace()
+            total_height = current_control.getHeight() - item_height
+            items_per_page = int( float( total_height ) / float( item_height ) )
+            item = current_control.getSelectedPosition()
+            total_pages = int( float( current_control.size() ) / items_per_page + 0.99 )
+            current_page = int( float( item ) / items_per_page + 1 )
+            self.controls[ 7 ][ 'control' ].setLabel( '%d/%d' % ( current_page, total_pages, ) )
+        except: pass
+        xbmcgui.unlock()
+            
     def onAction(self, action):
         if action == ACTION_PREVIOUS_MENU:
             self.exitScript()
+        else: self.update_label()
     
     def onControl(self, control):
         if control == self.controls[5]['control']:

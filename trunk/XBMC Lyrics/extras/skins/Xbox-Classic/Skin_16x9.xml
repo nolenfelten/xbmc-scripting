@@ -50,6 +50,7 @@
             <diffusecolor>DAFFFFFF</diffusecolor>
         </control>
 
+        <!-- Uncomment this control to use a textbox for lyrics -->
         <control type="textbox" id="4">
             <description>textarea</description>
             <posx>220</posx>
@@ -72,12 +73,50 @@
             <visible>false</visible>
         </control>
 
+        <!-- Uncomment this control to use a list for lyrics -->
+        <!--control type="list" id="4">
+            <description>lyrics list</description>
+            <posx>220</posx>
+            <posy>202</posy>
+            <width>436</width>
+            <height>299</height>
+            <onleft>4</onleft>
+            <onright>4</onright>
+            <onup>4</onup>
+            <ondown>4</ondown>
+            <spinposx>410</spinposx>
+            <spinposy>345</spinposy>
+            <spincolor>ddffffff</spincolor>
+            <textureup>scroll-up.png</textureup>
+            <texturedown>scroll-down.png</texturedown>
+            <textureupfocus>scroll-up-focus.gif</textureupfocus>
+            <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <image>-</image>
+			<itemwidth>0</itemwidth>
+			<itemheight>0</itemheight>
+            <textureheight>22</textureheight>
+            <spacebetweenitems>1</spacebetweenitems>  
+            <font>font13</font>
+            <selectedcolor>ffffffff</selectedcolor>
+            <textcolor>DDFFFFFF</textcolor>
+            <textcolor2>ddffffff</textcolor2>
+            <colordiffuse>ffffffff</colordiffuse>
+            <suffix> |</suffix>
+            <textxoff>3</textxoff>
+            <textxoff2>0</textxoff2>
+            <aligny>center</aligny>
+            <visible>false</visible>
+			<textxoff>0</textxoff>
+        </control-->
+
         <control type="list" id="5">
             <description>link list</description>
             <posx>220</posx>
             <posy>202</posy>
             <width>436</width>
-            <height>320</height>
+            <height>310</height>
             <onleft>5</onleft>
             <onright>5</onright>
             <onup>5</onup>
@@ -91,9 +130,12 @@
             <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>list-nofocus.png</texturenofocus>
-            <image>icon-folder.png</image>
-            <textureheight>30</textureheight>
+            <image>-</image>
+			<itemwidth>0</itemwidth>
+			<itemheight>0</itemheight>
+            <textureheight>29</textureheight>
             <spacebetweenitems>2</spacebetweenitems>  
+			<textxoff>0</textxoff>
             <font>font13</font>
             <selectedcolor>ffffffff</selectedcolor>
             <textcolor>DDFFFFFF</textcolor>
@@ -104,6 +146,17 @@
             <textxoff2>0</textxoff2>
             <aligny>center</aligny>
             <visible>false</visible>
+        </control>
+
+        <control type="label" id="7">
+            <description>list label</description>
+            <posx>627</posx>
+            <posy>481</posy>
+            <width>100</width>
+            <label>1/4</label>
+            <align>right</align>
+            <font>font13</font>
+            <textcolor>DDFFFFFF</textcolor>
         </control>
 
         <control type="group">
