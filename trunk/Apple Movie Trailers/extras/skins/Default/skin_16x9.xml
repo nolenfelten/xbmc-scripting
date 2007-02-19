@@ -22,6 +22,7 @@
 
 	<defaultcontrol always="true">10</defaultcontrol>
 	<resolution>PAL16x9</resolution>
+    <useincludes>false</useincludes>
 
 	<controls>
 
