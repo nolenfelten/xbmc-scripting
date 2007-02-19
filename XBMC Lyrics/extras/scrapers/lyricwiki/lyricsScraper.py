@@ -1,4 +1,3 @@
-# coding: utf-8
 import urllib
 from sgmllib import SGMLParser
 import sys
@@ -21,7 +20,7 @@ class _SongListParser( SGMLParser ):
                     self.url = value
             elif ( key == 'title' ):
                 if ( urllib.unquote( self.url[ 1 : ] ) == urllib.unquote( value.replace( ' ', '_' ).replace( '&amp;', '&' ) ) ):
-                    self.song_list += [ ( urllib.unquote( value ), self.url, ) ]
+                    self.song_list += [ ( unicode( value, 'utf-8' ), self.url, ) ]
             else:
                 self.url = 'None'
 
@@ -30,7 +29,7 @@ class _LyricsParser( SGMLParser ):
     def reset( self ):
         SGMLParser.reset( self )
         self.lyrics_found = False
-        self.lyrics = ''
+        self.lyrics = unicode( '', 'utf-8' )
 
     def start_div( self, attrs ):
         for key, value in attrs:
@@ -43,7 +42,7 @@ class _LyricsParser( SGMLParser ):
 
     def handle_data( self, text ):
         if ( self.lyrics_found ):
-            self.lyrics += text
+            self.lyrics += unicode( text, 'utf-8' )
 
 class LyricsFetcher:
     def __init__( self ):
@@ -119,7 +118,11 @@ class LyricsFetcher:
         """ convert param to the form expected by site """
         retVal = ''
         for word in param.split():
-            if ( caps ): word = word.capitalize()
+            if ( caps ):
+                if ( word[ 0 ] in """!@#$%^&*()_+=-][{}'";:/?.>,<\\|""" ):
+                    word = word[ 0 ] + word[ 1 : ].capitalize()
+                else:
+                    word = word.capitalize()
             word = word.replace( '/', '_' ).replace( 'Ac_dc', 'AC_DC' )
             retVal += urllib.quote( word ) + '_'
         return retVal[ : -1 ]
@@ -140,10 +143,11 @@ class LyricsFetcher:
         return text
 
 if ( __name__ == '__main__' ):
+    
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
     artist = "Blue Öyster Cult"#"Kim Mitchell"
-    song = "Godzilla"#"Go for Soda"
+    song = "(Don't Fear) The Reaper"#"Go for Soda"
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
@@ -153,10 +157,10 @@ if ( __name__ == '__main__' ):
     #lyrics = LyricsFetcher().get_lyrics_from_list( url )
     # --------------------------------------------------------------------#
     
-    if ( type( lyrics ) == str ):
-        print lyrics
-    else:
+    if ( type( lyrics ) == list ):
         for song in lyrics:
             print song
+    else:
+        print lyrics
             
 

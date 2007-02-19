@@ -1,4 +1,4 @@
-###XBMC Lyrics script by SveinT##########################################
+'''###XBMC Lyrics script by SveinT###
 #
 # Be sure to play a mp3 before running this script, or else it won't work.
 # Report any bugs to sveint@gmail.com
@@ -9,6 +9,7 @@
 #
 # Smuto mod: July 27th 2006
 # Thanks to Nuka1195 and Rocko (Rockstar)
+'''
 
 SAVE_LYRICS = False
 LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
@@ -110,7 +111,7 @@ class Overlay(xbmcgui.WindowDialog):
                 self.show_lyrics( lyrics )
             else:
                 test = self.LyricsScraper.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
-                if ( type( test ) == str ):
+                if ( type( test ) == str or type( test ) == unicode ):
                     self.show_lyrics( test )
                 elif ( type( test ) == list and test ):
                     self.show_choices( test )
