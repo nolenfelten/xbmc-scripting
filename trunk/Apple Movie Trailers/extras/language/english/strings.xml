@@ -126,6 +126,12 @@
   <string id="331">Download</string>
   <string id="332">Download &amp; Save</string>
   <string id="340">Check version on startup</string>
+  <string id="350">a save folder</string>
+  <string id="351">choose your skin</string>
+  <string id="352">choose trailer quality</string>
+  <string id="353">choose streaming mode</string>
+  <string id="354">choose thumbnail display mode</string>
+  <string id="355">choose category</string>
 
   <!-- Movie/Genre Information -->
   <string id="400">*No plot could be retrieved for this title.</string>

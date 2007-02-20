@@ -485,7 +485,7 @@ class GUI( xbmcgui.Window ):
                     url = trailer_urls[choice]
                     fetcher = cacheurl.HTTPProgressSave()
                     filename = str( fetcher.urlretrieve( url ) )
-                elif ( self.settings.mode == 2):
+                elif ( self.settings.mode >= 2):
                     url = trailer_urls[choice]
                     ext = os.path.splitext( url )[ 1 ]
                     title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
