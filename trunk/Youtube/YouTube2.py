@@ -116,7 +116,7 @@ class YouTube2:
 		url = YouTube2.feed_url % feed
 
 		return self.parse_rss(url, opener)
-	
+
 	def search(self, term, opener):
 		"""Assemble a search query and return a (desc, id) list."""
 
@@ -127,7 +127,7 @@ class YouTube2:
 
 	def parse_rss(self, url, opener):
 		"""Fetch an url, strip invalid chars and return a (desc, id) list."""
-		
+
 		list = []
 
 		filename = opener.fetch(url)
@@ -143,7 +143,7 @@ class YouTube2:
 			list.append((str, entry.link[-11:]))
 
 		return list
-	
+
 	def parse_video(self, id, opener):
 		"""Return a proper playback url for some YouTube id."""
 
@@ -175,7 +175,7 @@ if __name__ == '__main__':
 	def progress_handler(done, total, dlg):
 		t = int((done*100.0)/(total))
 		print t
-	
+
 	def error_handler(code, message, udata):
 		print '%d - %s' % (code, message)
 
