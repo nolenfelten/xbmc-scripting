@@ -7,4 +7,17 @@
   
   <string id="10">What do you want to run this for?</string>
   <string id="11">No music is playing fool!</string>
+  <string id="12">There was an error svaing your settings.</string>
+  <string id="13">Scraper changes won't take effect until you restart.</string>
+  
+  <string id="30">Scraper</string>
+  <string id="31">Save Lyrics</string>
+  <string id="32">Save Folder</string>
+  <string id="33">a save folder</string>
+  
+  <string id="50">Ok</string>
+  <string id="51">Cancel</string>
+  <string id="52">Update</string>
+  <string id="53">Credits</string>
+  
 </strings>
