@@ -15,7 +15,7 @@ def setQuality( _ ):
     return [_(320), _(321), _(322)]
 
 def setMode( _ ):
-    return [_(330), _(331), '%s - (videos)' % _(332), '%s - (files)' % _(332)]
+    return [_(330), _(331), '%s (videos)' % _(332), '%s (files)' % _(332)]
 
 def setControllerAction():
     return {
