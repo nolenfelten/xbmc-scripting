@@ -28,6 +28,7 @@ import os
 import sys
 import traceback
 import guibuilder
+import pickle
 
 # Gamepad constans
 ACTION_MOVE_LEFT      = 1  
@@ -97,13 +98,14 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Return a list of old search terms."""
 
 		list = []
+		path = os.path.join(self.base_path, 'data', 'history.txt')
+
 		try:
-			path = os.path.join(self.base_path, 'history.txt')
-			f = open(path)
-			list = [x.strip() for x in f.readlines()]
+			f = open(path, 'rb')
+			list = pickle.load(f)
 			f.close()
 		except IOError, e:
-			pass
+			print 'There was an error while loading the pickle (%s)' % e
 
 		return list
 
@@ -117,13 +119,13 @@ class YouTubeGUI(xbmcgui.Window):
 		if len(list) > 50:
 			list = list[:50]
 
-		data = '\n'.join(list)
-		
-		path = os.path.join(self.base_path, 'history.txt')
-		f = open(path, 'w+')
-		f.write(data)
-		f.flush()
-		f.close()
+		path = os.path.join(self.base_path, 'data', 'history.txt')
+		try:
+			f = open(path, 'wb')
+			pickle.dump(list, f, protocol=pickle.HIGHEST_PROTOCOL)
+			f.close()
+		except IOError, e:
+			print 'There was an error while saving the pickle (%s)' % e
 
 	def load_skin(self, name=None):
 		"""Loads the GUI skin."""
