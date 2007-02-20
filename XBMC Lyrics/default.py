@@ -63,11 +63,11 @@ if ( not os.path.isdir( LYRICS_PATH ) ): #if folder doesn't exist
 class Overlay(xbmcgui.WindowDialog):
     def __init__(self):
         try:
-            self.artist = None
-            self.song = None
             self.setupGUI()
             if (not self.SUCCEEDED): self.exitScript()
             else:
+                self.artist = None
+                self.song = None
                 self.dummy()
                 self.LyricsScraper = lyricsScraper.LyricsFetcher()
                 self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )

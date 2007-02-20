@@ -119,12 +119,17 @@ class LyricsFetcher:
         retVal = ''
         for word in param.split():
             if ( caps ):
+                if ( word[ 0 ].upper() in """ABCDEFGHIJKLMNOPQRSTUVWXYZ""" ):
+                    word = word.title()
+                ''' Leave for a short time for more testing.
                 if ( word[ 0 ] in """!@#$%^&*()_+=-][{}'";:/?.>,<\\|""" ):
                     word = word[ 0 ] + word[ 1 : ].capitalize()
                 else:
                     word = word.capitalize()
-            word = word.replace( '/', '_' ).replace( 'Ac_dc', 'AC_DC' )
+                '''
+            word = word.replace( '/', '_' ).replace( 'Ac_Dc', 'AC_DC' )
             retVal += urllib.quote( word ) + '_'
+        print retVal
         return retVal[ : -1 ]
     
     def _clean_text( self, text ):
@@ -146,8 +151,8 @@ if ( __name__ == '__main__' ):
     
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "Blue Öyster Cult"#"Kim Mitchell"
-    song = "(Don't Fear) The Reaper"#"Go for Soda"
+    artist = "AC/DC"#"Ted Nugent"#"Blue Öyster Cult"#"Kim Mitchell"#
+    song = "T.N.T."#"Free-for-all"#"(Don't Fear) The Reaper"#"Go for Soda"#
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
@@ -162,5 +167,4 @@ if ( __name__ == '__main__' ):
             print song
     else:
         print lyrics
-            
-
+    
