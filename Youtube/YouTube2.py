@@ -107,8 +107,17 @@ class YouTube2:
 	feed_url = 'http://youtube.com/rss/global/%s.rss'
 	search_url = 'http://youtube.com/rss/search/%s.rss'
 
+	user_url = 'http://www.youtube.com/rss/user/%s/videos.rss'
+
 	def __init__(self):
 		pass
+
+	def get_user_videos(self, user, opener):
+		"""Assemble user videos url and return a (desc, id) list."""
+
+		url = YouTube2.user_url % user
+
+		return self.parse_rss(url, opener)
 
 	def get_feed(self, feed, opener):
 		"""Assemble feed url and return a (desc, id) list."""
@@ -194,3 +203,7 @@ if __name__ == '__main__':
 	print "--------------------------------------"
 	print yt.parse_video('S2n1_h3Bvt0', opener)
 
+	print "--------------------------------------"
+	list = yt.get_user_videos('sneseglarn', opener)
+	for (desc, id) in list:
+		print "%s %s" % (id, desc)
