@@ -225,6 +225,9 @@ class YouTubeGUI(xbmcgui.Window):
 				lbl = 'Search: %s' % term
 				self.get_control('Feed Label').setLabel(lbl)
 				self.add_search_history(term)
+			else:
+				dlg = xbmcgui.Dialog()
+				dlg.ok('YouTube', 'No videos were found that match your query.')
 
 	def search_history(self):
 		"""Get search history and update the list."""
