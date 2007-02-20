@@ -231,6 +231,16 @@
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font13</font>
                 </control>
+                <control type="label" id="8">
+                    <description>Scraper</description>
+                    <posx>655</posx>
+                    <posy>78</posy>
+                    <width>200</width>
+                    <label>-</label>
+                    <align>right</align>
+                    <font>font12</font>
+                    <textcolor>FF9FCA4F</textcolor>
+                </control>
                 <control type="fadelabel">
                     <description>Title label</description>
                     <posx>220</posx>

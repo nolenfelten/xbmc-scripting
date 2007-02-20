@@ -11,71 +11,41 @@
 # Thanks to Nuka1195 and Rocko (Rockstar)
 '''
 
-SAVE_LYRICS = False
-LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
-SCRAPER = 'lyricwiki'
-#SCRAPER = 'lyrc.com.ar'
-
 ########## IMPORTS ###############
 import xbmc, xbmcgui
 import os, sys
 import threading
 import traceback
 
-
-########## STANDARDS ###############
-
-ExtrasPath = sys.path[0] +  '\\extras\\'
-sys.path.append(ExtrasPath + '\\lib')
-sys.path.append(ExtrasPath + '\\scrapers\\' + SCRAPER)
-import lyricsScraper
-import language
+ExtrasPath = os.path.join( sys.path[0], 'extras' )
+sys.path.append( os.path.join( ExtrasPath, 'lib' ) )
+import language, lyricsutil#, settings
+import guibuilder
 _ = language.Language().string
 
 
-######### KEY - FUNCTIONS ################
-
-ACTION_MOVE_LEFT				= 1	
-ACTION_MOVE_RIGHT			= 2
-ACTION_MOVE_UP				= 3
-ACTION_MOVE_DOWN			= 4
-ACTION_PAGE_UP				= 5
-ACTION_PAGE_DOWN			= 6
-ACTION_SELECT_ITEM			= 7
-ACTION_HIGHLIGHT_ITEM		= 8
-ACTION_PARENT_DIR			= 9
-ACTION_PREVIOUS_MENU		= 10
-ACTION_SHOW_INFO			= 11
-ACTION_PAUSE					= 12
-ACTION_STOP						= 13
-ACTION_NEXT_ITEM				= 14
-ACTION_PREV_ITEM				= 15
-
-########## Functions ##############
-
-if ( not os.path.isdir( LYRICS_PATH ) ): #if folder doesn't exist
-    try:
-        os.makedirs(LYRICS_PATH)
-    except Exception:
-        pass
-        
-
-class Overlay(xbmcgui.WindowDialog):
-    def __init__(self):
+class Overlay( xbmcgui.WindowDialog ):
+    def __init__( self ):
         try:
+            self.Timer = None
             self.setupGUI()
-            if (not self.SUCCEEDED): self.exitScript()
+            if ( not self.SUCCEEDED ): self.exitScript()
             else:
+                self.getSettings()
+                self.setupVariables()
+                sys.path.append( os.path.join( ExtrasPath, 'scrapers', self.settings.SCRAPER ) )
+                import lyricsScraper
                 self.artist = None
                 self.song = None
                 self.dummy()
                 self.LyricsScraper = lyricsScraper.LyricsFetcher()
                 self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
                 self.myPlayerChanged( 2 )
-        except: traceback.print_exc()
-        
+        except: 
+            traceback.print_exc()
+            self.exitScript()
+            
     def setupGUI( self ):
-        import guibuilder
         cwd = sys.path[ 0 ]
         current_skin = xbmc.getSkinDir()
         if ( not os.path.exists( os.path.join( cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
@@ -85,6 +55,14 @@ class Overlay(xbmcgui.WindowDialog):
         else: xml_file = 'skin.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True )
+
+    def getSettings( self ):
+        self.settings = lyricsutil.Settings()
+
+    def setupVariables( self ):
+        self.controller_action = lyricsutil.setControllerAction()
+        try: self.controls[ 8 ][ 'control' ].setLabel( self.settings.SCRAPER )
+        except: pass
 
     def exitScript(self):
         if ( self.Timer ): self.Timer.cancel()
@@ -127,7 +105,7 @@ class Overlay(xbmcgui.WindowDialog):
 
     def get_lyrics_from_file( self ):
         try:
-            song_path = os.path.join( LYRICS_PATH, self.artist_filename, self.song_filename )
+            song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
             lyrics_file = open( song_path, 'r' )
             lyrics = lyrics_file.read()
             lyrics_file.close()
@@ -136,9 +114,9 @@ class Overlay(xbmcgui.WindowDialog):
 
     def save_lyrics_to_file( self, lyrics ):
         try:
-            song_path = os.path.join( LYRICS_PATH, self.artist_filename, self.song_filename )
-            if ( not os.path.isdir( os.path.join( LYRICS_PATH, self.artist_filename ) ) ):
-                os.makedirs( os.path.join( LYRICS_PATH, self.artist_filename ) )
+            song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
+            if ( not os.path.isdir( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) ) ):
+                os.makedirs( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) )
             lyrics_file = open( song_path, 'w' )
             lyrics_file.write( lyrics )
             lyrics_file.close()
@@ -173,7 +151,7 @@ class Overlay(xbmcgui.WindowDialog):
             else:
                 for x in lyrics.split( '\n' ):
                     self.controls[ 4 ][ 'control' ].addItem( x )
-            if ( SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
+            if ( self.settings.SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
         self.show_control( 4 )
         xbmcgui.unlock()
         
@@ -200,14 +178,26 @@ class Overlay(xbmcgui.WindowDialog):
             self.controls[ 7 ][ 'control' ].setLabel( '%d/%d' % ( current_page, total_pages, ) )
         except: pass
         xbmcgui.unlock()
+
+    def changeSettings( self ):
+        try:
+            import settings
+            settings = settings.GUI( language=_ )
+            settings.doModal()
+            del settings
+            self.getSettings()
+        except: traceback.print_exc()
             
     def onAction(self, action):
-        if action == ACTION_PREVIOUS_MENU:
+        button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
+        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.exitScript()
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
+            self.changeSettings()
         else: self.update_label()
     
     def onControl(self, control):
-        if control == self.controls[5]['control']:
+        if control == self.controls[ 5 ][ 'control' ]:
             self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
             
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 

@@ -1,7 +1,0 @@
-<strings>
-  <string><id>0</id><value>XBMC Lyrics</value></string>
-  <string><id>1</id><value>Unusual page layout, no parsing built in yet...</value></string>
-  <string><id>2</id><value>ERROR! Couldn't get link name</value></string>
-  <string><id>3</id><value>No lyrics found</value></string>
-  <string><id>4</id><value>Page for song found, but it is empty</value></string>
-</strings>

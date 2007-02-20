@@ -13,7 +13,6 @@ class LyricsFetcher:
         elif string.find(Page, "Suggestions :") != -1:
             links_query = re.compile('<br><a href=\"(.*?)\"><font color=\'white\'>(.*?)</font></a>', re.IGNORECASE)
             urls = re.findall(links_query, Page)
-            print urls
             links = []
             for x in urls:
                 links.append( ( x[1], x[0], ) )

@@ -129,11 +129,11 @@ class LyricsFetcher:
                 '''
             word = word.replace( '/', '_' ).replace( 'Ac_Dc', 'AC_DC' )
             retVal += urllib.quote( word ) + '_'
-        print retVal
         return retVal[ : -1 ]
     
     def _clean_text( self, text ):
         """ covert line terminators and html entities """
+        text = text.replace( '\t', '' )
         text = text.replace( '<br> ', '\n' )
         text = text.replace( '<br>', '\n' )
         text = text.replace( '<br /> ', '\n' )
@@ -151,8 +151,8 @@ if ( __name__ == '__main__' ):
     
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "AC/DC"#"Ted Nugent"#"Blue Öyster Cult"#"Kim Mitchell"#
-    song = "T.N.T."#"Free-for-all"#"(Don't Fear) The Reaper"#"Go for Soda"#
+    artist = "The 5th Dimension"#"AC/DC"#"Ted Nugent"#"Blue Öyster Cult"#"Kim Mitchell"#
+    song = "Age of Aquarius"#"T.N.T."#"Free-for-all"#"(Don't Fear) The Reaper"#"Go for Soda"#
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
