@@ -7,7 +7,7 @@
 
 	<controls>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Black translucent backdrop</description>
 			<posx>0</posx>
 			<posy>0</posy>
@@ -18,7 +18,7 @@
 			<animation effect="fade" delay="450" time="100">WindowClose</animation>
 		</control>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Guide Blade Background</description>
 			<posx>85</posx>
 			<posy>0</posy>
@@ -31,7 +31,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Custom Guide Blade Background</description>
 			<posx>85</posx>
 			<posy>0</posy>
@@ -45,7 +45,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Guide Blade Overlay</description>
 			<posx>160</posx>
 			<posy>0</posy>
@@ -56,7 +56,8 @@
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
-        <control type="image" id="1">
+
+	        <control type="image" id="1">
 			<description>Guide Edge Overlay</description>
 			<posx>60</posx>
 			<posy>0</posy>
@@ -68,7 +69,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Back Button</description>
 			<posx>650</posx>
 			<posy>475</posy>
@@ -79,7 +80,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control> 
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>A Button</description>
 			<posx>665</posx>
 			<posy>498</posy>
@@ -90,18 +91,28 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control> 
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Y Button</description>
 			<posx>150</posx>
 			<posy>475</posy>
 			<width>18</width>
 			<height>21</height>
-			<texture>button-Y-turnedoff.png</texture>
+			<texture>button-Y.png</texture>
 			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control> 
 
-        <control type="image" id="1">
+		<control type="label">
+			<description>Setting Label</description>
+			<posx>175</posx>
+			<posy>478</posy>
+			<label>Settings</label>
+			<align>left</align>
+			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
+		</control>
+
+	        <control type="image" id="1">
 			<description>X Button</description>
 			<posx>135</posx>
 			<posy>498</posy>
@@ -112,7 +123,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control> 
 
-        <control type="label" id="1">
+	        <control type="label" id="1">
 			<description>Back Label</description>
 			<posx>642</posx>
 			<posy>479</posy>
@@ -124,7 +135,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
 
-        <control type="label" id="1">
+	        <control type="label" id="1">
 			<description>Select Label</description>
 			<posx>656</posx>
 			<posy>501</posy>
@@ -137,21 +148,21 @@
 		</control>
 
 
-        <control type="label" id="1">
-            <description>description label</description>
-            <posx>120</posx>
-            <posy>200</posy>
-            <align>left</align>
-            <label>Lyrics</label>
-            <textcolor>FF000000</textcolor>
-            <include>shadow-grey</include>
-            <font>font14</font>
-            <angle>270</angle>
-            <animation effect="slide" time="250" start="212,0">WindowOpen</animation>
-            <animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
-   		</control>
+		<control type="label" id="1">
+			<description>description label</description>
+			<posx>120</posx>
+			<posy>200</posy>
+			<align>left</align>
+			<label>Lyrics</label>
+			<textcolor>FF000000</textcolor>
+			<include>shadow-grey</include>
+			<font>font14</font>
+			<angle>270</angle>
+			<animation effect="slide" time="250" start="212,0">WindowOpen</animation>
+			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
+		</control>
 
-        <control type="fadelabel" id="3">
+	        <control type="fadelabel" id="3">
 			<description>Album Title value</description>
 			<posx>145</posx>
 			<posy>35</posy>
@@ -165,7 +176,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-        <control type="textbox" id="4">
+	        <control type="textbox" id="4">
 			<description>textarea</description>
 			<posx>315</posx>
 			<posy>90</posy>
@@ -192,7 +203,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-        <control type="list" id="5">
+	        <control type="list" id="5">
 			<description>listcontrol</description>
 			<posx>315</posx>
 			<posy>90</posy>
@@ -226,7 +237,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-        <control type="image" id="6">
+	        <control type="image" id="6">
 			<description>Cover</description>
 			<posx>160</posx>
 			<posy>92</posy>
@@ -238,7 +249,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-        <control type="image" id="1">
+	        <control type="image" id="1">
 			<description>Jewel CD Case</description>
 			<posx>135</posx>
 			<posy>82</posy>
@@ -249,7 +260,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-        <control type="fadelabel" id="1">
+	        <control type="fadelabel" id="1">
 			<description>Music - Time</description>
 			<posx>140</posx>
 			<posy>285</posy>
@@ -262,7 +273,7 @@
 			<animation effect="fade" time="100">WindowOpen</animation>
 		</control>
 
-        <control type="label" id="1">
+	        <control type="label" id="1">
 			<description>Music - Album</description>
 			<posx>140</posx>
 			<posy>307</posy>
@@ -275,7 +286,7 @@
 			<animation effect="fade" time="100">WindowOpen</animation>
 		</control>
 
-        <control type="fadelabel" id="1">
+	        <control type="fadelabel" id="1">
 			<description>Music - Codec</description>
 			<posx>140</posx>
 			<posy>329</posy>
@@ -288,7 +299,7 @@
 			<animation effect="fade" time="100">WindowOpen</animation>
 		</control>
 
-        <control type="fadelabel" id="1">
+	        <control type="fadelabel" id="1">
 			<description>Music - Bitrate</description>
 			<posx>140</posx>
 			<posy>351</posy>
