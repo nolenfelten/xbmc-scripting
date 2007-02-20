@@ -57,9 +57,9 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Skin Button Value']['control'].setLabel( '%s' % ( self.settings.skin, ) )
         self.controls['Trailer Quality Button Value']['control'].setLabel( '%s' % ( self.quality[self.settings.trailer_quality], ) )
         self.controls['Mode Button Value']['control'].setLabel( '%s' % ( self.mode[self.settings.mode], ) )
-        self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode == 2 )
+        self.controls['Save Folder Button']['control'].setEnabled( self.settings.mode >= 2 )
         self.controls['Save Folder Button Value']['control'].setLabel( '%s' % ( self.settings.save_folder, ) )
-        self.controls['Save Folder Button Value']['control'].setEnabled( self.settings.mode == 2 )
+        self.controls['Save Folder Button Value']['control'].setEnabled( self.settings.mode >= 2 )
         self.controls['Thumbnail Display Button Value']['control'].setLabel( '%s' % ( self.thumbnail[self.settings.thumbnail_display], ) )
         self.controls['Startup Category Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[0]][0], ) )
         self.controls['Shortcut1 Button Value']['control'].setLabel( '%s' % ( self.startup_categories[self.startup_category[1]][0], ) )
@@ -84,7 +84,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def browseForFolder( self ):
         dialog = xbmcgui.Dialog()
-        folder = dialog.browse( 3, 'a save folder', 'video' )
+        if ( self.settings.mode == 2 ): shares = 'video'
+        else: shares = 'files'
+        folder = dialog.browse( 3, self._( 350 ), shares )
         if ( folder ):
             self.settings.save_folder = folder
             self.setControlsValues()
@@ -116,7 +118,7 @@ class GUI( xbmcgui.WindowDialog ):
                 if ( item.lower() == self.settings.skin.lower() ): pos = count - 1
         self.controls['Popup List']['control'].selectItem( pos  )
         self.getThumb( self.controls['Popup List']['control'].getSelectedItem() )
-        self.showPopup( 'choose your skin', True )
+        self.showPopup( self._( 351 ), True )
         xbmcgui.unlock()
 
     def chooseTrailerQuality( self ):
@@ -125,7 +127,7 @@ class GUI( xbmcgui.WindowDialog ):
         for item in self.quality:
             self.controls['Popup List2']['control'].addItem( item ) 
         self.controls['Popup List2']['control'].selectItem( self.settings.trailer_quality )
-        self.showPopup( 'choose trailer quality', False, True )
+        self.showPopup( self._( 352 ), False, True )
         xbmcgui.unlock()
 
     def chooseMode( self ):
@@ -134,7 +136,7 @@ class GUI( xbmcgui.WindowDialog ):
         for item in self.mode:
             self.controls['Popup List2']['control'].addItem( item ) 
         self.controls['Popup List2']['control'].selectItem( self.settings.mode )
-        self.showPopup( 'choose streaming mode', False, True )
+        self.showPopup( self._( 353 ), False, True )
         xbmcgui.unlock()
 
     def chooseThumbnailDisplay( self ):
@@ -142,7 +144,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Popup List2']['control'].reset()
         for item in self.thumbnail:
             self.controls['Popup List2']['control'].addItem( item ) 
-        self.showPopup( 'choose thumbnail display mode', False, True )
+        self.showPopup( self._( 354 ), False, True )
         self.controls['Popup List2']['control'].selectItem( self.settings.thumbnail_display )
         #xbmcgui.unlock()
 
@@ -152,7 +154,7 @@ class GUI( xbmcgui.WindowDialog ):
         for item in self.startup_categories:
             self.controls['Popup List2']['control'].addItem( str( item[ 0 ] ) )
         self.controls['Popup List2']['control'].selectItem( self.startup_category[ category ] )
-        self.showPopup( 'choose category', False, True )
+        self.showPopup( self._( 355 ), False, True )
         #xbmcgui.unlock()
 
     def showPopup( self, title, thumb_visible=False, list_visible=False ):
