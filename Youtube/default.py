@@ -21,7 +21,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-from YouTube2 import YouTube2, YouTubeUrlOpener
+import youtube
 import xbmcgui
 import xbmc
 import os
@@ -76,7 +76,7 @@ class YouTubeGUI(xbmcgui.Window):
 				self.close()
 
 			self.data = []
-			self.yt = YouTube2()
+			self.yt = youtube.YouTube()
 			self.state = YouTubeGUI.STATE_MAIN
 
 			# Get the last search term
@@ -182,13 +182,11 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg.update(percent)
 		return not dlg.iscanceled()
 	
-	def error_handler(self, code, message, udata):
+	def error_handler(self, message, udata):
 		"""Shows an error dialog with the HTTP error code and a message."""
 
-		msg = '%d - %s' % (code, message)
-
 		dlg = xbmcgui.Dialog()
-		dlg.ok('YouTube', 'There was an error.', msg)
+		dlg.ok('YouTube', 'There was an error.', message)
 
 	def download_data(self, arg, func):
 		"""Show a progress dialog while downloading and return the data."""
@@ -196,9 +194,10 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg = xbmcgui.DialogProgress()
 		dlg.create('YouTube', 'Downloading content')
 
-		opener = YouTubeUrlOpener(self.error_handler, None,
-		                          self.progress_handler, dlg)
-		data = func(arg, opener)
+		self.yt.set_error_hook(self.error_handler)
+		self.yt.set_report_hook(self.progress_handler, dlg)
+
+		data = func(arg)
 
 		dlg.close()
 
@@ -272,7 +271,7 @@ class YouTubeGUI(xbmcgui.Window):
 	def play_clip(self, id):
 		"""Get the url for the id and start playback."""
 
-		file = self.download_data(id, self.yt.parse_video)
+		file = self.download_data(id, self.yt.get_video_url)
 		if file is not None:
 			self.player.play(str(file))
 
