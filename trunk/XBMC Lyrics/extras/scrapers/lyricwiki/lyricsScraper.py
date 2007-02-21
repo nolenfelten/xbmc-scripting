@@ -114,22 +114,26 @@ class LyricsFetcher:
         new_song_list.sort()
         return new_song_list
 
-    def _format_param( self, param, caps = True):
+    def _format_param( self, param ):
         """ convert param to the form expected by site """
-        retVal = ''
-        for word in param.split():
-            if ( caps ):
-                if ( word[ 0 ].upper() in """ABCDEFGHIJKLMNOPQRSTUVWXYZ""" ):
-                    word = word.title()
-                ''' Leave for a short time for more testing.
-                if ( word[ 0 ] in """!@#$%^&*()_+=-][{}'";:/?.>,<\\|""" ):
-                    word = word[ 0 ] + word[ 1 : ].capitalize()
-                else:
-                    word = word.capitalize()
-                '''
-            word = word.replace( '/', '_' ).replace( 'Ac_Dc', 'AC_DC' )
-            retVal += urllib.quote( word ) + '_'
-        return retVal[ : -1 ]
+        caps = True
+        words = ''
+        for letter in param.upper().strip():
+            if ( letter in """ABCDEFGHIJKLMNOPQRSTUVWXYZ""" and caps ):
+                caps = False
+            elif ( letter in """ABCDEFGHIJKLMNOPQRSTUVWXYZ""" ):
+                letter = letter.lower()
+            elif ( letter == ' ' ):
+                letter = '_'
+                caps = True
+            elif ( letter in """(_-.""" ):
+                caps = True
+            else:
+                caps = False
+            words += letter
+        words = words.replace( '/', '_' ).replace( 'Ac_dc', 'AC_DC' )
+        retVal = urllib.quote( words )
+        return retVal
     
     def _clean_text( self, text ):
         """ covert line terminators and html entities """
@@ -151,8 +155,8 @@ if ( __name__ == '__main__' ):
     
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "Blue Öyster Cult"#"AC/DC"#"Ted Nugent"#"Kim Mitchell"#
-    song = "2(Don't Fear) The Reaper"#"Age of Aquarius"#"T.N.T."#"Free-for-all"#"Go for Soda"#
+    artist = "Blue Öyster Cult"#"Ted Nugent"#"Kim Mitchell"#"The 5th Dimension"#"AC/DC"#"Tom Jones"#
+    song = "(Don't Fear) The Reaper"#"Free-for-all"#"Go for Soda"#"Age of Aquarius"#"T.N.T."#"She's A Lady"#
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
