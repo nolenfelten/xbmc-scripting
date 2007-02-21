@@ -21,12 +21,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-import urllib2
-import elementtree.ElementTree
 import re
+import urllib2
 
 from xml.sax.saxutils import unescape
 from xml.sax.saxutils import escape
+
+import elementtree.ElementTree
 
 class YouTube:
 	"""YouTube dataminer class."""
