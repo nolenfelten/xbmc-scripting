@@ -1,4 +1,4 @@
-<strings>
+ï»¿<strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbox media center</string>
 
@@ -6,12 +6,12 @@
   <string id="40">Komplette Info wird geladen, Suche ist verfuegbar. (10 - 60 Minuten)</string>
   <string id="41">Info wird pro Genre geladen. (1 - 5 Minuten)</string>
   <string id="42">Speicher Filminfos zur Datenbank...</string>
-  <string id="43">Einträge in Datenbank festlegen...</string>
+  <string id="43">EintrÃ¤ge in Datenbank festlegen...</string>
   <string id="44">Datenbank Erstellung...</string>
-  <string id="45">Einträge umwandeln</string>
+  <string id="45">EintrÃ¤ge umwandeln</string>
   <string id="46">Datenbank Umwandlung fehlgeschlagen...</string>
   <string id="47">Momentane Tabelle</string>
-  <string id="48">Einträge laden...</string>
+  <string id="48">EintrÃ¤ge laden...</string>
   <string id="49">*Du kannst die komplette Erstellung jederzeit nachholen.</string>
   
   <string id="50">Script einstellen:</string>
@@ -20,14 +20,14 @@
   <string id="53">Datenbank Version inkompatibel!</string>
   <string id="54">Du musst alle Genre und Film Informationen aktualisieren.</string>
   <string id="55">Fehler beim speichern der Einstellungen.</string>
-  <string id="56">Die Skinänderungen werden erst nach einem Neustart sichtbar.</string>
+  <string id="56">Die SkinÃ¤nderungen werden erst nach einem Neustart sichtbar.</string>
   <string id="57">Fehler beim Aufbau des GUI.</string>
   <string id="58">Ueberpruefe Skindatei:</string>
-  <string id="59">Datenbankdatei unzulässig...</string>
-  <string id="60">Die Datenbankdatei ist mit dieser Version von AMT|unzulässig. Sie muss neu generiert werden.</string>
+  <string id="59">Datenbankdatei unzulÃ¤ssig...</string>
+  <string id="60">Die Datenbankdatei ist mit dieser Version von AMT|unzulÃ¤ssig. Sie muss neu generiert werden.</string>
   <string id="61">Alle Genre und Film Informationen werden aktualisiert...</string>
   <string id="62">Willst du wirklich fortfahren?</string>        |
-  <string id="63">Die Aktualisierung kann 5 - 15 Minuten dauern,|das hängt ganz von deiner Internetleitung ab.</string>
+  <string id="63">Die Aktualisierung kann 5 - 15 Minuten dauern,|das hÃ¤ngt ganz von deiner Internetleitung ab.</string>
   <string id="64">Fehler</string>
   <string id="65">Kann AMT.pk nicht richtig aktualisieren</string>
   <string id="66">Fetching genre information...</string>
@@ -37,16 +37,16 @@
   <string id="70">Film Informationen laden...</string>
   <string id="71">Genre:</string>
   <string id="72">Fehler beim Laden der Informationen einer odere mehrerer Filmtitel.</string>
-  <string id="73">Cache Ordner löschen...</string>           |
-  <string id="74">Wenn der Cache Ordner nicht gelöscht wird ist|das Update schneller, doch es kann sein, dass es unvollständig ist.</string>
+  <string id="73">Cache Ordner lÃ¶schen...</string>           |
+  <string id="74">Wenn der Cache Ordner nicht gelÃ¶scht wird ist|das Update schneller, doch es kann sein, dass es unvollstÃ¤ndig ist.</string>
   <string id="75">Nicht genug freier Speicherplatz auf dem Ziellaufwerk.</string>
   <string id="76">Laufwerk</string>
   <string id="77">Frei</string>
-  <string id="78">Platz benötigt</string>
+  <string id="78">Platz benÃ¶tigt</string>
   <string id="79">Downloade...</string>
   <string id="80">KB/s</string>
-  <string id="81">Nicht alle benötigten Module wurden gefunden!</string>
-  <string id="82">Wirklich löschen</string>
+  <string id="81">Nicht alle benÃ¶tigten Module wurden gefunden!</string>
+  <string id="82">Wirklich lÃ¶schen</string>
   <string id="83">Lade Datenbank...</string>
   <string id="84">Speichere datenbank...</string>
   <string id="85">Suche durchfuehren...</string>
@@ -57,7 +57,7 @@
 
   <string id="90">Momentan markierte Versionen pruefen...</string>
   <string id="91">ist neuer</string>
-  <string id="92">Möchtest du aktualisieren?</string>
+  <string id="92">MÃ¶chtest du aktualisieren?</string>
   <string id="93">Dateiliste wird geladen...</string>
   <string id="94">Bitte warten...</string>
   <string id="95">Deine Version ist aktuell.</string>
@@ -69,7 +69,7 @@
   <!-- Credits -->
   <string id="100">Version</string>
   <string id="101">Team Credits:</string>
-  <string id="102">Zusätzliche Credits:</string>
+  <string id="102">ZusÃ¤tzliche Credits:</string>
   <string id="103">Skin Credits:</string>
   <string id="104">Coder</string>
   
@@ -86,9 +86,9 @@
   <string id="209">Credits</string>
   <string id="210">Ok</string>
   <string id="211">Abbrechen</string>
-  <string id="212">*Skin abhängig</string>
+  <string id="212">*Skin abhÃ¤ngig</string>
   <string id="213">Version</string>
-  <string id="214">wähle Skin</string>
+  <string id="214">wÃ¤hle Skin</string>
   <string id="215">Handlung</string>
   <string id="216">Besetzung</string>
   <string id="217">Favoriten</string>
@@ -107,15 +107,15 @@
   <string id="230">Minimal</string>
   
   <!-- Settings -->
-  <string id="300">Trailer Qualität</string>
+  <string id="300">Trailer QualitÃ¤t</string>
   <string id="301">Modus</string>
   <string id="302">Speicher Ordner</string>
   <string id="303">Skin</string>
   <string id="304">Start Kategorie</string>
   <string id="305">Miniatur Anzeige</string>
-  <string id="306">Verknüpfung #1</string>
-  <string id="307">Verknüpfung #2</string>
-  <string id="308">Verknüpfung #3</string>
+  <string id="306">VerknÃ¼pfung #1</string>
+  <string id="307">VerknÃ¼pfung #2</string>
+  <string id="308">VerknÃ¼pfung #3</string>
   <string id="310">Film Poster</string>
   <string id="311">Allgemeine Vorschau</string>
   <string id="312">Aus</string>
@@ -125,23 +125,23 @@
   <string id="330">Stream</string>
   <string id="331">Download</string>
   <string id="332">Download &amp; Speichern</string>
-  <string id="340">Version beim starten prüfen</string>
+  <string id="340">Version beim starten prÃ¼fen</string>
 
   <!-- Movie/Genre Information -->
-  <string id="400">*Für diesen Titel konnte keine Handlung geladen werden.</string>
-  <string id="401">*Für diesen Titel konnte keine Besetzungsliste geladen werden.</string>
+  <string id="400">*FÃ¼r diesen Titel konnte keine Handlung geladen werden.</string>
+  <string id="401">*FÃ¼r diesen Titel konnte keine Besetzungsliste geladen werden.</string>
 
   <!-- Context Menu -->
   <string id="500">Kino Zeiten</string>
   <string id="501">-</string>
-  <string id="502">Zu Favoriten hinzufügen</string>
-  <string id="503">Von Favoriten löschen</string>
+  <string id="502">Zu Favoriten hinzufÃ¼gen</string>
+  <string id="503">Von Favoriten lÃ¶schen</string>
   <string id="504">Als gesehen markieren</string>
   <string id="505">Als ungesehen markieren</string>
   <string id="506">Trailer Info aktualisieren</string>
   <string id="507">Genre aktualisieren</string>
   <string id="508">Komplette Installation</string>
-  <string id="509">Gespeicherte Trailer löschen</string>
+  <string id="509">Gespeicherte Trailer lÃ¶schen</string>
   <string id="510">Trailer abspielen</string>
   <string id="511">Dieses Genre anzeigen</string>
   <string id="512">Dieses Studio anzeigen</string>
