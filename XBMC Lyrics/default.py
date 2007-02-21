@@ -1,17 +1,24 @@
-'''###XBMC Lyrics script by SveinT###
-#
-# Be sure to play a mp3 before running this script, or else it won't work.
-# Report any bugs to sveint@gmail.com
-# 
-# Thanks to solexalex and TomKun for bugfixes and additions
-#
-# Last updated: March 13th 2005
-#
-# Smuto mod: July 27th 2006
-# Thanks to Nuka1195 and Rocko (Rockstar)
 '''
+	Credits:	
+		EnderW:					Original Author
+		SveinT:
+		Stanley87:				PM3 Integration and AD Removal
+		solexalex:
+		TomKun:
+		Smuto:					Skinning Mod
+		Rockstar & Donno:	Language Routine
+		Spiff:						Unicode support
+		Nuka1195:				lyricwiki Scraper and Modulization
+				
+Please report any bugs: http://www.xboxmediacenter.com/forum/showthread.php?t=10187
+'''
+__scriptname__ = 'XBMC Lyrics'
+__author__ = 'XBMC Lyrics Team'
+__url__ = 'http://code.google.com/p/xbmc-scripting/XBMC%20Lyrics/'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
+__version__ = '1.1'
 
-########## IMPORTS ###############
+
 import xbmc, xbmcgui
 import os, sys
 import threading
@@ -19,12 +26,12 @@ import traceback
 
 ExtrasPath = os.path.join( sys.path[0], 'extras' )
 sys.path.append( os.path.join( ExtrasPath, 'lib' ) )
-import language, lyricsutil#, settings
+import language, lyricsutil
 import guibuilder
 _ = language.Language().string
 
 
-class Overlay( xbmcgui.WindowDialog ):
+class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
         try:
             self.Timer = None
@@ -33,14 +40,9 @@ class Overlay( xbmcgui.WindowDialog ):
             else:
                 self.getSettings()
                 self.setupVariables()
-                sys.path.append( os.path.join( ExtrasPath, 'scrapers', self.settings.SCRAPER ) )
-                import lyricsScraper
-                self.artist = None
-                self.song = None
-                self.dummy()
-                self.LyricsScraper = lyricsScraper.LyricsFetcher()
-                self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
-                self.myPlayerChanged( 2 )
+                self.getScraper()
+                self.getDummyTimer()
+                self.getMyPlayer()
         except: 
             traceback.print_exc()
             self.exitScript()
@@ -56,18 +58,31 @@ class Overlay( xbmcgui.WindowDialog ):
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True )
 
-    def getSettings( self ):
-        self.settings = lyricsutil.Settings()
-
     def setupVariables( self ):
+        self.artist = None
+        self.song = None
         self.controller_action = lyricsutil.setControllerAction()
         try: self.controls[ 8 ][ 'control' ].setLabel( self.settings.SCRAPER )
         except: pass
+    
+    def getSettings( self ):
+        self.settings = lyricsutil.Settings()
 
-    def exitScript(self):
-        if ( self.Timer ): self.Timer.cancel()
-        self.close()
+    def getScraper( self ):
+        sys.path.append( os.path.join( ExtrasPath, 'scrapers', self.settings.SCRAPER ) )
+        import lyricsScraper
+        self.LyricsScraper = lyricsScraper.LyricsFetcher()
 
+    # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
+    # it calls myPlayerChanged() immediately.
+    def getDummyTimer( self ):
+        self.Timer = threading.Timer( 60*60*60, self.getDummyTimer,() )
+        self.Timer.start()
+    
+    def getMyPlayer( self ):
+        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
+        self.myPlayerChanged( 2 )
+    
     def show_control( self, controlId ):
         self.controls[ 3 ][ 'control' ].setVisible( controlId == 3 )
         self.controls[ 4 ][ 'control' ].setVisible( controlId == 4 )
@@ -80,34 +95,28 @@ class Overlay( xbmcgui.WindowDialog ):
         self.update_label()
         
     def get_lyrics(self, artist, song):
-        try:
-            #self.controls[ 3 ][ 'control' ].reset()
-            #self.controls[ 4 ][ 'control' ].reset()
-            #self.controls[ 5 ][ 'control' ].reset()
-            self.menu_items = []
-            self.artist_filename = self.make_fatx_compatible( artist, False )
-            self.song_filename = self.make_fatx_compatible( song + '.txt', True )
-            lyrics = self.get_lyrics_from_file()
-            if ( lyrics ):
+        self.menu_items = []
+        self.reset_controls()
+        lyrics = self.get_lyrics_from_file( artist, song )
+        if ( lyrics ):
+            self.show_lyrics( lyrics )
+        else:
+            lyrics = self.LyricsScraper.get_lyrics( artist, song )
+            if ( type( lyrics ) == str or type( lyrics ) == unicode ):
                 self.show_lyrics( lyrics )
+            elif ( type( lyrics ) == list and lyrics ):
+                self.show_choices( lyrics )
             else:
-                test = self.LyricsScraper.get_lyrics( artist, song )#self.main.lyrc_search( artist, song )
-                if ( type( test ) == str or type( test ) == unicode ):
-                    self.show_lyrics( test )
-                elif ( type( test ) == list and test ):
-                    self.show_choices( test )
-                else:
-                    self.show_lyrics( _( 2 ) )
-        except: pass
+                self.show_lyrics( _( 2 ) )
         
     def get_lyrics_from_list( self, item ):
-        try:
-            lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
-            self.show_lyrics( lyrics )
-        except: traceback.print_exc()
+        lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
+        self.show_lyrics( lyrics )
 
-    def get_lyrics_from_file( self ):
+    def get_lyrics_from_file( self, artist, song ):
         try:
+            self.artist_filename = self.make_fatx_compatible( artist, False )
+            self.song_filename = self.make_fatx_compatible( song + '.txt', True )
             song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
             lyrics_file = open( song_path, 'r' )
             lyrics = lyrics_file.read()
@@ -138,9 +147,7 @@ class Overlay( xbmcgui.WindowDialog ):
         
     def show_lyrics( self, lyrics ):
         xbmcgui.lock()
-        self.controls[ 3 ][ 'control' ].reset()
-        self.controls[ 4 ][ 'control' ].reset()
-        self.controls[ 5 ][ 'control' ].reset()
+        #self.reset_controls()
         #Checking whether some idiot has submitted empty lyrics or not:
         if ( len( lyrics ) < 2 ):
             self.controls[ 3 ][ 'control' ].setText( _( 3 ) )
@@ -156,15 +163,17 @@ class Overlay( xbmcgui.WindowDialog ):
         
     def show_choices( self, choices ):
         xbmcgui.lock()
-        self.controls[ 3 ][ 'control' ].reset()
-        self.controls[ 4 ][ 'control' ].reset()
-        self.controls[ 5 ][ 'control' ].reset()
         for song in choices:
             self.controls[ 5 ][ 'control' ].addItem( song[ 0 ] )
         self.menu_items = choices
         self.show_control( 5 )
         xbmcgui.unlock()
     
+    def reset_controls( self ):
+        self.controls[ 3 ][ 'control' ].reset()
+        self.controls[ 4 ][ 'control' ].reset()
+        self.controls[ 5 ][ 'control' ].reset()
+        
     def update_label( self ):
         xbmcgui.lock()
         try:
@@ -179,37 +188,34 @@ class Overlay( xbmcgui.WindowDialog ):
         except: pass
         xbmcgui.unlock()
 
-    def changeSettings( self ):
+    def change_settings( self ):
         try:
             import settings
             settings = settings.GUI( language=_ )
             settings.doModal()
             del settings
             self.getSettings()
-            if ( self.controlId ==3 or self.controlId == 4 ): 
+            if ( self.controlId == 3 or self.controlId == 4 ): 
                 self.show_control( 3 + self.settings.USE_LIST )
         except: traceback.print_exc()
             
+    def exitScript(self):
+        if ( self.Timer ): self.Timer.cancel()
+        self.close()
+
     def onAction(self, action):
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.exitScript()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
-            self.changeSettings()
+            self.change_settings()
         else: self.update_label()
     
     def onControl(self, control):
         if control == self.controls[ 5 ][ 'control' ]:
             self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
             
-    # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
-    # it calls myPlayerChanged() immediately.
-    def dummy( self ):
-        self.Timer = threading.Timer( 60*60*60, self.dummy,() )
-        self.Timer.start()
-    
     def myPlayerChanged( self, event ):
-        #print [ 'stopped', 'ended', 'started'][ event ]
         if ( event < 2 ): 
             self.exitScript()
         else:
@@ -221,7 +227,8 @@ class Overlay( xbmcgui.WindowDialog ):
             self.artist = xbmc.getInfoLabel( 'MusicPlayer.Artist' )
             self.controls[ 6 ][ 'control' ].setImage( xbmc.getInfoImage( 'MusicPlayer.Cover' ) )
             self.get_lyrics( self.artist, self.song )
-            
+
+
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
     def  __init__( self, *args, **kwargs ):
@@ -242,8 +249,8 @@ class MyPlayer( xbmc.Player ):
 if ( __name__ == '__main__' ):
     if ( xbmc.Player().isPlayingAudio() ):
         xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
-        w = Overlay()
-        if ( w.SUCCEEDED ): w.doModal()
-        del w
+        ui = GUI()
+        if ( ui.SUCCEEDED ): ui.doModal()
+        del ui
     else:
         xbmcgui.Dialog().ok( _( 0 ), _( 10 ), _( 11 ) )
