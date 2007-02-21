@@ -162,7 +162,7 @@
 			<animation effect="slide" time="250" delay="250" end="720,0">WindowClose</animation>
 		</control>
 
-	        <control type="fadelabel" id="3">
+	        <control type="fadelabel" id="1">
 			<description>Album Title value</description>
 			<posx>145</posx>
 			<posy>35</posy>
@@ -176,7 +176,7 @@
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
 
-	        <control type="textbox" id="4">
+	        <control type="textbox" id="3">
 			<description>textarea</description>
 			<posx>315</posx>
 			<posy>90</posy>
@@ -193,12 +193,46 @@
 			<textureupfocus>sortup-focus.png</textureupfocus>
 			<texturedownfocus>sortdown-focus.png</texturedownfocus>
 			<textcolor>FF000000</textcolor>
-			<onleft>5</onleft>
-			<onright>5</onright>
-			<onup>5</onup>
-			<ondown>5</ondown>
+			<onleft>3</onleft>
+			<onright>3</onright>
+			<onup>3</onup>
+			<ondown>3</ondown>
 			<font>font14</font>
 			<visible>True</visible>
+			<animation effect="fade" delay="450" time="200">WindowOpen</animation>
+			<animation effect="fade" time="150">WindowClose</animation>
+		</control>
+
+	        <control type="list" id="4">
+			<description>lyrics list</description>
+			<posx>315</posx>
+			<posy>90</posy>
+			<width>370</width>
+			<height>370</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>362</spinposx>
+			<spinposy>160</spinposy>
+			<spincolor>FF000000</spincolor>
+			<spinfont>font12</spinfont>
+			<textureup>sortup-nofocus.png</textureup>
+			<texturedown>sortdown-nofocus.png</texturedown>
+			<textureupfocus>sortup-focus.png</textureupfocus>
+			<texturedownfocus>sortdown-focus.png</texturedownfocus>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<textcolor>FF000000</textcolor>
+			<textureheight>26</textureheight>
+			<onleft>4</onleft>
+			<onright>4</onright>
+			<onup>4</onup>
+			<ondown>4</ondown>
+			<shadowcolor>a0dadada</shadowcolor>
+			<font>font13</font>
+			<textxoff>-10</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>False</visible>
 			<animation effect="fade" delay="450" time="200">WindowOpen</animation>
 			<animation effect="fade" time="150">WindowClose</animation>
 		</control>
@@ -208,7 +242,7 @@
 			<posx>315</posx>
 			<posy>90</posy>
 			<width>370</width>
-			<height>350</height>
+			<height>370</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>362</spinposx>
@@ -235,6 +269,18 @@
 			<visible>False</visible>
 			<animation effect="fade" delay="450" time="200">WindowOpen</animation>
 			<animation effect="fade" time="150">WindowClose</animation>
+		</control>
+
+		<control type="label" id="7">
+			<description>list label</description>
+			<posx>650</posx>
+			<posy>430</posy>
+			<width>100</width>
+			<label>1/4</label>
+			<align>left</align>
+			<font>font13</font>
+			<textcolor>DDFFFFFF</textcolor>
+			<visible>false</visible>
 		</control>
 
 	        <control type="image" id="6">
