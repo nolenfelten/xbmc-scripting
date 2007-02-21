@@ -1,4 +1,5 @@
-﻿<strings>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
   <string id="0">XBMC Lyrics</string>
   <string id="1">Niespodziewana sytuacja, wygl¹da na to ¿e coœ zmieni³o siê w uk³adzie strony, nie potrawiê odczytaæ zawartoœci...</string>
   <string id="2">B£¥D! niedostêpny link do tego tekstu</string>
