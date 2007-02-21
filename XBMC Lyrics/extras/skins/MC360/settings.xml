@@ -175,7 +175,7 @@
 			<onleft>30</onleft>
 			<onright>30</onright>
 			<onup>20</onup>
-			<ondown>100</ondown>
+			<ondown>40</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="31">
@@ -195,6 +195,46 @@
 			<onleft>30</onleft>
 			<onright>30</onright>
 			<onup>20</onup>
+			<ondown>40</ondown>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="40">
+			<description>List-Text Button</description>
+			<posx>365</posx>
+			<posy>220</posy>
+			<width>315</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>33</label>
+			<font>font13</font>
+			<textcolor>FF000000</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>iconlist-nofocus.png</texturenofocus>
+			<onleft>40</onleft>
+			<onright>40</onright>
+			<onup>30</onup>
+			<ondown>100</ondown>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="41">
+			<description>List-Text Button Value</description>
+			<posx>365</posx>
+			<posy>220</posy>
+			<width>315</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>FF000000</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<onleft>40</onleft>
+			<onright>40</onright>
+			<onup>30</onup>
 			<ondown>100</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -213,7 +253,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>200</onleft>
 			<onright>150</onright>
-			<onup>30</onup>
+			<onup>40</onup>
 			<ondown>10</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -232,7 +272,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>100</onleft>
 			<onright>200</onright>
-			<onup>30</onup>
+			<onup>40</onup>
 			<ondown>10</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -251,7 +291,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
-			<onup>30</onup>
+			<onup>40</onup>
 			<ondown>10</ondown>
 		</control>
 		<control type="image">
