@@ -203,15 +203,15 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return data
 
-	def get_user_videos(self, user=None):
+	def get_user_videos(self, method, title, user=None):
 		"""Get rss data and update the list."""
 
 		if user is None:
 			user = self.get_input('', 'User')
 	
-		data = self.download_data(user, self.yt.get_user_videos)
+		data = self.download_data(user, method)
 		if self.update_list(data):
-			lbl = 'User: %s' % user
+			lbl = '%s user %s' % (title, user)
 			self.get_control('Feed Label').setLabel(lbl)
 	
 	def get_feed(self, feed):
@@ -352,9 +352,9 @@ class YouTubeGUI(xbmcgui.Window):
 
 	def on_control_users(self, ctrl):
 		if ctrl is self.get_control('User Favorites Button'):
-			self.not_implemented()
+			self.get_user_videos(self.yt.get_user_favorites, 'Favorites of')
 		elif ctrl is self.get_control('User Videos Button'):
-			self.get_user_videos()
+			self.get_user_videos(self.yt.get_user_videos, 'Videos by')
 		elif ctrl is self.get_control('User Friends Button'):
 			self.not_implemented()
 
