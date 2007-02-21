@@ -248,6 +248,9 @@ class YouTube:
 
 		data = ''
 
+		if self.report_hook is not None:
+			self.report_hook(0, -1, self.report_udata)
+
 		try:
 			req = urllib2.Request(unescape(url))
 			fp = urllib2.urlopen(req)
@@ -265,9 +268,6 @@ class YouTube:
 			size = -1
 
 		bs = max(int(size / 100.0), 1024)
-
-		if self.report_hook is not None:
-			self.report_hook(0, size, self.report_udata)
 
 		read = 0
 		while True:
