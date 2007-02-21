@@ -21,14 +21,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-import youtube
-import xbmcgui
-import xbmc
 import os
+import pickle
 import sys
 import traceback
+
+import xbmcgui
+import xbmc
+
 import guibuilder
-import pickle
+
+import youtube
 
 # Gamepad constans
 ACTION_MOVE_LEFT      = 1  
