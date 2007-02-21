@@ -24,7 +24,7 @@ class Language:
             pattern = '<string id="(.*?)">(.*?)</string>'
             strings = re.findall(pattern, temp_strings)
             for item in strings:
-                self.strings[int( item[0] )] = str( item[1] ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
+                self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
         
             if ( language != 'english' ):
                 language_path = os.path.join( cwd, 'english', 'strings.xml' )
@@ -34,7 +34,7 @@ class Language:
                 strings = re.findall(pattern, temp_strings)
                 for item in strings:
                     if ( not self.strings.has_key(int( item[0] ) ) ):
-                        self.strings[int( item[0] )] = str( item[1] ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
+                        self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
         except:
             print "ERROR: Language file %s can't be opened" % ( language_path, )
 
