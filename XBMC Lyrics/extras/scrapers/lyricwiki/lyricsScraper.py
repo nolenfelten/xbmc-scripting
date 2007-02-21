@@ -20,7 +20,7 @@ class _SongListParser( SGMLParser ):
                     self.url = value
             elif ( key == 'title' ):
                 if ( urllib.unquote( self.url[ 1 : ] ) == urllib.unquote( value.replace( ' ', '_' ).replace( '&amp;', '&' ) ) ):
-                    self.song_list += [ ( unicode( value, 'utf-8' ), self.url, ) ]
+                    self.song_list += [ ( unicode( value[ value.find( ':' ) + 1 : ], 'utf-8' ), self.url, ) ]
             else:
                 self.url = 'None'
 
@@ -151,8 +151,8 @@ if ( __name__ == '__main__' ):
     
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "The 5th Dimension"#"AC/DC"#"Ted Nugent"#"Blue Öyster Cult"#"Kim Mitchell"#
-    song = "Age of Aquarius"#"T.N.T."#"Free-for-all"#"(Don't Fear) The Reaper"#"Go for Soda"#
+    artist = "Blue Öyster Cult"#"AC/DC"#"Ted Nugent"#"Kim Mitchell"#
+    song = "2(Don't Fear) The Reaper"#"Age of Aquarius"#"T.N.T."#"Free-for-all"#"Go for Soda"#
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
