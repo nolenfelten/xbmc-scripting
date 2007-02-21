@@ -51,7 +51,7 @@
         </control>
 
         <!-- Uncomment this control to use a textbox for lyrics -->
-        <control type="textbox" id="4">
+        <control type="textbox" id="3">
             <description>textarea</description>
             <posx>220</posx>
             <posy>195</posy>
@@ -74,7 +74,7 @@
         </control>
 
         <!-- Uncomment this control to use a list for lyrics -->
-        <!--control type="list" id="4">
+        <control type="list" id="4">
             <description>lyrics list</description>
             <posx>220</posx>
             <posy>202</posy>
@@ -109,7 +109,7 @@
             <aligny>center</aligny>
             <visible>false</visible>
 			<textxoff>0</textxoff>
-        </control-->
+        </control>
 
         <control type="list" id="5">
             <description>link list</description>

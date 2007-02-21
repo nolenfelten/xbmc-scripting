@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, traceback
 
 def setControllerAction():
     return {
@@ -39,7 +39,9 @@ class Settings:
             self.SAVE_LYRICS = ( s[ 0 ] == '1' )
             self.LYRICS_PATH = s[ 1 ]
             self.SCRAPER = s[ 2 ]
+            self.USE_LIST = ( s[ 3 ] == '1' )
         except:
+            traceback.print_exc()
             print 'ERROR: getting settings'
             self.setDefaults()
 
@@ -47,16 +49,18 @@ class Settings:
         self.SAVE_LYRICS = True
         self.LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
         self.SCRAPER = 'lyricwiki'#'lyrc.com.ar'
+        self.USE_LIST = False
         success = self.saveSettings()
         
     def saveSettings( self ):
         try:
             if ( not os.path.isdir( os.path.join( sys.path[ 0 ], 'extras', 'data' ) ) ):
                 os.makedirs( os.path.join( sys.path[ 0 ], 'extras', 'data' ) )
-            strSettings = '%d|%s|%s' % ( 
+            strSettings = '%d|%s|%s|%d' % ( 
                 self.SAVE_LYRICS,
                 self.LYRICS_PATH,
-                self.SCRAPER, )
+                self.SCRAPER,
+                self.USE_LIST, )
             f = open( os.path.join( sys.path[ 0 ], 'extras', 'data', 'settings.txt' ), 'w' )
             f.write( strSettings )
             f.close()
