@@ -61,6 +61,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controls['Save Folder Button']['control'].setEnabled( self.settings.SAVE_LYRICS )
         self.controls['Save Folder Button Value']['control'].setLabel( '%s' % ( self.settings.LYRICS_PATH, ) )
         self.controls['Save Folder Button Value']['control'].setEnabled( self.settings.SAVE_LYRICS  )
+        self.controls['List-Text Button Value']['control'].setLabel( '%s' % ( str( self.settings.USE_LIST, ) ) )
         #xbmcgui.lock()
     
     def toggleScraper( self ):
@@ -71,9 +72,12 @@ class GUI( xbmcgui.WindowDialog ):
     def toggleSaveLyrics( self ):
         self.settings.SAVE_LYRICS = not self.settings.SAVE_LYRICS
 
+    def toggleUseList( self ):
+        self.settings.USE_LIST = not self.settings.USE_LIST
+
     def browseForFolder( self ):
         dialog = xbmcgui.Dialog()
-        folder = dialog.browse( 3, self._( 33 ), 'files' )
+        folder = dialog.browse( 3, self._( 40 ), 'files' )
         if ( folder ):
             self.settings.LYRICS_PATH = folder
     
@@ -105,6 +109,8 @@ class GUI( xbmcgui.WindowDialog ):
                 self.toggleSaveLyrics()
             elif ( control is self.controls['Save Folder Button']['control'] ):
                 self.browseForFolder()
+            elif ( control is self.controls['List-Text Button']['control'] ):
+                self.toggleUseList()
             self.setControlsValues()
             
     def onAction( self, action ):

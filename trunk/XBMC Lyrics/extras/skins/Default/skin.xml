@@ -29,8 +29,8 @@
             <colordiffuse>BBFFFFFF</colordiffuse>
         </control>
         
-        <!-- Uncomment this control to use a textbox for lyrics -->
-        <control type="textbox" id="4">
+		<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="textbox" id="3">
             <description>textarea</description>
             <posx>240</posx>
             <posy>195</posy>
@@ -52,8 +52,8 @@
             <visible>false</visible>
         </control>
 
-        <!-- Uncomment this control to use a list for lyrics -->
-        <!--control type="list" id="4">
+		<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="list" id="4">
             <description>lyrics list</description>
             <posx>240</posx>
             <posy>202</posy>
@@ -88,8 +88,9 @@
             <aligny>center</aligny>
             <visible>false</visible>
 			<textxoff>0</textxoff>
-        </control-->
+        </control>
 
+		<!-- ** Required ** Do not change <id> or <type> -->
         <control type="list" id="5">
             <description>link list</description>
             <posx>240</posx>
@@ -127,6 +128,7 @@
             <visible>false</visible>
         </control>
 
+		<!-- ** Optional ** Do not change <id> or <type> -->
         <control type="label" id="7">
             <description>list label</description>
             <posx>647</posx>
@@ -154,6 +156,8 @@
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">\homeinfo-bg.png</texture>
                 </control>
+                
+                <!-- ** Required ** Do not change <id> or <type> -->
                 <control type="image" id="6">
                     <description>CD Cover Image</description>
                     <posx>65</posx>

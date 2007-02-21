@@ -68,19 +68,22 @@ class Overlay( xbmcgui.WindowDialog ):
         if ( self.Timer ): self.Timer.cancel()
         self.close()
 
-    def show_control( self, control ):
-        self.controls[ 4 ][ 'control' ].setVisible( control == 4 )
-        self.controls[ 5 ][ 'control' ].setVisible( control == 5 )
+    def show_control( self, controlId ):
+        self.controls[ 3 ][ 'control' ].setVisible( controlId == 3 )
+        self.controls[ 4 ][ 'control' ].setVisible( controlId == 4 )
+        self.controls[ 5 ][ 'control' ].setVisible( controlId == 5 )
         try:
-            self.controls[ 7 ][ 'control' ].setVisible( control == 5 or ( control == 4 and str( self.controls[4]['control'] ).find( 'ControlTextBox' ) == -1 ) )
+            self.controls[ 7 ][ 'control' ].setVisible( controlId == 4 or controlId == 5 )
         except: pass
-        self.setFocus( self.controls[ control ][ 'control' ] )
+        self.setFocus( self.controls[ controlId ][ 'control' ] )
+        self.controlId = controlId
         self.update_label()
         
     def get_lyrics(self, artist, song):
         try:
-            self.controls[4]['control'].reset()
-            self.controls[5]['control'].reset()
+            #self.controls[ 3 ][ 'control' ].reset()
+            #self.controls[ 4 ][ 'control' ].reset()
+            #self.controls[ 5 ][ 'control' ].reset()
             self.menu_items = []
             self.artist_filename = self.make_fatx_compatible( artist, False )
             self.song_filename = self.make_fatx_compatible( song + '.txt', True )
@@ -135,28 +138,25 @@ class Overlay( xbmcgui.WindowDialog ):
         
     def show_lyrics( self, lyrics ):
         xbmcgui.lock()
-        self.controls[4]['control'].reset()
-        self.controls[5]['control'].reset()
-        control_is_TextBox = str( self.controls[4]['control'] ).find( 'ControlTextBox' ) != -1
+        self.controls[ 3 ][ 'control' ].reset()
+        self.controls[ 4 ][ 'control' ].reset()
+        self.controls[ 5 ][ 'control' ].reset()
         #Checking whether some idiot has submitted empty lyrics or not:
         if ( len( lyrics ) < 2 ):
-            if ( control_is_TextBox ):
-                self.controls[ 4 ][ 'control' ].setText( _( 3 ) )
-            else:
-                self.controls[ 4 ][ 'control' ].addItem( _( 3 ) )
+            self.controls[ 3 ][ 'control' ].setText( _( 3 ) )
+            self.controls[ 4 ][ 'control' ].addItem( _( 3 ) )
         #If not, we show whatever results we got:
         else:
-            if ( control_is_TextBox ):
-                self.controls[ 4 ][ 'control' ].setText( lyrics )
-            else:
-                for x in lyrics.split( '\n' ):
-                    self.controls[ 4 ][ 'control' ].addItem( x )
+            self.controls[ 3 ][ 'control' ].setText( lyrics )
+            for x in lyrics.split( '\n' ):
+                self.controls[ 4 ][ 'control' ].addItem( x )
             if ( self.settings.SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
-        self.show_control( 4 )
+        self.show_control( 3 + self.settings.USE_LIST )
         xbmcgui.unlock()
         
     def show_choices( self, choices ):
         xbmcgui.lock()
+        self.controls[ 3 ][ 'control' ].reset()
         self.controls[ 4 ][ 'control' ].reset()
         self.controls[ 5 ][ 'control' ].reset()
         for song in choices:
@@ -186,6 +186,8 @@ class Overlay( xbmcgui.WindowDialog ):
             settings.doModal()
             del settings
             self.getSettings()
+            if ( self.controlId ==3 or self.controlId == 4 ): 
+                self.show_control( 3 + self.settings.USE_LIST )
         except: traceback.print_exc()
             
     def onAction(self, action):
