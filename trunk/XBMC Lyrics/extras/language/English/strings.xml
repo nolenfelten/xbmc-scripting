@@ -22,7 +22,9 @@
   <string id="51">Cancel</string>
   <string id="52">Update</string>
   <string id="53">Credits</string>
-  
+
+  <string id="68">Fetching:</string>
+
   <string id="90">Fetching current tagged versions...</string>
   <string id="91">is newer</string>
   <string id="92">Would you like to update?</string>
@@ -33,5 +35,10 @@
   <string id="97">Path:</string>
   <string id="98">File:</string>
   <string id="99">Your new version was saved to:</string>
-  
+  <string id="100">Version</string>
+
+  <string id="208">Update</string>
+  <string id="209">Credits</string>
+  <string id="210">Ok</string>
+  <string id="211">Cancel</string>
 </strings>
