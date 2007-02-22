@@ -185,22 +185,22 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg.update(percent)
 		return not dlg.iscanceled()
 	
-	def error_handler(self, message, udata):
-		"""Shows an error dialog with the HTTP error code and a message."""
-
-		dlg = xbmcgui.Dialog()
-		dlg.ok('YouTube', 'There was an error.', message)
-
 	def download_data(self, arg, func):
 		"""Show a progress dialog while downloading and return the data."""
 
 		dlg = xbmcgui.DialogProgress()
 		dlg.create('YouTube', 'Downloading content')
 
-		self.yt.set_error_hook(self.error_handler)
 		self.yt.set_report_hook(self.progress_handler, dlg)
 
-		data = func(arg)
+		try:
+			data = func(arg)
+		except youtube.DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('YouTube', 'There was an error.', e.value)
+			data = None
+		except youtube.DownloadAbort:
+			data = None
 
 		dlg.close()
 
