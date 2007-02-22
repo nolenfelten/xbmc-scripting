@@ -1,5 +1,4 @@
 import urllib, os, sys, xbmcgui
-sys.path.append( os.path.join( os.path.dirname( sys.modules['update'].__file__ ), '_xmlplus.zip' ) )
 from sgmllib import SGMLParser
 import socket
 
