@@ -4,9 +4,9 @@ Scraper for http://www.lyricwiki.org
 Nuka1195
 """
 
-import urllib
+import sys, os
 from sgmllib import SGMLParser
-import sys
+import urllib
 
 class _SongListParser( SGMLParser ):
     """ Parses an html document for all song links """
@@ -55,6 +55,7 @@ class LyricsFetcher:
         
     def get_lyrics( self, artist, song ):
         """ *required: Returns song lyrics or a list of choices from artist & song """
+        self.exceptions = self._get_exceptions()
         url = self.url + '/%s:%s'
         artist = self._format_param( artist )
         song = self._format_param( song )
@@ -70,6 +71,18 @@ class LyricsFetcher:
         lyrics = self._fetch_lyrics( self.url + item[ 1 ] )
         return self._clean_text( lyrics )
         
+    def _get_exceptions( self ):
+        """ Reads a rules file for exceptions in formatting artist or song """
+        exceptions = []
+        try:
+            ex_file = open( os.path.join( sys.path[ 0 ] , 'exceptions.txt' ), 'r' )
+            ex_list = ex_file.read().split('||')
+            ex_file.close()
+            for ex in ex_list:
+                exceptions += [ ( ex.split( '|' )[0], ex.split( '|' )[1], ) ]
+        except: pass
+        return exceptions
+
     def _fetch_lyrics( self, url ):
         """ Fetch lyrics if available """
         try:
@@ -144,8 +157,10 @@ class LyricsFetcher:
                 letter = letter.lower()
                 caps = False
             result += letter
-        # hack for AC/DC
-        result = result.replace( '/', '_' ).replace( 'Ac_dc', 'AC_DC' )
+        result = result.replace( '/', '_' )
+        # replace any exceptions
+        for ex in self.exceptions:
+            result = result.replace( ex[ 0 ], ex[ 1 ] )
         # properly quote string for url
         retVal = urllib.quote( result )
         return retVal
@@ -172,9 +187,9 @@ debugWrite = False
 
 if ( __name__ == '__main__' ):
     # used to test get_lyrics() 
-    artist = [ "AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
-    song = [ "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
-    for cnt in range( 3, 4 ):
+    artist = [ "Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
+    song = [ "Silly Love Songs", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
+    for cnt in range( 0, 1 ):
         lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
     # used to test get_lyrics_from_list() 
@@ -186,5 +201,4 @@ if ( __name__ == '__main__' ):
         for song in lyrics:
             print song
     else:
-        print lyrics
-    
+        print lyrics.encode( 'ascii', 'replace' )
