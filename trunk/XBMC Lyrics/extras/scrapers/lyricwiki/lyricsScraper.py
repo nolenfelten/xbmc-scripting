@@ -75,7 +75,10 @@ class LyricsFetcher:
         """ Reads a rules file for exceptions in formatting artist or song """
         exceptions = []
         try:
-            ex_file = open( os.path.join( sys.path[ 0 ] , 'exceptions.txt' ), 'r' )
+            if ( __name__ == '__main__' ):
+                ex_file = open( os.path.join( sys.path[ 0 ] , 'exceptions.txt' ), 'r' )
+            else:
+                ex_file = open( os.path.join( os.path.dirname( sys.modules[ 'lyricsScraper' ].__file__ ) , 'exceptions.txt' ), 'r' )
             ex_list = ex_file.read().split('||')
             ex_file.close()
             for ex in ex_list:
@@ -188,7 +191,7 @@ debugWrite = False
 if ( __name__ == '__main__' ):
     # used to test get_lyrics() 
     artist = [ "Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
-    song = [ "Silly Love Songs", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
+    song = [ "Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
     for cnt in range( 0, 1 ):
         lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
