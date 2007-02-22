@@ -33,7 +33,7 @@ class Settings:
 
     def getSettings( self ):
         try:
-            f = open( os.path.join( sys.path[ 0 ], 'extras', 'data', 'settings.txt' ), 'r' )
+            f = open( os.path.join( 'P:\\script_data', 'XBMC Lyrics', 'settings.txt' ), 'r' )
             s = f.read().split('|')
             f.close()
             self.SAVE_LYRICS = ( s[ 0 ] == '1' )
@@ -47,21 +47,21 @@ class Settings:
 
     def setDefaults( self, show_dialog = False ):
         self.SAVE_LYRICS = True
-        self.LYRICS_PATH = 'Q:\\UserData\\lyrics\\'
-        self.SCRAPER = 'lyricwiki'#'lyrc.com.ar'
+        self.LYRICS_PATH = os.path.join( 'T:\\script_data', 'XBMC Lyrics', 'lyrics' )
+        self.SCRAPER = 'lyricwiki'
         self.USE_LIST = False
         success = self.saveSettings()
         
     def saveSettings( self ):
         try:
-            if ( not os.path.isdir( os.path.join( sys.path[ 0 ], 'extras', 'data' ) ) ):
-                os.makedirs( os.path.join( sys.path[ 0 ], 'extras', 'data' ) )
+            if ( not os.path.isdir( os.path.join( 'P:\\script_data', 'XBMC Lyrics' ) ) ):
+                os.makedirs( os.path.join( 'P:\\script_data', 'XBMC Lyrics' ) )
             strSettings = '%d|%s|%s|%d' % ( 
                 self.SAVE_LYRICS,
                 self.LYRICS_PATH,
                 self.SCRAPER,
                 self.USE_LIST, )
-            f = open( os.path.join( sys.path[ 0 ], 'extras', 'data', 'settings.txt' ), 'w' )
+            f = open( os.path.join( 'P:\\script_data', 'XBMC Lyrics', 'settings.txt' ), 'w' )
             f.write( strSettings )
             f.close()
             return True
