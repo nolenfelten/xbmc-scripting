@@ -13,7 +13,7 @@ import time
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
 
-cwd = os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', '.cache\\' )
+cwd = fetcher.cache_dir
 
 class Movie:
     '''
