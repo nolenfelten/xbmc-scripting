@@ -1,7 +1,6 @@
 '''
 	Credits:	
 		EnderW:					Original Author
-		SveinT:
 		Stanley87:				PM3 Integration and AD Removal
 		solexalex:
 		TomKun:
@@ -16,7 +15,7 @@ __scriptname__ = 'XBMC Lyrics'
 __author__ = 'XBMC Lyrics Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/XBMC%20Lyrics/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = '1.1'
+__version__ = 'pre-1.2'
 
 
 import xbmc, xbmcgui
