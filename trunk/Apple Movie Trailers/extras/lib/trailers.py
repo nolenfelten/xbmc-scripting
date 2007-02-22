@@ -13,7 +13,7 @@ import time
 fetcher = cacheurl.HTTP()
 _ = language.Language().string
 
-cwd = fetcher.cache_dir
+cwd = fetcher.cache_dir + os.sep
 
 class Movie:
     '''
