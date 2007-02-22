@@ -3,6 +3,7 @@
  <id>2004</id>
  <defaultcontrol>200</defaultcontrol>
  <resolution>PAL</resolution>
+ <useincludes>false</useincludes>
 
  <controls>
 
