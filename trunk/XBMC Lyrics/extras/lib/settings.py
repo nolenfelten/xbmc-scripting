@@ -95,7 +95,7 @@ class GUI( xbmcgui.WindowDialog ):
     def updateScript( self ):
         import update
         updt = update.Update( language=self._, script=self.__scriptname__, version=self.__version__ )
-        del update
+        del updt
 
     def closeDialog( self ):
         self.close()
