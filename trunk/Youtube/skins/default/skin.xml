@@ -32,7 +32,7 @@
 			<posy>20</posy>
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>Feed Label</label>
+			<label> </label>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
 		</control>

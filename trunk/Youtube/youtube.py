@@ -29,6 +29,19 @@ from xml.sax.saxutils import escape
 
 import elementtree.ElementTree
 
+class DownloadError(Exception):
+	def __init__(self, value):
+		self.value = value
+	def __str__(self):
+		return repr(self.value)
+
+class DownloadAbort(Exception):
+	def __init__(self):
+		self.value = 'Operation aborted'
+	def __str__(self):
+		return repr(self.value)
+
+
 class YouTube:
 	"""YouTube dataminer class."""
 
@@ -234,11 +247,6 @@ class YouTube:
 
 		return ret
 
-	def set_error_hook(self, func, udata=None):
-		"""Set the error handler."""
-		self.error_hook = func
-		self.error_udata = udata
-
 	def set_report_hook(self, func, udata=None):
 		"""Set the download progress report handler."""
 		self.report_hook = func
@@ -247,20 +255,16 @@ class YouTube:
 	def retrieve(self, url):
 		"""Downloads an url."""
 
-		data = ''
-
 		if self.report_hook is not None:
 			self.report_hook(0, -1, self.report_udata)
 
 		try:
 			req = urllib2.Request(unescape(url))
 			fp = urllib2.urlopen(req)
-		except Exception, e:
-			if self.error_hook is not None:
-				self.error_hook(str(e), self.error_udata)
-			else:
-				print e
-			return None
+		except urllib2.HTTPError, e:
+			raise DownloadError('HTTP error: %d' % e.code)
+		except urllib2.URLError, e:
+			raise DownloadError('Network error: %s' % e.reason.args[1])
 
 		hdr = fp.info()
 		if hdr.has_key('Content-length'):
@@ -270,6 +274,7 @@ class YouTube:
 
 		bs = max(int(size / 100.0), 1024)
 
+		data = ''
 		read = 0
 		while True:
 			block = fp.read(bs)
@@ -281,15 +286,13 @@ class YouTube:
 			if self.report_hook is not None:
 				keep_going = self.report_hook(read, size, self.report_udata)
 				if keep_going is not None and not keep_going:
-					read = size
-					data = None
-					break
+					raise DownloadAbort()
 
 		fp.close()
 
-		if size > 0 and read < size and self.error_hook is not None:
+		if size > 0 and read < size:
 			msg = 'Download incomplete. Got only %d out of %d.' % (read, size)
-			self.error_hook(msg, self.error_udata)
+			raise DownloadError(msg)
 
 		return data
 
@@ -302,7 +305,6 @@ if __name__ == '__main__':
 	def error(msg, udata):
 		print msg
 
-	yt.set_error_hook(error)
 	yt.set_report_hook(report)
 
 	print "User Profile (sneseglarn):"
