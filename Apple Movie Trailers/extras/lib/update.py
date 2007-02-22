@@ -1,4 +1,4 @@
-import urllib, os, sys
+import urllib, os
 import xbmcgui
 from sgmllib import SGMLParser
 import socket

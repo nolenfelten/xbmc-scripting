@@ -577,7 +577,7 @@ class GUI( xbmcgui.Window ):
     def updateScript( self ):
         import update
         updt = update.Update( language=_, script=default.__scriptname__, version=default.__version__ )
-        del update
+        del updt
         
     def toggleAsWatched( self ):
         trailer = self.setCountLabel( 'Trailer List' )
