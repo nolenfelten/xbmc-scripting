@@ -143,11 +143,6 @@ class GUIBuilder:
                     self.dlg = xbmcgui.DialogProgress()
                     self.dlg.create( title )
                 self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
-                self.pct1 = int( ( 100 - pct ) * 0.333 )
-                self.includesExist = self.LoadIncludes()
-                self.pct += self.pct1
-            else:
-                self.includesExist = False
             self.pct1 = int( ( 100 - self.pct ) * 0.333 )
             self.parseSkinFile( imagePath, skinXML )
             if ( self.win.SUCCEEDED ): self.setNav()
@@ -350,22 +345,26 @@ class GUIBuilder:
             cnt = -1
             self.controlsFailed = ''
             self.controlsFailedCnt = 0
-            if ( not self.fastMethod ):
-                self.lines[ self.lineno + 1 ]    = 'loading %s file...' % ( self.skinXML, )
-                self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
             # load and parse skin.xml file
             skindoc = xml.dom.minidom.parse( filename )
             root = skindoc.documentElement
             # make sure this is a valid <window> xml file
             if ( not root or root.tagName != 'window' ): raise
             
-            # check for an overide fastMethod if fastMethod is on
-            if ( self.fastMethod ):
-                overide_fastMethod = self.FirstChildElement( root, 'useincludes' )
-                if ( overide_fastMethod and overide_fastMethod.firstChild ): 
-                    overide = overide_fastMethod.firstChild.nodeValue.lower()
-                    if ( overide == '1' or overide == 'true' or overide == 'yes' ):
-                        self.includesExist = self.LoadIncludes()
+            # check for an overide of <useincludes>
+            useInclude_overide = self.FirstChildElement( root, 'useincludes' )
+            if ( useInclude_overide and useInclude_overide.firstChild ): 
+                overide = useInclude_overide.firstChild.nodeValue.lower()
+            else: 
+                overide = str( not self.fastMethod ).lower()
+            if ( overide == '1' or overide == 'true' or overide == 'yes' ):
+                self.includesExist = self.LoadIncludes()
+                self.pct += self.pct1
+            else: self.includesExist = False
+
+            if ( not self.fastMethod ):
+                self.lines[ self.lineno + 1 ]    = 'loading %s file...' % ( self.skinXML, )
+                self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
             
             #resolve xml file
             if ( self.includesExist ): self.ResolveIncludes( root )
