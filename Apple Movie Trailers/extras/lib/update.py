@@ -1,4 +1,5 @@
-import urllib, os, sys, xbmcgui
+import urllib, os, sys
+import xbmcgui
 from sgmllib import SGMLParser
 import socket
 
@@ -9,6 +10,7 @@ socket.setdefaulttimeout( timeout )
 class Parser( SGMLParser ):
     def reset( self ):
         self.tags = []
+        self.url = None
         self.tag_found = None
         self.url_found = True
         SGMLParser.reset( self )
@@ -41,14 +43,17 @@ class Update:
         else: xbmcgui.Dialog().ok( self.script, self._( 95 + ( new == None ) ) )
             
     def checkForNewVersion( self ):
-        self.dialog.create( self.script, self._( 90 ) )
-        # get version tags
-        htmlsource = self.getHTMLSource( '%s/tags/%s' % ( self.base_url, self.script.replace( ' ', '%20' ), ) )
-        if ( htmlsource ):
-            self.versions, url = self.parseHTMLSource( htmlsource )
-            self.url = url[url.find( ':%20' ) + 4:]
-            new = ( self.version < self.versions[-1][:-1] or ( self.version[:4] == 'pre-' and self.version.replace( 'pre-', '' ) <= self.versions[-1][:-1] ) )
-        else: new = None
+        try:
+            self.dialog.create( self.script, self._( 90 ) )
+            # get version tags
+            new = False
+            htmlsource = self.getHTMLSource( '%s/tags/%s' % ( self.base_url, self.script.replace( ' ', '%20' ), ) )
+            if ( htmlsource ):
+                self.versions, url = self.parseHTMLSource( htmlsource )
+                self.url = url[url.find( ':%20' ) + 4:]
+                if ( self.versions ):
+                    new = ( self.version < self.versions[-1][:-1] or ( self.version[:4] == 'pre-' and self.version.replace( 'pre-', '' ) <= self.versions[-1][:-1] ) )
+        except: new = None
         self.dialog.close()
         return new
                 
@@ -110,7 +115,7 @@ class Update:
             parser.feed( htmlsource )
             parser.close()
             return parser.tags, parser.url
-        except: return None
+        except: return None, None
             
     def parseItems( self, items ):
         folders = []
