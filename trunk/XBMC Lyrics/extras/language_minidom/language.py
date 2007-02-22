@@ -8,6 +8,7 @@ class Language:
         self._get_language()
         
     def _get_language( self ):
+        """ gets the current language """
         self.strings = {}
         module_dir = os.path.dirname( sys.modules['language'].__file__ )
         cwd = os.path.join( os.path.dirname( module_dir ), 'language' )
@@ -19,7 +20,6 @@ class Language:
         success = self._parse_strings_file( language_path )
         if ( language != 'english' ):
             success = self._parse_strings_file( os.path.join( cwd, 'english', 'strings.xml' ) )
-        return success
         
     def _parse_strings_file( self, language_path ):
         """ Main parser for the strings.xml file """
@@ -27,8 +27,8 @@ class Language:
             # load and parse strings.xml file
             doc = xml.dom.minidom.parse( language_path )
 
+            # make sure this is a valid <strings> xml file
             root = doc.documentElement
-            # make sure this is a valid <window> xml file
             if ( not root or root.tagName != 'strings' ): raise
             
             # parse and resolve each <string>
@@ -39,16 +39,13 @@ class Language:
                 if ( string_id and not self.strings.has_key( string_id ) ):
                     if ( string.hasChildNodes() ): 
                         self.strings[ int( string_id ) ] = string.firstChild.nodeValue
+            success = True
         except:
-            traceback.print_exc()
             print "ERROR: Language file %s can't be opened" % ( language_path, )
-            try: doc.unlink()
-            except: pass
-            return False
-        else:
-            try: doc.unlink()
-            except: pass
-            return True
+            success = False
+        try: doc.unlink()
+        except: pass
+        return success
 
     def string( self, code ):
         """ Returns the localized string if it exists """
