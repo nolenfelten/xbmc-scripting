@@ -4,6 +4,7 @@
  <allowoverlay>no</allowoverlay>
  <resolution>PAL16x9</resolution>
  <defaultcontrol>10</defaultcontrol>
+ <useincludes>false</useincludes>
 
  <controls>
 
