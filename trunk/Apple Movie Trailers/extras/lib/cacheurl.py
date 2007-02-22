@@ -110,7 +110,7 @@ class HTTP:
             filename = filename.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
-            filename = '%s\\%s' % ( filename[0], filename, )
+            filename = os.path.join( filename[0], filename )
         # ..and the filepath
         filepath = os.path.join( self.cache_dir, filename )
         return filepath
