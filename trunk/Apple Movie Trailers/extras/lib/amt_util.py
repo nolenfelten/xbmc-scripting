@@ -2,11 +2,11 @@ import xbmcgui, xbmc
 import os, sys, default
 
 COMPATIBLE_VERSIONS = [ 'pre-0.95', '0.95', 'pre-0.95.1', '0.95.1', 'pre-0.96', '0.96' , 'pre-0.97', '0.97' ]
-GENRES				= -1
-STUDIOS			= -2
-ACTORS				= -3
-FAVORITES			= -6
-DOWNLOADED		= -7
+GENRES              = -1
+STUDIOS             = -2
+ACTORS              = -3
+FAVORITES           = -6
+DOWNLOADED          = -7
 
 def setThumbnailDisplay( _ ):
     return [_(310), _(311), _(312)]
@@ -19,11 +19,11 @@ def setMode( _ ):
 
 def setControllerAction():
     return {
-                61478 : 'Keyboard Up Arrow',
-                61480 : 'Keyboard Down Arrow',
-                61448 : 'Keyboard Backspace Button',
-                61533 : 'Keyboard Menu Button',
-                61467 : 'Keyboard ESC Button',
+                  61478 : 'Keyboard Up Arrow',
+                  61480 : 'Keyboard Down Arrow',
+                  61448 : 'Keyboard Backspace Button',
+                  61533 : 'Keyboard Menu Button',
+                  61467 : 'Keyboard ESC Button',
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',
