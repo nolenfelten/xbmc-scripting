@@ -7,7 +7,9 @@ import traceback
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         try:
-            self._ = kwargs['language']
+            self._ = kwargs[ 'language' ]
+            self.__scriptname__ = kwargs[ 'scriptname' ]
+            self.__version__ = kwargs[ 'version' ]
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.close()
             else:
@@ -89,6 +91,11 @@ class GUI( xbmcgui.WindowDialog ):
             if ( self.SCRAPER != self.settings.SCRAPER):
                 ok = xbmcgui.Dialog().ok( self._( 0 ), self._( 13 )  )
             self.closeDialog()
+            
+    def updateScript( self ):
+        import update
+        updt = update.Update( language=self._, script=self.__scriptname__, version=self.__version__ )
+        del update
 
     def closeDialog( self ):
         self.close()
@@ -98,8 +105,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
         elif ( control is self.controls['Ok Button']['control'] ):
             self.saveSettings()
-        #elif ( control is self.controls['Update Button']['control'] ):
-        #    self.updateScript()
+        elif ( control is self.controls['Update Button']['control'] ):
+            self.updateScript()
         #elif ( control is self.controls['Credits Button']['control'] ):
         #    self.showCredits()
         else:

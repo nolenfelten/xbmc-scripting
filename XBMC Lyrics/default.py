@@ -191,7 +191,7 @@ class GUI( xbmcgui.WindowDialog ):
     def change_settings( self ):
         try:
             import settings
-            settings = settings.GUI( language=_ )
+            settings = settings.GUI( language=_, scriptname=__scriptname__, version=__version__ )
             settings.doModal()
             del settings
             self.getSettings()
