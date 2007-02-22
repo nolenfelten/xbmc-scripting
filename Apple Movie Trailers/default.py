@@ -9,7 +9,7 @@ __scriptname__ = 'Apple Movie Trailers'
 __author__ = 'Apple Movie Trailers (AMT) Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = '0.96'
+__version__ = 'pre-0.97'
 
 __credits_l1__ = 'Head Developer & Coder'
 __credits_r1__ = 'Killarny'
