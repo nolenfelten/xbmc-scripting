@@ -52,10 +52,10 @@ class LyricsFetcher:
     """ required: Fetcher class for www.lyricwiki.org """
     def __init__( self ):
         self.url = 'http://www.lyricwiki.org'
+        self.exceptions = self._get_exceptions()
         
     def get_lyrics( self, artist, song ):
         """ *required: Returns song lyrics or a list of choices from artist & song """
-        self.exceptions = self._get_exceptions()
         url = self.url + '/%s:%s'
         artist = self._format_param( artist )
         song = self._format_param( song )
