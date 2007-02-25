@@ -50,19 +50,26 @@
 #   Nuka1195                                                                    #
 #################################################################################
 
-debug           = False     # True outputs debug info to debug screen
+__scriptname__ = 'Poker Timer II'
+__author__ = 'Nuka1195'
+__url__ = 'http://code.google.com/p/xbmc-scripting/'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
+__version__ = '2.0'
 
-import xbmc, xbmcgui
+
+debug = False     # True outputs debug info to debug screen
+
 import os, sys
+import xbmc, xbmcgui
 #from time import sleep
 import thread, threading
 
-ExtrasPath = os.path.join( sys.path[0], 'Extras' )
-GFXPath = os.path.join( ExtrasPath, 'gfx' )
-SoundPath = os.path.join( ExtrasPath, 'sounds' )
+resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
+GFXPath = os.path.join( resourcesPath, 'gfx' )
+SoundPath = os.path.join( resourcesPath, 'sounds' )
 
-sys.path.append( os.path.join( ExtrasPath, 'Lib' ) )
-sys.path.append( os.path.join( ExtrasPath, 'Lib', '_xmlplus.zip' ) )
+sys.path.append( os.path.join( resourcesPath, 'Lib' ) )
+sys.path.append( os.path.join( resourcesPath, 'Lib', '_xmlplus.zip' ) )
 
 try:
     reload(PTconfigmgr)
@@ -237,7 +244,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def getPadConfig(self):
         try:
-            self.padsettings                = PTconfigmgr.ReadSettings(os.path.join( ExtrasPath, 'PTPadFile.xml' ) )
+            self.padsettings                = PTconfigmgr.ReadSettings(os.path.join( resourcesPath, 'PTPadFile.xml' ) )
 
             self.ScriptTitle                = self.padsettings['ScriptTitle']
             self.PadImageName               = self.padsettings['PadImageName']
@@ -254,7 +261,7 @@ class windowOverlay(xbmcgui.WindowDialog):
     def getConfigValues(self):
 
         try:
-            self.settings = PTconfigmgr.ReadSettings(os.path.join( ExtrasPath, 'PTCfgFile.xml' ) )
+            self.settings = PTconfigmgr.ReadSettings(os.path.join( resourcesPath, 'PTCfgFile.xml' ) )
 
             self.EndTournamentAlarm     = self.settings['EndTournamentAlarm']
             self.EndTournamentAlarmTime = self.settings['EndTournamentAlarmTime']
@@ -646,7 +653,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.settings['BLIND_TABLE']            = self.BLIND_TABLE
 
         try:
-            PTconfigmgr.saveSettings(self.settings, os.path.join( ExtrasPath, 'PTCfgFile.xml' ) )
+            PTconfigmgr.saveSettings(self.settings, os.path.join( resourcesPath, 'PTCfgFile.xml' ) )
         except:
             print "ERROR: saving settings."
 
@@ -663,7 +670,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.padsettings['padOffsetY']          = self.padOffsetY
 
         try:
-            PTconfigmgr.savePadSettings(self.padsettings, os.path.join( ExtrasPath, 'PTPadFile.xml' ) )
+            PTconfigmgr.savePadSettings(self.padsettings, os.path.join( resourcesPath, 'PTPadFile.xml' ) )
         except:
             print "ERROR: saving pad position."
 
