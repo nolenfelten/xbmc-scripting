@@ -159,7 +159,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return self.controls[desc]['control']
 
-	def get_input(self, default, title):
+	def get_input(self, title, default=''):
 		"""Show a virtual keyboard and return the entered text."""
 
 		ret = None
@@ -210,12 +210,13 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Get rss data and update the list."""
 
 		if user is None:
-			user = self.get_input('', 'User')
+			user = self.get_input('User')
 	
-		data = self.download_data(user, method)
-		if self.update_list(data):
-			lbl = '%s user %s' % (title, user)
-			self.get_control('Feed Label').setLabel(lbl)
+		if user is not None:
+			data = self.download_data(user, method)
+			if self.update_list(data):
+				lbl = '%s user %s' % (title, user)
+				self.get_control('Feed Label').setLabel(lbl)
 	
 	def get_feed(self, feed):
 		"""Get rss data and update the list."""
@@ -228,7 +229,7 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Get user input and perform a search. On success update the list."""
 
 		if term is None:
-			term = self.get_input(self.last_search_term, 'Search')
+			term = self.get_input('Search', self.last_search_term)
 		
 		# Only update the list if the user entered something.
 		if term != None:
