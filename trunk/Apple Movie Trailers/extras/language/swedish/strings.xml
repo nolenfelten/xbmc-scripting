@@ -2,8 +2,8 @@
 <strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbox media center</string>
-  <string id="40">All info hämtas, sökning är tillgänglig. (20 - 60 minuter)</string>
-  <string id="41">Info uppdateras per genre. (5 - 15 minuter)</string>
+  <string id="40">All info hämtas, sökning är tillgänglig. (10 - 60 minuter)</string>
+  <string id="41">Info uppdateras per genre. (1 - 5 minuter)</string>
   <string id="42">Spara filminfo till databas...</string>
   <string id="43">Skriver register till databas...</string>
   <string id="44">Databasen skapas...</string>
@@ -117,6 +117,12 @@
   <string id="331">Ladda ner</string>
   <string id="332">Ladda ner &amp; spara</string>
   <string id="340">Kontrollera version vid uppstart</string>
+  <string id="350">mapp att spara i</string>
+  <string id="351">välj din skal</string>
+  <string id="352">välj trailerkvalitet</string>
+  <string id="353">välj strömmningsläge</string>
+  <string id="354">välj miniatyrbild visningsläge</string>
+  <string id="355">välj kategori</string>
   <string id="400">*Ingen beskrivning kunde hämtas för denna filmtiteln.</string>
   <string id="401">*Ingen rollsättning kunde hämtas för denna titel.</string>
   <string id="500">Theater Showtimes</string>
