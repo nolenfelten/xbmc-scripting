@@ -15,14 +15,20 @@ Credits:
  - This script was imagined by Pike from Team Xbox Media Center and made possible,
  - by the creative minds of Team Xbox Media Center and Team SmartXX.
 '''
+__scriptname__ = 'Ambient Light Control Pad'
+__author__ = 'Nuka1195'
+__url__ = 'http://code.google.com/p/xbmc-scripting/'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
+__version__ = '1.0'
 
-import xbmcgui, xbmc
+
 import os, sys
+import xbmcgui, xbmc
 import threading
 
-ExtrasPath = os.path.join(sys.path[0], 'extras')
-sys.path.append(os.path.join(ExtrasPath, 'lib'))
-sys.path.append(os.path.join(ExtrasPath, 'lib', '_PIL.zip'))
+resourcesPath = os.path.join(os.getcwd().replace( ";", "" ), 'resources')
+sys.path.append(os.path.join(resourcesPath, 'lib'))
+sys.path.append(os.path.join(resourcesPath, 'lib', '_PIL.zip'))
 from PIL import Image
 
 class windowOverlay(xbmcgui.WindowDialog):
@@ -40,9 +46,9 @@ class windowOverlay(xbmcgui.WindowDialog):
             
     def setupGUI(self):
         import guibuilder
-        self.ImagePath = os.path.join(ExtrasPath, 'images')
-        skin = os.path.join(ExtrasPath, 'skins', xbmc.getSkinDir(), 'skin.xml')
-        if (not os.path.isfile(skin)): skin = os.path.join(ExtrasPath, 'skins', 'Project Mayhem III', 'skin.xml')
+        self.ImagePath = os.path.join(resourcesPath, 'images')
+        skin = os.path.join(resourcesPath, 'skins', xbmc.getSkinDir(), 'skin.xml')
+        if (not os.path.isfile(skin)): skin = os.path.join(resourcesPath, 'skins', 'Project Mayhem III', 'skin.xml')
         guibuilder.GUIBuilder(self,  skin, self.ImagePath, fastMethod=True)
         del guibuilder
         
@@ -101,7 +107,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def saveSettings(self):
         try:
-            fname = os.path.join(ExtrasPath, 'settings.txt')
+            fname = os.path.join(resourcesPath, 'settings.txt')
             f = open(fname, 'w')
             s = '%d|%d|%d|%d|%d|%d' % (self.mousePos[0][0], self.mousePos[0][1], self.mousePos[1][0], self.mousePos[1][1], self.method, self.time,)
             f.write(s)
@@ -110,7 +116,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def getSettings(self):
         try:
-            fname = os.path.join(ExtrasPath, 'settings.txt')
+            fname = os.path.join(resourcesPath, 'settings.txt')
             if (os.path.isfile(fname)):
                 f = open(fname, 'r')
                 v = f.read().split('|')
