@@ -22,7 +22,9 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 import re
-import urllib2
+import urllib, urllib2
+import cookielib
+import os.path
 
 from xml.sax.saxutils import unescape
 from xml.sax.saxutils import escape
@@ -41,6 +43,11 @@ class DownloadAbort(Exception):
 	def __str__(self):
 		return repr(self.value)
 
+class VideoStreamError(Exception):
+	def __init__(self, value):
+		self.value = value
+	def __str__(self):
+		return repr(self.value)
 
 class YouTube:
 	"""YouTube dataminer class."""
@@ -69,9 +76,24 @@ class YouTube:
 		self.video_url = 'http://youtube.com/?v=%s'
 		self.search_url = 'http://youtube.com/rss/search/%s.rss'
 		self.user_url = 'http://www.youtube.com/rss/user/%s/videos.rss'
+		self.confirm_url = 'http://www.youtube.com/verify_age?next_url=/watch?v=%s'
 
 		# should exotic characters be stripped?
 		self.strip_chars = True
+
+		# Cookie stuff
+		self.cookie_file = 'cookie.lwp'
+		self.cj = cookielib.LWPCookieJar()
+		if os.path.isfile(self.cookie_file):
+			self.cj.load(self.cookie_file)
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
+		urllib2.install_opener(opener)
+
+		# Callback related stuff
+		self.report_hook = None
+		self.report_udata = None
+		self.filter_hook = None
+		self.filter_udata = None
 
 	def strip_exotic_chars(self, str):
 		# Dump exotic characters so we don't have to watch ugly boxes
@@ -230,36 +252,67 @@ class YouTube:
 
 		return self.get_video_list(method, param)
 
-	def get_video_url(self, id):
+	def set_filter_hook(self, hook, udata=None):
+		"""Set the content filter handler."""
+
+		self.filter_hook = hook
+		self.filter_udata = udata
+
+	def get_video_url(self, id, confirmed=False):
 		"""Return a proper playback url for some YouTube id."""
 
 		ret = None
 
-		url = self.video_url % id
+		if not confirmed:
+			# Regular video page.
+			url = self.video_url % id
+			data = self.retrieve(url)
+		else:
+			# Filtered video page.
+			url = self.confirm_url % id
 
-		data = self.retrieve(url)
+			next_url = self.video_url % id
+			post = {'next_url': next_url,
+			        'action_confirm':'Confirm'}
+
+			data = self.retrieve(url, post)
+
 		if data is not None:
 			match = self.session_pattern.search(data)
 
 			if match != None and len(match.groups()) == 1:
 				session = match.group(1)
 				ret = self.stream_url % (id, session)
+			elif not confirmed:
+				# With some luck this only means that the url is protected
+				# by login + confirm page.
+				if self.filter_hook is not None:
+					# Ask the user if he wants to show the filtered content.
+					if self.filter_hook(self.filter_udata):
+						ret = self.get_video_url(id, confirmed=True)
+
+		# Failed to find the video stream url, better complain.
+		if ret is None:
+			raise VideoStreamError(id)
 
 		return ret
 
 	def set_report_hook(self, func, udata=None):
 		"""Set the download progress report handler."""
+
 		self.report_hook = func
 		self.report_udata = udata
 
-	def retrieve(self, url):
+	def retrieve(self, url, data=None):
 		"""Downloads an url."""
 
 		if self.report_hook is not None:
 			self.report_hook(0, -1, self.report_udata)
 
 		try:
-			req = urllib2.Request(unescape(url))
+			if data is not None:
+				data = urllib.urlencode(data)
+			req = urllib2.Request(unescape(url), data)
 			fp = urllib2.urlopen(req)
 		except urllib2.HTTPError, e:
 			raise DownloadError('HTTP error: %d' % e.code)
@@ -296,44 +349,78 @@ class YouTube:
 
 		return data
 
+	def login(self, username, password):
+		post = {'username':username, 
+		        'password':password,
+		        'current_form':'loginForm',
+				'action_login':'Log+In'}
+		url = 'http://www.youtube.com/login?next=/'
+
+		data = self.retrieve(url, post)
+		self.cj.save(self.cookie_file)
+
+		return True
+
 if __name__ == '__main__':
+	import sys
+
 	yt = YouTube()
 
 	def report(done, size, udata):
-		print done, size
+		str = '\r%d    ' % int((done*100.0)/size)
+		sys.stdout.write(str)
+		sys.stdout.flush()
+		if done == size:
+			print '\r'
 	
-	def error(msg, udata):
-		print msg
-
+	def filter_confirm(udata):
+		return True
+	
 	yt.set_report_hook(report)
 
-	print "User Profile (sneseglarn):"
-	print yt.get_user_profile('sneseglarn')
-	print "------------------------------------------"
-	print "User Favorite Videos (sneseglarn):"
-	print yt.get_user_favorites('sneseglarn')
-	print "------------------------------------------"
-	print "User Friends (bungloid):"
-	print yt.get_user_friends('bungloid')
-	print "------------------------------------------"
-	print "Video Details (NGrrPReQaOE):"
-	print yt.get_video_details('NGrrPReQaOE')
-	print "------------------------------------------"
-	print "Videos by Tag ('blender')"
-	print yt.get_videos_by_tag('blender')
-	print "------------------------------------------"
-	print "Videos by Tag and Category (1, 'blender')"
-	print yt.get_videos_by_tag_and_category(1, 'blender')
-	print "------------------------------------------"
-	print "Videos from Feed ('recently_featured')"
-	print yt.get_feed('recently_featured')
-	print "------------------------------------------"
-	print "Videos Url from Id ('whG99kjeXOM')"
-	print yt.get_video_url('whG99kjeXOM')
-	print "------------------------------------------"
-	print "Videos from Search ('snowboard')"
-	print yt.search('snowboard')
-	print "------------------------------------------"
-	print "Videos from User ('sneseglarn')"
-	print yt.get_user_videos('sneseglarn')
+	try:
+		print "User Profile (sneseglarn):"
+		print yt.get_user_profile('sneseglarn')
+		print "------------------------------------------"
+		print "User Favorite Videos (sneseglarn):"
+		print yt.get_user_favorites('sneseglarn')
+		print "------------------------------------------"
+		print "User Friends (bungloid):"
+		print yt.get_user_friends('bungloid')
+		print "------------------------------------------"
+		print "Video Details (NGrrPReQaOE):"
+		print yt.get_video_details('NGrrPReQaOE')
+		print "------------------------------------------"
+		print "Videos by Tag ('blender')"
+		print yt.get_videos_by_tag('blender')
+		print "------------------------------------------"
+		print "Videos by Tag and Category (1, 'blender')"
+		print yt.get_videos_by_tag_and_category(1, 'blender')
+		print "------------------------------------------"
+		print "Videos from Feed ('recently_featured')"
+		print yt.get_feed('recently_featured')
+		print "------------------------------------------"
+		print "Videos Url from Id ('whG99kjeXOM')"
+		print yt.get_video_url('whG99kjeXOM')
+		print "------------------------------------------"
+		print "Videos from Search ('snowboard')"
+		print yt.search('snowboard')
+		print "------------------------------------------"
+		print "Videos from User ('sneseglarn')"
+		print yt.get_user_videos('sneseglarn')
 
+		if len(sys.argv) == 3:
+			print "------------------------------------------"
+			print "Logging in"
+			print yt.login(sys.argv[1], sys.argv[2])
+			print "------------------------------------------"
+			print "Video Url from filtered Id ('M23If6Sqe-Q')"
+			yt.set_filter_hook(filter_confirm)
+			print yt.get_video_url('M23If6Sqe-Q')
+
+	except DownloadError, e:
+		print "download failed: %s" % e
+	except DownloadAbort, e:
+		print "download aborted: %s " % e
+	except VideoStreamError, e:
+		print "could not get video url for %s" % e
