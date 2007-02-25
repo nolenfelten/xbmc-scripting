@@ -11,10 +11,10 @@
     <controls>
         <control type="image" id="1">
             <description>background image</description>
-            <posx>228</posx>
+            <posx>220</posx>
             <posy>70</posy>
-            <width>440</width>
-            <height>442</height>
+            <width>455</width>
+            <height>460</height>
             <texture>\dialog-panel2.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
         </control>
@@ -150,9 +150,9 @@
                 <control type="image">
                     <description>Dialog Text Area</description>
                     <posx>60</posx>
-                    <posy>372</posy>
+                    <posy>360</posy>
                     <width>150</width>
-                    <height>150</height>
+                    <height>175</height>
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">\homeinfo-bg.png</texture>
                 </control>
