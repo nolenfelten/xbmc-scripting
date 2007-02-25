@@ -1,6 +1,6 @@
-import xbmc, os ,sys
+import sys, os
+import xbmc
 import xml.dom.minidom
-import traceback
 
 class Language:
     """ Language Class: Returns a localized string """

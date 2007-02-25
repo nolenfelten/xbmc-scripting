@@ -1,4 +1,4 @@
-import os, sys, traceback
+import os
 
 def setControllerAction():
     return {
@@ -41,8 +41,6 @@ class Settings:
             self.SCRAPER = s[ 2 ]
             self.USE_LIST = ( s[ 3 ] == '1' )
         except:
-            traceback.print_exc()
-            print 'ERROR: getting settings'
             self.setDefaults()
 
     def setDefaults( self, show_dialog = False ):

@@ -1,8 +1,7 @@
+import os
 import xbmc, xbmcgui
-import os, sys
 import guibuilder
-import lyricsutil#, guibuilder
-import traceback
+import lyricsutil
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
@@ -18,14 +17,13 @@ class GUI( xbmcgui.WindowDialog ):
                 self.setupScrapers()
                 self.setControlsValues()
         except:
-            traceback.print_exc()
             self.close()
             
     def setupGUI( self ):
-        cwd = sys.path[ 0 ]
+        cwd = os.getcwd().replace( ";", "" )
         current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( cwd, 'extras', 'skins', current_skin )
+        if ( not os.path.exists( os.path.join( cwd, 'resources', 'skins', current_skin ))): current_skin = 'default'
+        skin_path = os.path.join( cwd, 'resources', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'settings_16x9.xml'
         else: xml_file = 'settings.xml'
@@ -34,11 +32,12 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupVariables( self ):
         self.controller_action = lyricsutil.setControllerAction()
+        self.controls[ 'Version Label' ][ 'control' ].setLabel( '%s: %s' % ( self._( 100 ), self.__version__, ) )
         
     def setupScrapers( self ):
         scrapers = []
         self.current_scraper = 0
-        os.path.walk( os.path.join( sys.path[ 0 ], 'extras', 'scrapers' ), self.addDir, scrapers )
+        os.path.walk( os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'scrapers' ), self.addDir, scrapers )
         self.scrapers = scrapers
         for cnt, scraper in enumerate( scrapers ):
             if ( scraper == self.settings.SCRAPER ):
