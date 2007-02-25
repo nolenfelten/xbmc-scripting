@@ -24,7 +24,7 @@ class _SongListParser( SGMLParser ):
                     self.url = value
             elif ( key == 'title' ):
                 if ( urllib.unquote( self.url[ 1 : ] ) == urllib.unquote( value.replace( ' ', '_' ).replace( '&amp;', '&' ) ) ):
-                    self.song_list += [ ( unicode( value[ value.find( ':' ) + 1 : ], 'utf-8' ), self.url, ) ]
+                    self.song_list += [ ( unicode( value[ value.find( ':' ) + 1 : ], 'utf-8', 'ignore' ), self.url, ) ]
             else:
                 self.url = 'None'
 
@@ -47,7 +47,7 @@ class _LyricsParser( SGMLParser ):
     def handle_data( self, text ):
         if ( self.lyrics_found ):
             try:
-                self.lyrics += unicode( text, 'utf-8' )
+                self.lyrics += unicode( text, 'utf-8', 'ignore' )
             except:
                 # bad data so skip it
                 pass
@@ -173,7 +173,7 @@ class LyricsFetcher:
         return retVal
     
     def _clean_text( self, text ):
-        """ covert line terminators and html entities """
+        """ Convert line terminators and html entities """
         try:
             text = text.replace( '\t', '' )
             text = text.replace( '<br> ', '\n' )
@@ -196,19 +196,19 @@ debugWrite = False
 
 if ( __name__ == '__main__' ):
     # used to test get_lyrics() 
-    #artist = [ "Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
-    #song = [ "Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
-    #for cnt in range( 0, 1 ):
-    #    lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
+    artist = [ "ABBA", "Jem","Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
+    song = [ "S.O.S","24","Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
+    for cnt in range( 3, 4 ):
+        lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
     # used to test get_lyrics_from_list() 
     #url = ('Big & Rich:Save a Horse (Ride a Cowboy)', '/Big_%26_Rich:Save_a_Horse_%28Ride_a_Cowboy%29')
-    url = (u'Stuck In The Middle With You', '/Stealers_Wheel:Stuck_In_The_Middle_With_You')
-    lyrics = LyricsFetcher().get_lyrics_from_list( url )
+    #url = (u'Stuck In The Middle With You', '/Stealers_Wheel:Stuck_In_The_Middle_With_You')
+    #lyrics = LyricsFetcher().get_lyrics_from_list( url )
     
     # print the results
     if ( type( lyrics ) == list ):
         for song in lyrics:
             print song
     else:
-        print lyrics.encode( 'ascii', 'replace' )
+        print lyrics.encode( 'utf-8', 'ignore' )

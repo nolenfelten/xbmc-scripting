@@ -15,13 +15,12 @@ __scriptname__ = 'XBMC Lyrics'
 __author__ = 'XBMC Lyrics Team'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = '1.2'
+__version__ = '1.2.1'
 
 
 import os, sys
 import xbmc, xbmcgui
 import threading
-import traceback
 
 resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
 sys.path.append( os.path.join( resourcesPath, 'lib' ) )
@@ -43,7 +42,6 @@ class GUI( xbmcgui.WindowDialog ):
                 self.getDummyTimer()
                 self.getMyPlayer()
         except: 
-            traceback.print_exc()
             self.exitScript()
             
     def setupGUI( self ):
@@ -102,7 +100,7 @@ class GUI( xbmcgui.WindowDialog ):
         else:
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
             if ( type( lyrics ) == str or type( lyrics ) == unicode ):
-                self.show_lyrics( lyrics )
+                self.show_lyrics( lyrics, True )
             elif ( type( lyrics ) == list and lyrics ):
                 self.show_choices( lyrics )
             else:
@@ -110,7 +108,7 @@ class GUI( xbmcgui.WindowDialog ):
         
     def get_lyrics_from_list( self, item ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
-        self.show_lyrics( lyrics )
+        self.show_lyrics( lyrics, True )
 
     def get_lyrics_from_file( self, artist, song ):
         try:
@@ -118,7 +116,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.song_filename = self.make_fatx_compatible( song + '.txt', True )
             song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
             lyrics_file = open( song_path, 'r' )
-            lyrics = lyrics_file.read()
+            lyrics = unicode( lyrics_file.read(), 'utf-8', 'ignore' )
             lyrics_file.close()
             return lyrics
         except: return None
@@ -129,13 +127,12 @@ class GUI( xbmcgui.WindowDialog ):
             if ( not os.path.isdir( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) ) ):
                 os.makedirs( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) )
             lyrics_file = open( song_path, 'w' )
-            lyrics_file.write( lyrics )
+            lyrics_file.write( lyrics.encode( 'utf-8', 'ignore' ) )
             lyrics_file.close()
             return True
         except: return False
         
     def make_fatx_compatible( self, name, extension ):
-        #name = name.decode( 'utf-8', 'replace' ).encode( 'ascii', 'replace' )
         if len( name ) > 42:
             if ( extension ): name = '%s_%s' % ( name[ : 37 ], name[ -4 : ], )
             else: name = name[ : 42 ]
@@ -144,9 +141,8 @@ class GUI( xbmcgui.WindowDialog ):
         name = name.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
         return name
         
-    def show_lyrics( self, lyrics ):
+    def show_lyrics( self, lyrics, save=False ):
         xbmcgui.lock()
-        #self.reset_controls()
         #Checking whether some idiot has submitted empty lyrics or not:
         if ( len( lyrics ) < 2 ):
             self.controls[ 3 ][ 'control' ].setText( _( 3 ) )
@@ -156,7 +152,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls[ 3 ][ 'control' ].setText( lyrics )
             for x in lyrics.split( '\n' ):
                 self.controls[ 4 ][ 'control' ].addItem( x )
-            if ( self.settings.SAVE_LYRICS ): success = self.save_lyrics_to_file( lyrics )
+            if ( self.settings.SAVE_LYRICS and save ): success = self.save_lyrics_to_file( lyrics )
         self.show_control( 3 + self.settings.USE_LIST )
         xbmcgui.unlock()
         
@@ -196,7 +192,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.getSettings()
             if ( self.controlId == 3 or self.controlId == 4 ): 
                 self.show_control( 3 + self.settings.USE_LIST )
-        except: traceback.print_exc()
+        except: pass
             
     def exitScript(self):
         if ( self.Timer ): self.Timer.cancel()
