@@ -116,6 +116,8 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Append a term, and trim the search history to max 50 entries."""
 
 		list = self.get_search_history()
+
+		# Filter out the term to add from the list so only one copy is stored.
 		list = filter(lambda x: x != term, list)
 		list.insert(0, term)
 
@@ -222,6 +224,7 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Get rss data and update the list."""
 		data = self.download_data(feed, self.yt.get_feed)
 		if self.update_list(data):
+			# Change 'something_bleh_bluh' to 'Something Bleh Bluh'.
 			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
 			self.get_control('Feed Label').setLabel(lbl)
 		
