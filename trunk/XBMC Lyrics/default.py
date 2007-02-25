@@ -13,18 +13,18 @@ Please report any bugs: http://www.xboxmediacenter.com/forum/showthread.php?t=10
 '''
 __scriptname__ = 'XBMC Lyrics'
 __author__ = 'XBMC Lyrics Team'
-__url__ = 'http://code.google.com/p/xbmc-scripting/XBMC%20Lyrics/'
+__url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = 'pre-1.2'
+__version__ = '1.2'
 
 
-import xbmc, xbmcgui
 import os, sys
+import xbmc, xbmcgui
 import threading
 import traceback
 
-ExtrasPath = os.path.join( sys.path[0], 'extras' )
-sys.path.append( os.path.join( ExtrasPath, 'lib' ) )
+resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
+sys.path.append( os.path.join( resourcesPath, 'lib' ) )
 import language, lyricsutil
 import guibuilder
 _ = language.Language().string
@@ -47,10 +47,10 @@ class GUI( xbmcgui.WindowDialog ):
             self.exitScript()
             
     def setupGUI( self ):
-        cwd = sys.path[ 0 ]
+        cwd = os.getcwd().replace( ";", "" )
         current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( cwd, 'extras', 'skins', current_skin )
+        if ( not os.path.exists( os.path.join( cwd, 'resources', 'skins', current_skin ))): current_skin = 'default'
+        skin_path = os.path.join( cwd, 'resources', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
         else: xml_file = 'skin.xml'
@@ -68,7 +68,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.settings = lyricsutil.Settings()
 
     def getScraper( self ):
-        sys.path.append( os.path.join( ExtrasPath, 'scrapers', self.settings.SCRAPER ) )
+        sys.path.append( os.path.join( resourcesPath, 'scrapers', self.settings.SCRAPER ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
 

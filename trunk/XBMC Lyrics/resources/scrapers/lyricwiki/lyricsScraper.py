@@ -46,7 +46,11 @@ class _LyricsParser( SGMLParser ):
 
     def handle_data( self, text ):
         if ( self.lyrics_found ):
-            self.lyrics += unicode( text, 'utf-8' )
+            try:
+                self.lyrics += unicode( text, 'utf-8' )
+            except:
+                # bad data so skip it
+                pass
 
 class LyricsFetcher:
     """ required: Fetcher class for www.lyricwiki.org """
@@ -76,7 +80,7 @@ class LyricsFetcher:
         exceptions = []
         try:
             if ( __name__ == '__main__' ):
-                ex_file = open( os.path.join( sys.path[ 0 ] , 'exceptions.txt' ), 'r' )
+                ex_file = open( os.path.join( os.getcwd().replace( ";", "" ) , 'exceptions.txt' ), 'r' )
             else:
                 ex_file = open( os.path.join( os.path.dirname( sys.modules[ 'lyricsScraper' ].__file__ ) , 'exceptions.txt' ), 'r' )
             ex_list = ex_file.read().split('||')
@@ -92,12 +96,12 @@ class LyricsFetcher:
             # Open url or local file (if debug == True)
             if (not debug): usock = urllib.urlopen( url )
             else:
-                usock = open( sys.path[ 0 ] + '\\lyrics_source.txt','r' )
+                usock = open( os.path.join( os.getcwd().replace( ";", "" ), 'lyrics_source.txt' ), 'r' )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite == True)
             if (debugWrite):
-                usock = open( sys.path[0] + '\\lyrics_source.txt','w' )
+                usock = open( os.path.join( os.getcwd().replace( ";", "" ), 'lyrics_source.txt' ), 'w' )
                 usock.write( htmlSource )
                 usock.close
             # Parse htmlSource for lyrics
@@ -115,12 +119,12 @@ class LyricsFetcher:
             # Open url or local file (if debug == True)
             if (not debug): usock = urllib.urlopen( url % ( artist, ) )
             else:
-                usock = open( sys.path[ 0 ] + '\\song_source.txt','r' )
+                usock = open( os.path.join( os.getcwd().replace( ";", "" ), 'songs_source.txt' ), 'r' )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite == True)
             if ( debugWrite ):
-                usock = open( sys.path[0] + '\\song_source.txt', 'w' )
+                usock = open( os.path.join( os.getcwd().replace( ";", "" ), 'songs_source.txt' ), 'w' )
                 usock.write( htmlSource )
                 usock.close
             # Parse htmlSource for song links
@@ -170,18 +174,20 @@ class LyricsFetcher:
     
     def _clean_text( self, text ):
         """ covert line terminators and html entities """
-        text = text.replace( '\t', '' )
-        text = text.replace( '<br> ', '\n' )
-        text = text.replace( '<br>', '\n' )
-        text = text.replace( '<br /> ', '\n' )
-        text = text.replace( '<br />', '\n' )
-        text = text.replace( '<div>', '\n' )
-        text = text.replace( '> ', '\n' )
-        text = text.replace( '>', '\n' )
-        text = text.replace( '&amp;', '&' )
-        text = text.replace( '&gt;', '>' )
-        text = text.replace( '&lt;', '<' )
-        text = text.replace( '&quot;', '"' )
+        try:
+            text = text.replace( '\t', '' )
+            text = text.replace( '<br> ', '\n' )
+            text = text.replace( '<br>', '\n' )
+            text = text.replace( '<br /> ', '\n' )
+            text = text.replace( '<br />', '\n' )
+            text = text.replace( '<div>', '\n' )
+            text = text.replace( '> ', '\n' )
+            text = text.replace( '>', '\n' )
+            text = text.replace( '&amp;', '&' )
+            text = text.replace( '&gt;', '>' )
+            text = text.replace( '&lt;', '<' )
+            text = text.replace( '&quot;', '"' )
+        except: pass
         return text
 
 # used for testing only
@@ -190,14 +196,15 @@ debugWrite = False
 
 if ( __name__ == '__main__' ):
     # used to test get_lyrics() 
-    artist = [ "Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
-    song = [ "Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
-    for cnt in range( 0, 1 ):
-        lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
+    #artist = [ "Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
+    #song = [ "Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
+    #for cnt in range( 0, 1 ):
+    #    lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
     # used to test get_lyrics_from_list() 
     #url = ('Big & Rich:Save a Horse (Ride a Cowboy)', '/Big_%26_Rich:Save_a_Horse_%28Ride_a_Cowboy%29')
-    #lyrics = LyricsFetcher().get_lyrics_from_list( url )
+    url = (u'Stuck In The Middle With You', '/Stealers_Wheel:Stuck_In_The_Middle_With_You')
+    lyrics = LyricsFetcher().get_lyrics_from_list( url )
     
     # print the results
     if ( type( lyrics ) == list ):
