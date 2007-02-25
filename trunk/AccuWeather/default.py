@@ -1,5 +1,4 @@
 '''
-Nuka1195  - nuka1195@hotmail.com
 for support: http://www.xbmc.xbox-scene.com/forum/forumdisplay.php?f=27
 
 This script retrieves maps & radars from AccuWeather.com.
@@ -7,18 +6,24 @@ This script retrieves maps & radars from AccuWeather.com.
 Thanks to thor918 for the MyPlayer() class.
 Thanks to Phunck for the settings import functions.
 Thanks to Affini for his suggestions.
-'''
-debug             = False
-debugWrite     = False
 
-__title__        = 'AccuWeather.com'
-__line1__        = 'Setting up script:'
+Nuka1195
+'''
+debug = False
+debugWrite = False
+__line1__  = 'Setting up script:'
+
+__scriptname__ = 'AccuWeather'
+__author__ = 'Nuka1195'
+__url__ = 'http://code.google.com/p/xbmc-scripting/'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
+__version__ = '0.9.1'
 
 def createProgressDialog():
     global dialog, pct
     pct = 0
     dialog = xbmcgui.DialogProgress()
-    dialog.create(__title__)
+    dialog.create(__scriptname__)
     updateProgressDialog(__line1__, 'Importing modules & initializing...')
 
 def updateProgressDialog(line1 = '', line2 = '', line3 = ''):
@@ -50,10 +55,10 @@ updateProgressDialog()
 
 socket.setdefaulttimeout(15.0) #seconds
 
-ExtrasPath        =    sys.path[0] +  '\\extras\\'
-sys.path.append(ExtrasPath + 'lib')
-sys.path.append(ExtrasPath + 'lib\\_xmlplus.zip')
-sys.path.append(ExtrasPath + 'lib\\_PIL.zip')
+resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources\\' )
+sys.path.append( os.path.join( resourcesPath, 'lib' ) )
+sys.path.append( os.path.join( resourcesPath, 'lib', '_xmlplus.zip' ) )
+sys.path.append( os.path.join( resourcesPath, 'lib', '_PIL.zip' ) )
     
 from PIL import Image
 updateProgressDialog()
@@ -61,9 +66,9 @@ updateProgressDialog()
 import configmgr, weatherparser, guibuilder
 updateProgressDialog()
 
-MapPath                                         = ExtrasPath + 'maps\\'
-ImagePath                                         = ExtrasPath + 'images'
-DefaultPath                                        = ExtrasPath + 'defaults\\'
+MapPath = os.path.join( resourcesPath, 'maps\\' )
+ImagePath = os.path.join( resourcesPath, 'images' )
+DefaultPath = os.path.join( resourcesPath, 'defaults\\' )
 
 ACTION_MOVE_LEFT                             = 1
 ACTION_MOVE_RIGHT                        = 2
@@ -106,17 +111,17 @@ class window(xbmcgui.Window):
 
     def setupGUI( self ):
         current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( ExtrasPath, 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( ExtrasPath, 'skins', current_skin )
+        if ( not os.path.exists( os.path.join( resourcesPath, 'skins', current_skin ))): current_skin = 'default'
+        skin_path = os.path.join( resourcesPath, 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
         else: xml_file = 'skin.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey = False, 
-            title = __title__, line1 = __line1__, dlg = dialog, pct = pct, useLocal = False, debug = False )
+            title = __scriptname__, line1 = __line1__, dlg = dialog, pct = pct, useLocal = False, debug = True )
         closeProgessDialog()
         if ( not self.SUCCEEDED ):
-            xbmcgui.Dialog().ok( __title__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
+            xbmcgui.Dialog().ok( __scriptname__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
 
     
     def getConfigValues(self):
@@ -125,7 +130,7 @@ class window(xbmcgui.Window):
             updateProgressDialog(__line1__, 'Importing main script settings...')
             curLocation, curURL_Location = self.getLocation()
             if ( curURL_Location != 'US' ): raise
-            settings                                = configmgr.ReadSettings(ExtrasPath + curURL_Location + '_CfgFile.xml')
+            settings                                = configmgr.ReadSettings(resourcesPath + curURL_Location + '_CfgFile.xml')
             self.codeURL                        = settings['codeURL']
             self.worldCodeURL                = settings['worldCodeURL']
             self.metroCodeURL                = settings['metroCodeURL']
@@ -165,16 +170,16 @@ class window(xbmcgui.Window):
             closeProgessDialog()
             dlg = xbmcgui.Dialog()
             if ( curURL_Location != 'US' ):
-                dlg.ok(__title__, "You can't use this script, it currently is only for residents in USA", "World and Canada support coming.")
+                dlg.ok(__scriptname__, "You can't use this script, it currently is only for residents in USA", "World and Canada support coming.")
             else:
-                dlg.ok(__title__, 'There was an error importing your settings.', 'Check your configuration files.')
+                dlg.ok(__scriptname__, 'There was an error importing your settings.', 'Check your configuration files.')
             self.exitScript()
 
 
     def saveDefaults(self):
         try:
             dlg = xbmcgui.DialogProgress()
-            dlg.create(__title__, 'Saving your cities codes...')
+            dlg.create(__scriptname__, 'Saving your cities codes...')
             dlg.update(10)
             fname = ('%s%s.xml' % (DefaultPath, self.location.replace(' ','_').replace(',', ''),))
             ##print "SAVE DEFAULTS", fname
@@ -192,7 +197,7 @@ class window(xbmcgui.Window):
         except:
             dlg.close()
             dlg = xbmcgui.Dialog()
-            dlg.ok(__title__, 'There was an error saving your settings.')
+            dlg.ok(__scriptname__, 'There was an error saving your settings.')
         else:
             dlg.close()
 
@@ -224,12 +229,12 @@ class window(xbmcgui.Window):
             request = urllib2.Request(self.codeURL + location)
             opener = urllib2.build_opener()
             usock = opener.open(request)
-        else: usock = open(sys.path[0] + '\\codes.txt','r')
+        else: usock = open(os.getcwd().replace( ";", "" ) + '\\codes.txt','r')
         htmlSource = usock.read()
         usock.close()
         ####################### write source for testing #######################
         if (debugWrite):
-            usock = open(sys.path[0] + '\\codes.txt','w')
+            usock = open(os.getcwd().replace( ";", "" ) + '\\codes.txt','w')
             usock.write(htmlSource)
             usock.close
         ##############################################################
@@ -242,7 +247,7 @@ class window(xbmcgui.Window):
     def getCodes(self):
         try:
             dlg = xbmcgui.DialogProgress()
-            dlg.create(__title__, 'Retrieving your cities codes...')
+            dlg.create(__scriptname__, 'Retrieving your cities codes...')
             dlg.update(10)
             self.location = self.LOCATION
             if (self.URL_Location == 'Canada'): location = self.LOCATION.split(', ')[0].replace(' ', '%20')
@@ -321,7 +326,7 @@ class window(xbmcgui.Window):
             try: dlg.close()
             except: pass
             dlg = xbmcgui.Dialog()
-            dlg.ok(__title__, 'There was an error retrieving the codes for your city.', 'Try another city.')
+            dlg.ok(__scriptname__, 'There was an error retrieving the codes for your city.', 'Try another city.')
         else:
             try: dlg.close()
             except: pass
@@ -334,18 +339,18 @@ class window(xbmcgui.Window):
     def getOtherCodes(self, url, msg, opt):
             try:
                 dlg = xbmcgui.DialogProgress()
-                dlg.create(__title__, 'No %s code was found for your city.' % (msg,), 'Retrieving %s code list...' % (msg,))
+                dlg.create(__scriptname__, 'No %s code was found for your city.' % (msg,), 'Retrieving %s code list...' % (msg,))
                 dlg.update(10)
                 #source = ('%slevel=%s&type=%s&site=%s' % (self.metroCodeURL, 'metro', 're2', 'MLB',))
                 # retrieve web page
                 if (not debug): usock = urllib.urlopen(url)
-                else: usock = open(sys.path[0] + '\\othercodes.txt','r')
+                else: usock = open(os.getcwd().replace( ";", "" ) + '\\othercodes.txt','r')
                 htmlSource = usock.read()
                 usock.close()
                 dlg.update(60)
                 ####################### write source for testing #######################
                 if (debugWrite):
-                    usock = open(sys.path[0] + '\\othercodes.txt','w')
+                    usock = open(os.getcwd().replace( ";", "" ) + '\\othercodes.txt','w')
                     usock.write(htmlSource)
                     usock.close
                 ##############################################################
@@ -357,7 +362,7 @@ class window(xbmcgui.Window):
             except:
                 dlg.close()
                 dlg = xbmcgui.Dialog()
-                dlg.ok(__title__, 'There was an error retrieving the %s codes.' % (msg,),\
+                dlg.ok(__scriptname__, 'There was an error retrieving the %s codes.' % (msg,),\
                     'Try manually editing your defaults\\cityname.xml file.')
             else:
                 dlg.close()
@@ -370,7 +375,7 @@ class window(xbmcgui.Window):
 #    def getRSSCodes(self):
 #        try:
 #            dlg = xbmcgui.DialogProgress()
-#            dlg.create(__title__, 'Retrieving county list for your state...')
+#            dlg.create(__scriptname__, 'Retrieving county list for your state...')
 #            dlg.update(10)
 #            source = (self.rssCodeURL[0].replace('*STATE*', self.location[-2:]))
 #            # retrieve web page
@@ -378,13 +383,13 @@ class window(xbmcgui.Window):
 #                request = urllib2.Request(source)
 #                opener = urllib2.build_opener()
 #                usock = opener.open(request)
-#            else: usock = open(sys.path[0] +'\\alertcodes.txt','r')
+#            else: usock = open(os.getcwd().replace( ";", "" ) +'\\alertcodes.txt','r')
 #            htmlSource = usock.read()
 #            usock.close()
 #            dlg.update(60)
             ####################### write source for testing #######################
 #            if (debugWrite):
-#                usock = open(sys.path[0] + '\\alertcodes.txt','w')
+#                usock = open(os.getcwd().replace( ";", "" ) + '\\alertcodes.txt','w')
 #                usock.write(htmlSource)
 #                usock.close
             ##############################################################
@@ -404,7 +409,7 @@ class window(xbmcgui.Window):
 #        except:
 #            dlg.close()
 #            dlg = xbmcgui.Dialog()
-#            dlg.ok(__title__, 'There was an error retrieving the list.',\
+#            dlg.ok(__scriptname__, 'There was an error retrieving the list.',\
 #                'Try manually editing your defaults\\cityname.xml file.')
 #        else:
 #            dlg.close()
@@ -484,18 +489,18 @@ class window(xbmcgui.Window):
         try:
             if (not silent):
                 dlg = xbmcgui.DialogProgress()
-                dlg.create(__title__, 'Retrieving NOAA RSS feed for your county...')
+                dlg.create(__scriptname__, 'Retrieving NOAA RSS feed for your county...')
                 dlg.update(10)
             source = (self.rssCodeURL + self.site[7])
             # retrieve web page
             if (not debug): usock = urllib.urlopen(source)
-            else: usock = open(sys.path[0] +'\\alertrss.txt','r')
+            else: usock = open(os.getcwd().replace( ";", "" ) +'\\alertrss.txt','r')
             xmlSource = usock.read()
             usock.close()
             if (not silent): dlg.update(60)
             ####################### write source for testing #######################
             if (debugWrite):
-                usock = open(sys.path[0] + '\\alertrss.txt','w')
+                usock = open(os.getcwd().replace( ";", "" ) + '\\alertrss.txt','w')
                 usock.write(xmlSource)
                 usock.close
             ##############################################################
@@ -529,13 +534,13 @@ class window(xbmcgui.Window):
             if (not silent):
                 dlg.close()
                 dlg = xbmcgui.Dialog()
-                dlg.ok(__title__, 'There was an error retrieving the Alert RSS feed.')
+                dlg.ok(__scriptname__, 'There was an error retrieving the Alert RSS feed.')
 
 
     def getMaps(self, result, ext, ck, silent):
         if (not silent):
             dlg = xbmcgui.DialogProgress()
-            dlg.create(__title__, 'Downloading maps...')
+            dlg.create(__scriptname__, 'Downloading maps...')
             dlg.update(10)
         fpath = MapPath + self.level[self.LEVEL] + '_' + self.type[self.TYPE] + '\\'
         IMAGES = [''] * 8
@@ -564,14 +569,14 @@ class window(xbmcgui.Window):
                 #print "GOT SOURCE"
                 # retrieve web page
                 if (not debug): usock = urllib.urlopen(source)
-                else: usock = open(sys.path[0] + '\\url.txt','r')
+                else: usock = open(os.getcwd().replace( ";", "" ) + '\\url.txt','r')
                 htmlSource = usock.read()
                 usock.close()
                 if (not silent):
                     if (dlg.iscanceled()): raise
                 ####################### write source for testing #######################
                 if (debugWrite):
-                    usock = open(sys.path[0] + '\\url.txt','w')
+                    usock = open(os.getcwd().replace( ";", "" ) + '\\url.txt','w')
                     usock.write(htmlSource)
                     usock.close
                 ##############################################################
@@ -643,7 +648,7 @@ class window(xbmcgui.Window):
                 dlg.close()
                 if (not dlg.iscanceled()):
                     dlg = xbmcgui.Dialog()
-                    dlg.ok(__title__, 'There was an error downloading the map.', source[0:60], source[60:120])
+                    dlg.ok(__scriptname__, 'There was an error downloading the map.', source[0:60], source[60:120])
             return False, 0, ext, ck
         else:
             if (not silent): dlg.close()
