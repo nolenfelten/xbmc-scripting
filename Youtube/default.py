@@ -126,8 +126,12 @@ class YouTubeGUI(xbmcgui.Window):
 		if len(list) > 50:
 			list = list[:50]
 
-		path = os.path.join(self.base_path, 'data', 'history.txt')
 		try:
+			dir = os.path.join(self.base_path, 'data')
+			# Create the 'data' directory if it doesn't exist.
+			if not os.path.exists(dir):
+				os.mkdir(dir)
+			path = os.path.join(dir, 'history.txt')
 			f = open(path, 'wb')
 			pickle.dump(list, f, protocol=pickle.HIGHEST_PROTOCOL)
 			f.close()
