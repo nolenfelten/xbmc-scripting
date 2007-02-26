@@ -4,9 +4,17 @@
 
 * Add a settings window
 	* Make stripping invalid chars configurable.
+	* Username/password setting
+	* Always confirm filtered content
 
 * Add download to youtube.py
 	* Add download-and-play mode
 	* Add store to disk mode
 
 * Do something about the ugly user menu handling.
+
+* Add context menu
+
+* Add filter confirmation hook
+
+* Catch VideoStream- and PermissionErrors
