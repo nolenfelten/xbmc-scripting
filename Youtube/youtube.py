@@ -387,7 +387,7 @@ class YouTube:
 	def user_add_favorite(self, id):
 		"""Add some video id to the user favorites."""
 
-		data = {'':'OK',
+		post = {'':'OK',
 		        'action_add_favorite_playlist':'1',
 		        'video_id':id,
 		        'playlist_id':'',
@@ -395,7 +395,15 @@ class YouTube:
 
 		headers = {'Content-Type':'application/x-www-form-urlencoded'}
 
-		self.retrieve(self.ajax_url, data, headers)
+		data = self.retrieve(self.ajax_url, post, headers)
+
+		root = elementtree.ElementTree.XML(data)
+
+		node = root.find('return_code')
+		if node is None or node.text != '0':
+			raise PrivilegeError()
+
+		return True
 
 
 if __name__ == '__main__':
