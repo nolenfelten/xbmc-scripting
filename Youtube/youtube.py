@@ -388,7 +388,7 @@ class YouTube:
 		"""Add some video id to the user favorites."""
 
 		data = {'':'OK',
-			    'action_add_favorite_playlist':'1',
+		        'action_add_favorite_playlist':'1',
 		        'video_id':id,
 		        'playlist_id':'',
 		        'add_to_favorite':'on'}
