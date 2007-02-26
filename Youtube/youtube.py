@@ -49,6 +49,12 @@ class VideoStreamError(Exception):
 	def __str__(self):
 		return repr(self.value)
 
+class PrivilegeError(Exception):
+	def __init__(self):
+		self.value = 'Insufficient permissions, operation aborted.'
+	def __str__(self):
+		return repr(self.value)
+
 class YouTube:
 	"""YouTube dataminer class."""
 
@@ -66,8 +72,10 @@ class YouTube:
 	              20:'Video Games'}
 
 	def __init__(self):
-		# regexp for the youtube video session id.
+		# pattern to match youtube video session id.
 		self.session_pattern = re.compile('&t=([0-9a-zA-Z-_]{32})')
+		# pattern to match login status
+		self.login_pattern = re.compile('Log In')
 
 		# various urls
 		self.api_url = 'http://www.youtube.com/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s'
@@ -77,6 +85,7 @@ class YouTube:
 		self.search_url = 'http://youtube.com/rss/search/%s.rss'
 		self.user_url = 'http://www.youtube.com/rss/user/%s/videos.rss'
 		self.confirm_url = 'http://www.youtube.com/verify_age?next_url=/watch?v=%s'
+		self.ajax_url = 'http://www.youtube.com/watch_ajax'
 
 		# should exotic characters be stripped?
 		self.strip_chars = True
@@ -284,6 +293,9 @@ class YouTube:
 				session = match.group(1)
 				ret = self.stream_url % (id, session)
 			elif not confirmed:
+				if not self.login_status(data):
+					raise PrivilegeError()
+
 				# With some luck this only means that the url is protected
 				# by login + confirm page.
 				if self.filter_hook is not None:
@@ -303,7 +315,7 @@ class YouTube:
 		self.report_hook = func
 		self.report_udata = udata
 
-	def retrieve(self, url, data=None):
+	def retrieve(self, url, data=None, headers={}):
 		"""Downloads an url."""
 
 		if self.report_hook is not None:
@@ -312,7 +324,7 @@ class YouTube:
 		try:
 			if data is not None:
 				data = urllib.urlencode(data)
-			req = urllib2.Request(unescape(url), data)
+			req = urllib2.Request(unescape(url), data, headers)
 			fp = urllib2.urlopen(req)
 		except urllib2.HTTPError, e:
 			raise DownloadError('HTTP error: %d' % e.code)
@@ -350,6 +362,8 @@ class YouTube:
 		return data
 
 	def login(self, username, password):
+		"""Login with username, password and return status."""
+
 		post = {'username':username, 
 		        'password':password,
 		        'current_form':'loginForm',
@@ -359,7 +373,30 @@ class YouTube:
 		data = self.retrieve(url, post)
 		self.cj.save(self.cookie_file)
 
+		return self.login_status(data)
+
+	def login_status(self, data):
+		"""Return True if logged in, otherwise False."""
+
+		match = self.login_pattern.search(data)
+		if match is not None:
+			return False
+
 		return True
+
+	def user_add_favorite(self, id):
+		"""Add some video id to the user favorites."""
+
+		data = {'':'OK',
+			    'action_add_favorite_playlist':'1',
+		        'video_id':id,
+		        'playlist_id':'',
+		        'add_to_favorite':'on'}
+
+		headers = {'Content-Type':'application/x-www-form-urlencoded'}
+
+		self.retrieve(self.ajax_url, data, headers)
+
 
 if __name__ == '__main__':
 	import sys
@@ -368,8 +405,8 @@ if __name__ == '__main__':
 
 	def report(done, size, udata):
 		str = '\r%d    ' % int((done*100.0)/size)
-		sys.stdout.write(str)
-		sys.stdout.flush()
+		sys.stderr.write(str)
+		sys.stderr.flush()
 		if done == size:
 			print '\r'
 	
@@ -379,6 +416,7 @@ if __name__ == '__main__':
 	yt.set_report_hook(report)
 
 	try:
+		"""
 		print "User Profile (sneseglarn):"
 		print yt.get_user_profile('sneseglarn')
 		print "------------------------------------------"
@@ -408,6 +446,7 @@ if __name__ == '__main__':
 		print "------------------------------------------"
 		print "Videos from User ('sneseglarn')"
 		print yt.get_user_videos('sneseglarn')
+		"""
 
 		if len(sys.argv) == 3:
 			print "------------------------------------------"
@@ -417,6 +456,9 @@ if __name__ == '__main__':
 			print "Video Url from filtered Id ('M23If6Sqe-Q')"
 			yt.set_filter_hook(filter_confirm)
 			print yt.get_video_url('M23If6Sqe-Q')
+			print "------------------------------------------"
+			print "Add Video to Favorites ('M23If6Sqe-Q')"
+			print yt.user_add_favorite('M23If6Sqe-Q')
 
 	except DownloadError, e:
 		print "download failed: %s" % e
@@ -424,3 +466,5 @@ if __name__ == '__main__':
 		print "download aborted: %s " % e
 	except VideoStreamError, e:
 		print "could not get video url for %s" % e
+	except PrivilegeError, e:
+		print "login required for this operation"
