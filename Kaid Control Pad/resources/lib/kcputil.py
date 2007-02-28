@@ -61,8 +61,8 @@ class Settings:
             "reboot_command": "/sbin/reboot",
             "version_command": "%s -V",
             "version_regex_pat": "var log = .*\\\\x0a\\\\x0a([0-9a-zA-Z]*)",
-            "command_failed_1": "not found",
-            "command_failed_2": "No such file or directory"
+            "version_command_failed": "not found",
+            "ls_command_failed": "No such file or directory"
             }        
         return router_settings
     

@@ -20,7 +20,7 @@ class Commands( urllib.FancyURLopener ):
         self._get_settings()
     
     def _set_variables( self ):
-        """ Initially set variable to -1 so status labels will be blank """
+        """ initially sets variables to -1 so status labels will be blank """
         self.STATUS_KAID_RUNNING = -1
         self.STATUS_ROUTER = -1
         self.STATUS_XBOX = -1
@@ -31,7 +31,7 @@ class Commands( urllib.FancyURLopener ):
         self.router_settings = kcputil.Settings().get_router_settings( self.settings[ "firmware" ] )
 
     def _parse_data( self, data, failed, pattern=None ):
-        """ search router source for info """
+        """ searches router source for successful command completion """
         try:
             command_failed = data.find( failed )
             if ( command_failed != -1 ): return False
@@ -54,16 +54,18 @@ class Commands( urllib.FancyURLopener ):
         return self.STATUS_XBOX
         
     def _status_router_kaid( self ):
-        """ check the status of the kai daemon on the router """
+        """ check the status of the kai daemon on the router and returns the version """
         version = ""
         self.STATUS_ROUTER = 0
         command = self.router_settings[ "version_command" ] % ( self.router_settings[ "bin_filename" ], )
         ok, result = self._do_command( command )
         if ( ok ):
             data = str(result.read())
-            version = self._parse_data( data, self.router_settings[ "command_failed_1" ], self.router_settings[ "version_regex_pat" ] )
+            version = self._parse_data( data, self.router_settings[ "version_command_failed" ], self.router_settings[ "version_regex_pat" ] )
             if ( version ): self.STATUS_ROUTER = 1
-        else: self.STATUS_ROUTER = 2
+        else: 
+            self.STATUS_ROUTER = 2
+            self.STATUS_KAID_RUNNING = 2
         return self.STATUS_ROUTER, version
         
     def _status_router_kaid_conf( self ):
@@ -72,7 +74,7 @@ class Commands( urllib.FancyURLopener ):
         ok, result = self._do_command( command )
         if ( ok ):
             data = result.read()
-            self.STATUS_ROUTER = self._parse_data( data, self.router_settings[ "command_failed_2" ] )
+            self.STATUS_ROUTER = self._parse_data( data, self.router_settings[ "ls_command_failed" ] )
         return self.STATUS_ROUTER
 
     def _status_kaid_running( self ):

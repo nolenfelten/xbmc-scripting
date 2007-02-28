@@ -76,16 +76,13 @@ class GUI( xbmcgui.WindowDialog ):
         return self.controls[ key ][ 'control' ]
 
     def set_status_labels( self ):
-        self.get_control( "Kaid Status Label" ).setLabel( [ "", _( 300 + self.wrt54g.STATUS_KAID_RUNNING ) ][ self.wrt54g.STATUS_KAID_RUNNING != -1 ],
-            self.controls[ "Kaid Status Label" ][ "special" ][ 0 ],
-            self.controls[ "Kaid Status Label" ][ "special" ][ 1 + ( self.wrt54g.STATUS_KAID_RUNNING != 1 ) ] )
-        self.get_control( "Router Status Label" ).setLabel( self.KAID_VERSION,
-            self.controls[ "Router Status Label" ][ "special" ][ 0 ],
-            self.controls[ "Router Status Label" ][ "special" ][ 1 + ( self.wrt54g.STATUS_ROUTER != 1 ) ] )
-        self.get_control( "Xbox Status Label" ).setLabel( [ "", _( 320 + self.wrt54g.STATUS_XBOX ) ][ self.wrt54g.STATUS_XBOX != -1 ],
-            self.controls[ "Xbox Status Label" ][ "special" ][ 0 ],
-            self.controls[ "Xbox Status Label" ][ "special" ][ 1 + ( self.wrt54g.STATUS_XBOX != 1 ) ] )
-
+        self.get_control( "Kaid Status Label" ).setLabel( [ "", _( 300 + self.wrt54g.STATUS_KAID_RUNNING ) ][ self.wrt54g.STATUS_KAID_RUNNING != -1 ] )
+        self.get_control( "Kaid Status Label" ).setEnabled( self.wrt54g.STATUS_KAID_RUNNING == 1 )
+        self.get_control( "Router Status Label" ).setLabel( self.KAID_VERSION )
+        self.get_control( "Router Status Label" ).setEnabled( self.wrt54g.STATUS_ROUTER == 1 )
+        self.get_control( "Xbox Status Label" ).setLabel( [ "", _( 320 + self.wrt54g.STATUS_XBOX ) ][ self.wrt54g.STATUS_XBOX != -1 ] )
+        self.get_control( "Xbox Status Label" ).setEnabled( self.wrt54g.STATUS_XBOX == 1 )
+        
     def set_status_buttons( self ):
         self.get_control( "Restart Button" ).setLabel( _( 10 + ( self.wrt54g.STATUS_KAID_RUNNING != 1 ) ) )
         self.get_control( "Restart Button" ).setEnabled( self.wrt54g.STATUS_ROUTER == True )

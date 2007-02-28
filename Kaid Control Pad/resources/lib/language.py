@@ -8,7 +8,7 @@ import xbmc
 import xml.dom.minidom
 
 class Language:
-    """ Language Class: Returns a localized string """
+    """ Language Class: creates a dictionary of { int: string } """
     def __init__( self ):
         self._get_language()
         
@@ -31,11 +31,9 @@ class Language:
         try:
             # load and parse strings.xml file
             doc = xml.dom.minidom.parse( language_path )
-
             # make sure this is a valid <strings> xml file
             root = doc.documentElement
             if ( not root or root.tagName != 'strings' ): raise
-            
             # parse and resolve each <string>
             strings = root.getElementsByTagName( 'string' )
             for string in strings:

@@ -242,7 +242,7 @@ class GUIBuilder:
                     angle=int(control['angle']), shadowColor=control['shadowcolor'], focusTexture=control['texturefocus'],\
                     noFocusTexture=control['texturenofocus'], textXOffset=int(control['textoffsetx']), textYOffset=int(control['textoffsety'])))
                 self.win.addControl(ctl)
-                control['special'] = ( control['font'], control['textcolor'], control['disabledcolor'], )
+                #control['special'] = ( control['font'], control['textcolor'], control['disabledcolor'], )
             # checkmark control
             elif (control['type'] == 'checkmark'):
                 if (control.has_key('info')):
