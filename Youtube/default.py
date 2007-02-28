@@ -81,7 +81,10 @@ class YouTubeGUI(xbmcgui.Window):
 				self.close()
 
 			self.data = []
+			
 			self.yt = youtube.YouTube()
+			self.yt.set_filter_hook(self.confirm_content)
+
 			self.state = YouTubeGUI.STATE_MAIN
 
 			# Get the last search term
@@ -98,6 +101,14 @@ class YouTubeGUI(xbmcgui.Window):
 			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
 			self.close()
+
+	def confirm_content(self, udata):
+		"""Let the user choose to watch offensive crap."""
+
+		dlg = xbmcgui.Dialog()
+		return dlg.yesno('YouTube',
+		                 'This clip may contain inappropriate content.',
+		                 'Do you want to watch it anyway?')
 
 	def get_search_history(self):
 		"""Return a list of old search terms."""
@@ -209,6 +220,10 @@ class YouTubeGUI(xbmcgui.Window):
 			data = None
 		except youtube.DownloadAbort:
 			data = None
+		except Exception, e:
+			# In Python 2.5 this would have been a finally
+			dlg.close()
+			raise e
 
 		dlg.close()
 
@@ -281,12 +296,31 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return True
 
+	def login(self):
+		"""Get username and password from the user and try to login."""
+
+		username = self.get_input('Username')
+		password = self.get_input('Password')
+
+		return self.yt.login(username, password)
+
 	def play_clip(self, id):
 		"""Get the url for the id and start playback."""
 
-		file = self.download_data(id, self.yt.get_video_url)
-		if file is not None:
+		try:
+			file = self.download_data(id, self.yt.get_video_url)
 			self.player.play(str(file))
+		except youtube.PrivilegeError, e:
+			dlg = xbmcgui.Dialog()
+			ret = dlg.yesno('YouTube',
+			                'You need to be logged in to watch this clip.',
+			                'Do you want to login?')
+			# If the user wants to login, and login works, then try again
+			if ret and self.login():
+				self.play_clip(id)
+		except youtube.VideoStreamError, e:
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Unable to play the video clip.')
 
 	def onAction(self, action):
 		"""Handle user input events."""
