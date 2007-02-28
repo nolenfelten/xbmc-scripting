@@ -116,7 +116,7 @@
             <shadowcolor>ff000000</shadowcolor>
 			<onleft>100</onleft>
 			<onright>100</onright>
-			<onup>40</onup>
+			<onup>50</onup>
 			<ondown>20</ondown>
 		</control>
 
@@ -137,10 +137,6 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>40</onup>
-			<ondown>20</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -183,10 +179,6 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>10</onup>
-			<ondown>30</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -229,14 +221,10 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>20</onup>
-			<ondown>40</ondown>
 		</control>
 
 		<control type="button" id="40">
-			<description>List-Text Button</description>
+			<description>Smooth Scroll Button</description>
 			<posx>-15</posx>
 			<posy>156</posy>
 			<width>365</width>
@@ -254,12 +242,12 @@
 			<onleft>100</onleft>
 			<onright>100</onright>
 			<onup>30</onup>
-			<ondown>10</ondown>
+			<ondown>50</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="41">
-			<description>List-Text Button Value</description>
+			<description>Smooth Scroll Button Value</description>
 			<posx>-15</posx>
 			<posy>156</posy>
 			<width>365</width>
@@ -278,6 +266,47 @@
 			<onright>100</onright>
 			<onup>30</onup>
 			<ondown>10</ondown>
+		</control>
+
+		<control type="button" id="50">
+			<description>Show Viz Button</description>
+			<posx>-15</posx>
+			<posy>188</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>34</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>100</onleft>
+			<onright>100</onright>
+			<onup>40</onup>
+			<ondown>10</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="51">
+			<description>Show Viz Button Value</description>
+			<posx>-15</posx>
+			<posy>188</posy>
+			<width>365</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->

@@ -49,7 +49,7 @@ line1					: [opt] string - The first line of the progress dialog.
 dialog				: [opt] progress dialog - A current progress dialog.
 pct					: [opt] integer - The percent already completed. (0-100)
 fastMethod			: [opt] bool - True=no dialogs, no <include> tags and no defaults from references.xml.
-useLocal				: [opt] bool - True=use a local language file / False=use XBMC language files
+language			: [opt] dictionary { int : string } - False=use XBMC language files
 debug				: [opt] bool - True=output debug information / False=no logging.
 
 *Note,	You may use the above as keywords for arguments and skip certain optional arguments.
@@ -108,16 +108,14 @@ A special thanks to elupus for shaming me into doing it the right way. :)
 Nuka1195
 '''
 
+import os
 import xbmc, xbmcgui
 import xml.dom.minidom
-import re, os
-
-try: import language
-except: pass
+import re
 
 class GUIBuilder:
     def __init__( self, win, skinXML, imagePath='', useDescAsKey=False, title='GUI Builder', line1='', dlg=None,
-                        pct=0, fastMethod=False, useLocal=False, debug=False ):
+                        pct=0, fastMethod=False, language=False, debug=False ):
         try:
             self.debug = debug
             self.debugWrite( 'guibuilder.py', 2 )
@@ -126,7 +124,7 @@ class GUIBuilder:
             self.skinXML = skinXML[ skinXML.rfind( '\\' ) + 1: ]
             self.useDescAsKey = useDescAsKey
             self.fastMethod = fastMethod
-            self.useLocal = useLocal
+            self._ = language
             self.pct = pct
             self.lineno = line1 != ''
             self.lines = [ '' ] * 3
@@ -134,9 +132,6 @@ class GUIBuilder:
             self.lines[ self.lineno ] = 'Creating GUI from %s.' % ( self.skinXML, )
             self.initVariables()
             self.ClearIncludes()
-            try:
-                if ( self.useLocal ): self.language = language.Language()
-            except: self.useLocal = False
             if ( not self.fastMethod ):
                 if ( dlg ): self.dlg = dlg
                 else:
@@ -157,12 +152,6 @@ class GUIBuilder:
         except:
             self.win.SUCCEEDED = False
             if ( not self.fastMethod ): self.dlg.close()
-#            if (not self.fastMethod):
-#                if (dlg): dlg.close()
-#                dlg = xbmcgui.Dialog()
-#                dlg.ok(title, 'There was an error setting up controls.', 'Check your skin file:', skinXML)
-#                self.dlg.close()
-
 
     def debugWrite( self, function, action, lines=[], values=[] ):
         if (self.debug):
@@ -227,6 +216,13 @@ class GUIBuilder:
                     filename=control[ 'texture' ], colorKey=control[ 'colorkey' ], aspectRatio=int( control[ 'aspectratio' ] ),\
                     colorDiffuse=control[ 'colordiffuse' ] ) )
                 self.win.addControl( ctl )
+            # progress control
+            elif ( control[ 'type' ] == 'progress' ):
+                ctl = ( xbmcgui.ControlProgress( x=int( control[ 'posx' ] ) + self.posx, y=int( control[ 'posy' ] ) + self.posy,\
+                    width=int( control[ 'width' ] ), height=int( control[ 'height' ] ), texturebg=control[ 'texturebg' ],\
+                    textureleft=control[ 'lefttexture' ], texturemid=control[ 'midtexture' ], textureright=control[ 'righttexture' ],\
+                    textureoverlay=control[ 'overlaytexture' ] ) )
+                self.win.addControl( ctl )
             # label control
             elif (control['type'] == 'label'):
                 if (control.has_key('info')):
@@ -246,6 +242,7 @@ class GUIBuilder:
                     angle=int(control['angle']), shadowColor=control['shadowcolor'], focusTexture=control['texturefocus'],\
                     noFocusTexture=control['texturenofocus'], textXOffset=int(control['textoffsetx']), textYOffset=int(control['textoffsety'])))
                 self.win.addControl(ctl)
+                #control['special'] = ( control['font'], control['textcolor'], control['disabledcolor'], )
             # checkmark control
             elif (control['type'] == 'checkmark'):
                 if (control.has_key('info')):
@@ -434,8 +431,8 @@ class GUIBuilder:
                     if ( node.tagName.lower() == 'label' ):
                         try:
                             v = node.firstChild.nodeValue
-                            if ( self.useLocal ):
-                                ls = self.language.string( int( v ) )
+                            if ( self._ ):
+                                ls = self._( int( v ) )
                             else: ls = xbmc.getLocalizedString( int( v ) )
                             if ( ls ): lbl1.append( ls )
                             else: raise
@@ -444,8 +441,8 @@ class GUIBuilder:
                     elif ( node.tagName.lower() == 'label2' ):
                         try: 
                             v = node.firstChild.nodeValue
-                            if ( self.useLocal ):
-                                ls = self.language.string( int( v ) )
+                            if ( self._ ):
+                                ls = self._( int( v ) )
                             else: ls = xbmc.getLocalizedString( int( v ) )
                             if ( ls ): lbl2.append( ls )
                             else: raise
@@ -560,6 +557,18 @@ class GUIBuilder:
                         elif (ctl['texturecheckmarknofocus'][0] == '\\'): ctl['texturecheckmarknofocus'] = os.path.join(imagePath, ctl['texturecheckmarknofocus'][1:])
                         if (not ctl.has_key('markwidth')): ctl['markwidth'] = '20'
                         if (not ctl.has_key('markheight')): ctl['markheight'] = '20'
+
+                    if ( ctype == 'progress' ):
+                        if ( not ctl.has_key( 'texturebg' ) ): ctl[ 'texturebg' ] = ''
+                        elif ( ctl[ 'texturebg' ][ 0 ] == '\\' ): ctl[ 'texturebg' ] = os.path.join( imagePath, ctl[ 'texturebg' ][ 1 : ] )
+                        if ( not ctl.has_key( 'lefttexture' ) ): ctl[ 'lefttexture' ] = ''
+                        elif ( ctl[ 'lefttexture' ][ 0 ] == '\\' ): ctl[ 'lefttexture' ] = os.path.join( imagePath, ctl[ 'lefttexture' ][ 1 : ] )
+                        if ( not ctl.has_key( 'midtexture' ) ): ctl[ 'midtexture' ] = ''
+                        elif ( ctl[ 'midtexture' ][ 0 ] == '\\' ): ctl[ 'midtexture' ] = os.path.join( imagePath, ctl[ 'midtexture' ][ 1 : ] )
+                        if ( not ctl.has_key( 'righttexture' ) ): ctl[ 'righttexture' ] = ''
+                        elif ( ctl[ 'righttexture' ][ 0 ] == '\\' ): ctl[ 'righttexture' ] = os.path.join( imagePath, ctl[ 'righttexture' ][ 1 : ] )
+                        if ( not ctl.has_key( 'overlaytexture' ) ): ctl[ 'overlaytexture' ] = ''
+                        elif ( ctl[ 'overlaytexture' ][ 0 ] == '\\' ): ctl[ 'overlaytexture' ] = os.path.join( imagePath, ctl[ 'overlaytexture' ][ 1 : ] )
 
                     if (ctype == 'list' or ctype == 'listcontrol'):
                         ctl['label2'] = lbl2

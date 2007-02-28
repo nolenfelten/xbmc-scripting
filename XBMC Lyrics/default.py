@@ -36,7 +36,9 @@ class GUI( xbmcgui.WindowDialog ):
             self.setupGUI()
             if ( not self.SUCCEEDED ): self.exitScript()
             else:
+                self.show()
                 self.getSettings()
+                self.showVizWindow()
                 self.setupVariables()
                 self.getScraper()
                 self.getDummyTimer()
@@ -53,20 +55,26 @@ class GUI( xbmcgui.WindowDialog ):
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
         else: xml_file = 'skin.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True )
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True, language=_ )
 
     def setupVariables( self ):
         self.artist = None
         self.song = None
         self.controller_action = lyricsutil.setControllerAction()
-        try: self.controls[ 8 ][ 'control' ].setLabel( self.settings.SCRAPER )
+        try: self.controls[ 8 ][ 'control' ].setLabel( self.settings[ "scraper" ] )
         except: pass
     
     def getSettings( self ):
-        self.settings = lyricsutil.Settings()
+        self.settings = lyricsutil.Settings().get_settings()
+        
+    def showVizWindow( self ):
+        if ( self.settings[ "show_viz" ] ):
+            xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
+        else:
+            xbmc.executebuiltin( 'XBMC.ActivateWindow(%s)' % ( current_wid, ) )
 
     def getScraper( self ):
-        sys.path.append( os.path.join( resourcesPath, 'scrapers', self.settings.SCRAPER ) )
+        sys.path.append( os.path.join( resourcesPath, 'scrapers', self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
 
@@ -114,7 +122,7 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             self.artist_filename = self.make_fatx_compatible( artist, False )
             self.song_filename = self.make_fatx_compatible( song + '.txt', True )
-            song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
+            song_path = os.path.join( self.settings[ "lyrics_path" ], self.artist_filename, self.song_filename )
             lyrics_file = open( song_path, 'r' )
             lyrics = unicode( lyrics_file.read(), 'utf-8', 'ignore' )
             lyrics_file.close()
@@ -123,9 +131,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def save_lyrics_to_file( self, lyrics ):
         try:
-            song_path = os.path.join( self.settings.LYRICS_PATH, self.artist_filename, self.song_filename )
-            if ( not os.path.isdir( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) ) ):
-                os.makedirs( os.path.join( self.settings.LYRICS_PATH, self.artist_filename ) )
+            song_path = os.path.join( self.settings[ "lyrics_path" ], self.artist_filename, self.song_filename )
+            if ( not os.path.isdir( os.path.join( self.settings[ "lyrics_path" ], self.artist_filename ) ) ):
+                os.makedirs( os.path.join( self.settings[ "lyrics_path" ], self.artist_filename ) )
             lyrics_file = open( song_path, 'w' )
             lyrics_file.write( lyrics.encode( 'utf-8', 'ignore' ) )
             lyrics_file.close()
@@ -152,14 +160,18 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls[ 3 ][ 'control' ].setText( lyrics )
             for x in lyrics.split( '\n' ):
                 self.controls[ 4 ][ 'control' ].addItem( x )
-            if ( self.settings.SAVE_LYRICS and save ): success = self.save_lyrics_to_file( lyrics )
-        self.show_control( 3 + self.settings.USE_LIST )
+            #################################################
+            self.controls[ 4 ][ 'control' ].selectItem( 0 )
+            if ( self.settings[ "save_lyrics" ] and save ): success = self.save_lyrics_to_file( lyrics )
+        self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
         xbmcgui.unlock()
         
     def show_choices( self, choices ):
         xbmcgui.lock()
         for song in choices:
             self.controls[ 5 ][ 'control' ].addItem( song[ 0 ] )
+        #################################################
+        self.controls[ 5 ][ 'control' ].selectItem( 0 )
         self.menu_items = choices
         self.show_control( 5 )
         xbmcgui.unlock()
@@ -191,7 +203,8 @@ class GUI( xbmcgui.WindowDialog ):
             del settings
             self.getSettings()
             if ( self.controlId == 3 or self.controlId == 4 ): 
-                self.show_control( 3 + self.settings.USE_LIST )
+                self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
+            self.showVizWindow()
         except: pass
             
     def exitScript(self):
@@ -211,6 +224,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
             
     def myPlayerChanged( self, event ):
+        #print ['stopped','ended','started'][event]
         if ( event < 2 ): 
             self.exitScript()
         else:
@@ -243,7 +257,7 @@ class MyPlayer( xbmc.Player ):
     
 if ( __name__ == '__main__' ):
     if ( xbmc.Player().isPlayingAudio() ):
-        xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
+        current_wid = xbmcgui.getCurrentWindowId()
         ui = GUI()
         if ( ui.SUCCEEDED ): ui.doModal()
         del ui

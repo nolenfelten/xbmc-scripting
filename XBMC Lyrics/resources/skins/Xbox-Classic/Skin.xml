@@ -56,10 +56,10 @@
             <posy>195</posy>
             <width>415</width>
             <height>320</height>
-            <onup>4</onup>
-            <ondown>4</ondown>
-            <onleft>4</onleft>
-            <onright>4</onright>
+            <onup>3</onup>
+            <ondown>3</ondown>
+            <onleft>3</onleft>
+            <onright>3</onright>
             <spinposx>410</spinposx>
             <spinposy>345</spinposy>
             <spincolor>ffffffff</spincolor>
