@@ -58,7 +58,8 @@ class windowOverlay( xbmcgui.Window ):
         self.setupGUI()
         if (not self.SUCCEEDED): 
             self.close()
-        else: 
+        else:
+            self.show()
             dialog.close()
             dialog = xbmcgui.DialogProgress()
             dialog.create('XBMC Changelog')
