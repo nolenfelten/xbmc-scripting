@@ -27,6 +27,7 @@ import re
 import urllib, urllib2
 import cookielib
 import os.path
+import time
 
 from xml.sax.saxutils import unescape
 from xml.sax.saxutils import escape
@@ -74,29 +75,41 @@ class YouTube:
 	              20:'Video Games'}
 
 	def __init__(self):
+		self.base_path = os.getcwd().replace(';','')
+
+
 		# pattern to match youtube video session id.
 		self.session_pattern = re.compile('&t=([0-9a-zA-Z-_]{32})')
 		# pattern to match login status
 		self.login_pattern = re.compile('Log In')
 
 		# various urls
-		self.api_url = 'http://www.youtube.com/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s'
-		self.feed_url = 'http://youtube.com/rss/global/%s.rss'
-		self.stream_url = 'http://youtube.com/get_video?video_id=%s&t=%s'
-		self.video_url = 'http://youtube.com/?v=%s'
-		self.search_url = 'http://youtube.com/rss/search/%s.rss'
-		self.user_url = 'http://www.youtube.com/rss/user/%s/videos.rss'
-		self.confirm_url = 'http://www.youtube.com/verify_age?next_url=/watch?v=%s'
-		self.ajax_url = 'http://www.youtube.com/watch_ajax'
+		self.base_url = 'http://www.youtube.com'
+		self.api_url = self.base_url + '/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s'
+		self.feed_url = self.base_url + '/rss/global/%s.rss'
+		self.stream_url = self.base_url + '/get_video?video_id=%s&t=%s'
+		self.video_url = self.base_url + '/?v=%s'
+		self.search_url = self.base_url + '/rss/search/%s.rss'
+		self.user_url = self.base_url + '/rss/user/%s/videos.rss'
+		self.confirm_url = self.base_url + '/verify_age?next_url=/watch?v=%s'
+		self.ajax_url = self.base_url + '/watch_ajax'
 
 		# should exotic characters be stripped?
 		self.strip_chars = True
 
+		# Create the data subdirectory if it doesn't exist.
+		data_dir = os.path.join(self.base_path, 'data')
+		if not os.path.exists(data_dir):
+			os.mkdir(data_dir)
+
 		# Cookie stuff
-		self.cookie_file = 'cookie.lwp'
+		self.cookie_file = os.path.join(data_dir, 'cookie.lwp')
+
 		self.cj = cookielib.LWPCookieJar()
 		if os.path.isfile(self.cookie_file):
 			self.cj.load(self.cookie_file)
+
+		# Cookie build opener, user for content pages
 		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
 		urllib2.install_opener(opener)
 
@@ -305,8 +318,8 @@ class YouTube:
 					if self.filter_hook(self.filter_udata):
 						ret = self.get_video_url(id, confirmed=True)
 
-		# Failed to find the video stream url, better complain.
 		if ret is None:
+			# Failed to find the video stream url, better complain.
 			raise VideoStreamError(id)
 
 		return ret
@@ -377,8 +390,11 @@ class YouTube:
 
 		return self.login_status(data)
 
-	def login_status(self, data):
+	def login_status(self, data=None):
 		"""Return True if logged in, otherwise False."""
+
+		if data is None:
+			data = self.retrieve(self.base_url)
 
 		match = self.login_pattern.search(data)
 		if match is not None:
@@ -456,12 +472,18 @@ if __name__ == '__main__':
 		print "------------------------------------------"
 		print "Videos from User ('sneseglarn')"
 		print yt.get_user_videos('sneseglarn')
+		print "------------------------------------------"
 		"""
 
 		if len(sys.argv) == 3:
+			print "Login status"
+			print yt.login_status()
 			print "------------------------------------------"
 			print "Logging in"
 			print yt.login(sys.argv[1], sys.argv[2])
+			print "------------------------------------------"
+			print "Login status"
+			print yt.login_status()
 			print "------------------------------------------"
 			print "Video Url from filtered Id ('M23If6Sqe-Q')"
 			yt.set_filter_hook(filter_confirm)
