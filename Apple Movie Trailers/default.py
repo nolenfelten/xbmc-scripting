@@ -1,7 +1,6 @@
 import sys, os, traceback
 
-scriptpath = sys.path[0]
-sys.path.append( os.path.join( sys.path[0], 'extras', 'lib' ) )
+sys.path.append( os.path.join( os.getcwd().replace( ";", "" ), 'extras', 'lib' ) )
 
 import gui
 
