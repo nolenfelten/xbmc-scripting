@@ -24,7 +24,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'settings_16x9.xml'
         else: xml_file = 'settings.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'settings.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, useLocal=True, fastMethod=True, debug=False )
+        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, language=self._, fastMethod=True, debug=False )
 
     def setStartupCategories( self, genres ):
         self.startup_categories = []
