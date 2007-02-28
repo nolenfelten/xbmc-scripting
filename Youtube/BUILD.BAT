@@ -22,6 +22,8 @@ Echo.
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
 xcopy gfx "BUILD\%ScriptName%\gfx" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+xcopy skins "BUILD\%ScriptName%\skins" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+xcopy elementtree "BUILD\%ScriptName%\elementtree" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 xcopy *.* "BUILD\%ScriptName%\" /EXCLUDE:BUILD\exclude.txt
 Echo.
 
