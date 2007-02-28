@@ -112,10 +112,6 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>10</onleft>
-			<onright>10</onright>
-			<onup>100</onup>
-			<ondown>20</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
@@ -152,10 +148,6 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>10</onup>
-			<ondown>30</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
@@ -192,14 +184,10 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>30</onleft>
-			<onright>30</onright>
-			<onup>20</onup>
-			<ondown>40</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
-			<description>List-Text Button</description>
+			<description>Smooth Button</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
@@ -215,11 +203,11 @@
 			<onleft>40</onleft>
 			<onright>40</onright>
 			<onup>30</onup>
-			<ondown>100</ondown>
+			<ondown>50</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="41">
-			<description>List-Text Button Value</description>
+			<description>Smooth Button Value</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
@@ -232,10 +220,42 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>40</onleft>
-			<onright>40</onright>
-			<onup>30</onup>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="50">
+			<description>Show Viz Button</description>
+			<posx>365</posx>
+			<posy>250</posy>
+			<width>315</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>33</label>
+			<font>font13</font>
+			<textcolor>FF000000</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>iconlist-focus.png</texturefocus>
+			<texturenofocus>iconlist-nofocus.png</texturenofocus>
+			<onleft>50</onleft>
+			<onright>50</onright>
+			<onup>40</onup>
 			<ondown>100</ondown>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="51">
+			<description>Show Viz Button Value</description>
+			<posx>365</posx>
+			<posy>250</posy>
+			<width>315</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>FF000000</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="100">
@@ -253,7 +273,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>200</onleft>
 			<onright>150</onright>
-			<onup>40</onup>
+			<onup>50</onup>
 			<ondown>10</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -272,7 +292,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>100</onleft>
 			<onright>200</onright>
-			<onup>40</onup>
+			<onup>50</onup>
 			<ondown>10</ondown>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -291,7 +311,7 @@
 			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
 			<onleft>150</onleft>
 			<onright>100</onright>
-			<onup>40</onup>
+			<onup>50</onup>
 			<ondown>10</ondown>
 		</control>
 		<control type="image">

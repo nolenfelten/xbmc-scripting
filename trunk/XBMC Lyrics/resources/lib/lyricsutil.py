@@ -29,39 +29,38 @@ def setControllerAction():
 
 class Settings:
     def __init__( self, *args, **kwargs ):
-        self.getSettings()
-
-    def getSettings( self ):
-        try:
-            f = open( os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__, 'settings.txt' ), 'r' )
-            s = f.read().split('|')
-            f.close()
-            self.SAVE_LYRICS = ( s[ 0 ] == '1' )
-            self.LYRICS_PATH = s[ 1 ]
-            self.SCRAPER = s[ 2 ]
-            self.USE_LIST = ( s[ 3 ] == '1' )
-        except:
-            self.setDefaults()
-
-    def setDefaults( self, show_dialog = False ):
-        self.SAVE_LYRICS = True
-        self.LYRICS_PATH = os.path.join( 'T:\\script_data', sys.modules[ '__main__' ].__scriptname__, 'lyrics' )
-        self.SCRAPER = 'lyricwiki'
-        self.USE_LIST = False
-        success = self.saveSettings()
+        pass
         
-    def saveSettings( self ):
+    def get_settings( self ):
         try:
-            if ( not os.path.isdir( os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__ ) ) ):
-                os.makedirs( os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__ ) )
-            strSettings = '%d|%s|%s|%d' % ( 
-                self.SAVE_LYRICS,
-                self.LYRICS_PATH,
-                self.SCRAPER,
-                self.USE_LIST, )
-            f = open( os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__, 'settings.txt' ), 'w' )
-            f.write( strSettings )
-            f.close()
+            settings_path = os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__ )
+            settings_file = open( os.path.join( settings_path, 'settings.txt' ), 'r' )
+            settings = eval( settings_file.read() )
+            settings_file.close()
+        except:
+            settings = self._use_defaults()
+        return settings
+
+    def _use_defaults( self, show_dialog=False ):
+        settings = {  
+            "save_lyrics": True,
+            "lyrics_path": os.path.join( 'T:\\script_data', sys.modules[ '__main__' ].__scriptname__, 'lyrics' ),
+            "scraper": "lyricwiki",
+            "smooth_scrolling": False,
+            "show_viz": True 
+            }
+        success = self.save_settings( settings )
+        return settings
+
+    def save_settings( self, settings ):
+        try:
+            settings_path = os.path.join( 'P:\\script_data', sys.modules[ '__main__' ].__scriptname__ )
+            if ( not os.path.isdir( settings_path ) ):
+                os.makedirs( settings_path )
+            settings_file = open( os.path.join( settings_path, 'settings.txt' ), 'w' )
+            settings_file.write( repr( settings ) )
+            settings_file.close()
             return True
         except:
             return False
+            

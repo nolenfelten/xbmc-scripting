@@ -12,9 +12,10 @@
   <string id="13">Scraper changes won't take effect until you restart.</string>
   
   <string id="30">Scraper</string>
-  <string id="31">Save Lyrics</string>
-  <string id="32">Save Folder</string>
+  <string id="31">Save lyrics</string>
+  <string id="32">Save folder</string>
   <string id="33">Smooth scrolling for lyrics</string>
+  <string id="34">Show visualization window</string>
   
   <string id="40">a save folder</string>
   
