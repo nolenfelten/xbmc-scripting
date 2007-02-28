@@ -118,7 +118,7 @@ class window(xbmcgui.Window):
         else: xml_file = 'skin.xml'
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey = False, 
-            title = __scriptname__, line1 = __line1__, dlg = dialog, pct = pct, useLocal = False, debug = True )
+            title = __scriptname__, line1 = __line1__, dlg = dialog, pct = pct, language = False, debug = False )
         closeProgessDialog()
         if ( not self.SUCCEEDED ):
             xbmcgui.Dialog().ok( __scriptname__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
