@@ -1,0 +1,332 @@
+<window id="3000">
+    <!--
+        The <resolution> tag is used for the setCoordinateResolution() function.
+        
+        You may move, add or delete any controls you want as long as they're not Required.
+        With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+        The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+        <shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+
+        Use <useincludes>false</useincludes> tag if you don't have any <include> tags. Your skin
+        will load faster, but you must supply all tags and values.
+        
+        To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+        
+    -->
+
+    <resolution>PAL16x9</resolution>
+    <useincludes>false</useincludes>
+    <coordinates>
+        <system>1</system>
+        <posx>440</posx>
+        <posy>220</posy>
+    </coordinates>
+
+    <controls>
+        <control type="image" id="1">
+            <description>pad</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>300</width>
+            <height>300</height>
+            <texture>\panel2.png</texture>
+            <aspectratio>keep</aspectratio>
+            <!--colordiffuse>BBFFFFFF</colordiffuse-->
+        </control>
+
+        <control type="image" id="1">
+            <description>divider</description>
+            <posx>48</posx>
+            <posy>174</posy>
+            <width>180</width>
+            <height>2</height>
+            <texture>\separatorOSD.png</texture>
+            <colordiffuse>FFFFFFFF</colordiffuse>
+        </control>
+        
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="label" id="1">
+            <description>Title Label</description>
+            <posx>80</posx>
+            <posy>38</posy>
+            <width>115</width>
+            <label>0</label>
+            <align>center</align>
+            <font>font10</font>
+            <textcolor>FFF1EA40</textcolor>
+            <visible>true</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="10">
+            <description>Restart Button</description>
+            <posx>50</posx>
+            <posy>70</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>11</label>
+            <font>font10</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <disabledcolor>60FFFFFF</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>10</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+            <onup>50</onup>
+            <ondown>20</ondown>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="20">
+            <description>Stop Button</description>
+            <posx>50</posx>
+            <posy>90</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>12</label>
+            <font>font10</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <disabledcolor>60FFFFFF</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>10</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+            <onup>10</onup>
+            <ondown>30</ondown>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="30">
+            <description>Upload Button</description>
+            <posx>50</posx>
+            <posy>110</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>13</label>
+            <font>font10</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <disabledcolor>60FFFFFF</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>10</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+            <onup>20</onup>
+            <ondown>40</ondown>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="40">
+            <description>Reboot Button</description>
+            <posx>50</posx>
+            <posy>130</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>14</label>
+            <font>font10</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <disabledcolor>60FFFFFF</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>10</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+            <onup>30</onup>
+            <ondown>50</ondown>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="50">
+            <description>Settings Button</description>
+            <posx>50</posx>
+            <posy>150</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>15</label>
+            <font>font10</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <disabledcolor>60FFFFFF</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>10</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+            <onup>40</onup>
+            <ondown>10</ondown>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="label" id="1">
+            <description>Kaid Status Heading</description>
+            <posx>130</posx>
+            <posy>179</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>30</label>
+            <align>right</align>
+            <textcolor>DDFFFFFF</textcolor>
+            <font>font10</font>
+        </control>
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="1">
+            <description>Kaid Status Label</description>
+            <posx>135</posx>
+            <posy>179</posy>
+            <width>170</width>
+            <height>22</height>
+            <label> </label>
+            <font>font10</font>
+            <textcolor>CC00FF00</textcolor>
+            <disabledcolor>CCFF0000</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>0</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="label" id="1">
+            <description>Router Status Heading</description>
+            <posx>130</posx>
+            <posy>197</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>31</label>
+            <align>right</align>
+            <textcolor>DDFFFFFF</textcolor>
+            <font>font10</font>
+        </control>
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="1">
+            <description>Router Status Label</description>
+            <posx>135</posx>
+            <posy>197</posy>
+            <width>170</width>
+            <height>22</height>
+            <label> </label>
+            <font>font10</font>
+            <textcolor>CC00FF00</textcolor>
+            <disabledcolor>CCFF0000</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>0</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="label" id="1">
+            <description>Xbox Status Heading</description>
+            <posx>130</posx>
+            <posy>215</posy>
+            <width>170</width>
+            <height>22</height>
+            <label>32</label>
+            <align>right</align>
+            <textcolor>DDFFFFFF</textcolor>
+            <font>font10</font>
+        </control>
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="button" id="1">
+            <description>Xbox Status Label</description>
+            <posx>135</posx>
+            <posy>215</posy>
+            <width>170</width>
+            <height>22</height>
+            <label> </label>
+            <font>font10</font>
+            <textcolor>CC00FF00</textcolor>
+            <disabledcolor>CCFF0000</disabledcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <focusedcolor>FFF1EA40</focusedcolor>
+            <align>left</align>
+            <textoffsetx>0</textoffsetx>
+            <textoffsety>0</textoffsety>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <visible>true</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="progress" id="1">
+            <description>Progressbar</description>
+            <posx>40</posx>
+            <posy>246</posy>
+            <width>192</width>
+            <height>12</height>
+            <texturebg>\progress_back.png</texturebg>
+            <lefttexture>-</lefttexture>
+            <midtexture>\progress_mid.png</midtexture>
+            <righttexture>-</righttexture>
+            <overlaytexture>-</overlaytexture>
+            <visible>false</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="fadelabel" id="1">
+            <description>Info Message Label</description>
+            <posx>42</posx>
+            <posy>240</posy>
+            <width>190</width>
+            <height>18</height>
+            <label> </label>
+            <align>left</align>
+            <textcolor>CC00CCFF</textcolor>
+            <font>font10</font>
+            <visible>true</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="fadelabel" id="1">
+            <description>Success Message Label</description>
+            <posx>42</posx>
+            <posy>240</posy>
+            <width>190</width>
+            <height>18</height>
+            <label> </label>
+            <align>left</align>
+            <textcolor>FFF1EA40</textcolor>
+            <font>font10</font>
+            <visible>false</visible>
+        </control>
+
+		<!-- ** Required ** Do not change <description> or type -->
+        <control type="fadelabel" id="1">
+            <description>Error Message Label</description>
+            <posx>42</posx>
+            <posy>240</posy>
+            <width>190</width>
+            <height>18</height>
+            <label> </label>
+            <align>left</align>
+            <textcolor>CCFF0000</textcolor>
+            <font>font10</font>
+            <visible>false</visible>
+        </control>
+
+    </controls>
+</window>
