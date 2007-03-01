@@ -1,11 +1,10 @@
 import os
-import xbmc, xbmcgui
+import xbmcgui
 import urllib
 from sgmllib import SGMLParser
 import socket
 
-timeout = 5
-socket.setdefaulttimeout( timeout )
+socket.setdefaulttimeout( 5 )
 
 class Parser( SGMLParser ):
     def reset( self ):
