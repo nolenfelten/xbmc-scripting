@@ -1,11 +1,10 @@
-import urllib, os
+import sys, os
 import xbmcgui
+import urllib
 from sgmllib import SGMLParser
 import socket
 
-# timeout in seconds
-timeout = 10
-socket.setdefaulttimeout( timeout )
+socket.setdefaulttimeout( 10 )
 
 class Parser( SGMLParser ):
     def reset( self ):
@@ -17,91 +16,89 @@ class Parser( SGMLParser ):
 
     def start_a( self, attrs ):
         for key, value in attrs:
-            if ( key == 'href' ): self.tag_found = value
+            if ( key == "href" ): self.tag_found = value
     
     def handle_data( self, text ):
-        if ( self.tag_found == text.replace( ' ', '%20' ) ):
+        if ( self.tag_found == text.replace( " ", "%20" ) ):
             self.tags.append( self.tag_found )
             self.tag_found = False
         if ( self.url_found ):
-            self.url = text.replace( ' ', '%20' )
+            self.url = text.replace( " ", "%20" )
             self.url_found = False
             
     def unknown_starttag( self, tag, attrs ):
-        if ( tag == 'h2' ):
+        if ( tag == "h2" ):
             self.url_found = True
 
 class Update:
-    def __init__( self, language, script = 'Apple Movie Trailers', version = '0' ):
+    def __init__( self, language ):
         self._ = language
-        self.script = script
-        self.version = version
-        self.base_url = 'http://xbmc-scripting.googlecode.com/svn'
+        self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+        self.__version__ = sys.modules[ "__main__" ].__version__
+        self.base_url = "http://xbmc-scripting.googlecode.com/svn"
         self.dialog = xbmcgui.DialogProgress()
-        new = self.checkForNewVersion()
-        if ( new ): self.updateScript()
-        else: xbmcgui.Dialog().ok( self.script, self._( 95 + ( new == None ) ) )
+        new = self._check_for_new_version()
+        if ( new ): self._update_script()
+        else: xbmcgui.Dialog().ok( self.__scriptname__, self._( 1000 + ( 30 * ( new == None ) ) ) )
             
-    def checkForNewVersion( self ):
-        try:
-            self.dialog.create( self.script, self._( 90 ) )
-            # get version tags
-            new = False
-            htmlsource = self.getHTMLSource( '%s/tags/%s' % ( self.base_url, self.script.replace( ' ', '%20' ), ) )
-            if ( htmlsource ):
-                self.versions, url = self.parseHTMLSource( htmlsource )
-                self.url = url[url.find( ':%20' ) + 4:]
-                if ( self.versions ):
-                    new = ( self.version < self.versions[-1][:-1] or ( self.version[:4] == 'pre-' and self.version.replace( 'pre-', '' ) <= self.versions[-1][:-1] ) )
-        except: new = None
+    def _check_for_new_version( self ):
+        self.dialog.create( self.__scriptname__, self._( 1001 ) )
+        # get version tags
+        new = None
+        htmlsource = self._get_html_source( "%s/tags/%s" % ( self.base_url, self.__scriptname__.replace( " ", "%20" ), ) )
+        if ( htmlsource ):
+            self.versions, url = self._parse_html_source( htmlsource )
+            self.url = url[url.find( ":%20" ) + 4:]
+            if ( self.versions ):
+                new = ( self.__version__ < self.versions[-1][:-1] or ( self.__version__[:4] == "pre-" and self.__version__.replace( "pre-", "" ) <= self.versions[-1][:-1] ) )
         self.dialog.close()
         return new
                 
-    def updateScript( self ):
+    def _update_script( self ):
         try:
-            if ( xbmcgui.Dialog().yesno( self.script, '%s %s %s.' % ( self._( 100 ), self.versions[-1][:-1], self._( 91 ), ), self._( 92 ), '', self._( 211 ), self._( 208 ) ) ):
-                self.dialog.create( self.script, self._( 93 ), self._( 94 ) )
+            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[-1][:-1], self._( 1002 ), ), self._( 1003 ), "", self._( 51 ), self._( 52 ) ) ):
+                self.dialog.create( self.__scriptname__, self._( 1004 ), self._( 1005 ) )
                 script_files = []
-                folders = ['%s/%s' % ( self.url, self.versions[-1], )]
+                folders = ["%s/%s" % ( self.url, self.versions[-1], )]
                 while folders:
                     try:
-                        htmlsource = self.getHTMLSource( '%s%s' % ( self.base_url, folders[0] ) )
+                        htmlsource = self._get_html_source( "%s%s" % ( self.base_url, folders[0] ) )
                         if ( htmlsource ):
-                            items, url = self.parseHTMLSource( htmlsource )
-                            files, dirs = self.parseItems( items )
-                            url = url[url.find( ':%20' ) + 4:]
+                            items, url = self._parse_html_source( htmlsource )
+                            files, dirs = self._parse_items( items )
+                            url = url[url.find( ":%20" ) + 4:]
                             for file in files:
-                                script_files.append( '%s/%s' % ( url, file, ) )
+                                script_files.append( "%s/%s" % ( url, file, ) )
                             for folder in dirs:
-                                folders.append( '%s/%s' % ( folders[0], folder, ) )
+                                folders.append( "%s/%s" % ( folders[0], folder, ) )
                         else: 
                             raise
                         folders = folders[1:]
                     except:
                         folders = None
-                self.getFiles( script_files, self.versions[-1][:-1] )
+                self._get_files( script_files, self.versions[-1][:-1] )
         except:
             self.dialog.close()
-            xbmcgui.Dialog().ok( self.script, self._( 96 ) )
+            xbmcgui.Dialog().ok( self.__scriptname__, self._( 1031 ) )
         
-    def getFiles( self, script_files, version ):
+    def _get_files( self, script_files, version ):
         try:
             for cnt, url in enumerate( script_files ):
                 items = os.path.split( url )
-                path = items[0].replace( '/tags/%s/' % ( self.script.replace( ' ', '%20' ), ), 'Q:\\scripts\\%s_v' % ( self.script, ) ).replace( '/', '\\' ).replace( '%20', ' ' )
-                file = items[1].replace( '%20', ' ' )
+                path = items[0].replace( "/tags/%s/" % ( self.__scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( self.__scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
+                file = items[1].replace( "%20", " " )
                 pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
-                self.dialog.update( pct, '%s %s' % ( self._( 68 ), url, ), '%s %s' % ( self._( 97 ), path, ), '%s %s' % ( self._( 98 ), file, ) )
+                self.dialog.update( pct, "%s %s" % ( self._( 1007 ), url, ), "%s %s" % ( self._( 1008 ), path, ), "%s %s" % ( self._( 1009 ), file, ) )
                 if ( self.dialog.iscanceled() ): raise
                 if ( not os.path.isdir( path ) ): os.makedirs( path )
-                urllib.urlretrieve( '%s%s' % ( self.base_url, url, ), '%s\\%s' % ( path, file, ) )
+                urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), "%s\\%s" % ( path, file, ) )
         except:
             raise
         else:
             self.dialog.close()
-            xbmcgui.Dialog().ok( self.script, self._( 99 ), 'Q:\\scripts\\%s_v%s\\' % ( self.script, version, ) )
+            xbmcgui.Dialog().ok( self.__scriptname__, self._( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( self.__scriptname__, version, ) )
             
-    def getHTMLSource( self, url ):
+    def _get_html_source( self, url ):
         try:
             sock = urllib.urlopen( url )
             htmlsource = sock.read()
@@ -109,7 +106,7 @@ class Update:
             return htmlsource
         except: return None
 
-    def parseHTMLSource( self, htmlsource ):
+    def _parse_html_source( self, htmlsource ):
         try:
             parser = Parser()
             parser.feed( htmlsource )
@@ -117,11 +114,11 @@ class Update:
             return parser.tags, parser.url
         except: return None, None
             
-    def parseItems( self, items ):
+    def _parse_items( self, items ):
         folders = []
         files = []
         for item in items:
-            if ( item[-1] == '/' ):
+            if ( item[-1] == "/" ):
                 folders.append( item )
             else:
                 files.append( item )

@@ -23,6 +23,17 @@
     </coordinates>
 
     <controls>
+        <!-- needed for control conflicts -->
+        <!--control type="image" id="1">
+            <description>dummy</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>0</width>
+            <height>0</height>
+            <texture>-</texture>
+            <visible>false</visible>
+        </control-->
+    
         <control type="image" id="1">
             <description>pad</description>
             <posx>0</posx>
@@ -179,7 +190,7 @@
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label>30</label>
+            <label>100</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -212,7 +223,7 @@
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label>31</label>
+            <label>110</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -245,7 +256,7 @@
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label>32</label>
+            <label>120</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>

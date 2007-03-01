@@ -88,7 +88,7 @@ class Settings:
             "xbox_user": "xbox",
             "xbox_pwd": "xbox",
             "sniff_device": "vlan0",
-            "exit_to_kai": 1
+            "exit_to_kai": True
             }
         success = self.save_settings( settings )
         return settings
