@@ -179,7 +179,7 @@
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label>30</label>
+            <label>100</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -212,7 +212,7 @@
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label>31</label>
+            <label>110</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -245,7 +245,7 @@
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label>32</label>
+            <label>120</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
