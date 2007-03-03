@@ -6,7 +6,7 @@
 import os
 import xbmc
 import urllib, socket
-import kcputil
+import utilities
 import re
 
 socket.setdefaulttimeout( 5.0 ) #seconds
@@ -27,8 +27,8 @@ class Commands( urllib.FancyURLopener ):
     
     def _get_settings( self ):
         """ get user and router settings """
-        self.settings = kcputil.Settings().get_settings()
-        self.router_settings = kcputil.Settings().get_router_settings( self.settings[ "firmware" ] )
+        self.settings = utilities.Settings().get_settings()
+        self.router_settings = utilities.Settings().get_router_settings( self.settings[ "firmware" ] )
 
     def _parse_data( self, data, failed, pattern=None ):
         """ searches router source for successful command completion """

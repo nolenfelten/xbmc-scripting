@@ -10,18 +10,8 @@ __url__ = "http://code.google.com/p/xbmc-scripting/"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
 __version__ = "pre-2.0"
 
-def _dialog_progress_create():
-    global dialog
-    dialog = xbmcgui.DialogProgress()
-    dialog.create( __scriptname__, "Setting up script, please wait..." )
-
-def _dialog_progress_close():
-    global dialog
-    dialog.close()
-
 import sys, os
 import xbmc, xbmcgui
-#_dialog_progress_create()
 import threading
 import traceback
 
@@ -30,7 +20,7 @@ RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( RESOURCE_PATH, "lib" ) )
 
 import wrt54g
-import kcputil
+import utilities
 import guibuilder
 import language
 _ = language.Language().string
@@ -49,9 +39,7 @@ class GUI( xbmcgui.WindowDialog ):
                 self.setup_variables()
                 self.wrt54g = wrt54g.Commands()
                 self.check_status()
-                #_dialog_progress_close()
         except: 
-            #_dialog_progress_close()
             traceback.print_exc()
             self.close()
 
@@ -67,7 +55,7 @@ class GUI( xbmcgui.WindowDialog ):
             title=__scriptname__, useDescAsKey=True, debug=False, language=_ )
 
     def setup_variables( self ):
-        self.controller_action = kcputil.setControllerAction()
+        self.controller_action = utilities.setControllerAction()
         self.KAID_VERSION = ""
         
     def set_status_labels( self ):
@@ -118,6 +106,9 @@ class GUI( xbmcgui.WindowDialog ):
             import settings
             settings = settings.GUI( language=_ )
             settings.doModal()
+            if ( settings.changed ):
+                self.wrt54g._get_settings()
+                self.check_status()
             del settings
         except: traceback.print_exc()
             
