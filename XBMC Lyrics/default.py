@@ -24,7 +24,7 @@ import threading
 
 resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
 sys.path.append( os.path.join( resourcesPath, 'lib' ) )
-import language, lyricsutil
+import language, utilities
 import guibuilder
 _ = language.Language().string
 
@@ -34,17 +34,18 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             self.Timer = None
             self.setupGUI()
-            if ( not self.SUCCEEDED ): self.exitScript()
+            if ( not self.SUCCEEDED ): self.exit_script()
             else:
                 self.show()
-                self.getSettings()
-                self.showVizWindow()
-                self.setupVariables()
-                self.getScraper()
+                dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
+                self.get_settings()
+                self.show_viz_window()
+                self.setup_variables()
+                self.get_scraper()
                 self.getDummyTimer()
                 self.getMyPlayer()
         except: 
-            self.exitScript()
+            self.exit_script()
             
     def setupGUI( self ):
         cwd = os.getcwd().replace( ";", "" )
@@ -57,37 +58,27 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
         guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True, language=_ )
 
-    def setupVariables( self ):
+    def setup_variables( self ):
         self.artist = None
         self.song = None
-        self.controller_action = lyricsutil.setControllerAction()
+        self.controller_action = utilities.setControllerAction()
         try: self.controls[ 8 ][ 'control' ].setLabel( self.settings[ "scraper" ] )
         except: pass
     
-    def getSettings( self ):
-        self.settings = lyricsutil.Settings().get_settings()
+    def get_settings( self ):
+        self.settings = utilities.Settings().get_settings()
         
-    def showVizWindow( self ):
+    def show_viz_window( self ):
         if ( self.settings[ "show_viz" ] ):
             xbmc.executebuiltin( 'XBMC.ActivateWindow(2006)' )
         else:
             xbmc.executebuiltin( 'XBMC.ActivateWindow(%s)' % ( current_wid, ) )
 
-    def getScraper( self ):
+    def get_scraper( self ):
         sys.path.append( os.path.join( resourcesPath, 'scrapers', self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
 
-    # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
-    # it calls myPlayerChanged() immediately.
-    def getDummyTimer( self ):
-        self.Timer = threading.Timer( 60*60*60, self.getDummyTimer,() )
-        self.Timer.start()
-    
-    def getMyPlayer( self ):
-        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
-        self.myPlayerChanged( 2 )
-    
     def show_control( self, controlId ):
         self.controls[ 3 ][ 'control' ].setVisible( controlId == 3 )
         self.controls[ 4 ][ 'control' ].setVisible( controlId == 4 )
@@ -112,7 +103,7 @@ class GUI( xbmcgui.WindowDialog ):
             elif ( type( lyrics ) == list and lyrics ):
                 self.show_choices( lyrics )
             else:
-                self.show_lyrics( _( 2 ) )
+                self.show_lyrics( _( 631 ) )
         
     def get_lyrics_from_list( self, item ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
@@ -153,8 +144,8 @@ class GUI( xbmcgui.WindowDialog ):
         xbmcgui.lock()
         #Checking whether some idiot has submitted empty lyrics or not:
         if ( len( lyrics ) < 2 ):
-            self.controls[ 3 ][ 'control' ].setText( _( 3 ) )
-            self.controls[ 4 ][ 'control' ].addItem( _( 3 ) )
+            self.controls[ 3 ][ 'control' ].setText( _( 632 ) )
+            self.controls[ 4 ][ 'control' ].addItem( _( 632 ) )
         #If not, we show whatever results we got:
         else:
             self.controls[ 3 ][ 'control' ].setText( lyrics )
@@ -198,35 +189,52 @@ class GUI( xbmcgui.WindowDialog ):
     def change_settings( self ):
         try:
             import settings
-            settings = settings.GUI( language=_, scriptname=__scriptname__, version=__version__ )
+            settings = settings.GUI( language=_ )
             settings.doModal()
+            ok = False
+            if ( settings.changed ):
+                self.get_settings()
+                if ( settings.restart ):
+                    ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
             del settings
-            self.getSettings()
-            if ( self.controlId == 3 or self.controlId == 4 ): 
-                self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
-            self.showVizWindow()
-        except: pass
+            if ( not ok ):
+                if ( self.controlId == 3 or self.controlId == 4 ): 
+                    self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
+                self.show_viz_window()
+            else: self.exit_script( True )
+        except: traceback.print_exc()
             
-    def exitScript(self):
+    def exit_script( self, restart=False ):
         if ( self.Timer ): self.Timer.cancel()
         self.close()
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s\\default.py)" % ( os.getcwd().replace( ";", "" ), ) )
+
+    def onControl(self, control):
+        if control == self.controls[ 5 ][ 'control' ]:
+            self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
 
     def onAction(self, action):
         button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.exitScript()
+            self.exit_script()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
             self.change_settings()
         else: self.update_label()
     
-    def onControl(self, control):
-        if control == self.controls[ 5 ][ 'control' ]:
-            self.get_lyrics_from_list( self.controls[ 5 ][ 'control' ].getSelectedPosition() )
-            
+    # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
+    # it calls myPlayerChanged() immediately.
+    def getDummyTimer( self ):
+        self.Timer = threading.Timer( 60*60*60, self.getDummyTimer,() )
+        self.Timer.start()
+    
+    def getMyPlayer( self ):
+        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
+        self.myPlayerChanged( 2 )
+    
     def myPlayerChanged( self, event ):
         #print ['stopped','ended','started'][event]
         if ( event < 2 ): 
-            self.exitScript()
+            self.exit_script()
         else:
             song = self.song
             for cnt in range( 5 ):
@@ -262,4 +270,4 @@ if ( __name__ == '__main__' ):
         if ( ui.SUCCEEDED ): ui.doModal()
         del ui
     else:
-        xbmcgui.Dialog().ok( _( 0 ), _( 10 ), _( 11 ) )
+        xbmcgui.Dialog().ok( __scriptname__, _( 638 ), _( 639 ) )
