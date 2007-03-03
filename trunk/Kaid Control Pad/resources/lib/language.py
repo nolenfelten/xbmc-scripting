@@ -3,7 +3,7 @@ Language module
 
 Nuka1195
 """
-import sys, os
+import os
 import xbmc
 import xml.dom.minidom
 

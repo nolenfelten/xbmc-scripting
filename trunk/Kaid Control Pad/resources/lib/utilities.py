@@ -1,4 +1,4 @@
-import sys, os, traceback
+import sys, os
 
 def setControllerAction():
     return {
@@ -90,7 +90,7 @@ class Settings:
             "sniff_device": "vlan0",
             "exit_to_kai": True
             }
-        success = self.save_settings( settings )
+        ok = self.save_settings( settings )
         return settings
 
     def save_settings( self, settings ):
@@ -103,6 +103,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            print traceback.print_exc()
             return False
             
