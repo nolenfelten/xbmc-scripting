@@ -10,7 +10,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
         self.__version__ = sys.modules[ "__main__" ].__version__
         self.setupGUI()
-        if ( not self.SUCCEEDED ): self._close_dialog( False )
+        if ( not self.SUCCEEDED ): self._close_dialog()
         else:
             #self.show()
             self._set_variables()
@@ -104,13 +104,12 @@ class GUI( xbmcgui.WindowDialog ):
 
 ##### Start of unique defs #####################################################
 
-##### Special defs, script dependent, remember to call them from _setup_special #@###############
+##### Special defs, script dependent, remember to call them from _setup_special #################
     
     def _set_restart_required( self ):
         """ copies self.settings and add any settings that require a restart on change """
         self.settings_original = self.settings.copy()
-        self.settings_restart = ()
-        # Example: self.settings_restart = ( "firmware", "router_ip", )
+        self.settings_restart = ( "firmware", "router_ip", "router_user", "router_pwd", )
 
     def _setup_special( self ):
         """ calls any special defs """
@@ -232,15 +231,17 @@ class GUI( xbmcgui.WindowDialog ):
     
     def _changed_message( self ):
         """ checks for any changes that require a restart to take effect """
+        restart = False
         for setting in self.settings_restart:
             if ( self.settings_original[ setting ] != self.settings[ setting ] ):
-                ok = xbmcgui.Dialog().ok( self.__scriptname__, self._( 240 )  )
+                restart = True
                 break
-        self._close_dialog( True )
+        self._close_dialog( True, restart )
 
-    def _close_dialog( self, changed ):
+    def _close_dialog( self, changed=False, restart=False ):
         """ closes this dialog window """
         self.changed = changed
+        self.restart = restart
         self.close()
         
     def get_control( self, key ):
@@ -252,7 +253,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( control is self.get_control( "Ok Button" ) ):
             self._save_settings()
         elif ( control is self.get_control( "Cancel Button" ) ):
-            self._close_dialog( False )
+            self._close_dialog()
         elif ( control is self.get_control( "Update Button" ) ):
             self._update_script()
         elif ( control is self.get_control( "Credits Button" ) ):
@@ -285,9 +286,8 @@ class GUI( xbmcgui.WindowDialog ):
             self._set_controls_values()
             
     def onAction( self, action ):
-        control = self.getFocus()
         button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
         if ( button_key == "Keyboard Backspace Button" or button_key == "B Button" or button_key == "Remote Back Button" ):
-            self._close_dialog( False )
+            self._close_dialog()
         elif ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
             self._save_settings()

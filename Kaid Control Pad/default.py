@@ -33,9 +33,10 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             self.timer_msg = None
             self.setupGUI()
-            if ( not self.SUCCEEDED ): self.exitScript()
+            if ( not self.SUCCEEDED ): self.exit_script()
             else:
                 self.show()
+                dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
                 self.setup_variables()
                 self.wrt54g = wrt54g.Commands()
                 self.check_status()
@@ -97,7 +98,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.get_control( "Success Message Label" ).setVisible( False )
         self.get_control( "Error Message Label" ).setVisible( False )
         self.get_control( "Progressbar" ).setVisible( False )
-    
+
     def clear_message_timer( self ):
         if ( self.timer_msg ): self.timer_msg.cancel()
 
@@ -108,7 +109,8 @@ class GUI( xbmcgui.WindowDialog ):
             settings.doModal()
             if ( settings.changed ):
                 self.wrt54g._get_settings()
-                self.check_status()
+                if ( settings.restart ):
+                    self.check_status()
             del settings
         except: traceback.print_exc()
             
@@ -202,9 +204,10 @@ class GUI( xbmcgui.WindowDialog ):
             xbmc.sleep( sleep_time )
         self.get_control( "Progressbar" ).setVisible( False )
     
-    def exitScript( self ):
+    def exit_script( self, restart=False ):
         self.clear_message_timer()
         self.close()
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s\\default.py)" % ( os.getcwd().replace( ";", "" ), ) )
 
     def get_control( self, key ):
         """ Return the control that matches the key """
@@ -226,7 +229,7 @@ class GUI( xbmcgui.WindowDialog ):
     def onAction(self, action):
         button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
         if ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
-            self.exitScript()
+            self.exit_script()
         elif ( button_key == "Keyboard Menu Button" or button_key == "Y Button" or button_key == "Remote Title Button" or button_key == "White Button" ):
             self.change_settings()
     

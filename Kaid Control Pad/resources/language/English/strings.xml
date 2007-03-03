@@ -44,6 +44,7 @@
 
     <!-- Settings restart required message -->
     <string id="240">Some settings changed require a restart to take effect.</string>
+    <string id="241">Would you like to restart %s now?</string>
     
     <!-- Settings buttons -->
     <string id="250">Ok</string>
@@ -51,6 +52,8 @@
     <string id="252">Update</string>
     <string id="253">Credits</string>
     <string id="254">Page</string>
+    <string id="255">Restart</string>
+    <string id="256">Later</string>
 
     <!-- Status check messages -->
     <string id="500">Checking if kai is installed on xbox...</string>
