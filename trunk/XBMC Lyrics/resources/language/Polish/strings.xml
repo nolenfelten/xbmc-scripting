@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="0">XBMC Lyrics</string>
-  <string id="1">Niespodziewana sytuacja, wygl¹da na to ¿e coœ zmieni³o siê w uk³adzie strony, nie potrawiê odczytaæ zawartoœci...</string>
-  <string id="2">B£¥D! niedostêpny link do tego tekstu</string>
-  <string id="3">Nie znalaz³em tekstu, zawsze mo¿esz wgraæ teksty tego artysty na dysk</string>
-  <string id="4">Ale jaja, niby tekst tego utworu znajduje siê na stonie, ale niestety nie ma tam ani jednego s³owa</string>
+  <string id="630">Niespodziewana sytuacja, wygl¹da na to ¿e coœ zmieni³o siê w uk³adzie strony, nie potrawiê odczytaæ zawartoœci...</string>
+  <string id="631">B£¥D! niedostêpny link do tego tekstu</string>
+  <string id="632">Nie znalaz³em tekstu, zawsze mo¿esz wgraæ teksty tego artysty na dysk</string>
+  <string id="633">Ale jaja, niby tekst tego utworu znajduje siê na stonie, ale niestety nie ma tam ani jednego s³owa</string>
   
-  <string id="10">What do you want to run this for?</string>
-  <string id="11">No music is playing fool!</string>
+  <string id="638">What do you want to run this for?</string>
+  <string id="639">No music is playing fool!</string>
 </strings>

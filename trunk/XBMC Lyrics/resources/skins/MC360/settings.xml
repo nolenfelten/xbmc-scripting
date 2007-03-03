@@ -79,14 +79,14 @@
 		<!-- buttons -->
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
-			<description>Scraper Button</description>
+			<description>Setting1 Button</description>
 			<posx>365</posx>
 			<posy>130</posy>
 			<width>315</width>
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>30</label>
+			<label>201</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -99,7 +99,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="11">
-			<description>Scraper Button Value</description>
+			<description>Setting1 Value</description>
 			<posx>365</posx>
 			<posy>130</posy>
 			<width>315</width>
@@ -115,14 +115,14 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
-			<description>Save Lyrics Button</description>
+			<description>Setting2 Button</description>
 			<posx>365</posx>
 			<posy>160</posy>
 			<width>315</width>
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>31</label>
+			<label>202</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -135,7 +135,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="21">
-			<description>Save Lyrics Button Value</description>
+			<description>Setting2 Value</description>
 			<posx>365</posx>
 			<posy>160</posy>
 			<width>315</width>
@@ -151,14 +151,14 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
-			<description>Save Folder Button</description>
+			<description>Setting3 Button</description>
 			<posx>365</posx>
 			<posy>190</posy>
 			<width>315</width>
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>32</label>
+			<label>203</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -171,7 +171,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="31">
-			<description>Save Folder Button Value</description>
+			<description>Setting3 Value</description>
 			<posx>365</posx>
 			<posy>190</posy>
 			<width>315</width>
@@ -187,14 +187,14 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
-			<description>Smooth Scroll Button</description>
+			<description>Setting4 Button</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>33</label>
+			<label>204</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -207,7 +207,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="41">
-			<description>Smooth Scroll Button Value</description>
+			<description>Setting4 Value</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
@@ -223,14 +223,14 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
-			<description>Show Viz Button</description>
+			<description>Setting5 Button</description>
 			<posx>365</posx>
 			<posy>250</posy>
 			<width>315</width>
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>34</label>
+			<label>205</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -243,7 +243,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="51">
-			<description>Show Viz Button Value</description>
+			<description>Setting5 Value</description>
 			<posx>365</posx>
 			<posy>250</posy>
 			<width>315</width>
@@ -266,7 +266,7 @@
 			<height>50</height>
 			<font>font12</font>
 			<align>center</align>
-			<label>50</label>
+			<label>250</label>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
 			<texturefocus>guide-media-button-focus.png</texturefocus>
@@ -285,7 +285,7 @@
 			<height>50</height>
 			<font>font12</font>
 			<align>center</align>
-			<label>51</label>
+			<label>251</label>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
 			<texturefocus>guide-media-button-focus.png</texturefocus>
@@ -303,7 +303,45 @@
 			<width>90</width>
 			<height>50</height>
 			<font>font12</font>
-			<label>52</label>
+			<label>252</label>
+			<align>center</align>
+			<textcolor>FF000000</textcolor>
+			<textoffsety>7</textoffsety>
+			<texturefocus>guide-media-button-focus.png</texturefocus>
+			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>10</ondown>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="300">
+			<description>Credits Button</description>
+			<posx>575</posx>
+			<posy>420</posy>
+			<width>90</width>
+			<height>50</height>
+			<font>font12</font>
+			<label>253</label>
+			<align>center</align>
+			<textcolor>FF000000</textcolor>
+			<textoffsety>7</textoffsety>
+			<texturefocus>guide-media-button-focus.png</texturefocus>
+			<texturenofocus>guide-media-button-nofocus.png</texturenofocus>
+			<onleft>150</onleft>
+			<onright>100</onright>
+			<onup>50</onup>
+			<ondown>10</ondown>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="310">
+			<description>Page Button</description>
+			<posx>575</posx>
+			<posy>420</posy>
+			<width>90</width>
+			<height>50</height>
+			<font>font12</font>
+			<label>254</label>
 			<align>center</align>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
