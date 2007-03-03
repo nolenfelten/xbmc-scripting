@@ -18,18 +18,18 @@
 	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
-		<posx>161</posx>
-		<posy>132</posy>
+		<posx>162</posx>
+		<posy>96</posy>
 	</coordinates>
 
 	<controls>
 
 		<control type="image" id="1">
 			<description>backdrop</description>
-			<posx>-300</posx>
-			<posy>-300</posy>
-			<width>1300</width>
-			<height>1300</height>
+			<posx>-162</posx>
+			<posy>-96</posy>
+			<width>720</width>
+			<height>576</height>
 			<texture>\black.png</texture>
 		</control>
 
@@ -61,18 +61,6 @@
 			<posx>420</posx>
 			<posy>6</posy>
 			<width>150</width>
-			<align>right</align>
-			<font>special13</font>
-			<textcolor>DDced8da</textcolor>
-			<label>-</label>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="label" id="1">
-			<description>Page Label</description>
-			<posx>420</posx>
-			<posy>316</posy>
-			<width>90</width>
 			<align>right</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>
@@ -563,12 +551,12 @@
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>15</onleft>
 			<onright>10</onright>
-			<onup>220</onup>
-			<ondown>150</ondown>
+			<onup>140</onup>
+			<ondown>110</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="150">
+		<control type="button" id="110">
 			<description>Cancel Button</description>
 			<posx>340</posx>
 			<posy>95</posy>
@@ -585,11 +573,11 @@
 			<onleft>15</onleft>
 			<onright>10</onright>
 			<onup>100</onup>
-			<ondown>200</ondown>
+			<ondown>120</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="200">
+		<control type="button" id="120">
 			<description>Update Button</description>
 			<posx>340</posx>
 			<posy>130</posy>
@@ -606,12 +594,12 @@
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>15</onleft>
 			<onright>10</onright>
-			<onup>150</onup>
-			<ondown>220</ondown>
+			<onup>110</onup>
+			<ondown>130</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<!--control type="button" id="210">
+		<control type="button" id="130">
 			<description>Credits Button</description>
 			<posx>340</posx>
 			<posy>165</posy>
@@ -628,12 +616,12 @@
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>15</onleft>
 			<onright>10</onright>
-			<onup>200</onup>
-			<ondown>100</ondown>
-		</control-->
+			<onup>120</onup>
+			<ondown>140</ondown>
+		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="220">
+		<control type="button" id="140">
 			<description>Page Button</description>
 			<posx>340</posx>
 			<posy>200</posy>
@@ -650,7 +638,7 @@
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>15</onleft>
 			<onright>10</onright>
-			<onup>200</onup>
+			<onup>130</onup>
 			<ondown>100</ondown>
 		</control>
 

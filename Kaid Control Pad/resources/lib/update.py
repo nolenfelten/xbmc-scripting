@@ -7,6 +7,7 @@ import socket
 socket.setdefaulttimeout( 10 )
 
 class Parser( SGMLParser ):
+    """ Parser Class: grabs all tag versions and urls """
     def reset( self ):
         self.tags = []
         self.url = None
@@ -31,6 +32,7 @@ class Parser( SGMLParser ):
             self.url_found = True
 
 class Update:
+    """ Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
     def __init__( self, language ):
         self._ = language
         self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -42,6 +44,7 @@ class Update:
         else: xbmcgui.Dialog().ok( self.__scriptname__, self._( 1000 + ( 30 * ( new == None ) ) ) )
             
     def _check_for_new_version( self ):
+        """ checks for a newer version """
         self.dialog.create( self.__scriptname__, self._( 1001 ) )
         # get version tags
         new = None
@@ -55,6 +58,7 @@ class Update:
         return new
                 
     def _update_script( self ):
+        """ main update function """
         try:
             if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[-1][:-1], self._( 1002 ), ), self._( 1003 ), "", self._( 51 ), self._( 52 ) ) ):
                 self.dialog.create( self.__scriptname__, self._( 1004 ), self._( 1005 ) )
@@ -82,6 +86,7 @@ class Update:
             xbmcgui.Dialog().ok( self.__scriptname__, self._( 1031 ) )
         
     def _get_files( self, script_files, version ):
+        """ fetch the files """
         try:
             for cnt, url in enumerate( script_files ):
                 items = os.path.split( url )
@@ -99,6 +104,7 @@ class Update:
             xbmcgui.Dialog().ok( self.__scriptname__, self._( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( self.__scriptname__, version, ) )
             
     def _get_html_source( self, url ):
+        """ fetch the SVN html source """
         try:
             sock = urllib.urlopen( url )
             htmlsource = sock.read()
@@ -107,6 +113,7 @@ class Update:
         except: return None
 
     def _parse_html_source( self, htmlsource ):
+        """ parse html source for tagged version and url """
         try:
             parser = Parser()
             parser.feed( htmlsource )
@@ -115,6 +122,7 @@ class Update:
         except: return None, None
             
     def _parse_items( self, items ):
+        """ separates files and folders """
         folders = []
         files = []
         for item in items:

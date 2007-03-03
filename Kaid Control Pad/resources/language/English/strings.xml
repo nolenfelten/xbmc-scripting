@@ -42,6 +42,9 @@
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>
 
+    <!-- Settings restart required message -->
+    <string id="240">Some settings changed require a restart to take effect.</string>
+    
     <!-- Settings buttons -->
     <string id="250">Ok</string>
     <string id="251">Cancel</string>

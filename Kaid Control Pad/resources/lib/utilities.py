@@ -1,30 +1,30 @@
-import sys, os
+import sys, os, traceback
 
 def setControllerAction():
     return {
-                61478 : 'Keyboard Up Arrow',
-                61480 : 'Keyboard Down Arrow',
-                61448 : 'Keyboard Backspace Button',
-                61533 : 'Keyboard Menu Button',
-                61467 : 'Keyboard ESC Button',
-                    216 : 'Remote Back Button',
-                    247 : 'Remote Menu Button',
-                    229 : 'Remote Title Button',
-                    207 : 'Remote 0',
-                    166 : 'Remote Up',
-                    167 : 'Remote Down',
-                    256 : 'A Button',
-                    257 : 'B Button',
-                    258 : 'X Button',
-                    259 : 'Y Button',
-                    260 : 'Black Button',
-                    261 : 'White Button',
-                    274 : 'Start Button',
-                    275 : 'Back Button',
-                    270 : 'DPad Up',
-                    271 : 'DPad Down',
-                    272 : 'DPad Left',
-                    273 : 'DPad Right'
+                61478 : "Keyboard Up Arrow",
+                61480 : "Keyboard Down Arrow",
+                61448 : "Keyboard Backspace Button",
+                61533 : "Keyboard Menu Button",
+                61467 : "Keyboard ESC Button",
+                    216 : "Remote Back Button",
+                    247 : "Remote Menu Button",
+                    229 : "Remote Title Button",
+                    207 : "Remote 0",
+                    166 : "Remote Up",
+                    167 : "Remote Down",
+                    256 : "A Button",
+                    257 : "B Button",
+                    258 : "X Button",
+                    259 : "Y Button",
+                    260 : "Black Button",
+                    261 : "White Button",
+                    274 : "Start Button",
+                    275 : "Back Button",
+                    270 : "DPad Up",
+                    271 : "DPad Down",
+                    272 : "DPad Left",
+                    273 : "DPad Right"
                 }
 
 
@@ -68,8 +68,8 @@ class Settings:
     
     def get_settings( self ):
         try:
-            settings_path = os.path.join( 'T:\\script_data', sys.modules[ '__main__' ].__scriptname__ )
-            settings_file = open( os.path.join( settings_path, 'settings.txt' ), 'r' )
+            settings_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
+            settings_file = open( os.path.join( settings_path, "settings.txt" ), "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
         except:
@@ -95,13 +95,14 @@ class Settings:
 
     def save_settings( self, settings ):
         try:
-            settings_path = os.path.join( 'T:\\script_data', sys.modules[ '__main__' ].__scriptname__ )
+            settings_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
             if ( not os.path.isdir( settings_path ) ):
                 os.makedirs( settings_path )
-            settings_file = open( os.path.join( settings_path, 'settings.txt' ), 'w' )
+            settings_file = open( os.path.join( settings_path, "settings.txt" ), "w" )
             settings_file.write( repr( settings ) )
             settings_file.close()
             return True
         except:
+            print traceback.print_exc()
             return False
             
