@@ -52,11 +52,11 @@ def get_changes():
     changes = '\n'.join( changelog )
     return changes
 
-class windowOverlay( xbmcgui.Window ):
+class GUI( xbmcgui.Window ):
     def __init__( self ):
         global dialog
-        self.setupGUI()
-        if (not self.SUCCEEDED): 
+        self.gui_loaded = self.setupGUI()
+        if (not self.gui_loaded): 
             self.close()
         else:
             self.show()
@@ -73,21 +73,14 @@ class windowOverlay( xbmcgui.Window ):
     def setupGUI( self ):
         global dialog
         import guibuilder
-        cwd = os.getcwd().replace( ";", "" )
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, 'resources', 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( cwd, 'resources', 'skins', current_skin )
-        image_path = os.path.join( skin_path, 'gfx' )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
-        else: xml_file = 'skin.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, 
-            title=__scriptname__, useDescAsKey=True, dlg=dialog, pct=60 )
+        gb = guibuilder.GUIBuilder()
+        ok = gb.create_gui( self, title=__scriptname__, useDescAsKey=True, dlg=dialog, pct=60 )
+        return ok
 
     def onAction( self, action ):
         if action == 10: self.close()
 
-
-MyDisplay = windowOverlay()
-if (MyDisplay.SUCCEEDED): MyDisplay.doModal()
-del MyDisplay
+if ( __name__ == "__main__" ):
+    ui = GUI()
+    if (ui.gui_loaded): ui.doModal()
+    del ui
