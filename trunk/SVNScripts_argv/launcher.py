@@ -11,7 +11,7 @@ if ( __name__ == "__main__" ):
         if ( os.path.isfile( "q:\\scripts\\%s\\default.py" % ( SCRIPT, ) ) ):
             xbmc.executebuiltin( 'XBMC.RunScript(q:\\scripts\\%s\\default.py)' % ( SCRIPT, ) )
         else:
-            xbmc.sleep( 300 ) # per GeminiServers instructions
+            if ( not dummy ): xbmc.sleep( 500 ) # per GeminiServers instructions
             if ( xbmc.getCondVisibility( "System.InternetState" ) ):
                 ok = xbmcgui.Dialog().yesno( "Warning! %s" % ( SCRIPT, ), "%s is not installed on your Xbox." % ( SCRIPT, ), "Would you like to download and install it?", "", 'skip', 'download' )
                 if ( ok ):
