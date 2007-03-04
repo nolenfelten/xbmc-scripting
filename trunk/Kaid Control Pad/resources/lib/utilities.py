@@ -78,7 +78,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         settings = {  
-            "firmware": "Hyper-Wrt",
+            "firmware": "Hyper-WRT",
             "router_ip": "192.168.1.1",
             "router_user": "root",
             "router_pwd": "password",

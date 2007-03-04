@@ -32,8 +32,8 @@ class GUI( xbmcgui.WindowDialog ):
     def __init__(self):
         try:
             self.timer_msg = None
-            self.setupGUI()
-            if ( not self.SUCCEEDED ): self.exit_script()
+            self.gui_loaded = self.setupGUI()
+            if ( not self.gui_loaded ): self.exit_script()
             else:
                 self.show()
                 dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
@@ -45,16 +45,10 @@ class GUI( xbmcgui.WindowDialog ):
             self.close()
 
     def setupGUI( self ):
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( RESOURCE_PATH, "skins", current_skin ))): current_skin = "default"
-        skin_path = os.path.join( RESOURCE_PATH, "skins", current_skin )
-        image_path = os.path.join( skin_path, "gfx" )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = "skin_16x9.xml"
-        else: xml_file = "skin.xml"
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "skin.xml"
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, fastMethod=True, 
-            title=__scriptname__, useDescAsKey=True, debug=False, language=_ )
-
+        gb = guibuilder.GUIBuilder()
+        ok = gb.create_gui( self, fastMethod=True, title=__scriptname__, useDescAsKey=True, language=_ )
+        return ok
+        
     def setup_variables( self ):
         self.controller_action = utilities.setControllerAction()
         self.KAID_VERSION = ""
@@ -106,11 +100,12 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             import settings
             settings = settings.GUI( language=_ )
-            settings.doModal()
-            if ( settings.changed ):
-                self.wrt54g._get_settings()
-                if ( settings.restart ):
-                    self.check_status()
+            if ( settings.gui_loaded ):
+                settings.doModal()
+                if ( settings.changed ):
+                    self.wrt54g._get_settings()
+                    if ( settings.restart ):
+                        self.check_status()
             del settings
         except: traceback.print_exc()
             
@@ -207,7 +202,7 @@ class GUI( xbmcgui.WindowDialog ):
     def exit_script( self, restart=False ):
         self.clear_message_timer()
         self.close()
-        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s\\default.py)" % ( os.getcwd().replace( ";", "" ), ) )
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
     def get_control( self, key ):
         """ Return the control that matches the key """
@@ -236,5 +231,5 @@ class GUI( xbmcgui.WindowDialog ):
 
 if ( __name__ == "__main__" ):
     ui = GUI()
-    ui.doModal()
+    if ( ui.gui_loaded ): ui.doModal()
     del ui

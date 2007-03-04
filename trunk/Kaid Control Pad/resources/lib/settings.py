@@ -9,10 +9,9 @@ class GUI( xbmcgui.WindowDialog ):
         self._ = kwargs[ "language" ]
         self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
         self.__version__ = sys.modules[ "__main__" ].__version__
-        self.setupGUI()
-        if ( not self.SUCCEEDED ): self._close_dialog()
+        self.gui_loaded = self.setupGUI()
+        if ( not self.gui_loaded ): self._close_dialog()
         else:
-            #self.show()
             self._set_variables()
             self._get_settings()
             self._setup_special()
@@ -22,16 +21,10 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupGUI( self ):
         """ sets up the gui using guibuilder """
-        cwd = os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" )
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, current_skin ))): current_skin = "default"
-        skin_path = os.path.join( cwd, current_skin )
-        image_path = os.path.join( skin_path, "gfx" )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = "settings_16x9.xml"
-        else: xml_file = "settings.xml"
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "settings.xml"
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, language=self._, fastMethod=True, debug=False )
-
+        gb = guibuilder.GUIBuilder()
+        ok = gb.create_gui( self, skinXML="settings", fastMethod=True, useDescAsKey=True, language=self._ )
+        return ok
+        
     def _set_variables( self ):
         """ initializes variables """
         self.current_page = 1
@@ -56,7 +49,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not ok ):
             ok = xbmcgui.Dialog().ok( self.__scriptname__, self._( 230 ) )
         else:
-            self._changed_message()
+            self._check_for_restart()
 
     def _set_page_visible( self ):
         """ shows the current page of settings """
@@ -118,45 +111,32 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _setup_sniff_devices( self ):
         """ special def for setting up sniff device choices """
-        self.sniff_devices = ( "eth0", "en0", "br0", "vlan0", )
-        for cnt, sd in enumerate( self.sniff_devices ):
-            if ( sd == self.settings[ "sniff_device" ].lower() ):
-                self.current_sniff_device = cnt
-                break
-
+        self.sniff_devices = [ "eth0", "en0", "br0", "vlan0" ]
+        try: self.current_sniff_device = self.sniff_devices.index( self.settings[ "sniff_device" ] )
+        except: self.current_sniff_device = 0
+            
     def _setup_firmware( self ):
         """ special def for setting up firmware choices """
-        firmware = []
-        self.current_firmware = 0
-        os.path.walk( os.path.join( os.getcwd().replace( ";", "" ), "resources", "firmware" ), self._add_firmware, firmware )
-        self.firmware = firmware
-        for cnt, firmware in enumerate( self.firmware ):
-            if ( firmware.lower() == self.settings[ "firmware" ].lower() ):
-                self.current_firmware = cnt
-                break
+        self.firmware = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "firmware" ) )
+        try: self.current_firmware = self.firmware.index( self.settings[ "firmware" ] )
+        except: self.current_firmware = 0
         
-    def _add_firmware( self, firmware, path, files ):
-        """ special def for adding firmware to a list variable """
-        folder = os.path.split( path )[ 1 ]
-        if ( folder.lower() != "firmware" ):
-            firmware += [ folder ]
-
 ###### End of Special defs #####################################################
 
     def _set_controls_values( self ):
         """ sets the value labels """
         xbmcgui.lock()
-        self.get_control( "Setting1 Value" ).setLabel( "%s" % ( self.settings[ "firmware" ], ) )
-        self.get_control( "Setting2 Value" ).setLabel( "%s" % ( self.settings[ "router_ip" ], ) )
-        self.get_control( "Setting3 Value" ).setLabel( "%s" % ( self.settings[ "router_user" ], ) )
-        self.get_control( "Setting4 Value" ).setLabel( "%s" % ( self.settings[ "router_pwd" ], ) )
-        self.get_control( "Setting5 Value" ).setLabel( "%s" % ( self.settings[ "path_to_kaid" ], ) )
-        self.get_control( "Setting6 Value" ).setLabel( "%s" % ( self.settings[ "path_to_kaid_conf" ], ) )
-        self.get_control( "Setting7 Value" ).setLabel( "%s" % ( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ], ) )
-        self.get_control( "Setting8 Value" ).setLabel( "%s" % ( self.settings[ "xbox_user" ], ) )
-        self.get_control( "Setting9 Value" ).setLabel( "%s" % ( self.settings[ "xbox_pwd" ], ) )
-        self.get_control( "Setting10 Value" ).setLabel( "%s" % ( self.settings[ "sniff_device" ], ) )
-        self.get_control( "Setting11 Value" ).setLabel( "%s" % ( str( self.settings[ "exit_to_kai" ] ), ) )
+        self.get_control( "Setting1 Value" ).setLabel( self.settings[ "firmware" ] )
+        self.get_control( "Setting2 Value" ).setLabel( self.settings[ "router_ip" ] )
+        self.get_control( "Setting3 Value" ).setLabel( self.settings[ "router_user" ] )
+        self.get_control( "Setting4 Value" ).setLabel( self.settings[ "router_pwd" ] )
+        self.get_control( "Setting5 Value" ).setLabel( self.settings[ "path_to_kaid" ] )
+        self.get_control( "Setting6 Value" ).setLabel( self.settings[ "path_to_kaid_conf" ] )
+        self.get_control( "Setting7 Value" ).setLabel( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ] )
+        self.get_control( "Setting8 Value" ).setLabel( self.settings[ "xbox_user" ] )
+        self.get_control( "Setting9 Value" ).setLabel( self.settings[ "xbox_pwd" ] )
+        self.get_control( "Setting10 Value" ).setLabel( self.settings[ "sniff_device" ] )
+        self.get_control( "Setting11 Value" ).setLabel( str( self.settings[ "exit_to_kai" ] ) )
         xbmcgui.unlock()
     
     def _change_setting1( self ):
@@ -229,7 +209,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.current_page = 1
         self._set_page_visible()
     
-    def _changed_message( self ):
+    def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
         restart = False
         for setting in self.settings_restart:
