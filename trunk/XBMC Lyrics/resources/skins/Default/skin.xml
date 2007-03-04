@@ -13,8 +13,8 @@
             <description>background image</description>
             <posx>220</posx>
             <posy>70</posy>
-            <width>455</width>
-            <height>460</height>
+            <width>450</width>
+            <height>470</height>
             <texture>\dialog-panel2.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
         </control>
@@ -150,7 +150,7 @@
                 <control type="image">
                     <description>Dialog Text Area</description>
                     <posx>60</posx>
-                    <posy>360</posy>
+                    <posy>340</posy>
                     <width>150</width>
                     <height>175</height>
                     <colordiffuse>BBFFFFFF</colordiffuse>
@@ -161,7 +161,7 @@
                 <control type="image" id="6">
                     <description>CD Cover Image</description>
                     <posx>65</posx>
-                    <posy>377</posy>
+                    <posy>357</posy>
                     <width>140</width>
                     <height>140</height>
                     <info>MusicPlayer.Cover</info>
