@@ -9,8 +9,8 @@ class GUI( xbmcgui.WindowDialog ):
         self._ = kwargs[ "language" ]
         self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
         self.__version__ = sys.modules[ "__main__" ].__version__
-        self.setupGUI()
-        if ( not self.SUCCEEDED ): self._close_dialog()
+        self.gui_loaded = self.setupGUI()
+        if ( not self.gui_loaded ): self._close_dialog()
         else:
             #self.show()
             self._set_variables()
@@ -22,15 +22,9 @@ class GUI( xbmcgui.WindowDialog ):
             
     def setupGUI( self ):
         """ sets up the gui using guibuilder """
-        cwd = os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" )
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, current_skin ))): current_skin = "default"
-        skin_path = os.path.join( cwd, current_skin )
-        image_path = os.path.join( skin_path, "gfx" )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = "settings_16x9.xml"
-        else: xml_file = "settings.xml"
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "settings.xml"
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey=True, language=self._, fastMethod=True, debug=False )
+        gb = guibuilder.GUIBuilder()
+        ok = gb.create_gui( self, skinXML="settings", fastMethod=True, useDescAsKey=True, language=self._ )
+        return ok
 
     def _set_variables( self ):
         """ initializes variables """
@@ -56,7 +50,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( not ok ):
             ok = xbmcgui.Dialog().ok( self.__scriptname__, self._( 230 ) )
         else:
-            self._changed_message()
+            self._check_for_restart()
 
     def _set_page_visible( self ):
         """ shows the current page of settings """
@@ -117,42 +111,23 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _setup_scrapers( self ):
         """ special def for setting up scraper choices """
-        scrapers = []
-        self.current_scraper = 0
-        os.path.walk( os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'scrapers' ), self._add_scraper, scrapers )
-        self.scrapers = scrapers
-        for cnt, scraper in enumerate( scrapers ):
-            if ( scraper == self.settings[ "scraper" ] ):
-                self.current_scraper = cnt
-                break
-        
-    def _add_scraper( self, scrapers, path, files ):
-        """ special def for adding scrapers to a list variable """
-        folder = os.path.split( path )[ 1 ]
-        if ( folder.lower() != 'scrapers' ):
-            scrapers += [ folder ]
+        self.scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "scrapers" ) )
+        try: self.current_scraper = self.scrapers.index( self.settings[ "scraper" ] )
+        except: self.current_scraper = 0
 
 ###### End of Special defs #####################################################
 
     def _set_controls_values( self ):
         """ sets the value labels """
-        #xbmcgui.lock()
-        #self.controls['Scraper Button Value']['control'].setLabel( '%s' % ( self.settings[ "scraper" ], ) )
-        #self.controls['Save Lyrics Button Value']['control'].setLabel( '%s' % ( str( self.settings[ "save_lyrics" ], ) ) )
-        #self.controls['Save Folder Button']['control'].setEnabled( self.settings[ "save_lyrics" ] )
-        #self.controls['Save Folder Button Value']['control'].setLabel( '%s' % ( self.settings[ "lyrics_path" ], ) )
-        #self.controls['Save Folder Button Value']['control'].setEnabled( self.settings[ "save_lyrics" ]  )
-        #self.controls['Smooth Scroll Button Value']['control'].setLabel( '%s' % ( str( self.settings[ "smooth_scrolling" ], ) ) )
-        #self.controls['Show Viz Button Value']['control'].setLabel( '%s' % ( str( self.settings[ "show_viz" ], ) ) )
-
-        self.get_control( "Setting1 Value" ).setLabel( "%s" % ( self.settings[ "scraper" ], ) )
-        self.get_control( "Setting2 Value" ).setLabel( "%s" % ( str( self.settings[ "save_lyrics" ] ), ) )
+        xbmcgui.lock()
+        self.get_control( "Setting1 Value" ).setLabel( self.settings[ "scraper" ] )
+        self.get_control( "Setting2 Value" ).setLabel( str( self.settings[ "save_lyrics" ] ) )
         self.get_control( "Setting3 Button" ).setEnabled( self.settings[ "save_lyrics" ] )
-        self.get_control( "Setting3 Value" ).setLabel( "%s" % ( self.settings[ "lyrics_path" ], ) )
+        self.get_control( "Setting3 Value" ).setLabel( self.settings[ "lyrics_path" ] )
         self.get_control( "Setting3 Value" ).setEnabled( self.settings[ "save_lyrics" ] )
-        self.get_control( "Setting4 Value" ).setLabel( "%s" % ( str( self.settings[ "smooth_scrolling" ] ), ) )
-        self.get_control( "Setting5 Value" ).setLabel( "%s" % ( str( self.settings[ "show_viz" ] ), ) )
-        #xbmcgui.unlock()
+        self.get_control( "Setting4 Value" ).setLabel( str( self.settings[ "smooth_scrolling" ] ) )
+        self.get_control( "Setting5 Value" ).setLabel( str( self.settings[ "show_viz" ] ) )
+        xbmcgui.unlock()
     
     def _change_setting1( self ):
         """ changes settings #1 """
@@ -198,7 +173,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.current_page = 1
         self._set_page_visible()
     
-    def _changed_message( self ):
+    def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
         restart = False
         for setting in self.settings_restart:
