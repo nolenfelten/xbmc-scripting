@@ -79,20 +79,24 @@ ACTION_PREVIOUS_MENU                     = 10
 ACTION_WHITE_BUTTON                    = 117
 ACTION_Y_BUTTON                            = 34
 
-class window(xbmcgui.Window):
+class GUI(xbmcgui.Window):
     def __init__(self):
         self.INITIALIZING = True
         self.initValues()
-        self.getConfigValues()
-        self.setDefaultMap()
-        self.setupGUI()
-        if (not self.SUCCEEDED): self.exitScript()
+        self.gui_loaded = self.getConfigValues()
+        if ( not self.gui_loaded ): self.exitScript()
         else:
+            self.setDefaultMap()
+            self.gui_loaded = self.setupGUI()
             closeProgessDialog()
-            if (self.LOCATION): self.getCodes()
-            self.getRSSFeed()
-            self.addMaps()
-            self.INITIALIZING = False
+            if (not self.gui_loaded):
+                xbmcgui.Dialog().ok( __scriptname__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
+                self.exitScript()
+            else:
+                if (self.LOCATION): self.getCodes()
+                self.getRSSFeed()
+                self.addMaps()
+                self.INITIALIZING = False
 
 
     def initValues(self):
@@ -110,18 +114,9 @@ class window(xbmcgui.Window):
 
 
     def setupGUI( self ):
-        current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( resourcesPath, 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( resourcesPath, 'skins', current_skin )
-        image_path = os.path.join( skin_path, 'gfx' )
-        if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'skin_16x9.xml'
-        else: xml_file = 'skin.xml'
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = 'skin.xml'
-        guibuilder.GUIBuilder( self, os.path.join( skin_path, xml_file ), image_path, useDescAsKey = False, 
-            title = __scriptname__, line1 = __line1__, dlg = dialog, pct = pct, language = False, debug = False )
-        closeProgessDialog()
-        if ( not self.SUCCEEDED ):
-            xbmcgui.Dialog().ok( __scriptname__, 'There was an error setting up your GUI.', 'Check your skin file:', os.path.join( skin_path, xml_file ))
+        gb = guibuilder.GUIBuilder()
+        ok = gb.create_gui( self, title=__scriptname__, line1=__line1__, dlg=dialog, pct=pct )
+        return ok
 
     
     def getConfigValues(self):
@@ -173,7 +168,8 @@ class window(xbmcgui.Window):
                 dlg.ok(__scriptname__, "You can't use this script, it currently is only for residents in USA", "World and Canada support coming.")
             else:
                 dlg.ok(__scriptname__, 'There was an error importing your settings.', 'Check your configuration files.')
-            self.exitScript()
+            return False
+        return True
 
 
     def saveDefaults(self):
@@ -913,7 +909,7 @@ class MyPlayer(xbmc.Player):
         self.function()
     
 
-
-MyDisplay = window()
-if (MyDisplay.SUCCEEDED): MyDisplay.doModal()
-del MyDisplay
+if ( __name__ == "__main__" ):
+    ui = GUI()
+    if ( ui.gui_loaded ): ui.doModal()
+    del ui
