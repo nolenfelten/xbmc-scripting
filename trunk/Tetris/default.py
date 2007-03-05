@@ -9,10 +9,8 @@
 import re, random, math, threading, time, traceback
 import xbmc, xbmcgui
 import threading, os, re
-sys.path.append( os.path.join( sys.path[0], 'extras', 'lib' ) )
-import scores
-import language
-import update
+sys.path.append( os.path.join( sys.path[0], 'resources', 'lib' ) )
+import scores,language,update,guibuilder
 
 _ = language.Language().string
 VERSION = "1.1"
@@ -83,6 +81,8 @@ BUTTON_NAMES={
 	267 : 'RThumb Down',
 	268 : 'RThumb Left',
 	269 : 'RThumb Right',
+	276 : 'LThumb',
+	277 : 'RThumb',
 	280 : 'LThumb Up',
 	281 : 'LThumb Down',
 	282 : 'LThumb Left',
@@ -136,8 +136,8 @@ COORD_PAL60_4X3  = 8
 COORD_PAL60_16X9 = 9 
 
 ROOT_DIR = os.getcwd()[:-1]+'\\'    
-IMAGE_DIR = ROOT_DIR+"extras\\themes\\modern\\images\\"
-SOUND_DIR = ROOT_DIR+"extras\\themes\\modern\\sounds\\"
+IMAGE_DIR = ROOT_DIR+"resources\\themes\\modern\\images\\"
+SOUND_DIR = ROOT_DIR+"resources\\themes\\modern\\sounds\\"
 
 MAX_LENGTH 		= 4
 COLOR_NONE 		= 0
@@ -151,7 +151,7 @@ COLOR_ORANGE 	= 7
 COLOR_GHOST 	= 8
 COLORS = ['none','blu','red','gre','yel','cya','mag','ora','ghost']
 
-DO_LOGGING = 0
+DO_LOGGING = 1
 try:
 	LOG_FILE.close()
 except Exception:
@@ -402,7 +402,7 @@ def noStretch(window):
 		SX = C(1.0)
 	#if window.getResolution() < 2: window.setCoordinateResolution(COORD_720P)
 	#else: window.setCoordinateResolution(COORD_PAL_4X3)
-
+	
 class ConfigControlsDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
 		self.parent = parent
@@ -425,7 +425,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 		self.controls = []
 		for i, action in enumerate(GAME_ACTIONS):
 			button = xbmcgui.ControlButton(SX*(self.posX+25), SY*(self.posY+25 + i * 40), SX*100, SY*25, action, textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")
-			label = xbmcgui.ControlButton(SX*(self.posX+245), SY*(self.posY+25 + i * 40), SX*100, SY*25, "",font='font14',disabledColor='FFFFFFFF',textXOffset=0,focusTexture="",noFocusTexture="") #blank button = label
+			label = xbmcgui.ControlButton(SX*(self.posX+245), SY*(self.posY+25 + i * 40), SX*100, SY*25, "",font='font14',disabledColor='FFFFFFFF',textXOffset=0,focusTexture="",noFocusTexture="") #blank button = label    
 			self.addControl(button)
 			self.addControl(label)
 			label.setEnabled(False)
@@ -443,7 +443,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 			buttons = [button for button in self.parent.keymap.keys() if self.parent.keymap[button] == action]
 			for idx in range(len(buttons)):
 				deltaX = min(30,100/len(buttons))
-				image = xbmcgui.ControlImage(SX*(self.posX+225-idx*deltaX), SY*(self.posY+25 + action * 40), SX*32, SY*32, ROOT_DIR+"extras\\media\\buttons\\"+str(buttons[idx])+".png")#, aspectRatio=2)
+				image = xbmcgui.ControlImage(SX*(self.posX+225-idx*deltaX), SY*(self.posY+25 + action * 40), SX*32, SY*32, ROOT_DIR+"resources\\media\\buttons\\"+str(buttons[idx])+".png", aspectRatio=2)
 				self.addControl(image)
 				self.imgButtons.append(image)				
 		xbmcgui.unlock()
@@ -477,7 +477,7 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 		if self.discardNextAction:
 			self.discardNextAction = False
 			return
-		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE):
+		if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_PAUSE:
 			if self.pickButton:
 				self.exitPickButtonMode()
 			else:
@@ -495,30 +495,17 @@ class ConfigControlsDialog(xbmcgui.WindowDialog):
 class PauseDialog(xbmcgui.WindowDialog):
 	def __init__(self,parent=None):
 		noStretch(self)
+		guibuilder.GUIBuilder( self, ROOT_DIR+"resources\\themes\\modern\\pause.xml", IMAGE_DIR, useDescAsKey = False, title = _( 0 ), fastMethod=True, language = _, debug = False )
 		self.parent = parent
 		self.listen = True
-		self.addControl(xbmcgui.ControlImage(SX*(parent.blockX-20),SY*(parent.blockY+70),SX*213,SY*113, IMAGE_DIR+'pause.png'))
-		self.addControl(xbmcgui.ControlLabel(SX*(parent.blockX+10),SY*(parent.blockY+10), SX*150,SY*25,_(10),'font14','FFFFFF00'))
-		self.lblHighScoreName = xbmcgui.ControlLabel(SX*(parent.blockX+30),SY*(parent.blockY+29), SX*100,SY*25,"",'font14','FFFFFFFF')
-		self.lblHighScore = xbmcgui.ControlLabel(SX*(parent.blockX+170),SY*(parent.blockY+27), SX*100,SY*25,"",'font14','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.chkGhostPiece = xbmcgui.ControlCheckMark(SX*(parent.blockX),SY*(parent.blockY+230), SX*100,SY*25,'',font='font14',focusTexture=IMAGE_DIR+"check-box.png",noFocusTexture=IMAGE_DIR+"check-box-nofocus.png",checkWidth=SX*24,checkHeight=SY*24)
-		self.btnGhostPiece = xbmcgui.ControlButton(SX*(parent.blockX+25), SY*(parent.blockY+230), SX*150, SY*25, _(11), textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")
-		self.btnConfigControls = xbmcgui.ControlButton(SX*(parent.blockX+25), SY*(parent.blockY+260), SX*150, SY*25, _(12), textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")
-		self.btnUpdate = xbmcgui.ControlButton(SX*(parent.blockX+25), SY*(parent.blockY+290), SX*150, SY*25, _(89), textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")		
-		self.btnHighScores = xbmcgui.ControlButton(SX*(parent.blockX+25), SY*(parent.blockY+320), SX*150, SY*25, _(73), textYOffset=3,focusTexture=IMAGE_DIR+"button-focus.png",noFocusTexture=IMAGE_DIR+"button-nofocus.png")				
+		self.lblHighScoreName = self.controls[10]['control']
+		self.lblHighScore = self.controls[9]['control']
+		self.chkGhostPiece = self.controls[14]['control']
+		self.btnGhostPiece = self.controls[11]['control']
+		self.btnConfigControls = self.controls[13]['control']
+		self.btnUpdate = self.controls[89]['control']
+		self.btnHighScores = self.controls[73]['control']
 		self.dlgConfigControls = ConfigControlsDialog(parent=self.parent)
-		self.addControl(self.lblHighScoreName)
-		self.addControl(self.lblHighScore)
-		self.addControl(self.btnGhostPiece)		
-		self.addControl(self.chkGhostPiece)		
-		self.addControl(self.btnConfigControls)
-		self.addControl(self.btnUpdate)		
-		self.addControl(self.btnHighScores)				
-		self.controls = [self.btnGhostPiece, self.btnConfigControls, self.btnUpdate, self.btnHighScores]
-		for i in range(len(self.controls)):
-			self.controls[i].controlUp(self.controls[(i-1)%len(self.controls)])
-			self.controls[i].controlDown(self.controls[(i+1)%len(self.controls)])
-		self.setFocus(self.btnGhostPiece)
 	
 	def onControl(self,control):
 		LOG("PW - Oc -->")
@@ -536,15 +523,9 @@ class PauseDialog(xbmcgui.WindowDialog):
 			self.parent.dlgGame.dlgHighScores.doModal()
 			self.listen = True			
 		if control == self.btnUpdate:
-			update = Update(_,script='Tetris',version=VERSION)
-			if update.checkForNewVersion():
-				lock.acquire()				
-				if update.doUpdate():
-					self.parent.state = STATE_QUITTING
-					self.parent.close()
-				lock.release()
-			else:
-				xbmcgui.Dialog().ok( _(0), _( 95 ) )
+			LOG("Up1")
+			if updateProc(self.parent,VERSION,async=False):
+				self.close()
 		
 		LOG("PW - Oc <--")
 	
@@ -552,17 +533,17 @@ class PauseDialog(xbmcgui.WindowDialog):
 		LOG("PW - OA")
 		if not self.listen:
 			return
-		if action in (ACTION_PREVIOUS_MENU, ACTION_PAUSE) or action.getButtonCode() == KEY_BUTTON_START:
+		if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_PAUSE or action.getButtonCode() == KEY_BUTTON_START:
 			xbmcgui.lock()
 			self.close()
 
 class Tetris(xbmcgui.WindowDialog):
 	def __init__(self):
 		noStretch(self)
-		self.blockSize = 17
-		self.spacing = 3
-		self.blockX = 400
-		self.blockY = 70
+		guibuilder.GUIBuilder( self, ROOT_DIR+"resources\\themes\\modern\\skin.xml", IMAGE_DIR, useDescAsKey = False, title = _( 0 ), fastMethod=True, language = _, debug = False )
+		self.blockX,self.blockY = self.controls[25]['control'].getPosition()
+		self.spacing = self.controls[25]['control'].getSpace()
+		self.blockSize = self.controls[25]['control'].getItemHeight()
 		self.drawGhostPiece = False
 		self.keymap = DEFAULT_KEYMAP
 		self.dlgPause = PauseDialog(parent=self)
@@ -570,14 +551,13 @@ class Tetris(xbmcgui.WindowDialog):
 		self.gravityControl = 0 # 0 = let fall, 1 = wait to fall, >1 = new piece take a break
 		self.version = VERSION
 		self.state = STATE_READY
-		self.addControl(xbmcgui.ControlImage(SX*(self.blockX-111),SY*(self.blockY-20),SX*320,SY*445, IMAGE_DIR+'background.png'))
 		self.imgBlocks = []
 		self.imgPiece = []
 		self.imgNextPiece = []
 		self.imgGhostPiece = []
 		self.timer = True
-		self.renderPieces()
 		self.renderLabels()
+		self.renderPieces()
 		
 		
 	def setController(self,controller):
@@ -606,8 +586,8 @@ class Tetris(xbmcgui.WindowDialog):
 			window.removeControl(lbl)
 		
 		LOG("dsb 1 " + str(msg) + "-"+str(x)+"-"+str(y))
-		screenx = self.blockX + (self.blockSize + self.spacing)*x + 10
-		screeny = self.blockY + (self.blockSize + self.spacing)*y
+		screenx = x
+		screeny = y
 		LOG("dsb 2")
 
 		thread = threading.Thread(target=SubProc, args=(self,msg,screenx,screeny,duration,font))
@@ -653,28 +633,35 @@ class Tetris(xbmcgui.WindowDialog):
 
 
 	def renderPieces(self):
-		for i in range(len(PIECETYPE)):
-			piece = Piece(PIECETYPE[i])
-			piece.rotation = (1,3,0,0,3,1,0)[i]
-			self.rasterPiece(piece,self.blockX-50-12*(PIECETYPE[i].size),self.blockY+130+40*i,2,10)
+		self.lstNextPieceDescripter = None
+		if 28 in self.controls:
+			self.lstNextPieceDescripter = self.controls[28]['control']
+		
+		if self.lstPieceCount:
+			if 27 in self.controls:
+				fakelist = self.controls[27]['control']
+				x,y = self.lstPieceCount.getPosition()
+				step = self.lstPieceCount.getItemHeight() + self.lstPieceCount.getSpace()
+				offsetx,offsety = fakelist.getPosition()
+				space = fakelist.getSpace()
+				size = fakelist.getItemHeight() - space
+				for i in range(len(PIECETYPE)):
+					piece = Piece(PIECETYPE[i])
+					piece.rotation = (1,3,0,0,3,1,0)[i]
+					self.rasterPiece(piece,x+offsetx - (space+size)*(PIECETYPE[i].size),y+offsety+step*i,space,size)
  
 	def renderLabels(self):
 		x = self.blockX - 100
 		y = self.blockY + 60
-		self.addControl(xbmcgui.ControlLabel(SX*x,SY*y,SX*455,SY*20,_(30),'font12','FFFFFF00'))
-		self.lblLines   = xbmcgui.ControlLabel(SX*(x+80),SY*y,SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.addControl(self.lblLines)
-		self.addControl(xbmcgui.ControlLabel(SX*x,SY*(y+20),SX*455,SY*20,_(31),'font12','FFFFFF00'))
-		self.lblScore   = xbmcgui.ControlLabel(SX*(x+80),SY*(y+20),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.addControl(self.lblScore)
-		self.addControl(xbmcgui.ControlLabel(SX*(x),SY*(y+40),SX*455,SY*20,_(32),'font12','FFFFFF00'))
-		self.lblLevel   = xbmcgui.ControlLabel(SX*(x+80),SY*(y+40),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT)
-		self.addControl(self.lblLevel)
-		self.lblPieceCount = []
-		for i in range(len(PIECETYPE)):
-			self.lblPieceCount.append(xbmcgui.ControlLabel(SX*(x+80),SY*(self.blockY+130+40*i),SX*40,SY*20,'','font12','FFFFFFFF',alignment=XBFONT_RIGHT))
-			self.addControl(self.lblPieceCount[-1])
-			
+		self.lblLines   = self.controls[30]['control']
+		self.lblScore   = self.controls[31]['control']
+		self.lblLevel   = self.controls[32]['control']
+		self.lstPieceCount = None
+		if 26 in self.controls:
+			self.lstPieceCount = self.controls[26]['control']
+			self.lstPieceCount.reset()
+			for i in range(len(PIECETYPE)):
+				self.lstPieceCount.addItem(xbmcgui.ListItem(" ",""))
  	
 	def updateBlocks(self):
  		LOG('-> UB' + str(len(self.imgBlocks)))
@@ -718,14 +705,20 @@ class Tetris(xbmcgui.WindowDialog):
 		self.imgPiece = self.rasterPiece(self.controller.curPiece,self.blockX,self.blockY,self.spacing,self.blockSize)
 
 		self.removeBlocks(self.imgNextPiece)
-		self.imgNextPiece = self.rasterPiece(self.controller.nextPiece,
-			self.blockX-40-self.controller.nextPiece.type.size*12,self.blockY+18-self.controller.nextPiece.type.size*6,2,10)
+		if self.lstNextPieceDescripter:
+			x,y = self.lstNextPieceDescripter.getPosition()
+			space = self.lstNextPieceDescripter.getSpace()
+			size = self.lstNextPieceDescripter.getItemHeight()
+			self.imgNextPiece = self.rasterPiece(self.controller.nextPiece,x - (space+size)*(self.controller.nextPiece.type.size),
+				y-(space+size)*(self.controller.nextPiece.type.size)/2,space,size)
 			
 		self.lblLines.setLabel(str(self.controller.nLines))
 		self.lblScore.setLabel(str(self.controller.nScore))
 		self.lblLevel.setLabel(str(self.controller.nLevel))
-		for i in range(len(PIECETYPE)):
-			self.lblPieceCount[i].setLabel(str(self.controller.nPieceCount[i]))
+		if self.lstPieceCount:
+			self.lstPieceCount.reset()
+			for i in range(len(PIECETYPE)):
+				self.lstPieceCount.addItem(xbmcgui.ListItem(" ",str(self.controller.nPieceCount[i])))
  		LOG('<- Update Piece')
 
 	def rasterPiece(self,piece,blockX,blockY,spacing,size):
@@ -754,8 +747,8 @@ class Tetris(xbmcgui.WindowDialog):
 			self.movePieces()			
 			if rows>0 or True:
 				clearLev = self.controller.nLevel - (event == EVENT_LEVEL_UP)
-				bloomX = self.controller.curPiece.x+self.controller.curPiece.type.size/2 -1
-				bloomY = self.controller.curPiece.y
+				bloomX = self.blockX + (self.blockSize + self.spacing)*(self.controller.curPiece.x+self.controller.curPiece.type.size/2)
+				bloomY = self.blockY + (self.blockSize + self.spacing)*(self.controller.curPiece.y)
 			self.imgBlocks.extend(self.imgPiece)
 			self.imgPiece = []
 			event = self.controller.doNewPiece()
@@ -778,8 +771,10 @@ class Tetris(xbmcgui.WindowDialog):
 		elif entryEvent == EVENT_LEVEL_UP:
 			xbmc.playSFX(SOUND_DIR+"levelup.wav")
 			self.updateBlocks()
+			x,y = self.lblLevel.getPosition()
+			x += 10
+			self.drawBloom("Level Up! +"+str(self.controller.nLevel*15),x,y,font="font14",duration=90)
 			self.drawBloom("+"+str(rows*rows*clearLev),bloomX,bloomY)
-			self.drawBloom("Level Up! +"+str(self.controller.nLevel*15),-1,5,font="font14",duration=90)
 		elif rows > 0:
 			xbmc.playSFX(SOUND_DIR+"clear"+str(rows)+".wav")
 			self.updateBlocks()
@@ -821,7 +816,7 @@ class Tetris(xbmcgui.WindowDialog):
 
 		# The scroll actions have a very high freq
 		# decrease this frequency so we dont get bogged down with extra threads		
-		if action == ACTION_SCROLL_DOWN or action == ACTION_SCROLL_UP:  
+		if action.getId() == ACTION_SCROLL_DOWN or action.getId() == ACTION_SCROLL_UP:  
 			LOG ("ASD - " + str(self.gravityControl) +"="+ str(time.clock()+GRAVITY_SPEED_DELAY-self.gravityControl))
 			if self.gravityControl >= GRAVITY_SPEED_DELAY: 
 				#self.gravityControl -= 1
@@ -961,26 +956,41 @@ class Tetris(xbmcgui.WindowDialog):
 
 			
 	def doUpdateCheck(self):
-		def updateProc(view):
-			update = Update(_,script='Tetris',version=view.version)
-			if update.checkForNewVersion():
-				lock.acquire()				
-				view.state = STATE_PAUSED
-				if update.doUpdate():
-					view.state = STATE_QUITTING
-					lock.release()
-					view.close()
-				else:
-					view.state = STATE_READY
-					lock.release()
-
-		thread = threading.Thread(target=updateProc, args=(self))
+		thread = threading.Thread(target=updateProc, args=(self,self.version))
 		thread.setDaemon(True)
 		try:
 			thread.start()
 		except:
 			LOG("Update - thread start fail")
 
+def updateProc(view,currentVersion,async=True):
+	LOG("UP")
+	up = update.Update(_,script='Tetris')
+	LOG("UP2")
+	version = up.getLatestVersion()
+	LOG("UP3 "+version)
+	if version == "-1":
+		if not async: xbmcgui.Dialog().ok( _(0), _( 96 ) ) #error
+		return
+	if currentVersion < version:
+		if async: 
+			lock.acquire()				
+			view.state = STATE_PAUSED
+		if ( xbmcgui.Dialog().yesno( _(0), _( 91 ).replace("%s",version), _( 92 ) ) ): #want to upgrade?
+			view.state = STATE_QUITTING
+			if async: lock.release()
+			up.makeBackup()
+			up.issueUpdate(version)
+			view.close()
+			return True
+		elif async: 
+			xbmcgui.Dialog().ok( self.script, _( 99 ) % (self.version) ) #not be asked again
+			view.state = STATE_READY
+			lock.release()
+	elif not async:
+		xbmcgui.Dialog().ok( _(0), _( 95 ) ) # up to date
+	return False
+			
 if __name__ == '__main__':
     try:
 		#sys.stderr = open(ROOT_DIR+"err.txt",'w')
