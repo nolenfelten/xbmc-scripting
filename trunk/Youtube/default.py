@@ -51,6 +51,7 @@ ACTION_PAUSE          = 12
 ACTION_STOP           = 13
 ACTION_NEXT_ITEM      = 14
 ACTION_PREV_ITEM      = 15
+ACTION_CONTEXT_MENU   = 117
 
 class Logger:
 	def write(data):
@@ -71,6 +72,13 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_SEARCH = 32
 	STATE_USERS = 64
 
+	# Content list states
+	STATE_LESS = 0
+	STATE_VIDEO = 1
+	STATE_USERS = 2
+	STATE_FAVORITES = 4
+	STATE_SEARCH_HISTORY = 8
+
 	def __init__(self):
 		"""Setup the default skin, state and load 'recently_featured' feed"""
 
@@ -86,6 +94,7 @@ class YouTubeGUI(xbmcgui.Window):
 			self.yt.set_filter_hook(self.confirm_content)
 
 			self.state = YouTubeGUI.STATE_MAIN
+			self.list_state = YouTubeGUI.STATE_LESS
 
 			# Get the last search term
 			history = self.get_search_history()
@@ -240,6 +249,7 @@ class YouTubeGUI(xbmcgui.Window):
 			if self.update_list(data):
 				lbl = '%s user %s' % (title, user)
 				self.get_control('Feed Label').setLabel(lbl)
+				self.list_state = YouTubeGUI.STATE_VIDEO
 	
 	def get_feed(self, feed):
 		"""Get rss data and update the list."""
@@ -248,6 +258,7 @@ class YouTubeGUI(xbmcgui.Window):
 			# Change 'something_bleh_bluh' to 'Something Bleh Bluh'.
 			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
 			self.get_control('Feed Label').setLabel(lbl)
+			self.list_state = YouTubeGUI.STATE_VIDEO
 		
 	def search(self, term=None):
 		"""Get user input and perform a search. On success update the list."""
@@ -263,6 +274,7 @@ class YouTubeGUI(xbmcgui.Window):
 				lbl = 'Search: %s' % term
 				self.get_control('Feed Label').setLabel(lbl)
 				self.add_search_history(term)
+				self.list_state = YouTubeGUI.STATE_VIDEO
 			else:
 				dlg = xbmcgui.Dialog()
 				dlg.ok('YouTube', 'No videos were found that match your query.')
@@ -273,6 +285,10 @@ class YouTubeGUI(xbmcgui.Window):
 		data = [(x,None) for x in self.get_search_history()]
 		if self.update_list(data):
 			self.get_control('Feed Label').setLabel('Search History')
+			self.list_state = YouTubeGUI.STATE_SEARCH_HISTORY
+		else:
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Search history empty.')
 
 	def update_list(self, data):
 		"""Updates the list widget with new data."""
@@ -296,11 +312,14 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return True
 
-	def login(self):
+	def login(self, username=None, password=None):
 		"""Get username and password from the user and try to login."""
 
-		username = self.get_input('Username')
-		password = self.get_input('Password')
+		if username is None:
+			username = self.get_input('Username')
+
+		if password is None:
+			password = self.get_input('Password')
 
 		return self.yt.login(username, password)
 
@@ -333,10 +352,18 @@ class YouTubeGUI(xbmcgui.Window):
 					self.set_button_state(YouTubeGUI.STATE_FEEDS)
 				else:
 					self.set_button_state(YouTubeGUI.STATE_MAIN)
+			elif action == ACTION_CONTEXT_MENU:
+				if self.list_state is YouTubeGUI.STATE_VIDEO:
+					self.context_menu_video()
+				else:
+					self.not_implemented()
 		except:
 			xbmc.log('Exception (onAction): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
 			self.close()
+
+	def context_menu_video(self):
+		self.not_implemented()
 
 	def onControl(self, ctrl):
 		"""Handle widget events."""
