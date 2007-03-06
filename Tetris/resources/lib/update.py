@@ -36,23 +36,16 @@ class Update:
 		
 	def downloadVersion(self,version):
 		try:
-			print 'here'
 			self.dialog.create( self.script, self._( 93 ), self._( 94 ) ) #fetching
-			print 'here2'
 			folders = ['tags/%s/%s/' % ( self.script, version )]
-			print 'here3', folders
 			script_files = []
 			while folders:
-				print 'here4', folders
 				try:
 					htmlsource = self.getHTMLSource( '%s/%s' % ( self.base_url, folders[0] ) )
-					print 'here4.5'
 					if ( htmlsource ):
 						items, url = self.parseHTMLSource( htmlsource )
-						print 'here4.6', items, url
 						files, dirs = self.parseItems( items )
 						url = url[url.find( ': ' ) + 2:].replace( ' ', '%20' )
-						print 'here4.7', items, url, files, dirs
 						for file in files:
 							script_files.append( '%s/%s' % ( url, file, ) )
 						for folder in dirs:
@@ -62,9 +55,7 @@ class Update:
 					folders = folders[1:]
 				except:
 					folders = None
-			print 'here5', folders, script_files						
 			self.getFiles( script_files, version )
-			print 'here7', folders
 		except:
 			self.dialog.close()
 			traceback.print_exc()
@@ -92,7 +83,6 @@ class Update:
 	def issueUpdate( self, version ):
 		path = self.local_dir+'_backup\\resources\\lib\\update.py'
 		command = 'XBMC.RunScript(%s,%s,%s)'%(path,self.script.replace('%20',' '), version)
-		print "issueing command: ",command
 		xbmc.executebuiltin(command)
 		
 	def removeBackup( self ):
@@ -110,7 +100,6 @@ class Update:
 		try:
 			for cnt, url in enumerate( script_files ):
 				items = os.path.split( url )
-				print "getting -- ",items[0],items[1]
 				path = items[0].replace( '/tags/%s/%s' % ( self.script, version), 'Q:\\scripts\\%s' % ( self.script) ).replace( '%20', ' ' ).replace( '/', '\\' )
 				file = items[1].replace( '%20', ' ' )
 				pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
@@ -151,7 +140,6 @@ class Update:
 		return files, folders
 
 if __name__ == "__main__":
-	print 'we got here!',sys.argv
 	if len(sys.argv) != 3:
 		xbmcgui.Dialog().ok("Update error",  "Not enough arguments were passed for update")
 		sys.exit(1)
