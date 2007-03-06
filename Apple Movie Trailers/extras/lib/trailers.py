@@ -93,6 +93,21 @@ class Category:
         self.url = url
         self.count = count
         
+    def removeXML( self ):
+        try:
+            filename = fetcher.make_cache_filename( self.url )
+            filename = os.path.join( cwd, filename )
+            if os.path.isfile( filename ):
+                os.remove( filename )
+                print 'url:', self.url
+                print 'Removed:', filename
+        except:
+            print '-- Error removing', self.title, '--'
+            print 'url:', self.url
+            print 'file:', fetcher.make_cache_filename( self.url )
+            print '-' * 79
+            raise
+
 class Trailers:
     '''
         Exposes the following:
@@ -109,7 +124,11 @@ class Trailers:
         #####################################
         self.start_time = 0
         #####################################
-        self.loadGenres()
+        update_on_start = True # FIXME this needs to be changed to read whatever setting we use
+        if update_on_start:
+            self.updateGenres()
+        else:
+            self.loadGenres()
         
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -118,13 +137,33 @@ class Trailers:
             result += [ BASENS + each ]
         return '/'.join( result )
             
-    def loadGenres( self ):
+    def updateGenres( self ):
+        """
+            Updates the xml for each category from the site. Returns True/False
+            to indicate success.
+        """
+        self.loadGenres()
+        print 'UPDATE'
+        for each in self.categories:
+            try:
+                each.removeXML()
+            except:
+                traceback.print_exc()
+        try:
+            self.loadGenres( override = True )
+        except:
+            return False
+        print 'UPDATE: done'
+        sys.exit()
+        return True
+
+    def loadGenres( self, override = False ):
         try:
             dialog = xbmcgui.DialogProgress()
             self.records = database.Records()
             genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
             self.categories = []
-            if ( genre_list ):
+            if ( genre_list and not override ):
                 for genre in genre_list:
                     self.categories += [ Category( idGenre=genre[ 0 ], title=genre[ 1 ], url=genre[ 2 ] )]
             else:
