@@ -1,4 +1,4 @@
-COMPATIBLE_VERSIONS = [ 'pre-0.96', '0.96', 'pre-0.97', '0.97'  ]
+COMPATIBLE_VERSIONS = [ 'pre-0.97.1' ]
 
 import xbmcgui, xbmc
 import sys, os, default
