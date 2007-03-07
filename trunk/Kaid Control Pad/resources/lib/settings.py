@@ -32,7 +32,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.controller_action = utilities.setControllerAction()
         self.get_control( "Title Label" ).setLabel( self.__scriptname__ )
         self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), self.__version__, ) )
-        self.get_control( "Update Button" ).setEnabled( xbmc.getCondVisibility( "System.InternetState" ) )
+        #self.get_control( "Update Button" ).setEnabled( xbmc.getCondVisibility( "System.InternetState" ) )
         self.get_control( "Page Button" ).setVisible( self.total_pages > 1 )
         self.get_control( "Page Button" ).setEnabled( self.total_pages > 1 )
         # setEnabled( False ) if not used

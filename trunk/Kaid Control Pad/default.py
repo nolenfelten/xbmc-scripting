@@ -47,7 +47,7 @@ class GUI( xbmcgui.WindowDialog ):
         
     def setup_all( self ):
         #self.show()
-        dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
+        #dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
         self.setup_variables()
         self.wrt54g = wrt54g.Commands()
         self.check_status()
