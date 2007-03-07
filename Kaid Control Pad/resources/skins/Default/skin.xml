@@ -31,6 +31,8 @@
             <height>300</height>
             <texture>\panel2.png</texture>
             <aspectratio>keep</aspectratio>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
             <!--colordiffuse>BBFFFFFF</colordiffuse-->
         </control>
 
@@ -42,19 +44,23 @@
             <height>2</height>
             <texture>\separatorOSD.png</texture>
             <colordiffuse>FFFFFFFF</colordiffuse>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
         
 		<!-- ** Required ** Do not change <description> or type -->
         <control type="label" id="1">
             <description>Title Label</description>
             <posx>75</posx>
-            <posy>38</posy>
+            <posy>42</posy>
             <width>115</width>
             <label>0</label>
             <align>center</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
             <visible>true</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -78,6 +84,8 @@
             <visible>true</visible>
             <onup>50</onup>
             <ondown>20</ondown>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -101,6 +109,8 @@
             <visible>true</visible>
             <onup>10</onup>
             <ondown>30</ondown>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -124,6 +134,8 @@
             <visible>true</visible>
             <onup>20</onup>
             <ondown>40</ondown>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -147,6 +159,8 @@
             <visible>true</visible>
             <onup>30</onup>
             <ondown>50</ondown>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -170,6 +184,8 @@
             <visible>true</visible>
             <onup>40</onup>
             <ondown>10</ondown>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -183,6 +199,8 @@
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 		<!-- ** Required ** Do not change <description> or type -->
         <control type="button" id="1">
@@ -203,6 +221,8 @@
             <texturefocus>\list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
             <visible>true</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -216,6 +236,8 @@
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 		<!-- ** Required ** Do not change <description> or type -->
         <control type="button" id="1">
@@ -236,6 +258,8 @@
             <texturefocus>\list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
             <visible>true</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -249,6 +273,8 @@
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 		<!-- ** Required ** Do not change <description> or type -->
         <control type="button" id="1">
@@ -269,6 +295,8 @@
             <texturefocus>\list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
             <visible>true</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -284,6 +312,8 @@
             <righttexture>-</righttexture>
             <overlaytexture>-</overlaytexture>
             <visible>false</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -297,7 +327,9 @@
             <align>left</align>
             <textcolor>CC00CCFF</textcolor>
             <font>font10</font>
-            <visible>true</visible>
+            <visible>false</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -311,7 +343,9 @@
             <align>left</align>
             <textcolor>FFF1EA40</textcolor>
             <font>font10</font>
-            <visible>false</visible>
+            <visible>true</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <description> or type -->
@@ -326,6 +360,8 @@
             <textcolor>CCFF0000</textcolor>
             <font>font10</font>
             <visible>false</visible>
+            <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
 
     </controls>
