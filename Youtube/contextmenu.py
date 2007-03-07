@@ -89,10 +89,10 @@ class ContextMenu(xbmcgui.WindowDialog):
 		self.btn_offx = btn_x - dlg_x
 		self.btn_offy = btn_y - dlg_y
 
-	def update_buttons(self, lbl_list):
+	def update_buttons(self, items):
 		"""Update button visibility and new labels."""
 
-		for btn, lbl in map(lambda *a: tuple(a), self.buttons, lbl_list):
+		for btn, lbl in map(lambda *a: tuple(a), self.buttons, items):
 			if lbl is not None:
 				btn.setLabel(lbl)
 				btn.setVisible(True)
@@ -101,7 +101,7 @@ class ContextMenu(xbmcgui.WindowDialog):
 				btn.setVisible(False)
 				btn.setEnabled(False)
 
-		self.items = lbl_list
+		self.items = items
 
 		self.setFocus(self.buttons[0])
 
@@ -139,14 +139,15 @@ class ContextMenu(xbmcgui.WindowDialog):
 			btn_y = dlg_mdl_y + self.btn_offy + btn_height * i
 			btn.setPosition(btn_x, btn_y)
 
-	def select(self, lbl_list, center_widget, select_hook):
+	def select(self, items, center_widget, select_hook, select_udata=None):
 		"""Set the Context Menu content and display."""
 
-		if len(lbl_list) > len(self.buttons):
+		if len(items) > len(self.buttons):
 			raise ValueError('Too many menu items')
 
 		self.select_hook = select_hook
-		self.update_buttons(lbl_list)
+		self.select_udata = select_udata
+		self.update_buttons(items)
 		self.update_position(center_widget)
 		self.doModal()
 
@@ -161,9 +162,10 @@ class ContextMenu(xbmcgui.WindowDialog):
 			# Find the index of the pressed button.
 			idx = filter(lambda (x,y): y.getId() == id, enumerate(self.buttons))
 			if len(idx) > 0 and idx[0][0] < len(self.items):
-				self.select_hook(idx[0][0], self.items[idx[0][0]])
+				self.select_hook(idx[0][0], self.select_udata)
 			else:
-				self.select_hook(-1, None)
+				# This should never happen.
+				self.select_hook(-1, self.select_udata)
 		except:
 			xbmc.log('Exception (CxtMenu:onControl): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()

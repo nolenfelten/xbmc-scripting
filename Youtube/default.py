@@ -366,7 +366,7 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	def context_menu_handler(self, id, lbl):
+	def context_menu_handler(self, id, udata):
 		self.not_implemented()
 
 	def context_menu_video(self):
