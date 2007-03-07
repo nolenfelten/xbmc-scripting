@@ -142,19 +142,23 @@ class Trailers:
             Updates the xml for each category from the site. Returns True/False
             to indicate success.
         """
-        self.loadGenres()
-        print 'UPDATE'
-        for each in self.categories:
+        self.records = database.Records()
+        genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
+        if genre_list:
+            self.loadGenres()
+            print 'UPDATE'
+            for each in self.categories:
+                try:
+                    each.removeXML()
+                except:
+                    traceback.print_exc()
+        else:
             try:
-                each.removeXML()
+                self.loadGenres( override = True )
             except:
-                traceback.print_exc()
-        try:
-            self.loadGenres( override = True )
-        except:
-            return False
-        print 'UPDATE: done'
-        sys.exit()
+                return False
+            print 'UPDATE: done'
+            sys.exit()
         return True
 
     def loadGenres( self, override = False ):
