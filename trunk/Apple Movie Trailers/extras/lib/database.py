@@ -105,7 +105,7 @@ class Tables( dict ):
         self['genres'] = (
             ( 'idGenre', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
             ( 'genre', 'text', '', '', '' ),
-            ( 'url', 'text', '', '', '' ),
+            ( 'urls', 'blob', '', '', '' ),
             ( 'trailer_urls', 'blob', '', '', '' ),
         )
         self['actors'] = (
@@ -297,7 +297,7 @@ class Query( dict ):
         self[ 'studio_category_list' ]		= "SELECT studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ 'actor_category_list' ]		= "SELECT actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
-        self[ 'genre_table_list' ]			= 'SELECT idGenre, genre, url FROM genres ORDER BY genre;'
+        self[ 'genre_table_list' ]			= 'SELECT idGenre, genre, urls FROM genres ORDER BY genre;'
         
         self[ 'movie_exists' ]				= 'SELECT idMovie FROM movies WHERE upper(title)=?;'
         self[ 'actor_exists' ]					= "SELECT idActor FROM actors WHERE upper(actor)=?;"

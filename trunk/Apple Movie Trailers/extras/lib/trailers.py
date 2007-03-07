@@ -79,34 +79,37 @@ class Category:
         - url (string - url to xml)
         - count (integer - number of movies in category)
     '''
-    def __init__( self, idGenre=None, title=None, url=None, count=None ):
+    def __init__( self, idGenre=None, title=None, urls=list(), count=None ):
         '''
         self.tables['genres'] = (
             ( 'idGenre', 'integer', 'AUTO_INCREMENT', 'UNIQUE INDEX', '(idGenre)' ),
             ( 'title', 'text', '', '', '' ),
-            ( 'url', 'text', '', '', '' ),
+            ( 'urls', 'blob', '', '', '' ),
             ( 'trailer_urls', 'blob', '', '', '' ),
         )
         '''
         self.id = idGenre
         self.title = title
-        self.url = url
+        # if urls is unicode, evaluate it so it becomes a list type
+        if type( urls ) is type( unicode() ):
+            self.urls = eval( urls )
+        else:
+            self.urls = urls
         self.count = count
-        
+
     def removeXML( self ):
-        try:
-            filename = fetcher.make_cache_filename( self.url )
-            filename = os.path.join( cwd, filename )
-            if os.path.isfile( filename ):
-                os.remove( filename )
-                print 'url:', self.url
-                print 'Removed:', filename
-        except:
-            print '-- Error removing', self.title, '--'
-            print 'url:', self.url
-            print 'file:', fetcher.make_cache_filename( self.url )
-            print '-' * 79
-            raise
+        for url in self.urls:
+            try:
+                filename = fetcher.make_cache_filename( url )
+                filename = os.path.join( cwd, filename )
+                if os.path.isfile( filename ):
+                    os.remove( filename )
+            except:
+                print '-- Error removing', self.title, '--'
+                print 'url:', url
+                print 'file:', fetcher.make_cache_filename( url )
+                print '-' * 79
+                raise
 
 class Trailers:
     '''
@@ -152,13 +155,11 @@ class Trailers:
                     each.removeXML()
                 except:
                     traceback.print_exc()
-        else:
-            try:
-                self.loadGenres( override = True )
-            except:
-                return False
-            print 'UPDATE: done'
-            sys.exit()
+        try:
+            self.loadGenres( override = True )
+        except:
+            return False
+        print 'UPDATE: done'
         return True
 
     def loadGenres( self, override = False ):
@@ -169,7 +170,7 @@ class Trailers:
             self.categories = []
             if ( genre_list and not override ):
                 for genre in genre_list:
-                    self.categories += [ Category( idGenre=genre[ 0 ], title=genre[ 1 ], url=genre[ 2 ] )]
+                    self.categories += [ Category( idGenre=genre[ 0 ], title=genre[ 1 ], urls=genre[ 2 ] )]
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), _( 49 ), _( 230 ), _( 229 ) )
                 #####################################
@@ -219,10 +220,10 @@ class Trailers:
                 pct_sect = float( 100 ) / total_cnt
                 for cnt, genre in enumerate( genres ):
                     dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
-                    trailer_urls = self.loadGenreInfo( genre, genre_dict[genre] )
+                    trailer_urls, genre_urls = self.loadGenreInfo( genre, genre_dict[genre] )
                     if ( trailer_urls ):
-                        idGenre = self.records.add( 'genres', ( genre, genre_dict[genre], repr( trailer_urls), ) )
-                        self.categories += [ Category( idGenre=idGenre, title=genre, url=genre_dict[genre] ) ]
+                        idGenre = self.records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), ) )
+                        self.categories += [ Category( idGenre=idGenre, title=genre, urls=genre_urls ) ]
                         total_urls = len( trailer_urls )
                         for url_cnt, url in enumerate( trailer_urls ):
                             dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '%s: (%d of %d)' % ( _( 88 ), url_cnt + 1, total_urls, ), url[ 0 ] )
@@ -247,6 +248,12 @@ class Trailers:
             traceback.print_exc()
     
     def loadGenreInfo( self, genre, url ):
+        """
+            Follows all links from a genre page and fetches all trailer urls.
+            Returns two lists, trailer_urls (contains tuples of ( title, url ) 
+            for all trailers in genre and genre_urls (contains urls to all 
+            pages of genre)
+        """
         try:
             if url[:7] != 'http://':
                 url = self.BASEURL + url
@@ -254,6 +261,7 @@ class Trailers:
             next_url = url
             first_url = True
             trailer_dict = dict()
+            genre_urls = list()
             while next_url:
                 try:
                     element = fetcher.urlopen( next_url )
@@ -264,6 +272,8 @@ class Trailers:
                     if not is_special:
                         lookup = self.ns( lookup )
                     elements = element.getiterator( lookup )
+                    # add next_url to the genre_urls list
+                    genre_urls.append( next_url )
                     if first_url:
                         next_url = elements[0].get( 'url' )
                         first_url = False
@@ -308,10 +318,10 @@ class Trailers:
                     trailer_urls.append( ( key, reordered_dict[key] ) )
                 except:
                     continue
-            return trailer_urls
+            return trailer_urls, genre_urls
         except:
             traceback.print_exc()
-            return []
+            return [], []
 
     def fullUpdate( self ):
         #####################################
