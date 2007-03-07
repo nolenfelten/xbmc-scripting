@@ -590,6 +590,7 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
+            <visible allowhiddenfocus="false">System.InternetState</visible>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
 			<onleft>15</onleft>
