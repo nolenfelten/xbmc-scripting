@@ -35,6 +35,8 @@ import guibuilder
 
 import youtube
 
+from contextmenu import ContextMenu
+
 # Gamepad constans
 ACTION_MOVE_LEFT      = 1  
 ACTION_MOVE_RIGHT     = 2
@@ -73,11 +75,11 @@ class YouTubeGUI(xbmcgui.Window):
 	STATE_USERS = 64
 
 	# Content list states
-	STATE_LESS = 0
-	STATE_VIDEO = 1
-	STATE_USERS = 2
-	STATE_FAVORITES = 4
-	STATE_SEARCH_HISTORY = 8
+	CONTENT_STATE_NONE = 0
+	CONTENT_STATE_VIDEO = 1
+	CONTENT_STATE_USERS = 2
+	CONTENT_STATE_FAVORITES = 4
+	CONTENT_STATE_SEARCH_HISTORY = 8
 
 	def __init__(self):
 		"""Setup the default skin, state and load 'recently_featured' feed"""
@@ -94,7 +96,9 @@ class YouTubeGUI(xbmcgui.Window):
 			self.yt.set_filter_hook(self.confirm_content)
 
 			self.state = YouTubeGUI.STATE_MAIN
-			self.list_state = YouTubeGUI.STATE_LESS
+			self.list_state = YouTubeGUI.CONTENT_STATE_NONE
+
+			self.cxt = ContextMenu()
 
 			# Get the last search term
 			history = self.get_search_history()
@@ -122,29 +126,29 @@ class YouTubeGUI(xbmcgui.Window):
 	def get_search_history(self):
 		"""Return a list of old search terms."""
 
-		list = []
+		history_list = []
 		path = os.path.join(self.base_path, 'data', 'history.txt')
 
 		try:
 			f = open(path, 'rb')
-			list = pickle.load(f)
+			history_list = pickle.load(f)
 			f.close()
 		except IOError, e:
 			print 'There was an error while loading the pickle (%s)' % e
 
-		return list
+		return history_list
 
 	def add_search_history(self, term):
 		"""Append a term, and trim the search history to max 50 entries."""
 
-		list = self.get_search_history()
+		history_list = self.get_search_history()
 
 		# Filter out the term to add from the list so only one copy is stored.
-		list = filter(lambda x: x != term, list)
-		list.insert(0, term)
+		history_list = filter(lambda x: x != term, history_list)
+		history_list.insert(0, term)
 
-		if len(list) > 50:
-			list = list[:50]
+		if len(history_list) > 50:
+			history_list = history_list[:50]
 
 		try:
 			dir = os.path.join(self.base_path, 'data')
@@ -153,7 +157,7 @@ class YouTubeGUI(xbmcgui.Window):
 				os.mkdir(dir)
 			path = os.path.join(dir, 'history.txt')
 			f = open(path, 'wb')
-			pickle.dump(list, f, protocol=pickle.HIGHEST_PROTOCOL)
+			pickle.dump(history_list, f, protocol=pickle.HIGHEST_PROTOCOL)
 			f.close()
 		except IOError, e:
 			print 'There was an error while saving the pickle (%s)' % e
@@ -249,7 +253,7 @@ class YouTubeGUI(xbmcgui.Window):
 			if self.update_list(data):
 				lbl = '%s user %s' % (title, user)
 				self.get_control('Feed Label').setLabel(lbl)
-				self.list_state = YouTubeGUI.STATE_VIDEO
+				self.list_state = YouTubeGUI.CONTENT_STATE_VIDEO
 	
 	def get_feed(self, feed):
 		"""Get rss data and update the list."""
@@ -258,7 +262,7 @@ class YouTubeGUI(xbmcgui.Window):
 			# Change 'something_bleh_bluh' to 'Something Bleh Bluh'.
 			lbl = ' '.join(map(lambda x: x.capitalize(), feed.split('_')))
 			self.get_control('Feed Label').setLabel(lbl)
-			self.list_state = YouTubeGUI.STATE_VIDEO
+			self.list_state = YouTubeGUI.CONTENT_STATE_VIDEO
 		
 	def search(self, term=None):
 		"""Get user input and perform a search. On success update the list."""
@@ -274,7 +278,7 @@ class YouTubeGUI(xbmcgui.Window):
 				lbl = 'Search: %s' % term
 				self.get_control('Feed Label').setLabel(lbl)
 				self.add_search_history(term)
-				self.list_state = YouTubeGUI.STATE_VIDEO
+				self.list_state = YouTubeGUI.CONTENT_STATE_VIDEO
 			else:
 				dlg = xbmcgui.Dialog()
 				dlg.ok('YouTube', 'No videos were found that match your query.')
@@ -285,7 +289,7 @@ class YouTubeGUI(xbmcgui.Window):
 		data = [(x,None) for x in self.get_search_history()]
 		if self.update_list(data):
 			self.get_control('Feed Label').setLabel('Search History')
-			self.list_state = YouTubeGUI.STATE_SEARCH_HISTORY
+			self.list_state = YouTubeGUI.CONTENT_STATE_SEARCH_HISTORY
 		else:
 			dlg = xbmcgui.Dialog()
 			dlg.ok('YouTube', 'Search history empty.')
@@ -301,13 +305,13 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.data = data
 
-		list = self.get_control('Content List')
+		content_list = self.get_control('Content List')
 
 		xbmcgui.lock()
-		list.reset()
+		content_list.reset()
 		for desc, id in self.data:
 			item = xbmcgui.ListItem (label=desc)
-			list.addItem(item)
+			content_list.addItem(item)
 		xbmcgui.unlock()
 
 		return True
@@ -353,7 +357,7 @@ class YouTubeGUI(xbmcgui.Window):
 				else:
 					self.set_button_state(YouTubeGUI.STATE_MAIN)
 			elif action == ACTION_CONTEXT_MENU:
-				if self.list_state is YouTubeGUI.STATE_VIDEO:
+				if self.list_state is YouTubeGUI.CONTENT_STATE_VIDEO:
 					self.context_menu_video()
 				else:
 					self.not_implemented()
@@ -362,8 +366,13 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	def context_menu_video(self):
+	def context_menu_handler(self, id, lbl):
 		self.not_implemented()
+
+	def context_menu_video(self):
+		items = ['Add Favorite', 'Information', 'Test1', 'Test2', 'Test3']
+		center_widget = self.get_control('Content List')
+		self.cxt.select(items, center_widget, self.context_menu_handler)
 
 	def onControl(self, ctrl):
 		"""Handle widget events."""
