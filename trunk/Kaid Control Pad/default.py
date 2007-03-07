@@ -12,7 +12,7 @@ __version__ = "pre-2.0"
 
 import sys, os
 import xbmc, xbmcgui
-import threading
+import threading, thread
 import traceback
 
 RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
@@ -29,17 +29,13 @@ _ = language.Language().string
 
 class GUI( xbmcgui.WindowDialog ):
 
-    def __init__(self):
+    def __init__( self ):
         try:
             self.timer_msg = None
             self.gui_loaded = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
-                self.show()
-                dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
-                self.setup_variables()
-                self.wrt54g = wrt54g.Commands()
-                self.check_status()
+                thread.start_new_thread(self.setup_all, ())
         except: 
             traceback.print_exc()
             self.close()
@@ -48,6 +44,13 @@ class GUI( xbmcgui.WindowDialog ):
         gb = guibuilder.GUIBuilder()
         ok = gb.create_gui( self, fastMethod=True, title=__scriptname__, useDescAsKey=True, language=_ )
         return ok
+        
+    def setup_all( self ):
+        #self.show()
+        dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
+        self.setup_variables()
+        self.wrt54g = wrt54g.Commands()
+        self.check_status()
         
     def setup_variables( self ):
         self.controller_action = utilities.setControllerAction()

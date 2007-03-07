@@ -60,7 +60,7 @@ class Update:
     def _update_script( self ):
         """ main update function """
         try:
-            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[-1][:-1], self._( 1002 ), ), self._( 1003 ), "", self._( 51 ), self._( 52 ) ) ):
+            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[-1][:-1], self._( 1002 ), ), self._( 1003 ), "", self._( 251 ), self._( 252 ) ) ):
                 self.dialog.create( self.__scriptname__, self._( 1004 ), self._( 1005 ) )
                 script_files = []
                 folders = ["%s/%s" % ( self.url, self.versions[-1], )]
