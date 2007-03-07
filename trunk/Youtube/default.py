@@ -327,6 +327,97 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return self.yt.login(username, password)
 
+	def add_favorite(self):
+		content_list = self.get_control('Content List')
+		pos = content_list.getSelectedPosition()
+
+		desc, id = self.data[pos]
+
+		dlg = xbmcgui.DialogProgress()
+		dlg.create('YouTube', 'Adding \'%s\' to favorites' % desc)
+
+		self.yt.set_report_hook(self.progress_handler, dlg)
+
+		if not self.yt.login_status() and not self.login():
+			dlg.close()
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Login failed.')
+		elif self.yt.user_add_favorite(id):
+			dlg.close()
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Favorite added.')
+
+	def video_details(self, id):
+		dlg = xbmcgui.DialogProgress()
+		dlg.create('YouTube', 'Getting related videos')
+
+		self.yt.set_report_hook(self.progress_handler, dlg)
+		details = self.yt.get_video_details(id)
+
+		dlg.close()
+
+		return details
+
+	def videos_by_user(self):
+		content_list = self.get_control('Content List')
+		pos = content_list.getSelectedPosition()
+
+		desc, id = self.data[pos]
+
+		details = self.video_details(id)
+
+		if not details.has_key('author'):
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Could not find author.')
+		else:
+			user = details['author']
+
+			dlg = xbmcgui.DialogProgress()
+			dlg.create('YouTube', 'Getting videos by %s' % user)
+
+			self.yt.set_report_hook(self.progress_handler, dlg)
+			list = self.yt.get_videos_by_user(user, per_page=40)
+
+			dlg.close()
+
+			if self.update_list(list):
+				self.get_control('Feed Label').setLabel('Videos by %s' % user)
+				self.list_state = YouTubeGUI.CONTENT_STATE_VIDEO
+			else:
+				dlg = xbmcgui.Dialog()
+				dlg.ok('YouTube', '%s hasn\'t uploaded any videos.')
+
+	def videos_related(self):
+		content_list = self.get_control('Content List')
+		pos = content_list.getSelectedPosition()
+
+		desc, id = self.data[pos]
+
+		details = self.video_details(id)
+
+		if not details.has_key('tags'):
+			dlg = xbmcgui.Dialog()
+			dlg.ok('YouTube', 'Could not find any tags.')
+		else:
+			dlg = xbmcgui.DialogProgress()
+			dlg.create('YouTube', 'Getting related videos')
+
+			self.yt.set_report_hook(self.progress_handler, dlg)
+			list = self.yt.get_videos_by_related(details['tags'], per_page=40)
+
+			dlg.close()
+
+			if self.update_list(list):
+				if details.has_key('title'):
+					lbl = 'Videos related to \'%s\'' % details['title']
+				else:
+					lbl = 'Related videos'
+				self.get_control('Feed Label').setLabel(lbl)
+				self.list_state = YouTubeGUI.CONTENT_STATE_VIDEO
+			else:
+				dlg = xbmcgui.Dialog()
+				dlg.ok('YouTube', 'No related videos found.')
+
 	def play_clip(self, id):
 		"""Get the url for the id and start playback."""
 
@@ -366,13 +457,23 @@ class YouTubeGUI(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	def context_menu_handler(self, id, udata):
-		self.not_implemented()
+	def context_menu_video_handler(self, id, udata):
+		if id is 0: # 'Add Favorites'
+			self.add_favorite()
+		elif id is 1: # 'Information'
+			self.not_implemented()
+		elif id is 2: # 'Related Videos'
+			self.videos_related()
+		elif id is 3: # 'Other Videos By User'
+			self.videos_by_user()
 
 	def context_menu_video(self):
-		items = ['Add Favorite', 'Information', 'Test1', 'Test2', 'Test3']
+		items = ['Add Favorite',
+		         'Information',
+		         'Related Videos',
+		         'Other Videos By User']
 		center_widget = self.get_control('Content List')
-		self.cxt.select(items, center_widget, self.context_menu_handler)
+		self.cxt.select(items, center_widget, self.context_menu_video_handler)
 
 	def onControl(self, ctrl):
 		"""Handle widget events."""
