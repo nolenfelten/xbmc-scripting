@@ -15,7 +15,7 @@ __scriptname__ = "XBMC Lyrics"
 __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.2.3"
+__version__ = "1.3"
 
 
 import os, sys
@@ -36,16 +36,16 @@ class GUI( xbmcgui.WindowDialog ):
             self.gui_loaded = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
-                self.setup_all()
+                self.startScript = Start( function=self.setup_all ).start()
         except: 
             self.exit_script()
             
     def setup_all( self ):
         self.get_settings()
-        self.show_viz_window()
         self.setup_variables()
         self.get_scraper()
         self.getDummyTimer()
+        self.show_viz_window()
         self.getMyPlayer()
 
     def setupGUI( self ):
@@ -88,18 +88,21 @@ class GUI( xbmcgui.WindowDialog ):
     def get_lyrics(self, artist, song):
         self.menu_items = []
         self.reset_controls()
+        current_song = self.song
         lyrics = self.get_lyrics_from_file( artist, song )
         if ( lyrics ):
-            self.show_lyrics( lyrics )
+            if ( current_song == self.song ):
+                self.show_lyrics( lyrics )
         else:
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
-            if ( type( lyrics ) == str or type( lyrics ) == unicode ):
-                self.show_lyrics( lyrics, True )
-            elif ( type( lyrics ) == list and lyrics ):
-                self.show_choices( lyrics )
-            else:
-                self.show_lyrics( _( 631 ) )
-        
+            if ( current_song == self.song ):
+                if ( type( lyrics ) == str or type( lyrics ) == unicode ):
+                    self.show_lyrics( lyrics, True )
+                elif ( type( lyrics ) == list and lyrics ):
+                    self.show_choices( lyrics )
+                else:
+                    self.show_lyrics( _( 631 ) )
+
     def get_lyrics_from_list( self, item ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
         self.show_lyrics( lyrics, True )
@@ -234,20 +237,22 @@ class GUI( xbmcgui.WindowDialog ):
         else:
             song = self.song
             for cnt in range( 5 ):
-                if ( xbmc.getInfoLabel( "MusicPlayer.Title" ) != self.song ): break
+                self.song = xbmc.getInfoLabel( "MusicPlayer.Title" )
+                if ( song != self.song and self.song ): break
                 xbmc.sleep( 50 )
-            self.song = xbmc.getInfoLabel( "MusicPlayer.Title" )
-            self.artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-            self.controls[ 6 ][ "control" ].setImage( xbmc.getInfoImage( "MusicPlayer.Cover" ) )
-            self.get_lyrics( self.artist, self.song )
+            if ( song != self.song ):
+                self.artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
+                self.controls[ 6 ][ "control" ].setImage( xbmc.getInfoImage( "MusicPlayer.Cover" ) )
+                if ( self.song and self.artist ): self.get_lyrics( self.artist, self.song )
+                else: self.reset_controls()
 
 
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
-    def  __init__( self, *args, **kwargs ):
+    def __init__( self, *args, **kwargs ):
+        xbmc.Player.__init__( self )
         if ( kwargs.has_key( "function" ) ): 
             self.function = kwargs[ "function" ]
-            xbmc.Player.__init__( self )
 
     def onPlayBackStopped( self ):
         self.function( 0 )
@@ -258,10 +263,23 @@ class MyPlayer( xbmc.Player ):
     def onPlayBackStarted( self ):
         self.function( 2 )
 
-    
+
+class Start( threading.Thread ):
+    def __init__( self, *args, **kwargs ):
+        threading.Thread.__init__( self )
+        if ( kwargs.has_key( "function" ) ): 
+            self.function = kwargs[ "function" ]
+
+    def run(self):
+        self.function()
+
+
 if ( __name__ == "__main__" ):
     if ( xbmc.Player().isPlayingAudio() ):
-        current_wid = xbmcgui.getCurrentWindowId()
+        try: current_wid = xbmcgui.getCurrentWindowDialogId()
+        except: current_wid = 9999
+        if ( current_wid == 9999 ):
+            current_wid = xbmcgui.getCurrentWindowId()
         ui = GUI()
         if ( ui.gui_loaded ): ui.doModal()
         del ui
