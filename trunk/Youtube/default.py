@@ -34,8 +34,9 @@ import xbmc
 import guibuilder
 
 import youtube
+import contextmenu
+import details
 
-from contextmenu import ContextMenu
 
 # Gamepad constans
 ACTION_MOVE_LEFT      = 1  
@@ -98,7 +99,8 @@ class YouTubeGUI(xbmcgui.Window):
 			self.state = YouTubeGUI.STATE_MAIN
 			self.list_state = YouTubeGUI.CONTENT_STATE_NONE
 
-			self.cxt = ContextMenu()
+			self.cxt = contextmenu.ContextMenu()
+			self.details = details.Details()
 
 			# Get the last search term
 			history = self.get_search_history()
@@ -338,18 +340,27 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.yt.set_report_hook(self.progress_handler, dlg)
 
-		if not self.yt.login_status() and not self.login():
+		try:
+			if not self.yt.login_status() and not self.login():
+				dlg.close()
+				dlg = xbmcgui.Dialog()
+				dlg.ok('YouTube', 'Login failed.')
+			elif self.yt.user_add_favorite(id):
+				dlg.close()
+				dlg = xbmcgui.Dialog()
+				dlg.ok('YouTube', 'Favorite added.')
+		except youtube.DownloadAbort, e:
 			dlg.close()
-			dlg = xbmcgui.Dialog()
-			dlg.ok('YouTube', 'Login failed.')
-		elif self.yt.user_add_favorite(id):
-			dlg.close()
-			dlg = xbmcgui.Dialog()
-			dlg.ok('YouTube', 'Favorite added.')
 
-	def video_details(self, id):
+	def video_details(self, id=None):
+		if id is None:
+			content_list = self.get_control('Content List')
+			pos = content_list.getSelectedPosition()
+
+			desc, id = self.data[pos]
+
 		dlg = xbmcgui.DialogProgress()
-		dlg.create('YouTube', 'Getting related videos')
+		dlg.create('YouTube', 'Getting video details')
 
 		self.yt.set_report_hook(self.progress_handler, dlg)
 		details = self.yt.get_video_details(id)
@@ -358,13 +369,12 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return details
 
+	def show_video_details(self):
+		details = self.video_details()
+		self.details.display(details)
+
 	def videos_by_user(self):
-		content_list = self.get_control('Content List')
-		pos = content_list.getSelectedPosition()
-
-		desc, id = self.data[pos]
-
-		details = self.video_details(id)
+		details = self.video_details()
 
 		if not details.has_key('author'):
 			dlg = xbmcgui.Dialog()
@@ -388,12 +398,7 @@ class YouTubeGUI(xbmcgui.Window):
 				dlg.ok('YouTube', '%s hasn\'t uploaded any videos.')
 
 	def videos_related(self):
-		content_list = self.get_control('Content List')
-		pos = content_list.getSelectedPosition()
-
-		desc, id = self.data[pos]
-
-		details = self.video_details(id)
+		details = self.video_details()
 
 		if not details.has_key('tags'):
 			dlg = xbmcgui.Dialog()
@@ -461,7 +466,7 @@ class YouTubeGUI(xbmcgui.Window):
 		if id is 0: # 'Add Favorites'
 			self.add_favorite()
 		elif id is 1: # 'Information'
-			self.not_implemented()
+			self.show_video_details()
 		elif id is 2: # 'Related Videos'
 			self.videos_related()
 		elif id is 3: # 'Other Videos By User'
@@ -469,7 +474,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 	def context_menu_video(self):
 		items = ['Add Favorite',
-		         'Information',
+		         'Details',
 		         'Related Videos',
 		         'Other Videos By User']
 		center_widget = self.get_control('Content List')
@@ -510,10 +515,12 @@ class YouTubeGUI(xbmcgui.Window):
 			self.close()
 			return
 
-		if id is not None:
+		if self.list_state is YouTubeGUI.CONTENT_STATE_VIDEO:
 			self.play_clip(id)
-		else:
+		elif self.list_state is YouTubeGUI.CONTENT_STATE_SEARCH_HISTORY:
 			self.search(desc)
+		else:
+			self.not_implemented()
 
 	def on_control_main(self, ctrl):
 		"""Handle main menu events."""
