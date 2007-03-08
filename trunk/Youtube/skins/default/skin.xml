@@ -27,8 +27,8 @@
 		<!-- START: Labels -->
 		<control type="label" id="5">
 			<description>Feed Label</description>
-			<width>200</width>
-			<posx>340</posx>
+			<width>427</width>
+			<posx>244</posx>
 			<posy>20</posy>
 			<align>center</align>
 			<aligny>center</aligny>
