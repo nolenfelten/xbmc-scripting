@@ -230,11 +230,13 @@ class YouTubeGUI(xbmcgui.Window):
 		try:
 			data = func(arg)
 		except youtube.DownloadError, e:
+			dlg.close()
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('YouTube', 'There was an error.', e.value)
-			data = None
+			return None
 		except youtube.DownloadAbort:
-			data = None
+			dlg.close()
+			return None
 		except Exception, e:
 			# In Python 2.5 this would have been a finally
 			dlg.close()
@@ -321,13 +323,24 @@ class YouTubeGUI(xbmcgui.Window):
 	def login(self, username=None, password=None):
 		"""Get username and password from the user and try to login."""
 
+		ret = False
+
 		if username is None:
 			username = self.get_input('Username')
 
 		if password is None:
 			password = self.get_input('Password')
 
-		return self.yt.login(username, password)
+		try:
+			ret = self.yt.login(username, password)
+		except youtube.DownloadAbort, e:
+			# Just fall through as ret defaults to False
+			pass
+		except youtube.DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('YouTube', 'There was an error.', e.value)
+
+		return ret
 
 	def add_favorite(self):
 		content_list = self.get_control('Content List')
@@ -342,17 +355,25 @@ class YouTubeGUI(xbmcgui.Window):
 
 		try:
 			if not self.yt.login_status() and not self.login():
-				dlg.close()
-				dlg = xbmcgui.Dialog()
-				dlg.ok('YouTube', 'Login failed.')
+				err_dlg = xbmcgui.Dialog()
+				err_dlg.ok('YouTube', 'Login failed.')
 			elif self.yt.user_add_favorite(id):
-				dlg.close()
-				dlg = xbmcgui.Dialog()
-				dlg.ok('YouTube', 'Favorite added.')
+				added_dlg = xbmcgui.Dialog()
+				added_dlg.ok('YouTube', 'Favorite added.')
 		except youtube.DownloadAbort, e:
-			dlg.close()
+			# Just fall through as the method shouldn't return anyhting.
+			pass
+		except youtube.DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('YouTube', 'There was an error.', e.value)
+
+		dlg.close()
 
 	def video_details(self, id=None):
+		"""Get video details about some id."""
+
+		details = None
+
 		if id is None:
 			content_list = self.get_control('Content List')
 			pos = content_list.getSelectedPosition()
@@ -363,30 +384,77 @@ class YouTubeGUI(xbmcgui.Window):
 		dlg.create('YouTube', 'Getting video details')
 
 		self.yt.set_report_hook(self.progress_handler, dlg)
-		details = self.yt.get_video_details(id)
+
+		try:
+			details = self.yt.get_video_details(id)
+		except youtube.DownloadAbort, e:
+			# Just fall through as return value defaults to None
+			pass
+		except youtube.DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('YouTube', 'There was an error.', e.value)
 
 		dlg.close()
 
 		return details
 
 	def show_video_details(self):
+		"""Get the details, and show the details window."""
+
 		details = self.video_details()
-		self.details.display(details)
+
+		dlg = xbmcgui.DialogProgress()
+		dlg.create('YouTube', 'Downloading thumbnail.')
+		self.yt.set_report_hook(self.progress_handler, dlg)
+
+		if details is not None and details.has_key('thumbnail_url'):
+			try:
+				thumb = self.yt.retrieve(details['thumbnail_url'])
+			except youtube.DownloadAbort, e:
+				# Just fall through as a thumbnail is not required.
+				pass
+			except youtube.DownloadError, e:
+				err_dlg = xbmcgui.Dialog()
+				err_dlg.ok('YouTube', 'There was an error.', e.value)
+			else:
+				# Save the thumbnail to a local file so it can be used.
+				path = os.path.join(self.base_path, 'data', 'thumb.jpg')
+				fp = open(path, 'wb')
+				fp.write(thumb)
+				fp.close()
+				details['thumbnail_url'] = path
+
+		dlg.close()
+		
+		if details is not None:
+			self.details.display(details)
 
 	def videos_by_user(self):
 		details = self.video_details()
 
-		if not details.has_key('author'):
+		if details is not None and not details.has_key('author'):
 			dlg = xbmcgui.Dialog()
 			dlg.ok('YouTube', 'Could not find author.')
-		else:
+		elif details is not None:
 			user = details['author']
 
 			dlg = xbmcgui.DialogProgress()
 			dlg.create('YouTube', 'Getting videos by %s' % user)
 
 			self.yt.set_report_hook(self.progress_handler, dlg)
-			list = self.yt.get_videos_by_user(user, per_page=40)
+
+			try:
+				list = self.yt.get_videos_by_user(user, per_page=40)
+			except youtube.DownloadAbort, e:
+				# No data gathered, no need to update list.
+				dlg.close()
+				return
+			except youtube.DownloadError, e:
+				# No data gathered, no need to update list.
+				dlg.close()
+				err_dlg = xbmcgui.Dialog()
+				err_dlg.ok('YouTube', 'There was an error.', e.value)
+				return
 
 			dlg.close()
 
@@ -408,7 +476,22 @@ class YouTubeGUI(xbmcgui.Window):
 			dlg.create('YouTube', 'Getting related videos')
 
 			self.yt.set_report_hook(self.progress_handler, dlg)
-			list = self.yt.get_videos_by_related(details['tags'], per_page=40)
+
+			list = None
+
+			try:
+				tags = details['tags']
+				list = self.yt.get_videos_by_related(tags, per_page=40)
+			except youtube.DownloadError, e:
+				# No data gathered, no need to update list.
+				dlg.close()
+				err_dlg = xbmcgui.Dialog()
+				err_dlg.ok('YouTube', 'There was an error.', e.value)
+				return
+			except youtube.DownloadAbort, e:
+				# No data gathered, no need to update list.
+				dlg.close()
+				return
 
 			dlg.close()
 
@@ -434,9 +517,21 @@ class YouTubeGUI(xbmcgui.Window):
 			ret = dlg.yesno('YouTube',
 			                'You need to be logged in to watch this clip.',
 			                'Do you want to login?')
+
 			# If the user wants to login, and login works, then try again
-			if ret and self.login():
-				self.play_clip(id)
+			try:
+				if ret:
+					if self.login():
+						self.play_clip(id)
+					else:
+						dlg = xbmcgui.Dialog()
+						dlg.ok('YouTube', 'Login failed.')
+			except youtube.DownloadError, e:
+				err_dlg = xbmcgui.Dialog()
+				err_dlg.ok('YouTube', 'There was an error.', e.value)
+			except youtube.DownloadAbort, e:
+				# Just fall through as the method shouldn't return anything.
+				pass
 		except youtube.VideoStreamError, e:
 			dlg = xbmcgui.Dialog()
 			dlg.ok('YouTube', 'Unable to play the video clip.')

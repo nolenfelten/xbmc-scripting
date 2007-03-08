@@ -72,68 +72,61 @@ class Details(xbmcgui.WindowDialog):
 
 		return self.controls[desc]['control']
 
-	def display(self, details):
+	def display(self, data):
 		"""Set the Details content and display."""
 
-		if details.has_key('description'):
-			ctrl = self.get_control('Description')
-			ctrl.setText(details['description'])
-		if details.has_key('thumbnail_url'):
-			req = urllib2.Request(details['thumbnail_url'])
-			fp = urllib2.urlopen(req)
-			p = os.path.join(self.base_path, 'data', 'thumb.jpg')
-			f = open(p, 'wb')
-			f.write(fp.read())
-			fp.close()
-			f.close()
-			ctrl = self.get_control('Video Thumbnail')
-			ctrl.setImage(p)
-		if details.has_key('title'):
-			ctrl = self.get_control('Title Label')
-			ctrl.setLabel(details['title'])
-		if details.has_key('tags'):
-			ctrl = self.get_control('Tags Text Label')
+		ctrl = self.get_control('Description')
+		if data.has_key('description'):
+			ctrl.setText(data['description'])
+		else:
+			ctrl.setText('')
+
+		ctrl = self.get_control('Video Thumbnail')
+		if data.has_key('thumbnail_url'):
+			ctrl.setImage(data['thumbnail_url'])
+		else:
+			ctrl.setImage('dialog-context-middle.png')
+
+		ctrl = self.get_control('Title Label')
+		if data.has_key('title'):
+			ctrl.setLabel(data['title'])
+		else:
+			ctrl.setLabel('')
+
+		ctrl = self.get_control('Tags Text Label')
+		if data.has_key('tags'):
 			ctrl.reset()
-			ctrl.addLabel(details['tags'])
-		if details.has_key('author'):
-			ctrl = self.get_control('Author Text Label')
-			ctrl.setLabel(details['author'])
-		if details.has_key('length_seconds'):
-			length = int(details['length_seconds'])
+			ctrl.addLabel(data['tags'])
+		else:
+			ctrl.reset()
+
+		ctrl = self.get_control('Author Text Label')
+		if data.has_key('author'):
+			ctrl.setLabel(data['author'])
+		else:
+			ctrl.setLabel('')
+
+		ctrl = self.get_control('Length Text Label')
+		if data.has_key('length_seconds') and len(data['length_seconds']) > 0:
+			length = int(data['length_seconds'])
 			lbl = '%d minutes, %d seconds' % (length / 60, length % 60)
-			ctrl = self.get_control('Length Text Label')
 			ctrl.setLabel(lbl)
-		if details.has_key('rating_avg'):
-			ctrl = self.get_control('Rating Text Label')
-			ctrl.setLabel(details['rating_avg'])
-		if details.has_key('upload_time'):
-			unixtime = int(details['upload_time'])
+		else:
+			ctrl.setLabel('')
+
+		ctrl = self.get_control('Rating Text Label')
+		if data.has_key('rating_avg'):
+			ctrl.setLabel(data['rating_avg'])
+		else:
+			ctrl.setLabel('')
+
+		ctrl = self.get_control('Added Text Label')
+		if data.has_key('upload_time') and len(data['upload_time']) > 0:
+			unixtime = int(data['upload_time'])
 			y, m, d, hour, min, sec, wd, yd, dst = time.gmtime(unixtime)
 			lbl = '%d-%02d-%02d %02d:%02d' % (y, m, d, hour, min)
-			ctrl = self.get_control('Added Text Label')
 			ctrl.setLabel(lbl)
+		else:
+			ctrl.setLabel('')
 
 		self.doModal()
-
-	def onControl(self, ctrl):
-		"""Handle Details events."""
-
-		try: 
-			print ctrl, ctrl.getId()
-		except:
-			xbmc.log('Exception (Details:onControl): ' + str(sys.exc_info()[0]))
-			traceback.print_exc()
-			self.close()
-
-	def onAction(self, action):
-		"""Handle Details actions."""
-
-		try: 
-			if action == ACTION_PREVIOUS_MENU:
-				self.close()
-		except:
-			xbmc.log('Exception (Details:onAction): ' + str(sys.exc_info()[0]))
-			traceback.print_exc()
-			self.close()
-
-
