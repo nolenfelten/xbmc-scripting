@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="0">XBMC Lyrics</string>
+  <string id="630">Ovanlig sidlayout, ingen tolkning inbyggd ännu...</string>
+  <string id="631">ERROR! Kunde inte hitta länknamn</string>
+  <string id="632">Inga texter hittade</string>
+  <string id="633">Sidan för sången hittad, men är tom</string>
+  <string id="638">Vad vill du köra detta för?</string>
+  <string id="639">Ingen musik spelas!</string>
+  <string id="230">Ett fel uppstod vid sparande av dina inställningar.</string>
+  <string id="240">Scraper ändringar kommer att ändras efter du startat om.</string>
+  <string id="201">Scraper</string>
+  <string id="202">Spara sångtext</string>
+  <string id="203">Spara mapp</string>
+  <string id="204">Mjuk rullning för sångtexter</string>
+  <string id="203">en sparmapp</string>
+  <string id="250">Ok</string>
+  <string id="251">Avbryt</string>
+  <string id="252">Uppdatera</string>
+  <string id="253">Credits</string>
+  <string id="1007">Hämtar:</string>
+  <string id="1001">Hämtar nuvarande taggade versioner...</string>
+  <string id="1002">är nyare</string>
+  <string id="1003">Vill du uppgradera?</string>
+  <string id="1004">Hämtar fillista...</string>
+  <string id="1005">Var god vänta...</string>
+  <string id="1000">Din version är aktuell.</string>
+  <string id="1031">Ett fel uppstod under uppdateringen.</string>
+  <string id="1008">Sökväg:</string>
+  <string id="1009">Fil:</string>
+  <string id="1010">Din nya version sparades i:</string>
+  <string id="1006">Version</string>
+</strings>
