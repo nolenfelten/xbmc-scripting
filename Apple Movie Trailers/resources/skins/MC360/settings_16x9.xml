@@ -79,7 +79,7 @@
 		<!-- buttons -->
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
-			<description>Skin Button</description>
+			<description>Setting1 Button</description>
 			<posx>365</posx>
 			<posy>130</posy>
 			<width>315</width>
@@ -99,7 +99,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="11">
-			<description>Skin Button Value</description>
+			<description>Setting1 Value</description>
 			<posx>365</posx>
 			<posy>130</posy>
 			<width>315</width>
@@ -119,7 +119,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
-			<description>Trailer Quality Button</description>
+			<description>Setting2 Button</description>
 			<posx>365</posx>
 			<posy>160</posy>
 			<width>315</width>
@@ -139,7 +139,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="21">
-			<description>Trailer Quality Button Value</description>
+			<description>Setting2 Value</description>
 			<posx>365</posx>
 			<posy>160</posy>
 			<width>315</width>
@@ -159,7 +159,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
-			<description>Mode Button</description>
+			<description>Setting3 Button</description>
 			<posx>365</posx>
 			<posy>190</posy>
 			<width>315</width>
@@ -179,7 +179,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="31">
-			<description>Mode Button Value</description>
+			<description>Setting3 Value</description>
 			<posx>365</posx>
 			<posy>190</posy>
 			<width>315</width>
@@ -199,7 +199,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
-			<description>Save Folder Button</description>
+			<description>Setting4 Button</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
@@ -219,7 +219,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="41">
-			<description>Save Folder Button Value</description>
+			<description>Setting4 Value</description>
 			<posx>365</posx>
 			<posy>220</posy>
 			<width>315</width>
@@ -239,7 +239,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
-			<description>Thumbnail Display Button</description>
+			<description>Setting5 Button</description>
 			<posx>365</posx>
 			<posy>250</posy>
 			<width>315</width>
@@ -259,7 +259,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="51">
-			<description>Thumbnail Display Button Value</description>
+			<description>Setting5 Value</description>
 			<posx>365</posx>
 			<posy>250</posy>
 			<width>315</width>
@@ -279,7 +279,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
-			<description>Startup Category Button</description>
+			<description>Setting6 Button</description>
 			<posx>365</posx>
 			<posy>280</posy>
 			<width>315</width>
@@ -299,7 +299,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="61">
-			<description>Startup Category Button Value</description>
+			<description>Setting6 Value</description>
 			<posx>365</posx>
 			<posy>280</posy>
 			<width>315</width>
@@ -319,7 +319,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="70">
-			<description>Shortcut1 Button</description>
+			<description>Setting7 Button</description>
 			<posx>365</posx>
 			<posy>310</posy>
 			<width>315</width>
@@ -339,7 +339,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="71">
-			<description>Shortcut1 Button Value</description>
+			<description>Setting7 Value</description>
 			<posx>365</posx>
 			<posy>310</posy>
 			<width>315</width>
@@ -358,7 +358,7 @@
 			<ondown>80</ondown>
 		</control>
 		<control type="button" id="80">
-			<description>Shortcut2 Button</description>
+			<description>Setting8 Button</description>
 			<posx>365</posx>
 			<posy>340</posy>
 			<width>315</width>
@@ -378,7 +378,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="81">
-			<description>Shortcut2 Button Value</description>
+			<description>Setting8 Value</description>
 			<posx>365</posx>
 			<posy>340</posy>
 			<width>315</width>
@@ -397,7 +397,7 @@
 			<ondown>90</ondown>
 		</control>
 		<control type="button" id="90">
-			<description>Shortcut3 Button</description>
+			<description>Setting9 Button</description>
 			<posx>365</posx>
 			<posy>370</posy>
 			<width>315</width>
@@ -417,7 +417,7 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="91">
-			<description>Shortcut3 Button Value</description>
+			<description>Setting9 Value</description>
 			<posx>365</posx>
 			<posy>370</posy>
 			<width>315</width>
@@ -511,6 +511,29 @@
 			<onup>100</onup>
 			<ondown>10</ondown>
 		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="155">
+			<description>Page Button</description>
+			<posx>340</posx>
+			<posy>95</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>211</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>100</onup>
+			<ondown>200</ondown>
+		</control>
+
+
 		<!-- skin selection dialog -->
 		<!-- ** Optional ** Do not change <description> -->
 		<control type="image" id="600">
