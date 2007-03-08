@@ -1,6 +1,6 @@
 import sys, os, traceback
 
-sys.path.append( os.path.join( os.getcwd().replace( ";", "" ), 'extras', 'lib' ) )
+sys.path.append( os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'lib' ) )
 
 import gui
 
@@ -27,7 +27,7 @@ __acredits_r3__ = 'Rockstar & Donno'
 if __name__ == '__main__':
     try:
         ui = gui.GUI()
-        if ui.SUCCEEDED:
+        if ui.gui_loaded:
             ui.doModal()
             del ui
     except:
