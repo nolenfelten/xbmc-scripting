@@ -1,14 +1,14 @@
-COMPATIBLE_VERSIONS = [ 'pre-0.97.1' ]
-
+import sys, os
 import xbmcgui, xbmc
-import sys, os, default
 from pysqlite2 import dbapi2 as sqlite
 import traceback
 
-if ( not os.path.isdir( os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data' ) ) ):
-    os.makedirs( os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data' ) )
-db_filename = os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', 'AMT.db' )
+db_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
+if ( not os.path.isdir( db_path ) ):
+    os.makedirs( db_path )
+db_filename = os.path.join( db_path, "AMT.db" )
 
+COMPATIBLE_VERSIONS = [ 'pre-0.97.1', '0.97.1'  ]
 
 class Database:
     "main initializing of the database"
@@ -17,7 +17,7 @@ class Database:
         self.query = Query()
         self.db_version, self.complete = self.getVersion()
         if ( not self.db_version ): 
-            print 'no database exists', default.__version__
+            print 'no database exists', sys.modules['__main__'].__version__
 
     def getVersion( self ):
         records = Records()
@@ -35,12 +35,12 @@ class Database:
         success = tables.createTables( self._ )
         if ( success ):
             success = self.writeVersion()
-            if ( success ): return default.__version__, False
+            if ( success ): return sys.modules['__main__'].__version__, False
         return None, False
 
     def writeVersion( self ):
         records = Records()
-        lastrowid = records.add( 'version', ( default.__version__, False, ) )
+        lastrowid = records.add( 'version', ( sys.modules['__main__'].__version__, False, ) )
         if ( lastrowid ): success = records.commit()
         records.close()
         return lastrowid
@@ -53,7 +53,7 @@ class Database:
             try:
                 dialog = xbmcgui.DialogProgress()
                 dialog.create( self._( 53 ) )
-                replace_string = os.path.join( os.path.dirname( sys.modules['default'].__file__ ), 'extras', 'data', '.cache\\' )
+                replace_string = os.path.join( os.path.dirname( sys.modules['__main__'].__file__ ), 'resources', 'data', '.cache\\' )
                 sql = 'SELECT title, poster, thumbnail, thumbnail_watched, rating_url FROM Movies WHERE poster != ?'
                 dialog.update( -1, self._( 48 ) )
                 records = self.getRecords( sql, params=( '', ), all=True )
@@ -72,10 +72,10 @@ class Database:
                         if ( dialog.iscanceled == True ): raise
                     dialog.update( 100 , '%s: (%d of %d)' % ( self._( 45 ), cnt + 1, total_cnt, ), '%s: %s' % ( self._( 88 ), record[ 0 ], ), '-----> %s <-----' % ( self._( 43 ), ) )
                     succeeded = self.updateRecords( 'Movies', ( 'poster', 'thumbnail', 'thumbnail_watched', 'rating_url', ), changed_records, 'title' )
-                    if ( succeeded ): self.updateRecords( 'Version', ( 'version', ), ( ( default.__version__, version[ 0 ], ), ), 'version' )
+                    if ( succeeded ): self.updateRecords( 'Version', ( 'version', ), ( ( sys.modules['__main__'].__version__, version[ 0 ], ), ), 'version' )
                     #xbmc.sleep(1000)
                     dialog.close()
-                    if ( succeeded ): return ( default.__version__, )
+                    if ( succeeded ): return ( sys.modules['__main__'].__version__, )
                     else: return version
             except:
                 traceback.print_exc()
@@ -87,7 +87,7 @@ class Database:
     '''
     def updateVersion( self ):
         records = Records()
-        success = records.update( 'version', ( 'version', ), ( '0.98.85', default.__version__, ), 'version' )
+        success = records.update( 'version', ( 'version', ), ( '0.98.85', sys.modules['__main__'].__version__, ), 'version' )
         records.commit()
         records.close()
         return success

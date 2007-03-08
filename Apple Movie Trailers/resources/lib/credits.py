@@ -22,8 +22,8 @@ class GUI( xbmcgui.WindowDialog ):
     def setupGUI( self ):
         if ( self.skin == 'Default' ): current_skin = xbmc.getSkinDir()
         else: current_skin = self.skin
-        if ( not os.path.exists( os.path.join( self.cwd, 'extras', 'skins', current_skin ))): current_skin = 'default'
-        skin_path = os.path.join( self.cwd, 'extras', 'skins', current_skin )
+        if ( not os.path.exists( os.path.join( self.cwd, 'resources', 'skins', current_skin ))): current_skin = 'default'
+        skin_path = os.path.join( self.cwd, 'resources', 'skins', current_skin )
         image_path = os.path.join( skin_path, 'gfx' )
         if ( self.getResolution() == 0 or self.getResolution() % 2 ): xml_file = 'credits_16x9.xml'
         else: xml_file = 'credits.xml'

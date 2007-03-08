@@ -15,7 +15,7 @@
 -->
 	
 	<defaultcontrol>10</defaultcontrol>
-	<resolution>PAL</resolution>
+	<resolution>PAL16x9</resolution>
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
@@ -38,7 +38,7 @@
 			<posy>-11</posy>
 			<width>486</width>
 			<height>406</height>
-			<texture>\background-settings.png</texture>
+			<texture>\background-settings_16x9.png</texture>
 		</control>
 
 		<!-- labels -->
@@ -494,6 +494,28 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="210">
+			<description>Page Button</description>
+			<posx>340</posx>
+			<posy>165</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>209</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>200</onup>
+			<ondown>100</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="100">
 			<description>Ok Button</description>
 			<posx>340</posx>
@@ -618,7 +640,7 @@
 			<posx>63</posx>
 			<posy>100</posy>
 			<width>150</width>
-			<height>170</height>
+			<height>220</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>
