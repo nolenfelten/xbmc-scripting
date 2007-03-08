@@ -15,7 +15,7 @@ __scriptname__ = "XBMC Lyrics"
 __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.2.2"
+__version__ = "1.2.3"
 
 
 import os, sys
