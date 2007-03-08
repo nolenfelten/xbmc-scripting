@@ -18,15 +18,11 @@ class GUI( xbmcgui.WindowDialog ):
                 
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
-        
+
     def setupGUI( self, skin ):
         """ sets up the gui using guibuilder """
-        cwd = os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" )
-        if ( skin == "Default" ): current_skin = xbmc.getSkinDir()
-        else: current_skin = self.win.skin
-        if ( not os.path.exists( os.path.join( cwd, "resources", "skins", current_skin ))): current_skin = "Default"
         gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=current_skin, skinXML="credits", useDescAsKey=True, language=self._, fastMethod=True )
+        ok =  gb.create_gui( self, skin=skin, skinXML="credits", useDescAsKey=True, language=self._, fastMethod=True )
         return ok
         
     def showCredits( self ):

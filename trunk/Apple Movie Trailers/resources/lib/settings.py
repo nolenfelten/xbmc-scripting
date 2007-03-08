@@ -26,12 +26,8 @@ class GUI( xbmcgui.WindowDialog ):
             
     def setupGUI( self, skin ):
         """ sets up the gui using guibuilder """
-        cwd = os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" )
-        if ( skin == "Default" ): current_skin = xbmc.getSkinDir()
-        else: current_skin = self.win.skin
-        if ( not os.path.exists( os.path.join( cwd, "resources", "skins", current_skin ))): current_skin = "Default"
         gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=current_skin, skinXML="settings", useDescAsKey=True, language=self._, fastMethod=True )
+        ok =  gb.create_gui( self, skin=skin, skinXML="settings", useDescAsKey=True, language=self._, fastMethod=True )
         return ok
 
     def _set_variables( self ):
@@ -150,7 +146,7 @@ class GUI( xbmcgui.WindowDialog ):
         #xbmcgui.lock()
         #self.controls["Skin Button Value"]["control"].setLabel( "%s" % ( self.settings.skin, ) )
         #self.controls["Trailer Quality Button Value"]["control"].setLabel( "%s" % ( self.quality[self.settings.trailer_quality], ) )
-        #self.controls["Mode Button Value"]["control"].setLabel( "%s" % ( self.mode[self.settings.mode], ) )
+        #self.controls["Mode Button Value"]["control"].setLabel( "%s" % ( self.mode[self.settings[ "mode" ]], ) )
         #self.controls["Save Folder Button"]["control"].setEnabled( self.settings.mode >= 2 )
         #self.controls["Save Folder Button Value"]["control"].setLabel( "%s" % ( self.settings.save_folder, ) )
         #self.controls["Save Folder Button Value"]["control"].setEnabled( self.settings.mode >= 2 )
@@ -164,8 +160,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.get_control( "Setting2 Value" ).setLabel( self.quality[ self.settings[ "trailer_quality" ] ] )
             self.get_control( "Setting3 Value" ).setLabel( self.mode[ self.settings[ "mode" ] ] )
             self.get_control( "Setting4 Value" ).setLabel( self.settings[ "save_folder" ] )
-            self.get_control( "Setting4 Value" ).setEnabled( self.settings.mode >= 2 )
-            self.get_control( "Setting4 Button" ).setEnabled( self.settings.mode >= 2 )
+            self.get_control( "Setting4 Value" ).setEnabled( self.settings[ "mode" ] >= 2 )
+            self.get_control( "Setting4 Button" ).setEnabled( self.settings[ "mode" ] >= 2 )
             self.get_control( "Setting5 Value" ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
             self.get_control( "Setting6 Value" ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
             self.get_control( "Setting7 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
@@ -262,6 +258,14 @@ class GUI( xbmcgui.WindowDialog ):
                 self._change_setting4()
             elif ( control is self.get_control( "Setting5 Button" ) ):
                 self._change_setting5()
+            elif ( control is self.get_control( "Setting6 Button" ) ):
+                self._change_setting6()
+            elif ( control is self.get_control( "Setting7 Button" ) ):
+                self._change_setting7()
+            elif ( control is self.get_control( "Setting8 Button" ) ):
+                self._change_setting8()
+            elif ( control is self.get_control( "Setting9 Button" ) ):
+                self._change_setting9()
             self._set_controls_values()
             
     def onAction( self, action ):

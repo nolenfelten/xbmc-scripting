@@ -23,12 +23,10 @@ class GUI( xbmcgui.WindowDialog ):
         if ( self.list_control == "Trailer List" ):
             self.saved = self.win.trailers.movies[ self.list_item ].saved != ""
             
-    def setupGUI( self ):
-        if ( self.win.skin == "Default" ): current_skin = xbmc.getSkinDir()
-        else: current_skin = self.win.skin
-        if ( not os.path.exists( os.path.join( self.cwd, "resources", "skins", current_skin ))): current_skin = "Default"
+    def setupGUI( self, skin ):
+        """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=current_skin, skinXML="context_menu", useDescAsKey=True, language=self._, fastMethod=True )
+        ok =  gb.create_gui( self, skin=skin, skinXML="context_menu", useDescAsKey=True, language=self._, fastMethod=True )
         return ok
 
     def showContextMenu( self ):

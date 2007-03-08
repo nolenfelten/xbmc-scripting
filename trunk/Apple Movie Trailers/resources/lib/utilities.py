@@ -45,7 +45,7 @@ class Settings:
             settings_file = open( os.path.join( settings_path, "settings.txt" ), "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
-            if ( settings[ version ] not in COMPATIBLE_VERSIONS ):
+            if ( settings[ "version" ] not in COMPATIBLE_VERSIONS ):
                 raise
         except:
             settings = self._use_defaults()
