@@ -1,0 +1,245 @@
+<window id="2006">
+    <allowoverlay>no</allowoverlay>
+    <defaultcontrol always="false">4</defaultcontrol>
+    <resolution>PAL</resolution>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+
+    <controls>
+	<!-- Background Image - Slate Style -->
+        <control type="image" id="1">
+            <description>background image</description>
+            <posx>200</posx>
+            <posy>80</posy>
+            <width>455</width>
+            <height>460</height>
+            <texture>\lyrics-dialog.png</texture>
+        </control>
+
+        
+	<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="textbox" id="3">
+            <description>textarea</description>
+            <posx>220</posx>
+            <posy>195</posy>
+            <width>415</width>
+            <height>348</height>
+            <onup>4</onup>
+            <ondown>4</ondown>
+            <onleft>4</onleft>
+            <onright>4</onright>
+            <spinposx>390</spinposx>
+            <spinposy>345</spinposy>
+            <spincolor>ffffffff</spincolor>
+            <textureup>scroll-up.png</textureup>
+            <texturedown>scroll-down.png</texturedown>
+            <textureupfocus>scroll-up-focus.gif</textureupfocus>
+            <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+            <font>font13</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <visible>false</visible>
+        </control>
+
+	<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="list" id="4">
+            <description>lyrics list</description>
+            <posx>220</posx>
+            <posy>202</posy>
+            <width>416</width>
+            <height>349</height>
+            <onleft>4</onleft>
+            <onright>4</onright>
+            <onup>4</onup>
+            <ondown>4</ondown>
+            <spinposx>390</spinposx>
+            <spinposy>345</spinposy>
+            <spincolor>ddffffff</spincolor>
+            <textureup>scroll-up.png</textureup>
+            <texturedown>scroll-down.png</texturedown>
+            <textureupfocus>scroll-up-focus.gif</textureupfocus>
+            <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <image>-</image>
+	    <itemwidth>0</itemwidth>
+	    <itemheight>0</itemheight>
+            <textureheight>22</textureheight>
+            <spacebetweenitems>1</spacebetweenitems>  
+            <font>font13</font>
+            <selectedcolor>ffffffff</selectedcolor>
+            <textcolor>DDFFFFFF</textcolor>
+            <textcolor2>ddffffff</textcolor2>
+            <colordiffuse>ffffffff</colordiffuse>
+            <suffix> |</suffix>
+            <textxoff>3</textxoff>
+            <textxoff2>0</textxoff2>
+            <aligny>center</aligny>
+            <visible>false</visible>
+	    <textxoff>0</textxoff>
+        </control>
+
+	<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="list" id="5">
+            <description>link list</description>
+            <posx>220</posx>
+            <posy>202</posy>
+            <width>416</width>
+            <height>349</height>
+            <onleft>5</onleft>
+            <onright>5</onright>
+            <onup>5</onup>
+            <ondown>5</ondown>
+            <spinposx>390</spinposx>
+            <spinposy>345</spinposy>
+            <spincolor>ddffffff</spincolor>
+            <textureup>scroll-up.png</textureup>
+            <texturedown>scroll-down.png</texturedown>
+            <textureupfocus>scroll-up-focus.gif</textureupfocus>
+            <texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+            <texturefocus>\list-focus.png</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <image>-</image>
+	    <itemwidth>0</itemwidth>
+	    <itemheight>0</itemheight>
+            <textureheight>29</textureheight>
+            <spacebetweenitems>2</spacebetweenitems>  
+	    <textxoff>0</textxoff>
+            <font>font13</font>
+            <selectedcolor>ffffffff</selectedcolor>
+            <textcolor>DDFFFFFF</textcolor>
+            <textcolor2>ddffffff</textcolor2>
+            <colordiffuse>ffffffff</colordiffuse>
+            <suffix> |</suffix>
+            <textxoff>3</textxoff>
+            <textxoff2>0</textxoff2>
+            <aligny>center</aligny>
+            <visible>false</visible>
+        </control>
+
+	<!-- ** Optional ** Do not change <id> or <type> -->
+        <control type="label" id="7">
+            <description>list label</description>
+            <posx>647</posx>
+            <posy>481</posy>
+            <width>100</width>
+            <label>1/4</label>
+            <align>right</align>
+            <font>font13</font>
+            <textcolor>DDFFFFFF</textcolor>
+            <visible>false</visible>
+        </control>
+
+        <control type="group">
+            <visible>Player.ShowInfo</visible>
+            <animation effect="fade" time="1000">VisibleChange</animation>
+            <control type="group">
+                <posx>40</posx>
+                <posy>350</posy>                
+                <!-- ** Required ** Do not change <id> or <type> -->
+                <control type="image" id="6">
+      		    <description>CD Cover Image</description>
+      		    <posx>50</posx>
+      		    <posy>400</posy>
+      		    <width>140</width>
+      		    <height>140</height>
+      		    <info>videoplayer.cover</info>
+      		    <aspectratio aligny="bottom">keep</aspectratio>
+      		    <animation effect="slide" delay="100" start="-215,0" end="0,0" acceleration="-1" time="250" condition="!Skin.HasSetting(animated)">Visible</animation>
+                </control>
+
+     		<!--control type="image">
+     		    <description>cover reflect</description>
+     		    <posx>50</posx>
+     		    <posy>540</posy>
+		    <width>140</width>
+		    <height>140</height>
+		    <info>videoplayer.cover</info>
+		    <aspectratio aligny="top">keep</aspectratio>
+		    <texture flipy="true" diffuse="thumb_mask2.png">-</texture>
+		    <visible>Player.ShowInfo + !Skin.HasSetting(reflect)</visible>
+		    <animation effect="slide" delay="100" start="-215,0" end="0,0" acceleration="-1" time="250" condition="!Skin.HasSetting(animated)">Visible</animation>
+		</control-->
+            </control>
+
+            <control type="group">
+                <posx>350</posx>
+                <posy>400</posy>
+                <control type="fadelabel">
+                    <description>Artist label</description>
+                    <posx>215</posx>
+                    <posy>81</posy>
+                    <width>380</width>
+                    <label>$INFO[MusicPlayer.Artist]</label>
+                    <align>left</align>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <font>font13</font>
+                </control>
+                <control type="label" id="8">
+                    <description>Scraper</description>
+                    <posx>635</posx>
+                    <posy>82</posy>
+                    <width>200</width>
+                    <label>-</label>
+                    <align>right</align>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control>
+                <control type="fadelabel">
+                    <description>Title label</description>
+                    <posx>215</posx>
+                    <posy>115</posy>
+                    <width>380</width>
+                    <label>$INFO[MusicPlayer.Title]</label>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <font>font14</font>
+                </control>
+                <control type="fadelabel">
+                    <description>Album label</description>
+                    <posx>215</posx>
+                    <posy>136</posy>
+                    <width>380</width>
+                    <label>$INFO[MusicPlayer.Album]</label>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <font>font12</font>
+                </control>
+                <control type="fadelabel">
+                    <description>time label</description>
+                    <posx>215</posx>
+                    <posy>160</posy>
+                    <width>380</width>
+                    <label>$INFO[musicplayer.Time]$INFO[musicplayer.Duration, / ]</label>
+                    <align>left</align>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <font>font12</font>
+                </control>
+                <control type="label">
+                    <description>Playlist Pos No</description>
+                    <posx>643</posx>
+                    <posy>160</posy>
+                    <width>200</width>
+                    <label>$INFO[musicplayer.Playlistposition,$LOCALIZE[435] ]$INFO[musicplayer.Playlistlength, / ]</label>
+                    <visible>!MusicPartyMode.Enabled</visible>
+                    <align>right</align>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control>
+                <control type="label">
+                    <description>PartyMode Enabled</description>
+                    <posx>643</posx>
+                    <posy>160</posy>
+                    <width>200</width>
+                    <label>589</label>
+                    <visible>MusicPartyMode.Enabled</visible>
+                    <align>right</align>
+                    <font>font12</font>
+                    <textcolor>FF9FCA4F</textcolor>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>
