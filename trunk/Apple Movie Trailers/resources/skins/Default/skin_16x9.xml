@@ -602,7 +602,7 @@
 
 		<!-- info controls -->
 		
-		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- ** Optional ** -->
 		<control type="image" id="200">
 			<description>Poster Backdrop</description>
 			<posx>518</posx>
@@ -611,7 +611,6 @@
 			<height>254</height>
 			<texture>\poster_backdrop.png</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
@@ -624,7 +623,6 @@
 			<height>250</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
@@ -637,7 +635,6 @@
 			<height>15</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
@@ -711,8 +708,7 @@
 			<onright>211</onright>
 			<onup>100</onup>
 			<ondown>216</ondown>
-			<!--visible>Control.IsVisible(215)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">!Control.IsVisible(110)</visible> 
 			<onclick>-</onclick>
 		</control>
 
@@ -737,8 +733,7 @@
 			<onright>215</onright>
 			<onup>100</onup>
 			<ondown>215</ondown>
-			<!--visible>Control.IsVisible(216)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">!Control.IsVisible(110)</visible> 
 			<onclick>-</onclick>
 		</control>
 		
@@ -871,57 +866,6 @@
 			<hidespinner>true</hidespinner>
 			<spacebetweenitems>0</spacebetweenitems>
 			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
-		</control>
-
-		<!-- special controls for media playing info -->
-		
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="300">
-			<description>X Button On</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<visible>Player.HasMedia</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="301">
-			<description>X Button Off</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<visible>!Player.Hasmedia</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="302">
-			<description>Full-Screen Visualisation Label</description>
-			<font>font12</font>
-			<posx>115</posx>
-			<posy>528</posy>
-			<width>250</width>
-			<label>220</label>
-			<align>left</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<visible>Player.HasAudio</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="303">
-			<description>Full-Screen Video Label</description>
-			<font>font12</font>
-			<posx>50</posx>
-			<posy>500</posy>
-			<label>221</label>
-			<align>center</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<visible>Player.HasVideo</visible>
 		</control>
 
 	</controls>

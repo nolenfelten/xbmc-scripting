@@ -246,7 +246,7 @@ class GUI( xbmcgui.Window ):
                     visible = False
                 self.showScrollbar( visible, list_control )
                 ######self.setSelection( list_control )
-            else: self.showScrollbar( False, False, list_control )
+            else: self.showScrollbar( False, list_control )
 
     def getListControlItemsPerPage( self, list_control ):
         height = self.controls[ list_control ][ 'control' ].getItemHeight() + self.controls[ list_control ][ 'control' ].getSpace()
@@ -404,7 +404,7 @@ class GUI( xbmcgui.Window ):
         xbmcgui.unlock()
         
     def showOverlays( self, trailer ):
-        posx, posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()# + self.coordinates[0]
+        posx, posy = self.controls['Trailer Favorite Overlay'][ 'control' ].getPosition()
         favorite = self.trailers.movies[trailer].favorite
         self.controls['Trailer Favorite Overlay']['control'].setVisible( favorite )
         posx = posx - ( favorite * self.controls['Trailer Favorite Overlay'][ 'control' ].getWidth() )
