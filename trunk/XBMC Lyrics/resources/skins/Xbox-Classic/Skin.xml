@@ -18,8 +18,8 @@
             <height>180</height>
             <texture>dialog_top.png</texture>
             <diffusecolor>DAFFFFFF</diffusecolor>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="image" id="101">
@@ -30,8 +30,8 @@
             <height>442</height>
             <texture>dialog_middle.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="image" id="102">
@@ -42,8 +42,8 @@
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
         <control type="image" id="103">
@@ -54,8 +54,8 @@
             <height>160</height>
             <texture>dialog_bottom.png</texture>
             <diffusecolor>DAFFFFFF</diffusecolor>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="textbox" id="3">
@@ -78,8 +78,8 @@
             <font>font13</font>
             <textcolor>DDFFFFFF</textcolor>
             <visible>false</visible>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="list" id="4">
@@ -117,8 +117,8 @@
             <aligny>center</aligny>
             <visible>false</visible>
 			<textxoff>0</textxoff>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="list" id="5">
@@ -156,8 +156,8 @@
             <textxoff2>0</textxoff2>
             <aligny>center</aligny>
             <visible>false</visible>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="label" id="7">
@@ -170,8 +170,8 @@
             <font>font13</font>
             <textcolor>DDFFFFFF</textcolor>
             <visible>false</visible>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
         <control type="group">
@@ -187,8 +187,8 @@
                     <width>150</width>
                     <height>100</height>
                     <texture>dialog_top.png</texture>
-                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="image" id="201">
                     <description>Dialog Text Area</description>
@@ -198,8 +198,8 @@
                     <height>150</height>
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">dialog_middle.png</texture>
-                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="image" id="202">
                     <description>Dialog Footer</description>
@@ -208,8 +208,8 @@
                     <width>150</width>
                     <height>70</height>
                     <texture>dialog_bottom.png</texture>
-                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="image" id="6">
                     <description>CD Cover Image</description>
@@ -219,8 +219,8 @@
                     <height>140</height>
                     <info>MusicPlayer.Cover</info>
                     <aspectratio>keep</aspectratio>
-                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
             </control>
 
@@ -253,8 +253,8 @@
                     <align>left</align>
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font13</font>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="label" id="8">
                     <description>Scraper</description>
@@ -265,8 +265,8 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="fadelabel" id="204">
                     <description>Title label</description>
@@ -277,8 +277,8 @@
                     <textcolor>FFE7FF00</textcolor>
                     <align>left</align>
                     <font>font14</font>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="fadelabel" id="205">
                     <description>Album label</description>
@@ -289,8 +289,8 @@
                     <textcolor>FF9FCA4F</textcolor>
                     <align>left</align>
                     <font>font12</font>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="fadelabel" id="206">
                     <description>time label</description>
@@ -301,8 +301,8 @@
                     <align>left</align>
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font12</font>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="label" id="207">
                     <description>Playlist Pos No</description>
@@ -314,8 +314,8 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
                 <control type="label" id="208">
                     <description>PartyMode Enabled</description>
@@ -327,8 +327,8 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
-                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
             </control>
         </control>
