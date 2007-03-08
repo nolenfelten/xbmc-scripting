@@ -36,17 +36,18 @@ class GUI( xbmcgui.WindowDialog ):
             self.gui_loaded = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
-                self.show()
-                dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
-                self.get_settings()
-                self.show_viz_window()
-                self.setup_variables()
-                self.get_scraper()
-                self.getDummyTimer()
-                self.getMyPlayer()
+                self.setup_all()
         except: 
             self.exit_script()
             
+    def setup_all( self ):
+        self.get_settings()
+        self.show_viz_window()
+        self.setup_variables()
+        self.get_scraper()
+        self.getDummyTimer()
+        self.getMyPlayer()
+
     def setupGUI( self ):
         gb = guibuilder.GUIBuilder()
         ok = gb.create_gui( self, fastMethod=True, language=_ )
@@ -62,10 +63,10 @@ class GUI( xbmcgui.WindowDialog ):
     def get_settings( self ):
         self.settings = utilities.Settings().get_settings()
         
-    def show_viz_window( self ):
+    def show_viz_window( self, startup=True ):
         if ( self.settings[ "show_viz" ] ):
             xbmc.executebuiltin( "XBMC.ActivateWindow(2006)" )
-        else:
+        elif ( not startup ):
             xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_wid, ) )
 
     def get_scraper( self ):
@@ -195,7 +196,7 @@ class GUI( xbmcgui.WindowDialog ):
                 if ( not ok ):
                     if ( self.controlId == 3 or self.controlId == 4 ): 
                         self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
-                    self.show_viz_window()
+                    self.show_viz_window( False )
                 else: self.exit_script( True )
         except: traceback.print_exc()
             

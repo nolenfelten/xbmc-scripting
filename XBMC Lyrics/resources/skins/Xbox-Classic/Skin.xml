@@ -10,7 +10,7 @@
 
     <controls>
 
-        <control type="image" id="1">
+        <control type="image" id="100">
             <description>background image</description>
             <posx>188</posx>
             <posy>30</posy>
@@ -18,9 +18,11 @@
             <height>180</height>
             <texture>dialog_top.png</texture>
             <diffusecolor>DAFFFFFF</diffusecolor>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
-        <control type="image" id="1">
+        <control type="image" id="101">
             <description>background image</description>
             <posx>228</posx>
             <posy>70</posy>
@@ -28,9 +30,11 @@
             <height>442</height>
             <texture>dialog_middle.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
-        <control type="image" id="1">
+        <control type="image" id="102">
             <description>divider image</description>
             <posx>248</posx>
             <posy>182</posy>
@@ -38,9 +42,11 @@
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
         
-        <control type="image" id="1">
+        <control type="image" id="103">
             <description>background image</description>
             <posx>410</posx>
             <posy>390</posy>
@@ -48,6 +54,8 @@
             <height>160</height>
             <texture>dialog_bottom.png</texture>
             <diffusecolor>DAFFFFFF</diffusecolor>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="textbox" id="3">
@@ -70,6 +78,8 @@
             <font>font13</font>
             <textcolor>DDFFFFFF</textcolor>
             <visible>false</visible>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="list" id="4">
@@ -107,6 +117,8 @@
             <aligny>center</aligny>
             <visible>false</visible>
 			<textxoff>0</textxoff>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="list" id="5">
@@ -144,6 +156,8 @@
             <textxoff2>0</textxoff2>
             <aligny>center</aligny>
             <visible>false</visible>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="label" id="7">
@@ -156,6 +170,8 @@
             <font>font13</font>
             <textcolor>DDFFFFFF</textcolor>
             <visible>false</visible>
+            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="group">
@@ -164,15 +180,17 @@
             <control type="group">
                 <posx>40</posx>
                 <posy>350</posy>
-                <control type="image">
+                <control type="image" id="200">
                     <description>Dialog Header</description>
                     <posx>40</posx>
                     <posy>350</posy>
                     <width>150</width>
                     <height>100</height>
                     <texture>dialog_top.png</texture>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="image">
+                <control type="image" id="201">
                     <description>Dialog Text Area</description>
                     <posx>60</posx>
                     <posy>372</posy>
@@ -180,14 +198,18 @@
                     <height>150</height>
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">dialog_middle.png</texture>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="image">
+                <control type="image" id="202">
                     <description>Dialog Footer</description>
                     <posx>76</posx>
                     <posy>469</posy>
                     <width>150</width>
                     <height>70</height>
                     <texture>dialog_bottom.png</texture>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
                 </control>
                 <control type="image" id="6">
                     <description>CD Cover Image</description>
@@ -197,6 +219,8 @@
                     <height>140</height>
                     <info>MusicPlayer.Cover</info>
                     <aspectratio>keep</aspectratio>
+                    <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1">WindowClose</animation>
                 </control>
             </control>
 
@@ -220,7 +244,7 @@
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">dialog_middle.png</texture>
                 </control-->
-                <control type="fadelabel">
+                <control type="fadelabel" id="203">
                     <description>Artist label</description>
                     <posx>240</posx>
                     <posy>78</posy>
@@ -229,6 +253,8 @@
                     <align>left</align>
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font13</font>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
                 <control type="label" id="8">
                     <description>Scraper</description>
@@ -239,8 +265,10 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="fadelabel">
+                <control type="fadelabel" id="204">
                     <description>Title label</description>
                     <posx>240</posx>
                     <posy>99</posy>
@@ -249,8 +277,10 @@
                     <textcolor>FFE7FF00</textcolor>
                     <align>left</align>
                     <font>font14</font>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="fadelabel">
+                <control type="fadelabel" id="205">
                     <description>Album label</description>
                     <posx>240</posx>
                     <posy>125</posy>
@@ -259,8 +289,10 @@
                     <textcolor>FF9FCA4F</textcolor>
                     <align>left</align>
                     <font>font12</font>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="fadelabel">
+                <control type="fadelabel" id="206">
                     <description>time label</description>
                     <posx>240</posx>
                     <posy>148</posy>
@@ -269,8 +301,10 @@
                     <align>left</align>
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font12</font>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="label">
+                <control type="label" id="207">
                     <description>Playlist Pos No</description>
                     <posx>655</posx>
                     <posy>148</posy>
@@ -280,8 +314,10 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
-                <control type="label">
+                <control type="label" id="208">
                     <description>PartyMode Enabled</description>
                     <posx>655</posx>
                     <posy>148</posy>
@@ -291,6 +327,8 @@
                     <align>right</align>
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
+                    <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                    <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
                 </control>
             </control>
         </control>
