@@ -252,7 +252,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
@@ -263,7 +263,7 @@
 			<width>20</width>
 			<height>216</height>
 			<texture>scrollbar_background.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
@@ -274,7 +274,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
@@ -298,9 +298,10 @@
 			<onup>900</onup>
 			<ondown>900</ondown>
 			<onclick>-</onclick>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
-		<!-- ** Optional ** Do not change <description> -->
+		<!-- ** Optional ** -->
 		<control type="image" id="0">
 			<description>Trailer List Backdrop</description>
 			<posx>206</posx>
@@ -308,6 +309,7 @@
 			<width>280</width>
 			<height>266</height>
 			<texture>folder-nofocus.png</texture>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -352,7 +354,7 @@
 			<label>-</label>
 			<font>font10</font>
 			<include>textcolor-yellow</include>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- Category list controls -->
@@ -365,7 +367,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -376,7 +378,7 @@
 			<width>20</width>
 			<height>344</height>
 			<texture>scrollbar_background.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -387,7 +389,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
@@ -411,6 +413,7 @@
 			<onup>91</onup>
 			<ondown>91</ondown>
 			<onclick>-</onclick>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
@@ -421,7 +424,7 @@
 			<width>455</width>
 			<height>394</height>
 			<texture>folder-nofocus.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -466,7 +469,7 @@
 			<label>-</label>
 			<font>font10</font>
 			<include>textcolor-yellow</include>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(110)</visible> 
 		</control>
 
 		<!-- info controls -->
@@ -481,8 +484,7 @@
 			<texture>dialog_middle.png</texture>
 			<aspectratio>stretch</aspectratio>
 			<colordiffuse>90FFFFFF</colordiffuse>
-            <!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -494,8 +496,7 @@
 			<height>236</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -507,8 +508,7 @@
 			<height>15</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -520,8 +520,7 @@
 			<height>16</height>
 			<texture>buddyitem-ping.png</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -533,8 +532,7 @@
 			<height>16</height>
 			<texture>defaultVideoBig.png</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -546,8 +544,7 @@
 			<height>16</height>
 			<texture>OverlayRAR.png</texture>
 			<aspectratio>keep</aspectratio>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
@@ -563,8 +560,7 @@
 			<texturenofocus>-</texturenofocus>
 			<textoffsetx>0</textoffsetx>
 			<include>textcolor-yellow</include>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -588,8 +584,7 @@
 			<onright>211</onright>
 			<onup>100</onup>
 			<ondown>216</ondown>
-			<!--visible>Control.IsVisible(215)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">!Control.IsVisible(110)</visible> 
 			<onclick>-</onclick>
 		</control>
 
@@ -614,8 +609,7 @@
 			<onright>215</onright>
 			<onup>100</onup>
 			<ondown>215</ondown>
-			<!--visible>Control.IsVisible(216)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">!Control.IsVisible(110)</visible> 
 			<onclick>-</onclick>
 		</control>
 		
@@ -636,8 +630,7 @@
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<!--visible>!Control.IsVisible(100)</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(211)</visible> 
 		</control>
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
@@ -648,7 +641,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_uparrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
@@ -659,7 +652,7 @@
 			<width>20</width>
 			<height>56</height>
 			<texture>scrollbar_background.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
@@ -670,7 +663,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>scrollbar_downarrow.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 		
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
@@ -694,6 +687,7 @@
 			<onup>95</onup>
 			<ondown>95</ondown>
 			<onclick>-</onclick>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 
 		<!-- ** Optional ** Do not change <description> -->
@@ -704,7 +698,7 @@
 			<width>445</width>
 			<height>106</height>
 			<texture>folder-nofocus.png</texture>
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -727,67 +721,11 @@
 			<itemheight>22</itemheight>
 			<hidespinner>true</hidespinner>
 			<spacebetweenitems>2</spacebetweenitems>
-			<!--visible>!Control.IsVisible(100)</visible-->
 			<onup>216</onup>
 			<ondown>216</ondown>
 			<onleft>215</onleft>
 			<onright>95</onright>
-			<visible>false</visible>
-		</control>
-
-		<!-- special controls for media playing info -->
-		
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="300">
-			<description>X Button On</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<!--visible>Player.HasMedia</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="301">
-			<description>X Button Off</description>
-			<posx>82</posx>
-			<posy>525</posy>
-			<width>21</width>
-			<height>21</height>
-			<texture>-</texture>
-			<!--visible>!Player.Hasmedia</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="302">
-			<description>Full-Screen Visualisation Label</description>
-			<font>font12</font>
-			<posx>115</posx>
-			<posy>528</posy>
-			<width>250</width>
-			<label>220</label>
-			<align>left</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<!--visible>Player.HasAudio</visible-->
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="303">
-			<description>Full-Screen Video Label</description>
-			<font>font12</font>
-			<posx>50</posx>
-			<posy>500</posy>
-			<label>221</label>
-			<align>center</align>
-			<textcolor>FFFFFFFF</textcolor>
-			<shadowcolor>FF000000</shadowcolor>
-			<!--visible>Player.HasVideo</visible-->
-			<visible>false</visible>
+			<visible allowhiddenfocus="false">Control.IsVisible(210)</visible> 
 		</control>
 
 	</controls>
