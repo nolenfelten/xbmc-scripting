@@ -14,9 +14,9 @@ You may use <include> tags and references.xml will be used for default values if
 
 GUI Builder sets up navigation based on the <onup>, <ondown>, <onleft> and <onright> tags.
 
-The <control> <type> fadelabel takes multiple <label> and/or <info> tags.
+The <control type="fadelabel"> takes multiple <label> and/or <info> tags.
 
-The <control> <type> list supports an additional tag <label2> for use as the second column.
+The <control type="list"> supports an additional tag <label2> for use as the second column.
 GUI Builder creates a listitem from multiple <label>, <label2> and <image> tags. In most cases these
 tags won't be used as your code will populate a list.
 
@@ -119,6 +119,7 @@ import xml.dom.minidom
 import re
 
 class GUIBuilder:
+    """ Class to create a dictionary of controls and add them to a Window or WindowDialog """
     def __init__( self ):
         pass
         
@@ -126,15 +127,16 @@ class GUIBuilder:
         self, win, skin="Default", skinXML="skin", skinPath="resources\\skins", imageFolder="gfx", useDescAsKey=False,
         title="GUI Builder", line1="", dlg=None, pct=0, fastMethod=False, language=False, debug=False
         ):
+        """ main function to create the GUI """
         try:
             succeeded = True
             self.debug = debug
             self._debug_write( "guibuilder.py", 2 )
             self.win = win
+            self.fastMethod = fastMethod
             skinXML, imagePath = self._get_skin_path( skin, skinPath, imageFolder, skinXML )
             self.skinXML = os.path.split( skinXML )[ 1 ]
             self.useDescAsKey = useDescAsKey
-            self.fastMethod = fastMethod
             self._ = language
             self.pct = pct
             self.lineno = line1 != ""
@@ -150,7 +152,7 @@ class GUIBuilder:
                     self.dlg.create( title )
                 self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
             self.pct1 = int( ( 100 - self.pct ) * 0.333 )
-            succeeded = self._parse_xml_file( imagePath, skinXML )
+            succeeded = self._parse_xml_file( skinXML, imagePath )
             if ( succeeded ): succeeded = self._set_navigation()
             if ( not succeeded ): raise
             else:
@@ -163,19 +165,24 @@ class GUIBuilder:
         return succeeded
 
     def _get_skin_path( self, skin, skin_path, image_folder, skin_xml ):
-        cwd = os.path.join( os.getcwd().replace( ";", "" ) )
-        if ( skin == "Default" ): current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, skin_path, current_skin ))): current_skin = "Default"
-        skin_path = os.path.join( cwd, skin_path, current_skin )
-        image_path = os.path.join( skin_path, image_folder )
-        if ( self.win.getResolution() == 0 or self.win.getResolution() % 2 ): xml_file = "%s_16x9.xml" % ( skin_xml, )
-        else: xml_file = "%s.xml" % ( skin_xml, )
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "%s.xml" % ( skin_xml, )
-        skin_xml = os.path.join( skin_path, xml_file )
+        """ determines the skin and image path """
+        try:
+            cwd = os.path.join( os.getcwd().replace( ";", "" ) )
+            if ( skin == "Default" ): current_skin = xbmc.getSkinDir()
+            else: current_skin = skin
+            if ( not os.path.exists( os.path.join( cwd, skin_path, current_skin ))): current_skin = "Default"
+            skin_path = os.path.join( cwd, skin_path, current_skin )
+            image_path = os.path.join( skin_path, image_folder )
+            if ( self.win.getResolution() == 0 or self.win.getResolution() % 2 ): xml_file = "%s_16x9.xml" % ( skin_xml, )
+            else: xml_file = "%s.xml" % ( skin_xml, )
+            if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "%s.xml" % ( skin_xml, )
+            skin_xml = os.path.join( skin_path, xml_file )
+        except: 
+            pass
         return skin_xml, image_path
 
-
     def _debug_write( self, function, action, lines=[], values=[] ):
+        """ function for outputting debug info """
         if ( self.debug ):
             Action = ( "Failed", "Succeeded", "Started" )
             Highlight = ( "__", "__", "<<<<< ", "__", "__", " >>>>>" )
@@ -186,8 +193,8 @@ class GUIBuilder:
                     xbmc.output( fLine % values[ cnt ] )
             except: pass
 
-
     def _setup_variables( self ):
+        """ initializes variables """
         self.win.controls = {}
         #self.win.controlKey = {}
         self.navigation = {}
@@ -199,8 +206,8 @@ class GUIBuilder:
         self.resolution = self.resolutions[ "pal" ]
         self._debug_write( "_setup_variables", True )
 
-
     def _clear_variables( self ):
+        """ clears variables and unlinks docs """
         self.navigation = None
         self.resPath = None
         self.resolutions = None
@@ -212,6 +219,7 @@ class GUIBuilder:
             except: pass
 
     def _add_control( self, control ):
+        """ sets up the controls disctionary and adds the controls to the window """
         try:
             succeeded = True
             control[ "special" ] = False
@@ -381,14 +389,12 @@ class GUIBuilder:
                     "controlId"	: ctl.getId(),
                     "control"		: ctl,
                     "special"		: control[ "special" ],
-                    "visible"		: control[ "visible" ].lower(),
-                    #"animation"	: control[ "animation" ],
+                    "visible"		: [ control[ "visible" ].lower(), control[ "allowhiddenfocus" ] ],
+                    "animation"	: control[ "animation" ],
                     "onclick"		: control[ "onclick" ],
                     "onfocus"	: control[ "onfocus" ]
                 }
-                #self.win.controlKey[ctl.getId()] = key
                 self.navigation[ int( control[ "id" ] ) ] = ( key, int( control[ "onup" ] ), int( control[ "ondown" ] ), int( control[ "onleft" ] ), int( control[ "onright" ] ) )
-                ###ctl.setVisible( xbmc.getCondVisibility( control[ "visible" ] ) )
             except: pass
         except:
             if ( not self.fastMethod ): self.dlg.close()
@@ -398,6 +404,7 @@ class GUIBuilder:
         return succeeded
 
     def _set_resolution( self ):
+        """ sets the coordinate resolution compensating for widescreen modes """
         try:
             offset = 0
             # if current and skinned resolutions differ and skinned resolution is not
@@ -417,15 +424,15 @@ class GUIBuilder:
                 ( self.resolution, self.resPath[ self.resolution ], ), ( self.resolution + offset, self.resPath[ self.resolution + offset], ) ] )
         except: self._debug_write( "_set_resolution", False )
 
-
-    def _parse_xml_file(self, imagePath, filename):
+    def _parse_xml_file( self, skinXML, imagePath ):
+        """ parses and resolves an xml file and adds any missing tags """
         try:
             succeeded = True
             cnt = -1
             self.controlsFailed = ""
             self.controlsFailedCnt = 0
             # load and parse skin.xml file
-            skindoc = xml.dom.minidom.parse( filename )
+            skindoc = xml.dom.minidom.parse( skinXML )
             root = skindoc.documentElement
             # make sure this is a valid <window> xml file
             if ( not root or root.tagName != "window" ): raise
@@ -494,7 +501,7 @@ class GUIBuilder:
                 if (self.includesExist): self.ResolveIncludes( control, ctype )
                 
                 ctl = {}
-                anim = {}
+                anim = []
                 lbl1 = []
                 lbl2 = []
                 ifo = []
@@ -534,21 +541,36 @@ class GUIBuilder:
                     elif ( node.tagName.lower() == "image" ):
                         if ( node.hasChildNodes() ): img.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "visible" ):
-                        if ( node.hasChildNodes() ): vis.append( node.firstChild.nodeValue )
+                        if ( node.hasChildNodes() ):
+                            if ( node.hasAttributes() ):
+                                ah = node.getAttribute( "allowhiddenfocus" )
+                            else: ah = "false"
+                            ctl[ "allowhiddenfocus" ] = ah
+                            vis.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "animation" ):
                         if ( node.hasChildNodes() ): 
-                            anim[ "type" ] = node.firstChild.nodeValue
                             if ( node.hasAttributes() ):
-                                anim[ "effect" ]			= node.getAttribute( "effect" )
-                                anim[ "time" ]			    = node.getAttribute( "time" )
-                                anim[ "delay" ]		    = node.getAttribute( "delay" )
-                                anim[ "start" ]			= node.getAttribute( "start" )
-                                anim[ "end" ]				= node.getAttribute( "end" )
-                                anim[ "acceleration" ]	= node.getAttribute( "acceleration" )
-                                anim[ "center" ]			= node.getAttribute( "center" )
-                                anim[ "condition" ]		= node.getAttribute( "condition" )
-                                anim[ "reversible" ]		= node.getAttribute( "reversible" )
-                    elif (node.hasChildNodes()): 
+                                condition = ""
+                                if ( node.hasAttribute( "effect" ) ):
+                                    condition += "effect=%s " % node.getAttribute( "effect" ).strip()
+                                if ( node.hasAttribute( "time" ) ):
+                                    condition += "time=%s " % node.getAttribute( "time" ).strip()
+                                if ( node.hasAttribute( "delay" ) ):
+                                    condition += "delay=%s " % node.getAttribute( "delay" ).strip()
+                                if ( node.hasAttribute( "start" ) ):
+                                    condition += "start=%s " % node.getAttribute( "start" ).strip()
+                                if ( node.hasAttribute( "end" ) ):
+                                    condition += "end=%s " % node.getAttribute( "end" ).strip()
+                                if ( node.hasAttribute( "acceleration" ) ):
+                                    condition += "acceleration=%s " % node.getAttribute( "acceleration" ).strip()
+                                if ( node.hasAttribute( "center" ) ):
+                                    condition += "center=%s " % node.getAttribute( "center" ).strip()
+                                if ( node.hasAttribute( "condition" ) ):
+                                    condition += "condition=%s " % node.getAttribute( "condition" ).strip()
+                                if ( node.hasAttribute( "reversible" ) ):
+                                    condition += "reversible=%s " % node.getAttribute( "reversible" ).strip()
+                            anim += [ ( node.firstChild.nodeValue, condition.strip().lower(), ) ]
+                    elif (node.hasChildNodes()):
                         if (node.tagName.lower() == "type"): ctype = node.firstChild.nodeValue
                         if ( not ctl.has_key( node.tagName.lower() ) ):
                             ctl[ node.tagName.lower() ] = node.firstChild.nodeValue
@@ -568,6 +590,10 @@ class GUIBuilder:
                     if (not ctl.has_key("onright")): ctl["onright"] = ctl["id"]
                     if (vis): ctl["visible"] = self.GetConditionalVisibility(vis)
                     else: ctl["visible"] = "true"
+                    if ( not ctl.has_key( "allowhiddenfocus" ) ): ctl[ "allowhiddenfocus" ] = "false"
+                    if (ctl["allowhiddenfocus"] == "false" or ctl["allowhiddenfocus"] == "no"): ctl["allowhiddenfocus"] = 0
+                    elif (ctl["allowhiddenfocus"] == "true" or ctl["allowhiddenfocus"] == "yes"): ctl["allowhiddenfocus"] = 1
+                    else: ctl["allowhiddenfocus"] = 0
 
                     if (not ctl.has_key("onclick")): ctl["onclick"] = ""
                     if (not ctl.has_key("onfocus")): ctl["onfocus"] = ""
@@ -685,8 +711,8 @@ class GUIBuilder:
                 [((cnt + 1 - self.controlsFailedCnt), self.skinXML), self.controlsFailed[:-2]])
         return succeeded
 
-
     def _set_navigation(self):
+        """ sets control navigation """
         try:
             succeeded = True
             if (not self.fastMethod): 
@@ -709,40 +735,55 @@ class GUIBuilder:
             succeeded = False
             self._debug_write("_set_navigation", False)
         return succeeded
-            
-            
-    def _set_conditional_visibility(self):
-        if (not self.fastMethod): 
-            self.lines[self.lineno + 1]    = "setting up visibility..."
-            t = len(self.win.controls)
-        pattern1     = "control.hasfocus\(([0-9]+)\)"
-        pattern2     = "control.isvisible\(([0-9]+)\)"
-        for cnt, key in enumerate(self.win.controls.keys()):
-            if (not self.fastMethod): self.dlg.update(int((float(self.pct1) / float(t) * (cnt + 1)) + self.pct), self.lines[0], self.lines[1], self.lines[2])
-            try:
-                visible = self.win.controls[key]["visible"]
-                visibleChanged = False
-                # fix Control.HasFocus(id) visibility condition
-                items = re.findall(pattern1, visible)
-                for item in items:
-                    visibleChanged = True
-                    if (self.win.controls.has_key(self.navigation[int(item)][0]) and self.win.controls[self.navigation[int(item)][0]]["id"]==int(item)):
-                        actualId = self.win.controls[self.navigation[int(item)][0]]["controlId"]
-                        visible = re.sub(pattern1, "control.hasfocus(%d)" % actualId, visible)
-                # fix Control.IsVisible(id) visibility condition
-                items = re.findall(pattern2, visible)
-                for item in items:
-                    visibleChanged = True
-                    if (self.win.controls.has_key(self.navigation[int(item)][0])):
-                        actualId = self.win.controls[self.navigation[int(item)][0]]["controlId"]
-                        visible = re.sub(pattern2, "control.isvisible(%d)" % actualId, visible)
-                # set the controls new visible condition
-                if (visibleChanged): self.win.controls[key]["visible"] = visible
-                # set the controls initial visibility
-                self.win.controls[key]["control"].setVisible(xbmc.getCondVisibility(visible))
-            except: pass
-        self._debug_write("_set_conditional_visibility", True)
 
+    def _set_conditional_visibility( self ):
+        """ corrects control id's for some visible conditions and set's visible status """
+        if ( not self.fastMethod ): 
+            self.lines[ self.lineno + 1 ] = "setting up visibility..."
+            t = len( self.win.controls )
+        pattern = [ "control.hasfocus\(([0-9]+)\)", "control.isvisible\(([0-9]+)\)" ]
+        rvalue = [ "control.hasfocus(##)", "control.isvisible(##)" ]
+        try:
+            for cnt, key in enumerate( self.win.controls.keys() ):
+                if ( not self.fastMethod ): self.dlg.update( int( ( float( self.pct1 ) / float( t ) * ( cnt + 1 ) ) + self.pct ), self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
+                visible = self.win.controls[ key ][ "visible" ][ 0 ]
+                visibleChanged = False
+                animChanged = False
+                final_anim = []
+                # fix Control.HasFocus(id) visibility condition and Control.IsVisible(id) visibility condition
+                for cnt in range( len( pattern ) ):
+                    items = re.findall( pattern[ cnt ], visible )
+                    visible = re.sub( pattern[ cnt ], rvalue[ cnt ], visible )
+                    for item in items:
+                        visibleChanged = True
+                        if ( self.win.controls.has_key( self.navigation[ int( item ) ][ 0 ] ) and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                            actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                            visible = visible.replace( "##", str( actualId ), 1 )
+                    
+                    for acnt in range( len( self.win.controls[ key ][ "animation" ] ) ):
+                        items = re.findall( pattern[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
+                        anim_attr = re.sub( pattern[ cnt ], rvalue[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
+                        for item in items:
+                            animChanged = True
+                            if ( self.win.controls.has_key( self.navigation[ int( item ) ][ 0 ] ) and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                                actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                                anim_attr = anim_attr.replace( "##", str( actualId ), 1 )
+                        if ( items ): final_anim += [ ( self.win.controls[ key ][ "animation" ][ acnt ][ 0 ], anim_attr, ) ]
+                
+                # set the controls new visible condition
+                if ( visibleChanged ): self.win.controls[ key ][ "visible" ][ 0 ] = visible
+                # set the controls new animation condition
+                if ( animChanged ): 
+                    self.win.controls[ key ][ "animation" ] = final_anim
+                # set the controls initial visibility
+                if ( visible != "false" and visible != "true" ):
+                    self.win.controls[ key ][ "control" ].setVisibleCondition( visible, self.win.controls[ key ][ "visible" ][ 1 ] )
+                else:
+                    self.win.controls[ key ][ "control" ].setVisible( xbmc.getCondVisibility( visible ) )
+                # set the controls animations
+                if ( self.win.controls[ key ][ "animation" ] ): self.win.controls[ key ][ "control" ].setAnimations( self.win.controls[ key ][ "animation" ] )
+        except: pass
+        self._debug_write( "_set_conditional_visibility", True )
 
     def GetConditionalVisibility( self, conditions ):
         if ( len( conditions ) == 0 ): return "true"
@@ -754,7 +795,6 @@ class GUIBuilder:
                 conditionString += conditions[ i ] + "] + ["
             conditionString += conditions[ len( conditions ) - 1 ] + "]"
         return conditionString
-
 
     def GetSkinPath(self, filename):
         default = 6
@@ -799,7 +839,6 @@ class GUIBuilder:
             self._debug_write("GetSkinPath", False, ["No path for %s found"], [(filename,)])
             return None
 
-
     def FirstChildElement(self, root, value = "include"):
         node = root.firstChild
         while (node):
@@ -808,7 +847,6 @@ class GUIBuilder:
             node = node.nextSibling
         return None
 
-
     def NextSiblingElement(self, node, value = "include"):
         while (node):
             node = node.nextSibling
@@ -816,18 +854,15 @@ class GUIBuilder:
                 if (node.tagName == value or not value): return node
         return None
 
-
     def ClearIncludes( self ):
         self.m_includes = {}
         self.m_defaults = {}
         self.m_files = []
 
-
     def HasIncludeFile( self, file ):
         if ( file in self.m_files ): 
             return True
         else: return False
-
 
     def LoadIncludes( self, includeFile = "includes.xml" ):
         # check to see if we already have this loaded
@@ -852,7 +887,6 @@ class GUIBuilder:
         else: 
             self._debug_write("LoadIncludes", False)
             return False
-
 
     def LoadIncludesFromXML( self, root ):
         if ( not root or root.tagName != "includes" ):
@@ -879,7 +913,6 @@ class GUIBuilder:
             node = self.NextSiblingElement( node, "default" )
         self._debug_write( "LoadIncludesFromXML", True )
         return True
-
 
     def ResolveIncludes( self, node, type = None ):
         # we have a node, find any <include file="fileName">tagName</include> tags and replace
