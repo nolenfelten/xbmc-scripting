@@ -28,7 +28,6 @@ import language, utilities
 import guibuilder
 _ = language.Language().string
 
-
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
         try:
@@ -66,8 +65,9 @@ class GUI( xbmcgui.WindowDialog ):
     def show_viz_window( self, startup=True ):
         if ( self.settings[ "show_viz" ] ):
             xbmc.executebuiltin( "XBMC.ActivateWindow(2006)" )
-        elif ( not startup ):
-            xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_wid, ) )
+        else:
+            if ( current_dlg_id != 9999 or not startup ):
+                xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_win_id, ) )
 
     def get_scraper( self ):
         sys.path.append( os.path.join( resourcesPath, "scrapers", self.settings[ "scraper" ] ) )
@@ -201,7 +201,7 @@ class GUI( xbmcgui.WindowDialog ):
                         self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
                     self.show_viz_window( False )
                 else: self.exit_script( True )
-        except: traceback.print_exc()
+        except: pass
             
     def exit_script( self, restart=False ):
         if ( self.Timer ): self.Timer.cancel()
@@ -276,10 +276,9 @@ class Start( threading.Thread ):
 
 if ( __name__ == "__main__" ):
     if ( xbmc.Player().isPlayingAudio() ):
-        try: current_wid = xbmcgui.getCurrentWindowDialogId()
-        except: current_wid = 9999
-        if ( current_wid == 9999 ):
-            current_wid = xbmcgui.getCurrentWindowId()
+        try: current_dlg_id = xbmcgui.getCurrentWindowDialogId()
+        except: current_dlg_id = 0
+        current_win_id = xbmcgui.getCurrentWindowId()
         ui = GUI()
         if ( ui.gui_loaded ): ui.doModal()
         del ui
