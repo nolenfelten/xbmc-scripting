@@ -33,7 +33,7 @@ import urllib2
 import xbmc
 import xbmcgui
 
-import guibuilder
+import xbmcutils.guibuilder
 
 ACTION_PREVIOUS_MENU  = 10
 

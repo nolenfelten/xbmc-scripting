@@ -22,6 +22,7 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
 """
+
 import os
 import sys
 import traceback
@@ -31,6 +32,19 @@ import xbmcgui
 
 import guibuilder
 
+def get_input(title, default=''):
+	"""Show a virtual keyboard and return the entered text."""
+
+	ret = None
+
+	keyboard = xbmc.Keyboard(default, title)
+	keyboard.doModal()
+
+	if keyboard.isConfirmed():
+		ret = keyboard.getText()
+
+	return ret
+	
 ACTION_PREVIOUS_MENU  = 10
 
 class ContextMenu(xbmcgui.WindowDialog):

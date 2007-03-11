@@ -24,27 +24,16 @@
 """
 
 import re
-import urllib, urllib2
+import urllib2
 import cookielib
 import os.path
 import time
 
-from xml.sax.saxutils import unescape
 from xml.sax.saxutils import escape
 
 import elementtree.ElementTree
 
-class DownloadError(Exception):
-	def __init__(self, value):
-		self.value = value
-	def __str__(self):
-		return repr(self.value)
-
-class DownloadAbort(Exception):
-	def __init__(self):
-		self.value = 'Operation aborted'
-	def __str__(self):
-		return repr(self.value)
+import xbmcutils.net
 
 class VideoStreamError(Exception):
 	def __init__(self, value):
@@ -333,46 +322,9 @@ class YouTube:
 	def retrieve(self, url, data=None, headers={}):
 		"""Downloads an url."""
 
-		if self.report_hook is not None:
-			self.report_hook(0, -1, self.report_udata)
-
-		try:
-			if data is not None:
-				data = urllib.urlencode(data)
-			req = urllib2.Request(unescape(url), data, headers)
-			fp = urllib2.urlopen(req)
-		except urllib2.HTTPError, e:
-			raise DownloadError('HTTP error: %d' % e.code)
-		except urllib2.URLError, e:
-			raise DownloadError('Network error: %s' % e.reason.args[1])
-
-		hdr = fp.info()
-		if hdr.has_key('Content-length'):
-			size = int(hdr['Content-length'])
-		else:
-			size = -1
-
-		bs = max(int(size / 100.0), 1024)
-
-		data = ''
-		read = 0
-		while True:
-			block = fp.read(bs)
-			if block == "":
-				break
-			read += len(block)
-			data += block
-
-			if self.report_hook is not None:
-				keep_going = self.report_hook(read, size, self.report_udata)
-				if keep_going is not None and not keep_going:
-					raise DownloadAbort()
-
-		fp.close()
-
-		if size > 0 and read < size:
-			msg = 'Download incomplete. Got only %d out of %d.' % (read, size)
-			raise DownloadError(msg)
+		return xbmcutils.net.retrieve (url, data, headers,
+		                               self.report_hook,
+		                               self.report_udata)
 
 		return data
 
