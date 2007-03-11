@@ -2,6 +2,7 @@
 
 	<defaultcontrol always="true">10</defaultcontrol>
 	<resolution>PAL16x9</resolution>
+	<useincludes>false</useincludes>
 
 	<controls>
 		<!-- START: Images -->
@@ -11,7 +12,7 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>background.png</texture>
+			<texture>\background.png</texture>
 		</control>
 
 		<control type="image" id="1">
@@ -75,6 +76,8 @@
 			<onright>0</onright>
 			<onup>13</onup>
 			<ondown>11</ondown>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="11">
@@ -87,6 +90,8 @@
 			<onright>0</onright>
 			<onup>10</onup>
 			<ondown>12</ondown>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="12">
@@ -99,6 +104,8 @@
 			<onright>0</onright>
 			<onup>11</onup>
 			<ondown>13</ondown>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="13">
@@ -111,6 +118,8 @@
 			<onright>0</onright>
 			<onup>12</onup>
 			<ondown>10</ondown>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 		<!-- END: Main menu buttons -->
 
@@ -126,6 +135,8 @@
 			<onup>25</onup>
 			<ondown>21</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="21">
@@ -139,6 +150,8 @@
 			<onup>20</onup>
 			<ondown>22</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="22">
@@ -152,6 +165,8 @@
 			<onup>21</onup>
 			<ondown>23</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="23">
@@ -165,6 +180,8 @@
 			<onup>22</onup>
 			<ondown>24</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="24">
@@ -178,6 +195,8 @@
 			<onup>23</onup>
 			<ondown>25</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="25">
@@ -191,6 +210,8 @@
 			<onup>24</onup>
 			<ondown>20</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 		<!-- END: Feeds menu buttons -->
 
@@ -206,6 +227,8 @@
 			<onup>33</onup>
 			<ondown>31</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="31">
@@ -219,6 +242,8 @@
 			<onup>30</onup>
 			<ondown>32</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="32">
@@ -232,6 +257,8 @@
 			<onup>31</onup>
 			<ondown>33</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="33">
@@ -245,6 +272,8 @@
 			<onup>32</onup>
 			<ondown>30</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 		<!-- END: Time frame buttons -->
 
@@ -260,6 +289,8 @@
 			<onup>41</onup>
 			<ondown>41</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="41">
@@ -273,6 +304,8 @@
 			<onup>40</onup>
 			<ondown>40</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 		<!-- END: Search menu buttons -->
 
@@ -288,6 +321,8 @@
 			<onup>52</onup>
 			<ondown>51</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="51">
@@ -301,6 +336,8 @@
 			<onup>50</onup>
 			<ondown>52</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 
 		<control type="button" id="52">
@@ -314,6 +351,8 @@
 			<onup>51</onup>
 			<ondown>50</ondown>
 			<visible>false</visible>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
 		</control>
 		<!-- END: User menu buttons -->
 	</controls>

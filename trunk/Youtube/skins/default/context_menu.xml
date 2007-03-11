@@ -10,7 +10,7 @@
 			<posy>-25</posy>
 			<width>230</width>
 			<height>26</height>
-			<texture>dialog-context-top.png</texture>
+			<texture>\dialog-context-top.png</texture>
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -19,7 +19,7 @@
 			<posx>5</posx>
 			<posy>0</posy>
 			<width>230</width>
-			<texture>dialog-context-middle.png</texture>
+			<texture>\dialog-context-middle.png</texture>
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -28,7 +28,7 @@
 			<posx>5</posx>
 			<width>230</width>
 			<height>25</height>
-			<texture>dialog-context-bottom.png</texture>
+			<texture>\dialog-context-bottom.png</texture>
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -43,8 +43,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1002</ondown>
             <onup>1006</onup>
 		</control>
@@ -61,8 +61,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1003</ondown>
             <onup>1001</onup>
 		</control>
@@ -79,8 +79,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1004</ondown>
             <onup>1002</onup>
 		</control>
@@ -97,8 +97,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1005</ondown>
             <onup>1003</onup>
 		</control>
@@ -115,8 +115,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1006</ondown>
             <onup>1004</onup>
 		</control>
@@ -133,8 +133,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>keyboard-btn-space.png</texturenofocus>
-			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>\keyboard-btn-space.png</texturenofocus>
+			<texturefocus>\keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1001</ondown>
             <onup>1005</onup>
 		</control>
