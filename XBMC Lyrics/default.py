@@ -210,7 +210,7 @@ class GUI( xbmcgui.WindowDialog ):
         try:
             artist = self.LyricsScraper._format_param( self.artist, False )
             if ( artist ):
-                alt_artist = self.get_keyboard( artist, _( 100 ) )
+                alt_artist = self.get_keyboard( artist, "%s %s" % ( _( 100 ), self.artist, ) )
                 if ( alt_artist != artist ):
                     exception = ( artist, alt_artist, )
                     self.LyricsScraper._set_exceptions( exception )
