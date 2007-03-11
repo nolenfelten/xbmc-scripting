@@ -15,7 +15,7 @@ __scriptname__ = "XBMC Lyrics"
 __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.3"
+__version__ = "1.4"
 
 
 import os, sys
@@ -88,6 +88,7 @@ class GUI( xbmcgui.WindowDialog ):
     def get_lyrics(self, artist, song):
         self.menu_items = []
         self.reset_controls()
+        self.allow_exception = False
         current_song = self.song
         lyrics = self.get_lyrics_from_file( artist, song )
         if ( lyrics ):
@@ -102,6 +103,7 @@ class GUI( xbmcgui.WindowDialog ):
                     self.show_choices( lyrics )
                 else:
                     self.show_lyrics( _( 631 ) )
+                    self.allow_exception = True
 
     def get_lyrics_from_list( self, item ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
@@ -203,6 +205,27 @@ class GUI( xbmcgui.WindowDialog ):
                 else: self.exit_script( True )
         except: pass
             
+    def get_exception( self ):
+        """ user modified exceptions """
+        try:
+            artist = self.LyricsScraper._format_param( self.artist, False )
+            if ( artist ):
+                alt_artist = self.get_keyboard( artist, _( 100 ) )
+                if ( alt_artist != artist ):
+                    exception = ( artist, alt_artist, )
+                    self.LyricsScraper._set_exceptions( exception )
+                    self.myPlayerChanged( 2, True )
+                    #self.allow_exception = False
+        except: pass
+        
+    def get_keyboard( self, default="", heading="" ):
+        """ shows a keyboard and returns a value """
+        keyboard = xbmc.Keyboard( default, heading )
+        keyboard.doModal()
+        if ( keyboard.isConfirmed() ):
+            return keyboard.getText()
+        return default
+
     def exit_script( self, restart=False ):
         if ( self.Timer ): self.Timer.cancel()
         self.close()
@@ -218,6 +241,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.exit_script()
         elif ( button_key == "Keyboard Menu Button" or button_key == "Y Button" or button_key == "Remote Title Button" or button_key == "White Button" ):
             self.change_settings()
+        elif ( self.allow_exception and ( button_key == "Keyboard Backspace Button" or button_key == "Black Button" or button_key == "Remote Back Button" ) ):
+            self.get_exception()
         else: self.update_label()
     
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
@@ -230,7 +255,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
         self.myPlayerChanged( 2 )
     
-    def myPlayerChanged( self, event ):
+    def myPlayerChanged( self, event, force_update=False ):
         #print ["stopped","ended","started"][event]
         if ( event < 2 ): 
             self.exit_script()
@@ -240,7 +265,7 @@ class GUI( xbmcgui.WindowDialog ):
                 self.song = xbmc.getInfoLabel( "MusicPlayer.Title" )
                 if ( song != self.song and self.song ): break
                 xbmc.sleep( 50 )
-            if ( song != self.song ):
+            if ( song != self.song or force_update ):
                 self.artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
                 self.controls[ 6 ][ "control" ].setImage( xbmc.getInfoImage( "MusicPlayer.Cover" ) )
                 if ( self.song and self.artist ): self.get_lyrics( self.artist, self.song )
@@ -249,6 +274,7 @@ class GUI( xbmcgui.WindowDialog ):
 
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
+    """ Player Class: calls function when song changes or playback ends """
     def __init__( self, *args, **kwargs ):
         xbmc.Player.__init__( self )
         if ( kwargs.has_key( "function" ) ): 
@@ -265,6 +291,7 @@ class MyPlayer( xbmc.Player ):
 
 
 class Start( threading.Thread ):
+    """ Thread Class used to allow gui to show before all checks are done at start of script """
     def __init__( self, *args, **kwargs ):
         threading.Thread.__init__( self )
         if ( kwargs.has_key( "function" ) ): 

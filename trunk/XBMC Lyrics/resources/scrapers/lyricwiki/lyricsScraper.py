@@ -9,7 +9,7 @@ from sgmllib import SGMLParser
 import urllib
 
 class _SongListParser( SGMLParser ):
-    """ Parses an html document for all song links """
+    """ Parser Class: parses an html document for all song links """
     def reset( self ):
         SGMLParser.reset( self )
         self.song_list = []
@@ -29,7 +29,7 @@ class _SongListParser( SGMLParser ):
                 self.url = "None"
 
 class _LyricsParser( SGMLParser ):
-    """ Parses an html document for song lyrics """
+    """ Parser Class: parses an html document for song lyrics """
     def reset( self ):
         SGMLParser.reset( self )
         self.lyrics_found = False
@@ -53,16 +53,16 @@ class _LyricsParser( SGMLParser ):
                 pass
 
 class LyricsFetcher:
-    """ required: Fetcher class for www.lyricwiki.org """
+    """ required: Fetcher Class for www.lyricwiki.org """
     def __init__( self ):
-        self.url = "http://www.lyricwiki.org"
-        self.exceptions = self._get_exceptions()
+        self.base_url = "http://www.lyricwiki.org"
+        self._set_exceptions()
         
     def get_lyrics( self, artist, song ):
         """ *required: Returns song lyrics or a list of choices from artist & song """
-        url = self.url + "/%s:%s"
+        url = self.base_url + "/%s:%s"
         artist = self._format_param( artist )
-        song = self._format_param( song )
+        song = self._format_param( song, False )
         lyrics = self._fetch_lyrics( url % ( artist, song, ) )
         # if no lyrics found try just artist for a list of songs
         if ( not lyrics ):
@@ -72,35 +72,35 @@ class LyricsFetcher:
     
     def get_lyrics_from_list( self, item ):
         """ *required: Returns song lyrics from user selection - item[1]"""
-        lyrics = self._fetch_lyrics( self.url + item[ 1 ] )
+        lyrics = self._fetch_lyrics( self.base_url + item[ 1 ] )
         return self._clean_text( lyrics )
         
-    def _get_exceptions( self ):
-        """ Reads a rules file for exceptions in formatting artist or song """
-        exceptions = []
+    def _set_exceptions( self, exception=None ):
+        """ Sets exceptions for formatting artist """
         try:
             if ( __name__ == "__main__" ):
                 ex_path = os.path.join( os.getcwd().replace( ";", "" ), "exceptions.txt" )
             else:
                 ex_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, "scrapers", os.path.split( os.path.dirname( sys.modules[ "lyricsScraper" ].__file__ ) )[ 1 ], "exceptions.txt" )
-                if ( not os.path.isfile( ex_path ) ):
-                    self._make_exception_file( ex_path )
             ex_file = open( ex_path, "r" )
-            ex_list = ex_file.read().split("||")
+            self.exceptions = eval( ex_file.read() )
             ex_file.close()
-            for ex in ex_list:
-                exceptions += [ ( ex.split( "|" )[0], ex.split( "|" )[1], ) ]
-        except: pass
-        return exceptions
+        except:
+            self.exceptions = {}
+        if ( exception ):
+            self.exceptions[ exception[ 0 ] ] = exception[ 1 ]
+            self._save_exception_file( ex_path, self.exceptions )
 
-    def _make_exception_file( self, ex_path ):
+    def _save_exception_file( self, ex_path, exceptions ):
+        """ Saves the exception file as a repr(dict) """
         try:
-            os.makedirs( os.path.split( ex_path )[ 0 ] )
+            if ( not os.path.isdir( os.path.split( ex_path )[ 0 ] ) ):
+                os.makedirs( os.path.split( ex_path )[ 0 ] )
             ex_file = open( ex_path, "w" )
-            ex_file.write( "Ac_dc|AC_DC||Abba|ABBA" )
+            ex_file.write( repr( exceptions ) )
             ex_file.close()
         except: pass
-
+        
     def _fetch_lyrics( self, url ):
         """ Fetch lyrics if available """
         try:
@@ -126,7 +126,7 @@ class LyricsFetcher:
     def _get_song_list( self, artist ):
         """ If no lyrics found, fetch a list of choices """
         try:
-            url = self.url + "/%s"
+            url = self.base_url + "/%s"
             # Open url or local file (if debug == True)
             if (not debug): usock = urllib.urlopen( url % ( artist, ) )
             else:
@@ -158,7 +158,7 @@ class LyricsFetcher:
         new_song_list.sort()
         return new_song_list
 
-    def _format_param( self, param ):
+    def _format_param( self, param, exception=True ):
         """ Converts param to the form expected by www.lyricwiki.org """
         caps = True
         result = ""
@@ -176,12 +176,12 @@ class LyricsFetcher:
                 caps = False
             result += letter
         result = result.replace( "/", "_" )
-        # replace any exceptions
-        for ex in self.exceptions:
-            result = result.replace( ex[ 0 ], ex[ 1 ] )
         # properly quote string for url
-        retVal = urllib.quote( result )
-        return retVal
+        result = urllib.quote( result )
+        # replace any exceptions
+        if ( exception and result in self.exceptions ):
+            result = self.exceptions[ result ]
+        return result
     
     def _clean_text( self, text ):
         """ Convert line terminators and html entities """

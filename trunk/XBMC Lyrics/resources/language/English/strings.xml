@@ -2,6 +2,9 @@
 <strings>
     <string id="0">XBMC Lyrics</string>
 
+    <!-- User Messages -->
+    <string id="100">Exception for artist</string>
+
     <!-- Settings labels -->
     <string id="201">Scraper</string>
     <string id="202">Save lyrics</string>
@@ -24,7 +27,7 @@
     <string id="254">Page</string>
     <string id="255">Restart</string>
     <string id="256">Later</string>
-
+    
     <!-- Error messages -->
     <string id="630">Unusual page layout, no parsing built in yet!</string>
     <string id="631">Artist not found!</string>
