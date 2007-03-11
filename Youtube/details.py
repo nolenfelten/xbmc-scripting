@@ -62,8 +62,8 @@ class Details(xbmcgui.WindowDialog):
 
 		self.img_path = os.path.join(skin_path, 'gfx')
 
-		guibuilder.GUIBuilder(self, skin, self.img_path, 
-		                      useDescAsKey=True, fastMethod=True)
+		xbmcutils.guibuilder.GUIBuilder(self, skin, self.img_path, 
+		                                useDescAsKey=True, fastMethod=True)
 
 		return self.SUCCEEDED
 
