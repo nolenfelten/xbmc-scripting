@@ -148,8 +148,8 @@
 			<label> </label>
 			<font>font13</font>
 			<textcolor>00ffffff</textcolor>
-            <texturecheckmark>settings-check-box.png</texturecheckmark>
-            <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
             <markwidth>16</markwidth>
             <markheight>20</markheight>
             <disabledcolor>00d0d0d0</disabledcolor>
@@ -236,8 +236,8 @@
 			<label> </label>
 			<font>font13</font>
 			<textcolor>00ffffff</textcolor>
-            <texturecheckmark>settings-check-box.png</texturecheckmark>
-            <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
             <markwidth>16</markwidth>
             <markheight>20</markheight>
             <disabledcolor>00d0d0d0</disabledcolor>
@@ -280,8 +280,8 @@
 			<label> </label>
 			<font>font13</font>
 			<textcolor>00ffffff</textcolor>
-            <texturecheckmark>settings-check-box.png</texturecheckmark>
-            <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
             <markwidth>16</markwidth>
             <markheight>20</markheight>
             <disabledcolor>00d0d0d0</disabledcolor>
