@@ -31,11 +31,13 @@ import traceback
 import xbmcgui
 import xbmc
 
-import guibuilder
-
 import youtube
-import contextmenu
 import details
+
+from xbmcutils.net import DownloadAbort, DownloadError
+
+import xbmcutils.gui
+import xbmcutils.guibuilder
 
 
 # Gamepad constans
@@ -99,7 +101,7 @@ class YouTubeGUI(xbmcgui.Window):
 			self.state = YouTubeGUI.STATE_MAIN
 			self.list_state = YouTubeGUI.CONTENT_STATE_NONE
 
-			self.cxt = contextmenu.ContextMenu()
+			self.cxt = xbmcutils.gui.ContextMenu()
 			self.details = details.Details()
 
 			# Get the last search term
@@ -136,7 +138,8 @@ class YouTubeGUI(xbmcgui.Window):
 			history_list = pickle.load(f)
 			f.close()
 		except IOError, e:
-			print 'There was an error while loading the pickle (%s)' % e
+			# File not found, will be created upon save
+			pass
 
 		return history_list
 
@@ -175,7 +178,7 @@ class YouTubeGUI(xbmcgui.Window):
 
 		self.img_path = os.path.join(skin_path, 'gfx')
 
-		guibuilder.GUIBuilder(self, skin, self.img_path, title='YouTube',
+		xbmcutils.guibuilder.GUIBuilder(self, skin, self.img_path, title='YouTube',
 		                      useDescAsKey=True, debug=True)
 
 		return self.SUCCEEDED
@@ -193,19 +196,6 @@ class YouTubeGUI(xbmcgui.Window):
 
 		return self.controls[desc]['control']
 
-	def get_input(self, title, default=''):
-		"""Show a virtual keyboard and return the entered text."""
-
-		ret = None
-
-		keyboard = xbmc.Keyboard(default, title)
-		keyboard.doModal()
-
-		if keyboard.isConfirmed():
-			ret = keyboard.getText()
-
-		return ret
-	
 	def not_implemented(self):
 		"""Show a 'not implemented' dialog."""
 		dlg = xbmcgui.Dialog()
@@ -229,12 +219,12 @@ class YouTubeGUI(xbmcgui.Window):
 
 		try:
 			data = func(arg)
-		except youtube.DownloadError, e:
+		except DownloadError, e:
 			dlg.close()
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('YouTube', 'There was an error.', e.value)
 			return None
-		except youtube.DownloadAbort:
+		except DownloadAbort:
 			dlg.close()
 			return None
 		except Exception, e:
@@ -250,7 +240,7 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Get rss data and update the list."""
 
 		if user is None:
-			user = self.get_input('User')
+			user = xbmcutils.gui.get_input('User')
 	
 		if user is not None:
 			data = self.download_data(user, method)
@@ -272,7 +262,7 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Get user input and perform a search. On success update the list."""
 
 		if term is None:
-			term = self.get_input('Search', self.last_search_term)
+			term = xbmcutils.gui.get_input('Search', self.last_search_term)
 		
 		# Only update the list if the user entered something.
 		if term != None:
@@ -326,17 +316,17 @@ class YouTubeGUI(xbmcgui.Window):
 		ret = False
 
 		if username is None:
-			username = self.get_input('Username')
+			username = xbmcutils.gui.get_input('Username')
 
 		if password is None:
-			password = self.get_input('Password')
+			password = xbmcutils.gui.get_input('Password')
 
 		try:
 			ret = self.yt.login(username, password)
-		except youtube.DownloadAbort, e:
+		except DownloadAbort, e:
 			# Just fall through as ret defaults to False
 			pass
-		except youtube.DownloadError, e:
+		except DownloadError, e:
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('YouTube', 'There was an error.', e.value)
 
@@ -360,10 +350,10 @@ class YouTubeGUI(xbmcgui.Window):
 			elif self.yt.user_add_favorite(id):
 				added_dlg = xbmcgui.Dialog()
 				added_dlg.ok('YouTube', 'Favorite added.')
-		except youtube.DownloadAbort, e:
+		except DownloadAbort, e:
 			# Just fall through as the method shouldn't return anyhting.
 			pass
-		except youtube.DownloadError, e:
+		except DownloadError, e:
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('YouTube', 'There was an error.', e.value)
 
@@ -387,10 +377,10 @@ class YouTubeGUI(xbmcgui.Window):
 
 		try:
 			details = self.yt.get_video_details(id)
-		except youtube.DownloadAbort, e:
+		except DownloadAbort, e:
 			# Just fall through as return value defaults to None
 			pass
-		except youtube.DownloadError, e:
+		except DownloadError, e:
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('YouTube', 'There was an error.', e.value)
 
@@ -410,10 +400,10 @@ class YouTubeGUI(xbmcgui.Window):
 		if details is not None and details.has_key('thumbnail_url'):
 			try:
 				thumb = self.yt.retrieve(details['thumbnail_url'])
-			except youtube.DownloadAbort, e:
+			except DownloadAbort, e:
 				# Just fall through as a thumbnail is not required.
 				pass
-			except youtube.DownloadError, e:
+			except DownloadError, e:
 				err_dlg = xbmcgui.Dialog()
 				err_dlg.ok('YouTube', 'There was an error.', e.value)
 			else:
@@ -445,11 +435,11 @@ class YouTubeGUI(xbmcgui.Window):
 
 			try:
 				list = self.yt.get_videos_by_user(user, per_page=40)
-			except youtube.DownloadAbort, e:
+			except DownloadAbort, e:
 				# No data gathered, no need to update list.
 				dlg.close()
 				return
-			except youtube.DownloadError, e:
+			except DownloadError, e:
 				# No data gathered, no need to update list.
 				dlg.close()
 				err_dlg = xbmcgui.Dialog()
@@ -482,13 +472,13 @@ class YouTubeGUI(xbmcgui.Window):
 			try:
 				tags = details['tags']
 				list = self.yt.get_videos_by_related(tags, per_page=40)
-			except youtube.DownloadError, e:
+			except DownloadError, e:
 				# No data gathered, no need to update list.
 				dlg.close()
 				err_dlg = xbmcgui.Dialog()
 				err_dlg.ok('YouTube', 'There was an error.', e.value)
 				return
-			except youtube.DownloadAbort, e:
+			except DownloadAbort, e:
 				# No data gathered, no need to update list.
 				dlg.close()
 				return
@@ -526,10 +516,10 @@ class YouTubeGUI(xbmcgui.Window):
 					else:
 						dlg = xbmcgui.Dialog()
 						dlg.ok('YouTube', 'Login failed.')
-			except youtube.DownloadError, e:
+			except DownloadError, e:
 				err_dlg = xbmcgui.Dialog()
 				err_dlg.ok('YouTube', 'There was an error.', e.value)
-			except youtube.DownloadAbort, e:
+			except DownloadAbort, e:
 				# Just fall through as the method shouldn't return anything.
 				pass
 		except youtube.VideoStreamError, e:
