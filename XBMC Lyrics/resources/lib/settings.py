@@ -17,7 +17,6 @@ class GUI( xbmcgui.WindowDialog ):
             self._get_settings()
             self._setup_special()
             self._set_controls_values()
-            self._set_page_visible()
             self._set_restart_required()
             
     def setupGUI( self ):
@@ -28,14 +27,9 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _set_variables( self ):
         """ initializes variables """
-        self.current_page = 1
-        self.total_pages = 1
         self.controller_action = utilities.setControllerAction()
         self.get_control( "Title Label" ).setLabel( self.__scriptname__ )
         self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), self.__version__, ) )
-        #self.get_control( "Update Button" ).setEnabled( xbmc.getCondVisibility( "System.InternetState" ) )
-        self.get_control( "Page Button" ).setVisible( self.total_pages > 1 )
-        self.get_control( "Page Button" ).setEnabled( self.total_pages > 1 )
         # setEnabled( False ) if not used
         self.get_control( "Credits Button" ).setVisible( False )
         self.get_control( "Credits Button" ).setEnabled( False )
@@ -52,18 +46,6 @@ class GUI( xbmcgui.WindowDialog ):
         else:
             self._check_for_restart()
 
-    def _set_page_visible( self ):
-        """ shows the current page of settings """
-        xbmcgui.lock()
-        try: 
-            for control in range( 1, 19 ):
-                self.get_control( "Setting%s Button" % ( control, ) ).setVisible( self.current_page == int( ( control / 10 ) + 1 ) )
-                self.get_control( "Setting%s Button" % ( control, ) ).setEnabled( self.current_page == int( ( control / 10 ) + 1 ) )
-                self.get_control( "Setting%s Value" % ( control, ) ).setVisible( self.current_page == int( ( control / 10 ) + 1 ) )
-        except: pass
-        self.get_control( "Page Button" ).setLabel( "%s: %d/%d" % ( self._( 254 ), self.current_page, self.total_pages, ) )
-        xbmcgui.unlock()
-    
     def _get_keyboard( self, default="", heading="" ):
         """ shows a keyboard and returns a value """
         keyboard = xbmc.Keyboard( default, heading )
@@ -120,13 +102,15 @@ class GUI( xbmcgui.WindowDialog ):
     def _set_controls_values( self ):
         """ sets the value labels """
         xbmcgui.lock()
-        self.get_control( "Setting1 Value" ).setLabel( self.settings[ "scraper" ] )
-        self.get_control( "Setting2 Value" ).setLabel( str( self.settings[ "save_lyrics" ] ) )
-        self.get_control( "Setting3 Button" ).setEnabled( self.settings[ "save_lyrics" ] )
-        self.get_control( "Setting3 Value" ).setLabel( self.settings[ "lyrics_path" ] )
-        self.get_control( "Setting3 Value" ).setEnabled( self.settings[ "save_lyrics" ] )
-        self.get_control( "Setting4 Value" ).setLabel( str( self.settings[ "smooth_scrolling" ] ) )
-        self.get_control( "Setting5 Value" ).setLabel( str( self.settings[ "show_viz" ] ) )
+        try:
+            self.get_control( "Setting1 Value" ).setLabel( self.settings[ "scraper" ] )
+            self.get_control( "Setting2 Value" ).setSelected( self.settings[ "save_lyrics" ] )
+            self.get_control( "Setting3 Button" ).setEnabled( self.settings[ "save_lyrics" ] )
+            self.get_control( "Setting3 Value" ).setLabel( self.settings[ "lyrics_path" ] )
+            self.get_control( "Setting3 Value" ).setEnabled( self.settings[ "save_lyrics" ] )
+            self.get_control( "Setting4 Value" ).setSelected( self.settings[ "smooth_scrolling" ] )
+            self.get_control( "Setting5 Value" ).setSelected( self.settings[ "show_viz" ] )
+        except: pass
         xbmcgui.unlock()
     
     def _change_setting1( self ):
@@ -141,7 +125,7 @@ class GUI( xbmcgui.WindowDialog ):
         
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], self._( 203 ) )
+        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], self._( 203 ), 3 )
 
     def _change_setting4( self ):
         """ changes settings #4 """
@@ -166,13 +150,6 @@ class GUI( xbmcgui.WindowDialog ):
         c.doModal()
         del c
 
-    def _change_page( self ):
-        """ changes pages """
-        self.current_page += 1
-        if ( self.current_page > self.total_pages ):
-            self.current_page = 1
-        self._set_page_visible()
-    
     def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
         restart = False
@@ -202,8 +179,6 @@ class GUI( xbmcgui.WindowDialog ):
             self._update_script()
         elif ( control is self.get_control( "Credits Button" ) ):
             self._show_credits()
-        elif ( control is self.get_control( "Page Button" ) ):
-            self._change_page()
         else:
             if ( control is self.get_control( "Setting1 Button" ) ):
                 self._change_setting1()
