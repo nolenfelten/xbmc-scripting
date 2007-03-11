@@ -136,7 +136,7 @@ class GUI( xbmcgui.WindowDialog ):
         name = name.replace( ",", "_" ).replace( "*", "_" ).replace( "=", "_" ).replace( "\\", "_" ).replace( "|", "_" )
         name = name.replace( "<", "_" ).replace( ">", "_" ).replace( "?", "_" ).replace( ";", "_" ).replace( ":", "_" )
         name = name.replace( '"', "_" ).replace( "+", "_" ).replace( "/", "_" )
-        return name
+        return unicode( name, "utf-8", "ignore" )
         
     def show_lyrics( self, lyrics, save=False ):
         xbmcgui.lock()
