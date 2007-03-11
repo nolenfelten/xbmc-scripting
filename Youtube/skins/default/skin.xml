@@ -80,6 +80,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="11">
@@ -96,6 +98,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="12">
@@ -112,6 +116,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="13">
@@ -128,6 +134,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 		<!-- END: Main menu buttons -->
 
@@ -147,6 +155,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="21">
@@ -164,6 +174,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="22">
@@ -181,6 +193,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="23">
@@ -198,6 +212,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="24">
@@ -215,6 +231,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="25">
@@ -232,6 +250,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 		<!-- END: Feeds menu buttons -->
 
@@ -251,6 +271,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="31">
@@ -268,6 +290,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="32">
@@ -285,6 +309,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="33">
@@ -302,6 +328,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 		<!-- END: Time frame buttons -->
 
@@ -321,6 +349,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="41">
@@ -338,6 +368,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 		<!-- END: Search menu buttons -->
 
@@ -357,6 +389,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="51">
@@ -374,6 +408,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 
 		<control type="button" id="52">
@@ -391,6 +427,8 @@
 			<texturenofocus>\button-nofocus.png</texturenofocus>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
 		</control>
 		<!-- END: User menu buttons -->
 	</controls>

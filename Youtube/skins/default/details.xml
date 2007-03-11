@@ -1,6 +1,7 @@
 ﻿<window>
 	<defaultcontrol always="true">1000</defaultcontrol>
-    <resolution>PAL16x9</resolution>
+	<resolution>PAL16x9</resolution>
+	<useincludes>false</useincludes>
 
 	<controls>
 		<control type="image" id="999">

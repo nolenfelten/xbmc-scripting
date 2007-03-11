@@ -1,6 +1,7 @@
 ﻿<window>
 	<defaultcontrol>1001</defaultcontrol>
-    <resolution>PAL16x9</resolution>
+	<resolution>PAL16x9</resolution>
+	<useincludes>false</useincludes>
 
 	<controls>
         <!-- ** Required ** Do not change <description> or <type> -->
