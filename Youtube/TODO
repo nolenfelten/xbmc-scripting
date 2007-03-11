@@ -3,18 +3,15 @@
 * Check resolution when loading skin
 
 * Add a settings window
-	* Make stripping invalid chars configurable.
-	* Username/password setting
+	* Strip invalid chars
+	* Username/password
 	* Always confirm filtered content
+	* Stream mode (direct, temp-download, store-download)
+	* Keep last search term
+	* Skin
 
 * Add download to youtube.py
 	* Add download-and-play mode
 	* Add store to disk mode
 
 * Do something about the ugly user menu handling.
-
-* Add context menu
-
-* Add filter confirmation hook
-
-* Catch VideoStream- and PermissionErrors
