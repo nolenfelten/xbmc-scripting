@@ -207,16 +207,14 @@ class GUI( xbmcgui.WindowDialog ):
             
     def get_exception( self ):
         """ user modified exceptions """
-        try:
-            artist = self.LyricsScraper._format_param( self.artist, False )
-            if ( artist ):
-                alt_artist = self.get_keyboard( artist, "%s %s" % ( _( 100 ), self.artist, ) )
-                if ( alt_artist != artist ):
-                    exception = ( artist, alt_artist, )
-                    self.LyricsScraper._set_exceptions( exception )
-                    self.myPlayerChanged( 2, True )
-                    #self.allow_exception = False
-        except: pass
+        artist = self.LyricsScraper._format_param( self.artist, False )
+        if ( artist ):
+            alt_artist = self.get_keyboard( artist, "%s %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
+            if ( alt_artist != artist ):
+                exception = ( artist, alt_artist, )
+                self.LyricsScraper._set_exceptions( exception )
+                self.myPlayerChanged( 2, True )
+                #self.allow_exception = False
         
     def get_keyboard( self, default="", heading="" ):
         """ shows a keyboard and returns a value """
