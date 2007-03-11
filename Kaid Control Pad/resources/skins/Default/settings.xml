@@ -86,10 +86,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
-			<onup>90</onup>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>110</onup>
 			<ondown>20</ondown>
+            <visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50) | Control.HasFocus(60) | Control.HasFocus(70) | Control.HasFocus(80) | Control.HasFocus(90)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -109,6 +110,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -128,10 +130,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -151,6 +154,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -170,10 +174,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -193,6 +198,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -212,10 +218,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -235,6 +242,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -254,10 +262,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -277,6 +286,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -296,10 +306,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>50</onup>
 			<ondown>70</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -319,6 +330,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -338,10 +350,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>60</onup>
 			<ondown>80</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -361,6 +374,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -380,10 +394,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>70</onup>
 			<ondown>90</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -403,6 +418,7 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -422,10 +438,11 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>80</onup>
-			<ondown>10</ondown>
+			<ondown>100</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -445,13 +462,14 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 
 		<!-- buttons page 2 -->
 		
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="15">
+		<control type="button" id="100">
 			<description>Setting10 Button</description>
 			<posx>-20</posx>
 			<posy>60</posy>
@@ -467,14 +485,15 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>10</onleft>
-			<onright>100</onright>
-			<onup>25</onup>
-			<ondown>25</ondown>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>90</onup>
+			<ondown>110</ondown>
+            <visible allowhiddenfocus="true">Control.HasFocus(100) | Control.HasFocus(110)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="16">
+		<control type="button" id="101">
 			<description>Setting10 Value</description>
 			<posx>-20</posx>
 			<posy>60</posy>
@@ -490,10 +509,11 @@
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="25">
+		<control type="button" id="110">
 			<description>Setting11 Button</description>
 			<posx>-20</posx>
 			<posy>92</posy>
@@ -509,33 +529,35 @@
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
-			<onleft>10</onleft>
-			<onright>100</onright>
-			<onup>15</onup>
-			<ondown>15</ondown>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>100</onup>
+			<ondown>10</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="26">
+		<control type="checkmark" id="111">
 			<description>Setting11 Value</description>
-			<posx>-20</posx>
-			<posy>92</posy>
-			<width>350</width>
+			<posx>295</posx>
+			<posy>97</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
+            <disabledcolor>00d0d0d0</disabledcolor>
+            <shadowcolor>00000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="100">
+		<control type="button" id="200">
 			<description>Ok Button</description>
 			<posx>340</posx>
 			<posy>60</posy>
@@ -549,14 +571,14 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>15</onleft>
+			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>140</onup>
-			<ondown>110</ondown>
+			<onup>230</onup>
+			<ondown>210</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="110">
+		<control type="button" id="210">
 			<description>Cancel Button</description>
 			<posx>340</posx>
 			<posy>95</posy>
@@ -570,14 +592,14 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>15</onleft>
+			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>100</onup>
-			<ondown>120</ondown>
+			<onup>200</onup>
+			<ondown>220</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="120">
+		<control type="button" id="220">
 			<description>Update Button</description>
 			<posx>340</posx>
 			<posy>130</posy>
@@ -590,17 +612,17 @@
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
 			<textoffsetx>17</textoffsetx>
-            <visible allowhiddenfocus="false">System.InternetState</visible>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>15</onleft>
+			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>110</onup>
-			<ondown>130</ondown>
+			<onup>210</onup>
+			<ondown>230</ondown>
+            <visible allowhiddenfocus="false">System.InternetState</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="130">
+		<control type="button" id="230">
 			<description>Credits Button</description>
 			<posx>340</posx>
 			<posy>165</posy>
@@ -615,32 +637,38 @@
 			<textoffsetx>17</textoffsetx>
 			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
 			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>15</onleft>
+			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>120</onup>
-			<ondown>140</ondown>
+			<onup>220</onup>
+			<ondown>200</ondown>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="140">
-			<description>Page Button</description>
-			<posx>340</posx>
-			<posy>200</posy>
+		<!-- ** Optional ** -->
+		<control type="label" id="300">
+			<description>Page1 Label</description>
+			<posx>430</posx>
+			<posy>337</posy>
 			<width>90</width>
 			<height>32</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>254</label>
-			<font>font10</font>
+			<align>right</align>
+			<label>1/2</label>
+			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
-			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
-			<onleft>15</onleft>
-			<onright>10</onright>
-			<onup>130</onup>
-			<ondown>100</ondown>
+            <visible allowhiddenfocus="false">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Optional ** -->
+		<control type="label" id="310">
+			<description>Page2 Label</description>
+			<posx>430</posx>
+			<posy>337</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>right</align>
+			<label>2/2</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+            <visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
 		</control>
 
 	</controls>
