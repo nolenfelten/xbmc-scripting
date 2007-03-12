@@ -185,16 +185,3 @@ class ContextMenu(xbmcgui.WindowDialog):
 			xbmc.log('Exception (CxtMenu:onControl): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
 			self.close()
-
-	def onAction(self, action):
-		"""Handle Context Menu actions."""
-
-		try: 
-			if action == ACTION_PREVIOUS_MENU:
-				self.close()
-		except:
-			xbmc.log('Exception (CxtMenu:onAction): ' + str(sys.exc_info()[0]))
-			traceback.print_exc()
-			self.close()
-
-
