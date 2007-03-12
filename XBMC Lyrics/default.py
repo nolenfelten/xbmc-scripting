@@ -250,7 +250,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.Timer.start()
     
     def getMyPlayer( self ):
-        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function = self.myPlayerChanged )
+        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function=self.myPlayerChanged )
         self.myPlayerChanged( 2 )
     
     def myPlayerChanged( self, event, force_update=False ):
@@ -275,8 +275,7 @@ class MyPlayer( xbmc.Player ):
     """ Player Class: calls function when song changes or playback ends """
     def __init__( self, *args, **kwargs ):
         xbmc.Player.__init__( self )
-        if ( kwargs.has_key( "function" ) ): 
-            self.function = kwargs[ "function" ]
+        self.function = kwargs[ "function" ]
 
     def onPlayBackStopped( self ):
         self.function( 0 )
@@ -292,8 +291,7 @@ class Start( threading.Thread ):
     """ Thread Class used to allow gui to show before all checks are done at start of script """
     def __init__( self, *args, **kwargs ):
         threading.Thread.__init__( self )
-        if ( kwargs.has_key( "function" ) ): 
-            self.function = kwargs[ "function" ]
+        self.function = kwargs[ "function" ]
 
     def run(self):
         self.function()
