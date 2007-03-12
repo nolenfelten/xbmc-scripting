@@ -2,77 +2,26 @@
 Main GUI for Apple Movie Trailers
 '''
 
-def createProgressDialog( __line3__ ):
-    global dialog, pct
-    pct = 0
-    dialog = xbmcgui.DialogProgress()
-    dialog.create( _( 0 ) )
-    updateProgressDialog( __line3__ )
+import xbmc, xbmcgui, traceback, guibase
+from guibase import _
 
-def updateProgressDialog( __line3__ ):
-    global dialog, pct
-    pct += 5
-    dialog.update( pct, __line1__, __line2__, __line3__ )
-
-def closeProgessDialog():
-    global dialog
-    dialog.close()
-    
-import xbmcgui, language
-_ = language.Language().string
-
-__line1__ = _(50)
-__line2__ = _(51)
-
-try:
-    createProgressDialog( '%s xbmc' % ( _( 52 ), ))
-    import xbmc
-    updateProgressDialog( '%s sys' % ( _( 52 ), ))
-    import sys
-    updateProgressDialog( '%s os' % ( _( 52 ), ))
-    import os
-    updateProgressDialog( '%s traceback' % ( _( 52 ), ))
-    import traceback
-    updateProgressDialog( '%s threading' % ( _( 52 ), ))
-    import threading
-    updateProgressDialog( '%s guibuilder' % ( _( 52 ), ))
-    import guibuilder
-    updateProgressDialog( '%s utilities' % ( _( 52 ), ))
-    import utilities, context_menu
-    updateProgressDialog( '%s cacheurl' % ( _( 52 ), ))
-    import cacheurl
-    updateProgressDialog( '%s shutil' % ( _( 52 ), ))
-    import shutil, datetime
-
-
-except:
-    closeProgessDialog()
-    traceback.print_exc()
-    xbmcgui.Dialog().ok( _( 0 ), _( 81 ) )
-    raise
-    
-class GUI( xbmcgui.Window ):
+class GUI( guibase.GUI ):
 
     def __init__( self ):
-        self.cwd = os.getcwd().replace( ";", "" )
-        self.debug = os.path.isfile( os.path.join( self.cwd, 'debug.txt' ))
-        self.getSettings()
-        self.gui_loaded = self.setupGUI()
-        if ( not self.gui_loaded ): self.close()
-        else:
-            try:
-                ## enable when ready
-                self.controls['Search Button']['control'].setEnabled( False )
-                self.setControlsDisabled()
-                self.setupVariables()
-                self.setStartupChoices()
-                self.setStartupCategory()
-            except:
-                closeProgessDialog()
-                traceback.print_exc()
-                self.gui_loaded = False
-                self.exitScript()
-                
+        try:
+            custom_imports = [ 'context_menu', 'cacheurl', 'utilities' ]
+            guibase.GUI.__init__( self, custom_imports )
+            for name in self.imported.keys():
+                globals().update( { name: self.imported[name] } )
+            ## enable when ready
+            self.controls['Search Button']['control'].setEnabled( False )
+            self.setControlsDisabled()
+            self.setStartupChoices()
+            self.setStartupCategory()
+        except:
+            traceback.print_exc()
+            self.exitScript()
+
     def setControlsDisabled( self ):
         try: self.controls['Category List Backdrop']['control'].setEnabled( False )
         except: pass
@@ -81,39 +30,23 @@ class GUI( xbmcgui.Window ):
         try: self.controls['Cast List Backdrop']['control'].setEnabled( False )
         except: pass
 
-    def getSettings( self ):
-        self.settings = utilities.Settings().get_settings()
-
-    def setupGUI( self ):
-        if ( self.settings[ "skin" ] == 'Default' ): current_skin = xbmc.getSkinDir()
-        else: current_skin = self.settings[ "skin" ]
-        if ( not os.path.exists( os.path.join( self.cwd, 'resources', 'skins', current_skin ))): current_skin = 'Default'
-        self.image_path = os.path.join( self.cwd, 'resources', 'skins', current_skin, 'gfx' )
-        gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=current_skin, skinXML="skin", useDescAsKey = True, 
-            title = sys.modules[ "__main__" ].__scriptname__, line1 = __line1__, dlg = dialog, pct = pct, language = _, debug = False )
-        #closeProgessDialog()
-        #if ( not ok ):
-        #    xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
-        return ok
-
     def setupVariables( self ):
+        guibase.GUI.setupVariables( self )
         import trailers, database
         self.trailers = trailers.Trailers()
         self.query= database.Query()
-        self.skin = self.settings[ "skin" ]
         self.sql = None
         self.params = None
         self.display_cast = False
         self.dummy()
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
-        self.controller_action = utilities.setControllerAction()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
 
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def dummy( self ):
+        import threading
         #self.debugWrite('dummy', 2)
         self.Timer = threading.Timer( 60*60*60, self.dummy,() )
         self.Timer.start()
@@ -142,7 +75,10 @@ class GUI( xbmcgui.Window ):
         self.setControlNavigation( '%s Button' % ( startup_button, ) )
         self.setCategory( self.settings[ "startup_category_id" ], 1 )
 
-    def setCategory( self, category_id = utilities.GENRES, list_category = 0 ):
+    def setCategory( self, category_id = None, list_category = 0 ):
+        # slight change to allow for the dynamic importing in guibase
+        if category_id == None:
+            category_id = utilities.GENRES
         self.category_id = category_id
         self.list_category = list_category
         if ( list_category > 0 ):
@@ -548,11 +484,6 @@ class GUI( xbmcgui.Window ):
             cw.doModal()
         del cw
 
-    def updateScript( self ):
-        import update
-        updt = update.Update( language=_ )
-        del updt
-        
     def toggleAsWatched( self ):
         trailer = self.setCountLabel( 'Trailer List' )
         watched = not ( self.trailers.movies[ trailer ].watched > 0 )
@@ -601,11 +532,6 @@ class GUI( xbmcgui.Window ):
                 else: force_update = False
                 self.showTrailers( self.sql, self.params, choice = trailer, force_update = force_update )
 
-    def exitScript( self, restart=False ):
-        if ( self.Timer ): self.Timer.cancel()
-        self.close()
-        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
-
     def setShortcut( self, shortcut ):
         if ( self.main_category == -1 ):
             self.sql_category = 'SELECT title, count, url, id, loaded FROM Genres ORDER BY title'
@@ -651,12 +577,11 @@ class GUI( xbmcgui.Window ):
         except: traceback.print_exc()
         
     def onAction( self, action ):
+        guibase.GUI.onAction( self, action )
         try:
             button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
             control = self.getFocus()
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-                self.exitScript()
-            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
+            if ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
                 self.setCategory( self.current_display[ self.list_category == 0 ][ 0 ], self.current_display[ self.list_category == 0 ][ 1 ] )
             elif ( control is self.controls['Trailer List']['control'] ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
@@ -715,17 +640,6 @@ class GUI( xbmcgui.Window ):
                         self.setControlNavigation( 'Optional Button' )
                 except: pass
         except: traceback.print_exc()
-        
-    def debugWrite( self, function, action, lines=[], values=[] ):
-        if ( self.debug ):
-            Action = ( 'Failed', 'Succeeded', 'Started' )
-            Highlight = ( '__', '__', '<<<<< ', '__', '__', ' >>>>>' )
-            xbmc.output( '%s%s%s : (%s)\n' % ( Highlight[action], function, Highlight[action + 3], Action[action] ) )
-            try:
-                for cnt, line in enumerate( lines ):
-                    finished_line = '%s\n' % ( line, )
-                    xbmc.output( finished_line % values[cnt] )
-            except: traceback.print_exc()
 
 
 
