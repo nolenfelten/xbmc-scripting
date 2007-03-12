@@ -319,7 +319,7 @@ class YouTubeGUI(xbmcgui.Window):
 			username = xbmcutils.gui.get_input('Username')
 
 		if password is None:
-			password = xbmcutils.gui.get_input('Password')
+			password = xbmcutils.gui.get_input('Password', hidden=True)
 
 		try:
 			ret = self.yt.login(username, password)
