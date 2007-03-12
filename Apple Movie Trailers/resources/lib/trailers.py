@@ -127,7 +127,7 @@ class Trailers:
         #####################################
         self.start_time = 0
         #####################################
-        update_on_start = True # FIXME this needs to be changed to read whatever setting we use
+        update_on_start = False # FIXME this needs to be changed to read whatever setting we use
         if update_on_start:
             self.updateGenres()
         else:
