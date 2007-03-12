@@ -32,12 +32,13 @@ import xbmcgui
 
 import guibuilder
 
-def get_input(title, default=''):
+def get_input(title, default='', hidden=False):
 	"""Show a virtual keyboard and return the entered text."""
 
 	ret = None
 
 	keyboard = xbmc.Keyboard(default, title)
+	keyboard.setHiddenInput(hidden)
 	keyboard.doModal()
 
 	if keyboard.isConfirmed():
