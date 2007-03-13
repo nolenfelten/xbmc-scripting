@@ -1,3 +1,14 @@
+      ##########################
+      #                        #                      
+      #   XinBox (V.0.9)       #         
+      #     By Stanley87       #         
+      #                        #
+#######                        #######             
+#                                    #
+#                                    #
+#   A pop3 email client for XBMC     #
+#                                    #
+######################################
 import sys, os, xbmc
 
 scriptpath = sys.path[0]
