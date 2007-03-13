@@ -31,8 +31,8 @@
     <string id="202">Router IP</string>
     <string id="203">Router username</string>
     <string id="204">Router password</string>
-    <string id="205">Path to kaid on Xbox</string>
-    <string id="206">Path to kaid.conf on Xbox</string>
+    <string id="205">Kaid path</string>
+    <string id="206">Kaid.conf path</string>
     <string id="207">Upload method</string>
     <string id="208">Xbox username</string>
     <string id="209">Xbox password</string>
