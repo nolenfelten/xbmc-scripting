@@ -42,12 +42,10 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupGUI( self ):
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, fastMethod=True, title=__scriptname__, useDescAsKey=True, language=_ )
+        ok = gb.create_gui( self, fastMethod=True, useDescAsKey=True, language=_ )
         return ok
         
     def setup_all( self ):
-        #self.show()
-        #dummy = xbmc.getCondVisibility( "System.InternetState" ) # per GeminiServers instructions
         self.setup_variables()
         self.wrt54g = wrt54g.Commands()
         self.check_status()
