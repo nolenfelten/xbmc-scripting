@@ -21,12 +21,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-from SVT import SVTMedia
 import xbmcgui
 import xbmc
 import os
 import sys
 import traceback
+
+from xbmcutils.net import DownloadAbort, DownloadError
+
+from SVT import SVTMedia, ParseError
 
 ACTION_MOVE_LEFT      = 1  
 ACTION_MOVE_RIGHT     = 2
@@ -155,31 +158,33 @@ class SVTGui(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	def update_progress(val, dlg):
-		dlg.update(val)
-		return dlg.iscanceled()
-	update_progress = staticmethod(update_progress)
+	def update_progress(self, done, size, dlg):
+		msg = 'Hamtar data (%dkB)' % int(done / 1024)
+		percent = min(int((done * 100.0) / size), size)
+		dlg.update(percent, msg)
+
+		return not dlg.iscanceled()
 	
 	def download_data(self, url, func):
 		data = None
 
 		dlg = xbmcgui.DialogProgress()
 		dlg.create('Sveriges Television', 'Hamtar data')
-		soup = SVTMedia.make_soup(url, SVTGui.update_progress, dlg)
+
+		self.svt.set_report_hook(self.update_progress, dlg)
+
+		try:
+			data = func(url)
+		except ParseError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('Sveriges Television', 'Kunde inte tolka data.')
+		except DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('Sveriges Television', 'Kunde inte hamta data.')
+		except DownloadAbort, e:
+			pass
+
 		dlg.close()
-
-		if soup == None:
-			dlg = xbmcgui.Dialog()
-			dlg.ok('Sveriges Television', 'Kunde inte hamta data')
-			self.close()
-			return None
-
-		data = func(soup) 
-		if data == None:
-			dlg = xbmcgui.Dialog()
-			dlg.ok('Sveriges Television', 'Kunde inte tolka data')
-			self.close()
-			return None
 
 		return data
 
