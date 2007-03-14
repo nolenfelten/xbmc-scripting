@@ -36,22 +36,6 @@ import xbmcutils.guibuilder
 
 from SVT import SVTMedia, ParseError
 
-ACTION_MOVE_LEFT      = 1  
-ACTION_MOVE_RIGHT     = 2
-ACTION_MOVE_UP        = 3
-ACTION_MOVE_DOWN      = 4
-ACTION_PAGE_UP        = 5 
-ACTION_PAGE_DOWN      = 6
-ACTION_SELECT_ITEM    = 7
-ACTION_HIGHLIGHT_ITEM = 8
-ACTION_PARENT_DIR     = 9
-ACTION_PREVIOUS_MENU  = 10
-ACTION_SHOW_INFO      = 11
-ACTION_PAUSE          = 12
-ACTION_STOP           = 13
-ACTION_NEXT_ITEM      = 14
-ACTION_PREV_ITEM      = 15
-
 class Logger:
 	def write(data):
 		xbmc.log(data)
@@ -159,9 +143,9 @@ class SVTGui(xbmcgui.Window):
 	
 	def onAction(self, action):
 		try: 
-			if action == ACTION_PREVIOUS_MENU:
+			if action == xbmcutils.gui.ACTION_PREVIOUS_MENU:
 				self.close()
-			elif action == ACTION_PARENT_DIR and len(self.stack) > 1:
+			elif action == xbmcutils.gui.ACTION_PARENT_DIR and len(self.stack) > 1:
 				url = self.stack.pop() # current
 				url = self.stack.pop() # prev
 				self.list_contents(url)
