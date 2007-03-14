@@ -29,6 +29,9 @@ import traceback
 
 from xbmcutils.net import DownloadAbort, DownloadError
 
+import xbmcutils.gui
+import xbmcutils.guibuilder
+
 from SVT import SVTMedia, ParseError
 
 ACTION_MOVE_LEFT      = 1  
@@ -56,45 +59,46 @@ sys.stderr = Logger
 
 class SVTGui(xbmcgui.Window):
 	def __init__(self):
-		self.stack = []
-		self.data = []
+		try:
+			self.stack = []
+			self.data = []
 
-		self.img_path = os.path.join(os.getcwd()[:-1], 'gfx')
-		self.svt = SVTMedia()
+			self.base_path = os.getcwd().replace(';','')
 
-		self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
+			if not self.load_skin('default'):
+				self.close()
 
-		xbmcgui.lock()
+			self.img_path = os.path.join(os.getcwd()[:-1], 'gfx')
+			self.svt = SVTMedia()
 
-		# Background image
-		img = os.path.join(self.img_path, 'background.png')
-		widget = xbmcgui.ControlImage(0,0,720,576, img)
-		self.addControl(widget)
+			self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
 
-		# Sveriges Television logo
-		img = os.path.join(self.img_path, 'svt-fargstor.png')
-		widget = xbmcgui.ControlImage(50,15,177,125, img)
-		self.addControl(widget)
+			self.list_contents(self.svt.get_start_url())
+		except:
+			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
+			traceback.print_exc()
+			self.close()
 
-		# About button
-		widget = xbmcgui.ControlButton(40, 113, 150, 30, 'Om')
-		self.addControl(widget)
-		self.about = widget
+	def get_control(self, desc):
+		"""Return the control that matches the widget description."""
 
-		# Content list
-		widget = xbmcgui.ControlList(217, 113, 450, 435)
-		widget.setImageDimensions(32, 32)
-		self.addControl(widget)
-		self.setFocus(widget)
-		self.list = widget
+		return self.controls[desc]['control']
 
-		# Movement
-		self.about.controlRight(self.list)
-		self.list.controlLeft(self.about)
+	def load_skin(self, name=None):
+		"""Loads the GUI skin."""
 
-		xbmcgui.unlock()
+		if not name:
+			name = 'default'
 
-		self.list_contents(self.svt.get_start_url())
+		skin_path = os.path.join(self.base_path, 'skins', name)
+		skin = os.path.join(skin_path, 'skin.xml')
+
+		self.img_path = os.path.join(skin_path, 'gfx')
+
+		xbmcutils.guibuilder.GUIBuilder(self, skin, self.img_path,
+		                                useDescAsKey=True, fastMethod=True)
+
+		return self.SUCCEEDED
 
 	def show_about(self):
 		dlg = xbmcgui.Dialog()
@@ -103,14 +107,19 @@ class SVTGui(xbmcgui.Window):
 		       'Felrapporter: XBMC Forum - Python Script Development')
 
 	def list_contents(self, url):
-		self.data = self.download_data(url, self.svt.parse_directory)
-		if self.data != None:
-			pass
+		data = self.download_data(url, self.svt.parse_directory)
+		if data is None:
+			# Nothing to update.
+			return
+
+		self.data = data
 
 		self.stack.append(url)
 
+		list = self.get_control('Content List')
+
 		xbmcgui.lock()
-		self.list.reset()
+		list.reset()
 		for desc, url, type in self.data:
 			item = xbmcgui.ListItem (label=desc)
 			if type is SVTMedia.DIR:
@@ -119,7 +128,7 @@ class SVTGui(xbmcgui.Window):
 			elif type is SVTMedia.VIDEO:
 				img = os.path.join(self.img_path, 'video-x-generic.png')
 				item.setThumbnailImage(img)
-			self.list.addItem(item)
+			list.addItem(item)
 		xbmcgui.unlock()
 
 	def play_clip(self, url):
@@ -131,14 +140,15 @@ class SVTGui(xbmcgui.Window):
 
 	def onControl(self, control):
 		try: 
-			if control == self.list:
-				pos = self.list.getSelectedPosition()
+			if control is self.get_control('Content List'):
+				list = self.get_control('Content List')
+				pos = list.getSelectedPosition()
 				desc, url, type = self.data[pos]
 				if type is SVTMedia.DIR:
 					self.list_contents(url)
 				elif type is SVTMedia.VIDEO:
 					self.play_clip(url)
-			elif control == self.about:
+			elif control is self.get_control('About Button'):
 				self.show_about()
 		except:
 			xbmc.log('Exception (onControl): ' + str(sys.exc_info()[0]))
