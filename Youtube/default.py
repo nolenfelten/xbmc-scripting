@@ -39,25 +39,6 @@ from xbmcutils.net import DownloadAbort, DownloadError
 import xbmcutils.gui
 import xbmcutils.guibuilder
 
-
-# Gamepad constans
-ACTION_MOVE_LEFT      = 1  
-ACTION_MOVE_RIGHT     = 2
-ACTION_MOVE_UP        = 3
-ACTION_MOVE_DOWN      = 4
-ACTION_PAGE_UP        = 5 
-ACTION_PAGE_DOWN      = 6
-ACTION_SELECT_ITEM    = 7
-ACTION_HIGHLIGHT_ITEM = 8
-ACTION_PARENT_DIR     = 9
-ACTION_PREVIOUS_MENU  = 10
-ACTION_SHOW_INFO      = 11
-ACTION_PAUSE          = 12
-ACTION_STOP           = 13
-ACTION_NEXT_ITEM      = 14
-ACTION_PREV_ITEM      = 15
-ACTION_CONTEXT_MENU   = 117
-
 class Logger:
 	def write(data):
 		xbmc.log(data)
@@ -530,14 +511,14 @@ class YouTubeGUI(xbmcgui.Window):
 		"""Handle user input events."""
 
 		try: 
-			if action == ACTION_PREVIOUS_MENU:
+			if action == xbmcutils.gui.ACTION_PREVIOUS_MENU:
 				if self.state is YouTubeGUI.STATE_MAIN:
 					self.close()
 				elif self.state & ~YouTubeGUI.STATE_FEEDS & YouTubeGUI.STATE_MOST_DISCUSSED:
 					self.set_button_state(YouTubeGUI.STATE_FEEDS)
 				else:
 					self.set_button_state(YouTubeGUI.STATE_MAIN)
-			elif action == ACTION_CONTEXT_MENU:
+			elif action == xbmcutils.gui.ACTION_CONTEXT_MENU:
 				if self.list_state is YouTubeGUI.CONTENT_STATE_VIDEO:
 					self.context_menu_video()
 				else:
