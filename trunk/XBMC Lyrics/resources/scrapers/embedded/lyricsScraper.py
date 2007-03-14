@@ -1,5 +1,5 @@
 """
-Scraper for embedded lyrics with LAME 3.92
+Scraper for embedded lyrics
 
 Nuka1195
 """
@@ -9,9 +9,9 @@ import xbmc
 import re
 
 class LyricsFetcher:
-    """ required: Fetcher Class for www.lyricwiki.org """
+    """ required: Fetcher Class for embedded lyrics """
     def __init__( self ):
-        self.pattern = "USLT.*[A-Za-z0-9]*\x00([^\x00]*)TEXT"
+        self.pattern = "USLT.*[A-Za-z0-9][A-Za-z0-9]*\x00([^\x00]*)"
 
     def get_lyrics( self, artist, song ):
         """ *required: Returns song lyrics or a blank string if none found """
@@ -42,6 +42,8 @@ class LyricsFetcher:
         text = text.replace( "\t", "" )
         text = text.replace( "\r\n", "\n" )
         text = text.replace( "\r", "\n" )
+        if ( text[ -4 : ] == "TEXT" ):
+            text = text[ : -4 ]
         return text
 
 
