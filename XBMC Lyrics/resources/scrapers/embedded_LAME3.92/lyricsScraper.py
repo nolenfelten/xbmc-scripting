@@ -1,5 +1,5 @@
 """
-Scraper for embedded lyrics with iTunes
+Scraper for embedded lyrics with LAME 3.92
 
 Nuka1195
 """
@@ -11,8 +11,8 @@ import re
 class LyricsFetcher:
     """ required: Fetcher Class for www.lyricwiki.org """
     def __init__( self ):
-        self.pattern = "USLT\x00\x00\x02.\x00\x00\x00[A-Za-z0-9]*\x00([^\x00]*)"
-        
+        self.pattern = "USLT.*[A-Za-z0-9]*\x00([^\x00]*)TEXT"
+
     def get_lyrics( self, artist, song ):
         """ *required: Returns song lyrics or a blank string if none found """
         file_path = xbmc.Player().getPlayingFile()
@@ -40,6 +40,7 @@ class LyricsFetcher:
     def _clean_text( self, text ):
         """ Convert line terminators and html entities """
         text = text.replace( "\t", "" )
+        text = text.replace( "\r\n", "\n" )
         text = text.replace( "\r", "\n" )
         return text
 
