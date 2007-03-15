@@ -1,6 +1,6 @@
 <window>
 
-	<defaultcontrol always="true">10</defaultcontrol>
+	<defaultcontrol always="true">5</defaultcontrol>
 	<resolution>PAL16x9</resolution>
 	<useincludes>false</useincludes>
 
