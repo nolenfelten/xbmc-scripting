@@ -119,10 +119,8 @@ class SVTGui(xbmcgui.Window):
 
 	def play_clip(self, url):
 		file = self.download_data(url, self.svt.parse_video)
-		if file == None:
-			pass
-
-		self.player.play(str(file[0]))
+		if file is not None:
+			self.player.play(str(file[0]))
 
 	def onControl(self, control):
 		try: 
