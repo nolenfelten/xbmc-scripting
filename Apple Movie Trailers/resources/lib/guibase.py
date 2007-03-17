@@ -56,28 +56,15 @@ class GUI( xbmcgui.Window ):
         self.settings = utilities.Settings().get_settings()
 
     def setupGUI( self ):
-        if ( self.settings[ "skin" ] == 'Default' ):
-            current_skin = xbmc.getSkinDir()
-        else:
-            current_skin = self.settings[ "skin" ]
-        if ( not os.path.exists( os.path.join( self.cwd, 'resources', 'skins', current_skin ))):
-            current_skin = 'Default'
-        self.image_path = os.path.join( self.cwd, 'resources', 'skins', current_skin, 'gfx' )
         gb = guibuilder.GUIBuilder()
         dialog = xbmcgui.DialogProgress()
         dialog.create( _( 0 ) )
-        ok = gb.create_gui(
+        ok, self.image_path = gb.create_gui(
             self,
-            skin=current_skin,
-            skinXML="skin",
-            useDescAsKey = True, 
-            title = sys.modules[ "__main__" ].__scriptname__,
-            line1 = _(50),
-            dlg = dialog,
-            pct = 0,
-            language = _,
-            debug = False
+            skin = self.settings[ "skin" ],
+            language = _
         )
+        dialog.close()
         return ok
 
     def setupVariables( self ):

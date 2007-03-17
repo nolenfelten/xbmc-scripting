@@ -1,4 +1,4 @@
-<window>
+<window id="3001">
 
 <!--
     The <resolution> tag is used for the setCoordinateResolution() function.
@@ -8,7 +8,7 @@
 	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
 	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
 	
-	<include> tags DO NOT work and the defaults.xml file WILL NOT be used for any missing tags.
+	To use <include> tags and defaults.xml, changed <useincludes>false</useincludes> to true.
 	
 	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
 	
@@ -16,6 +16,7 @@
 	
 	<defaultcontrol>10</defaultcontrol>
 	<resolution>PAL16x9</resolution>
+    <useincludes>false</useincludes>
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>

@@ -62,7 +62,7 @@ class Settings:
             "startup_category_id": 10,
             "shortcut1": 10,
             "shortcut2": 4,
-            "shortcut3": -6
+            "shortcut3": FAVORITES
             }
         ok = self.save_settings( settings )
         return settings
