@@ -19,10 +19,10 @@ class GUI( xbmcgui.WindowDialog ):
     def setupVariables( self ):
         self.controller_action = amt_util.setControllerAction()
 
-    def setupGUI( self, skin ):
+    def setupGUI( self ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=skin, skinXML="credits", useDescAsKey=True, language=self._, fastMethod=True )
+        ok, image_path = gb.create_gui( self, skin=self.skin, xml_name="credits", language=self._ )
         return ok
         
     def showCredits( self ):

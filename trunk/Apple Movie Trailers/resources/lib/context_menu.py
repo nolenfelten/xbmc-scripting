@@ -6,11 +6,11 @@ import utilities
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         try:
-            self.cwd = os.getcwd().replace( ";", "" )
             self.win = kwargs[ "win" ]
             self._ = kwargs[ "language" ]
+            self.skin = kwargs[ "skin" ]
             self.list_control = kwargs[ "list_control" ]
-            self.gui_loaded = self.setupGUI()
+            self.gui_loaded = self.setupGUI( self.win.skin )
             if ( not self.gui_loaded ): self.close()
             else:
                 self.setupVariables()
@@ -23,10 +23,10 @@ class GUI( xbmcgui.WindowDialog ):
         if ( self.list_control == "Trailer List" ):
             self.saved = self.win.trailers.movies[ self.list_item ].saved != ""
             
-    def setupGUI( self, skin ):
+    def setupGUI( self ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok =  gb.create_gui( self, skin=skin, skinXML="context_menu", useDescAsKey=True, language=self._, fastMethod=True )
+        ok, image_path = gb.create_gui( self, skin=self.skin, xml_name="context_menu", language=self._ )
         return ok
 
     def showContextMenu( self ):

@@ -15,13 +15,13 @@ class GUI( guibase.GUI ):
                 globals().update( { name: self.imported[name] } )
             ## enable when ready
             self.controls['Search Button']['control'].setEnabled( False )
-            self.setControlsDisabled()
+            #self.setControlsDisabled()
             self.setStartupChoices()
             self.setStartupCategory()
         except:
             traceback.print_exc()
             self.exitScript()
-
+        '''
     def setControlsDisabled( self ):
         try: self.controls['Category List Backdrop']['control'].setEnabled( False )
         except: pass
@@ -29,7 +29,8 @@ class GUI( guibase.GUI ):
         except: pass
         try: self.controls['Cast List Backdrop']['control'].setEnabled( False )
         except: pass
-
+        '''
+        
     def setupVariables( self ):
         guibase.GUI.setupVariables( self )
         import trailers, database
