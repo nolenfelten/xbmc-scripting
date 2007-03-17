@@ -96,7 +96,7 @@ class SVTGui(xbmcgui.Window):
 		data = self.download_data(url, self.svt.parse_directory)
 		if data is None:
 			# Nothing to update.
-			return
+			return False
 
 		self.data = data
 
@@ -116,6 +116,8 @@ class SVTGui(xbmcgui.Window):
 				item.setThumbnailImage(img)
 			list.addItem(item)
 		xbmcgui.unlock()
+
+		return True
 
 	def play_clip(self, url):
 		file = self.download_data(url, self.svt.parse_video)
@@ -144,9 +146,13 @@ class SVTGui(xbmcgui.Window):
 			if action == xbmcutils.gui.ACTION_PREVIOUS_MENU:
 				self.close()
 			elif action == xbmcutils.gui.ACTION_PARENT_DIR and len(self.stack) > 1:
-				url = self.stack.pop() # current
-				url = self.stack.pop() # prev
-				self.list_contents(url)
+				cur = self.stack.pop()
+				prev = self.stack.pop()
+				if not self.list_contents(prev):
+					# Still at the same ol' position.
+					self.stack.append(prev)
+					self.stack.append(cur)
+
 		except:
 			xbmc.log('Exception (onAction): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
