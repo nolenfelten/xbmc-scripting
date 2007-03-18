@@ -1,18 +1,4 @@
 <window id="3000">
-    <!--
-        The <resolution> tag is used for the setCoordinateResolution() function.
-        
-        You may move, add or delete any controls you want as long as they're not Required.
-        With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-        The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
-        <shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-
-        Use <useincludes>false</useincludes> tag if you don't have any <include> tags. Your skin
-        will load faster, but you must supply all tags and values.
-        
-        To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
-        
-    -->
 
     <resolution>PAL</resolution>
     <useincludes>false</useincludes>
@@ -121,7 +107,7 @@
             <height>16</height>
             <texture>opponent.png</texture>
             <aspectratio>keep</aspectratio>
-            <visible>true</visible>
+            <visible>System.KaiEnabled</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
