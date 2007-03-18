@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="0">XBMC Lyrics</string>
+
+    <!-- User Messages -->
+    <string id="100">Exception for</string>
+
+    <!-- Settings labels -->
+    <string id="201">Scraper</string>
+    <string id="202">Save lyrics</string>
+    <string id="203">Save folder</string>
+    <string id="204">Smooth scrolling for lyrics</string>
+    <string id="205">Show visualization window</string>
+
+    <!-- Settings error messages -->
+    <string id="230">There was an error saving settings!</string>
+
+    <!-- Settings restart required message -->
+    <string id="240">Scraper changes won't take effect until you restart.</string>
+    <string id="241">Would you like to restart %s now?</string>
+
+    <!-- Settings buttons -->
+    <string id="250">Ok</string>
+    <string id="251">Cancel</string>
+    <string id="252">Update</string>
+    <string id="253">Credits</string>
+    <string id="254">Page</string>
+    <string id="255">Restart</string>
+    <string id="256">Later</string>
+    
+    <!-- Error messages -->
+    <string id="630">Unusual page layout, no parsing built in yet!</string>
+    <string id="631">Artist not found!</string>
+    <string id="632">No lyrics found!</string>
+    <string id="633">Empty page found!</string>
+    <string id="638">What do you want to run this for?</string>
+    <string id="639">No music is playing fool!</string>
+    
+    <!-- Update messages -->
+    <string id="1000">Your version is up to date.</string>
+    <string id="1001">Fetching current tagged versions...</string>
+    <string id="1002">is newer</string>
+    <string id="1003">Would you like to update?</string>
+    <string id="1004">Fetching file list...</string>
+    <string id="1005">Please wait...</string>
+    <string id="1006">Version</string>
+    <string id="1007">Fetching:</string>
+    <string id="1008">Path:</string>
+    <string id="1009">File:</string>
+    <string id="1010">Your new version was saved to:</string>
+
+    <!-- Update error messages -->
+    <string id="1030">No tagged versions were found!</string>
+    <string id="1031">There was an error updating script!</string>
+</strings>
