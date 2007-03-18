@@ -1,0 +1,496 @@
+<window id="3001">
+
+<!--
+    The <resolution> tag is used for the setCoordinateResolution() function.
+    
+	You may move, add or delete any controls you want as long as they're not Required.
+	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+	
+	use <useincludes>true</useincludes> tag to allow <include> tags and defaults.xml
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
+-->
+	
+	<defaultcontrol>10</defaultcontrol>
+	<resolution>PAL</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>162</posx>
+		<posy>96</posy>
+	</coordinates>
+
+	<controls>
+
+		<control type="image" id="1">
+			<description>backdrop</description>
+			<posx>-162</posx>
+			<posy>-96</posy>
+			<width>720</width>
+			<height>576</height>
+			<texture>\black.png</texture>
+		</control>
+
+		<control type="image" id="1">
+			<posx>-45</posx>
+			<posy>-11</posy>
+			<width>486</width>
+			<height>406</height>
+			<texture>\dialog-panel2.png</texture>
+		</control>
+
+		<!-- labels -->
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="1">
+			<description>Title Label</description>
+			<posx>-10</posx>
+			<posy>6</posy>
+			<width>280</width>
+			<align>left</align>
+			<font>special13</font>
+			<textcolor>DDced8da</textcolor>
+			<label>0</label>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="1">
+			<description>Version Label</description>
+			<posx>420</posx>
+			<posy>6</posy>
+			<width>150</width>
+			<align>right</align>
+			<font>special13</font>
+			<textcolor>DDced8da</textcolor>
+			<label>-</label>
+		</control>
+
+        <!-- buttons page 1-->
+		
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="10">
+			<description>Setting1 Button</description>
+			<posx>-20</posx>
+			<posy>60</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>201</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>50</onup>
+			<ondown>20</ondown>
+            <visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="11">
+			<description>Setting1 Value</description>
+			<posx>320</posx>
+			<posy>60</posy>
+			<width>200</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="20">
+			<description>Setting2 Button</description>
+			<posx>-20</posx>
+			<posy>92</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>202</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="checkmark" id="21">
+			<description>Setting2 Value</description>
+			<posx>295</posx>
+			<posy>97</posy>
+			<width>50</width>
+			<height>30</height>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
+            <disabledcolor>00d0d0d0</disabledcolor>
+            <shadowcolor>00000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="30">
+			<description>Setting3 Button</description>
+			<posx>-20</posx>
+			<posy>124</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>203</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>20</onup>
+			<ondown>40</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="31">
+			<description>Setting3 Value</description>
+			<posx>320</posx>
+			<posy>124</posy>
+			<width>200</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="40">
+			<description>Setting4 Button</description>
+			<posx>-20</posx>
+			<posy>156</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>204</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>30</onup>
+			<ondown>50</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="checkmark" id="41">
+			<description>Setting4 Value</description>
+			<posx>295</posx>
+			<posy>161</posy>
+			<width>50</width>
+			<height>30</height>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
+            <disabledcolor>00d0d0d0</disabledcolor>
+            <shadowcolor>00000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="50">
+			<description>Setting5 Button</description>
+			<posx>-20</posx>
+			<posy>188</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>205</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>40</onup>
+			<ondown>10</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="checkmark" id="51">
+			<description>Setting5 Value</description>
+			<posx>295</posx>
+			<posy>193</posy>
+			<width>50</width>
+			<height>30</height>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>\settings-check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
+            <disabledcolor>00d0d0d0</disabledcolor>
+            <shadowcolor>00000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!--control type="button" id="60">
+			<description>Setting6 Button</description>
+			<posx>-20</posx>
+			<posy>220</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>206</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>50</onup>
+			<ondown>70</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control-->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!--control type="button" id="61">
+			<description>Setting6 Value</description>
+			<posx>-20</posx>
+			<posy>220</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control-->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!--control type="button" id="70">
+			<description>Setting7 Button</description>
+			<posx>-20</posx>
+			<posy>252</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>207</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturefocus>\input-focus.png</texturefocus>
+			<texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>60</onup>
+			<ondown>80</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control-->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!--control type="button" id="71">
+			<description>Setting7 Value</description>
+			<posx>-20</posx>
+			<posy>252</posy>
+			<width>350</width>
+			<height>30</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>10</textoffsetx>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <disabledcolor>60d0d0d0</disabledcolor>
+            <shadowcolor>ff000000</shadowcolor>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+		</control-->
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="200">
+			<description>Ok Button</description>
+			<posx>340</posx>
+			<posy>60</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>250</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>230</onup>
+			<ondown>210</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="210">
+			<description>Cancel Button</description>
+			<posx>340</posx>
+			<posy>95</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>251</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>200</onup>
+			<ondown>220</ondown>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="220">
+			<description>Update Button</description>
+			<posx>340</posx>
+			<posy>130</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>252</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>210</onup>
+			<ondown>230</ondown>
+            <enable>System.HasInternet</enable> 
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="230">
+			<description>Credits Button</description>
+			<posx>340</posx>
+			<posy>165</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>253</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<texturenofocus>\keyboard-btn-backspace.png</texturenofocus>
+			<texturefocus>\keyboard-btn-backspace-focus.png</texturefocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>220</onup>
+			<ondown>200</ondown>
+		</control>
+
+		<!-- ** Optional ** -->
+		<control type="label" id="300">
+			<description>Page1 Label</description>
+			<posx>430</posx>
+			<posy>337</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>right</align>
+			<label>1/1</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+            <visible allowhiddenfocus="false">Control.IsVisible(10)</visible> 
+		</control>
+
+		<!-- ** Optional ** -->
+		<!--control type="label" id="310">
+			<description>Page2 Label</description>
+			<posx>430</posx>
+			<posy>335</posy>
+			<width>90</width>
+			<height>32</height>
+			<align>right</align>
+			<label>2/2</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+            <visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
+		</control-->
+
+	</controls>
+</window>
