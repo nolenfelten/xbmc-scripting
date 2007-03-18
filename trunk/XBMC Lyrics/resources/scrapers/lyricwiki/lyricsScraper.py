@@ -105,16 +105,17 @@ class LyricsFetcher:
         """ Fetch lyrics if available """
         try:
             # Open url or local file (if debug == True)
-            if (not debug): usock = urllib.urlopen( url )
+            if ( not debug ):
+                usock = urllib.urlopen( url )
             else:
                 usock = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite == True)
             if (debugWrite):
-                usock = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "w" )
-                usock.write( htmlSource )
-                usock.close
+                file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "w" )
+                file_object.write( htmlSource )
+                file_object.close()
             # Parse htmlSource for lyrics
             parser = _LyricsParser()
             parser.feed( htmlSource )
@@ -128,16 +129,17 @@ class LyricsFetcher:
         try:
             url = self.base_url + "/%s"
             # Open url or local file (if debug == True)
-            if (not debug): usock = urllib.urlopen( url % ( artist, ) )
+            if ( not debug ):
+                usock = urllib.urlopen( url % ( artist, ) )
             else:
                 usock = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite == True)
             if ( debugWrite ):
-                usock = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "w" )
-                usock.write( htmlSource )
-                usock.close
+                file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "w" )
+                file_object.write( htmlSource )
+                file_object.close()
             # Parse htmlSource for song links
             parser = _SongListParser()
             parser.feed( htmlSource )
@@ -198,7 +200,8 @@ class LyricsFetcher:
             text = text.replace( "&gt;", ">" )
             text = text.replace( "&lt;", "<" )
             text = text.replace( "&quot;", '"' )
-        except: pass
+        except: 
+            pass
         return text
 
 # used for testing only
@@ -209,7 +212,7 @@ if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
     artist = [ "The Charlie Daniels Band", "ABBA", "Jem","Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
     song = [ "(What This World Needs Is) A Few More Rednecks", "S.O.S","24","Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
-    for cnt in range( 0, 1 ):
+    for cnt in range( 1 ):
         lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
     # used to test get_lyrics_from_list() 

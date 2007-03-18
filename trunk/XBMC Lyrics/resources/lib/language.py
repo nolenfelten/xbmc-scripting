@@ -16,19 +16,19 @@ class Language:
         """ gets the current language """
         self.strings = {}
         # language folder
-        cwd = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
         # get the current users language setting
         language = xbmc.getLanguage().lower()
-        language_path = os.path.join( cwd, language, "strings.xml" )
+        language_path = os.path.join( base_path, language, "strings.xml" )
         # if no strings.xml exists, default to english
         if ( not os.path.isfile( language_path ) ):
             language = "english"
-            language_path = os.path.join( cwd, language, "strings.xml" )
+            language_path = os.path.join( base_path, language, "strings.xml" )
         # add localized strings
         ok = self._parse_strings_file( language_path )
         # fill-in missing strings with english strings
         if ( language != "english" ):
-            ok = self._parse_strings_file( os.path.join( cwd, "english", "strings.xml" ) )
+            ok = self._parse_strings_file( os.path.join( base_path, "english", "strings.xml" ) )
         
     def _parse_strings_file( self, language_path ):
         """ adds localized strings to the strings dictionary """

@@ -5,9 +5,8 @@
 		solexalex:
 		TomKun:
 		Smuto:					Skinning Mod
-		Rockstar & Donno:	Language Routine
 		Spiff:						Unicode support
-		Nuka1195:				lyricwiki Scraper and Modulization
+		Nuka1195:				lyricwiki & embedded Scraper and Modulization
 				
 Please report any bugs: http://www.xboxmediacenter.com/forum/showthread.php?t=10187
 """
@@ -22,8 +21,8 @@ import os, sys
 import xbmc, xbmcgui
 import threading
 
-resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
-sys.path.append( os.path.join( resourcesPath, "lib" ) )
+resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+sys.path.append( os.path.join( resource_path, "lib" ) )
 import language, utilities
 import guibuilder
 _ = language.Language().string
@@ -32,7 +31,7 @@ class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
         try:
             self.Timer = None
-            self.gui_loaded = self.setupGUI()
+            self.gui_loaded, image_path = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
                 self.startScript = Start( function=self.setup_all ).start()
@@ -49,7 +48,7 @@ class GUI( xbmcgui.WindowDialog ):
 
     def setupGUI( self ):
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, fastMethod=True, language=_ )
+        ok = gb.create_gui( self, use_desc_as_key=False, language=_ )
         return ok
 
     def setup_variables( self ):
@@ -70,7 +69,7 @@ class GUI( xbmcgui.WindowDialog ):
                 xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_win_id, ) )
 
     def get_scraper( self ):
-        sys.path.append( os.path.join( resourcesPath, "scrapers", self.settings[ "scraper" ] ) )
+        sys.path.append( os.path.join( resource_path, "scrapers", self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
 
@@ -214,11 +213,10 @@ class GUI( xbmcgui.WindowDialog ):
                 exception = ( artist, alt_artist, )
                 self.LyricsScraper._set_exceptions( exception )
                 self.myPlayerChanged( 2, True )
-                #self.allow_exception = False
         
-    def get_keyboard( self, default="", heading="" ):
+    def get_keyboard( self, default="", heading="", hidden=False ):
         """ shows a keyboard and returns a value """
-        keyboard = xbmc.Keyboard( default, heading )
+        keyboard = xbmc.Keyboard( default, heading, hidden )
         keyboard.doModal()
         if ( keyboard.isConfirmed() ):
             return keyboard.getText()
@@ -229,11 +227,11 @@ class GUI( xbmcgui.WindowDialog ):
         self.close()
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
-    def onControl(self, control):
+    def onControl( self, control ):
         if control == self.controls[ 5 ][ "control" ]:
             self.get_lyrics_from_list( self.controls[ 5 ][ "control" ].getSelectedPosition() )
 
-    def onAction(self, action):
+    def onAction( self, action ):
         button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
         if ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
             self.exit_script()
