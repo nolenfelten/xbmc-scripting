@@ -1,19 +1,5 @@
-<window>
+<window id="3001">
 
-<!--
-    The <resolution> tag is used for the setCoordinateResolution() function.
-    
-	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
-	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-	
-	<include> tags DO NOT work and the defaults.xml file WILL NOT be used for any missing tags.
-	
-	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
-	
--->
-	
 	<defaultcontrol>10</defaultcontrol>
 	<resolution>PAL</resolution>
 	<coordinates>
@@ -127,7 +113,7 @@
 			<ondown>20</ondown>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" time="100" start="0" end="100" delay="150" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-            <visible allowhiddenfocus="true">Control.HasFocus(100) | Control.HasFocus(110) | Control.HasFocus(120) | Control.HasFocus(130) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50)</visible> 
+            <visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -413,7 +399,7 @@
 			<onright>10</onright>
 			<onup>210</onup>
 			<ondown>230</ondown>
-            <visible>System.InternetState</visible>
+            <enable>System.InternetState</enable>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" time="100" start="0" end="100" delay="150" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 		</control>
@@ -454,12 +440,12 @@
             <align>right</align>
 			<aligny>center</aligny>
 			<label>1/1</label>
-			<textcolor>ffffffff</textcolor>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
 			<textoffsetx>10</textoffsetx>
             <texturefocus>-</texturefocus>
             <texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" time="100" start="0" end="100" delay="150" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 

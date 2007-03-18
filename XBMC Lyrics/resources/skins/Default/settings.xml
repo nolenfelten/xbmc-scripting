@@ -1,4 +1,4 @@
-<window>
+<window id="3001">
 
 <!--
     The <resolution> tag is used for the setCoordinateResolution() function.
@@ -439,7 +439,7 @@
 			<onright>10</onright>
 			<onup>210</onup>
 			<ondown>230</ondown>
-            <visible allowhiddenfocus="false">System.HasInternet</visible> 
+            <enable>System.HasInternet</enable> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
