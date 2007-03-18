@@ -1,21 +1,8 @@
-<window>
-<!--
-	The <resolution> tag is used for the setCoordinateResolution() function.
-	
-	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
-	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-		
-	<include> tags work and the defaults.xml file will be used for any missing tags.
-	
-	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
-	
--->
+<window id="3000">
 
-
-	<defaultcontrol>200</defaultcontrol>
-	<resolution>PAL</resolution>
+ <defaultcontrol>200</defaultcontrol>
+ <resolution>PAL</resolution>
+ <useincludes>true</useincludes>
 
 	<controls>
 		<control type="image" id="1">
@@ -64,7 +51,7 @@
 			<posx>50</posx>
 			<posy>120</posy>
 			<width>630</width>
-			<height>410</height>
+			<height>425</height>
 		</control>
 	</controls>
 
