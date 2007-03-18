@@ -7,8 +7,6 @@ class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         self._ = kwargs[ "language" ]
-        self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
-        self.__version__ = sys.modules[ "__main__" ].__version__
         self.gui_loaded = self.setupGUI()
         if ( not self.gui_loaded ): self._close_dialog()
         else:
@@ -21,14 +19,14 @@ class GUI( xbmcgui.WindowDialog ):
     def setupGUI( self ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, skinXML="settings", fastMethod=True, useDescAsKey=True, language=self._ )
+        ok, image_path = gb.create_gui( self, xml_name="settings", language=self._ )
         return ok
         
     def _set_variables( self ):
         """ initializes variables """
         self.controller_action = utilities.setControllerAction()
-        self.get_control( "Title Label" ).setLabel( self.__scriptname__ )
-        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), self.__version__, ) )
+        self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
+        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
         # setEnabled( False ) if not used
         self.get_control( "Credits Button" ).setVisible( False )
         self.get_control( "Credits Button" ).setEnabled( False )
@@ -41,13 +39,13 @@ class GUI( xbmcgui.WindowDialog ):
         """ saves settings """
         ok = utilities.Settings().save_settings( self.settings )
         if ( not ok ):
-            ok = xbmcgui.Dialog().ok( self.__scriptname__, self._( 230 ) )
+            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__scriptname__, self._( 230 ) )
         else:
             self._check_for_restart()
 
-    def _get_keyboard( self, default="", heading="" ):
+    def _get_keyboard( self, default="", heading="", hidden=False ):
         """ shows a keyboard and returns a value """
-        keyboard = xbmc.Keyboard( default, heading )
+        keyboard = xbmc.Keyboard( default, heading, hidden )
         keyboard.doModal()
         if ( keyboard.isConfirmed() ):
             return keyboard.getText()

@@ -1,26 +1,13 @@
-<window>
-
-<!--
-    The <resolution> tag is used for the setCoordinateResolution() function.
-    
-	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
-	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-	
-	use <useincludes>true</useincludes> tag to allow <include> tags and defaults.xml
-	
-	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
-	
--->
+<window id="3001">
 	
 	<defaultcontrol>10</defaultcontrol>
-	<resolution>PAL16x9</resolution>
-	<coordinates>
-		<system>1</system>
+    <resolution>PAL16x9</resolution>
+    <useincludes>false</useincludes>
+    <coordinates>
+        <system>1</system>
         <posx>420</posx>
         <posy>220</posy>
-	</coordinates>
+    </coordinates>
 
 	<controls>
 
@@ -667,7 +654,7 @@
 			<onright>230</onright>
 			<onup>110</onup>
 			<ondown>10</ondown>
-            <visible allowhiddenfocus="false">System.InternetState</visible>
+            <enable>System.InternetState</enable>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 		</control>

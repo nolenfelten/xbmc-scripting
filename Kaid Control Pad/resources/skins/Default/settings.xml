@@ -618,7 +618,7 @@
 			<onright>10</onright>
 			<onup>210</onup>
 			<ondown>230</ondown>
-            <visible allowhiddenfocus="false">System.InternetState</visible>
+            <enable>System.InternetState</enable>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->

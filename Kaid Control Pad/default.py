@@ -12,18 +12,18 @@ __version__ = "pre-2.0"
 
 import sys, os
 import xbmc, xbmcgui
-import threading, thread
+import threading
 import traceback
 
-RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
-
-sys.path.append( os.path.join( RESOURCE_PATH, "lib" ) )
+resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+sys.path.append( os.path.join( resource_path, "lib" ) )
 
 import wrt54g
 import utilities
 import guibuilder
 import language
 _ = language.Language().string
+
 
 ##xLinkKai_UserName = xbmc.getInfoLabel( "xLinkKai.UserName" )
 
@@ -35,14 +35,14 @@ class GUI( xbmcgui.WindowDialog ):
             self.gui_loaded = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
-                thread.start_new_thread(self.setup_all, ())
+                Start( function=self.setup_all ).start()
         except: 
             traceback.print_exc()
             self.close()
 
     def setupGUI( self ):
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, fastMethod=True, useDescAsKey=True, language=_ )
+        ok, image_path = gb.create_gui( self, language=_ )
         return ok
         
     def setup_all( self ):
@@ -53,6 +53,7 @@ class GUI( xbmcgui.WindowDialog ):
     def setup_variables( self ):
         self.controller_action = utilities.setControllerAction()
         self.KAID_VERSION = ""
+        self.command_running = False
         
     def set_status_labels( self ):
         self.get_control( "Kaid Status Label" ).setLabel( [ "", _( 101 + self.wrt54g.STATUS_KAID_RUNNING ) ][ self.wrt54g.STATUS_KAID_RUNNING != -1 ] )
@@ -111,10 +112,12 @@ class GUI( xbmcgui.WindowDialog ):
         except: traceback.print_exc()
             
     def check_status( self ):
+        self.command_running = True
         self._status_xbox( False )
         self._status_router( False )
         self._status_kaid_running( False )
         self._set_status()
+        self.command_running = False
         
     def _set_status( self ):
         self.set_status_labels()
@@ -174,7 +177,7 @@ class GUI( xbmcgui.WindowDialog ):
             ok = self.wrt54g._finalize_upload()
             if ( not ok ): self.set_message( 636, 0 )
             else: 
-                self.check_status()
+                self._status_router( False )
                 #self.set_message( 607, 1 )
                 #ok = self.wrt54g._config_file_patch()
                 #if ( not ok ): self.set_message( 637, 0 )
@@ -211,24 +214,37 @@ class GUI( xbmcgui.WindowDialog ):
         except: return None
 
     def onControl( self, control ):
-        if ( control == self.get_control( "Restart Button" ) ):
-            self._kaid_restart()
-        elif ( control == self.get_control( "Stop Button" ) ):
-            self._kaid_kill()
-        elif ( control == self.get_control( "Upload Button" ) ):
-            self._kaid_upload()
-        elif ( control == self.get_control( "Reboot Button" ) ):
-            self._router_reboot()
-        elif ( control == self.get_control( "Settings Button" ) ):
-            self.change_settings()
+        if ( not self.command_running ):
+            self.command_running = True
+            if ( control == self.get_control( "Restart Button" ) ):
+                self._kaid_restart()
+            elif ( control == self.get_control( "Stop Button" ) ):
+                self._kaid_kill()
+            elif ( control == self.get_control( "Upload Button" ) ):
+                self._kaid_upload()
+            elif ( control == self.get_control( "Reboot Button" ) ):
+                self._router_reboot()
+            elif ( control == self.get_control( "Settings Button" ) ):
+                self.change_settings()
+            self.command_running = False
 
     def onAction(self, action):
-        button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
-        if ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
-            self.exit_script()
-        elif ( button_key == "Keyboard Menu Button" or button_key == "Y Button" or button_key == "Remote Title Button" or button_key == "White Button" ):
-            self.change_settings()
-    
+        if ( not self.command_running ):
+            button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
+            if ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
+                self.exit_script()
+            elif ( button_key == "Keyboard Menu Button" or button_key == "Y Button" or button_key == "Remote Title Button" or button_key == "White Button" ):
+                self.change_settings()
+
+class Start( threading.Thread ):
+    """ Thread Class used to allow gui to show before all checks are done at start of script """
+    def __init__( self, *args, **kwargs ):
+        threading.Thread.__init__( self )
+        self.function = kwargs[ "function" ]
+
+    def run(self):
+        self.function()
+
 
 if ( __name__ == "__main__" ):
     ui = GUI()
