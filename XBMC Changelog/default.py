@@ -19,22 +19,20 @@ dialog = xbmcgui.DialogProgress()
 dialog.create(__scriptname__)
 dialog.update(5, 'Importing modules & initializing...')
 
-import urllib
+import sys, os
 dialog.update(20)
-import sys
+import urllib
 dialog.update(40)
-import os
-dialog.update(60)
-
-# url for the raw changelog
-CHANGELOG = 'http://appliedcuriosity.cc/xbox/changelog.txt'
-# how many lines of changes to show
-
 sys.path.append(os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'lib' ) )
+import guibuilder
+dialog.update(60)
+# url for the raw changelog
+
     
 def get_changes():
-    # get the actual changelog.txt from sourceforge
-    data = urllib.urlopen( CHANGELOG )
+    base_url = 'http://appliedcuriosity.cc/xbox/changelog.txt'
+    # get the actual changelog.txt
+    data = urllib.urlopen( base_url )
     data = data.read()
 
     # ignore the top 7 lines, as they contain nothing useful
@@ -55,15 +53,14 @@ def get_changes():
 class GUI( xbmcgui.Window ):
     def __init__( self ):
         global dialog
+        dialog.update(80, 'Setting up GUI...' )
         self.gui_loaded = self.setupGUI()
         if (not self.gui_loaded): 
+            dialog.close()
             self.close()
         else:
             self.show()
-            dialog.close()
-            dialog = xbmcgui.DialogProgress()
-            dialog.create('XBMC Changelog')
-            dialog.update(-1, 'Downloading changelog', 'Please wait...' )
+            dialog.update(100, 'Downloading changelog' )
             try:
                 change_text = get_changes()
             finally:
@@ -71,10 +68,8 @@ class GUI( xbmcgui.Window ):
             self.controls[ 'textarea' ]['control'].setText( change_text )
             
     def setupGUI( self ):
-        global dialog
-        import guibuilder
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, title=__scriptname__, useDescAsKey=True, dlg=dialog, pct=60 )
+        ok = gb.create_gui( self )
         return ok
 
     def onAction( self, action ):

@@ -1,8 +1,8 @@
-<window>
+<window id="3000">
 
-	<id>2004</id>
-	<defaultcontrol>200</defaultcontrol>
-	<resolution>PAL</resolution>
+    <defaultcontrol>200</defaultcontrol>
+    <resolution>PAL</resolution>
+    <useincludes>true</useincludes>
 
 	<controls>
         <include>LiveBackGroundWhitewash</include>
