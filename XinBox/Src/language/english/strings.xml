@@ -5,7 +5,7 @@
 
   <string id="21">NEW!</string>
   <string id="22">[No Subject]</string>
-  <string id="23">from</string>
+  <string id="23">- From:</string>
 
   <string id="40">Please Enter Master Password</string>
   <string id="41">Error!</string>
@@ -31,10 +31,22 @@
   <string id="60">Setting up script:</string>
   <string id="61">Importing modules &amp; initializing...</string>
   <string id="62">module:</string>
+  <string id="63">Recieved: </string>	
+  <string id="64">Delete selected email from XinBox?</string>	
+  <string id="65">Check For New</string>
+  <string id="66">Delete Email From:</string>
+  <string id="67">XinBox ONLY</string>
+  <string id="68">Server ONLY</string>
+  <string id="69">Both The Above</string>
+  <string id="70">Deleting Email from server..</string>
+  <string id="71">Email deleted off server OK!</string>
+  <string id="72">Email NOT deleted off server!</string>
+  <string id="73">Email not present on server</string>
+
 
   <string id="200">Mini Mode</string>
   <string id="201">Settings</string>
   <string id="202">Attachments</string>
-  <string id="203">Fullscreen</string>
+  <string id="203">Details</string>
 
 </strings>
