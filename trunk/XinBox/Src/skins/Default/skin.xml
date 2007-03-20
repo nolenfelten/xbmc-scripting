@@ -36,16 +36,6 @@
 		</control>
 
 
-        	<control type="image" id="25">
-			<description>fsoverlay</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<texture>\background22.png</texture>
-			<visible>false</visible>
-		</control>
-	
 
 		<control type="image" id="0">
 			<description>music rectangle</description>
@@ -53,7 +43,7 @@
 			<posy>381</posy>
 			<width>110</width>
 			<height>120</height>
-			<visible>player.hasaudio + !Control.IsVisible(25)</visible>
+			<visible>player.hasaudio</visible>
 			<texture>blue_rectangle_music.png</texture>
 			<include>mediaoverlay</include>
 		</control>
@@ -63,7 +53,7 @@
 			<posy>387</posy>
 			<width>100</width>
 			<height>109</height>
-			<visible>player.hasaudio + !Control.IsVisible(25)</visible>
+			<visible>player.hasaudio</visible>
 			<texture>defaultAlbumCover.png</texture>
 			<include>mediaoverlay</include>
 		</control>
@@ -75,7 +65,7 @@
 			<textcolor>FFFFFFFF</textcolor>
 			<align>left</align>
 			<font>font13</font>
-			<visible>player.hasaudio + !Control.IsVisible(25)</visible>
+			<visible>player.hasaudio</visible>
 			<include>mediaoverlay</include>
 		</control>
 		<control type="fadelabel" id="0">
@@ -84,7 +74,7 @@
 			<posx>65</posx>
 			<posy>525</posy>
 			<font>font10</font>
-			<visible>player.hasaudio + !Control.IsVisible(25)</visible>
+			<visible>player.hasaudio</visible>
 			<textcolor>FFFFFFFF</textcolor>
 			<label>$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Title, | ]$INFO[MusicPlayer.Album, | ]$INFO[MusicPlayer.Year, | ]</label>
 			<include>mediaoverlay</include>
@@ -110,29 +100,6 @@
 			<onup>60</onup>
 			<ondown>20</ondown>
 			<onclick>-</onclick>
-			<visible>!Control.IsVisible(25)</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="20">
-			<description>csButton</description>
-			<posx>64</posx>
-			<posy>192</posy>
-			<width>135</width>
-			<height>30</height>
-			<texturefocus>\button-focus.png</texturefocus>
-			<texturenofocus>\button-nofocus.png</texturenofocus>
-			<font>font14</font>
-			<textcolor>FFFFFFFF</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<aligny>center</aligny>
-			<onleft>20</onleft>
-			<onright>100</onright>
-			<onup>10</onup>
-			<ondown>30</ondown>
-			<onclick>-</onclick>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -155,8 +122,29 @@
 			<onup>20</onup>
 			<ondown>40</ondown>
 			<onclick>-</onclick>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="20">
+			<description>csButton</description>
+			<posx>64</posx>
+			<posy>192</posy>
+			<width>135</width>
+			<height>30</height>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<font>font14</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+			<onleft>20</onleft>
+			<onright>100</onright>
+			<onup>10</onup>
+			<ondown>30</ondown>
+			<onclick>-</onclick>
+		</control>
+
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
@@ -200,7 +188,6 @@
 			<onup>40</onup>
 			<ondown>60</ondown>
 			<onclick>-</onclick>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -223,8 +210,8 @@
 			<onup>50</onup>
 			<ondown>10</ondown>
 			<onclick>-</onclick>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
+
 
 		<!-- special controls for media playing info -->
 		
@@ -291,7 +278,6 @@
 			<label>XinBox</label>
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
 
 		
@@ -320,7 +306,6 @@
 			<ondown>100</ondown>
 			<onleft>10</onleft>
 			<onright>120</onright>
-			<visible>!Control.IsVisible(25)</visible>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="list" id="130">
@@ -356,13 +341,13 @@
             		<posy>340</posy>
             		<width>456</width>
             		<height>200</height>
-            		<spinposx>410</spinposx>
-            		<spinposy>345</spinposy>
+            		<spinposx>1</spinposx>
+            		<spinposy>1</spinposy>
             		<spincolor>ffffffff</spincolor>
-            		<textureup>\scroll-up.png</textureup>
-            		<texturedown>\scroll-down.png</texturedown>
-            		<textureupfocus>\scroll-up-focus.gif</textureupfocus>
-            		<texturedownfocus>\scroll-down-focus.gif</texturedownfocus>
+            		<textureup>scroll-up.png</textureup>
+            		<texturedown>scroll-down.png</texturedown>
+            		<textureupfocus>scroll-up-focus.gif</textureupfocus>
+            		<texturedownfocus>scroll-down-focus.gif</texturedownfocus>
             		<font>font13</font>
             		<textcolor>FFFFFFFF</textcolor>
             		<onup>100</onup>
@@ -371,18 +356,27 @@
             		<onright>200</onright>
             		<visible>false</visible>
         	</control>
-
+        	
+		<control type="image" id="0">
+			<description>fsoverlay</description>
+			<posx>100</posx>
+			<posy>100</posy>
+			<width>500</width>
+			<height>400</height>
+			<texture>\fs.png</texture>
+			<visible>false</visible>
+		</control>
 
 
         	<control type="textbox" id="210">
             		<description>fsmsgbody</description>
-            		<posx>60</posx>
-            		<posy>50</posy>
-            		<width>600</width>
-            		<height>500</height>
-            		<spinposx>410</spinposx>
-            		<spinposy>345</spinposy>
-            		<spincolor>ffffffff</spincolor>
+            		<posx>150</posx>
+            		<posy>150</posy>
+            		<width>415</width>
+            		<height>300</height>
+            		<spinposx>1</spinposx>
+            		<spinposy>1</spinposy>
+            		<spincolor>FFFFFF00</spincolor>
             		<textureup>scroll-up.png</textureup>
             		<texturedown>scroll-down.png</texturedown>
             		<textureupfocus>scroll-up-focus.gif</textureupfocus>
@@ -394,7 +388,28 @@
             		<onleft>210</onleft>
            		<onright>210</onright>
 			<visible>false</visible>
-        	</control>
+        	</control>	
+
+        	<control type="fadelabel" id="2">
+			<description>emailinfo</description>
+			<width>405</width>
+			<posx>150</posx>
+			<posy>130</posy>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
+     	
+		<control type="fadelabel" id="3">
+			<description>emailrec</description>
+			<posx>150</posx>
+			<posy>440</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
+
     </controls>
 
 </window>

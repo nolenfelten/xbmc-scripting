@@ -88,6 +88,8 @@ class GUI( xbmcgui.Window ):
         self.settings = xib_util.Settings()
         
     def setupvars( self ):
+        self.removeControl(self.controls['emailinfo']['control'])
+        self.removeControl(self.controls['emailrec']['control'])
         self.Fullscreen = False
         self.notread = self.image_path + "\\" + "emailnotread.png"
         self.read = self.image_path + "\\" + "emailread.png"
@@ -122,11 +124,17 @@ class GUI( xbmcgui.Window ):
         except:pass
     
     def checkemail ( self, inbox, minimode):
-        w = mailchecker.Checkemail(inbox, minimode)
+        w = mailchecker.Checkemail(inbox, minimode, 0)
         w.setupemail()
         self.newmails = w.returnvar
         del w
         return
+
+    def delemail (self, inbox, emailid):
+        w = mailchecker.Checkemail(inbox, 0, emailid)
+        w.deletemail()
+        del w
+        return    
         
     def enablemusicinfo ( self ):
         try:
@@ -169,15 +177,15 @@ class GUI( xbmcgui.Window ):
         if inbox == 1:
     	    self.box1 = 1
     	    self.box2 = 0
-    	    self.controls['title']['control'].setLabel("XinBox - " + self.settings.user1)
-    	    self.controls['cmButton']['control'].setLabel("Check For New", "font14")
+    	    self.controls['title']['control'].setLabel( _(0) + " - " + self.settings.user1)
+    	    self.controls['cmButton']['control'].setLabel(_(65), "font14")
     	    self.controls['csButton']['control'].setLabel("XinBox 2", "font14")
     	    self.emfolder = DATADIR + self.settings.user1 + "@" + self.settings.server1 + "\\"
         else:
     	    self.box2 = 1
     	    self.box1 = 0
-    	    self.controls['title']['control'].setLabel("XinBox - " + self.settings.user2)
-    	    self.controls['csButton']['control'].setLabel("Check For New", "font14")
+    	    self.controls['title']['control'].setLabel( _(0) + " - " + self.settings.user2)
+    	    self.controls['csButton']['control'].setLabel(_(65), "font14")
     	    self.controls['cmButton']['control'].setLabel("XinBox 1", "font14")
     	    self.emfolder = DATADIR + self.settings.user2 + "@" + self.settings.server2 + "\\"
         if not os.path.exists(self.emfolder):
@@ -185,6 +193,8 @@ class GUI( xbmcgui.Window ):
             self.controls['listControl']['control'].setEnabled( False )
         else:
             self.addme()
+            if self.controls['listControl']['control'].size() == 0:
+                self.disablexinbox()
 
     def clearfolder(self, folder):
         for root, dirs, files in os.walk(folder, topdown=False):
@@ -233,17 +243,27 @@ class GUI( xbmcgui.Window ):
                 else:
                     self.count = self.count+1
                     self.count3 = self.count3-1
-        if self.controls['listControl']['control'].size() == 0:
-            self.controls['listControl']['control'].addItem( _(0) + " "+ _(58))
-            self.controls['listControl']['control'].setEnabled( False )
         return
 
-      
+    def disablexinbox (self):
+        self.controls['listControl']['control'].reset()
+        self.controls['listControl']['control'].addItem( _(0) + " "+ _(58))
+        self.controls['listControl']['control'].setEnabled( False )
+        self.controls['fsButton']['control'].setEnabled( False )
+        self.controls['msgbody']['control'].setVisible(False)
+        if self.box2 ==1:
+            self.setFocus(self.controls['csButton']['control'])
+        else:
+            self.setFocus(self.controls['cmButton']['control'])
+        return
 
     def getstatus( self ):
         s = self.tempStr.split('|')
         self.readstatus = s[0]
-        self.emailbody = s[1]
+        self.time = s[1]
+        self.date = s[2]
+        self.mailid = s[3]
+        self.emailbody = s[4]
         return
         
     
@@ -302,20 +322,87 @@ class GUI( xbmcgui.Window ):
         self.setFocus(self.controls['msgbody']['control'])
 
     def goFullscreen(self):
+        self.getemailinfo()
+        self.getstatus()
+        self.addControl(self.controls['emailinfo']['control'])
+        self.addControl(self.controls['emailrec']['control'])
         self.controls['msgbody']['control'].setVisible( False )
         self.controls['attachlist']['control'].setVisible( False )
         self.controls['fsoverlay']['control'].setVisible(True)
         self.controls['fsmsgbody']['control'].setVisible(True)
         self.controls['fsmsgbody']['control'].setText(self.msgText)
         self.setFocus(self.controls['fsmsgbody']['control'])
+        self.controls['emailinfo']['control'].addLabel(self.temp3)
+        self.controls['emailrec']['control'].addLabel( _( 63 ) + str(self.time) + " - " + str(self.date))
+        self.controls['emailinfo']['control'].setVisible(True)
+        self.controls['emailrec']['control'].setVisible(True)
         self.Fullscreen = True
 
+    def getemailinfo(self):
+        self.temp = self.controls['listControl']['control'].getSelectedPosition()
+        self.temp2 = self.controls['listControl']['control'].getSelectedItem()
+        self.temp3 = self.temp2.getLabel()
+        fh = open(self.emfolder + CORFOLDER + str(self.temp)+ ".cor")
+        self.updateme = fh.read()
+        fh.close()
+        fh = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss")
+        self.tempStr = fh.read()
+        fh.close()
+        return
+
+    def deletemail(self):
+        self.getstatus()
+        dialog = xbmcgui.Dialog()
+        ret = dialog.select( _( 66 ), [ _( 67 ), _( 68 ), _( 69 )])
+        if ret == 0:
+            self.getemailinfo()
+            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss") 
+            self.controls['msgbody']['control'].setVisible(False)
+            self.addme()
+            if self.controls['listControl']['control'].size() == 0:
+                self.disablexinbox()
+            else:
+                self.setFocus(self.controls['listControl']['control'])
+                self.controls['listControl']['control'].selectItem(self.temp)
+                self.updatepointer()
+            return
+        elif ret == 1:
+            if self.box1 == 1:
+                self.delemail(1, self.mailid)
+            else:
+                self.delemail(2, self.mailid)
+            return
+        elif ret == 2:
+            if self.box1 == 1:
+                self.delemail(1, self.mailid)
+            else:
+                self.delemail(2, self.mailid)
+            self.getemailinfo()
+            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss") 
+            self.controls['msgbody']['control'].setVisible(False)
+            self.addme()
+            if self.controls['listControl']['control'].size() == 0:
+                self.disablexinbox()
+            else:
+                self.setFocus(self.controls['listControl']['control'])
+                self.controls['listControl']['control'].selectItem(self.temp)
+                self.updatepointer()
+            return
+        else:
+            dialog.close()
+        return
+            
+            
     def undoFullscreen(self):
+        self.removeControl(self.controls['emailinfo']['control'])
+        self.removeControl(self.controls['emailrec']['control'])
         self.controls['msgbody']['control'].setVisible( True )
         self.controls['fsoverlay']['control'].setVisible(False)
         self.controls['fsmsgbody']['control'].setVisible(False)
-        self.setFocus(self.controls['msgbody']['control'])
+        self.controls['emailrec']['control'].setVisible(False)
         self.Fullscreen = False
+        time.sleep(0.1)
+        self.setFocus(self.controls['fsButton']['control'])
         return
 
     def createdirs( self ):
@@ -328,24 +415,29 @@ class GUI( xbmcgui.Window ):
         if ( self.Timer ): self.Timer.cancel()
         self.close()
 
+    def updatepointer(self):
+        try:
+            self.temp5.setLabel2("")
+        except:pass
+        self.temp5 = self.controls['listControl']['control'].getSelectedItem()
+        self.temp5.setLabel2("<---")
+        return
+
     def updateicon(self):
-        temp = self.controls['listControl']['control'].getSelectedItem()
-        temp.setThumbnailImage(self.read)
-        temp = self.controls['listControl']['control'].getSelectedPosition()
-        fh = open(self.emfolder + CORFOLDER + str(temp)+ ".cor")
-        updateme = fh.read()
-        fh.close()
-        fh = open(self.emfolder + MAILFOLDER + str(updateme) +".sss")
-        self.tempStr = fh.read()
-        fh.close()
+        self.updatepointer()
+        self.temp5.setThumbnailImage(self.read)
+        self.getemailinfo()
         self.getstatus()
         self.readstatus = "READ"
-        f = open(self.emfolder + MAILFOLDER + str(updateme) +".sss", "w")
-        f.write(self.readstatus + "|" + self.emailbody)
+        self.writestatus()
+        return
+
+    def writestatus (self):  
+        f = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss", "w")
+        f.write(self.readstatus + "|" + self.time + "|" + self.date + "|" + self.mailid + "|" + self.emailbody)
         f.close()
         return
         
-
     def onControl( self, control ):
         try:
             if ( control is self.controls['cmButton']['control'] ):
@@ -381,7 +473,7 @@ class GUI( xbmcgui.Window ):
                 else:
                     self.exitscript()
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
-                self.exitscript()
+                    self.deletemail()     
             else:pass
         except: traceback.print_exc()
 
