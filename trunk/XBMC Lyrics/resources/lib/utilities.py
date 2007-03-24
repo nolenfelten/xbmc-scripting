@@ -48,7 +48,7 @@ class Settings:
             "save_lyrics": True,
             "lyrics_path": os.path.join( 'T:\\script_data', sys.modules[ '__main__' ].__scriptname__, 'lyrics' ),
             "smooth_scrolling": False,
-            "show_viz": True 
+            "show_viz": True
             }
         ok = self.save_settings( settings )
         return settings

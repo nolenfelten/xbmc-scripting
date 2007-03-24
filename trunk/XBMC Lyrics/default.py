@@ -10,22 +10,28 @@
 				
 Please report any bugs: http://www.xboxmediacenter.com/forum/showthread.php?t=10187
 """
-__scriptname__ = "XBMC Lyrics"
-__author__ = "XBMC Lyrics Team"
-__url__ = "http://code.google.com/p/xbmc-scripting/"
-__credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.4"
 
-
-import os, sys
-import xbmc, xbmcgui
+import sys
+import os
+import xbmc
+import xbmcgui
 import threading
 
 resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( resource_path, "lib" ) )
-import language, utilities
+
+import language
+import utilities
 import guibuilder
-_ = language.Language().string
+_ = language.Language().localized
+
+
+__scriptname__ = "XBMC Lyrics"
+__author__ = "XBMC Lyrics Team"
+__url__ = "http://code.google.com/p/xbmc-scripting/"
+__credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
+__version__ = "1.4.1"
+
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self ):
@@ -34,44 +40,44 @@ class GUI( xbmcgui.WindowDialog ):
             self.gui_loaded, image_path = self.setupGUI()
             if ( not self.gui_loaded ): self.exit_script()
             else:
-                self.startScript = Start( function=self.setup_all ).start()
+                Start( function=self.setup_all ).start()
         except: 
             self.exit_script()
             
-    def setup_all( self ):
-        self.get_settings()
-        self.setup_variables()
-        self.get_scraper()
-        self.getDummyTimer()
-        self.show_viz_window()
-        self.getMyPlayer()
-
     def setupGUI( self ):
         gb = guibuilder.GUIBuilder()
         ok = gb.create_gui( self, use_desc_as_key=False, language=_ )
         return ok
 
+    def setup_all( self ):
+        self.get_settings()
+        self.get_scraper()
+        self.setup_variables()
+        self.getDummyTimer()
+        self.getMyPlayer()
+        self.show_viz_window()
+
+    def get_settings( self ):
+        self.settings = utilities.Settings().get_settings()
+        
+    def get_scraper( self ):
+        sys.path.append( os.path.join( resource_path, "scrapers", self.settings[ "scraper" ] ) )
+        import lyricsScraper
+        self.LyricsScraper = lyricsScraper.LyricsFetcher()
+        try: self.controls[ 8 ][ "control" ].setLabel( sys.modules[ "lyricsScraper" ].__title__ )
+        except: pass
+
     def setup_variables( self ):
         self.artist = None
         self.song = None
         self.controller_action = utilities.setControllerAction()
-        try: self.controls[ 8 ][ "control" ].setLabel( self.settings[ "scraper" ] )
-        except: pass
     
-    def get_settings( self ):
-        self.settings = utilities.Settings().get_settings()
-        
     def show_viz_window( self, startup=True ):
         if ( self.settings[ "show_viz" ] ):
             xbmc.executebuiltin( "XBMC.ActivateWindow(2006)" )
         else:
             if ( current_dlg_id != 9999 or not startup ):
                 xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_win_id, ) )
-
-    def get_scraper( self ):
-        sys.path.append( os.path.join( resource_path, "scrapers", self.settings[ "scraper" ] ) )
-        import lyricsScraper
-        self.LyricsScraper = lyricsScraper.LyricsFetcher()
 
     def show_control( self, controlId ):
         self.controls[ 3 ][ "control" ].setVisible( controlId == 3 )
@@ -90,15 +96,15 @@ class GUI( xbmcgui.WindowDialog ):
         self.allow_exception = False
         current_song = self.song
         lyrics = self.get_lyrics_from_file( artist, song )
-        if ( lyrics ):
+        if ( lyrics is not None ):
             if ( current_song == self.song ):
                 self.show_lyrics( lyrics )
         else:
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
             if ( current_song == self.song ):
-                if ( type( lyrics ) == str or type( lyrics ) == unicode ):
+                if ( isinstance( lyrics, basestring ) ):
                     self.show_lyrics( lyrics, True )
-                elif ( type( lyrics ) == list and lyrics ):
+                elif ( isinstance( lyrics, list ) and lyrics ):
                     self.show_choices( lyrics )
                 else:
                     self.show_lyrics( _( 631 ) )
@@ -141,11 +147,9 @@ class GUI( xbmcgui.WindowDialog ):
         
     def show_lyrics( self, lyrics, save=False ):
         xbmcgui.lock()
-        #Checking whether some idiot has submitted empty lyrics or not:
-        if ( len( lyrics ) < 2 ):
+        if ( lyrics == "" ):
             self.controls[ 3 ][ "control" ].setText( _( 632 ) )
             self.controls[ 4 ][ "control" ].addItem( _( 632 ) )
-        #If not, we show whatever results we got:
         else:
             self.controls[ 3 ][ "control" ].setText( lyrics )
             for x in lyrics.split( "\n" ):
@@ -206,14 +210,14 @@ class GUI( xbmcgui.WindowDialog ):
             
     def get_exception( self ):
         """ user modified exceptions """
-        artist = self.LyricsScraper._format_param( self.artist, False )
-        if ( artist ):
+        if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
+            artist = self.LyricsScraper._format_param( self.artist, False )
             alt_artist = self.get_keyboard( artist, "%s %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
                 exception = ( artist, alt_artist, )
                 self.LyricsScraper._set_exceptions( exception )
                 self.myPlayerChanged( 2, True )
-        
+            
     def get_keyboard( self, default="", heading="", hidden=False ):
         """ shows a keyboard and returns a value """
         keyboard = xbmc.Keyboard( default, heading, hidden )
@@ -223,7 +227,7 @@ class GUI( xbmcgui.WindowDialog ):
         return default
 
     def exit_script( self, restart=False ):
-        if ( self.Timer ): self.Timer.cancel()
+        if ( self.Timer is not None ): self.Timer.cancel()
         self.close()
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
