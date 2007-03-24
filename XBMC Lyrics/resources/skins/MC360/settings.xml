@@ -139,20 +139,21 @@
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="21">
+		<control type="checkmark" id="21">
 			<description>Setting2 Value</description>
-			<posx>365</posx>
-			<posy>160</posy>
-			<width>315</width>
+			<posx>280</posx>
+			<posy>165</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>FF000000</textcolor>
-			<textoffsetx>10</textoffsetx>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>20</markwidth>
+            <markheight>20</markheight>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
@@ -213,20 +214,21 @@
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="41">
+		<control type="checkmark" id="41">
 			<description>Setting4 Value</description>
-			<posx>365</posx>
-			<posy>220</posy>
-			<width>315</width>
+			<posx>280</posx>
+			<posy>225</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>FF000000</textcolor>
-			<textoffsetx>10</textoffsetx>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>20</markwidth>
+            <markheight>20</markheight>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
@@ -250,20 +252,21 @@
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="51">
+		<control type="checkmark" id="51">
 			<description>Setting5 Value</description>
-			<posx>365</posx>
-			<posy>250</posy>
-			<width>315</width>
+			<posx>280</posx>
+			<posy>255</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>FF000000</textcolor>
-			<textoffsetx>10</textoffsetx>
-			<texturefocus>-</texturefocus>
-			<texturenofocus>-</texturenofocus>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxNF.png</texturecheckmarknofocus>
+            <markwidth>20</markwidth>
+            <markheight>20</markheight>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="200">

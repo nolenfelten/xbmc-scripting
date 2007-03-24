@@ -127,7 +127,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            		<include>disabled-text</include>
+            <include>disabled-text</include>
 			<onleft>200</onleft>
 			<onright>200</onright>
 			<onup>10</onup>
@@ -136,21 +136,20 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="21">
+		<control type="checkmark" id="21">
 			<description>Setting2 Value</description>
-			<posx>-20</posx>
-			<posy>92</posy>
-			<width>350</width>
+			<posx>295</posx>
+			<posy>97</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font12</font>
-			<include>button-text</include>
-			<textoffsetx>10</textoffsetx>
-            		<texturefocus>default-button.png</texturefocus>
-			<texturenofocus>-</texturenofocus>
-            		<include>disabled-text</include>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxnf.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
@@ -220,25 +219,24 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="41">
+		<control type="checkmark" id="41">
 			<description>Setting4 Value</description>
-			<posx>-20</posx>
-			<posy>156</posy>
-			<width>350</width>
+			<posx>295</posx>
+			<posy>161</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font12</font>
-			<include>button-text</include>
-			<textoffsetx>10</textoffsetx>
-            		<texturefocus>default-button.png</texturefocus>
-	    		<texturenofocus>-</texturenofocus>
-            		<include>disabled-text</include>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxnf.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
+<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Setting5 Button</description>
 			<posx>-20</posx>
@@ -262,23 +260,23 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="51">
+		<control type="checkmark" id="51">
 			<description>Setting5 Value</description>
-			<posx>-20</posx>
-			<posy>188</posy>
-			<width>350</width>
+			<posx>295</posx>
+			<posy>193</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font12</font>
-			<include>button-text</include>
-			<textoffsetx>10</textoffsetx>
-            		<texturefocus>default-button.png</texturefocus>
-	    		<texturenofocus>-</texturenofocus>
-            		<include>disabled-text</include>
+			<align>left</align>
+			<label> </label>
+			<font>font13</font>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>check-box.png</texturecheckmark>
+            <texturecheckmarknofocus>check-boxnf.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
+
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<!--control type="button" id="60">
