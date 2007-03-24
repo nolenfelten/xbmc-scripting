@@ -4,9 +4,14 @@ Scraper for http://www.lyricwiki.org
 Nuka1195
 """
 
-import sys, os
+import sys
+import os
 from sgmllib import SGMLParser
 import urllib
+
+__title__ = "LyricWiki.org"
+__allow_exceptions__ = True
+
 
 class _SongListParser( SGMLParser ):
     """ Parser Class: parses an html document for all song links """
@@ -87,7 +92,7 @@ class LyricsFetcher:
             ex_file.close()
         except:
             self.exceptions = {}
-        if ( exception ):
+        if ( exception is not None ):
             self.exceptions[ exception[ 0 ] ] = exception[ 1 ]
             self._save_exception_file( ex_path, self.exceptions )
 
@@ -104,15 +109,15 @@ class LyricsFetcher:
     def _fetch_lyrics( self, url ):
         """ Fetch lyrics if available """
         try:
-            # Open url or local file (if debug == True)
+            # Open url or local file (if debug)
             if ( not debug ):
                 usock = urllib.urlopen( url )
             else:
                 usock = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
-            # Save htmlSource to a file for testing scraper (if debugWrite == True)
-            if (debugWrite):
+            # Save htmlSource to a file for testing scraper (if debugWrite)
+            if ( debugWrite ):
                 file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "w" )
                 file_object.write( htmlSource )
                 file_object.close()
@@ -128,14 +133,14 @@ class LyricsFetcher:
         """ If no lyrics found, fetch a list of choices """
         try:
             url = self.base_url + "/%s"
-            # Open url or local file (if debug == True)
+            # Open url or local file (if debug)
             if ( not debug ):
                 usock = urllib.urlopen( url % ( artist, ) )
             else:
                 usock = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
-            # Save htmlSource to a file for testing scraper (if debugWrite == True)
+            # Save htmlSource to a file for testing scraper (if debugWrite)
             if ( debugWrite ):
                 file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "w" )
                 file_object.write( htmlSource )

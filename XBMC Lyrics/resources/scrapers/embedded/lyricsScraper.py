@@ -8,10 +8,13 @@ if ( __name__ != "__main__" ):
     import xbmc
 import re
 
+__title__ = "Embedded Lyrics"
+__allow_exceptions__ = False
+
+
 class LyricsFetcher:
     """ required: Fetcher Class for embedded lyrics """
     def __init__( self ):
-        #self.pattern = "USLT.*?[A-Za-z]{3}\x00([^\x00]*)"
         self.pattern = "USLT.*?[A-Za-z]{3}\x00([^\x00]*?)\x00"
 
     def get_lyrics( self, artist, song ):
@@ -22,7 +25,7 @@ class LyricsFetcher:
             file_path = xbmc.Player().getPlayingFile()
         lyrics = self._fetch_lyrics( file_path )
         # if no lyrics found return blank string as there is no song list for embedded lyrics
-        if ( not lyrics ):
+        if ( lyrics is None ):
             return ""
         else:
             return self._clean_text( lyrics )
@@ -47,7 +50,7 @@ class LyricsFetcher:
         text = text.replace( "\t", "" )
         text = text.replace( "\r\n", "\n" )
         text = text.replace( "\r", "\n" )
-        if ( text[ -4 : ] == "TEXT" or text[ -4 : ] == "TIT2" ):
+        if ( text.endswith( "TEXT" ) or text.endswith( "TIT2" ) ):
             text = text[ : -4 ]
         return text
 

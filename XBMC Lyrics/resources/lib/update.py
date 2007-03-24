@@ -41,7 +41,7 @@ class Update:
         self.dialog = xbmcgui.DialogProgress()
         new = self._check_for_new_version()
         if ( new ): self._update_script()
-        else: xbmcgui.Dialog().ok( self.__scriptname__, self._( 1000 + ( 30 * ( new == None ) ) ) )
+        else: xbmcgui.Dialog().ok( self.__scriptname__, self._( 1000 + ( 30 * ( new is None ) ) ) )
             
     def _check_for_new_version( self ):
         """ checks for a newer version """
@@ -53,7 +53,7 @@ class Update:
             self.versions, url = self._parse_html_source( htmlsource )
             self.url = url[url.find( ":%20" ) + 4:]
             if ( self.versions ):
-                new = ( self.__version__ < self.versions[-1][:-1] or ( self.__version__[:4] == "pre-" and self.__version__.replace( "pre-", "" ) <= self.versions[-1][:-1] ) )
+                new = ( self.__version__ < self.versions[-1][:-1] or ( self.__version__.startswith( "pre-" ) and self.__version__.replace( "pre-", "" ) <= self.versions[-1][:-1] ) )
         self.dialog.close()
         return new
                 

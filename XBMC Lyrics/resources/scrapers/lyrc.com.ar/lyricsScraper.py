@@ -1,16 +1,26 @@
+"""
+Scraper for http://lyrc.com.ar/
+
+"""
+
 import os
 import urllib
 import re
-import string
+
+__title__ = "lyrc.com.ar"
+__allow_exceptions__ = False
 
 class LyricsFetcher:
+    def __init__( self ):
+        self.base_url = "http://lyrc.com.ar/en/tema1en.php"
+        
     def get_lyrics(self, artist, song):
         params = urllib.urlencode({'artist': artist, 'songname': song, 'procesado2': '1', 'Submit': ' S E A R C H '})
-        f = urllib.urlopen("http://lyrc.com.ar/en/tema1en.php", params)
+        f = urllib.urlopen(self.base_url, params)
         Page = f.read()
-        if string.find(Page, "Nothing found :") != -1:
+        if Page.find("Nothing found :") != -1:
             return None
-        elif string.find(Page, "Suggestions :") != -1:
+        elif Page.find("Suggestions :") != -1:
             links_query = re.compile('<br><a href=\"(.*?)\"><font color=\'white\'>(.*?)</font></a>', re.IGNORECASE)
             urls = re.findall(links_query, Page)
             links = []
@@ -45,8 +55,8 @@ class LyricsFetcher:
 if ( __name__ == '__main__' ):
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    artist = "Blue Öyster Cult"#"Kim Mitchell"
-    song = "Godzilla"#"Go for Soda"
+    artist = "Kim Mitchell"
+    song = "Go for Soda"
     lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     

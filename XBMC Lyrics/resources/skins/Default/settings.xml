@@ -4,8 +4,8 @@
     The <resolution> tag is used for the setCoordinateResolution() function.
     
 	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	With one exception, required controls <description> tag and type="" attribute MUST NOT be changed.
+	The exception is type="label" may be changed to type="button". This allows a
 	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
 	
 	use <useincludes>true</useincludes> tag to allow <include> tags and defaults.xml
@@ -15,6 +15,7 @@
 -->
 	
 	<defaultcontrol>10</defaultcontrol>
+    <useincludes>false</useincludes>
 	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
@@ -82,7 +83,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -126,7 +127,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -170,7 +171,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -214,7 +215,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -258,7 +259,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -302,7 +303,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -346,7 +347,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>

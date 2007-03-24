@@ -1,4 +1,18 @@
-<window>
+<window id="3001">
+
+<!--
+    The <resolution> tag is used for the setCoordinateResolution() function.
+    
+	You may move, add or delete any controls you want as long as they're not Required.
+	With one exception, required controls <description> tag and type="" attribute MUST NOT be changed.
+	The exception is type="label" may be changed to type="button". This allows a
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+	
+	use <useincludes>true</useincludes> tag to allow <include> tags and defaults.xml
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
+-->
 	
 	<defaultcontrol>10</defaultcontrol>
 	<resolution>PAL</resolution>
@@ -71,11 +85,12 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>100</onright>
+            <include>disabled-text</include>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>50</onup>
 			<ondown>20</ondown>
+            <visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -94,6 +109,7 @@
                         <texturefocus>default-button.png</texturefocus>
 	    		<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -112,10 +128,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -134,6 +151,7 @@
             		<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -152,10 +170,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -174,6 +193,7 @@
             		<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -192,10 +212,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -214,6 +235,7 @@
             		<texturefocus>default-button.png</texturefocus>
 	    		<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -232,10 +254,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>40</onup>
 			<ondown>10</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -254,6 +277,7 @@
             		<texturefocus>default-button.png</texturefocus>
 	    		<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -272,10 +296,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>50</onup>
 			<ondown>70</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control-->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -294,6 +319,7 @@
             		<texturefocus>default-button.png</texturefocus>
 	    		<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control-->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -312,10 +338,11 @@
 			<texturefocus>default-button.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
-			<onleft>100</onleft>
-			<onright>15</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>60</onup>
 			<ondown>80</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control-->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -334,10 +361,11 @@
             		<texturefocus>default-button.png</texturefocus>
 	    		<texturenofocus>-</texturenofocus>
             		<include>disabled-text</include>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control-->
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="100">
+		<control type="button" id="200">
 			<description>Ok Button</description>
 			<posx>340</posx>
 			<posy>60</posy>
@@ -353,12 +381,12 @@
 	    		<texturenofocus>-</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>140</onup>
-			<ondown>110</ondown>
+			<onup>230</onup>
+			<ondown>210</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="110">
+		<control type="button" id="210">
 			<description>Cancel Button</description>
 			<posx>340</posx>
 			<posy>95</posy>
@@ -374,12 +402,12 @@
 	    		<texturenofocus>-</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>100</onup>
-			<ondown>120</ondown>
+			<onup>200</onup>
+			<ondown>220</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="120">
+		<control type="button" id="220">
 			<description>Update Button</description>
 			<posx>340</posx>
 			<posy>130</posy>
@@ -396,12 +424,12 @@
 	    		<texturenofocus>-</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>110</onup>
-			<ondown>130</ondown>
+			<onup>210</onup>
+			<ondown>230</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="130">
+		<control type="button" id="230">
 			<description>Credits Button</description>
 			<posx>340</posx>
 			<posy>165</posy>
@@ -418,31 +446,23 @@
 	    		<texturenofocus>-</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>120</onup>
-			<ondown>140</ondown>
+			<onup>220</onup>
+			<ondown>200</ondown>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="140">
-			<description>Page Button</description>
-			<posx>340</posx>
-			<posy>200</posy>
+		<!-- ** Optional ** -->
+		<!--control type="label" id="300">
+			<description>Page1 Label</description>
+			<posx>430</posx>
+			<posy>337</posy>
 			<width>90</width>
 			<height>32</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>254</label>
-			<font>font10</font>
-			<include>button-text</include>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-			<texturefocus>default-button.png</texturefocus>
-	    		<texturenofocus>-</texturenofocus>
-			<onleft>10</onleft>
-			<onright>10</onright>
-			<onup>130</onup>
-			<ondown>100</ondown>
-		</control>
+			<align>right</align>
+			<label>1/1</label>
+			<font>font13</font>
+			<textcolor>ffffffff</textcolor>
+            <visible allowhiddenfocus="false">Control.IsVisible(10)</visible> 
+		</control-->
 
 	</controls>
 </window>

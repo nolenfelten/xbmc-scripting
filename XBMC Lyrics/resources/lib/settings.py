@@ -1,7 +1,16 @@
-import sys, os
-import xbmc, xbmcgui
+"""
+Settings module
+
+Nuka1195
+"""
+
+import sys
+import os
+import xbmc
+import xbmcgui
 import guibuilder
 import utilities
+
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
@@ -53,17 +62,16 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _get_numeric( self, default="", heading="", type=3 ):
         """ shows a numeric dialog and returns a value
-           - 0 : ShowAndGetNumber
-           - 1 : ShowAndGetDate
-           - 2 : ShowAndGetTime
-           - 3 : ShowAndGetIPAddress
+            - 0 : ShowAndGetNumber		(default format: #)
+            - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
+            - 2 : ShowAndGetTime			(default format: HH:MM)
+            - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.numeric( type, heading )
-        if ( value ): return value
-        else: return default
+        value = dialog.numeric( type, heading, default )
+        return value
 
-    def _get_browse_dialog( self, default="", heading="", type=1, shares="files" ):
+    def _get_browse_dialog( self, default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
         """ shows a browse dialog and returns a value
             - 0 : ShowAndGetDirectory
             - 1 : ShowAndGetFile
@@ -71,16 +79,15 @@ class GUI( xbmcgui.WindowDialog ):
             - 3 : ShowAndGetWriteableDirectory
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.browse( type, heading, shares )
-        if ( value ): return value
-        else: return default
+        value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+        return value
 
 ##### Start of unique defs #####################################################
 
 ##### Special defs, script dependent, remember to call them from _setup_special #################
     
     def _set_restart_required( self ):
-        """ copies self.settings and add any settings that require a restart on change """
+        """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "scraper", )
 
@@ -90,7 +97,20 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _setup_scrapers( self ):
         """ special def for setting up scraper choices """
-        self.scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "scrapers" ) )
+        import re
+        self.scrapers_title = []
+        pattern = """__title__.*?["'](.*?)["']"""
+        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "scrapers" )
+        self.scrapers = os.listdir( base_path )
+        for scraper in self.scrapers:
+            try:
+                file_object = open( os.path.join( base_path, scraper, "lyricsScraper.py" ), "r" )
+                file_data = file_object.read()
+                file_object.close()
+                title = re.findall( pattern, file_data )
+                if ( not title ): raise
+            except: title = [ scraper ]
+            self.scrapers_title += title
         try: self.current_scraper = self.scrapers.index( self.settings[ "scraper" ] )
         except: self.current_scraper = 0
 
@@ -100,7 +120,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.get_control( "Setting1 Value" ).setLabel( self.settings[ "scraper" ] )
+            self.get_control( "Setting1 Value" ).setLabel( self.scrapers_title[ self.current_scraper ] )
             self.get_control( "Setting2 Value" ).setSelected( self.settings[ "save_lyrics" ] )
             self.get_control( "Setting3 Button" ).setEnabled( self.settings[ "save_lyrics" ] )
             self.get_control( "Setting3 Value" ).setLabel( self.settings[ "lyrics_path" ] )
