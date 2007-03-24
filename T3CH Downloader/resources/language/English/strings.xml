@@ -14,6 +14,7 @@
     <string id="303">Download cancelled!</string>
     <string id="304">There was an error extracting build!</string>
     
+    <!-- Yes/No buttons -->
     <string id="400">download</string>
     <string id="401">skip</string>
 

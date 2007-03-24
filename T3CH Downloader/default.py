@@ -1,5 +1,7 @@
-import sys,os
-import xbmc, xbmcgui
+import sys
+import os
+import xbmc
+import xbmcgui
 import urllib
 from sgmllib import SGMLParser
 import socket
@@ -7,11 +9,12 @@ import traceback
 
 sys.path.append( os.path.join( os.getcwd().replace( ';', '' ), 'resources', 'lib' ) )
 import language
-_ = language.Language().string
+_ = language.Language().localized
 
 socket.setdefaulttimeout( 10 )
 
 __scriptname__ = 'T3CH Downloader'
+
 
 class Parser( SGMLParser ):
     def reset( self ):
@@ -26,7 +29,8 @@ class Parser( SGMLParser ):
     
 class Main:
     def __init__( self ):
-        self.base_url = 'http://t3ch.xil.us/'
+        #self.base_url = 'http://t3ch.xil.us/'
+        self.base_url = "http://217.118.215.116/"
         self._get_settings()
         self._download_build()
         
