@@ -1,7 +1,16 @@
-import sys, os
-import xbmc, xbmcgui
+"""
+Settings module
+
+Nuka1195
+"""
+
+import sys
+import os
+import xbmc
+import xbmcgui
 import guibuilder
 import utilities
+
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
@@ -53,17 +62,16 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _get_numeric( self, default="", heading="", type=3 ):
         """ shows a numeric dialog and returns a value
-           - 0 : ShowAndGetNumber
-           - 1 : ShowAndGetDate
-           - 2 : ShowAndGetTime
-           - 3 : ShowAndGetIPAddress
+            - 0 : ShowAndGetNumber		(default format: #)
+            - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
+            - 2 : ShowAndGetTime			(default format: HH:MM)
+            - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.numeric( type, heading )
-        if ( value ): return value
-        else: return default
+        value = dialog.numeric( type, heading, default )
+        return value
 
-    def _get_browse_dialog( self, default="", heading="", type=1, shares="files" ):
+    def _get_browse_dialog( self, default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
         """ shows a browse dialog and returns a value
             - 0 : ShowAndGetDirectory
             - 1 : ShowAndGetFile
@@ -71,16 +79,15 @@ class GUI( xbmcgui.WindowDialog ):
             - 3 : ShowAndGetWriteableDirectory
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.browse( type, heading, shares )
-        if ( value ): return value
-        else: return default
+        value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+        return value
 
 ##### Start of unique defs #####################################################
 
 ##### Special defs, script dependent, remember to call them from _setup_special #################
     
     def _set_restart_required( self ):
-        """ copies self.settings and add any settings that require a restart on change """
+        """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "firmware", "router_ip", "router_user", "router_pwd", )
 
@@ -105,19 +112,21 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _set_controls_values( self ):
         """ sets the value labels """
-        #xbmcgui.lock()
-        self.get_control( "Setting1 Value" ).setLabel( self.settings[ "firmware" ] )
-        self.get_control( "Setting2 Value" ).setLabel( self.settings[ "router_ip" ] )
-        self.get_control( "Setting3 Value" ).setLabel( self.settings[ "router_user" ] )
-        self.get_control( "Setting4 Value" ).setLabel( self.settings[ "router_pwd" ] )
-        self.get_control( "Setting5 Value" ).setLabel( self.settings[ "path_to_kaid" ] )
-        self.get_control( "Setting6 Value" ).setLabel( self.settings[ "path_to_kaid_conf" ] )
-        self.get_control( "Setting7 Value" ).setLabel( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ] )
-        self.get_control( "Setting8 Value" ).setLabel( self.settings[ "xbox_user" ] )
-        self.get_control( "Setting9 Value" ).setLabel( self.settings[ "xbox_pwd" ] )
-        self.get_control( "Setting10 Value" ).setLabel( self.settings[ "sniff_device" ] )
-        self.get_control( "Setting11 Value" ).setSelected( self.settings[ "exit_to_kai" ] )
-        #xbmcgui.unlock()
+        xbmcgui.lock()
+        try:
+            self.get_control( "Setting1 Value" ).setLabel( self.settings[ "firmware" ] )
+            self.get_control( "Setting2 Value" ).setLabel( self.settings[ "router_ip" ] )
+            self.get_control( "Setting3 Value" ).setLabel( self.settings[ "router_user" ] )
+            self.get_control( "Setting4 Value" ).setLabel( self.settings[ "router_pwd" ] )
+            self.get_control( "Setting5 Value" ).setLabel( self.settings[ "path_to_kaid" ] )
+            self.get_control( "Setting6 Value" ).setLabel( self.settings[ "path_to_kaid_conf" ] )
+            self.get_control( "Setting7 Value" ).setLabel( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ] )
+            self.get_control( "Setting8 Value" ).setLabel( self.settings[ "xbox_user" ] )
+            self.get_control( "Setting9 Value" ).setLabel( self.settings[ "xbox_pwd" ] )
+            self.get_control( "Setting10 Value" ).setLabel( self.settings[ "sniff_device" ] )
+            self.get_control( "Setting11 Value" ).setSelected( self.settings[ "exit_to_kai" ] )
+        except: pass
+        xbmcgui.unlock()
     
     def _change_setting1( self ):
         """ changes settings #1 """

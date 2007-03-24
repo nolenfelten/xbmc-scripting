@@ -82,7 +82,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -126,7 +126,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -170,7 +170,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -214,7 +214,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -258,7 +258,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -302,7 +302,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -346,7 +346,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -390,7 +390,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -434,7 +434,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -481,7 +481,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -525,7 +525,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\input-focus.png</texturefocus>
+			<texturefocus>\list-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>

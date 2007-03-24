@@ -4,14 +4,10 @@
     Nuka1195
 """
 
-__scriptname__ = "Kaid Control Pad"
-__author__ = "Nuka1195"
-__url__ = "http://code.google.com/p/xbmc-scripting/"
-__credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "pre-2.0"
-
-import sys, os
-import xbmc, xbmcgui
+import sys
+import os
+import xbmc
+import xbmcgui
 import threading
 import traceback
 
@@ -22,10 +18,15 @@ import wrt54g
 import utilities
 import guibuilder
 import language
-_ = language.Language().string
+_ = language.Language().localized
 
 
-##xLinkKai_UserName = xbmc.getInfoLabel( "xLinkKai.UserName" )
+__scriptname__ = "Kaid Control Pad"
+__author__ = "Nuka1195"
+__url__ = "http://code.google.com/p/xbmc-scripting/"
+__credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
+__version__ = "pre-2.0"
+
 
 class GUI( xbmcgui.WindowDialog ):
 
@@ -96,7 +97,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.get_control( "Progressbar" ).setVisible( False )
 
     def clear_message_timer( self ):
-        if ( self.timer_msg ): self.timer_msg.cancel()
+        if ( self.timer_msg is not None ): self.timer_msg.cancel()
 
     def change_settings( self ):
         try:
@@ -216,15 +217,15 @@ class GUI( xbmcgui.WindowDialog ):
     def onControl( self, control ):
         if ( not self.command_running ):
             self.command_running = True
-            if ( control == self.get_control( "Restart Button" ) ):
+            if ( control is self.get_control( "Restart Button" ) ):
                 self._kaid_restart()
-            elif ( control == self.get_control( "Stop Button" ) ):
+            elif ( control is self.get_control( "Stop Button" ) ):
                 self._kaid_kill()
-            elif ( control == self.get_control( "Upload Button" ) ):
+            elif ( control is self.get_control( "Upload Button" ) ):
                 self._kaid_upload()
-            elif ( control == self.get_control( "Reboot Button" ) ):
+            elif ( control is self.get_control( "Reboot Button" ) ):
                 self._router_reboot()
-            elif ( control == self.get_control( "Settings Button" ) ):
+            elif ( control is self.get_control( "Settings Button" ) ):
                 self.change_settings()
             self.command_running = False
 
