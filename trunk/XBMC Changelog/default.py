@@ -14,19 +14,20 @@ __url__ = 'http://code.google.com/p/xbmc-scripting/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
 __version__ = '1.0.1'
 
-import xbmcgui, xbmc
+import xbmc
+import xbmcgui
 dialog = xbmcgui.DialogProgress()
 dialog.create(__scriptname__)
 dialog.update(5, 'Importing modules & initializing...')
 
-import sys, os
+import sys
+import os
 dialog.update(20)
 import urllib
 dialog.update(40)
 sys.path.append(os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'lib' ) )
 import guibuilder
 dialog.update(60)
-# url for the raw changelog
 
     
 def get_changes():
