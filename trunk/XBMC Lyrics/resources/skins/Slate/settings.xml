@@ -146,22 +146,20 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="21">
+		<control type="checkmark" id="21">
 			<description>Setting2 Value</description>
-			<posx>-15</posx>
-			<posy>92</posy>
-			<width>365</width>
+			<posx>320</posx>
+			<posy>97</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>rodiobutton_focus.png</texturecheckmark>
+            <texturecheckmarknofocus>rodiobutton_nofocus.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
@@ -234,22 +232,20 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="41">
+		<control type="checkmark" id="41">
 			<description>Setting4 Value</description>
-			<posx>-15</posx>
-			<posy>156</posy>
-			<width>365</width>
+			<posx>320</posx>
+			<posy>161</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>rodiobutton_focus.png</texturecheckmark>
+            <texturecheckmarknofocus>rodiobutton_nofocus.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
@@ -257,7 +253,7 @@
 		<control type="button" id="50">
 			<description>Setting5 Button</description>
 			<posx>-15</posx>
-			<posy>156</posy>
+			<posy>188</posy>
 			<width>365</width>
 			<height>30</height>
 			<align>left</align>
@@ -278,22 +274,20 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="51">
+		<control type="checkmark" id="51">
 			<description>Setting5 Value</description>
-			<posx>-15</posx>
-			<posy>156</posy>
-			<width>365</width>
+			<posx>320</posx>
+			<posy>193</posy>
+			<width>50</width>
 			<height>30</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
+			<align>left</align>
+			<label> </label>
 			<font>font13</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
+			<textcolor>00ffffff</textcolor>
+            <texturecheckmark>rodiobutton_focus.png</texturecheckmark>
+            <texturecheckmarknofocus>rodiobutton_nofocus.png</texturecheckmarknofocus>
+            <markwidth>16</markwidth>
+            <markheight>20</markheight>
             <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
