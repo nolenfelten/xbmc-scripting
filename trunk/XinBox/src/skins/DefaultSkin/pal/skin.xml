@@ -1,0 +1,291 @@
+<window>
+	<defaultcontrol>63</defaultcontrol>
+	<allowoverlay>yes</allowoverlay>
+	<controls>
+		<control type="image" id="65">
+			<description>background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>720</width>
+			<height>576</height>
+			<texture>dbackground.png</texture>
+		</control>
+
+        	<control type="label" id="66">
+			<description>title</description>
+			<posx>250</posx>
+			<posy>70</posy>
+			<width>200</width>
+			<label>XinBox</label>
+			<height>100</height>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
+        	<control type="label" id="70">
+			<description>xinbox empty</description>
+			<posx>300</posx>
+			<posy>100</posy>
+			<width>200</width>
+			<height>100</height>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
+		<control type="group" id="9000">
+			<posx>20</posx>
+			<posy>-20</posy>
+			<include>buttonpanelslide</include>
+			<control type="button" id="61">
+				<description>XinBox1 button</description>
+				<posx>0</posx>
+				<posy>120</posy>
+				<label>XinBox 1</label>
+				<onleft>61</onleft>
+				<onright>68</onright>
+				<onup>64</onup>
+				<ondown>62</ondown>
+				<disabledcolor>60ffffff</disabledcolor>
+			</control>
+			<control type="button" id="62">
+				<description>XinBox2 button</description>
+				<posx>0</posx>
+				<posy>157</posy>
+				<label>XinBox 2</label>
+				<onleft>62</onleft>
+				<onright>68</onright>
+				<onup>61</onup>
+				<ondown>63</ondown>
+				<disabledcolor>60ffffff</disabledcolor>
+			</control>
+			<control type="button" id="63">
+				<description>Settings Button</description>
+				<posx>0</posx>
+				<posy>194</posy>
+				<onleft>65</onleft>
+				<onright>68</onright>
+				<onup>62</onup>
+				<ondown>64</ondown>
+			</control>
+			<control type="button" id="64">
+				<description>Minimode Button</description>
+				<posx>0</posx>
+				<posy>231</posy>
+				<onleft>66</onleft>
+				<onright>68</onright>
+				<onup>63</onup>
+				<ondown>61</ondown>
+				<disabledcolor>60ffffff</disabledcolor>
+			</control>
+		</control>
+		<control type="list" id="68">
+			<posx>211</posx>
+			<posy>125</posy>
+			<width>455</width>
+			<height>200</height>
+			<onleft>9000</onleft>
+			<onright>69</onright>
+			<onup>68</onup>
+			<ondown>68</ondown>
+			<viewtype label="535">list</viewtype>
+			<pagecontrol>69</pagecontrol>
+			<scrolltime>200</scrolltime>
+			<itemlayout height="27">
+				<control type="image">
+					<width>440</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture>list-nofocus.png</texture>
+				</control>
+				<control type="image">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>30</posx>
+					<posy>2</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>430</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<include>listselectedcolor</include>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="27">
+				<control type="image">
+					<width>440</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>!Control.HasFocus(68)</visible>
+					<colordiffuse>FF000000</colordiffuse>
+					<texture>list-focus.png</texture>
+				</control>
+				<control type="image">
+					<width>440</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(68)</visible>
+					<texture>list-focus.png</texture>
+				</control>
+				<control type="image">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>30</posx>
+					<posy>2</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>430</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<textcolor>60ffffff</textcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</focusedlayout>
+		</control>
+        	<control type="textbox" id="67">
+            		<description>email preview</description>
+            		<posx>216</posx>
+            		<posy>340</posy>
+            		<width>456</width>
+            		<height>200</height>
+            		<textureup>scroll-up.png</textureup>
+            		<texturedown>scroll-down.png</texturedown>
+            		<textureupfocus>scroll-up-focus.gif</textureupfocus>
+            		<texturedownfocus>scroll-down-focus.gif</texturedownfocus>
+            		<font>font13</font>
+            		<textcolor>FFFFFFFF</textcolor>
+            		<onup>67</onup>
+            		<ondown>67</ondown>
+            		<onleft>67</onleft>
+            		<onright>67</onright>
+        	</control>
+		<control type="scrollbar" id="69">
+			<posx>680</posx>
+			<posy>100</posy>
+			<width>17</width>
+			<height>200</height>
+			<texturesliderbackground border="4">scrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="3">scrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="3">scrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>scrollbar_nib.png</textureslidernib>
+			<textureslidernibfocus>scrollbar_nib_focus.png</textureslidernibfocus>
+			<onleft>68</onleft>
+			<onright>9000</onright>
+			<showonepage>false</showonepage>
+			<orientation>vertical</orientation>
+			<include>contentpanelslide</include>
+			<visible>Control.IsVisible(68)</visible>
+			<visible>!Skin.HasSetting(UseScrollbars) + !Control.IsVisible(56)</visible>
+			<visible>![Window.IsActive(myvideolibrary) + Control.IsVisible(51)]</visible>
+		</control>
+		<control type="image" id="71">
+			<description>fsoverlay</description>
+			<posx>100</posx>
+			<posy>100</posy>
+			<width>500</width>
+			<height>400</height>
+			<texture>fs.png</texture>
+		</control>
+        	<control type="textbox" id="72">
+            		<description>fsmsgbody</description>
+            		<posx>150</posx>
+            		<posy>150</posy>
+            		<width>390</width>
+            		<height>300</height>
+            		<spinposx>230</spinposx>
+            		<spinposy>290</spinposy>
+            		<textureup>scroll-up.png</textureup>
+            		<texturedown>scroll-down.png</texturedown>
+            		<textureupfocus>scroll-up-focus.png</textureupfocus>
+            		<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            		<font>font13</font>
+            		<textcolor>FFFFFFFF</textcolor>
+            		<onup>72</onup>
+            		<ondown>72</ondown>
+            		<onleft>72</onleft>
+           		<onright>75</onright>
+        	</control>	
+
+        	<control type="fadelabel" id="73">
+			<description>emailinfo</description>
+			<width>405</width>
+			<posx>150</posx>
+			<posy>130</posy>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
+     	
+		<control type="fadelabel" id="74">
+			<description>emailrec</description>
+			<posx>150</posx>
+			<posy>440</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
+		<control type="button" id="75">
+			<description>Attach button</description>
+			<posx>420</posx>
+			<posy>440</posy>
+			<label>A</label>
+			<width>17</width>
+			<height>17</height>
+			<onleft>72</onleft>
+			<onright>76</onright>
+			<onup>75</onup>
+			<textoffsetx>5</textoffsetx>
+			<ondown>75</ondown>
+			<disabledcolor>60ffffff</disabledcolor>
+		</control>
+		<control type="button" id="76">
+			<description>Del button</description>
+			<posx>437</posx>
+			<textoffsetx>5</textoffsetx>
+			<posy>440</posy>
+			<label>D</label>
+			<width>17</width>
+			<height>17</height>
+			<onleft>75</onleft>
+			<onright>76</onright>
+			<onup>76</onup>
+			<ondown>76</ondown>
+		</control>
+
+    </controls>
+
+</window>
