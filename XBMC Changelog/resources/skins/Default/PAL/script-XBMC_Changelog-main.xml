@@ -53,12 +53,12 @@
 			<label>Changelog</label>
 			<font>special13</font>
 		</control>
-        <control type="label">
+        <control type="label" id="6">
             <description>date label</description>
             <posx>640</posx>
             <posy>43</posy>
             <align>right</align>
-            <label>$INFO[System.Date]</label>
+            <label> </label>
             <font>special13</font>
         </control>
         <control type="label" id="4">
