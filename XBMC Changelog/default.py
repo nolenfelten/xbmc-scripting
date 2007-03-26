@@ -1,82 +1,55 @@
-###XBMC Changelog script################################################
-#Coded by SveinT (sveint@gmail.com)
-# Updated by Killarny (killarny@gmail.com)
-#
-#Thanks to Modplug for the idea :)
-#Thanks a lot to ChokeManiac for help and of course for his great skins!
-#
-#Last updated: 2006 August 13
-########################################################################
-
-__scriptname__ = 'XBMC Changelog'
-__author__ = 'Nuka1195/EnderW/killarny'
-__url__ = 'http://code.google.com/p/xbmc-scripting/'
-__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = '1.0.1'
-
-import xbmc
-import xbmcgui
-dialog = xbmcgui.DialogProgress()
-dialog.create(__scriptname__)
-dialog.update(5, 'Importing modules & initializing...')
-
-import sys
-import os
-dialog.update(20)
-import urllib
-dialog.update(40)
-sys.path.append(os.path.join( os.getcwd().replace( ";", "" ), 'resources', 'lib' ) )
-import guibuilder
-dialog.update(60)
-
+"""
+    XBMC Changelog script
     
-def get_changes():
-    base_url = 'http://appliedcuriosity.cc/xbox/changelog.txt'
-    # get the actual changelog.txt
-    data = urllib.urlopen( base_url )
-    data = data.read()
+    Thanks to Modplug for the idea :)
+    Thanks to SleepyP for hosting the changelog
+"""
 
-    # ignore the top 7 lines, as they contain nothing useful
-    changes = data.split('\n')[8:]
+import os
+import xbmcgui
 
-    # search each line to determine if it has a hyphen as the second
-    # character, meaning that it is a new change, and not a multiline
-    # change
-    changelog = []
-    for each in changes:
-        # ignore empty lines
-        if not len( each ):
-            continue
-        changelog += [ each ]
-    changes = '\n'.join( changelog )
-    return changes
+__scriptname__ = "XBMC Changelog"
+__author__ = "Nuka1195/EnderW/Killarny"
+__url__ = "http://code.google.com/p/xbmc-scripting/"
+__credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
+__version__ = "1.1"
 
-class GUI( xbmcgui.Window ):
-    def __init__( self ):
-        global dialog
-        dialog.update(80, 'Setting up GUI...' )
-        self.gui_loaded = self.setupGUI()
-        if (not self.gui_loaded): 
-            dialog.close()
-            self.close()
-        else:
-            self.show()
-            dialog.update(100, 'Downloading changelog' )
-            try:
-                change_text = get_changes()
-            finally:
-                dialog.close()
-            self.controls[ 'textarea' ]['control'].setText( change_text )
-            
-    def setupGUI( self ):
-        gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self )
-        return ok
+resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+
+
+class GUI( xbmcgui.WindowXML ):
+    def __init__( self, *args, **kwargs ):
+        base_url = "http://appliedcuriosity.cc/xbox/changelog.txt"
+        self.header, self.changelog = self.fetch_changelog( base_url )
+        self.exit_script = [ 247, 275, 61467 ]
+
+    def onInit( self ):
+        self.getControl( 4 ).setLabel( self.header )
+        self.getControl( 5 ).setText( self.changelog )
+
+    def fetch_changelog( self, base_url ):
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( "Fetching changelog..." )
+        import urllib
+        usock = urllib.urlopen( base_url )
+        data = usock.readlines()
+        usock.close()
+        header = "".join( data[ 6 : 8 ] )
+        changelog = "".join( data[ 8 : ] )
+        dialog.close()
+        return header, changelog
+
+    def onClick( self, controlId ):
+        pass
+
+    def onFocus( self, controlId ):
+        pass
 
     def onAction( self, action ):
-        if action == 10: self.close()
+        if ( action.getButtonCode() in self.exit_script ):
+            self.close()
 
 if ( __name__ == "__main__" ):
-    ui = GUI()
-    if (ui.gui_loaded): ui.doModal()
+    ui = GUI( "script-XBMC_Changelog-main.xml", resource_path, "Default" )
+    ui.doModal()
     del ui
