@@ -1,170 +1,52 @@
-﻿<window id="3000">
+<window id="3000">
 	<defaultcontrol>5</defaultcontrol>
 	<controls>
-		<control type="image">
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>720</width>
-			<height>576</height>
-			<texture>guide-black.png</texture>
-			<colordiffuse>DDFFFFFF</colordiffuse>
-			<animation effect="fade" time="50">WindowOpen</animation>
-			<animation effect="fade" delay="450" time="100">WindowClose</animation>
+		<include>LiveBackGroundWhitewash</include>
+		<!-- Start Normal Window Controls -->
+		<control type="group">
+			<animation effect="fade" delay="100" time="250">WindowOpen</animation>
+			<animation effect="fade" time="100">WindowClose</animation>
+			<control type="label" id="1">
+				<description>XBMC Live Place label</description>
+				<posx>102</posx>
+				<posy>42</posy>
+				<align>left</align>
+				<label>Changelog</label>
+				<include>TextcolorWhite</include>
+				<include>shadow-black</include>
+				<font>font18</font>
+			</control>
+			<control type="label" id="6">
+				<description>date label</description>
+				<posx>640</posx>
+				<posy>95</posy>
+				<align>right</align>
+				<label> </label>
+				<font>font12</font>
+			</control>
+			<control type="label" id="4">
+				<description>header label</description>
+				<posx>100</posx>
+				<posy>95</posy>
+				<width>550</width>
+				<font>font12</font>
+				<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			</control>
+			<control type="textbox" id="5">
+				<description>textarea</description>
+				<posx>100</posx>
+				<posy>140</posy>
+				<width>550</width>
+				<height>350</height>
+				<font>font12</font>
+				<spinposx>510</spinposx>
+				<spinposy>335</spinposy>
+				<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			</control>
+			<include>SystemCustomKeymaps</include>
 		</control>
-		<control type="image">
-			<description>Guide Blade Background</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>548</width>
-			<height>576</height>
-			<visible>!Skin.String(GuidePanel)</visible>
-			<texture>background-grey.png</texture>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>Custom Guide Blade Background</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>548</width>
-			<height>576</height>
-			<texture>-</texture>
-			<info>Skin.String(GuidePanel)</info>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>Guide Blade Overlay</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>450</width>
-			<height>576</height>
-			<texture>guide-blade-overlay-tile.png</texture>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>Guide Edge Overlay</description>
-			<posx>450</posx>
-			<posy>0</posy>
-			<width>128</width>
-			<height>576</height>
-			<texture>guide-blade-overlay-edge-left.png</texture>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="label">
-			<description>GamerTag Label</description>
-			<posx>528</posx>
-			<posy>200</posy>
-			<angle>270</angle>
-			<label>time</label>
-			<include>GamerName</include>
-			<include>TextcolorBlack</include>
-			<font>font14</font>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="label">
-			<description>Script Output Heading</description>
-			<label>XBMC Changelog</label>
-			<posx>31</posx>
-			<posy>45</posy>
-			<font>font14</font>
-			<align>left</align>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="label" id="6">
-			<description>Date label</description>
-			<posx>470</posx>
-			<posy>50</posy>
-			<label> </label>
-			<align>right</align>
-			<include>TextcolorWhite</include>
-			<font>font12</font>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="label" id="4">
-			<description>header label</description>
-			<posx>35</posx>
-			<posy>90</posy>
-            <width>420</width>
-            <include>TextcolorBlack</include>
-            <font>font12</font>
-			<animation effect="fade" delay="350" time="200">WindowOpen</animation>
-			<animation effect="fade" time="200">WindowClose</animation>
-		</control>
-		<control type="textbox" id="5">
-			<description>Script Output Text Area</description>
-			<posx>35</posx>
-			<posy>120</posy>
-			<width>420</width>
-			<height>320</height>
-			<font>font12</font>
-			<animation effect="fade" delay="350" time="200">WindowOpen</animation>
-			<animation effect="fade" time="200">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>Back Button</description>
-			<posx>430</posx>
-			<posy>475</posy>
-			<include>Button-Map-Texture-Width</include>
-			<height>21</height>
-			<texture>button-Back.png</texture>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>A Button</description>
-			<posx>445</posx>
-			<posy>498</posy>
-			<include>Button-Map-Texture-Width</include>
-			<height>21</height>
-			<texture>button-A.png</texture>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>Y Button</description>
-			<posx>60</posx>
-			<posy>475</posy>
-			<include>Button-Map-Texture-Width</include>
-			<height>21</height>
-			<texture>button-Y-turnedoff.png</texture>
-			<animation effect="slide" time="250" start="-512,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-512,0">WindowClose</animation>
-		</control>
-		<control type="image">
-			<description>X Button</description>
-			<posx>45</posx>
-			<posy>498</posy>
-			<include>Button-Map-Texture-Width</include>
-			<height>21</height>
-			<texture>button-X-turnedoff.png</texture>
-			<animation effect="slide" time="250" start="-512,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-512,0">WindowClose</animation>
-		</control>
-		<control type="label">
-			<description>Back Label</description>
-			<posx>424</posx>
-			<posy>479</posy>
-			<include>19023</include>
-			<align>right</align>
-			<font>font12</font>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
-		<control type="label">
-			<description>Select Label</description>
-			<posx>436</posx>
-			<posy>502</posy>
-			<include>19020</include>
-			<align>right</align>
-			<font>font12</font>
-			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
-			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
-		</control>
+		<include>LiveCommonsBlades</include>
 	</controls>
 </window>
