@@ -20,12 +20,13 @@ resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 class GUI( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         base_url = "http://appliedcuriosity.cc/xbox/changelog.txt"
-        self.header, self.changelog = self.fetch_changelog( base_url )
+        self.header, self.changelog, self.last_change = self.fetch_changelog( base_url )
         self.exit_script = [ 247, 275, 61467 ]
 
     def onInit( self ):
         self.getControl( 4 ).setLabel( self.header )
         self.getControl( 5 ).setText( self.changelog )
+        self.getControl( 6 ).setLabel( "Last change: %s" % self.last_change )
 
     def fetch_changelog( self, base_url ):
         dialog = xbmcgui.DialogProgress()
@@ -36,8 +37,9 @@ class GUI( xbmcgui.WindowXML ):
         usock.close()
         header = "".join( data[ 6 : 8 ] )
         changelog = "".join( data[ 8 : ] )
+        last_change = data[ 8 ].split()[0]
         dialog.close()
-        return header, changelog
+        return header, changelog, last_change
 
     def onClick( self, controlId ):
         pass

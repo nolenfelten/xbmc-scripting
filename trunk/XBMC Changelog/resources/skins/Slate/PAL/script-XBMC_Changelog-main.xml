@@ -71,11 +71,11 @@
         <include>menu time2</include>
         <include>menu date</include>
 
-     <control type="label" id="10">
+     <control type="label" id="6">
       <description>Date label</description>
       <posx>670</posx>
       <posy>90</posy>
-      <label>$INFO[System.Date]</label>
+      <label> </label>
       <font>font14</font>
       <align>right</align>
       <textcolor>FFffffff</textcolor>

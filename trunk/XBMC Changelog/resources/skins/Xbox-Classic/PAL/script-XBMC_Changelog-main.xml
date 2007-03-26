@@ -30,12 +30,12 @@
 			<include>textcolor-yellow</include>
 			<include>shadow-black</include>
 		</control>
-		<control type="label" id="11">
+		<control type="label" id="6">
 			<description>Date Label</description>
 			<posx>670</posx>
 			<posy>70</posy>
 			<width>450</width>
-            <label>$INFO[System.Date]</label>
+            <label> </label>
 			<font>font14</font>
             <align>right</align>
 			<include>textcolor-yellow</include>

@@ -75,12 +75,11 @@
 			<animation effect="slide" time="250" start="-655,0">WindowOpen</animation>
 			<animation effect="slide" time="250" delay="250" end="-655,0">WindowClose</animation>
 		</control>
-		<control type="label">
-			<description>Time label</description>
+		<control type="label" id="6">
+			<description>Date label</description>
 			<posx>470</posx>
 			<posy>50</posy>
-			<label>time</label>
-			<info>System.Date</info>
+			<label> </label>
 			<align>right</align>
 			<include>TextcolorWhite</include>
 			<font>font12</font>
