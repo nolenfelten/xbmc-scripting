@@ -1,7 +1,5 @@
 <window id="3000">
 
-    <resolution>PAL</resolution>
-    <useincludes>false</useincludes>
     <coordinates>
         <system>1</system>
         <posx>420</posx>
@@ -10,7 +8,7 @@
 
     <controls>
     
-        <control type="image" id="100">
+        <control type="image" id="1">
 			<description>Dialog Header</description>
             <posx>-75</posx>
             <posy>-9</posy>
@@ -23,19 +21,19 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="image" id="101">
+        <control type="image" id="1">
 			<description>Dialog Text Area</description>
             <posx>-25</posx>
             <posy>30</posy>
             <width>300</width>
             <height>250</height>
-            <texture>dialog_middle.png</texture>
+            <texture border="5">dialog_middle.png</texture>
             <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="image" id="102">
+        <control type="image" id="1">
             <description>divider top image</description>
             <posx>-15</posx>
             <posy>60</posy>
@@ -47,7 +45,7 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
-        <control type="image" id="103">
+        <control type="image" id="1">
             <description>divider middle image</description>
             <posx>-15</posx>
             <posy>173</posy>
@@ -59,7 +57,7 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
-        <control type="image" id="104">
+        <control type="image" id="1">
             <description>divider bottom image</description>
             <posx>-15</posx>
             <posy>238</posy>
@@ -71,7 +69,7 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
-        <control type="image" id="105">
+        <control type="image" id="1">
 			<description>Dialog Footer</description>
             <posx>8</posx>
             <posy>156</posy>
@@ -84,13 +82,13 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="label" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="label" id="2">
             <description>Title Label</description>
             <posx>-15</posx>
             <posy>38</posy>
             <width>200</width>
-            <label>0</label>
+            <label>-</label>
             <align>left</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
@@ -112,14 +110,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
+		<!-- ** Required ** Do not change id or type -->
         <control type="button" id="10">
             <description>Restart Button</description>
             <posx>20</posx>
             <posy>70</posy>
             <width>210</width>
             <height>22</height>
-            <label>11</label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>DDFFFFFF</textcolor>
             <disabledcolor>60FFFFFF</disabledcolor>
@@ -136,14 +134,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
+		<!-- ** Required ** Do not change id or type -->
         <control type="button" id="20">
             <description>Stop Button</description>
             <posx>20</posx>
             <posy>90</posy>
             <width>210</width>
             <height>22</height>
-            <label>12</label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>DDFFFFFF</textcolor>
             <disabledcolor>60FFFFFF</disabledcolor>
@@ -160,14 +158,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
+		<!-- ** Required ** Do not change id or type -->
         <control type="button" id="30">
             <description>Upload Button</description>
             <posx>20</posx>
             <posy>110</posy>
             <width>210</width>
             <height>22</height>
-            <label>13</label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>DDFFFFFF</textcolor>
             <disabledcolor>60FFFFFF</disabledcolor>
@@ -184,14 +182,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
+		<!-- ** Required ** Do not change id or type -->
         <control type="button" id="40">
             <description>Reboot Button</description>
             <posx>20</posx>
             <posy>130</posy>
             <width>210</width>
             <height>22</height>
-            <label>14</label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>DDFFFFFF</textcolor>
             <disabledcolor>60FFFFFF</disabledcolor>
@@ -208,14 +206,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
+		<!-- ** Required ** Do not change id or type -->
         <control type="button" id="50">
             <description>Settings Button</description>
             <posx>20</posx>
             <posy>150</posy>
             <width>210</width>
             <height>22</height>
-            <label>15</label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>DDFFFFFF</textcolor>
             <disabledcolor>60FFFFFF</disabledcolor>
@@ -232,28 +230,28 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="label" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="label" id="101">
             <description>Kaid Status Heading</description>
             <posx>120</posx>
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label>100</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="button" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="button" id="100">
             <description>Kaid Status Label</description>
             <posx>125</posx>
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -269,28 +267,28 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="label" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="label" id="111">
             <description>Router Status Heading</description>
             <posx>120</posx>
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label>110</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="button" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="button" id="110">
             <description>Router Status Label</description>
             <posx>125</posx>
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -306,28 +304,28 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="label" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="label" id="121">
             <description>Xbox Status Heading</description>
             <posx>120</posx>
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label>120</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="button" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="button" id="120">
             <description>Xbox Status Label</description>
             <posx>125</posx>
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -343,8 +341,8 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="progress" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="progress" id="900">
             <description>Progressbar</description>
             <posx>-15</posx>
             <posy>246</posy>
@@ -360,14 +358,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="fadelabel" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="fadelabel" id="500">
             <description>Info Message Label</description>
             <posx>-15</posx>
             <posy>250</posy>
             <width>280</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>CC00CCFF</textcolor>
             <font>font10</font>
@@ -376,14 +374,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="fadelabel" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="fadelabel" id="510">
             <description>Success Message Label</description>
             <posx>-15</posx>
             <posy>250</posy>
             <width>280</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>FFF1EA40</textcolor>
             <font>font10</font>
@@ -392,14 +390,14 @@
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-		<!-- ** Required ** Do not change <description> or type -->
-        <control type="fadelabel" id="1">
+		<!-- ** Required ** Do not change id or type -->
+        <control type="fadelabel" id="520">
             <description>Error Message Label</description>
             <posx>-15</posx>
             <posy>250</posy>
             <width>280</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>CCFF0000</textcolor>
             <font>font10</font>
