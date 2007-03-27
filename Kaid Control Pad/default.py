@@ -86,7 +86,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( key ).reset()
         self.getControl( key ).addLabel( _( msg_id ) )
         self.getControl( key ).setVisible( True )
-        key = [ "Error Message Label", "Success Message Label",  "Info Message Label" ][ status ]
         if ( status == 2 ):
             self.timer_msg = threading.Timer( 10, self.set_message, () )
             self.timer_msg.start()
