@@ -8,37 +8,50 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import guibuilder
 import utilities
 
-
-class GUI( xbmcgui.WindowDialog ):
+class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         self._ = kwargs[ "language" ]
-        self.gui_loaded = self.setupGUI()
-        if ( not self.gui_loaded ): self._close_dialog()
-        else:
-            self._set_variables()
-            self._get_settings()
-            self._setup_special()
-            self._set_controls_values()
-            self._set_restart_required()
+    
+    def onInit( self ):
+        self._set_labels()
+        self._set_variables()
+        self._get_settings()
+        self._setup_special()
+        self._set_controls_values()
+        self._set_restart_required()
 
-    def setupGUI( self ):
-        """ sets up the gui using guibuilder """
-        gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, xml_name="settings", language=self._ )
-        return ok
-        
+    def _set_labels( self ):
+        xbmcgui.lock()
+        try:
+            self.getControl( 2 ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
+            self.getControl( 3 ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
+            self.getControl( 10 ).setLabel( self._( 201 ) )
+            self.getControl( 20 ).setLabel( self._( 202 ) )
+            self.getControl( 30 ).setLabel( self._( 203 ) )
+            self.getControl( 40 ).setLabel( self._( 204 ) )
+            self.getControl( 50 ).setLabel( self._( 205 ) )
+            self.getControl( 60 ).setLabel( self._( 206 ) )
+            self.getControl( 70 ).setLabel( self._( 207 ) )
+            self.getControl( 80 ).setLabel( self._( 208 ) )
+            self.getControl( 90 ).setLabel( self._( 209 ) )
+            self.getControl( 100 ).setLabel( self._( 210 ) )
+            self.getControl( 110 ).setLabel( self._( 211 ) )
+            self.getControl( 200 ).setLabel( self._( 250 ) )
+            self.getControl( 210 ).setLabel( self._( 251 ) )
+            self.getControl( 220 ).setLabel( self._( 252 ) )
+            self.getControl( 230 ).setLabel( self._( 253 ) )
+        except: pass
+        xbmcgui.unlock()
+            
     def _set_variables( self ):
         """ initializes variables """
         self.controller_action = utilities.setControllerAction()
-        self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
-        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
         # setEnabled( False ) if not used
-        self.get_control( "Credits Button" ).setVisible( False )
-        self.get_control( "Credits Button" ).setEnabled( False )
+        self.getControl( 230 ).setVisible( False )
+        self.getControl( 230 ).setEnabled( False )
 
     def _get_settings( self ):
         """ reads settings """
@@ -114,17 +127,17 @@ class GUI( xbmcgui.WindowDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.get_control( "Setting1 Value" ).setLabel( self.settings[ "firmware" ] )
-            self.get_control( "Setting2 Value" ).setLabel( self.settings[ "router_ip" ] )
-            self.get_control( "Setting3 Value" ).setLabel( self.settings[ "router_user" ] )
-            self.get_control( "Setting4 Value" ).setLabel( self.settings[ "router_pwd" ] )
-            self.get_control( "Setting5 Value" ).setLabel( self.settings[ "path_to_kaid" ] )
-            self.get_control( "Setting6 Value" ).setLabel( self.settings[ "path_to_kaid_conf" ] )
-            self.get_control( "Setting7 Value" ).setLabel( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ] )
-            self.get_control( "Setting8 Value" ).setLabel( self.settings[ "xbox_user" ] )
-            self.get_control( "Setting9 Value" ).setLabel( self.settings[ "xbox_pwd" ] )
-            self.get_control( "Setting10 Value" ).setLabel( self.settings[ "sniff_device" ] )
-            self.get_control( "Setting11 Value" ).setSelected( self.settings[ "exit_to_kai" ] )
+            self.getControl( 11 ).setLabel( self.settings[ "firmware" ] )
+            self.getControl( 21 ).setLabel( self.settings[ "router_ip" ] )
+            self.getControl( 31 ).setLabel( self.settings[ "router_user" ] )
+            self.getControl( 41 ).setLabel( self.settings[ "router_pwd" ] )
+            self.getControl( 51 ).setLabel( self.settings[ "path_to_kaid" ] )
+            self.getControl( 61 ).setLabel( self.settings[ "path_to_kaid_conf" ] )
+            self.getControl( 71 ).setLabel( ( "http://", "ftp://", )[ self.settings[ "upload_method" ] ] )
+            self.getControl( 81 ).setLabel( self.settings[ "xbox_user" ] )
+            self.getControl( 91 ).setLabel( self.settings[ "xbox_pwd" ] )
+            self.getControl( 101 ).setLabel( self.settings[ "sniff_device" ] )
+            self.getControl( 111 ).setSelected( self.settings[ "exit_to_kai" ] )
         except: pass
         xbmcgui.unlock()
     
@@ -211,40 +224,43 @@ class GUI( xbmcgui.WindowDialog ):
         try: return self.controls[ key ][ "control" ]
         except: return None
 
-    def onControl( self, control ):
-        if ( control is self.get_control( "Ok Button" ) ):
+    def onClick( self, controlId ):
+        if ( controlId == 200 ):
             self._save_settings()
-        elif ( control is self.get_control( "Cancel Button" ) ):
+        elif ( controlId == 210 ):
             self._close_dialog()
-        elif ( control is self.get_control( "Update Button" ) ):
+        elif ( controlId == 220 ):
             self._update_script()
-        elif ( control is self.get_control( "Credits Button" ) ):
+        elif ( controlId == 230 ):
             self._show_credits()
         else:
-            if ( control is self.get_control( "Setting1 Button" ) ):
+            if ( controlId == 10 ):
                 self._change_setting1()
-            elif ( control is self.get_control( "Setting2 Button" ) ):
+            elif ( controlId == 20 ):
                 self._change_setting2()
-            elif ( control is self.get_control( "Setting3 Button" ) ):
+            elif ( controlId == 30 ):
                 self._change_setting3()
-            elif ( control is self.get_control( "Setting4 Button" ) ):
+            elif ( controlId == 40 ):
                 self._change_setting4()
-            elif ( control is self.get_control( "Setting5 Button" ) ):
+            elif ( controlId == 50 ):
                 self._change_setting5()
-            elif ( control is self.get_control( "Setting6 Button" ) ):
+            elif ( controlId == 60 ):
                 self._change_setting6()
-            elif ( control is self.get_control( "Setting7 Button" ) ):
+            elif ( controlId == 70 ):
                 self._change_setting7()
-            elif ( control is self.get_control( "Setting8 Button" ) ):
+            elif ( controlId == 80 ):
                 self._change_setting8()
-            elif ( control is self.get_control( "Setting9 Button" ) ):
+            elif ( controlId == 90 ):
                 self._change_setting9()
-            elif ( control is self.get_control( "Setting10 Button" ) ):
+            elif ( controlId == 100 ):
                 self._change_setting10()
-            elif ( control is self.get_control( "Setting11 Button" ) ):
+            elif ( controlId == 110 ):
                 self._change_setting11()
             self._set_controls_values()
-            
+
+    def onFocus( self, controlId ):
+        pass
+
     def onAction( self, action ):
         button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
         if ( button_key == "Keyboard Backspace Button" or button_key == "B Button" or button_key == "Remote Back Button" ):
