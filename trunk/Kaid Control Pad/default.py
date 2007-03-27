@@ -25,7 +25,7 @@ __scriptname__ = "Kaid Control Pad"
 __author__ = "Nuka1195"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "pre-2.0"
+__version__ = "2.0"
 
 
 class GUI( xbmcgui.WindowDialog ):
