@@ -3,13 +3,16 @@
     
     by: Nuka1195
 '''
+
 import os
 import xbmc
-import urllib, socket
-import utilities
+import urllib
+import socket
 import re
+import utilities
 
 socket.setdefaulttimeout( 5.0 ) #seconds
+
 
 class Commands( urllib.FancyURLopener ):
     """ Main class for controlling a linksys WRT54G router """

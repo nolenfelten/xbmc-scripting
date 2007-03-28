@@ -30,8 +30,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.timer_msg = None
 
     def onInit( self ):
-        Start( function=self.setup_all ).start()
-        #self.setup_all()
+        #Start( function=self.setup_all ).start()
+        self.setup_all()
         
     def setup_all( self ):
         self.set_labels()

@@ -1,10 +1,18 @@
-import sys, os
+"""
+Update module
+
+Nuka1195
+"""
+
+import sys
+import os
 import xbmcgui
 import urllib
-from sgmllib import SGMLParser
 import socket
+from sgmllib import SGMLParser
 
 socket.setdefaulttimeout( 10 )
+
 
 class Parser( SGMLParser ):
     """ Parser Class: grabs all tag versions and urls """
@@ -30,6 +38,7 @@ class Parser( SGMLParser ):
     def unknown_starttag( self, tag, attrs ):
         if ( tag == "h2" ):
             self.url_found = True
+
 
 class Update:
     """ Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """

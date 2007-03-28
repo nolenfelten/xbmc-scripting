@@ -1,4 +1,4 @@
-<window id="3000">
+<window>
 
     <coordinates>
         <system>1</system>
@@ -17,7 +17,6 @@
             <aspectratio>keep</aspectratio>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
-            <!--colordiffuse>BBFFFFFF</colordiffuse-->
         </control>
 
         <control type="image" id="1">
@@ -38,11 +37,10 @@
             <posx>70</posx>
             <posy>42</posy>
             <width>125</width>
-            <label>0</label>
+            <label>-</label>
             <align>center</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -65,7 +63,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>50</onup>
             <ondown>20</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
@@ -90,7 +87,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>10</onup>
             <ondown>30</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
@@ -115,7 +111,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>20</onup>
             <ondown>40</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
@@ -140,7 +135,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>30</onup>
             <ondown>50</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
@@ -165,7 +159,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>40</onup>
             <ondown>10</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
@@ -179,7 +172,7 @@
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label>100</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -193,7 +186,7 @@
             <posy>179</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -204,7 +197,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -216,7 +208,7 @@
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label>110</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -230,7 +222,7 @@
             <posy>197</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -241,7 +233,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -253,7 +244,7 @@
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label>120</label>
+            <label>-</label>
             <align>right</align>
             <textcolor>DDFFFFFF</textcolor>
             <font>font10</font>
@@ -267,7 +258,7 @@
             <posy>215</posy>
             <width>170</width>
             <height>22</height>
-            <label> </label>
+            <label>-</label>
             <font>font10</font>
             <textcolor>CC00FF00</textcolor>
             <disabledcolor>CCFF0000</disabledcolor>
@@ -278,7 +269,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -295,7 +285,6 @@
             <midtexture>progress_mid.png</midtexture>
             <righttexture>-</righttexture>
             <overlaytexture>-</overlaytexture>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -307,11 +296,10 @@
             <posy>240</posy>
             <width>240</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>CC00CCFF</textcolor>
             <font>font10</font>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -323,11 +311,10 @@
             <posy>240</posy>
             <width>240</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>FFF1EA40</textcolor>
             <font>font10</font>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>
@@ -339,11 +326,10 @@
             <posy>240</posy>
             <width>240</width>
             <height>18</height>
-            <label> </label>
+            <label>-</label>
             <align>left</align>
             <textcolor>CCFF0000</textcolor>
             <font>font10</font>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1">WindowClose</animation>
         </control>

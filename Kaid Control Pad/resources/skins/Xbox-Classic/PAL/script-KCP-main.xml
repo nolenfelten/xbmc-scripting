@@ -1,8 +1,8 @@
-<window id="3000">
+<window>
 
     <coordinates>
         <system>1</system>
-        <posx>420</posx>
+        <posx>400</posx>
         <posy>220</posy>
     </coordinates>
 
@@ -15,7 +15,6 @@
             <width>315</width>
             <height>180</height>
             <texture>dialog_top.png</texture>
-            <visible>true</visible>
             <aspectratio>keep</aspectratio>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
@@ -28,7 +27,6 @@
             <width>300</width>
             <height>250</height>
             <texture border="5">dialog_middle.png</texture>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -40,7 +38,6 @@
             <width>280</width>
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -52,7 +49,6 @@
             <width>280</width>
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -64,7 +60,6 @@
             <width>280</width>
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -76,7 +71,6 @@
             <width>310</width>
             <height>160</height>
             <texture>dialog_bottom.png</texture>
-            <visible>true</visible>
             <aspectratio>keep</aspectratio>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
@@ -92,7 +86,6 @@
             <align>left</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -127,7 +120,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>button-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>50</onup>
             <ondown>20</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
@@ -151,7 +143,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>button-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>10</onup>
             <ondown>30</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
@@ -175,7 +166,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>button-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>20</onup>
             <ondown>40</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
@@ -199,7 +189,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>button-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>30</onup>
             <ondown>50</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
@@ -223,7 +212,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>button-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <onup>40</onup>
             <ondown>10</ondown>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
@@ -262,7 +250,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -299,7 +286,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -336,7 +322,6 @@
             <textoffsety>0</textoffsety>
             <texturefocus>list-focus.png</texturefocus>
             <texturenofocus>-</texturenofocus>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -344,16 +329,15 @@
 		<!-- ** Required ** Do not change id or type -->
         <control type="progress" id="900">
             <description>Progressbar</description>
-            <posx>-15</posx>
-            <posy>246</posy>
-            <width>275</width>
-            <height>12</height>
+            <posx>-18</posx>
+            <posy>236</posy>
+            <width>285</width>
+            <height>48</height>
             <texturebg>progress_back.png</texturebg>
             <lefttexture>-</lefttexture>
             <midtexture>progress_mid.png</midtexture>
             <righttexture>-</righttexture>
             <overlaytexture>-</overlaytexture>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -369,7 +353,6 @@
             <align>left</align>
             <textcolor>CC00CCFF</textcolor>
             <font>font10</font>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -385,7 +368,6 @@
             <align>left</align>
             <textcolor>FFF1EA40</textcolor>
             <font>font10</font>
-            <visible>true</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
@@ -401,7 +383,6 @@
             <align>left</align>
             <textcolor>CCFF0000</textcolor>
             <font>font10</font>
-            <visible>false</visible>
             <animation effect="slide" time="500" start="400,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
             <animation effect="slide" time="300" start="0,0" end="400,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>

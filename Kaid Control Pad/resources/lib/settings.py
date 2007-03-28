@@ -10,6 +10,7 @@ import xbmc
 import xbmcgui
 import utilities
 
+
 class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
