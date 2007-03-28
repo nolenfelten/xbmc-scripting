@@ -75,7 +75,7 @@
       <description>Date label</description>
       <posx>670</posx>
       <posy>90</posy>
-      <label> </label>
+      <label>-</label>
       <font>font14</font>
       <align>right</align>
       <textcolor>FFffffff</textcolor>
