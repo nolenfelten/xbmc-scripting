@@ -1,4 +1,4 @@
-<window id="3001">
+<window>
 
 	<defaultcontrol>10</defaultcontrol>
     <coordinates>
@@ -16,7 +16,6 @@
             <width>300</width>
             <height>250</height>
             <texture border="5">dialog_middle.png</texture>
-            <visible>true</visible>
         </control>
         <control type="image" id="1">
             <description>divider top image</description>
@@ -25,7 +24,6 @@
             <width>280</width>
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
-            <visible>true</visible>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
         </control>
@@ -36,7 +34,6 @@
             <width>280</width>
             <height>4</height>
             <texture>calibrate-subtitles-focus.png</texture>
-            <visible>true</visible>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
         </control>
@@ -53,7 +50,6 @@
             <align>left</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
-            <visible>true</visible>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
         </control>
@@ -67,648 +63,622 @@
 			<align>right</align>
             <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
-            <visible>true</visible>
 			<label>-</label>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 		</control>
 
-        <!-- buttons page 1-->
-		
 		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="10">
-			<description>Setting1 Button</description>
-			<posx>-15</posx>
-			<posy>73</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>200</onup>
-			<ondown>20</ondown>
-            <visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50) | Control.HasFocus(60)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="11">
-			<description>Setting1 Value</description>
-			<posx>-15</posx>
-			<posy>73</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="20">
-			<description>Setting2 Button</description>
-			<posx>-15</posx>
-			<posy>99</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>10</onup>
-			<ondown>30</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="21">
-			<description>Setting2 Value</description>
-			<posx>-15</posx>
-			<posy>99</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="30">
-			<description>Setting3 Button</description>
-			<posx>-15</posx>
-			<posy>125</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>20</onup>
-			<ondown>40</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="31">
-			<description>Setting3 Value</description>
-			<posx>-15</posx>
-			<posy>125</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="40">
-			<description>Setting4 Button</description>
-			<posx>-15</posx>
-			<posy>151</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>30</onup>
-			<ondown>50</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="41">
-			<description>Setting4 Value</description>
-			<posx>-15</posx>
-			<posy>151</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="50">
-			<description>Setting5 Button</description>
-			<posx>-15</posx>
-			<posy>177</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>40</onup>
-			<ondown>60</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="51">
-			<description>Setting5 Value</description>
-			<posx>-15</posx>
-			<posy>177</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="60">
-			<description>Setting6 Button</description>
-			<posx>-15</posx>
-			<posy>203</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>50</onup>
-			<ondown>70</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="61">
-			<description>Setting6 Value</description>
-			<posx>-15</posx>
-			<posy>203</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- buttons page 2 -->
-		
-        <!-- ** Required ** Do not change id or type -->
-		<control type="button" id="70">
-			<description>Setting7 Button</description>
-			<posx>-15</posx>
-			<posy>73</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>60</onup>
-			<ondown>80</ondown>
-            <visible allowhiddenfocus="true">Control.HasFocus(70) | Control.HasFocus(80) | Control.HasFocus(90) | Control.HasFocus(100) | Control.HasFocus(110)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="71">
-			<description>Setting7 Value</description>
-			<posx>-15</posx>
-			<posy>73</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="80">
-			<description>Setting8 Button</description>
-			<posx>-15</posx>
-			<posy>99</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>70</onup>
-			<ondown>90</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="81">
-			<description>Setting8 Value</description>
-			<posx>-15</posx>
-			<posy>99</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="90">
-			<description>Setting9 Button</description>
-			<posx>-15</posx>
-			<posy>125</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>80</onup>
-			<ondown>100</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="91">
-			<description>Setting9 Value</description>
-			<posx>-15</posx>
-			<posy>125</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="100">
-			<description>Setting10 Button</description>
-			<posx>-15</posx>
-			<posy>151</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>90</onup>
-			<ondown>110</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="101">
-			<description>Setting10 Value</description>
-			<posx>-15</posx>
-			<posy>151</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>right</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="110">
-			<description>Setting11 Button</description>
-			<posx>-15</posx>
-			<posy>177</posy>
-			<width>280</width>
-			<height>24</height>
-			<align>left</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>10</textoffsetx>
-            <texturefocus>list-focus.png</texturefocus>
-            <texturenofocus>list-nofocus.png</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-			<onleft>200</onleft>
-			<onright>200</onright>
-			<onup>100</onup>
-			<ondown>200</ondown>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="checkmark" id="111">
-			<description>Setting11 Value</description>
-			<posx>240</posx>
-			<posy>180</posy>
-			<width>50</width>
-			<height>24</height>
-			<align>left</align>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
-            <texturecheckmark>settings-check-box.png</texturecheckmark>
-            <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
-            <markwidth>12</markwidth>
-            <markheight>16</markheight>
-            <visible allowhiddenfocus="true">Control.IsVisible(70)</visible> 
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="200">
-			<description>Ok Button</description>
-			<posx>-15</posx>
-			<posy>247</posy>
-			<width>80</width>
-			<height>26</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>17</textoffsetx>
-            <texturefocus>button-focus.png</texturefocus>
-            <texturenofocus>button-nofocus.png</texturenofocus>
-			<onleft>230</onleft>
-			<onright>210</onright>
-			<onup>110</onup>
-			<ondown>10</ondown>
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="210">
-			<description>Cancel Button</description>
-			<posx>67</posx>
-			<posy>247</posy>
-			<width>80</width>
-			<height>26</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<textoffsetx>17</textoffsetx>
-            <texturefocus>button-focus.png</texturefocus>
-            <texturenofocus>button-nofocus.png</texturenofocus>
-			<onleft>200</onleft>
-			<onright>220</onright>
-			<onup>110</onup>
-			<ondown>10</ondown>
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="220">
-			<description>Update Button</description>
-			<posx>149</posx>
-			<posy>247</posy>
-			<width>80</width>
-			<height>26</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-            <texturefocus>button-focus.png</texturefocus>
-            <texturenofocus>button-nofocus.png</texturenofocus>
-			<onleft>210</onleft>
-			<onright>230</onright>
-			<onup>110</onup>
-			<ondown>10</ondown>
-            <enable>System.InternetState</enable>
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Required ** Do not change id or type -->
-		<control type="button" id="230">
-			<description>Credits Button</description>
-			<posx>231</posx>
-			<posy>250</posy>
-			<width>80</width>
-			<height>26</height>
-			<align>center</align>
-			<aligny>center</aligny>
-			<label>-</label>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<disabledcolor>60ffffff</disabledcolor>
-			<textoffsetx>17</textoffsetx>
-            <texturefocus>button-focus.png</texturefocus>
-            <texturenofocus>button-nofocus.png</texturenofocus>
-			<onleft>220</onleft>
-			<onright>200</onright>
-			<onup>110</onup>
-			<ondown>10</ondown>
-            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-		</control>
-
-		<!-- ** Optional ** -->
-		<control type="label" id="300">
-			<description>Page1 Label</description>
+		<control type="spincontrol" id="900">
+			<description>page label</description>
 			<posx>265</posx>
 			<posy>250</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>right</align>
-			<label>1/2</label>
-			<font>font10</font>
+			<subtype>page</subtype>
+            <font>font10</font>
             <textcolor>FFF1EA40</textcolor>
-            <visible allowhiddenfocus="false">Control.IsVisible(10)</visible> 
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <textureup>-</textureup>
+            <textureupfocus>-</textureupfocus>
+            <texturedown>-</texturedown>
+            <texturedownfocus>-</texturedownfocus>
+			<showonepage>true</showonepage>
             <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
             <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 		</control>
 
-		<!-- ** Optional ** -->
-		<control type="label" id="310">
-			<description>Page2 Label</description>
-			<posx>265</posx>
-			<posy>250</posy>
-			<width>90</width>
-			<height>32</height>
-			<align>right</align>
-			<label>2/2</label>
-			<font>font10</font>
-            <textcolor>FFF1EA40</textcolor>
-            <visible allowhiddenfocus="false">Control.IsVisible(70)</visible> 
-		</control>
+		<!-- ** Required ** Do not change id's or type's -->
+        <control type="grouplist" id="9000">
+            <posx>-15</posx>
+            <posy>73</posy>
+            <width>280</width>
+            <height>156</height>
+            <itemgap>2</itemgap>
+            <pagecontrol>900</pagecontrol>
+            <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+            <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="10">
+                    <description>Setting1 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>2000</onup>
+                    <ondown>20</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="11">
+                    <description>Setting1 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="20">
+                    <description>Setting2 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>10</onup>
+                    <ondown>30</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="21">
+                    <description>Setting2 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="30">
+                    <description>Setting3 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>20</onup>
+                    <ondown>40</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="31">
+                    <description>Setting3 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="40">
+                    <description>Setting4 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>30</onup>
+                    <ondown>50</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="41">
+                    <description>Setting4 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="50">
+                    <description>Setting5 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>40</onup>
+                    <ondown>60</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="51">
+                    <description>Setting5 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="60">
+                    <description>Setting6 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>50</onup>
+                    <ondown>70</ondown>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+                <control type="button" id="61">
+                    <description>Setting6 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                    <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="70">
+                    <description>Setting7 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>200</onleft>
+                    <onright>200</onright>
+                    <onup>60</onup>
+                    <ondown>80</ondown>
+                </control>
+                <control type="button" id="71">
+                    <description>Setting7 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="80">
+                    <description>Setting8 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>70</onup>
+                    <ondown>90</ondown>
+                </control>
+                <control type="button" id="81">
+                    <description>Setting8 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="90">
+                    <description>Setting9 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>2000</onleft>
+                    <onright>2000</onright>
+                    <onup>80</onup>
+                    <ondown>100</ondown>
+                </control>
+                <control type="button" id="91">
+                    <description>Setting9 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="100">
+                    <description>Setting10 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>200</onleft>
+                    <onright>200</onright>
+                    <onup>90</onup>
+                    <ondown>110</ondown>
+                </control>
+                <control type="button" id="101">
+                    <description>Setting10 Value</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>-</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+            </control>
+
+            <control type="group">
+                <height>24</height>
+                <control type="button" id="110">
+                    <description>Setting11 Button</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>280</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <textoffsetx>10</textoffsetx>
+                    <texturefocus>list-focus.png</texturefocus>
+                    <texturenofocus>list-nofocus.png</texturenofocus>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <onleft>200</onleft>
+                    <onright>200</onright>
+                    <onup>100</onup>
+                    <ondown>200</ondown>
+                </control>
+                <control type="checkmark" id="111">
+                    <description>Setting11 Value</description>
+                    <posx>255</posx>
+                    <posy>4</posy>
+                    <width>50</width>
+                    <height>24</height>
+                    <align>left</align>
+                    <label>-</label>
+                    <font>font10</font>
+                    <textcolor>ffffffff</textcolor>
+                    <disabledcolor>60d0d0d0</disabledcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                    <texturecheckmark>settings-check-box.png</texturecheckmark>
+                    <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+                    <markwidth>12</markwidth>
+                    <markheight>16</markheight>
+                </control>
+            </control>
+        </control>
+
+		<!-- ** Required ** Do not change id's or type's -->
+        <control type="group" id="2000">
+            <control type="button" id="200">
+                <description>Ok Button</description>
+                <posx>-15</posx>
+                <posy>247</posy>
+                <width>80</width>
+                <height>26</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <label>-</label>
+                <font>font10</font>
+                <textcolor>ffffffff</textcolor>
+                <textoffsetx>17</textoffsetx>
+                <texturefocus>button-focus.png</texturefocus>
+                <texturenofocus>button-nofocus.png</texturenofocus>
+                <onleft>230</onleft>
+                <onright>210</onright>
+                <onup>9000</onup>
+                <ondown>9000</ondown>
+                <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            </control>
+
+            <control type="button" id="210">
+                <description>Cancel Button</description>
+                <posx>67</posx>
+                <posy>247</posy>
+                <width>80</width>
+                <height>26</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <label>-</label>
+                <font>font10</font>
+                <textcolor>ffffffff</textcolor>
+                <textoffsetx>17</textoffsetx>
+                <texturefocus>button-focus.png</texturefocus>
+                <texturenofocus>button-nofocus.png</texturenofocus>
+                <onleft>200</onleft>
+                <onright>220</onright>
+                <onup>9000</onup>
+                <ondown>9000</ondown>
+                <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            </control>
+
+            <control type="button" id="220">
+                <description>Update Button</description>
+                <posx>149</posx>
+                <posy>247</posy>
+                <width>80</width>
+                <height>26</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <label>-</label>
+                <font>font10</font>
+                <textcolor>ffffffff</textcolor>
+                <disabledcolor>60ffffff</disabledcolor>
+                <textoffsetx>17</textoffsetx>
+                <texturefocus>button-focus.png</texturefocus>
+                <texturenofocus>button-nofocus.png</texturenofocus>
+                <onleft>210</onleft>
+                <onright>230</onright>
+                <onup>9000</onup>
+                <ondown>9000</ondown>
+                <enable>System.InternetState</enable>
+                <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            </control>
+
+            <control type="button" id="230">
+                <description>Credits Button</description>
+                <posx>231</posx>
+                <posy>250</posy>
+                <width>80</width>
+                <height>26</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <label>-</label>
+                <font>font10</font>
+                <textcolor>ffffffff</textcolor>
+                <disabledcolor>60ffffff</disabledcolor>
+                <textoffsetx>17</textoffsetx>
+                <texturefocus>button-focus.png</texturefocus>
+                <texturenofocus>button-nofocus.png</texturenofocus>
+                <onleft>220</onleft>
+                <onright>200</onright>
+                <onup>9000</onup>
+                <ondown>9000</ondown>
+                <animation effect="fade" start="100" end="0" time="200" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+                <animation effect="fade" start="0" end="100" time="200" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            </control>
+        </control>
 
 	</controls>
 </window>
