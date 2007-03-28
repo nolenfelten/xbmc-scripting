@@ -21,7 +21,7 @@
 				<posx>640</posx>
 				<posy>95</posy>
 				<align>right</align>
-				<label> </label>
+				<label>-</label>
 				<font>font12</font>
 			</control>
 			<control type="label" id="4">

@@ -36,7 +36,7 @@
 			<posx>670</posx>
 			<posy>70</posy>
 			<width>450</width>
-			<label> </label>
+			<label>-</label>
 			<font>font14</font>
 			<align>right</align>
 			<include>textcolor-yellow</include>

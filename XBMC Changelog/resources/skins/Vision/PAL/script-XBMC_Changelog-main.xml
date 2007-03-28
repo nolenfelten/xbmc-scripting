@@ -53,7 +53,7 @@
 			<description>date label</description>
 			<posx>650</posx>
 			<posy>110</posy>
-            <label> </label>
+            <label>-</label>
             <align>right</align>
 			<font>font16</font>
 			<width>200</width>
