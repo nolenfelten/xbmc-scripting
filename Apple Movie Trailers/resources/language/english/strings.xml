@@ -1,157 +1,167 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="0">Apple Movie Trailers</string>
-  <string id="1">xbox media center</string>
+    <string id="0">Apple Movie Trailers</string>
+    <string id="1">xbox media center</string>
 
-  <!-- Dialog Messages -->
-  <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
-  <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
-  <string id="42">Save movie info to database...</string>
-  <string id="43">committing records to database...</string>
-  <string id="44">Database creation...</string>
-  <string id="45">Converting record</string>
-  <string id="46">database conversion failed...</string>
-  <string id="47">Current table</string>
-  <string id="48">Fetching records...</string>
-  <string id="49">*You may complete a full creation at anytime.</string>
-  
-  <string id="50">Setting up script:</string>
-  <string id="51">Importing modules &amp; initializing...</string>
-  <string id="52">module:</string>
-  <string id="53">Database version incompatable!</string>
-  <string id="54">You must update all genre and movie information.</string>
-  <string id="55">There was an error saving your settings.</string>
-  <string id="56">The skin change won't take effect until you restart.</string>
-  <string id="57">There was an error setting up your GUI.</string>
-  <string id="58">Check your skinfile:</string>
-  <string id="59">Database file invalid...</string>
-  <string id="60">Your database file is incompatible with this version|of AMT. It must be regenerated.</string>
-  <string id="61">Updating all genre and movie information...</string>
-  <string id="62">Are you sure you want to do this?</string>
-  <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string>
-  <string id="64">Error</string>
-  <string id="65">Unable to properly update AMT.pk</string>
-  <string id="66">Fetching genre information...</string>
-  <string id="67">Please wait a moment.</string>
-  <string id="68">Fetching:</string>
-  <string id="69">Error retrieving information for one or more genres.</string>
-  <string id="70">Fetching movie information...</string>
-  <string id="71">Genre:</string>
-  <string id="72">Error retrieving information for one or more movie titles.</string>
-  <string id="73">Clear cache folder...</string>
-  <string id="74">If you don't clear your cache, update will|be faster but some content may not be updated.</string>
-  <string id="75">Not enough free space on target drive.</string>
-  <string id="76">Drive</string>
-  <string id="77">Free</string>
-  <string id="78">Space Required</string>
-  <string id="79">Downloading...</string>
-  <string id="80">KB/s</string>
-  <string id="81">All the required modules could not be found!</string>
-  <string id="82">Are you sure you want to delete</string>
-  <string id="83">Loading database...</string>
-  <string id="84">Saving database...</string>
-  <string id="85">Executing query...</string>
-  <string id="86">The operation was cancelled.</string>
-  <string id="87">Current genre</string>
-  <string id="88">Current trailer</string>
-  <string id="89">There was an error creating the database.</string>
+    <!-- Dialog Messages -->
+    <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
+    <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
+    <string id="42">Save movie info to database...</string>
+    <string id="43">committing records to database...</string>
+    <string id="44">Database creation...</string>
+    <string id="45">Converting record</string>
+    <string id="46">database conversion failed...</string>
+    <string id="47">Current table</string>
+    <string id="48">Fetching records...</string>
+    <string id="49">*You may complete a full creation at anytime.</string>
+    <string id="50">Setting up script:</string>
+    <string id="51">Importing modules &amp; initializing...</string>
+    <string id="52">module:</string>
+    <string id="53">Database version incompatable!</string>
+    <string id="54">You must update all genre and movie information.</string>
+    <string id="55">Loading skin and creating gui...</string>
+    <string id="56">Copying movie...</string>
+    <string id="57">There was an error setting up your GUI.</string>
+    <string id="58">Check your skinfile:</string>
+    <string id="59">Database file invalid...</string>
+    <string id="60">Your database file is incompatible with this version|of AMT. It must be regenerated.</string>
+    <string id="61">Updating all genre and movie information...</string>
+    <string id="62">Are you sure you want to do this?</string>
+    <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string>
+    <string id="64">Error</string>
+    <string id="65">Unable to properly update AMT.pk</string>
+    <string id="66">Fetching genre information...</string>
+    <string id="67">Please wait a moment.</string>
+    <string id="68">Fetching:</string>
+    <string id="69">Error retrieving information for one or more genres.</string>
+    <string id="70">Fetching movie information...</string>
+    <string id="71">Genre:</string>
+    <string id="72">Error retrieving information for one or more movie titles.</string>
+    <string id="73">Clear cache folder...</string>
+    <string id="74">If you don't clear your cache, update will|be faster but some content may not be updated.</string>
+    <string id="75">Not enough free space on target drive.</string>
+    <string id="76">Drive</string>
+    <string id="77">Free</string>
+    <string id="78">Space Required</string>
+    <string id="79">Downloading...</string>
+    <string id="80">KB/s</string>
+    <string id="81">All the required modules could not be found!</string>
+    <string id="82">Are you sure you want to delete</string>
+    <string id="83">Loading database...</string>
+    <string id="84">Saving database...</string>
+    <string id="85">Executing query...</string>
+    <string id="86">The operation was cancelled.</string>
+    <string id="87">Current genre</string>
+    <string id="88">Current trailer</string>
+    <string id="89">There was an error creating the database.</string>
+    <string id="90">There was an error copying the movie!</string>
 
-  <string id="90">Fetching current tagged versions...</string>
-  <string id="91">is newer</string>
-  <string id="92">Would you like to update?</string>
-  <string id="93">Fetching file list...</string>
-  <string id="94">Please wait...</string>
-  <string id="95">Your version is up to date.</string>
-  <string id="96">There was an error updating script.</string>
-  <string id="97">Path:</string>
-  <string id="98">File:</string>
-  <string id="99">Your new version was saved to:</string>
+    <!-- Buttons -->
+    <string id="103">Genre...</string>
+    <string id="104">Studio...</string>
+    <string id="105">Actor...</string>
+    <string id="106">Search...</string>
+    <string id="107">Settings...</string>
 
-  <!-- Credits -->
-  <string id="100">Version</string>
-  <string id="101">Team Credits:</string>
-  <string id="102">Additional Credits:</string>
-  <string id="103">Skin Credits:</string>
-  <string id="104">Coder</string>
-  
-  <!-- Buttons and Labels -->
-  <string id="200">Newest</string>
-  <string id="201">Exclusives</string>
-  <string id="202">Genre...</string>
-  <string id="203">Search...</string>
-  <string id="204">Settings...</string>
-  <string id="205">Update All</string>
-  <string id="206">Update Genre</string>
-  <string id="207">Update Trailer</string>
-  <string id="208">Update</string>
-  <string id="209">Credits</string>
-  <string id="210">Ok</string>
-  <string id="211">Cancel</string>
-  <string id="212">*Skin dependent</string>
-  <string id="213">Version</string>
-  <string id="214">choose skin</string>
-  <string id="215">Plot</string>
-  <string id="216">Cast</string>
-  <string id="217">Favorites</string>
-  <string id="218">Playlist</string>
-  <string id="219">Genre</string>
-  <string id="220">Full Screen Visualization</string>
-  <string id="221">Full Screen Video</string>
-  <string id="222">Studio...</string>
-  <string id="223">Studio</string>
-  <string id="224">Actor...</string>
-  <string id="225">Actor</string>
-  <string id="226">Downloaded</string>
-  <string id="227">Exit script</string>
-  <string id="228">Check for update</string>
-  <string id="229">Full</string>
-  <string id="230">Minimal</string>
-  
-  <!-- Settings -->
-  <string id="300">Trailer Quality</string>
-  <string id="301">Mode</string>
-  <string id="302">Save Folder</string>
-  <string id="303">Skin</string>
-  <string id="304">Startup Category</string>
-  <string id="305">Thumbnail Display</string>
-  <string id="306">Shortcut #1</string>
-  <string id="307">Shortcut #2</string>
-  <string id="308">Shortcut #3</string>
-  <string id="310">Movie Poster</string>
-  <string id="311">Generic Thumb</string>
-  <string id="312">Off</string>
-  <string id="320">Low</string>
-  <string id="321">Medium</string>
-  <string id="322">High</string>
-  <string id="330">Stream</string>
-  <string id="331">Download</string>
-  <string id="332">Download &amp; Save</string>
-  <string id="340">Check version on startup</string>
-  <string id="350">a save folder</string>
-  <string id="351">choose your skin</string>
-  <string id="352">choose trailer quality</string>
-  <string id="353">choose streaming mode</string>
-  <string id="354">choose thumbnail display mode</string>
-  <string id="355">choose category</string>
+    <string id="113">Genre</string>
+    <string id="114">Studio</string>
+    <string id="115">Actor</string>
 
-  <!-- Movie/Genre Information -->
-  <string id="400">*No plot could be retrieved for this title.</string>
-  <string id="401">*No cast listing could be retrieved for this title.</string>
+    <string id="150">Newest</string>
+    <string id="151">Exclusives</string>
+    <string id="152">Favorites</string>
+    <string id="153">Downloaded</string>
+    <string id="154">Update</string>
+    <string id="155">Credits</string>
+    <string id="156">Plot</string>
+    <string id="157">Cast</string>
+    <string id="158">Full</string>
+    <string id="159">Minimal</string>
 
-  <!-- Context Menu -->
-  <string id="500">Theater Showtimes</string>
-  <string id="501">-</string>
-  <string id="502">Add to Favorites</string>
-  <string id="503">Remove from Favorites</string>
-  <string id="504">Mark as Watched</string>
-  <string id="505">Mark as Unwatched</string>
-  <string id="506">Refresh Trailer Info</string>
-  <string id="507">Refresh Genre</string>
-  <string id="508">Complete a full install</string>
-  <string id="509">Delete Saved Trailer</string>
-  <string id="510">Play Trailer</string>
-  <string id="511">View this Genre</string>
-  <string id="512">View this Studio</string>
-  <string id="513">View this Actor</string>
+    <!-- Settings labels -->
+    <string id="201">Skin</string>
+    <string id="202">Trailer quality</string>
+    <string id="203">Mode</string>
+    <string id="204">Save folder</string>
+    <string id="205">Thumbnail display</string>
+    <string id="206">Startup category</string>
+    <string id="207">Shortcut #1</string>
+    <string id="208">Shortcut #2</string>
+    <string id="209">Shortcut #3</string>
+    <string id="210">Refresh newest at startup</string>
+    <string id="211">Check version at startup</string>
+    <string id="212">Showtimes scraper</string>
+    <string id="213">Zip code</string>
+    
+    <!-- Settings choices -->
+    <string id="2020">Low</string>
+    <string id="2021">Medium</string>
+    <string id="2022">High</string>
+    <string id="2030">Stream</string>
+    <string id="2031">Download</string>
+    <string id="2032">Download &amp; Save</string>
+    <string id="2050">Movie Poster</string>
+    <string id="2051">Generic Thumb</string>
+    <string id="2052">Off</string>
+    
+    <!-- Settings error messages -->
+    <string id="230">There was an error saving settings!</string>
+    <string id="231">*Skin dependent</string>
+
+    <!-- Settings restart required message -->
+    <string id="240">Some settings changed require a restart to take effect.</string>
+    <string id="241">Would you like to restart %s now?</string>
+    
+    <!-- Settings buttons -->
+    <string id="250">Ok</string>
+    <string id="251">Cancel</string>
+    <string id="252">Update</string>
+    <string id="253">Credits</string>
+    <string id="254">Page</string>
+    <string id="255">Restart</string>
+    <string id="256">Later</string>
+
+    <!-- Plot/Cast Error Information -->
+    <string id="400">*No plot could be retrieved for this title.</string>
+    <string id="401">*No cast listing could be retrieved for this title.</string>
+
+    <!-- Context Menu -->
+    <string id="500">Theater Showtimes</string>
+    <string id="501">Copy to save folder</string>
+    <string id="502">Add to Favorites</string>
+    <string id="503">Remove from Favorites</string>
+    <string id="504">Mark as Watched</string>
+    <string id="505">Mark as Unwatched</string>
+    <string id="506">Refresh Trailer Info</string>
+    <string id="507">Refresh Genre</string>
+    <string id="508">Complete a full install</string>
+    <string id="509">Delete Saved Trailer</string>
+    <string id="510">Play Trailer</string>
+    <string id="511">View this Genre</string>
+    <string id="512">View this Studio</string>
+    <string id="513">View this Actor</string>
+    
+    <!-- Credits -->
+    <string id="900">Version</string>
+    <string id="901">Team Credits:</string>
+    <string id="902">Additional Credits:</string>
+    <string id="903">Skin Credits:</string>
+
+    <!-- Update messages -->
+    <string id="1000">Your version is up to date.</string>
+    <string id="1001">Fetching current tagged versions...</string>
+    <string id="1002">is newer</string>
+    <string id="1003">Would you like to update?</string>
+    <string id="1004">Fetching file list...</string>
+    <string id="1005">Please wait...</string>
+    <string id="1006">Version</string>
+    <string id="1007">Fetching:</string>
+    <string id="1008">Path:</string>
+    <string id="1009">File:</string>
+    <string id="1010">Your new version was saved to:</string>
+
+    <!-- Update error messages -->
+    <string id="1030">No tagged versions were found!</string>
+    <string id="1031">There was an error updating script!</string>
 
 </strings>

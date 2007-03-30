@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 
 COMPATIBLE_VERSIONS = [ 'pre-0.97.1', '0.97.1' ]
 GENRES = -1

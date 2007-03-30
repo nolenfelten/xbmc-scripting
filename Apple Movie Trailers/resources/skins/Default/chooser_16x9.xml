@@ -1,4 +1,4 @@
-<window id="3001">
+<window id="3002">
 
 <!--
     The <resolution> tag is used for the setCoordinateResolution() function.
@@ -14,7 +14,6 @@
 	
 -->
 	
-	<defaultcontrol>10</defaultcontrol>
 	<resolution>PAL16x9</resolution>
     <useincludes>false</useincludes>
 	<coordinates>
@@ -26,15 +25,14 @@
 	<controls>
 
 		<!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="600">
+		<!--control type="image" id="600">
 			<description>Chooser Image Top</description>
 			<posx>50</posx>
 			<posy>40</posy>
 			<width>300</width>
 			<height>290</height>
 			<texture>-</texture>
-			<visible>false</visible>
-		</control>
+		</control-->
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
 		<control type="image" id="601">
@@ -44,19 +42,17 @@
 			<width>300</width>
 			<height>290</height>
 			<texture>\dialog-panel.png</texture>
-			<visible>false</visible>
 		</control>
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="602">
+		<!--control type="image" id="602">
 			<description>Chooser Image Bottom</description>
 			<posx>50</posx>
 			<posy>40</posy>
 			<width>300</width>
 			<height>290</height>
 			<texture>-</texture>
-			<visible>false</visible>
-		</control>
+		</control-->
 
         <!-- skin selection controls -->
 		
@@ -70,7 +66,6 @@
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>214</label>
-			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -81,7 +76,6 @@
 			<width>128</width>
 			<height>72</height>
 			<texture>-</texture>
-			<visible>false</visible>
 			<aspectratio>keep</aspectratio>
 		</control>
 		

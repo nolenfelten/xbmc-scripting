@@ -1,27 +1,30 @@
-import sys, os
-import xbmcgui, xbmc
+import sys
+import os
+import xbmc
+import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
-import traceback
+#import traceback
 
 db_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
 if ( not os.path.isdir( db_path ) ):
     os.makedirs( db_path )
 db_filename = os.path.join( db_path, "AMT.db" )
 
-COMPATIBLE_VERSIONS = [ 'pre-0.97.1', '0.97.1'  ]
+COMPATIBLE_VERSIONS = [ "pre-0.97.1", "0.97.1" ]
+
 
 class Database:
     "main initializing of the database"
     def __init__( self, *args, **kwargs ):
-        self._ = kwargs[ 'language' ]
+        self._ = kwargs[ "language" ]
         self.query = Query()
         self.db_version, self.complete = self.getVersion()
         if ( not self.db_version ): 
-            print 'no database exists', sys.modules['__main__'].__version__
+            print "no database exists", sys.modules[ "__main__" ].__version__
 
     def getVersion( self ):
         records = Records()
-        record = records.fetchone( self.query[ 'version' ] )
+        record = records.fetchone( self.query[ "version" ] )
         if ( record ):
             version = record[ 1 ]
             complete = record[ 2 ]
@@ -31,16 +34,16 @@ class Database:
         return version, complete
     
     def createDatabase( self ):
-        tables = Tables()# language = self._
+        tables = Tables()
         success = tables.createTables( self._ )
         if ( success ):
             success = self.writeVersion()
-            if ( success ): return sys.modules['__main__'].__version__, False
+            if ( success ): return sys.modules[ "__main__" ].__version__, False
         return None, False
 
     def writeVersion( self ):
         records = Records()
-        lastrowid = records.add( 'version', ( sys.modules['__main__'].__version__, False, ) )
+        lastrowid = records.add( "version", ( sys.modules[ "__main__" ].__version__, False, ) )
         if ( lastrowid ): success = records.commit()
         records.close()
         return lastrowid
@@ -48,15 +51,15 @@ class Database:
     def convertDatabase( self, version ):
         return None, False
         pass
-        '''
-        if ( version[ 0 ] == 'pre-0.95' ):
+        """
+        if ( version[ 0 ] == "pre-0.95" ):
             try:
                 dialog = xbmcgui.DialogProgress()
                 dialog.create( self._( 53 ) )
-                replace_string = os.path.join( os.path.dirname( sys.modules['__main__'].__file__ ), 'resources', 'data', '.cache\\' )
-                sql = 'SELECT title, poster, thumbnail, thumbnail_watched, rating_url FROM Movies WHERE poster != ?'
+                replace_string = os.path.join( os.path.dirname( sys.modules["__main__"].__file__ ), "resources", "data", ".cache\\" )
+                sql = "SELECT title, poster, thumbnail, thumbnail_watched, rating_url FROM Movies WHERE poster != ?"
                 dialog.update( -1, self._( 48 ) )
-                records = self.getRecords( sql, params=( '', ), all=True )
+                records = self.getRecords( sql, params=( "", ), all=True )
                 if ( records ):
                     changed_records = ()
                     total_cnt = len( records )
@@ -64,84 +67,84 @@ class Database:
                     for cnt, record in enumerate( records ):
                         #xbmc.sleep(100)
                         new_field = ()
-                        dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: (%d of %d)' % ( self._( 45 ), cnt + 1, total_cnt, ), '%s: %s' % ( self._( 88 ), record[ 0 ], ), '' )
+                        dialog.update( int( ( cnt + 1 ) * pct_sect ), "%s: (%d of %d)" % ( self._( 45 ), cnt + 1, total_cnt, ), "%s: %s" % ( self._( 88 ), record[ 0 ], ), "" )
                         for item in record[ 1 : 5 ]:
-                            new_field += ( item.replace( replace_string, '' ), )
+                            new_field += ( item.replace( replace_string, "" ), )
                         new_field += ( record[ 0 ], )
                         changed_records += ( new_field, )
                         if ( dialog.iscanceled == True ): raise
-                    dialog.update( 100 , '%s: (%d of %d)' % ( self._( 45 ), cnt + 1, total_cnt, ), '%s: %s' % ( self._( 88 ), record[ 0 ], ), '-----> %s <-----' % ( self._( 43 ), ) )
-                    succeeded = self.updateRecords( 'Movies', ( 'poster', 'thumbnail', 'thumbnail_watched', 'rating_url', ), changed_records, 'title' )
-                    if ( succeeded ): self.updateRecords( 'Version', ( 'version', ), ( ( sys.modules['__main__'].__version__, version[ 0 ], ), ), 'version' )
+                    dialog.update( 100 , "%s: (%d of %d)" % ( self._( 45 ), cnt + 1, total_cnt, ), "%s: %s" % ( self._( 88 ), record[ 0 ], ), "-----> %s <-----" % ( self._( 43 ), ) )
+                    succeeded = self.updateRecords( "Movies", ( "poster", "thumbnail", "thumbnail_watched", "rating_url", ), changed_records, "title" )
+                    if ( succeeded ): self.updateRecords( "Version", ( "version", ), ( ( sys.modules["__main__"].__version__, version[ 0 ], ), ), "version" )
                     #xbmc.sleep(1000)
                     dialog.close()
-                    if ( succeeded ): return ( sys.modules['__main__'].__version__, )
+                    if ( succeeded ): return ( sys.modules["__main__"].__version__, )
                     else: return version
             except:
-                traceback.print_exc()
+                #traceback.print_exc()
                 dialog.close()
                 xbmcgui.Dialog().ok( self._( 53 ), self._( 46 ) )
                 return version
-        '''        
+        """        
 
-    '''
+    """
     def updateVersion( self ):
         records = Records()
-        success = records.update( 'version', ( 'version', ), ( '0.98.85', sys.modules['__main__'].__version__, ), 'version' )
+        success = records.update( "version", ( "version", ), ( "0.98.85", sys.modules[ "__main__" ].__version__, ), "version" )
         records.commit()
         records.close()
         return success
-    '''
+    """
 
 
 class Tables( dict ):
     def __init__( self, *args, **kwargs ):
         #{ column name, type, auto increment, index , index columns }
-        self['version'] = (
-            ( 'idVersion', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
-            ( 'version', 'text', '', '', '' ),
-            ( 'complete', 'integer', '', '', '' ),
+        self[ "version" ] = (
+            ( "idVersion", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
+            ( "version", "text", "", "", "" ),
+            ( "complete", "integer", "", "", "" ),
         )
-        self['genres'] = (
-            ( 'idGenre', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
-            ( 'genre', 'text', '', '', '' ),
-            ( 'urls', 'blob', '', '', '' ),
-            ( 'trailer_urls', 'blob', '', '', '' ),
+        self[ "genres" ] = (
+            ( "idGenre", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
+            ( "genre", "text", "", "", "" ),
+            ( "urls", "blob", "", "", "" ),
+            ( "trailer_urls", "blob", "", "", "" ),
         )
-        self['actors'] = (
-            ( 'idActor', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
-            ( 'actor', 'text', '', '', '' ),
+        self[ "actors" ] = (
+            ( "idActor", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
+            ( "actor", "text", "", "", "" ),
         )
-        self['studios'] = ( 
-            ( 'idStudio', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ),
-            ( 'studio', 'text', '', '', '' ),
+        self[ "studios" ] = ( 
+            ( "idStudio", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
+            ( "studio", "text", "", "", "" ),
         )
-        self['movies'] = (
-            ( 'idMovie', 'integer PRIMARY KEY', 'AUTOINCREMENT', '', '' ), 
-            ( 'title', 'text', '', '', '' ),
-            ( 'url', 'text',  '', '', '' ),
-            ( 'trailer_urls', 'text', '', '', '' ),
-            ( 'poster', 'text', '', '', '' ),
-            ( 'plot', 'text', '', '', '' ),
-            ( 'rating', 'text', '', '', '' ),
-            ( 'rating_url', 'text', '', '', '' ),
-            ( 'year', 'integer', '', '', '' ),
-            ( 'times_watched', 'integer', '', '', '' ),
-            ( 'last_watched', 'text', '', '', '' ),
-            ( 'favorite', 'integer', '', '', '' ),
-            ( 'saved_location', 'text', '', '', '' ),
+        self[ "movies" ] = (
+            ( "idMovie", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ), 
+            ( "title", "text", "", "", "" ),
+            ( "url", "text",  "", "", "" ),
+            ( "trailer_urls", "text", "", "", "" ),
+            ( "poster", "text", "", "", "" ),
+            ( "plot", "text", "", "", "" ),
+            ( "rating", "text", "", "", "" ),
+            ( "rating_url", "text", "", "", "" ),
+            ( "year", "integer", "", "", "" ),
+            ( "times_watched", "integer", "", "", "" ),
+            ( "last_watched", "text", "", "", "" ),
+            ( "favorite", "integer", "", "", "" ),
+            ( "saved_location", "text", "", "", "" ),
         )
-        self['genre_link_movie'] = ( 
-            ( 'idGenre', 'integer', '', 'UNIQUE INDEX', '(idGenre, idMovie)' ),
-            ( 'idMovie', 'integer', '', 'UNIQUE INDEX', '(idMovie, idGenre)' ),
+        self[ "genre_link_movie" ] = ( 
+            ( "idGenre", "integer", "", "UNIQUE INDEX", "(idGenre, idMovie)" ),
+            ( "idMovie", "integer", "", "UNIQUE INDEX", "(idMovie, idGenre)" ),
         )
-        self['actor_link_movie'] = ( 
-            ( 'idActor', 'integer', '', 'UNIQUE INDEX', '(idActor, idMovie)' ),
-            ( 'idMovie', 'integer', '', 'UNIQUE INDEX', '(idMovie, idActor)' ),
+        self[ "actor_link_movie" ] = ( 
+            ( "idActor", "integer", "", "UNIQUE INDEX", "(idActor, idMovie)" ),
+            ( "idMovie", "integer", "", "UNIQUE INDEX", "(idMovie, idActor)" ),
         )
-        self['studio_link_movie'] = ( 
-            ( 'idStudio', 'integer', '', 'UNIQUE INDEX', '(idStudio, idMovie)' ),
-            ( 'idMovie', 'integer', '', 'UNIQUE INDEX', '(idMovie, idStudio)' ),
+        self[ "studio_link_movie" ] = ( 
+            ( "idStudio", "integer", "", "UNIQUE INDEX", "(idStudio, idMovie)" ),
+            ( "idMovie", "integer", "", "UNIQUE INDEX", "(idMovie, idStudio)" ),
         )
 
     def connect( self ):
@@ -156,7 +159,7 @@ class Tables( dict ):
             dialog.create( _( 44 ) )
             self.connect()
             for table in self.keys():
-                dialog.update( -1, '%s: %s' % ( _( 47 ), table, ) )
+                dialog.update( -1, "%s: %s" % ( _( 47 ), table, ) )
                 success = self.createTable( table )
                 if ( not success ): raise
             self.close()
@@ -169,14 +172,14 @@ class Tables( dict ):
 
     def createTable( self, table ):
         try:
-            sql = 'CREATE TABLE %s (' % table
+            sql = "CREATE TABLE %s (" % table
             for item in self[table]:
-                sql += '%s %s %s, ' % ( item[ 0 ], item[ 1 ], item[ 2 ])
-            sql = sql[:-2].strip() + ');'
+                sql += "%s %s %s, " % ( item[ 0 ], item[ 1 ], item[ 2 ])
+            sql = sql[:-2].strip() + ");"
             self.db.execute( sql )
             for item in self[table]:
-                if ( item[3] != '' ):
-                    sql = 'CREATE %s %s_%s_idx ON %s %s;' % ( item[ 3 ], table, item[0], table, item[4], )
+                if ( item[3] != "" ):
+                    sql = "CREATE %s %s_%s_idx ON %s %s;" % ( item[ 3 ], table, item[0], table, item[4], )
                     self.db.execute( sql )
             return True
         except: return False
@@ -204,25 +207,25 @@ class Records:
     def add( self, table, params ):
         try:
             auto_increment = 0
-            sql='INSERT INTO %s (' % ( table, )
+            sql = "INSERT INTO %s (" % ( table, )
             for item in self.tables[table]:
-                if ( not item[ 2 ] == '' ):
+                if ( not item[ 2 ] == "" ):
                     auto_increment += 1
-                else: sql += '%s, ' % item[0]
-            sql = sql[:-2] + ') VALUES (' + ( '?, '*( len( self.tables[ table ] ) - auto_increment ) )
-            sql = sql[:-2] + ');'
+                else: sql += "%s, " % item[0]
+            sql = sql[:-2] + ") VALUES (" + ( "?, "*( len( self.tables[ table ] ) - auto_increment ) )
+            sql = sql[:-2] + ");"
             self.cursor.execute( sql, params )
             return self.cursor.lastrowid
         except:
-            print '*** ERROR: Records.add() ***'
+            print "*** ERROR: Records.add() ***"
             print sql
-            print params
-            traceback.print_exc()
+            #print params
+            #traceback.print_exc()
             return False
 
     def update( self, table, columns, params, key, commit=False ):
         try:
-            if ( columns[0] == '*' ):
+            if ( columns[0] == "*" ):
                 start_column = columns[ 1 ]
                 columns = ()
                 for item in self.tables[table][ start_column : ]:
@@ -234,10 +237,10 @@ class Records:
             self.cursor.execute( sql, params )
             return True
         except:
-            print '*** ERROR: Records.update() ***'
+            print "*** ERROR: Records.update() ***"
             print sql
-            print params
-            traceback.print_exc()
+            #print params
+            #traceback.print_exc()
             return False
 
     def fetchone( self, sql, params = False ):
@@ -260,7 +263,7 @@ class Records:
         return retval
 
     
-    '''
+    """
     def fetch( self, sql, params = False, all = False ):
         try:
             if ( params ): self.cursor.execute( sql , params )
@@ -272,43 +275,43 @@ class Records:
             else: retval = None
         self.close()
         return retval
-    '''
+    """
 
 class Query( dict ):
     "all sql statments. add as needed"
     def __init__( self ):
         #good sql statements
-        self[ 'movie_by_movie_id' ]		= "SELECT movies.* FROM movies WHERE movies.idMovie=?;"
-        self[ 'studio_by_movie_id' ]		= "SELECT studios.studio FROM studio_link_movie, studios, movies WHERE studio_link_movie.idMovie = movies.idMovie AND studio_link_movie.idStudio = studios.idStudio AND movies.idMovie=?;"
-        self[ 'actors_by_movie_id' ]		= "SELECT actors.actor FROM actor_link_movie, actors, movies WHERE actor_link_movie.idMovie = movies.idMovie AND actor_link_movie.idActor = actors.idActor AND movies.idMovie=? ORDER BY actors.actor;"
+        self[ "movie_by_movie_id" ]		= "SELECT movies.* FROM movies WHERE movies.idMovie=?;"
+        self[ "studio_by_movie_id" ]		= "SELECT studios.studio FROM studio_link_movie, studios, movies WHERE studio_link_movie.idMovie = movies.idMovie AND studio_link_movie.idStudio = studios.idStudio AND movies.idMovie=?;"
+        self[ "actors_by_movie_id" ]		= "SELECT actors.actor FROM actor_link_movie, actors, movies WHERE actor_link_movie.idMovie = movies.idMovie AND actor_link_movie.idActor = actors.idActor AND movies.idMovie=? ORDER BY actors.actor;"
 
-        self[ 'movies_by_genre_id' ]		= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.idGenre=? ORDER BY movies.title;"
-        self[ 'movies_by_studio_id' ]		= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND studios.idStudio=? ORDER BY movies.title;"
-        self[ 'movies_by_actor_id' ]		= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND actors.idActor=? ORDER BY movies.title;"
+        self[ "movies_by_genre_id" ]		= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.idGenre=? ORDER BY movies.title;"
+        self[ "movies_by_studio_id" ]		= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND studios.idStudio=? ORDER BY movies.title;"
+        self[ "movies_by_actor_id" ]		= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND actors.idActor=? ORDER BY movies.title;"
 
-        self[ 'movies_by_genre_name' ]	= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.genre=? ORDER BY movies.title;"
-        self[ 'movies_by_studio_name' ]	= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
-        self[ 'movies_by_actor_name' ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
+        self[ "movies_by_genre_name" ]	= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.genre=? ORDER BY movies.title;"
+        self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
+        self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
         
-        self[ 'incomplete_movies' ]		= "SELECT * FROM movies WHERE poster='' ORDER BY title;"
-        self[ 'version' ]						= "SELECT * FROM version;"
+        self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE poster='' ORDER BY title;"
+        self[ "version" ]						= "SELECT * FROM version;"
         
-        self[ 'genre_category_list' ]		= "SELECT genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
-        self[ 'studio_category_list' ]		= "SELECT studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
-        self[ 'actor_category_list' ]		= "SELECT actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
+        self[ "genre_category_list" ]		= "SELECT genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
+        self[ "studio_category_list" ]		= "SELECT studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
+        self[ "actor_category_list" ]		= "SELECT actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
-        self[ 'genre_table_list' ]			= 'SELECT idGenre, genre, urls FROM genres ORDER BY genre;'
+        self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls FROM genres ORDER BY genre;"
         
-        self[ 'movie_exists' ]				= 'SELECT idMovie FROM movies WHERE upper(title)=?;'
-        self[ 'actor_exists' ]					= "SELECT idActor FROM actors WHERE upper(actor)=?;"
-        self[ 'studio_exists' ]				= "SELECT idStudio FROM studios WHERE upper(studio)=?;"
+        self[ "movie_exists" ]				= "SELECT idMovie FROM movies WHERE upper(title)=?;"
+        self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE upper(actor)=?;"
+        self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE upper(studio)=?;"
 
-        self[ 'favorites' ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
-        self[ 'downloaded' ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
+        self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
+        self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
 
 
 
-'''
+"""
 SELECT movies.*, actors.actor, studios.studio FROM movies, actors, actor_link_movie, studios, studio_link_movie WHERE movies.idMovie = ? AND actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie = movies.idmovie AND studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie = movies.idMovie;
 SELECT movies.*, actors.actor FROM movies, genres, genre_link_movie, actors, actor_link_movie WHERE genres.idGenre = ? AND genre_link_movie.idGenre=genres.idGenre AND movies.idMovie=genre_link_movie.idMovie and actor_link_movie.idActor = actors.idActor and actor_link_movie.idMovie = movies.idMovie order BY movies.title;
 select movies.* from movies, genres, genre_link_movie
@@ -328,5 +331,5 @@ select actors.actor from actors, actor_link_movie, movies
  and movies.idMovie=100 order by actors.actor;
         
         
- '''
+ """
         

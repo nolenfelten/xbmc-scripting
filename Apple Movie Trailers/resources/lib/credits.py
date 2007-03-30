@@ -1,15 +1,22 @@
-import sys, os
-import xbmc, xbmcgui
+"""
+Credits modules
+
+Nuka1195
+"""
+
+import sys
+import xbmcgui
 import guibuilder
 import utilities
+
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
         try:
             self._ = kwargs['language']
             self.skin = kwargs['skin']
-            self.setupGUI()
-            if ( not self.SUCCEEDED ): self.close()
+            self.gui_loaded = self.setupGUI()
+            if ( not self.gui_loaded ): self.close()
             else:
                 self.setupVariables()
                 self.showCredits()
@@ -17,7 +24,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.close()
                 
     def setupVariables( self ):
-        self.controller_action = amt_util.setControllerAction()
+        self.controller_action = utilities.setControllerAction()
 
     def setupGUI( self ):
         """ sets up the gui using guibuilder """
@@ -28,9 +35,9 @@ class GUI( xbmcgui.WindowDialog ):
     def showCredits( self ):
         try:
             # Team credits
-            self.controls['Credits Label']['control'].setLabel( self._(0) )
-            self.controls['Credits Version Label']['control'].setLabel( '%s: %s' % ( self._(100), sys.modules[ "__main__" ].__version__, ) )
-            self.controls['Team Credits Label']['control'].setLabel( self._(101) )
+            self.controls['Credits Label']['control'].setLabel( sys.modules[ "__main__" ].__scriptname__ )
+            self.controls['Credits Version Label']['control'].setLabel( '%s: %s' % ( self._( 900 ), sys.modules[ "__main__" ].__version__, ) )
+            self.controls['Team Credits Label']['control'].setLabel( self._( 901 ) )
             self.controls['Team Credits List']['control'].reset()
             l = xbmcgui.ListItem( sys.modules[ "__main__" ].__credits_l1__, sys.modules[ "__main__" ].__credits_r1__ )
             self.controls['Team Credits List']['control'].addItem( l )
@@ -40,7 +47,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Team Credits List']['control'].addItem( l )
             
             # Additional credits
-            self.controls['Additional Credits Label']['control'].setLabel( self._(102) )
+            self.controls['Additional Credits Label']['control'].setLabel( self._( 902 ) )
             self.controls['Additional Credits List']['control'].reset()
             l = xbmcgui.ListItem( sys.modules[ "__main__" ].__acredits_l1__, sys.modules[ "__main__" ].__acredits_r1__ )
             self.controls['Additional Credits List']['control'].addItem( l )

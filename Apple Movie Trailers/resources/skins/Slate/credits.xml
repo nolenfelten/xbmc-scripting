@@ -15,7 +15,6 @@
 	The Skin Credits Label and List is where you add your credits.
 -->
 	
-	<defaultcontrol>703</defaultcontrol>
 	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
@@ -57,7 +56,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>0</label>
+			<label>-</label>
 			<visible>true</visible>
 		</control>
 
@@ -83,7 +82,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>101</label>
+			<label>901</label>
 			<visible>true</visible>
 		</control>
 
@@ -127,7 +126,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>102</label>
+			<label>902</label>
 			<visible>true</visible>
 		</control>
 
@@ -177,7 +176,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>103</label>
+			<label>903</label>
 			<visible>true</visible>
 		</control>
 
