@@ -11,10 +11,11 @@ Nuka1195
 """
 
 import os
-import xbmc, xbmcgui
+import xbmc
+import xbmcgui
 import xml.dom.minidom
 import re
-#import traceback
+
 
 class GUIBuilder:
     """ Class to create a dictionary of controls and add them to a Window or WindowDialog """
@@ -43,7 +44,6 @@ class GUIBuilder:
                 self._clear_variables()
             else: raise
         except: 
-            #traceback.print_exc()
             succeeded = False
         return succeeded, image_path
 

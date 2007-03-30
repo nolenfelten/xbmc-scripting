@@ -11,7 +11,7 @@ import time
 #####################################
 
 fetcher = cacheurl.HTTP()
-_ = language.Language().string
+_ = language.Language().localized
 
 cwd = fetcher.cache_dir + os.sep
 
@@ -172,12 +172,12 @@ class Trailers:
                 for genre in genre_list:
                     self.categories += [ Category( idGenre=genre[ 0 ], title=genre[ 1 ], urls=genre[ 2 ] )]
             else:
-                load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 229 ), _( 40 ), ), '%s: %s' % ( _( 230 ), _( 41 ), ), _( 49 ), _( 230 ), _( 229 ) )
+                load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
                 #####################################
                 self.start_time = time.localtime()
                 #####################################
                 
-                dialog.create( '%s   (%s)' % ( _( 66 ), _( 229 + ( not load_all ) ), ) )
+                dialog.create( '%s   (%s)' % ( _( 66 ), _( 158 + ( not load_all ) ), ) )
                 
                 base_xml = fetcher.urlopen( self.BASEXML )
                 base_xml = ET.fromstring( base_xml )
@@ -329,7 +329,7 @@ class Trailers:
         #####################################
         
         self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create( '%s   (%s)' % ( _( 70 ), _( 229 ), ) )
+        self.dialog.create( '%s   (%s)' % ( _( 70 ), _( 158 ), ) )
         full = self.getMovieList( self.query[ 'incomplete_movies' ], full = True )
         if ( full ): self.complete = self.updateRecord( 'version', ( 'complete', ), ( full, 1, ), 'idVersion' )
 

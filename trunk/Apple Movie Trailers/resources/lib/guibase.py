@@ -1,5 +1,5 @@
 import xbmc, xbmcgui, language, traceback
-_ = language.Language().string
+_ = language.Language().localized
 
 #----------------------------------------------------------------------------#
 # main gui

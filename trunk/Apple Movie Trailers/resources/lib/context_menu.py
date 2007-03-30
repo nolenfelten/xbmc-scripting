@@ -1,32 +1,37 @@
+"""
+Context menu module
+
+Nuka1195
+"""
+
 import os
-import xbmc, xbmcgui
+import xbmcgui
 import guibuilder
 import utilities
 
+
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
-        try:
-            self.win = kwargs[ "win" ]
-            self._ = kwargs[ "language" ]
-            self.skin = kwargs[ "skin" ]
-            self.list_control = kwargs[ "list_control" ]
-            self.gui_loaded = self.setupGUI( self.win.skin )
-            if ( not self.gui_loaded ): self.close()
-            else:
-                self.setupVariables()
-                self.showContextMenu()
-        except: self.close()
+        self.win = kwargs[ "win" ]
+        self._ = kwargs[ "language" ]
+        self.list_control = kwargs[ "list_control" ]
+        self.gui_loaded = self.setupGUI( self.win.skin )
+        if ( not self.gui_loaded ): self.close()
+        else:
+            self.setupVariables()
+            self.showContextMenu()
             
     def setupVariables( self ):
         self.controller_action = utilities.setControllerAction()
         self.list_item = self.win.controls[ self.list_control ][ "control" ].getSelectedPosition()
         if ( self.list_control == "Trailer List" ):
             self.saved = self.win.trailers.movies[ self.list_item ].saved != ""
-            
-    def setupGUI( self ):
+            self.cached = ( self.win.trailers.movies[ self.list_item ].title == self.win.flat_cache[ 0 ] )
+
+    def setupGUI( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, skin=self.skin, xml_name="context_menu", language=self._ )
+        ok, image_path = gb.create_gui( self, skin=skin, xml_name="context_menu", language=self._ )
         return ok
 
     def showContextMenu( self ):
@@ -49,10 +54,13 @@ class GUI( xbmcgui.WindowDialog ):
             else: watched_lbl = ""
             self.controls[ "Context Menu Button3" ][ "control" ].setLabel( "%s" % (self._( 504 + ( watched > 0 ) ) + watched_lbl, ) )
             self.controls[ "Context Menu Button4" ][ "control" ].setLabel( self._( 506 ) )
-            self.controls[ "Context Menu Button5" ][ "control" ].setLabel( self._( 509 ) )
+            if ( self.saved ):
+                self.controls[ "Context Menu Button5" ][ "control" ].setLabel( self._( 509 ) )
+            elif ( self.cached ):
+                self.controls[ "Context Menu Button5" ][ "control" ].setLabel( self._( 501 ) )
             if ( not self.win.trailers.complete ):
-                self.controls[ "Context Menu Button%s" % ( self.saved + 5, ) ][ "control" ].setLabel( self._( 508 ) )
-            self.buttons = 4 + self.saved + ( not self.win.trailers.complete )
+                self.controls[ "Context Menu Button%s" % ( ( self.saved or self.cached ) + 5, ) ][ "control" ].setLabel( self._( 508 ) )
+            self.buttons = 4 + ( self.saved or self.cached ) + ( not self.win.trailers.complete )
             #self.controls[ "Context Menu Button6" ][ "control" ].setLabel( self._( 510 ) )
         elif ( self.list_control == "Category List" ):
             if ( self.win.category_id == utilities.GENRES ):
@@ -149,7 +157,8 @@ class GUI( xbmcgui.WindowDialog ):
                     self.win.refreshInfo( False )
             elif ( control is self.controls[ "Context Menu Button5" ][ "control" ] ):
                 if ( self.list_control == "Trailer List" ):
-                    if ( self.saved ): self.win.deleteSavedTrailer()
+                    if ( self.cached ): self.win.saveCachedMovie()
+                    elif ( self.saved ): self.win.deleteSavedTrailer()
                     else: self.win.force_full_update()
             elif ( control is self.controls[ "Context Menu Button6" ][ "control" ] ):
                 if ( self.list_control == "Trailer List" ):
@@ -163,5 +172,5 @@ class GUI( xbmcgui.WindowDialog ):
             self.closeDialog()
         elif ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
             self.closeDialog()
-        elif ( button_key == "Keyboard Menu Button" or button_key == "Remote Title" or button_key == "White Button" ):
+        elif ( button_key == "Keyboard Menu Button" or button_key == "Remote Title Button" or button_key == "White Button" ):
             self.closeDialog()

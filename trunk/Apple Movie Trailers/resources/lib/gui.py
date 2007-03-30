@@ -2,52 +2,104 @@
 Main GUI for Apple Movie Trailers
 '''
 
-import xbmc, xbmcgui, traceback, guibase
-from guibase import _
+def createProgressDialog( __line2__, __line3__="" ):
+    global dialog, pct
+    pct = 0
+    dialog = xbmcgui.DialogProgress()
+    dialog.create( _( 0 ) )
+    updateProgressDialog( __line2__, __line3__ )
 
-class GUI( guibase.GUI ):
+def updateProgressDialog( __line2__, __line3__="" ):
+    global dialog, pct
+    pct += 10
+    dialog.update( pct, _(50), __line2__, __line3__ )
 
+def closeProgessDialog():
+    global dialog
+    dialog.close()
+    
+import xbmcgui
+import language
+_ = language.Language().localized
+
+try:
+    createProgressDialog( _(51), '%s xbmc' % ( _( 52 ), ))
+    import xbmc
+    updateProgressDialog( _(51), '%s sys' % ( _( 52 ), ))
+    import sys
+    import os
+    updateProgressDialog( _(51), '%s traceback' % ( _( 52 ), ))
+    import traceback
+    updateProgressDialog( _(51), '%s threading' % ( _( 52 ), ))
+    import threading
+    updateProgressDialog( _(51), '%s guibuilder' % ( _( 52 ), ))
+    import guibuilder
+    updateProgressDialog( _(51), '%s utilities' % ( _( 52 ), ))
+    import utilities, context_menu
+    updateProgressDialog( _(51), '%s cacheurl' % ( _( 52 ), ))
+    import cacheurl
+    updateProgressDialog( _(51), '%s shutil' % ( _( 52 ), ))
+    import shutil, datetime
+except:
+    closeProgessDialog()
+    traceback.print_exc()
+    xbmcgui.Dialog().ok( _( 0 ), _( 81 ) )
+    raise
+    
+class GUI( xbmcgui.Window ):
     def __init__( self ):
         try:
-            custom_imports = [ 'context_menu', 'cacheurl', 'utilities' ]
-            guibase.GUI.__init__( self, custom_imports )
-            for name in self.imported.keys():
-                globals().update( { name: self.imported[name] } )
-            ## enable when ready
-            self.controls['Search Button']['control'].setEnabled( False )
-            #self.setControlsDisabled()
-            self.setStartupChoices()
-            self.setStartupCategory()
+            self.Timer = None
+            base_path = os.getcwd().replace( ";", "" )
+            self.debug = os.path.isfile( os.path.join( base_path, 'debug.txt' ))
+            self.getSettings()
+            self.gui_loaded = self.setupGUI()
+            if ( not self.gui_loaded ): raise
+            else:
+                updateProgressDialog( _( 67 ) )
+                ## enable when ready
+                self.controls['Search Button']['control'].setEnabled( False )
+                self.setupVariables()
+                self.setStartupChoices()
+                self.setStartupCategory()
+                closeProgessDialog()
         except:
+            closeProgessDialog()
             traceback.print_exc()
+            self.gui_loaded = False
             self.exitScript()
-        '''
-    def setControlsDisabled( self ):
-        try: self.controls['Category List Backdrop']['control'].setEnabled( False )
-        except: pass
-        try: self.controls['Trailer List Backdrop']['control'].setEnabled( False )
-        except: pass
-        try: self.controls['Cast List Backdrop']['control'].setEnabled( False )
-        except: pass
-        '''
-        
+                
+    def getSettings( self ):
+        self.settings = utilities.Settings().get_settings()
+
+    def setupGUI( self ):
+        updateProgressDialog( _( 55 ) )
+        gb = guibuilder.GUIBuilder()
+        ok, self.image_path = gb.create_gui( self, skin=self.settings[ "skin" ], language=_ )
+        #closeProgessDialog()
+        #if ( not ok ):
+        #    xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
+        return ok
+
     def setupVariables( self ):
-        guibase.GUI.setupVariables( self )
-        import trailers, database
+        import trailers
+        import database
         self.trailers = trailers.Trailers()
         self.query= database.Query()
+        self.skin = self.settings[ "skin" ]
+        self.flat_cache = ( unicode( "", "utf-8" ), "", )
         self.sql = None
         self.params = None
         self.display_cast = False
         self.dummy()
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
+        self.controller_action = utilities.setControllerAction()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
 
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def dummy( self ):
-        import threading
         #self.debugWrite('dummy', 2)
         self.Timer = threading.Timer( 60*60*60, self.dummy,() )
         self.Timer.start()
@@ -76,10 +128,7 @@ class GUI( guibase.GUI ):
         self.setControlNavigation( '%s Button' % ( startup_button, ) )
         self.setCategory( self.settings[ "startup_category_id" ], 1 )
 
-    def setCategory( self, category_id = None, list_category = 0 ):
-        # slight change to allow for the dynamic importing in guibase
-        if category_id == None:
-            category_id = utilities.GENRES
+    def setCategory( self, category_id = utilities.GENRES, list_category = 0 ):
         self.category_id = category_id
         self.list_category = list_category
         if ( list_category > 0 ):
@@ -269,15 +318,15 @@ class GUI( guibase.GUI ):
     def setCategoryLabel( self ):
         category= 'oops'
         if ( self.category_id == utilities.GENRES ):
-            category = _( 219 )
+            category = _( 113 )
         elif ( self.category_id == utilities.STUDIOS ):
-            category = _( 223 )
+            category = _( 114 )
         elif ( self.category_id == utilities.ACTORS ):
-            category = _( 225 )
+            category = _( 115 )
         elif ( self.category_id == utilities.FAVORITES ):
-            category = _( 217 )
+            category = _( 152 )
         elif ( self.category_id == utilities.DOWNLOADED ):
-            category = _( 226 )
+            category = _( 153 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -381,23 +430,26 @@ class GUI( guibase.GUI ):
             while ( 'p.mov' in trailer_urls[ choice ] or choice == -1 ): choice -= 1
             
             if ( choice >= 0 ):
-                if ( self.settings[ "mode" ] == 0 ):
-                    filename = trailer_urls[choice]
-                elif ( self.settings[ "mode" ] == 1):
-                    url = trailer_urls[choice]
-                    fetcher = cacheurl.HTTPProgressSave()
-                    filename = str( fetcher.urlretrieve( url ) )
-                elif ( self.settings[ "mode" ] >= 2):
-                    url = trailer_urls[choice]
-                    ext = os.path.splitext( url )[ 1 ]
-                    title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
-                    fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
-                    filename = str( fetcher.urlretrieve( url ) )
-                    if ( filename ):
-                        poster = self.trailers.movies[trailer].poster
-                        if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
-                        self.saveThumbnail( filename, trailer, poster )
-            else: filename = None
+                filename = str( self.trailers.movies[ trailer ].saved )
+                if ( not os.path.isfile( filename ) ):
+                    if ( self.settings[ "mode" ] == 0 ):
+                        filename = trailer_urls[choice]
+                    else:
+                        url = trailer_urls[choice]
+                        ext = os.path.splitext( url )[ 1 ]
+                        title = '%s%s' % (self.trailers.movies[trailer].title, ext, )
+                        if ( self.settings[ "mode" ] == 1):
+                            fetcher = cacheurl.HTTPProgressSave( save_title=title )
+                            filename = str( fetcher.urlretrieve( url ) )
+                            self.flat_cache = ( self.trailers.movies[trailer].title, filename, )
+                        elif ( self.settings[ "mode" ] >= 2):
+                            fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
+                            filename = str( fetcher.urlretrieve( url ) )
+                            if ( filename ):
+                                poster = self.trailers.movies[trailer].poster
+                                if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
+                                self.saveThumbnail( filename, trailer, poster )
+            else: filename = ""
             if ( filename ):
                 self.MyPlayer.play( filename )
                 xbmc.sleep( 500 )
@@ -449,7 +501,7 @@ class GUI( guibase.GUI ):
             if ( settings.changed ):
                 self.getSettings()
                 if ( settings.restart ):
-                    ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
+                    ok = xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
             del settings
             if ( not ok ):
                 if ( thumbnail_display != self.settings[ "thumbnail_display" ] and self.category_id != utilities.GENRES and self.category_id != utilities.STUDIOS and self.category_id != utilities.ACTORS ):
@@ -460,21 +512,21 @@ class GUI( guibase.GUI ):
 
     def setShortcutLabels( self ):
         if ( self.settings[ "shortcut1" ] == utilities.FAVORITES ):
-            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 217 ) )
+            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut1" ] == utilities.DOWNLOADED ):
-            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 226 ) )
+            self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( _( 153 ) )
         else:
             self.controls[ 'Shortcut1 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
         if ( self.settings[ "shortcut2" ] == utilities.FAVORITES ):
-            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 217 ) )
+            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut2" ] == utilities.DOWNLOADED ):
-            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 226 ) )
+            self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( _( 153 ) )
         else:
             self.controls[ 'Shortcut2 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
         if ( self.settings[ "shortcut3" ] == utilities.FAVORITES ):
-            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 217 ) )
+            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut3" ] == utilities.DOWNLOADED ):
-            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 226 ) )
+            self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( _( 153 ) )
         else:
             self.controls[ 'Shortcut3 Button' ][ 'control' ].setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
 
@@ -485,6 +537,11 @@ class GUI( guibase.GUI ):
             cw.doModal()
         del cw
 
+    def updateScript( self ):
+        import update
+        updt = update.Update( language=_ )
+        del updt
+        
     def toggleAsWatched( self ):
         trailer = self.setCountLabel( 'Trailer List' )
         watched = not ( self.trailers.movies[ trailer ].watched > 0 )
@@ -515,7 +572,25 @@ class GUI( guibase.GUI ):
             self.trailers.movies[self.list_item].__update__()
         self.showTrailers( self.sql, choice = self.list_item )
         '''
-        
+    def saveCachedMovie( self ):
+        try:
+            trailer = self.setCountLabel( 'Trailer List' )
+            new_filename = os.path.join( self.settings[ "save_folder" ], os.path.split( self.flat_cache[ 1 ] )[ 1 ] )
+            dialog = xbmcgui.DialogProgress()
+            dialog.create( _( 56 ), "%s %s" % ( _( 1008 ), new_filename, ) )
+            if ( not os.path.isfile( new_filename ) ):
+                shutil.copyfile( self.flat_cache[ 1 ], new_filename )
+                shutil.copyfile( "%s.conf" % self.flat_cache[ 1 ], "%s.conf" % new_filename )
+                poster = self.trailers.movies[trailer].poster
+                if ( not poster ): poster = os.path.join( self.image_path, 'blank-poster.tbn' )
+                self.saveThumbnail( new_filename, trailer, poster )
+                self.showTrailerInfo()
+            dialog.close()
+        except:
+            dialog.close()
+            xbmcgui.Dialog().ok( _( 56 ), _( 90 ) )
+            traceback.print_exc()
+                
     def deleteSavedTrailer( self ):
         trailer = self.setCountLabel( 'Trailer List' )
         saved_trailer = self.trailers.movies[ trailer ].saved
@@ -532,6 +607,11 @@ class GUI( guibase.GUI ):
                 if ( self.category_id == utilities.DOWNLOADED ): force_update = True
                 else: force_update = False
                 self.showTrailers( self.sql, self.params, choice = trailer, force_update = force_update )
+
+    def exitScript( self, restart=False ):
+        if ( self.Timer is not None ): self.Timer.cancel()
+        self.close()
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
     def setShortcut( self, shortcut ):
         if ( self.main_category == -1 ):
@@ -578,16 +658,17 @@ class GUI( guibase.GUI ):
         except: traceback.print_exc()
         
     def onAction( self, action ):
-        guibase.GUI.onAction( self, action )
         try:
             button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
             control = self.getFocus()
-            if ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+                self.exitScript()
+            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
                 self.setCategory( self.current_display[ self.list_category == 0 ][ 0 ], self.current_display[ self.list_category == 0 ][ 1 ] )
             elif ( control is self.controls['Trailer List']['control'] ):
                 if ( button_key == 'Y' or button_key == 'Remote 0' ):
                     pass#self.toggleAsFavorite()##change to queue
-                elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
+                elif ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
                     self.showContextMenu( 'Trailer List' )
                 else:# ( button_key == 'n/a' or button_key == 'DPad Up' or button_key == 'Remote Up' or button_key == 'DPad Down' or button_key == 'Remote Down' ):
                     self.showTrailerInfo()
@@ -597,7 +678,7 @@ class GUI( guibase.GUI ):
                 elif ( button_key == 'Keyboard Down Arrow' or button_key == 'Remote Down' or button_key == 'DPad Down' ):
                     self.pageIndicator( 'Trailer List', 1 )
             elif ( control is self.controls['Category List']['control'] ):
-                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
                     self.showContextMenu( 'Category List' )
                 else:
                     self.setScrollbarIndicator( 'Category List' )
@@ -610,7 +691,7 @@ class GUI( guibase.GUI ):
                     self.pageIndicator( 'Category List', 1 )
                     choice = self.setCountLabel( 'Category List' )
             elif ( control is self.controls['Cast List']['control'] ):
-                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title' or button_key == 'White Button' ):
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Remote Title Button' or button_key == 'White Button' ):
                     self.showContextMenu( 'Cast List' )
                 else:
                     self.setScrollbarIndicator( 'Cast List' )
@@ -641,6 +722,17 @@ class GUI( guibase.GUI ):
                         self.setControlNavigation( 'Optional Button' )
                 except: pass
         except: traceback.print_exc()
+        
+    def debugWrite( self, function, action, lines=[], values=[] ):
+        if ( self.debug ):
+            Action = ( 'Failed', 'Succeeded', 'Started' )
+            Highlight = ( '__', '__', '<<<<< ', '__', '__', ' >>>>>' )
+            xbmc.output( '%s%s%s : (%s)\n' % ( Highlight[action], function, Highlight[action + 3], Action[action] ) )
+            try:
+                for cnt, line in enumerate( lines ):
+                    finished_line = '%s\n' % ( line, )
+                    xbmc.output( finished_line % values[cnt] )
+            except: traceback.print_exc()
 
 
 

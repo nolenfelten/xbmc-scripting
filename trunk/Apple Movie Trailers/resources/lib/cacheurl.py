@@ -1,17 +1,28 @@
-import os, urllib2, md5, traceback
-import xbmc, xbmcgui
-import language, time
+"""
+Url retrieve and cache module
+
+Killarny
+"""
+
+import os
+import sys
+import xbmc
+import xbmcgui
+import urllib2
+import md5
+import traceback
+import time
 import socket
+import language
 
-# timeout in seconds
-timeout = 10
-socket.setdefaulttimeout(timeout)
-
+socket.setdefaulttimeout( 10 )
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'
+__useragent__ = 'iTunes/4.7'
+#__useragent__ = '%s/%s' % ( __scriptname__, __version__ )
 
-_ = language.Language().string
+_ = language.Language().localized
 
 def percent_from_ratio( top, bottom ):
     return int( float( top ) / bottom * 100 )
@@ -54,16 +65,10 @@ def byte_measurement( bytes, detailed = False ):
 
 class HTTP:
     def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
-        # this module's path
-        import sys
-        self.module_dir = os.path.dirname( sys.modules['cacheurl'].__file__ )
-        self.default_data_dir = os.path.join( os.path.dirname( self.module_dir ), 'data' )
-        del sys
-        
         # set the cache directory; default to a .cache directory off of the location where this module is
         self.cache_dir = cache
-        if self.cache_dir[0] == '.':
-            self.cache_dir = os.path.join( self.default_data_dir, self.cache_dir )
+        if self.cache_dir[ 0 ] == '.':
+            self.cache_dir = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, self.cache_dir )
 
         # title is the real name of the trailer, used for saving
         self.title = title
@@ -78,15 +83,16 @@ class HTTP:
         # set default blocksize (this may require tweaking; cachedhttp1.3 had it set at 8192)
         self.blocksize = 8192
 
-    def clear_cache( self ):
+    def clear_cache( self, cache_dir=None ):
         try:
-            for root, dirs, files in os.walk( self.cache_dir, topdown = False ):
+            if cache_dir is None:
+                cache_dir = self.cache_dir
+            for root, dirs, files in os.walk( cache_dir, topdown = False ):
                 for name in files:
                     os.remove( os.path.join( root, name ) )
                 os.rmdir( root )
         except:
             traceback.print_exc()
-            raise
 
     def urlopen( self, url ):
         # retrieve the file so it is cached
@@ -100,17 +106,18 @@ class HTTP:
 
     def make_cache_filename( self, url ):
         # construct the filename
-        if self.flat_cache:
-            filename = 'flat_cache' + os.path.splitext( url )[1]
-        elif self.actual_filename:
+        if self.actual_filename:
             if len( self.title ) > 37:
                 self.title = '%s_%s' % ( self.title[0:32], self.title[-4:] )
             filename = self.title.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
             filename = filename.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
             filename = filename.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
+            if self.flat_cache:
+                filename = os.path.join( 'flat_cache', filename )
         else:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
             filename = os.path.join( filename[0], filename )
+
         # ..and the filepath
         filepath = os.path.join( self.cache_dir, filename )
         return filepath
@@ -124,10 +131,14 @@ class HTTP:
             # notify handler of being finished
             self.on_finished( url, filepath, os.path.getsize( filepath ), True )
             return filepath
+        
+        # if self.flat_cache delete existing flat_cache folder since this is a new movie
+        if self.flat_cache:
+            self.clear_cache( os.path.join( self.cache_dir, "flat_cache" ) )
 
         try:
             request = urllib2.Request( url )
-            request.add_header( 'User-Agent', '%s/%s' % ( __scriptname__, __version__ ) )
+            request.add_header( 'User-Agent', __useragent__ )
             # hacky, I know, but the chances that the url will fail twice are slimmer than only trying once
             try:
                 opened = urllib2.urlopen( request )
@@ -135,6 +146,8 @@ class HTTP:
                 opened = urllib2.urlopen( request )
         except:
             traceback.print_exc()
+            self.on_finished( url, "", 0, False )
+            return ""
 
         # this is the actual url that we got (redirection, etc)
         actual_url = opened.geturl()
@@ -162,7 +175,7 @@ class HTTP:
             drive = os.path.splitdrive( self.cache_dir )[0].split(':')[0]
             free_space = xbmc.getInfoLabel( 'System.Freespace(%s)' % drive )
             if len( free_space.split() ) > 2:
-                free_space_mb = int( free_space.split()[2] )
+                free_space_mb = int( free_space.split()[1] )
                 free_space_b = free_space_mb * 1024 * 1024
                 if totalsize >= free_space_b:
                     header = _(64) # Error
@@ -176,8 +189,9 @@ class HTTP:
                     return ''
         except:
             traceback.print_exc()
-            raise
-
+            self.on_finished( url, "", 0, False )
+            return ""
+            
         # create the cache dir if it doesn't exist
         if not os.path.isdir( os.path.split( filepath )[0] ):#self.cache_dir ):
             os.makedirs( os.path.split( filepath )[0] )#self.cache_dir )
@@ -222,7 +236,6 @@ class HTTP:
         if not is_completed:
             os.remove( filepath )
             filepath = None
-
         return filepath
 
     def on_data( self, url, filepath, filesize, size_read_so_far ):
@@ -265,10 +278,10 @@ class HTTPProgress( HTTP ):
 
 class HTTPProgressSave( HTTPProgress ):
     def __init__( self, save_location = None, save_title = '' ):
-        if save_location:
+        if save_location is not None:
             HTTPProgress.__init__( self, save_location, save_title, actual_filename = True )
         else:
-            HTTPProgress.__init__( self, flat_cache = True )
+            HTTPProgress.__init__( self, title = save_title, actual_filename = True, flat_cache = True )
 
     def on_finished( self, url, filepath, filesize, is_completed ):
         if is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:

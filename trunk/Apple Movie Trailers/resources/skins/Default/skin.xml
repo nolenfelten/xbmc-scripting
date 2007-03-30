@@ -172,7 +172,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Genre Button</description>
-			<label>202</label>
+			<label>103</label>
 			<posx>50</posx>
 			<posy>264</posy>
 			<width>150</width>
@@ -194,7 +194,7 @@
         <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
 			<description>Studio Button</description>
-			<label>222</label>
+			<label>104</label>
 			<posx>50</posx>
 			<posy>301</posy>
 			<width>150</width>
@@ -216,7 +216,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Actor Button</description>
-			<label>224</label>
+			<label>105</label>
 			<posx>50</posx>
 			<posy>338</posy>
 			<width>150</width>
@@ -238,7 +238,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
 			<description>Search Button</description>
-			<label>203</label>
+			<label>106</label>
 			<posx>50</posx>
 			<posy>408</posy>
 			<width>150</width>
@@ -260,7 +260,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="70">
 			<description>Settings Button</description>
-			<label>204</label>
+			<label>107</label>
 			<posx>50</posx>
 			<posy>478</posy>
 			<width>150</width>
@@ -283,17 +283,15 @@
             Uncomment the following control and uncomment the pair of <label> and <onclick> you prefer 
             and add them to the control. Don't forget to adjust you <on*> tags.
         -->
-			<!--label>209</label
-			<onclick>self.showCredits()</onclick-->
-			<!--label>228</label>
+			<!--label>154</label>
 			<onclick>self.updateScript()</onclick-->
-			<!--label>227</label>
-			<onclick>self.exitScript()</onclick-->
+			<!--label>155</label
+			<onclick>self.showCredits()</onclick-->
 
 		<!-- ** Optional ** Do not change <description> or <type> -->
 		<!--control type="button" id="80">
 			<description>Optional Button</description>
-			<label>228</label>
+			<label>154</label>
 			<onclick>self.updateScript()</onclick>
             <posx>50</posx>
 			<posy>517</posy>
@@ -422,7 +420,7 @@
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
+			<texturefocus>\list-focus2.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<textureheight>26</textureheight>
 			<itemwidth>10</itemwidth>
@@ -569,7 +567,7 @@
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
+			<texturefocus>\list-focus2.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<textureheight>26</textureheight>
 			<itemwidth>22</itemwidth>
@@ -741,9 +739,9 @@
 		<control type="textbox" id="215">
 			<description>Trailer Plot</description>
 			<posx>211</posx>
-			<posy>400</posy>
+			<posy>407</posy>
 			<width>445</width>
-			<height>153</height>
+			<height>142</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<onup>215</onup>
@@ -858,7 +856,7 @@
 			<texturedown>\scroll-down.png</texturedown>
 			<textureupfocus>\scroll-up-focus.png</textureupfocus>
 			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
+			<texturefocus>\list-focus2.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
 			<textureheight>26</textureheight>
 			<itemwidth>16</itemwidth>

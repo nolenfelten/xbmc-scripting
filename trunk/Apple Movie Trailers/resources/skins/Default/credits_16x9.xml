@@ -15,28 +15,15 @@
 	The Skin Credits Label and List is where you add your credits.
 -->
 	
-	<defaultcontrol>703</defaultcontrol>
+	<!--defaultcontrol>703</defaultcontrol-->
 	<resolution>PAL16x9</resolution>
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
-		<posy>132</posy>
+		<posy>103</posy>
 	</coordinates>
-
-	<controls>
-
-		<!-- ** You may need a dummy control at the top if controls conflict ** -->
-		<control type="image" id="1">
-			<description>backdrop</description>
-			<posx>0</posx>
-			<posy>0</posy>
-			<width>1</width>
-			<height>1</height>
-			<texture>-</texture>
-		</control>
-
-		<!-- credits dialog -->
-
+	
+    <controls>
         <!-- ** Optional ** -->
 		<control type="image" id="1">
 			<description>Background Image</description>
@@ -57,7 +44,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>0</label>
+			<label>-</label>
 			<visible>true</visible>
 		</control>
 
@@ -83,7 +70,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>101</label>
+			<label>901</label>
 			<visible>true</visible>
 		</control>
 
@@ -127,7 +114,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>102</label>
+			<label>902</label>
 			<visible>true</visible>
 		</control>
 
@@ -177,7 +164,7 @@
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>60ffffff</textcolor>
-			<label>103</label>
+			<label>903</label>
 			<visible>true</visible>
 		</control>
 

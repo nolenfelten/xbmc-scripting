@@ -1,17 +1,26 @@
-import sys, os
-import xbmc, xbmcgui
+"""
+Settings module
+
+Nuka1195
+"""
+
+import sys
+import os
+import xbmc
+import xbmcgui
 import guibuilder
 import utilities
-import chooser
+##import chooser
 import traceback
+
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         try:
             self._ = kwargs[ "language" ]
-            self.genres = kwargs[ "genres" ]
             self.skin = kwargs[ "skin" ]
+            self.genres = kwargs[ "genres" ]
             self.gui_loaded = self.setupGUI()
             if ( not self.gui_loaded ): self._close_dialog()
             else:
@@ -20,7 +29,7 @@ class GUI( xbmcgui.WindowDialog ):
                 self._setup_special()
                 self._set_controls_values()
                 self._set_restart_required()
-                self.chooser = chooser.GUI( skin=self.skin )
+                ##self.chooser = chooser.GUI( skin=self.skin )
         except: traceback.print_exc()
             
     def setupGUI( self ):
@@ -60,17 +69,16 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _get_numeric( self, default="", heading="", type=3 ):
         """ shows a numeric dialog and returns a value
-           - 0 : ShowAndGetNumber
-           - 1 : ShowAndGetDate
-           - 2 : ShowAndGetTime
-           - 3 : ShowAndGetIPAddress
+            - 0 : ShowAndGetNumber		(default format: #)
+            - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
+            - 2 : ShowAndGetTime			(default format: HH:MM)
+            - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.numeric( type, heading )
-        if ( value ): return value
-        else: return default
+        value = dialog.numeric( type, heading, default )
+        return value
 
-    def _get_browse_dialog( self, default="", heading="", type=1, shares="files" ):
+    def _get_browse_dialog( self, default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
         """ shows a browse dialog and returns a value
             - 0 : ShowAndGetDirectory
             - 1 : ShowAndGetFile
@@ -78,9 +86,8 @@ class GUI( xbmcgui.WindowDialog ):
             - 3 : ShowAndGetWriteableDirectory
         """
         dialog = xbmcgui.Dialog()
-        value = dialog.browse( type, heading, shares )
-        if ( value ): return value
-        else: return default
+        value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+        return value
 
 ##### Start of unique defs #####################################################
 
@@ -103,17 +110,28 @@ class GUI( xbmcgui.WindowDialog ):
         self.startup_categories = {}
         for count, genre in enumerate( self.genres ):
             self.startup_categories[ count ] = str( genre.title )
-        self.startup_categories[ utilities.FAVORITES ] = self._( 217 )
-        self.startup_categories[ utilities.DOWNLOADED ] = self._( 226 )
+        self.startup_categories[ utilities.FAVORITES ] = self._( 152 )
+        self.startup_categories[ utilities.DOWNLOADED ] = self._( 153 )
+        ###########################################
+        self.tmp_startup_categories = self.startup_categories.keys()
+        #self.tmp_startup_categories.sort()
+        try: self.startup_category_id = self.tmp_startup_categories.index( self.settings[ "startup_category_id" ] )
+        except: self.startup_category_id = 0
+        try: self.shortcut1 = self.tmp_startup_categories.index( self.settings[ "shortcut1" ] )
+        except: self.shortcut1 = 0
+        try: self.shortcut2 = self.tmp_startup_categories.index( self.settings[ "shortcut2" ] )
+        except: self.shortcut2 = 0
+        try: self.shortcut3 = self.tmp_startup_categories.index( self.settings[ "shortcut3" ] )
+        except: self.shortcut3 = 0
         
     def _setup_thumbnail_display( self ):
-        self.thumbnail = ( self._( 310 ), self._( 311 ), self._( 312 ), )
+        self.thumbnail = ( self._( 2050 ), self._( 2051 ), self._( 2052 ), )
         
     def _setup_playback_mode( self ):
-        self.mode = ( self._( 330 ), self._( 331 ), "%s (videos)" % self._( 332 ), "%s (files)" % self._( 332 ), )
+        self.mode = ( self._( 2030 ), self._( 2031 ), "%s (videos)" % self._( 2032 ), "%s (files)" % self._( 2032 ), )
     
     def _setup_trailer_quality( self ):
-        self.quality = ( self._( 320 ), self._( 321 ), self._( 322 ), )
+        self.quality = ( self._( 2020 ), self._( 2021 ), self._( 2022 ), )
 
     def _setup_skins( self ):
         """ special def for setting up scraper choices """
@@ -125,40 +143,32 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _set_controls_values( self ):
         """ sets the value labels """
-        #xbmcgui.lock()
-        #self.controls["Skin Button Value"]["control"].setLabel( "%s" % ( self.settings.skin, ) )
-        #self.controls["Trailer Quality Button Value"]["control"].setLabel( "%s" % ( self.quality[self.settings.trailer_quality], ) )
-        #self.controls["Mode Button Value"]["control"].setLabel( "%s" % ( self.mode[self.settings[ "mode" ]], ) )
-        #self.controls["Save Folder Button"]["control"].setEnabled( self.settings.mode >= 2 )
-        #self.controls["Save Folder Button Value"]["control"].setLabel( "%s" % ( self.settings.save_folder, ) )
-        #self.controls["Save Folder Button Value"]["control"].setEnabled( self.settings.mode >= 2 )
-        #self.controls["Thumbnail Display Button Value"]["control"].setLabel( "%s" % ( self.thumbnail[self.settings.thumbnail_display], ) )
-        #self.controls["Startup Category Button Value"]["control"].setLabel( "%s" % ( self.startup_categories[self.startup_category[0]][0], ) )
-        #self.controls["Shortcut1 Button Value"]["control"].setLabel( "%s" % ( self.startup_categories[self.startup_category[1]][0], ) )
-        #self.controls["Shortcut2 Button Value"]["control"].setLabel( "%s" % ( self.startup_categories[self.startup_category[2]][0], ) )
-        #self.controls["Shortcut3 Button Value"]["control"].setLabel( "%s" % ( self.startup_categories[self.startup_category[3]][0], ) )
+        xbmcgui.lock()
         try:
             self.get_control( "Setting1 Value" ).setLabel( self.settings[ "skin" ] )
             self.get_control( "Setting2 Value" ).setLabel( self.quality[ self.settings[ "trailer_quality" ] ] )
             self.get_control( "Setting3 Value" ).setLabel( self.mode[ self.settings[ "mode" ] ] )
             self.get_control( "Setting4 Value" ).setLabel( self.settings[ "save_folder" ] )
-            self.get_control( "Setting4 Value" ).setEnabled( self.settings[ "mode" ] >= 2 )
-            self.get_control( "Setting4 Button" ).setEnabled( self.settings[ "mode" ] >= 2 )
+            self.get_control( "Setting4 Value" ).setEnabled( self.settings[ "mode" ] >= 1 )
+            self.get_control( "Setting4 Button" ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.get_control( "Setting5 Value" ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
             self.get_control( "Setting6 Value" ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
             self.get_control( "Setting7 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
             self.get_control( "Setting8 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
             self.get_control( "Setting9 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
         except: traceback.print_exc()
-        #xbmcgui.unlock()
+        xbmcgui.unlock()
     
     def _change_setting1( self ):
         """ changes settings #1 """
-        if ( self.chooser.gui_loaded ):
-            self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1 )
-            if ( not self.chooser.selection is None ):
-                self.current_skin = self.chooser.selection
-                self.settings[ "skin" ] = self.skins[ self.current_skin ]
+        self.current_skin += 1
+        if (  self.current_skin == len( self.skins ) ):
+             self.current_skin = 0
+        self.settings[ "skin" ] = self.skins[ self.current_skin ]
+    #    self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1 )
+    #    if ( self.chooser.selection is not None ):
+    #        self.current_skin = self.chooser.selection
+    #        self.settings[ "skin" ] = self.skins[ self.current_skin ]
 
     def _change_setting2( self ):
         """ changes settings #2 """
@@ -174,11 +184,42 @@ class GUI( xbmcgui.WindowDialog ):
 
     def _change_setting4( self ):
         """ changes settings #4 """
-        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], self._( 203 ) )
+        shares = [ "video", "files" ][ self.settings[ "mode" ] == 3 ]
+        self.settings[ "save_folder" ] = self._get_browse_dialog( self.settings[ "save_folder" ], self._( 204 ), 3, shares )
         
     def _change_setting5( self ):
         """ changes settings #5 """
-        self.settings[ "show_viz" ] = not self.settings[ "show_viz" ]
+        self.settings[ "thumbnail_display" ] += 1
+        if ( self.settings[ "thumbnail_display" ] == len( self.thumbnail ) ):
+            self.settings[ "thumbnail_display" ] = 0
+    
+    def _change_setting6( self ):
+        """ changes settings #6 """
+        self.startup_category_id += 1
+        if ( self.startup_category_id == len( self.tmp_startup_categories ) ):
+            self.startup_category_id = 0
+        self.settings[ "startup_category_id" ] = self.tmp_startup_categories[ self.startup_category_id ]
+    
+    def _change_setting7( self ):
+        """ changes settings #7 """
+        self.shortcut1 += 1
+        if ( self.shortcut1 == len( self.tmp_startup_categories ) ):
+            self.shortcut1 = 0
+        self.settings[ "shortcut1" ] = self.tmp_startup_categories[ self.shortcut1 ]
+    
+    def _change_setting8( self ):
+        """ changes settings #8 """
+        self.shortcut2 += 1
+        if ( self.shortcut2 == len( self.tmp_startup_categories ) ):
+            self.shortcut2 = 0
+        self.settings[ "shortcut2" ] = self.tmp_startup_categories[ self.shortcut2 ]
+    
+    def _change_setting9( self ):
+        """ changes settings #9 """
+        self.shortcut3 += 1
+        if ( self.shortcut3 == len( self.tmp_startup_categories ) ):
+            self.shortcut3 = 0
+        self.settings[ "shortcut3" ] = self.tmp_startup_categories[ self.shortcut3 ]
     
 ##### End of unique defs ######################################################
     
@@ -191,8 +232,9 @@ class GUI( xbmcgui.WindowDialog ):
     def _show_credits( self ):
         """ shows a credit window """
         import credits
-        c = credits.GUI( language=self._ )
-        c.doModal()
+        c = credits.GUI( skin=self.skin, language=self._ )
+        if ( c.gui_loaded ):
+            c.doModal()
         del c
 
     def _check_for_restart( self ):
@@ -224,7 +266,7 @@ class GUI( xbmcgui.WindowDialog ):
             self._update_script()
         elif ( control is self.get_control( "Credits Button" ) ):
             self._show_credits()
-        else:
+        else: #if ( self.chooser.gui_loaded ):
             if ( control is self.get_control( "Setting1 Button" ) ):
                 self._change_setting1()
             elif ( control is self.get_control( "Setting2 Button" ) ):
