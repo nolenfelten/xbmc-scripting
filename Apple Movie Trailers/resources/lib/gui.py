@@ -563,15 +563,16 @@ class GUI( xbmcgui.Window ):
                 force_update = False
             self.showTrailers( self.sql, params = params, choice = choice, force_update = force_update )
     
+    def refreshGenre( self ):
+        genre = self.controls['Category List']['control'].getSelectedPosition()
+        self.trailers.refreshGenre( genre, force_update = True )
+        self.setCategory( utilities.GENRES, 0 )
+    
     def refreshInfo( self, refresh_all ):
-        xbmc.sleep(200)
-        '''
-        if ( refresh_all ):
-            self.trailers.update_all( force_update = True )
-        else:
-            self.trailers.movies[self.list_item].__update__()
-        self.showTrailers( self.sql, choice = self.list_item )
-        '''
+        pass
+        #    self.trailers.movies[self.list_item].__update__()
+        #self.showTrailers( self.sql, choice = self.list_item )
+        
     def saveCachedMovie( self ):
         try:
             trailer = self.setCountLabel( 'Trailer List' )

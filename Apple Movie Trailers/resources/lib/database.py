@@ -3,14 +3,12 @@ import os
 import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
-#import traceback
+import utilities
+import traceback
 
-db_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
-if ( not os.path.isdir( db_path ) ):
-    os.makedirs( db_path )
-db_filename = os.path.join( db_path, "AMT.db" )
-
-COMPATIBLE_VERSIONS = [ "pre-0.97.1", "0.97.1" ]
+if ( not os.path.isdir( utilities.BASE_DATA_PATH ) ):
+    os.makedirs( utilities.BASE_DATA_PATH )
+db_filename = os.path.join( utilities.BASE_DATA_PATH, "AMT.db" )
 
 
 class Database:
@@ -28,8 +26,8 @@ class Database:
         if ( record ):
             version = record[ 1 ]
             complete = record[ 2 ]
-            if ( record[ 1 ] not in COMPATIBLE_VERSIONS ): 
-                version, complete = self.convertDatabase( version )
+            if ( record[ 1 ] not in utilities.DATABASE_VERSIONS ): 
+                version = self.convertDatabase( version )
         else: version, complete = self.createDatabase()
         return version, complete
     
@@ -43,58 +41,41 @@ class Database:
 
     def writeVersion( self ):
         records = Records()
-        lastrowid = records.add( "version", ( sys.modules[ "__main__" ].__version__, False, ) )
-        if ( lastrowid ): success = records.commit()
+        lastrowid = records.add( "version", ( sys.modules[ "__main__" ].__version__, False, ), True )
         records.close()
         return lastrowid
 
     def convertDatabase( self, version ):
-        return None, False
-        pass
-        """
-        if ( version[ 0 ] == "pre-0.95" ):
+        def updateTable():
+            try:
+                sql = "ALTER TABLE genres ADD updated text"
+                records = Records()
+                records.cursor.execute( sql )
+                records.close()
+                return True
+            except: return False
+
+        def updateVersion():
+            records = Records()
+            success = records.update( "version", ( "version", ), ( sys.modules[ "__main__" ].__version__, 1, ), "idVersion", True )
+            records.close()
+            return success
+        
+        if ( version == "pre-0.97.1" ):
             try:
                 dialog = xbmcgui.DialogProgress()
                 dialog.create( self._( 53 ) )
-                replace_string = os.path.join( os.path.dirname( sys.modules["__main__"].__file__ ), "resources", "data", ".cache\\" )
-                sql = "SELECT title, poster, thumbnail, thumbnail_watched, rating_url FROM Movies WHERE poster != ?"
-                dialog.update( -1, self._( 48 ) )
-                records = self.getRecords( sql, params=( "", ), all=True )
-                if ( records ):
-                    changed_records = ()
-                    total_cnt = len( records )
-                    pct_sect = float( 100 ) / total_cnt
-                    for cnt, record in enumerate( records ):
-                        #xbmc.sleep(100)
-                        new_field = ()
-                        dialog.update( int( ( cnt + 1 ) * pct_sect ), "%s: (%d of %d)" % ( self._( 45 ), cnt + 1, total_cnt, ), "%s: %s" % ( self._( 88 ), record[ 0 ], ), "" )
-                        for item in record[ 1 : 5 ]:
-                            new_field += ( item.replace( replace_string, "" ), )
-                        new_field += ( record[ 0 ], )
-                        changed_records += ( new_field, )
-                        if ( dialog.iscanceled == True ): raise
-                    dialog.update( 100 , "%s: (%d of %d)" % ( self._( 45 ), cnt + 1, total_cnt, ), "%s: %s" % ( self._( 88 ), record[ 0 ], ), "-----> %s <-----" % ( self._( 43 ), ) )
-                    succeeded = self.updateRecords( "Movies", ( "poster", "thumbnail", "thumbnail_watched", "rating_url", ), changed_records, "title" )
-                    if ( succeeded ): self.updateRecords( "Version", ( "version", ), ( ( sys.modules["__main__"].__version__, version[ 0 ], ), ), "version" )
-                    #xbmc.sleep(1000)
-                    dialog.close()
-                    if ( succeeded ): return ( sys.modules["__main__"].__version__, )
-                    else: return version
+                succeeded = updateTable()
+                if ( succeeded ):
+                    succeeded = updateVersion()
+                dialog.close()
+                if ( succeeded ): return ( sys.modules["__main__"].__version__, )
+                else: return version
             except:
-                #traceback.print_exc()
+                traceback.print_exc()
                 dialog.close()
                 xbmcgui.Dialog().ok( self._( 53 ), self._( 46 ) )
-                return version
-        """        
-
-    """
-    def updateVersion( self ):
-        records = Records()
-        success = records.update( "version", ( "version", ), ( "0.98.85", sys.modules[ "__main__" ].__version__, ), "version" )
-        records.commit()
-        records.close()
-        return success
-    """
+        return version
 
 
 class Tables( dict ):
@@ -110,6 +91,7 @@ class Tables( dict ):
             ( "genre", "text", "", "", "" ),
             ( "urls", "blob", "", "", "" ),
             ( "trailer_urls", "blob", "", "", "" ),
+            ( "updated", "text", "", "", "" ),
         )
         self[ "actors" ] = (
             ( "idActor", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
@@ -204,7 +186,7 @@ class Records:
     def close( self ):
         self.db.close()
     
-    def add( self, table, params ):
+    def add( self, table, params, commit=False ):
         try:
             auto_increment = 0
             sql = "INSERT INTO %s (" % ( table, )
@@ -215,6 +197,7 @@ class Records:
             sql = sql[:-2] + ") VALUES (" + ( "?, "*( len( self.tables[ table ] ) - auto_increment ) )
             sql = sql[:-2] + ");"
             self.cursor.execute( sql, params )
+            if ( commit ): self.commit()
             return self.cursor.lastrowid
         except:
             print "*** ERROR: Records.add() ***"
@@ -222,15 +205,14 @@ class Records:
             #print params
             #traceback.print_exc()
             return False
-            
-    def delete( self, table, columns, params ):
+    def delete( self, table, columns, params, commit=False ):
         try:
-            #DELETE FROM genre_link_movie WHERE idGenre=11 AND idMovie=6;
             sql = "DELETE FROM %s WHERE " % table
             for col in columns:
                 sql += "%s=? AND " % col
             sql = sql[ : -5 ]
             self.cursor.execute( sql, params )
+            if ( commit ): self.commit()
             return True
         except:
             print "*** ERROR: Records.delete() ***"
@@ -251,6 +233,7 @@ class Records:
                 sql += "%s=?, " % col
             sql = sql[:-2] + " WHERE %s=?;" % ( key, )
             self.cursor.execute( sql, params )
+            if ( commit ): self.commit()
             return True
         except:
             print "*** ERROR: Records.update() ***"
@@ -312,11 +295,11 @@ class Query( dict ):
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE poster='' ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
         
-        self[ "genre_category_list" ]		= "SELECT genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
-        self[ "studio_category_list" ]		= "SELECT studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
-        self[ "actor_category_list" ]		= "SELECT actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
+        self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
+        self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
+        self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
-        self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls FROM genres ORDER BY genre;"
+        self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls, updated FROM genres ORDER BY genre;"
         self[ "genre_by_genre_id" ]		= "SELECT * FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         

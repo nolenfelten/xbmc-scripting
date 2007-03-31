@@ -156,6 +156,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.get_control( "Setting7 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
             self.get_control( "Setting8 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
             self.get_control( "Setting9 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
+            self.get_control( "Setting10 Value" ).setSelected( self.settings[ "refresh_newest" ] )
         except: traceback.print_exc()
         xbmcgui.unlock()
     
@@ -221,6 +222,10 @@ class GUI( xbmcgui.WindowDialog ):
             self.shortcut3 = 0
         self.settings[ "shortcut3" ] = self.tmp_startup_categories[ self.shortcut3 ]
     
+    def _change_setting10( self ):
+        """ changes settings #10 """
+        self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]
+    
 ##### End of unique defs ######################################################
     
     def _update_script( self ):
@@ -285,6 +290,8 @@ class GUI( xbmcgui.WindowDialog ):
                 self._change_setting8()
             elif ( control is self.get_control( "Setting9 Button" ) ):
                 self._change_setting9()
+            elif ( control is self.get_control( "Setting10 Button" ) ):
+                self._change_setting10()
             self._set_controls_values()
             
     def onAction( self, action ):
