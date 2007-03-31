@@ -82,10 +82,10 @@ class Category:
     def __init__( self, idGenre=None, title=None, urls=list(), count=None ):
         '''
         self.tables['genres'] = (
-            ( 'idGenre', 'integer', 'AUTO_INCREMENT', 'UNIQUE INDEX', '(idGenre)' ),
-            ( 'title', 'text', '', '', '' ),
-            ( 'urls', 'blob', '', '', '' ),
-            ( 'trailer_urls', 'blob', '', '', '' ),
+            ( "idGenre", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
+            ( "genre", "text", "", "", "" ),
+            ( "urls", "blob", "", "", "" ),
+            ( "trailer_urls", "blob", "", "", "" ),
         )
         '''
         self.id = idGenre
@@ -161,6 +161,7 @@ class Trailers:
                 #print "REMOVE", record
                 params = ( idGenre, record[ 0 ], )
                 success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), params )
+            success = self.records.update( 'genres', ( 'urls', 'trailer_urls' ), ( repr( genre_urls ), repr( trailer_urls), idGenre, ), 'idGenre' )
             success = self.records.commit()
             self.categories[ genre ] = Category( idGenre=idGenre, title=title, urls=genre_urls )
         except: traceback.print_exc()
