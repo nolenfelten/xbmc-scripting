@@ -222,6 +222,23 @@ class Records:
             #print params
             #traceback.print_exc()
             return False
+            
+    def delete( self, table, columns, params ):
+        try:
+            #DELETE FROM genre_link_movie WHERE idGenre=11 AND idMovie=6;
+            sql = "DELETE FROM %s WHERE " % table
+            for col in columns:
+                sql += "%s=? AND " % col
+            sql = sql[ : -5 ]
+            print sql
+            self.cursor.execute( sql, params )
+            return True
+        except:
+            print "*** ERROR: Records.delete() ***"
+            print sql
+            print params
+            traceback.print_exc()
+            return False
 
     def update( self, table, columns, params, key, commit=False ):
         try:
@@ -301,6 +318,8 @@ class Query( dict ):
         self[ "actor_category_list" ]		= "SELECT actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
         self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls FROM genres ORDER BY genre;"
+        self[ "genre_by_genre_id" ]		= "SELECT * FROM genres WHERE idGenre=?;"
+        self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         
         self[ "movie_exists" ]				= "SELECT idMovie FROM movies WHERE upper(title)=?;"
         self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE upper(actor)=?;"

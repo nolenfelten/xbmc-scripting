@@ -13,7 +13,7 @@ import time
 fetcher = cacheurl.HTTP()
 _ = language.Language().localized
 
-cwd = fetcher.cache_dir + os.sep
+base_cache_path = fetcher.cache_dir + os.sep
 
 class Movie:
     '''
@@ -57,12 +57,12 @@ class Movie:
             self.title = movie[1]
             self.trailer_urls = eval( movie[3] )
             #self.genre = movie[]
-            self.poster = os.path.join( cwd, movie[4] )
-            self.thumbnail = os.path.join( cwd, '%s.png' % ( os.path.splitext( movie[4] )[0], ) )
-            self.thumbnail_watched = os.path.join( cwd, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) )
+            self.poster = os.path.join( base_cache_path, movie[4] )
+            self.thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) )
+            self.thumbnail_watched = os.path.join( base_cache_path, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) )
             self.plot = movie[5]
             self.rating = movie[6]
-            self.rating_url = os.path.join( cwd, movie[7] )
+            self.rating_url = os.path.join( base_cache_path, movie[7] )
             self.year = movie[8]
             self.watched = movie[9]
             self.watched_date = movie[10]
@@ -97,19 +97,6 @@ class Category:
             self.urls = urls
         self.count = count
 
-    def removeXML( self ):
-        for url in self.urls:
-            try:
-                filename = fetcher.make_cache_filename( url )
-                filename = os.path.join( cwd, filename )
-                if os.path.isfile( filename ):
-                    os.remove( filename )
-            except:
-                print '-- Error removing', self.title, '--'
-                print 'url:', url
-                print 'file:', fetcher.make_cache_filename( url )
-                print '-' * 79
-                raise
 
 class Trailers:
     '''
@@ -127,11 +114,9 @@ class Trailers:
         #####################################
         self.start_time = 0
         #####################################
-        update_on_start = False # FIXME this needs to be changed to read whatever setting we use
-        if update_on_start:
-            self.updateGenres()
-        else:
-            self.loadGenres()
+        newest_genre = self.loadGenres()
+        if ( newest_genre ):
+            self.updateGenre( newest_genre )
         
     def ns( self, text ):
         BASENS = '{http://www.apple.com/itms/}'
@@ -140,37 +125,71 @@ class Trailers:
             result += [ BASENS + each ]
         return '/'.join( result )
             
-    def updateGenres( self ):
+    def updateGenre( self, genre ):
         """
-            Updates the xml for each category from the site. Returns True/False
-            to indicate success.
+            Updates the xml for each genre from the site.
         """
-        self.records = database.Records()
-        genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
-        if genre_list:
-            self.loadGenres()
-            print 'UPDATE'
-            for each in self.categories:
-                try:
-                    each.removeXML()
-                except:
-                    traceback.print_exc()
         try:
-            self.loadGenres( override = True )
-        except:
-            return False
-        print 'UPDATE: done'
-        return True
+            dialog = xbmcgui.DialogProgress()
+            dialog.create( '%s' % ( _( 66 ), ) )
+            idGenre = self.categories[ genre ].id
+            title = self.categories[ genre ].title
+            url = self.categories[ genre ].urls[ 0 ]
+            self.records = database.Records()
+            self.removeXML( self.categories[ genre ].urls )
+            trailer_urls, genre_urls = self.loadGenreInfo( title, url )
+            idMovie_list = self.records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
+            
+            total_cnt = len( trailer_urls )
+            pct_sect = float( 100 ) / total_cnt
 
-    def loadGenres( self, override = False ):
+            for cnt, url in enumerate( trailer_urls ):
+                #xbmc.sleep(300)
+                dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s' % (_( 87 ), title, ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), url[ 0 ] )
+                record = self.records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                if ( record is None ):
+                    #print "ADD", url
+                    idMovie = self.records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                    success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                else:
+                    try:
+                        #print "EXISTS", url
+                        i = idMovie_list.index( record )
+                        idMovie_list.pop( i )
+                    except: pass
+            for record in idMovie_list:
+                #print "REMOVE", record
+                params = ( idGenre, record[ 0 ], )
+                success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), params )
+            success = self.records.commit()
+            self.categories[ genre ] = Category( idGenre=idGenre, title=title, urls=genre_urls )
+        except: traceback.print_exc()
+            
+        dialog.close()
+
+
+    def removeXML( self, urls ):
+        for url in urls:
+            try:
+                filename = fetcher.make_cache_filename( url )
+                filename = os.path.join( base_cache_path, filename )
+                if os.path.isfile( filename ):
+                    os.remove( filename )
+            except:
+                traceback.print_exc()
+                
+    def loadGenres( self ):
         try:
             dialog = xbmcgui.DialogProgress()
             self.records = database.Records()
             genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
             self.categories = []
-            if ( genre_list and not override ):
-                for genre in genre_list:
+            if ( genre_list ):
+                for cnt, genre in enumerate( genre_list ):
                     self.categories += [ Category( idGenre=genre[ 0 ], title=genre[ 1 ], urls=genre[ 2 ] )]
+                    if ( genre[ 1 ] == "Newest" ):
+                        newest_id = cnt
+                return newest_id
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
                 #####################################
@@ -228,7 +247,7 @@ class Trailers:
                         for url_cnt, url in enumerate( trailer_urls ):
                             dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '%s: (%d of %d)' % ( _( 88 ), url_cnt + 1, total_urls, ), url[ 0 ] )
                             record = self.records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
-                            if ( not record ):
+                            if ( record is None ):
                                 idMovie = self.records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
                             else: idMovie = record[ 0 ]
                             success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
@@ -246,7 +265,8 @@ class Trailers:
         except:
             dialog.close()
             traceback.print_exc()
-    
+        return False
+        
     def loadGenreInfo( self, genre, url ):
         """
             Follows all links from a genre page and fetches all trailer urls.
@@ -375,7 +395,7 @@ class Trailers:
                 # download the actual poster to the local filesystem (or get the cached filename)
                 poster = fetcher.urlretrieve( poster )
                 if poster:
-                    self.poster = poster.replace( cwd, '' )
+                    self.poster = poster.replace( base_cache_path, '' )
                     # make thumbnails
                     success = pil_util.makeThumbnails( poster )
             
@@ -398,7 +418,7 @@ class Trailers:
                     if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
                         actors += [ ( actor, ) ]
                         actor_id = self.records.fetchone( self.query[ 'actor_exists' ], ( actor.upper(), ) )
-                        if ( not actor_id ): idActor = self.records.add( 'actors', ( actor, ) )
+                        if ( actor_id is None ): idActor = self.records.add( 'actors', ( actor, ) )
                         else: idActor = actor_id[ 0 ]
                         self.records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
                 self.actors = actors
@@ -409,7 +429,7 @@ class Trailers:
                 studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                 if studio:
                     studio_id = self.records.fetchone( self.query[ 'studio_exists' ], ( studio.upper(), ) )
-                    if ( not studio_id ): idStudio = self.records.add( 'studios', ( studio, ) )
+                    if ( studio_id is None ): idStudio = self.records.add( 'studios', ( studio, ) )
                     else: idStudio = studio_id[ 0 ]
                     self.records.add( 'studio_link_movie', ( idStudio, self.idMovie, ) )
                     self.studio = studio
@@ -421,7 +441,7 @@ class Trailers:
                     if '/mpaa' in temp_url:
                         rating_url = fetcher.urlretrieve( temp_url )
                         if rating_url:
-                            self.rating_url = rating_url.replace( cwd, '' )
+                            self.rating_url = rating_url.replace( base_cache_path, '' )
                             self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
             
             # -- trailer urls --
@@ -475,7 +495,7 @@ class Trailers:
             info_list += ( self.studio, )
             return info_list
         except:
-            #print traceback.print_exc()
+            #traceback.print_exc()
             print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
             return None
             
@@ -501,7 +521,7 @@ class Trailers:
         if ( actor_list ): movie += ( actor_list, )
         else: movie += ( [], )
         studio = self.records.fetchone( self.query[ 'studio_by_movie_id' ], ( movie[ 0 ], ) )
-        if ( studio ): movie += ( studio[ 0 ], )
+        if ( studio is not None ): movie += ( studio[ 0 ], )
         else: movie += ( '', )
         return movie
         
