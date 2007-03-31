@@ -119,20 +119,23 @@ class Trailers:
                 idMovie_list = self.records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
                 total_cnt = len( trailer_urls )
                 pct_sect = float( 100 ) / total_cnt
-
                 for cnt, url in enumerate( trailer_urls ):
                     dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s' % (_( 87 ), title, ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), url[ 0 ] )
                     record = self.records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
+                        #print "ADDED", url
                         idMovie = self.records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
                         success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                     else:
+                        #print "EXIST", url
                         try:
                             i = idMovie_list.index( record )
                             idMovie_list.pop( i )
                         except:
-                            success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                            #print "ADDED TO G_L_M table", record[ 0 ]
+                            success = self.records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
                 for record in idMovie_list:
+                    #print "DELETED", record
                     success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
                 success = self.records.update( 'genres', ( 'urls', 'trailer_urls', "updated" ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
                 success = self.records.commit()
@@ -146,6 +149,7 @@ class Trailers:
                 filename = fetcher.make_cache_filename( url )
                 filename = os.path.join( base_cache_path, filename )
                 if os.path.isfile( filename ):
+                    #print "REMOVED", filename
                     os.remove( filename )
             except:
                 traceback.print_exc()

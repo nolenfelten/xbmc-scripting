@@ -88,7 +88,7 @@ class GUI( xbmcgui.Window ):
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
         self.flat_cache = ( unicode( "", "utf-8" ), "", )
-        self.sql = None
+        self.sql = ""
         self.params = None
         self.display_cast = False
         ##self.dummy()
@@ -566,6 +566,7 @@ class GUI( xbmcgui.Window ):
     def refreshGenre( self ):
         genre = self.controls['Category List']['control'].getSelectedPosition()
         self.trailers.refreshGenre( genre, force_update = True )
+        self.sql_category = ""
         self.setCategory( utilities.GENRES, 0 )
     
     def refreshInfo( self, refresh_all ):
