@@ -230,14 +230,13 @@ class Records:
             for col in columns:
                 sql += "%s=? AND " % col
             sql = sql[ : -5 ]
-            print sql
             self.cursor.execute( sql, params )
             return True
         except:
             print "*** ERROR: Records.delete() ***"
             print sql
             print params
-            traceback.print_exc()
+            #traceback.print_exc()
             return False
 
     def update( self, table, columns, params, key, commit=False ):
