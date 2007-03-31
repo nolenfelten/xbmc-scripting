@@ -144,7 +144,7 @@ class GUI( xbmcgui.WindowDialog ):
                 if ( self.list_control == "Trailer List" ):
                     self.win.toggleAsFavorite()
                 elif ( self.list_control == "Category List" and self.win.category_id == utilities.GENRES ):
-                    self.win.refreshInfo( True )
+                    self.win.refreshGenre()
                 else:# ( self.list_control == "Cast List" ):
                     self.win.force_full_update()
             elif ( control is self.controls[ "Context Menu Button3" ][ "control" ] ):

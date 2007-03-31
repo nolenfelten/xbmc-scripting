@@ -1,12 +1,20 @@
 import sys
 import os
+import default
 
-COMPATIBLE_VERSIONS = [ 'pre-0.97.1', '0.97.1' ]
+DATABASE_VERSIONS = [ "pre-0.97.2", "0.97.2" ]
+SETTINGS_VERSIONS = DATABASE_VERSIONS
 GENRES = -1
 STUDIOS = -2
 ACTORS = -3
 FAVORITES = -6
 DOWNLOADED = -7
+BASE_DATA_PATH = os.path.join( "T:\\script_data", default.__scriptname__ )
+EXIT_SCRIPT = ( 247, 275, 61467, )
+TOGGLE_DISPLAY = ( 216, 257, 61448, )
+CONTEXT_MENU = ( 229, 261, 61533, )
+MOVEMENT_UP = ( 166, 270, 61478, )
+MOVEMENT_DOWN = ( 167, 271, 61480, )
 
 def setControllerAction():
     return {
@@ -46,7 +54,7 @@ class Settings:
             settings_file = open( os.path.join( settings_path, "settings.txt" ), "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
-            if ( settings[ "version" ] not in COMPATIBLE_VERSIONS ):
+            if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
                 raise
         except:
             settings = self._use_defaults()
@@ -54,7 +62,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         settings = {  
-            "version": sys.modules[ '__main__' ].__version__,
+            "version": sys.modules[ "__main__" ].__version__,
             "skin": "Default",
             "trailer_quality": 2,
             "mode": 0,
@@ -63,7 +71,8 @@ class Settings:
             "startup_category_id": 10,
             "shortcut1": 10,
             "shortcut2": 4,
-            "shortcut3": FAVORITES
+            "shortcut3": FAVORITES,
+            "refresh_newest": False
             }
         ok = self.save_settings( settings )
         return settings
