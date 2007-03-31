@@ -60,9 +60,9 @@ class GUI( xbmcgui.Window ):
                 ## enable when ready
                 self.controls['Search Button']['control'].setEnabled( False )
                 self.setupVariables()
+                closeProgessDialog()
                 self.setStartupChoices()
                 self.setStartupCategory()
-                closeProgessDialog()
         except:
             closeProgessDialog()
             traceback.print_exc()
@@ -91,8 +91,8 @@ class GUI( xbmcgui.Window ):
         self.sql = None
         self.params = None
         self.display_cast = False
-        self.dummy()
-        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
+        ##self.dummy()
+        ##self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         self.controller_action = utilities.setControllerAction()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
