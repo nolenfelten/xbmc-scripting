@@ -9,9 +9,6 @@ import elementtree.ElementTree as ET
 import language
 import pil_util
 import database
-#####################################
-import time
-#####################################
 
 fetcher = cacheurl.HTTP()
 _ = language.Language().localized
@@ -38,23 +35,6 @@ class Movie:
         - studio (string - movies studio)
     '''
     def __init__( self, movie=None ):
-        '''
-        self.tables['movies'] = (
-          0  ( 'idMovie', 'integer', '', 'UNIQUE INDEX', '(idMovie)' ), 
-          1  ( 'title', 'text', '', '', '' ),
-          2  ( 'url', 'text',  '', '', '' ),
-          3  ( 'trailer_urls', 'text', '', '', '' ),
-          4  ( 'poster', 'text', '', '', '' ),
-          5  ( 'plot', 'text', '', '', '' ),
-          6  ( 'rating', 'text', '', '', '' ),
-          7  ( 'rating_url', 'text', '', '', '' ),
-          8  ( 'year', 'integer', '', '', '' ),
-          9  ( 'times_watched', 'integer', '', '', '' ),
-         10  ( 'last_watched', 'text', '', '', '' ),
-         11  ( 'favorite', 'integer', '', '', '' ),
-         12  ( 'saved_location', 'text', '', '', '' ),
-        )
-        '''
         if ( movie ):
             self.idMovie = movie[0]
             self.title = movie[1]
@@ -73,7 +53,8 @@ class Movie:
             self.saved = movie[12]
             self.cast = movie[13]
             self.studio = movie[14]
-        
+
+
 class Category:
     '''
         Exposes the following:
@@ -84,15 +65,6 @@ class Category:
         - count (integer - number of movies in category)
     '''
     def __init__( self, id=None, title=None, urls=list(), updated="", count=None ):
-        '''
-        self.tables['genres'] = (
-            ( "idGenre", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),
-            ( "genre", "text", "", "", "" ),
-            ( "urls", "blob", "", "", "" ),
-            ( "trailer_urls", "blob", "", "", "" ),
-            ( "updated", "text", "", "", "" ),
-        )
-        '''
         self.id = id
         self.title = title
         # if urls is unicode, evaluate it so it becomes a list type
@@ -117,9 +89,6 @@ class Trailers:
         db = database.Database( language=_ )
         self.query = database.Query()
         self.complete = db.complete
-        #####################################
-        self.start_time = 0
-        #####################################
         newest_genre = self.loadGenres()
         if ( newest_genre ):
             self.refreshGenre( newest_genre )
@@ -139,14 +108,14 @@ class Trailers:
         if ( ( str( self.categories[ genre ].updated ) != str( updated_date ) ) or force_update ):
             try:
                 dialog = xbmcgui.DialogProgress()
-                dialog.create( '%s' % ( _( 66 ), ) )
+                dialog.create( '%s' % ( _( 42 ), ) )
                 idGenre = self.categories[ genre ].id
                 title = self.categories[ genre ].title
                 self.records = database.Records()
                 record = self.records.fetchone( self.query[ 'genre_by_genre_id' ], ( idGenre, ) )
-                url = eval( record[ 2 ] )[ 0 ]
-                self.removeXML( url )
-                trailer_urls, genre_urls = self.loadGenreInfo( title, url )
+                urls = eval( record[ 2 ] )
+                self.removeXML( urls )
+                trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
                 idMovie_list = self.records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
                 total_cnt = len( trailer_urls )
                 pct_sect = float( 100 ) / total_cnt
@@ -161,10 +130,10 @@ class Trailers:
                         try:
                             i = idMovie_list.index( record )
                             idMovie_list.pop( i )
-                        except: pass
+                        except:
+                            success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                 for record in idMovie_list:
-                    params = ( idGenre, record[ 0 ], )
-                    success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), params )
+                    success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
                 success = self.records.update( 'genres', ( 'urls', 'trailer_urls', "updated" ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
                 success = self.records.commit()
                 self.categories[ genre ] = Category( id=idGenre, title=title, urls=genre_urls, updated=updated_date )
@@ -195,9 +164,6 @@ class Trailers:
                 return newest_id
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
-                #####################################
-                self.start_time = time.localtime()
-                #####################################
                 dialog.create( '%s   (%s)' % ( _( 66 ), _( 158 + ( not load_all ) ), ) )
                 
                 updated_date = datetime.date.today()
@@ -259,12 +225,6 @@ class Trailers:
                 dialog.close()
                 self.records.close()
                 if ( load_all ): self.fullUpdate()
-                else: 
-                    #########################################
-                    end_time = time.localtime()
-                    seconds = time.mktime(end_time) - time.mktime( self.start_time )
-                    print "*** (MINIMAL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
-                    #########################################
 
         except:
             dialog.close()
@@ -348,20 +308,10 @@ class Trailers:
             return [], []
 
     def fullUpdate( self ):
-        #####################################
-        if ( not self.start_time ): self.start_time = time.localtime()
-        #####################################
-        
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create( '%s   (%s)' % ( _( 70 ), _( 158 ), ) )
         full = self.getMovieList( self.query[ 'incomplete_movies' ], full = True )
         if ( full ): self.complete = self.updateRecord( 'version', ( 'complete', ), ( full, 1, ), 'idVersion' )
-
-        #########################################
-        end_time = time.localtime()
-        seconds = time.mktime(end_time) - time.mktime( self.start_time )
-        print "*** (FULL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
-        #########################################
 
     def setDefaultMovieInfo( self, movie ):
         self.idMovie = movie[ 0 ]

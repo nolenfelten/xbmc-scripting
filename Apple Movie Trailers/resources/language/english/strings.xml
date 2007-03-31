@@ -6,10 +6,10 @@
     <!-- Dialog Messages -->
     <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
     <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
-    <string id="42">Save movie info to database...</string>
+    <string id="42">Refreshing genre information...</string>
     <string id="43">committing records to database...</string>
     <string id="44">Database creation...</string>
-    <string id="45">Converting record</string>
+    <!--string id="45">Converting record</string-->
     <string id="46">database conversion failed...</string>
     <string id="47">Current table</string>
     <string id="48">Fetching records...</string>
@@ -18,7 +18,7 @@
     <string id="51">Importing modules &amp; initializing...</string>
     <string id="52">module:</string>
     <string id="53">Database version incompatable!</string>
-    <string id="54">You must update all genre and movie information.</string>
+    <!--string id="54">You must update all genre and movie information.</string-->
     <string id="55">Loading skin and creating gui...</string>
     <string id="56">Copying movie...</string>
     <string id="57">There was an error setting up your GUI.</string>
@@ -26,13 +26,13 @@
     <string id="59">Database file invalid...</string>
     <string id="60">Your database file is incompatible with this version|of AMT. It must be regenerated.</string>
     <string id="61">Updating all genre and movie information...</string>
-    <string id="62">Are you sure you want to do this?</string>
-    <string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string>
+    <!--string id="62">Are you sure you want to do this?</string-->
+    <!--string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string-->
     <string id="64">Error</string>
-    <string id="65">Unable to properly update AMT.pk</string>
+    <!--string id="65">Unable to properly update AMT.pk</string-->
     <string id="66">Fetching genre information...</string>
     <string id="67">Please wait a moment.</string>
-    <string id="68">Fetching:</string>
+    <!--string id="68">Fetching:</string-->
     <string id="69">Error retrieving information for one or more genres.</string>
     <string id="70">Fetching movie information...</string>
     <string id="71">Genre:</string>
@@ -48,9 +48,9 @@
     <string id="81">All the required modules could not be found!</string>
     <string id="82">Are you sure you want to delete</string>
     <string id="83">Loading database...</string>
-    <string id="84">Saving database...</string>
+    <!--string id="84">Saving database...</string-->
     <string id="85">Executing query...</string>
-    <string id="86">The operation was cancelled.</string>
+    <!--string id="86">The operation was canceled.</string-->
     <string id="87">Current genre</string>
     <string id="88">Current trailer</string>
     <string id="89">There was an error creating the database.</string>
@@ -110,7 +110,7 @@
 
     <!-- Settings restart required message -->
     <string id="240">Some settings changed require a restart to take effect.</string>
-    <string id="241">Would you like to restart %s now?</string>
+    <string id="241">Would you like to restart now?</string>
     
     <!-- Settings buttons -->
     <string id="250">Ok</string>
