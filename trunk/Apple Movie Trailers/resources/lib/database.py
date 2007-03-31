@@ -302,6 +302,7 @@ class Query( dict ):
         self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls, updated FROM genres ORDER BY genre;"
         self[ "genre_by_genre_id" ]		= "SELECT * FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
+        self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
         
         self[ "movie_exists" ]				= "SELECT idMovie FROM movies WHERE upper(title)=?;"
         self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE upper(actor)=?;"
