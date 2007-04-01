@@ -39,7 +39,6 @@ class Movie:
             self.idMovie = movie[0]
             self.title = movie[1]
             self.trailer_urls = eval( movie[3] )
-            #self.genre = movie[]
             self.poster = os.path.join( base_cache_path, movie[4] )
             self.thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) )
             self.thumbnail_watched = os.path.join( base_cache_path, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) )
@@ -64,14 +63,10 @@ class Category:
         - updated (date - last date updated)
         - count (integer - number of movies in category)
     '''
-    def __init__( self, id=None, title=None, urls=list(), updated="", count=None ):
+    def __init__( self, id=None, title=None, updated="", count=None ):#, urls=list()
         self.id = id
         self.title = title
-        # if urls is unicode, evaluate it so it becomes a list type
-        if type( urls ) is type( unicode() ):
-            self.urls = eval( urls )
-        else:
-            self.urls = urls
+        #self.urls = urls
         self.updated = updated
         self.count = count
 
@@ -82,10 +77,10 @@ class Trailers:
         - categories (sorted list of Category() object instances)
         - trailers (sorted list of Movie() object instances)
     '''
-    def __init__( self, genre = 'Exclusives' ):
+    def __init__( self ):
         self.categories = []
-        self.BASEURL = 'http://www.apple.com'
-        self.BASEXML = self.BASEURL + '/moviesxml/h/index.xml'
+        self.base_url = 'http://www.apple.com'
+        self.base_xml = self.base_url + '/moviesxml/h/index.xml'
         db = database.Database( language=_ )
         self.query = database.Query()
         self.complete = db.complete
@@ -94,38 +89,51 @@ class Trailers:
             self.refreshGenre( newest_genre )
         
     def ns( self, text ):
-        BASENS = '{http://www.apple.com/itms/}'
+        base_ns = '{http://www.apple.com/itms/}'
         result = list()
         for each in text.split( '/' ):
-            result += [ BASENS + each ]
+            result += [ base_ns + each ]
         return '/'.join( result )
             
     def refreshGenre( self, genre, force_update=False ):
         """
             Updates the xml for each genre from the site.
         """
+        dialog = xbmcgui.DialogProgress()
+        def _progress_dialog( count=0 ):
+            __line1__ =  '%s: %s' % (_( 87 ), title, )
+            if ( not count ):
+                dialog.create( _( 42 ), __line1__, _( 45 ) )
+            elif ( count > 0 ):
+                percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
+                __line2__ = '%s: (%d of %d)' % ( _( 88 ), count, len( trailer_urls ), )
+                __line3__ = url[ 0 ]
+                dialog.update( percent, __line1__, __line2__, __line3__ )
+                if ( dialog.iscanceled() ): return False
+                else: return True
+            else:
+                dialog.close()
+        
         updated_date = datetime.date.today()
         if ( ( str( self.categories[ genre ].updated ) != str( updated_date ) ) or force_update ):
             try:
-                dialog = xbmcgui.DialogProgress()
-                dialog.create( '%s' % ( _( 42 ), ) )
-                idGenre = self.categories[ genre ].id
                 title = self.categories[ genre ].title
-                self.records = database.Records()
-                record = self.records.fetchone( self.query[ 'genre_by_genre_id' ], ( idGenre, ) )
-                urls = eval( record[ 2 ] )
+                _progress_dialog()
+                idGenre = self.categories[ genre ].id
+                records = database.Records()
+                record = records.fetchone( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
+                urls = eval( record[ 0 ] )
                 self.removeXML( urls )
                 trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
-                idMovie_list = self.records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
-                total_cnt = len( trailer_urls )
-                pct_sect = float( 100 ) / total_cnt
+                idMovie_list = records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
                 for cnt, url in enumerate( trailer_urls ):
-                    dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s' % (_( 87 ), title, ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), url[ 0 ] )
-                    record = self.records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                    ok = _progress_dialog( cnt + 1 )
+                    if ( not ok ): raise
+                    record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
-                        idMovie = self.records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
-                        success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                        success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                     else:
                         #print "EXIST", url
                         try:
@@ -133,16 +141,17 @@ class Trailers:
                             idMovie_list.pop( i )
                         except:
                             #print "ADDED TO G_L_M table", record[ 0 ]
-                            success = self.records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
+                            success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
                 for record in idMovie_list:
                     #print "DELETED", record
-                    success = self.records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
-                success = self.records.update( 'genres', ( 'urls', 'trailer_urls', "updated" ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                success = self.records.commit()
-                self.categories[ genre ] = Category( id=idGenre, title=title, urls=genre_urls, updated=updated_date )
-            except: traceback.print_exc()
-            dialog.close()
-
+                    success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
+                success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated" ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
+                self.categories[ genre ] = Category( id=idGenre, title=title, updated=updated_date )# urls=genre_urls, 
+            except: pass
+            success = records.commit()
+            records.close()
+            _progress_dialog( -1 )
+            
     def removeXML( self, urls ):
         for url in urls:
             try:
@@ -156,23 +165,23 @@ class Trailers:
                 
     def loadGenres( self ):
         try:
-            dialog = xbmcgui.DialogProgress()
             self.records = database.Records()
             genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
             self.categories = []
             if ( genre_list ):
                 for cnt, genre in enumerate( genre_list ):
-                    self.categories += [ Category( id=genre[ 0 ], title=genre[ 1 ], urls=genre[ 2 ], updated=genre[ 3 ] )]
+                    self.categories += [ Category( id=genre[ 0 ], title=genre[ 1 ], updated=genre[ 3 ] )] #, urls=eval( genre[ 2 ] )
                     if ( genre[ 1 ] == "Newest" ):
                         newest_id = cnt
                 return newest_id
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
+                dialog = xbmcgui.DialogProgress()
                 dialog.create( '%s   (%s)' % ( _( 66 ), _( 158 + ( not load_all ) ), ) )
                 
                 updated_date = datetime.date.today()
                 
-                base_xml = fetcher.urlopen( self.BASEXML )
+                base_xml = fetcher.urlopen( self.base_xml )
                 base_xml = ET.fromstring( base_xml )
 
                 view_matrix = {
@@ -216,7 +225,7 @@ class Trailers:
                     trailer_urls, genre_urls = self.loadGenreInfo( genre, genre_dict[genre] )
                     if ( trailer_urls ):
                         idGenre = self.records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date ) )
-                        self.categories += [ Category( id=idGenre, title=genre, urls=genre_urls, updated=updated_date ) ]
+                        self.categories += [ Category( id=idGenre, title=genre, updated=updated_date ) ]#, urls=genre_urls
                         total_urls = len( trailer_urls )
                         for url_cnt, url in enumerate( trailer_urls ):
                             dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '%s: (%d of %d)' % ( _( 88 ), url_cnt + 1, total_urls, ), url[ 0 ] )
@@ -244,7 +253,7 @@ class Trailers:
         """
         try:
             if url[:7] != 'http://':
-                url = self.BASEURL + url
+                url = self.base_url + url
             is_special = genre in [ 'Exclusives', 'Newest' ]
             next_url = url
             first_url = True
@@ -339,7 +348,7 @@ class Trailers:
             self.setDefaultMovieInfo( movie )
             
             if ( self.url[:7] != 'http://' ):
-                url = self.BASEURL + self.url
+                url = self.base_url + self.url
             else:
                 url = self.url
 
@@ -417,7 +426,7 @@ class Trailers:
                         continue
                     urls += [ temp_url ]
                 if len( urls ):
-                    temp_url = self.BASEURL + urls[0]
+                    temp_url = self.base_url + urls[0]
                     element = fetcher.urlopen( temp_url )
                     element = ET.fromstring( element )
                     trailer_urls = list()
@@ -460,8 +469,7 @@ class Trailers:
     def updateRecord( self, table, columns, values, key = 'title' ):
         try:
             records = database.Records()
-            success = records.update( table, columns, values, key )
-            records.commit()
+            success = records.update( table, columns, values, key, True )
             records.close()
         except:
             traceback.print_exc()
@@ -488,7 +496,8 @@ class Trailers:
             self.records = database.Records()
             movie_list = self.records.fetchall( sql, params )
             if ( movie_list ):
-                if ( not full ): self.movies = []
+                if ( not full ):
+                    self.movies = []
                 total_cnt = len( movie_list )
                 pct_sect = float( 100 ) / total_cnt
                 commit = info_missing = False
@@ -497,9 +506,12 @@ class Trailers:
                     if ( info_missing or eval( movie[ 3 ] ) == [] ):
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '' )
                         info_missing = True
-                        if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or self.dialog.iscanceled() or ( cnt + 1 ) == total_cnt ): commit = True
-                    if ( eval( movie[ 3 ] ) == [] ): movie = self.loadMovieInfo( movie )
-                    if ( movie and not full ): self.movies += [Movie( movie )]
+                        if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or self.dialog.iscanceled() or ( cnt + 1 ) == total_cnt ):
+                            commit = True
+                    if ( eval( movie[ 3 ] ) == [] ):
+                        movie = self.loadMovieInfo( movie )
+                    if ( movie and not full ):
+                        self.movies += [Movie( movie )]
                     if ( commit ):
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
                         self.records.commit()
