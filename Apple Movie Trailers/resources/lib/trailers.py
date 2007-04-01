@@ -59,14 +59,12 @@ class Category:
         Exposes the following:
         - id (integer)
         - title (string)
-        - urls (string - url to xml)
         - updated (date - last date updated)
         - count (integer - number of movies in category)
     '''
-    def __init__( self, id=None, title=None, updated="", count=None ):#, urls=list()
+    def __init__( self, id=None, title=None, updated="", count=None ):#, urls=list() - urls (string - url to xml) self.urls = urls
         self.id = id
         self.title = title
-        #self.urls = urls
         self.updated = updated
         self.count = count
 
@@ -127,8 +125,7 @@ class Trailers:
                 trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
                 idMovie_list = records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
                 for cnt, url in enumerate( trailer_urls ):
-                    ok = _progress_dialog( cnt + 1 )
-                    if ( not ok ): raise
+                    if ( not _progress_dialog( cnt + 1 ) ): raise
                     record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
@@ -164,21 +161,42 @@ class Trailers:
                 traceback.print_exc()
                 
     def loadGenres( self ):
+        """
+            Parses the main xml for genres
+        """
+        dialog = xbmcgui.DialogProgress()
+        def _progress_dialog( count=0, trailer_count=0 ):
+            if ( not count ):
+                dialog.create( "%s   (%s)" % ( _( 66 ), _( 158 + ( not load_all ) ), ) )
+            elif ( count > 0 ):
+                percent = int( count * ( float( 100 ) / len( genres ) ) )
+                __line1__ = "%s: %s - (%d of %d)" % (_( 87 ), genre, count, len( genres ), )
+                if ( trailer_count ):
+                    __line2__ = "%s: (%d of %d)" % ( _( 88 ), trailer_count, len( trailer_urls ), )
+                    __line3__ = url[ 0 ]
+                else:
+                    __line2__ = ""
+                    __line3__ = ""
+                dialog.update( percent, __line1__, __line2__, __line3__ )
+                if ( dialog.iscanceled() ): return False
+                else: return True
+            else:
+                dialog.close()
+
         try:
-            self.records = database.Records()
-            genre_list = self.records.fetchall( self.query[ 'genre_table_list' ] )
+            records = database.Records()
+            genre_list = records.fetchall( self.query[ 'genre_table_list' ] )
             self.categories = []
             if ( genre_list ):
                 for cnt, genre in enumerate( genre_list ):
                     self.categories += [ Category( id=genre[ 0 ], title=genre[ 1 ], updated=genre[ 3 ] )] #, urls=eval( genre[ 2 ] )
                     if ( genre[ 1 ] == "Newest" ):
                         newest_id = cnt
+                records.close()
                 return newest_id
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
-                dialog = xbmcgui.DialogProgress()
-                dialog.create( '%s   (%s)' % ( _( 66 ), _( 158 + ( not load_all ) ), ) )
-                
+                _progress_dialog()
                 updated_date = datetime.date.today()
                 
                 base_xml = fetcher.urlopen( self.base_xml )
@@ -218,29 +236,27 @@ class Trailers:
                         genre_dict.update( { name: url } )
                 genres = genre_dict.keys()
                 genres.sort()
-                total_cnt = len( genres )
-                pct_sect = float( 100 ) / total_cnt
                 for cnt, genre in enumerate( genres ):
-                    dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '', '' )
+                    ok = _progress_dialog( cnt + 1, 0 )
                     trailer_urls, genre_urls = self.loadGenreInfo( genre, genre_dict[genre] )
                     if ( trailer_urls ):
-                        idGenre = self.records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date ) )
+                        idGenre = records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date ) )
                         self.categories += [ Category( id=idGenre, title=genre, updated=updated_date ) ]#, urls=genre_urls
-                        total_urls = len( trailer_urls )
                         for url_cnt, url in enumerate( trailer_urls ):
-                            dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: %s - (%d of %d)' % (_( 87 ), genre, cnt + 1, total_cnt, ), '%s: (%d of %d)' % ( _( 88 ), url_cnt + 1, total_urls, ), url[ 0 ] )
-                            record = self.records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                            ok = _progress_dialog( cnt + 1, url_cnt + 1 )
+                            record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                idMovie = self.records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                                idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
                             else: idMovie = record[ 0 ]
-                            success = self.records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
-                        success = self.records.commit()
-                dialog.close()
-                self.records.close()
+                            success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                        success = records.commit()
+                records.close()
+                _progress_dialog( -1 )
                 if ( load_all ): self.fullUpdate()
 
         except:
-            dialog.close()
+            records.close()
+            _progress_dialog( -1 )
             traceback.print_exc()
         return False
         
