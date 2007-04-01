@@ -9,7 +9,7 @@
     <string id="42">Refreshing genre information...</string>
     <string id="43">committing records to database...</string>
     <string id="44">Database creation...</string>
-    <!--string id="45">Converting record</string-->
+    <string id="45">Removing old genre xml files...</string>
     <string id="46">database conversion failed...</string>
     <string id="47">Current table</string>
     <string id="48">Fetching records...</string>

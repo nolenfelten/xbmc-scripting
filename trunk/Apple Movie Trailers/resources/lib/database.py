@@ -1,10 +1,14 @@
+"""
+Database module
+"""
+
 import sys
 import os
 import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
 import utilities
-import traceback
+#import traceback
 
 if ( not os.path.isdir( utilities.BASE_DATA_PATH ) ):
     os.makedirs( utilities.BASE_DATA_PATH )
@@ -72,7 +76,7 @@ class Database:
                 if ( succeeded ): return ( sys.modules["__main__"].__version__, )
                 else: return version
             except:
-                traceback.print_exc()
+                #traceback.print_exc()
                 dialog.close()
                 xbmcgui.Dialog().ok( self._( 53 ), self._( 46 ) )
         return version
@@ -300,7 +304,7 @@ class Query( dict ):
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
         self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls, updated FROM genres ORDER BY genre;"
-        self[ "genre_by_genre_id" ]		= "SELECT * FROM genres WHERE idGenre=?;"
+        self[ "genre_urls_by_genre_id" ]	= "SELECT urls FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
         
@@ -310,28 +314,3 @@ class Query( dict ):
 
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
-
-
-
-"""
-SELECT movies.*, actors.actor, studios.studio FROM movies, actors, actor_link_movie, studios, studio_link_movie WHERE movies.idMovie = ? AND actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie = movies.idmovie AND studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie = movies.idMovie;
-SELECT movies.*, actors.actor FROM movies, genres, genre_link_movie, actors, actor_link_movie WHERE genres.idGenre = ? AND genre_link_movie.idGenre=genres.idGenre AND movies.idMovie=genre_link_movie.idMovie and actor_link_movie.idActor = actors.idActor and actor_link_movie.idMovie = movies.idMovie order BY movies.title;
-select movies.* from movies, genres, genre_link_movie
-where genres.idGenre = 11 and genre_link_movie.idGenre=genres.idGenre
-and movies.idMovie = genre_link_movie.idMovie order by movies.title;
-
-select genre_link_movie.idMovie,
- movies.title, movies.url
- from genre_link_movie, movies, genres
- where genre_link_movie.idMovie = movies.idMovie and
- genre_link_movie.idGenre = genres.idGenre and movies.trailer_urls is Null
- order by movies.title;
-        
-select actors.actor from actors, actor_link_movie, movies
- where actor_link_movie.idMovie = movies.idMovie
- and actors.idActor = actor_link_movie.idActor
- and movies.idMovie=100 order by actors.actor;
-        
-        
- """
-        
