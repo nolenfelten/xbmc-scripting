@@ -587,32 +587,26 @@ class GUIBuilder:
                 # fix Control.HasFocus(id) visibility condition and Control.IsVisible(id) visibility condition
                 for item in items:
                     visibleChanged = True
-                    try:
-                        if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ] == int( item ) ):
-                            actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
-                            visible = visible.replace( "##", str( actualId ), 1 )
-                    except: pass
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ] == int( item ) ):
+                        actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                        visible = visible.replace( "##", str( actualId ), 1 )
                 items = re.findall( pattern[ cnt ], enable )
                 enable = re.sub( pattern[ cnt ], rvalue[ cnt ], enable )
                 # fix Control.HasFocus(id) enabled condition and Control.IsVisible(id) enabled condition
                 for item in items:
                     enableChanged = True
-                    try:
-                        if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
-                            actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
-                            enable = enable.replace( "##", str( actualId ), 1 )
-                    except: pass
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                        actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                        enable = enable.replace( "##", str( actualId ), 1 )
                 # fix Control.HasFocus(id) animation condition and Control.IsVisible(id) animation condition
                 for acnt in range( len( self.win.controls[ key ][ "animation" ] ) ):
                     items = re.findall( pattern[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
                     anim_attr = re.sub( pattern[ cnt ], rvalue[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
                     for item in items:
                         animChanged = True
-                        try:
-                            if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
-                                actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
-                                anim_attr = anim_attr.replace( "##", str( actualId ), 1 )
-                        except: pass
+                        if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                            actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                            anim_attr = anim_attr.replace( "##", str( actualId ), 1 )
                     if ( items ): final_anim += [ ( self.win.controls[ key ][ "animation" ][ acnt ][ 0 ], anim_attr, ) ]
             
             # set the controls new visible condition
