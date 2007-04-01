@@ -314,7 +314,7 @@
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Up Arrow</description>
-			<posx>532</posx>
+			<posx>432</posx>
 			<posy>100</posy>
 			<width>12</width>
 			<height>16</height>
@@ -325,7 +325,7 @@
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Middle</description>
-			<posx>532</posx>
+			<posx>432</posx>
 			<posy>116</posy>
 			<width>12</width>
 			<height>201</height>
@@ -336,7 +336,7 @@
 		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Trailer List Scrollbar Down Arrow</description>
-			<posx>532</posx>
+			<posx>432</posx>
 			<posy>317</posy>
 			<width>12</width>
 			<height>16</height>
@@ -349,7 +349,7 @@
 		<control type="button" id="900">
 			<description>Trailer List Scrollbar Position Indicator</description>
 			<label>-</label>
-			<posx>532</posx>
+			<posx>432</posx>
 			<posy>122</posy>
 			<width>12</width>
 			<height>16</height>
@@ -375,7 +375,7 @@
 			<font>font13</font>
 			<posx>50</posx>
 			<posy>100</posy>
-			<width>480</width>
+			<width>380</width>
 			<height>260</height>
 			<textcolor>00FFFFFF</textcolor>
 			<selectedcolor>FFFFFF00</selectedcolor>
@@ -412,7 +412,7 @@
 			<font>font13</font>
 			<posx>50</posx>
 			<posy>100</posy>
-			<width>480</width>
+			<width>380</width>
 			<height>260</height>
 			<textcolor>FFFFFFFF</textcolor>
 			<selectedcolor>FFFFFF00</selectedcolor>
@@ -442,7 +442,7 @@
 		<control type="label" id="1">
 			<description>Trailer List Count Label</description>
 			<width>100</width>
-			<posx>544</posx>
+			<posx>444</posx>
 			<posy>334</posy>
 			<align>right</align>
 			<label>-</label>
@@ -589,8 +589,8 @@
 		<control type="label" id="1">
 			<description>Category List Count Label</description>
 			<width>100</width>
-			<posx>672</posx>
-			<posy>464</posy>
+			<posx>670</posx>
+			<posy>466</posy>
 			<align>right</align>
 			<label>-</label>
 			<font>font10</font>
@@ -603,10 +603,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="200">
 			<description>Poster Backdrop</description>
-			<posx>523</posx>
-			<posy>100</posy>
-			<width>179</width>
-			<height>248</height>
+			<posx>428</posx>
+			<posy>98</posy>
+			<width>264</width>
+			<height>389</height>
 			<texture>\poster_backdrop.png</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -615,10 +615,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="201">
 			<description>Trailer Poster</description>
-			<posx>525</posx>
-			<posy>102</posy>
-			<width>175</width>
-			<height>244</height>
+			<posx>430</posx>
+			<posy>100</posy>
+			<width>261</width>
+			<height>385</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -627,10 +627,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="202">
 			<description>Trailer Rating</description>
-			<posx>550</posx>
-			<posy>325</posy>
-			<width>66</width>
-			<height>15</height>
+			<posx>450</posx>
+			<posy>450</posy>
+			<width>132</width>
+			<height>30</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -639,10 +639,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
-			<posx>650</posx>
-			<posy>325</posy>
-			<width>16</width>
-			<height>16</height>
+			<posx>628</posx>
+			<posy>455</posy>
+			<width>24</width>
+			<height>24</height>
 			<texture>\overlay-favorite.png</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -651,10 +651,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="204">
 			<description>Trailer Watched Overlay</description>
-			<posx>650</posx>
-			<posy>325</posy>
-			<width>16</width>
-			<height>16</height>
+			<posx>628</posx>
+			<posy>455</posy>
+			<width>24</width>
+			<height>24</height>
 			<texture>\overlay-watched.png</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -663,10 +663,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="205">
 			<description>Trailer Saved Overlay</description>
-			<posx>645</posx>
-			<posy>325</posy>
-			<width>16</width>
-			<height>16</height>
+			<posx>628</posx>
+			<posy>455</posy>
+			<width>24</width>
+			<height>24</height>
 			<texture>\overlay-saved.png</texture>
 			<aspectratio>keep</aspectratio>
 			<visible allowhiddenfocus="false">Control.IsVisible(100)</visible> 
@@ -740,8 +740,8 @@
 			<description>Trailer Plot</description>
 			<posx>50</posx>
 			<posy>365</posy>
-			<width>620</width>
-			<height>140</height>
+			<width>396</width>
+			<height>135</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<onup>215</onup>
@@ -758,7 +758,7 @@
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Cast List Scrollbar Up Arrow</description>
-			<posx>657</posx>
+			<posx>432</posx>
 			<posy>373</posy>
 			<width>12</width>
 			<height>16</height>
@@ -769,7 +769,7 @@
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Cast List Scrollbar Middle</description>
-			<posx>657</posx>
+			<posx>432</posx>
 			<posy>389</posy>
 			<width>12</width>
 			<height>71</height>
@@ -780,7 +780,7 @@
 		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
 		<control type="image" id="1">
 			<description>Cast List Scrollbar Down Arrow</description>
-			<posx>657</posx>
+			<posx>432</posx>
 			<posy>460</posy>
 			<width>12</width>
 			<height>16</height>
@@ -792,7 +792,7 @@
 		<control type="button" id="95">
 			<description>Cast List Scrollbar Position Indicator</description>
 			<label>-</label>
-			<posx>657</posx>
+			<posx>432</posx>
 			<posy>419</posy>
 			<width>12</width>
 			<height>16</height>
@@ -817,7 +817,7 @@
 			<description>Cast List Backdrop</description>
 			<posx>50</posx>
 			<posy>373</posy>
-			<width>605</width>
+			<width>380</width>
 			<height>135</height>
 			<font>font12</font>
 			<textcolor>00FFFFFF</textcolor>
@@ -844,7 +844,7 @@
 			<description>Cast List</description>
 			<posx>50</posx>
 			<posy>373</posy>
-			<width>605</width>
+			<width>380</width>
 			<height>135</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>

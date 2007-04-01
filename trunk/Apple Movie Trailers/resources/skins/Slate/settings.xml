@@ -85,10 +85,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>90</onup>
+			<onleft>200</onleft>
+			<onright>200</onright>
+			<onup>100</onup>
 			<ondown>20</ondown>
+			<visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50) | Control.HasFocus(60) | Control.HasFocus(70) | Control.HasFocus(80) | Control.HasFocus(90)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -106,10 +107,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>200</onup>
-			<ondown>20</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -127,10 +125,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>10</onup>
 			<ondown>30</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -148,10 +147,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>10</onup>
-			<ondown>30</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -169,10 +165,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>20</onup>
 			<ondown>40</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -190,10 +187,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>20</onup>
-			<ondown>40</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -212,10 +206,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>30</onup>
 			<ondown>50</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -234,10 +229,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>30</onup>
-			<ondown>50</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -255,10 +247,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>40</onup>
 			<ondown>60</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -276,10 +269,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>40</onup>
-			<ondown>60</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -297,10 +287,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>50</onup>
 			<ondown>70</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -318,10 +309,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>50</onup>
-			<ondown>200</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -339,10 +327,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>60</onup>
 			<ondown>80</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -360,10 +349,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
-			<onup>50</onup>
-			<ondown>200</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -381,10 +367,11 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>100</onleft>
-			<onright>100</onright>
+			<onleft>200</onleft>
+			<onright>200</onright>
 			<onup>70</onup>
 			<ondown>90</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -402,10 +389,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>50</onup>
-			<ondown>200</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -427,6 +411,7 @@
 			<onright>200</onright>
 			<onup>80</onup>
 			<ondown>100</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -444,10 +429,7 @@
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>-</texturefocus>
 			<texturenofocus>-</texturenofocus>
-			<onleft>150</onleft>
-			<onright>100</onright>
-			<onup>50</onup>
-			<ondown>200</ondown>
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="100">
@@ -462,7 +444,7 @@
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
-			<texturefocus>\list-focus.png</texturefocus>
+			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
             <disabledcolor>60d0d0d0</disabledcolor>
             <shadowcolor>ff000000</shadowcolor>
@@ -484,8 +466,8 @@
 			<label> </label>
 			<font>font13</font>
 			<textcolor>00ffffff</textcolor>
-            <texturecheckmark>\settings-check-box.png</texturecheckmark>
-            <texturecheckmarknofocus>\settings-check-boxNF.png</texturecheckmarknofocus>
+            <texturecheckmark>rodiobutton_focus.png</texturecheckmark>
+            <texturecheckmarknofocus>rodiobutton_nofocus.png</texturecheckmarknofocus>
             <markwidth>16</markwidth>
             <markheight>20</markheight>
             <disabledcolor>00d0d0d0</disabledcolor>
@@ -495,7 +477,7 @@
 
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="100">
+		<control type="button" id="200">
 			<description>Ok Button</description>
 			<posx>340</posx>
 			<posy>60</posy>
@@ -511,12 +493,12 @@
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>210</onup>
-			<ondown>150</ondown>
+			<onup>230</onup>
+			<ondown>210</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="150">
+		<control type="button" id="210">
 			<description>Cancel Button</description>
 			<posx>340</posx>
 			<posy>95</posy>
@@ -532,12 +514,12 @@
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>100</onup>
-			<ondown>200</ondown>
+			<onup>200</onup>
+			<ondown>220</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="200">
+		<control type="button" id="220">
 			<description>Update Button</description>
 			<posx>340</posx>
 			<posy>130</posy>
@@ -554,12 +536,12 @@
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>150</onup>
-			<ondown>210</ondown>
+			<onup>210</onup>
+			<ondown>230</ondown>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="button" id="210">
+		<control type="button" id="230">
 			<description>Credits Button</description>
 			<posx>340</posx>
 			<posy>165</posy>
@@ -576,150 +558,8 @@
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<onleft>10</onleft>
 			<onright>10</onright>
-			<onup>200</onup>
-			<ondown>100</ondown>
+			<onup>220</onup>
+			<ondown>200</ondown>
 		</control>
-
-
-		<!-- popup selection dialog -->
-		
-		<!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="600">
-			<description>Popup Image Top</description>
-			<posx>50</posx>
-			<posy>40</posy>
-			<width>300</width>
-			<height>290</height>
-			<texture>-</texture>
-			<visible>false</visible>
-		</control>
-		
-        <!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="601">
-			<description>Popup Image Middle</description>
-			<posx>50</posx>
-			<posy>40</posy>
-			<width>300</width>
-			<height>290</height>
-			<texture>\popup-panel.png</texture>
-			<visible>false</visible>
-		</control>
-		
-        <!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="602">
-			<description>Popup Image Bottom</description>
-			<posx>50</posx>
-			<posy>40</posy>
-			<width>300</width>
-			<height>290</height>
-			<texture>-</texture>
-			<visible>false</visible>
-		</control>
-
-
-        <!-- skin selection controls -->
-		
-        <!-- ** Required ** Do not change <description> -->
-		<control type="label" id="500">
-			<description>Popup Label</description>
-			<posx>65</posx>
-			<posy>48</posy>
-			<width>150</width>
-			<align>left</align>
-			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
-			<label>214</label>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="501">
-			<description>Popup Thumb</description>
-			<posx>220</posx>
-			<posy>100</posy>
-			<width>128</width>
-			<height>72</height>
-			<texture>-</texture>
-			<visible>false</visible>
-			<aspectratio>keep</aspectratio>
-		</control>
-		
-		<!-- ** Required ** Do not change <description> -->
-		<control type="label" id="502">
-			<description>Popup Warning Label</description>
-			<posx>220</posx>
-			<posy>172</posy>
-			<width>128</width>
-			<height>20</height>
-			<align>center</align>
-			<font>font10</font>
-			<textcolor>DDced8da</textcolor>
-			<label>212</label>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="503">
-			<description>Popup List</description>
-			<posx>63</posx>
-			<posy>100</posy>
-			<width>150</width>
-			<height>170</height>
-			<spinwidth>18</spinwidth>
-			<spinheight>16</spinheight>
-			<spinposx>419</spinposx>
-			<spinposy>404</spinposy>
-			<spincolor>ffffffff</spincolor>
-			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
-			<texturenofocus>\list-nofocus.png</texturenofocus>
-			<image>-</image>
-			<textureheight>20</textureheight>
-			<itemwidth>0</itemwidth>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<suffix>|</suffix>
-			<textxoff>0</textxoff>
-			<textxoff2>0</textxoff2>
-			<aligny>center</aligny>
-			<visible>false</visible>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="list" id="504">
-			<description>Popup List2</description>
-			<posx>63</posx>
-			<posy>100</posy>
-			<width>275</width>
-			<height>234</height>
-			<spinwidth>18</spinwidth>
-			<spinheight>16</spinheight>
-			<spinposx>419</spinposx>
-			<spinposy>404</spinposy>
-			<spincolor>ffffffff</spincolor>
-			<spinfont>font10</spinfont>
-			<textureup>\scroll-up.png</textureup>
-			<texturedown>\scroll-down.png</texturedown>
-			<textureupfocus>\scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
-			<texturefocus>\list-focus.png</texturefocus>
-			<texturenofocus>\list-nofocus.png</texturenofocus>
-			<image>-</image>
-			<textureheight>24</textureheight>
-            <spacebetweenitems>2</spacebetweenitems>
-			<itemwidth>0</itemwidth>
-			<font>font10</font>
-			<textcolor>ffffffff</textcolor>
-			<suffix>|</suffix>
-			<textxoff>0</textxoff>
-			<textxoff2>0</textxoff2>
-			<aligny>center</aligny>
-			<visible>false</visible>
-		</control>
-
 	</controls>
 </window>
