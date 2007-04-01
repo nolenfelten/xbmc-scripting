@@ -89,7 +89,7 @@
 			<onright>200</onright>
 			<onup>100</onup>
 			<ondown>20</ondown>
-			<visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50) | Control.HasFocus(60) | Control.HasFocus(70) | Control.HasFocus(80) | Control.HasFocus(90)</visible> 
+			<visible allowhiddenfocus="true">Control.HasFocus(200) | Control.HasFocus(210) | Control.HasFocus(220) | Control.HasFocus(230) | Control.HasFocus(10) | Control.HasFocus(20) | Control.HasFocus(30) | Control.HasFocus(40) | Control.HasFocus(50) | Control.HasFocus(60) | Control.HasFocus(70) | Control.HasFocus(80) | Control.HasFocus(90) | Control.HasFocus(100)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -441,13 +441,11 @@
 			<align>left</align>
 			<aligny>center</aligny>
 			<label>210</label>
-			<font>font13</font>
+			<font>font12</font>
 			<textcolor>ffffffff</textcolor>
 			<textoffsetx>10</textoffsetx>
 			<texturefocus>\input-focus.png</texturefocus>
 			<texturenofocus>-</texturenofocus>
-            <disabledcolor>60d0d0d0</disabledcolor>
-            <shadowcolor>ff000000</shadowcolor>
 			<onleft>200</onleft>
 			<onright>200</onright>
 			<onup>90</onup>
@@ -459,7 +457,7 @@
 		<control type="checkmark" id="101">
 			<description>Setting10 Value</description>
 			<posx>295</posx>
-			<posy>363</posy>
+			<posy>353</posy>
 			<width>50</width>
 			<height>30</height>
 			<align>left</align>
