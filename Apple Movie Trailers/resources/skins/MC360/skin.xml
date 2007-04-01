@@ -190,7 +190,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="10">
 			<description>Shortcut1 Button</description>
-			<label>200</label>
+			<label>-</label>
 			<posy>90</posy>
 			<width>120</width>
 			<height>33</height>
@@ -210,7 +210,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="20">
 			<description>Shortcut2 Button</description>
-			<label>201</label>
+			<label>-</label>
 			<posy>120</posy>
 			<width>120</width>
 			<height>33</height>
@@ -230,7 +230,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="30">
 			<description>Shortcut3 Button</description>
-			<label>217</label>
+			<label>-</label>
 			<posy>150</posy>
 			<width>120</width>
 			<height>33</height>
@@ -250,7 +250,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Genre Button</description>
-			<label>202</label>
+			<label>103</label>
 			<posy>180</posy>
 			<width>120</width>
 			<height>33</height>
@@ -270,7 +270,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
 			<description>Studio Button</description>
-			<label>222</label>
+			<label>104</label>
 			<posy>210</posy>
 			<width>120</width>
 			<height>33</height>
@@ -290,7 +290,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Actor Button</description>
-			<label>224</label>
+			<label>105</label>
 			<posy>240</posy>
 			<width>120</width>
 			<height>33</height>
@@ -310,7 +310,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
 			<description>Search Button</description>
-			<label>203</label>
+			<label>106</label>
 			<posy>270</posy>
 			<width>120</width>
 			<height>33</height>
@@ -330,7 +330,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="70">
 			<description>Settings Button</description>
-			<label>204</label>
+			<label>107</label>
 			<posy>300</posy>
 			<width>120</width>
 			<height>33</height>
@@ -350,7 +350,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="80">
 			<description>Optional Button</description>
-			<label>209</label>
+			<label>155</label>
 			<posy>330</posy>
 			<width>120</width>
 			<height>33</height>
@@ -370,7 +370,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="210">
 			<description>Plot Button</description>
-			<label>215</label>
+			<label>156</label>
 			<posy>360</posy>
 			<width>120</width>
 			<height>33</height>
@@ -391,7 +391,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="211">
 			<description>Cast Button</description>
-			<label>216</label>
+			<label>157</label>
 			<posy>360</posy>
 			<width>120</width>
 			<height>33</height>
