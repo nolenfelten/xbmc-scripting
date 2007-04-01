@@ -92,7 +92,7 @@ class GUI( xbmcgui.Window ):
         self.params = None
         self.display_cast = False
         ##self.dummy()
-        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
+        ##self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         self.controller_action = utilities.setControllerAction()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
