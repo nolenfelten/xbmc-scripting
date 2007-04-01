@@ -435,7 +435,7 @@
 		<control type="button" id="100">
 			<description>Setting10 Button</description>
 			<posx>-20</posx>
-			<posy>60</posy>
+			<posy>348</posy>
 			<width>350</width>
 			<height>30</height>
 			<align>left</align>
@@ -452,14 +452,14 @@
 			<onright>200</onright>
 			<onup>90</onup>
 			<ondown>10</ondown>
-            <visible allowhiddenfocus="true">Control.HasFocus(100)</visible> 
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="checkmark" id="101">
 			<description>Setting10 Value</description>
 			<posx>295</posx>
-			<posy>65</posy>
+			<posy>363</posy>
 			<width>50</width>
 			<height>30</height>
 			<align>left</align>
@@ -472,7 +472,7 @@
             <markheight>20</markheight>
             <disabledcolor>00d0d0d0</disabledcolor>
             <shadowcolor>00000000</shadowcolor>
-            <visible allowhiddenfocus="true">Control.IsVisible(100)</visible> 
+            <visible allowhiddenfocus="true">Control.IsVisible(10)</visible> 
 		</control>
 
 
