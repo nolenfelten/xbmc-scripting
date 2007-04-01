@@ -86,7 +86,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>303</label>
+			<label>201</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -126,7 +126,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>300</label>
+			<label>202</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -166,7 +166,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>301</label>
+			<label>203</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -206,7 +206,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>302</label>
+			<label>204</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -246,7 +246,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>305</label>
+			<label>205</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -286,7 +286,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>304</label>
+			<label>206</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -326,7 +326,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>306</label>
+			<label>207</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -365,7 +365,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>307</label>
+			<label>208</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -404,7 +404,7 @@
 			<height>30</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<label>308</label>
+			<label>209</label>
 			<font>font13</font>
 			<textcolor>FF000000</textcolor>
 			<textoffsetx>10</textoffsetx>
@@ -489,7 +489,7 @@
 			<height>50</height>
 			<font>font12</font>
 			<align>center</align>
-			<label>210</label>
+			<label>250</label>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
 			<texturefocus>guide-media-button-focus.png</texturefocus>
@@ -508,7 +508,7 @@
 			<height>50</height>
 			<font>font12</font>
 			<align>center</align>
-			<label>211</label>
+			<label>251</label>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
 			<texturefocus>guide-media-button-focus.png</texturefocus>
@@ -526,7 +526,7 @@
 			<width>90</width>
 			<height>50</height>
 			<font>font12</font>
-			<label>208</label>
+			<label>252</label>
 			<align>center</align>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
@@ -546,7 +546,7 @@
 			<height>50</height>
 			<font>font12</font>
 			<align>center</align>
-			<label>209</label>
+			<label>253</label>
 			<textcolor>FF000000</textcolor>
 			<textoffsety>7</textoffsety>
 			<texturefocus>guide-media-button-focus.png</texturefocus>

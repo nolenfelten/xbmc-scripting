@@ -20,6 +20,7 @@
 	
 -->
 
+    <useincludes>true</useincludes>
 	<defaultcontrol always="true">10</defaultcontrol>
 	<resolution>PAL</resolution>
 
@@ -149,7 +150,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Genre Button</description>
-			<label>202</label>
+			<label>103</label>
 			<posx>50</posx>
 			<posy>264</posy>
 			<texturenofocus>-</texturenofocus>
@@ -165,7 +166,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
 			<description>Studio Button</description>
-			<label>222</label>
+			<label>104</label>
 			<posx>50</posx>
 			<posy>301</posy>
 			<texturenofocus>-</texturenofocus>
@@ -181,7 +182,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Actor Button</description>
-			<label>224</label>
+			<label>105</label>
 			<posx>50</posx>
 			<posy>338</posy>
 			<texturenofocus>-</texturenofocus>
@@ -197,7 +198,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
 			<description>Search Button</description>
-			<label>203</label>
+			<label>106</label>
 			<posx>50</posx>
 			<posy>408</posy>
 			<texturenofocus>-</texturenofocus>
@@ -213,7 +214,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="70">
 			<description>Settings Button</description>
-			<label>204</label>
+			<label>107</label>
 			<posx>50</posx>
 			<posy>445</posy>
 			<texturenofocus>-</texturenofocus>
@@ -229,7 +230,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="80">
 			<description>Optional Button</description>
-			<label>209</label>
+			<label>155</label>
 			<posx>50</posx>
 			<posy>482</posy>
 			<texturenofocus>-</texturenofocus>

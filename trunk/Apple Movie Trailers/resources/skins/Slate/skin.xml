@@ -203,7 +203,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="60">
 			<description>Search Button</description>
-			<label>203</label>
+			<label>106</label>
 			<posx>480</posx>
 			<posy>49</posy>
 			<width>139</width>
@@ -227,7 +227,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="45">
 			<description>Studio Button</description>
-			<label>222</label>
+			<label>104</label>
 			<posx>62</posx>
 			<posy>499</posy>
 			<width>139</width>
@@ -250,7 +250,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="50">
 			<description>Actor Button</description>
-			<label>224</label>
+			<label>105</label>
 			<posx>200</posx>
 			<posy>499</posy>
 			<width>139</width>
@@ -273,7 +273,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="40">
 			<description>Genre Button</description>
-			<label>202</label>
+			<label>103</label>
 			<posx>340</posx>
 			<posy>499</posy>
 			<width>139</width>
@@ -296,7 +296,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="70">
 			<description>Settings Button</description>
-			<label>204</label>
+			<label>107</label>
 			<posx>480</posx>
 			<posy>499</posy>
 			<width>139</width>
