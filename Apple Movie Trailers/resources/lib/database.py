@@ -50,7 +50,22 @@ class Database:
         return lastrowid
 
     def convertDatabase( self, version ):
-        def updateTable():
+        dialog = xbmcgui.DialogProgress()
+        def _progress_dialog( count=0, total_count=None, movie=None ):
+            __line1__ = self._( 63 )
+            if ( not count ):
+                dialog.create( self._( 59 ), __line1__ )
+            elif ( count > 0 ):
+                percent = int( count * ( float( 100 ) / total_count ) )
+                __line2__ = "%s: (%d of %d)" % ( self._( 88 ), count, total_count, )
+                __line3__ = movie[ 1 ]
+                dialog.update( percent, __line1__, __line2__, __line3__ )
+                if ( dialog.iscanceled() ): return False
+                else: return True
+            else:
+                dialog.close()
+
+        def _update_table():
             try:
                 sql = "ALTER TABLE genres ADD updated text"
                 records = Records()
@@ -59,27 +74,47 @@ class Database:
                 return True
             except: return False
 
-        def updateVersion():
+        def _update_records():
+            try:
+                sql = "SELECT idMovie, title, trailer_urls FROM movies WHERE trailer_urls='[]' ORDER BY title;"
+                records = Records()
+                movies = records.fetchall( sql )
+                total_count = len( movies )
+                for count, movie in enumerate( movies ):
+                    ok = _progress_dialog( count + 1, total_count, movie )
+                    success = records.update( "movies", ( "trailer_urls", ), ( None, movie[ 0 ], ), "idMovie" )
+                    if ( not success ): raise
+                    if ( ( float( count + 1) / 100 == int( ( count + 1 ) / 100) ) or ( ( count + 1 ) == total_count ) ):
+                        records.commit()
+                records.close()
+                return True
+            except: 
+                return False
+        
+        def _update_version():
             records = Records()
             success = records.update( "version", ( "version", ), ( sys.modules[ "__main__" ].__version__, 1, ), "idVersion", True )
             records.close()
             return success
         
-        if ( version == "pre-0.97.1" ):
+        if ( version == "pre-0.97.1" or version == "pre-0.97.2" ):
             try:
-                dialog = xbmcgui.DialogProgress()
-                dialog.create( self._( 53 ) )
-                succeeded = updateTable()
+                _progress_dialog()
+                if ( version == "pre-0.97.1" ):
+                    succeeded = _update_table()
+                succeeded = _update_records()
                 if ( succeeded ):
-                    succeeded = updateVersion()
-                dialog.close()
-                if ( succeeded ): return ( sys.modules["__main__"].__version__, )
-                else: return version
+                    succeeded = _update_version()
+                    _progress_dialog( -1 )
+                    if ( succeeded ):
+                        return ( sys.modules["__main__"].__version__, )
+                    else: raise#return version
             except:
-                #traceback.print_exc()
-                dialog.close()
-                xbmcgui.Dialog().ok( self._( 53 ), self._( 46 ) )
-        return version
+                _progress_dialog( -1 )
+                xbmcgui.Dialog().ok( self._( 59 ), self._( 46 ) )
+                raise
+        xbmcgui.Dialog().ok( self._( 53 ), self._( 54 ) )
+        raise
 
 
 class Tables( dict ):
@@ -172,7 +207,7 @@ class Tables( dict ):
 
 
 class Records:
-    "add, update and fetch records"
+    "add, delete, update and fetch records"
     def __init__( self, *args, **kwargs ):
         self.tables = Tables()
         self.connect()
@@ -192,14 +227,15 @@ class Records:
     
     def add( self, table, params, commit=False ):
         try:
-            auto_increment = 0
             sql = "INSERT INTO %s (" % ( table, )
-            for item in self.tables[table]:
-                if ( not item[ 2 ] == "" ):
-                    auto_increment += 1
-                else: sql += "%s, " % item[0]
-            sql = sql[:-2] + ") VALUES (" + ( "?, "*( len( self.tables[ table ] ) - auto_increment ) )
-            sql = sql[:-2] + ");"
+            count = 0
+            for column in self.tables[ table ]:
+                if ( column[ 2 ] != "AUTOINCREMENT" ):
+                    sql += "%s, " % column[ 0 ]
+                    count += 1
+                if ( count == len( params ) ): break
+            sql = sql[ : -2 ] + ") VALUES (" + ( "?, " * len( params ) )
+            sql = sql[ : -2 ] + ");"
             self.cursor.execute( sql, params )
             if ( commit ): self.commit()
             return self.cursor.lastrowid
@@ -303,7 +339,7 @@ class Query( dict ):
         self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
 
-        self[ "genre_table_list" ]			= "SELECT idGenre, genre, urls, updated FROM genres ORDER BY genre;"
+        self[ "genre_table_list" ]			= "SELECT idGenre, genre, updated FROM genres ORDER BY genre;"
         self[ "genre_urls_by_genre_id" ]	= "SELECT urls FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"

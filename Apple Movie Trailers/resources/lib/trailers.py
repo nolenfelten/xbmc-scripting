@@ -11,10 +11,10 @@ import pil_util
 import database
 
 fetcher = cacheurl.HTTP()
+base_cache_path = fetcher.cache_dir + os.sep
 _ = language.Language().localized
 
-base_cache_path = fetcher.cache_dir + os.sep
-
+"""
 class Movie:
     '''
         Exposes the following:
@@ -62,11 +62,53 @@ class Category:
         - updated (date - last date updated)
         - count (integer - number of movies in category)
     '''
-    def __init__( self, id=None, title=None, updated="", count=None ):#, urls=list() - urls (string - url to xml) self.urls = urls
+    def __init__( self, id=None, title=None, updated="", count=None ):
         self.id = id
         self.title = title
         self.updated = updated
         self.count = count
+"""
+        
+class Movie( object ):
+    '''
+        Exposes the following:
+        - title (string)
+        - trailer_urls (string - list of movie urls)
+        - poster (string - path to poster)
+        - thumbnail (string - path to thumbnail)
+        - thumbnail_watched (string - pathe to watched thumbnail)
+        - plot (string - movie plot)
+        - rating (string - movie rating)
+        - rating_url (string - path to rating image file)
+        - year (integer - year of movie)
+        - watched (integer - number of times watched)
+        - watched_date (string - last watched date)
+        - favorite (integer - 1=favorite)
+        - saved (string - path to saved movie)
+        - cast (list - list of actors)
+        - studio (string - movies studio)
+    '''
+    def __init__( self, *args, **kwargs ):
+        for name, value in kwargs.items():
+            self.__setattr__( name, value )
+    
+    def __setattr__( self, name, value ):
+        self.__dict__[ name ] = value
+
+class Category( object ):
+    """
+        Exposes the following:
+        - id (integer)
+        - title (string)
+        - updated (date - last date updated)
+        - count (integer - number of movies in category)
+    """
+    def __init__( self, *args, **kwargs ):
+        for name, value in kwargs.items():
+            self.__setattr__( name, value )
+    
+    def __setattr__( self, name, value ):
+        self.__dict__[ name ] = value
 
 
 class Trailers:
@@ -80,11 +122,11 @@ class Trailers:
         self.base_url = 'http://www.apple.com'
         self.base_xml = self.base_url + '/moviesxml/h/index.xml'
         db = database.Database( language=_ )
-        self.query = database.Query()
         self.complete = db.complete
-        newest_genre = self.loadGenres()
+        self.query = database.Query()
+        newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
-            self.refreshGenre( newest_genre )
+            self.refreshGenre( newest_genre, last_updated )
         
     def ns( self, text ):
         base_ns = '{http://www.apple.com/itms/}'
@@ -93,7 +135,7 @@ class Trailers:
             result += [ base_ns + each ]
         return '/'.join( result )
             
-    def refreshGenre( self, genre, force_update=False ):
+    def refreshGenre( self, genre, last_updated=False ):
         """
             Updates the xml for each genre from the site.
         """
@@ -113,7 +155,7 @@ class Trailers:
                 dialog.close()
         
         updated_date = datetime.date.today()
-        if ( ( str( self.categories[ genre ].updated ) != str( updated_date ) ) or force_update ):
+        if ( str( updated_date ) != str( last_updated ) ):
             try:
                 title = self.categories[ genre ].title
                 _progress_dialog()
@@ -129,7 +171,7 @@ class Trailers:
                     record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
-                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )#'[]', '', '', '', '', 0, 0, '', 0, '', ) )
                         success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                     else:
                         #print "EXIST", url
@@ -142,8 +184,8 @@ class Trailers:
                 for record in idMovie_list:
                     #print "DELETED", record
                     success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
-                success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated" ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                self.categories[ genre ] = Category( id=idGenre, title=title, updated=updated_date )# urls=genre_urls, 
+                success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
+                self.categories[ genre ] = Category( id=idGenre, title=title ) 
             except: pass
             success = records.commit()
             records.close()
@@ -189,11 +231,12 @@ class Trailers:
             self.categories = []
             if ( genre_list ):
                 for cnt, genre in enumerate( genre_list ):
-                    self.categories += [ Category( id=genre[ 0 ], title=genre[ 1 ], updated=genre[ 3 ] )] #, urls=eval( genre[ 2 ] )
+                    self.categories += [ Category( id=genre[ 0 ], title=genre[ 1 ] ) ]
                     if ( genre[ 1 ] == "Newest" ):
                         newest_id = cnt
+                        last_updated = genre[ 2 ]
                 records.close()
-                return newest_id
+                return newest_id, last_updated
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
                 _progress_dialog()
@@ -240,13 +283,13 @@ class Trailers:
                     ok = _progress_dialog( cnt + 1, 0 )
                     trailer_urls, genre_urls = self.loadGenreInfo( genre, genre_dict[genre] )
                     if ( trailer_urls ):
-                        idGenre = records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date ) )
-                        self.categories += [ Category( id=idGenre, title=genre, updated=updated_date ) ]#, urls=genre_urls
+                        idGenre = records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date, ) )
+                        self.categories += [ Category( id=idGenre, title=genre ) ]
                         for url_cnt, url in enumerate( trailer_urls ):
                             ok = _progress_dialog( cnt + 1, url_cnt + 1 )
                             record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], '[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                                idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
                             else: idMovie = record[ 0 ]
                             success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                         success = records.commit()
@@ -258,7 +301,7 @@ class Trailers:
             records.close()
             _progress_dialog( -1 )
             traceback.print_exc()
-        return False
+        return False, False
         
     def loadGenreInfo( self, genre, url ):
         """
@@ -346,19 +389,33 @@ class Trailers:
         self.idMovie = movie[ 0 ]
         self.title = movie[ 1 ]
         self.url = str( movie[ 2 ] )
-        self.trailer_urls = eval( movie[ 3 ] )
-        self.poster = movie[ 4 ]
-        self.plot = movie[ 5 ]
-        self.rating = movie[ 6 ]
-        self.rating_url = movie[ 7 ]
-        self.year = movie[ 8 ]
-        self.times_watched = movie[ 9 ]
-        self.last_watched = movie[ 10 ]
-        self.favorite = movie[ 11 ]
-        self.saved_location = movie[ 12 ]
-        self.actors = movie[ 13 ]
-        self.studio = movie[ 14 ]
-        
+        if ( movie[ 3 ] is not None ):
+            self.trailer_urls = eval( movie[ 3 ] )
+            self.poster = movie[ 4 ]
+            self.plot = movie[ 5 ]
+            self.rating = movie[ 6 ]
+            self.rating_url = movie[ 7 ]
+            self.year = movie[ 8 ]
+            self.times_watched = movie[ 9 ]
+            self.last_watched = movie[ 10 ]
+            self.favorite = movie[ 11 ]
+            self.saved_location = movie[ 12 ]
+            self.actors = movie[ 13 ]
+            self.studio = movie[ 14 ]
+        else:
+            self.trailer_urls = []
+            self.poster = ""
+            self.plot = ""
+            self.rating = ""
+            self.rating_url = ""
+            self.year = 0
+            self.times_watched = 0
+            self.last_watched = ""
+            self.favorite = 0
+            self.saved_location = ""
+            self.actors = []
+            self.studio = ""
+
     def loadMovieInfo( self, movie ):
         try:
             self.setDefaultMovieInfo( movie )
@@ -519,15 +576,36 @@ class Trailers:
                 commit = info_missing = False
                 for cnt, movie in enumerate( movie_list ):
                     movie = self.getActorStudio( movie )
-                    if ( info_missing or eval( movie[ 3 ] ) == [] ):
+                    if ( info_missing or movie[ 3 ] is None ):
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '' )
                         info_missing = True
                         if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or self.dialog.iscanceled() or ( cnt + 1 ) == total_cnt ):
                             commit = True
-                    if ( eval( movie[ 3 ] ) == [] ):
+                    if ( movie[ 3 ] is None ):
                         movie = self.loadMovieInfo( movie )
                     if ( movie and not full ):
-                        self.movies += [Movie( movie )]
+                        #self.movies += [Movie( movie )]
+                        self.movies += [ 
+                            Movie(
+                                idMovie = movie[ 0 ],
+                                title = movie[1],
+                                trailer_urls = eval( movie[3] ),
+                                poster = os.path.join( base_cache_path, movie[4] ),
+                                thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) ),
+                                thumbnail_watched = os.path.join( base_cache_path, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) ),
+                                plot = movie[5],
+                                rating = movie[6],
+                                rating_url = os.path.join( base_cache_path, movie[7] ),
+                                year = movie[8],
+                                watched = movie[9],
+                                watched_date = movie[10],
+                                favorite = movie[11],
+                                saved = movie[12],
+                                cast = movie[13],
+                                studio = movie[14]
+                                )
+                            ]
+                            
                     if ( commit ):
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
                         self.records.commit()
@@ -540,7 +618,7 @@ class Trailers:
         self.records.close()
         self.dialog.close()
         return full
-            
+
     def getCategories( self, sql, params = False ):
         try:
             dialog = xbmcgui.DialogProgress()
