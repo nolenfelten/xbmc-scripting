@@ -565,10 +565,11 @@ class GUI( xbmcgui.Window ):
     
     def refreshGenre( self ):
         genre = self.controls["Category List"]["control"].getSelectedPosition()
-        self.trailers.refreshGenre( genre )
         self.sql_category = ""
-        #self.setCategory( utilities.GENRES, 0 )
+        if ( self.current_display[ 1 ][ 0 ] == genre ):
+            self.sql = ""
         sql = self.query[ "genre_category_list" ]
+        self.trailers.refreshGenre( genre )
         self.showCategories( sql, choice=genre, force_update=True )
 
     def refreshInfo( self, refresh_all ):
@@ -739,7 +740,6 @@ class GUI( xbmcgui.Window ):
             except: traceback.print_exc()
 
 
-
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
     def  __init__( self, *args, **kwargs ):
@@ -754,11 +754,3 @@ class MyPlayer( xbmc.Player ):
     
     def onPlayBackStarted( self ):
         self.function( 2 )
-    
-
-
-
-
-
-
-
