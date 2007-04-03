@@ -1,4 +1,9 @@
-import sys
+"""
+Catchall module for shared functions and constants
+
+Nuka1195
+"""
+
 import os
 import default
 
@@ -15,6 +20,9 @@ TOGGLE_DISPLAY = ( 216, 257, 61448, )
 CONTEXT_MENU = ( 229, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
+if ( not os.path.isdir( BASE_DATA_PATH ) ):
+    os.makedirs( BASE_DATA_PATH )
+
 
 def setControllerAction():
     return {
@@ -50,7 +58,7 @@ class Settings:
 
     def get_settings( self ):
         try:
-            settings_path = os.path.join( "P:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
+            settings_path = os.path.join( "P:\\script_data", default.__scriptname__ )
             settings_file = open( os.path.join( settings_path, "settings.txt" ), "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
@@ -62,7 +70,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         settings = {  
-            "version": sys.modules[ "__main__" ].__version__,
+            "version": default.__version__,
             "skin": "Default",
             "trailer_quality": 2,
             "mode": 0,
@@ -79,7 +87,7 @@ class Settings:
 
     def save_settings( self, settings ):
         try:
-            settings_path = os.path.join( "P:\\script_data", sys.modules[ "__main__" ].__scriptname__ )
+            settings_path = os.path.join( "P:\\script_data", default.__scriptname__ )
             if ( not os.path.isdir( settings_path ) ):
                 os.makedirs( settings_path )
             settings_file = open( os.path.join( settings_path, "settings.txt" ), "w" )

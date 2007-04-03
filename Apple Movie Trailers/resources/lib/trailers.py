@@ -161,14 +161,14 @@ class Trailers:
                 _progress_dialog()
                 idGenre = self.categories[ genre ].id
                 records = database.Records()
-                record = records.fetchone( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
+                record = records.fetch( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
                 self.removeXML( urls )
                 trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
-                idMovie_list = records.fetchall( self.query[ "idMovie_by_genre_id" ], ( idGenre, ) )
+                idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
                 for cnt, url in enumerate( trailer_urls ):
                     if ( not _progress_dialog( cnt + 1 ) ): raise
-                    record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                    record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
                         idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )#'[]', '', '', '', '', 0, 0, '', 0, '', ) )
@@ -227,7 +227,7 @@ class Trailers:
 
         try:
             records = database.Records()
-            genre_list = records.fetchall( self.query[ 'genre_table_list' ] )
+            genre_list = records.fetch( self.query[ 'genre_table_list' ], all=True )
             self.categories = []
             if ( genre_list ):
                 for cnt, genre in enumerate( genre_list ):
@@ -287,7 +287,7 @@ class Trailers:
                         self.categories += [ Category( id=idGenre, title=genre ) ]
                         for url_cnt, url in enumerate( trailer_urls ):
                             ok = _progress_dialog( cnt + 1, url_cnt + 1 )
-                            record = records.fetchone( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
                                 idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
                             else: idMovie = record[ 0 ]
@@ -457,7 +457,7 @@ class Trailers:
                     actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
                     if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
                         actors += [ ( actor, ) ]
-                        actor_id = self.records.fetchone( self.query[ 'actor_exists' ], ( actor.upper(), ) )
+                        actor_id = self.records.fetch( self.query[ 'actor_exists' ], ( actor.upper(), ) )
                         if ( actor_id is None ): idActor = self.records.add( 'actors', ( actor, ) )
                         else: idActor = actor_id[ 0 ]
                         self.records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
@@ -468,7 +468,7 @@ class Trailers:
             if ( not self.studio ):
                 studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                 if studio:
-                    studio_id = self.records.fetchone( self.query[ 'studio_exists' ], ( studio.upper(), ) )
+                    studio_id = self.records.fetch( self.query[ 'studio_exists' ], ( studio.upper(), ) )
                     if ( studio_id is None ): idStudio = self.records.add( 'studios', ( studio, ) )
                     else: idStudio = studio_id[ 0 ]
                     self.records.add( 'studio_link_movie', ( idStudio, self.idMovie, ) )
@@ -556,10 +556,10 @@ class Trailers:
         full = self.getMovieList( sql, params )
 
     def getActorStudio( self, movie ):
-        actor_list = self.records.fetchall( self.query[ 'actors_by_movie_id' ], ( movie[ 0 ], ) )
+        actor_list = self.records.fetch( self.query[ 'actors_by_movie_id' ], ( movie[ 0 ], ), all=True )
         if ( actor_list ): movie += ( actor_list, )
         else: movie += ( [], )
-        studio = self.records.fetchone( self.query[ 'studio_by_movie_id' ], ( movie[ 0 ], ) )
+        studio = self.records.fetch( self.query[ 'studio_by_movie_id' ], ( movie[ 0 ], ) )
         if ( studio is not None ): movie += ( studio[ 0 ], )
         else: movie += ( '', )
         return movie
@@ -567,7 +567,7 @@ class Trailers:
     def getMovieList( self, sql, params = None, full = False ):
         try:
             self.records = database.Records()
-            movie_list = self.records.fetchall( sql, params )
+            movie_list = self.records.fetch( sql, params, all=True )
             if ( movie_list ):
                 if ( not full ):
                     self.movies = []
@@ -608,7 +608,7 @@ class Trailers:
                             
                     if ( commit ):
                         self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
-                        self.records.commit()
+                        success = self.records.commit()
                         commit = False
                         if ( self.dialog.iscanceled() ):
                             full = False
@@ -625,7 +625,7 @@ class Trailers:
             dialog.create( _( 85 ) )
             dialog.update( -1, _( 67 ) )
             records = database.Records()
-            category_list = records.fetchall( sql, params )
+            category_list = records.fetch( sql, params, all=True )
             records.close()
             if ( category_list ):
                 self.categories = []
