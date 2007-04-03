@@ -1,4 +1,12 @@
-import sys, os
+"""
+Catchall module for shared functions
+
+Nuka1195
+"""
+
+import sys
+import os
+
 
 def setControllerAction():
     return {
