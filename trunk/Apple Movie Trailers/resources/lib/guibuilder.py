@@ -14,7 +14,6 @@ import os
 import xbmc
 import xbmcgui
 import xml.dom.minidom
-import re
 
 
 class GUIBuilder:
@@ -572,6 +571,7 @@ class GUIBuilder:
 
     def _set_visibility_and_animations( self ):
         """ corrects control id's for some visible conditions and set's visible status """
+        import re
         pattern = [ "control.hasfocus\(([0-9]+)\)", "control.isvisible\(([0-9]+)\)" ]
         rvalue = [ "control.hasfocus(##)", "control.isvisible(##)" ]
         for key in self.win.controls.keys():

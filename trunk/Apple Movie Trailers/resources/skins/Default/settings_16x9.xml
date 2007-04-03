@@ -648,7 +648,7 @@
 			<width>90</width>
 			<height>32</height>
 			<align>right</align>
-			<label>1/1</label>
+			<label>1/2</label>
 			<font>font13</font>
 			<textcolor>ffffffff</textcolor>
             <visible allowhiddenfocus="false">Control.IsVisible(10)</visible> 

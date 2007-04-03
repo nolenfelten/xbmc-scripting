@@ -565,7 +565,7 @@ class GUI( xbmcgui.Window ):
     
     def refreshGenre( self ):
         genre = self.controls["Category List"]["control"].getSelectedPosition()
-        self.trailers.refreshGenre( genre, force_update = True )
+        self.trailers.refreshGenre( genre )
         self.sql_category = ""
         #self.setCategory( utilities.GENRES, 0 )
         sql = self.query[ "genre_category_list" ]

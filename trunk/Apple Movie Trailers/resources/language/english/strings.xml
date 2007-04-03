@@ -10,24 +10,24 @@
     <string id="43">committing records to database...</string>
     <string id="44">Database creation...</string>
     <string id="45">Removing old genre xml files...</string>
-    <string id="46">database conversion failed...</string>
+    <string id="46">Database update failed...</string>
     <string id="47">Current table</string>
     <string id="48">Fetching records...</string>
     <string id="49">*You may complete a full creation at anytime.</string>
     <string id="50">Setting up script:</string>
     <string id="51">Importing modules &amp; initializing...</string>
     <string id="52">module:</string>
-    <string id="53">Database version incompatable!</string>
-    <!--string id="54">You must update all genre and movie information.</string-->
+    <string id="53">Database version too old!</string>
+    <string id="54">You must recreate your database.</string>
     <string id="55">Loading skin and creating gui...</string>
     <string id="56">Copying movie...</string>
     <string id="57">There was an error setting up your GUI.</string>
     <string id="58">Check your skinfile:</string>
-    <string id="59">Database file invalid...</string>
-    <string id="60">Your database file is incompatible with this version|of AMT. It must be regenerated.</string>
+    <string id="59">Database needs updating...</string>
+    <string id="60">Your database is incompatible with this version of AMT.\nIt will be updated.</string>
     <string id="61">Updating all genre and movie information...</string>
     <!--string id="62">Are you sure you want to do this?</string-->
-    <!--string id="63">Updating can take anywhere from 5 - 15 minutes,|depending on your connection speed.</string-->
+    <string id="63">Updating can take anywhere from 1 - 5 minutes.</string>
     <string id="64">Error</string>
     <!--string id="65">Unable to properly update AMT.pk</string-->
     <string id="66">Fetching genre information...</string>
@@ -79,6 +79,7 @@
     <string id="159">Minimal</string>
 
     <!-- Settings labels -->
+    <string id="200">Choose:</string>
     <string id="201">Skin</string>
     <string id="202">Trailer quality</string>
     <string id="203">Mode</string>

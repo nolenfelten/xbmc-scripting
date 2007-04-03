@@ -10,8 +10,8 @@ import xbmc
 import xbmcgui
 import guibuilder
 import utilities
-##import chooser
-import traceback
+import chooser
+#import traceback
 
 
 class GUI( xbmcgui.WindowDialog ):
@@ -29,8 +29,8 @@ class GUI( xbmcgui.WindowDialog ):
                 self._setup_special()
                 self._set_controls_values()
                 self._set_restart_required()
-                ##self.chooser = chooser.GUI( skin=self.skin )
-        except: traceback.print_exc()
+                self.chooser = chooser.GUI( skin=self.skin, language=self._ )
+        except: pass#traceback.print_exc()
             
     def setupGUI( self ):
         """ sets up the gui using guibuilder """
@@ -108,22 +108,16 @@ class GUI( xbmcgui.WindowDialog ):
         
     def _setup_startup_categories( self ):
         self.startup_categories = {}
+        self.startup_titles = []
         for count, genre in enumerate( self.genres ):
             self.startup_categories[ count ] = str( genre.title )
         self.startup_categories[ utilities.FAVORITES ] = self._( 152 )
         self.startup_categories[ utilities.DOWNLOADED ] = self._( 153 )
-        ###########################################
-        self.tmp_startup_categories = self.startup_categories.keys()
-        #self.tmp_startup_categories.sort()
-        try: self.startup_category_id = self.tmp_startup_categories.index( self.settings[ "startup_category_id" ] )
-        except: self.startup_category_id = 0
-        try: self.shortcut1 = self.tmp_startup_categories.index( self.settings[ "shortcut1" ] )
-        except: self.shortcut1 = 0
-        try: self.shortcut2 = self.tmp_startup_categories.index( self.settings[ "shortcut2" ] )
-        except: self.shortcut2 = 0
-        try: self.shortcut3 = self.tmp_startup_categories.index( self.settings[ "shortcut3" ] )
-        except: self.shortcut3 = 0
-        
+        for title in self.startup_categories.values():
+            self.startup_titles += [ title ]
+        self.startup_titles.sort()
+            
+
     def _setup_thumbnail_display( self ):
         self.thumbnail = ( self._( 2050 ), self._( 2051 ), self._( 2052 ), )
         
@@ -141,6 +135,18 @@ class GUI( xbmcgui.WindowDialog ):
 
 ###### End of Special defs #####################################################
 
+    def _get_setting_from_category( self, category ):
+        for key, value in self.startup_categories.items():
+            if ( value == self.startup_titles[ category ] ):
+                return key
+        return 0
+    
+    def _get_category_from_setting( self, setting ):
+        for count, value in enumerate( self.startup_titles ):
+            if ( value == self.startup_categories[ setting ] ):
+                return count
+        return 0
+        
     def _set_controls_values( self ):
         """ sets the value labels """
         xbmcgui.lock()
@@ -157,31 +163,27 @@ class GUI( xbmcgui.WindowDialog ):
             self.get_control( "Setting8 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
             self.get_control( "Setting9 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
             self.get_control( "Setting10 Value" ).setSelected( self.settings[ "refresh_newest" ] )
-        except: traceback.print_exc()
+        except: pass
         xbmcgui.unlock()
     
     def _change_setting1( self ):
         """ changes settings #1 """
-        self.current_skin += 1
-        if (  self.current_skin == len( self.skins ) ):
-             self.current_skin = 0
-        self.settings[ "skin" ] = self.skins[ self.current_skin ]
-    #    self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1 )
-    #    if ( self.chooser.selection is not None ):
-    #        self.current_skin = self.chooser.selection
-    #        self.settings[ "skin" ] = self.skins[ self.current_skin ]
+        self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1, title="%s %s" % ( self._( 200 ), self._( 201 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.current_skin = self.chooser.selection
+            self.settings[ "skin" ] = self.skins[ self.current_skin ]
 
     def _change_setting2( self ):
         """ changes settings #2 """
-        self.settings[ "trailer_quality" ] += 1
-        if ( self.settings[ "trailer_quality" ] == len( self.quality ) ):
-            self.settings[ "trailer_quality" ] = 0
+        self.chooser.show_chooser( choices=self.quality, selection=self.settings[ "trailer_quality" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 202 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "trailer_quality" ] = self.chooser.selection
         
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "mode" ] += 1
-        if ( self.settings[ "mode" ] == len( self.mode ) ):
-            self.settings[ "mode" ] = 0
+        self.chooser.show_chooser( choices=self.mode, selection=self.settings[ "mode" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 203 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "mode" ] = self.chooser.selection
 
     def _change_setting4( self ):
         """ changes settings #4 """
@@ -190,38 +192,38 @@ class GUI( xbmcgui.WindowDialog ):
         
     def _change_setting5( self ):
         """ changes settings #5 """
-        self.settings[ "thumbnail_display" ] += 1
-        if ( self.settings[ "thumbnail_display" ] == len( self.thumbnail ) ):
-            self.settings[ "thumbnail_display" ] = 0
-    
+        self.chooser.show_chooser( choices=self.thumbnail, selection=self.settings[ "thumbnail_display" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 205 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "thumbnail_display" ] = self.chooser.selection
+
     def _change_setting6( self ):
         """ changes settings #6 """
-        self.startup_category_id += 1
-        if ( self.startup_category_id == len( self.tmp_startup_categories ) ):
-            self.startup_category_id = 0
-        self.settings[ "startup_category_id" ] = self.tmp_startup_categories[ self.startup_category_id ]
-    
+        selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 206 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "startup_category_id" ] = self._get_setting_from_category( self.chooser.selection )
+
     def _change_setting7( self ):
         """ changes settings #7 """
-        self.shortcut1 += 1
-        if ( self.shortcut1 == len( self.tmp_startup_categories ) ):
-            self.shortcut1 = 0
-        self.settings[ "shortcut1" ] = self.tmp_startup_categories[ self.shortcut1 ]
-    
+        selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 207 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "shortcut1" ] = self._get_setting_from_category( self.chooser.selection )
+
     def _change_setting8( self ):
         """ changes settings #8 """
-        self.shortcut2 += 1
-        if ( self.shortcut2 == len( self.tmp_startup_categories ) ):
-            self.shortcut2 = 0
-        self.settings[ "shortcut2" ] = self.tmp_startup_categories[ self.shortcut2 ]
-    
+        selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 208 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "shortcut2" ] = self._get_setting_from_category( self.chooser.selection )
+
     def _change_setting9( self ):
         """ changes settings #9 """
-        self.shortcut3 += 1
-        if ( self.shortcut3 == len( self.tmp_startup_categories ) ):
-            self.shortcut3 = 0
-        self.settings[ "shortcut3" ] = self.tmp_startup_categories[ self.shortcut3 ]
-    
+        selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 209 ) ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "shortcut3" ] = self._get_setting_from_category( self.chooser.selection )
+
     def _change_setting10( self ):
         """ changes settings #10 """
         self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]

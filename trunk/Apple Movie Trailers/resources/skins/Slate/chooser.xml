@@ -1,38 +1,23 @@
-<window id="3002">
+<window>
 
-<!--
-    The <resolution> tag is used for the setCoordinateResolution() function.
-    
-	You may move, add or delete any controls you want as long as they're not Required.
-	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
-	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
-	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
-	
-	To use <include> tags and defaults.xml, changed <useincludes>false</useincludes> to true.
-	
-	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
-	
--->
-	
-	<resolution>PAL16x9</resolution>
-    <useincludes>false</useincludes>
+	<resolution>PAL</resolution>
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
-		<posy>93</posy>
+		<posy>60</posy>
 	</coordinates>
 
 	<controls>
 
 		<!-- ** Optional ** Do not change <description> or <type> -->
-		<!--control type="image" id="600">
+		<control type="image" id="600">
 			<description>Chooser Image Top</description>
 			<posx>50</posx>
 			<posy>40</posy>
 			<width>300</width>
 			<height>290</height>
 			<texture>-</texture>
-		</control-->
+		</control>
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
 		<control type="image" id="601">
@@ -41,31 +26,29 @@
 			<posy>40</posy>
 			<width>300</width>
 			<height>290</height>
-			<texture>\dialog-panel.png</texture>
+			<texture>\popup-panel.png</texture>
 		</control>
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
-		<!--control type="image" id="602">
+		<control type="image" id="602">
 			<description>Chooser Image Bottom</description>
 			<posx>50</posx>
 			<posy>40</posy>
 			<width>300</width>
 			<height>290</height>
 			<texture>-</texture>
-		</control-->
+		</control>
 
-        <!-- skin selection controls -->
-		
         <!-- ** Required ** Do not change <description> -->
 		<control type="label" id="500">
 			<description>Chooser Label</description>
 			<posx>65</posx>
 			<posy>48</posy>
-			<width>250</width>
+			<width>150</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>214</label>
+			<label>-</label>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -98,7 +81,7 @@
 			<posx>63</posx>
 			<posy>100</posy>
 			<width>150</width>
-			<height>220</height>
+			<height>170</height>
 			<spinwidth>18</spinwidth>
 			<spinheight>16</spinheight>
 			<spinposx>419</spinposx>

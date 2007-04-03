@@ -20,13 +20,13 @@
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
-		<posy>132</posy>
+		<posy>93</posy>
 	</coordinates>
 
 	<controls>
 
 		<!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="600">
+		<!--control type="image" id="600">
 			<description>Chooser Image Top</description>
 			<posx>50</posx>
 			<posy>40</posy>
@@ -34,7 +34,7 @@
 			<height>290</height>
 			<texture>-</texture>
 			<visible>false</visible>
-		</control>
+		</control-->
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
 		<control type="image" id="601">
@@ -48,7 +48,7 @@
 		</control>
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
-		<control type="image" id="602">
+		<!--control type="image" id="602">
 			<description>Chooser Image Bottom</description>
 			<posx>50</posx>
 			<posy>40</posy>
@@ -56,7 +56,7 @@
 			<height>290</height>
 			<texture>-</texture>
 			<visible>false</visible>
-		</control>
+		</control-->
 
         <!-- skin selection controls -->
 		
@@ -95,7 +95,7 @@
 			<align>center</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>212</label>
+			<label>231</label>
 			<visible>false</visible>
 		</control>
 

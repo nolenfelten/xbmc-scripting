@@ -1,0 +1,150 @@
+<window>
+	
+	<resolution>PAL</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>161</posx>
+		<posy>132</posy>
+	</coordinates>
+
+	<controls>
+        <!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="600">
+			<description>Chooser Image Top</description>
+			<posx>60</posx>
+			<posy>10</posy>
+			<width>300</width>
+			<height>31</height>
+			<texture>dialog-context-top.png</texture>
+		</control>
+
+        <!-- ** Optional ** Do not change <description> or <type> -->
+		<control type="image" id="601">
+			<description>Chooser Image Middle</description>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>300</width>
+			<height>290</height>
+			<texture>dialog-context-middle.png</texture>
+		</control>
+
+        <!-- ** Optional ** Do not change <description> -->
+		<control type="image" id="602">
+			<description>Chooser Image Bottom</description>
+			<posx>60</posx>
+            <posy>330</posy>
+			<width>300</width>
+			<height>37</height>
+			<texture>dialog-context-bottom.png</texture>
+		</control>
+		
+		<!-- skin selection dialog -->
+
+    <!-- ** Required ** Do not change <description> -->
+		<control type="button" id="500">
+			<description>Chooser Label</description>
+			<posx>80</posx>
+			<posy>40</posy>
+			<width>250</width>
+			<align>left</align>
+			<font>font12</font>
+            <textoffsetx>0</textoffsetx>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<label>-</label>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="501">
+			<description>Chooser Thumb</description>
+			<posx>80</posx>
+			<posy>245</posy>
+			<width>160</width>
+			<height>90</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> -->
+		<control type="button" id="502">
+			<description>Chooser Warning Label</description>
+			<posx>83</posx>
+			<posy>220</posy>
+			<width>200</width>
+			<height>20</height>
+			<align>left</align>
+			<font>font10</font>
+            <textoffsetx>0</textoffsetx>
+            <textcolor>FFE7FF00</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
+			<label>231</label>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="503">
+			<description>Chooser List1</description>
+			<posx>83</posx>
+			<posy>80</posy>
+			<width>260</width>
+			<height>156</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+            <hidespinners>false</hidespinners>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+			<image>-</image>
+            <spacebetweenitems>2</spacebetweenitems>
+			<textureheight>24</textureheight>
+			<itemwidth>0</itemwidth>
+			<itemheight>20</itemheight>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-5</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="504">
+			<description>Chooser List2</description>
+			<posx>83</posx>
+			<posy>80</posy>
+			<width>260</width>
+			<height>286</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+            <hidespinners>false</hidespinners>
+			<textureup>scroll-up.png</textureup>
+			<texturedown>scroll-down.png</texturedown>
+			<textureupfocus>scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            <texturefocus>list-focus.png</texturefocus>
+            <texturenofocus>list-nofocus.png</texturenofocus>
+			<image>-</image>
+            <spacebetweenitems>2</spacebetweenitems>
+			<textureheight>24</textureheight>
+			<itemwidth>0</itemwidth>
+			<itemheight>20</itemheight>
+			<font>font12</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>-5</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+		</control>
+
+	</controls>
+</window>
