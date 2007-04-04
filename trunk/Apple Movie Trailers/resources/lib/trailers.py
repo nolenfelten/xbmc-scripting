@@ -9,9 +9,6 @@ import elementtree.ElementTree as ET
 import language
 import pil_util
 import database
-#####################################
-import time
-#####################################
 
 fetcher = cacheurl.HTTP()
 base_cache_path = fetcher.cache_dir + os.sep
@@ -189,9 +186,6 @@ class Trailers:
                 return newest_id, last_updated
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
-                #####################################
-                self.start_time = time.localtime()
-                #####################################
 
                 _progress_dialog()
                 updated_date = datetime.date.today()
@@ -251,12 +245,6 @@ class Trailers:
                 records.close()
                 _progress_dialog( -1 )
                 if ( load_all ): self.fullUpdate()
-                else: 
-                    #########################################
-                    end_time = time.localtime()
-                    seconds = time.mktime(end_time) - time.mktime( self.start_time )
-                    print "*** (MINIMAL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
-                    #########################################
         except:
             records.close()
             _progress_dialog( -1 )
@@ -340,16 +328,8 @@ class Trailers:
             return [], []
 
     def fullUpdate( self ):
-        #####################################
-        if ( not self.start_time ): self.start_time = time.localtime()
-        #####################################
         full = self._get_movie_list( self.query[ "incomplete_movies" ], header="%s   (%s)" % ( _( 70 ), _( 158 ), ), full = True )
         if ( full ): self.complete = self.updateRecord( "version", ( "complete", ), ( True, 1, ), "idVersion" )
-        #########################################
-        end_time = time.localtime()
-        seconds = time.mktime(end_time) - time.mktime( self.start_time )
-        print "*** (FULL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
-        #########################################
 
     def getMovies( self, sql, params=None ):
         self.movies = []
@@ -558,7 +538,7 @@ class Trailers:
                         if ( not dialog_ok ):
                             full = False
                             break
-            else: self.movies = None
+            elif ( not full ): self.movies = None
         except: traceback.print_exc()#pass
         records.close()
         _progress_dialog( -1 )
