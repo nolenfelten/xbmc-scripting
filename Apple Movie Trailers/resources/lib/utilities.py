@@ -7,8 +7,8 @@ Nuka1195
 import os
 import default
 
-DATABASE_VERSIONS = [ "pre-0.97.3", "0.97.3" ]
-SETTINGS_VERSIONS = DATABASE_VERSIONS + [ "pre-0.97.2", "0.97.2" ]
+DATABASE_VERSIONS = [ "pre-0.97.4", "0.97.4" ]
+SETTINGS_VERSIONS = DATABASE_VERSIONS + [ "pre-0.97.2", "0.97.2", "pre-0.97.3", "0.97.3" ]
 GENRES = -1
 STUDIOS = -2
 ACTORS = -3

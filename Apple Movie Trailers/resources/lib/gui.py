@@ -169,7 +169,7 @@ class GUI( xbmcgui.Window ):
         else:
             if ( self.trailers.movies ): self.setFocus( self.controls[ "Trailer List" ][ "control" ] )
     
-    def showCategories( self, sql, params = False, choice = 0, force_update = False ):
+    def showCategories( self, sql, params=None, choice = 0, force_update = False ):
         try:
             #self.debugWrite("getGenreCategories", 2)
             xbmcgui.lock()
@@ -195,7 +195,7 @@ class GUI( xbmcgui.Window ):
         except: traceback.print_exc()
         xbmcgui.unlock()
 
-    def showTrailers( self, sql, params = None, choice = 0, force_update = False ):
+    def showTrailers( self, sql, params=None, choice = 0, force_update = False ):
         try:
             if ( sql != self.sql or params != self.params or force_update ):
                 self.list_control_pos[ self.list_category ]  = choice

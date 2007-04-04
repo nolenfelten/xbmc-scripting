@@ -30,7 +30,7 @@ class Database:
         if ( record ):
             idVersion, version, complete = record
             if ( version not in utilities.DATABASE_VERSIONS ): 
-                version = self._convert_database( version )
+                version, complete = self._convert_database( version, complete )
         else: version, complete = self._create_database()
         return version, complete
     
@@ -89,7 +89,7 @@ class Database:
         version = _create_tables()
         return version, False
 
-    def _convert_database( self, version ):
+    def _convert_database( self, version, complete ):
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0, total_count=None, movie=None ):
             __line1__ = self._( 63 )
@@ -113,6 +113,18 @@ class Database:
                 records.close()
                 return True
             except: return False
+
+        def _update_completed():
+            sql = "SELECT idMovie, trailer_urls FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
+            records = Records()
+            movies = records.fetch( sql, all=True )
+            ok = True
+            updated = False
+            if ( movies is not None ):
+                ok = records.update( "version", ( "complete", ), ( 0, 1, ), "idVersion", True )
+                if ( ok ): updated = True
+            records.close()
+            return ok, updated
 
         def _update_records():
             try:
@@ -139,20 +151,23 @@ class Database:
             return ok
 
         msg = ( self._( 53 ), self._( 54 ), )
-        if ( version == "pre-0.97.1" or version == "pre-0.97.2" ):
+        if ( version == "pre-0.97.1" or version == "pre-0.97.2" or version == "pre-0.97.3" ):
             try:
                 _progress_dialog()
                 if ( version == "pre-0.97.1" ):
                     ok = _update_table()
-                ok = _update_records()
-                if ( ok ):
-                    ok = _update_version()
-                    _progress_dialog( -1 )
-                    if ( ok ):
-                        return ( sys.modules[ "__main__" ].__version__, )
-                    else: raise
+                if ( version == "pre-0.97.1" or version == "pre-0.97.2" ):
+                    ok = _update_records()
+                if ( version == "pre-0.97.3" ):
+                    ok, updated = _update_completed()
+                    if ( updated ): complete = False
+                if ( not ok ): raise
+                ok = _update_version()
+                if ( not ok ): raise
             except:
                 msg = ( self._( 59 ), self._( 46 ), )
+            _progress_dialog( -1 )
+            if ( ok ): return ( sys.modules[ "__main__" ].__version__, complete )
         xbmcgui.Dialog().ok( msg[ 0 ], msg[ 1 ] )
         raise
 
@@ -268,10 +283,14 @@ class Records:
 
     def update( self, table, columns, params, key, commit=False ):
         try:
-            if ( columns[0] == "*" ):
-                start_column = columns[ 1 ]
+            if ( isinstance( columns[ 0 ], int ) ):
+                start_column = columns[ 0 ]
+                if ( len( columns ) == 2 ):
+                    end_column = columns[ 1 ]
+                else:
+                    end_column = len( self.tables[table] )
                 columns = ()
-                for item in self.tables[table][ start_column : ]:
+                for item in self.tables[table][ start_column : end_column ]:
                     columns += ( item[0], )
             sql = "UPDATE %s SET " % ( table, )
             for col in columns:
@@ -287,9 +306,9 @@ class Records:
             #traceback.print_exc()
             return False
 
-    def fetch( self, sql, params=False, all=False ):
+    def fetch( self, sql, params=None, all=False ):
         try:
-            if ( params ): self.cursor.execute( sql , params )
+            if ( params is not None ): self.cursor.execute( sql , params )
             else: self.cursor.execute( sql )
             if ( all ): retval = self.cursor.fetchall()
             else: retval = self.cursor.fetchone()
@@ -298,7 +317,7 @@ class Records:
         return retval
 
         """
-    def fetchone( self, sql, params=False ):
+    def fetchone( self, sql, params=None ):
         try:
             if ( params ): self.cursor.execute( sql , params )
             else: self.cursor.execute( sql )
@@ -307,7 +326,7 @@ class Records:
             retval = None
         return retval
         
-    def fetchall( self, sql, params=False ):
+    def fetchall( self, sql, params=None ):
         try:
             if ( params ): self.cursor.execute( sql , params )
             else: self.cursor.execute( sql )
@@ -334,7 +353,7 @@ class Query( dict ):
         self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
         self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
         
-        self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE poster='' ORDER BY title;"
+        self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
         
         self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
