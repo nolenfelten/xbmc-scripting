@@ -476,11 +476,11 @@ class GUI( xbmcgui.Window ):
         del cm
 
     def force_full_update( self ):
-        categories = self.trailers.categories
-        self.trailers.categories = self.genres
+        ##categories = self.trailers.categories
+        ##self.trailers.categories = self.genres
         #self.setCategory( shortcut, 1 )
         self.trailers.fullUpdate()
-        self.trailers.categories = categories
+        ##self.trailers.categories = categories
 
     def markAsWatched( self, watched, trailer ):
         if ( watched ): date = datetime.date.today()
