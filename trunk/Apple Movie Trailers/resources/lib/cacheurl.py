@@ -5,7 +5,6 @@ Killarny
 """
 
 import os
-import sys
 import xbmc
 import xbmcgui
 import urllib2
@@ -14,6 +13,7 @@ import traceback
 import time
 import socket
 import language
+import utilities
 
 socket.setdefaulttimeout( 10 )
 
@@ -67,8 +67,8 @@ class HTTP:
     def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
         # set the cache directory; default to a .cache directory off of the location where this module is
         self.cache_dir = cache
-        if self.cache_dir[ 0 ] == '.':
-            self.cache_dir = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, self.cache_dir )
+        if self.cache_dir.startswith( '.' ):
+            self.cache_dir = os.path.join( utilities.BASE_DATA_PATH, self.cache_dir )
 
         # title is the real name of the trailer, used for saving
         self.title = title

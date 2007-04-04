@@ -9,69 +9,19 @@ import elementtree.ElementTree as ET
 import language
 import pil_util
 import database
+#####################################
+import time
+#####################################
 
 fetcher = cacheurl.HTTP()
 base_cache_path = fetcher.cache_dir + os.sep
 _ = language.Language().localized
 
-"""
-class Movie:
-    '''
-        Exposes the following:
-        - title (string)
-        - trailer_urls (string - list of movie urls)
-        - poster (string - path to poster)
-        - thumbnail (string - path to thumbnail)
-        - thumbnail_watched (string - pathe to watched thumbnail)
-        - plot (string - movie plot)
-        - rating (string - movie rating)
-        - rating_url (string - path to rating image file)
-        - year (integer - year of movie)
-        - watched (integer - number of times watched)
-        - watched_date (string - last watched date)
-        - favorite (integer - 1=favorite)
-        - saved (string - path to saved movie)
-        - cast (list - list of actors)
-        - studio (string - movies studio)
-    '''
-    def __init__( self, movie=None ):
-        if ( movie ):
-            self.idMovie = movie[0]
-            self.title = movie[1]
-            self.trailer_urls = eval( movie[3] )
-            self.poster = os.path.join( base_cache_path, movie[4] )
-            self.thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) )
-            self.thumbnail_watched = os.path.join( base_cache_path, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) )
-            self.plot = movie[5]
-            self.rating = movie[6]
-            self.rating_url = os.path.join( base_cache_path, movie[7] )
-            self.year = movie[8]
-            self.watched = movie[9]
-            self.watched_date = movie[10]
-            self.favorite = movie[11]
-            self.saved = movie[12]
-            self.cast = movie[13]
-            self.studio = movie[14]
 
-
-class Category:
-    '''
-        Exposes the following:
-        - id (integer)
-        - title (string)
-        - updated (date - last date updated)
-        - count (integer - number of movies in category)
-    '''
-    def __init__( self, id=None, title=None, updated="", count=None ):
-        self.id = id
-        self.title = title
-        self.updated = updated
-        self.count = count
-"""
-        
 class Movie( object ):
     '''
         Exposes the following:
+        - idMovie (integer - movies id#)
         - title (string)
         - trailer_urls (string - list of movie urls)
         - poster (string - path to poster)
@@ -239,10 +189,15 @@ class Trailers:
                 return newest_id, last_updated
             else:
                 load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
+                #####################################
+                self.start_time = time.localtime()
+                #####################################
+
                 _progress_dialog()
                 updated_date = datetime.date.today()
                 
                 base_xml = fetcher.urlopen( self.base_xml )
+                
                 base_xml = ET.fromstring( base_xml )
 
                 view_matrix = {
@@ -296,7 +251,12 @@ class Trailers:
                 records.close()
                 _progress_dialog( -1 )
                 if ( load_all ): self.fullUpdate()
-
+                else: 
+                    #########################################
+                    end_time = time.localtime()
+                    seconds = time.mktime(end_time) - time.mktime( self.start_time )
+                    print "*** (MINIMAL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
+                    #########################################
         except:
             records.close()
             _progress_dialog( -1 )
@@ -380,57 +340,72 @@ class Trailers:
             return [], []
 
     def fullUpdate( self ):
-        self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create( '%s   (%s)' % ( _( 70 ), _( 158 ), ) )
-        full = self.getMovieList( self.query[ 'incomplete_movies' ], full = True )
-        if ( full ): self.complete = self.updateRecord( 'version', ( 'complete', ), ( full, 1, ), 'idVersion' )
+        #####################################
+        if ( not self.start_time ): self.start_time = time.localtime()
+        #####################################
+        full = self._get_movie_list( self.query[ "incomplete_movies" ], header="%s   (%s)" % ( _( 70 ), _( 158 ), ), full = True )
+        if ( full ): self.complete = self.updateRecord( "version", ( "complete", ), ( True, 1, ), "idVersion" )
+        #########################################
+        end_time = time.localtime()
+        seconds = time.mktime(end_time) - time.mktime( self.start_time )
+        print "*** (FULL) - Start time: %s - End time: %s - Total time: %s" % ( time.strftime( '%H:%M:%S', self.start_time ), time.strftime( '%H:%M:%S', end_time ), time.strftime( '%M:%S', time.localtime( seconds ) ), )
+        #########################################
 
-    def setDefaultMovieInfo( self, movie ):
-        self.idMovie = movie[ 0 ]
-        self.title = movie[ 1 ]
-        self.url = str( movie[ 2 ] )
-        if ( movie[ 3 ] is not None ):
-            self.trailer_urls = eval( movie[ 3 ] )
-            self.poster = movie[ 4 ]
-            self.plot = movie[ 5 ]
-            self.rating = movie[ 6 ]
-            self.rating_url = movie[ 7 ]
-            self.year = movie[ 8 ]
-            self.times_watched = movie[ 9 ]
-            self.last_watched = movie[ 10 ]
-            self.favorite = movie[ 11 ]
-            self.saved_location = movie[ 12 ]
-            self.actors = movie[ 13 ]
-            self.studio = movie[ 14 ]
-        else:
-            self.trailer_urls = []
-            self.poster = ""
-            self.plot = ""
-            self.rating = ""
-            self.rating_url = ""
-            self.year = 0
-            self.times_watched = 0
-            self.last_watched = ""
-            self.favorite = 0
-            self.saved_location = ""
-            self.actors = []
-            self.studio = ""
+    def getMovies( self, sql, params=None ):
+        self.movies = []
+        full = self._get_movie_list( sql, params, _( 85 ), _( 67 ) )
 
-    def loadMovieInfo( self, movie ):
-        try:
-            self.setDefaultMovieInfo( movie )
-            
-            if ( self.url[:7] != 'http://' ):
-                url = self.base_url + self.url
+    def _get_movie_list( self, sql, params=None, header="", line1="", full=False ):
+        dialog = xbmcgui.DialogProgress()
+        def _progress_dialog( count=0, commit=False ):
+            if ( not count ):
+                dialog.create( header, line1 )
+            elif ( count > 0 ):
+                __line1__ = "%s: (%d of %d)" % ( _( 88 ), count, len( movie_list ), )
+                __line2__ = movie[ 1 ]
+                __line3__ = [ "", "-----> %s <-----" % (_( 43 ), ) ][ commit ]
+                percent = int( count * ( float( 100 ) / len( movie_list ) ) )
+                dialog.update( percent, __line1__, __line2__, __line3__ )
+                if ( dialog.iscanceled() ): return False
+                else: return True
             else:
-                url = self.url
-
-            # xml parsing
-            element = fetcher.urlopen( url )
-            element = ET.fromstring( element )
+                dialog.close()
             
-            # -- poster & thumbnails --
-            if ( not self.poster ):
+        def _load_movie_info( movie ):
+            def _set_default_movie_info( movie ):
+                self.idMovie = movie[ 0 ]
+                self.title = movie[ 1 ]
+                self.url = str( movie[ 2 ] )
+                self.trailer_urls = []
+                self.poster = ""
+                self.plot = ""
+                self.rating = ""
+                self.rating_url = ""
+                self.year = 0
+                self.times_watched = 0
+                self.last_watched = ""
+                self.favorite = 0
+                self.saved_location = ""
+                self.actors = []
+                self.studio = ""
+
+            try:
+                _set_default_movie_info( movie )
+                
+                if ( self.url[:7] != 'http://' ):
+                    url = self.base_url + self.url
+                else:
+                    url = self.url
+
+                # xml parsing
+                source = fetcher.urlopen( url )
+                try: element = ET.fromstring( source )
+                except:
+                    source = source.replace(" & ", "&amp;")
+                    element = ET.fromstring( source )
+                
+                # -- poster & thumbnails --
+                #if ( not self.poster ):
                 poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
                 # download the actual poster to the local filesystem (or get the cached filename)
                 poster = fetcher.urlretrieve( poster )
@@ -438,9 +413,9 @@ class Trailers:
                     self.poster = poster.replace( base_cache_path, '' )
                     # make thumbnails
                     success = pil_util.makeThumbnails( poster )
-            
-            # -- plot --
-            if ( not self.plot ):
+
+                # -- plot --
+                #if ( not self.plot ):
                 plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
                 if plot:
                     # remove any linefeeds so we can wrap properly to the text control this is displayed in
@@ -448,34 +423,34 @@ class Trailers:
                     plot = plot.replace( '\r', ' ' )
                     plot = plot.replace( '\n', ' ' )
                     self.plot = plot
-            
-            # -- actors --
-            if ( not ( self.actors ) ):
+                
+                # -- actors --
+                #if ( not ( self.actors ) ):
                 SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
                 actors = list()
                 for i in range( 5, 10 ):
                     actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
-                    if ( len( actor ) and actor[ 0 ] != '.' and actor != '1:46') :
+                    if ( len( actor ) and not actor.startswith( '.' ) and actor != '1:46') :
                         actors += [ ( actor, ) ]
-                        actor_id = self.records.fetch( self.query[ 'actor_exists' ], ( actor.upper(), ) )
-                        if ( actor_id is None ): idActor = self.records.add( 'actors', ( actor, ) )
+                        actor_id = records.fetch( self.query[ 'actor_exists' ], ( actor.upper(), ) )
+                        if ( actor_id is None ): idActor = records.add( 'actors', ( actor, ) )
                         else: idActor = actor_id[ 0 ]
-                        self.records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
+                        records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
                 self.actors = actors
                 self.actors.sort()
-            
-            # -- studio --
-            if ( not self.studio ):
+                
+                # -- studio --
+                #if ( not self.studio ):
                 studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                 if studio:
-                    studio_id = self.records.fetch( self.query[ 'studio_exists' ], ( studio.upper(), ) )
-                    if ( studio_id is None ): idStudio = self.records.add( 'studios', ( studio, ) )
+                    studio_id = records.fetch( self.query[ 'studio_exists' ], ( studio.upper(), ) )
+                    if ( studio_id is None ): idStudio = records.add( 'studios', ( studio, ) )
                     else: idStudio = studio_id[ 0 ]
-                    self.records.add( 'studio_link_movie', ( idStudio, self.idMovie, ) )
+                    records.add( 'studio_link_movie', ( idStudio, self.idMovie, ) )
                     self.studio = studio
-            
-            # -- rating --
-            if ( not self.rating ):
+                
+                # -- rating --
+                #if ( not self.rating ):
                 temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
                 if temp_url:
                     if '/mpaa' in temp_url:
@@ -483,9 +458,9 @@ class Trailers:
                         if rating_url:
                             self.rating_url = rating_url.replace( base_cache_path, '' )
                             self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
-            
-            # -- trailer urls --
-            if ( not self.trailer_urls ):
+                
+                # -- trailer urls --
+                #if ( not self.trailer_urls ):
                 urls = list()
                 for each in element.getiterator( self.ns('GotoURL') ):
                     temp_url = each.get( 'url' )
@@ -493,15 +468,18 @@ class Trailers:
                         continue
                     if '/moviesxml/g' in temp_url:
                         continue
-                    if temp_url[0] != '/':
+                    if not temp_url.startswith( '/' ):
                         continue
                     if temp_url in urls:
                         continue
                     urls += [ temp_url ]
                 if len( urls ):
                     temp_url = self.base_url + urls[0]
-                    element = fetcher.urlopen( temp_url )
-                    element = ET.fromstring( element )
+                    source = fetcher.urlopen( temp_url )
+                    try: element = ET.fromstring( source )
+                    except:
+                        source = source.replace(" & ", "&amp;")
+                        element = ET.fromstring( source )
                     trailer_urls = list()
                     for each in element.getiterator( self.ns('string') ):
                         text = each.text
@@ -511,79 +489,47 @@ class Trailers:
                             continue
                         if 'movies.apple.com' not in text:
                             continue
-                        if text[-3:] == 'm4v':
+                        if text.endswith( '.m4v' ):
                             continue
                         if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
                             continue
                         trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
                     self.trailer_urls = trailer_urls
-            info_list = ( self.idMovie, )
-            info_list += ( self.title, )
-            info_list += ( self.url,)
-            info_list += (repr( self.trailer_urls ),)
-            info_list += (self.poster,)
-            info_list += (self.plot,)
-            info_list += (self.rating,)
-            info_list += (self.rating_url,)
-            info_list += (self.year,)
-            info_list += (self.times_watched,)
-            info_list += (self.last_watched,)
-            info_list += (self.favorite,)
-            info_list += (self.saved_location,)
-            success = self.records.update( 'movies', ( '*', 3 ), ( info_list[ 3: ] ) + ( self.idMovie, ), 'idMovie' )
-            info_list += ( self.actors, )
-            info_list += ( self.studio, )
+            except:
+                #traceback.print_exc()
+                print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
+            info_list = ( self.idMovie, self.title, self.url, repr( self.trailer_urls ), self.poster, self.plot, self.rating,
+                            self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
+                            self.actors, self.studio, )
+            success = records.update( "movies", ( 3, 13, ), ( info_list[ 3 : 13 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
-        except:
-            #traceback.print_exc()
-            print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
-            return None
+
+        def _get_actor_and_studio( movie ):
+            actor_list = records.fetch( self.query[ "actors_by_movie_id" ], ( movie[ 0 ], ), all=True )
+            if ( actor_list is not None ): movie += ( actor_list, )
+            else: movie += ( [], )
+            studio = records.fetch( self.query[ "studio_by_movie_id" ], ( movie[ 0 ], ) )
+            if ( studio is not None ): movie += ( studio[ 0 ], )
+            else: movie += ( "", )
+            return movie
             
-    def updateRecord( self, table, columns, values, key = 'title' ):
         try:
+            _progress_dialog()
             records = database.Records()
-            success = records.update( table, columns, values, key, True )
-            records.close()
-        except:
-            traceback.print_exc()
-            success = False
-        return success
-
-    def getMovies( self, sql, params = None ):
-        self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create( _( 85 ) )
-        self.dialog.update( -1, _( 67 ) )
-        full = self.getMovieList( sql, params )
-
-    def getActorStudio( self, movie ):
-        actor_list = self.records.fetch( self.query[ 'actors_by_movie_id' ], ( movie[ 0 ], ), all=True )
-        if ( actor_list ): movie += ( actor_list, )
-        else: movie += ( [], )
-        studio = self.records.fetch( self.query[ 'studio_by_movie_id' ], ( movie[ 0 ], ) )
-        if ( studio is not None ): movie += ( studio[ 0 ], )
-        else: movie += ( '', )
-        return movie
-        
-    def getMovieList( self, sql, params = None, full = False ):
-        try:
-            self.records = database.Records()
-            movie_list = self.records.fetch( sql, params, all=True )
+            movie_list = records.fetch( sql, params, all=True )
             if ( movie_list ):
-                if ( not full ):
-                    self.movies = []
-                total_cnt = len( movie_list )
-                pct_sect = float( 100 ) / total_cnt
                 commit = info_missing = False
+                dialog_ok = True
                 for cnt, movie in enumerate( movie_list ):
-                    movie = self.getActorStudio( movie )
-                    if ( info_missing or movie[ 3 ] is None ):
-                        self.dialog.update( int( ( cnt + 1 ) * pct_sect ), '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '' )
-                        info_missing = True
-                        if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or self.dialog.iscanceled() or ( cnt + 1 ) == total_cnt ):
-                            commit = True
                     if ( movie[ 3 ] is None ):
-                        movie = self.loadMovieInfo( movie )
-                    if ( movie and not full ):
+                        movie = _load_movie_info( movie )
+                        info_missing = True
+                    else: movie = _get_actor_and_studio( movie )
+                    if ( info_missing ):
+                        if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or ( cnt + 1 ) == len( movie_list ) or not dialog_ok ):
+                            commit = True
+                        dialog_ok = _progress_dialog( cnt + 1, commit )
+                    if ( not full and movie is not None ):
                         #self.movies += [Movie( movie )]
                         self.movies += [ 
                             Movie(
@@ -605,21 +551,20 @@ class Trailers:
                                 studio = movie[14]
                                 )
                             ]
-                            
-                    if ( commit ):
-                        self.dialog.update( int( ( cnt + 1 ) * pct_sect ) , '%s: (%d of %d)' % ( _( 88 ), cnt + 1, total_cnt, ), movie[1], '-----> %s <-----' % (_( 43 ), ) )
-                        success = self.records.commit()
+
+                    if ( commit or not dialog_ok ):
+                        success = records.commit()
                         commit = False
-                        if ( self.dialog.iscanceled() ):
+                        if ( not dialog_ok ):
                             full = False
                             break
             else: self.movies = None
         except: traceback.print_exc()#pass
-        self.records.close()
-        self.dialog.close()
+        records.close()
+        _progress_dialog( -1 )
         return full
 
-    def getCategories( self, sql, params = False ):
+    def getCategories( self, sql, params=None ):
         try:
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 85 ) )
@@ -627,10 +572,21 @@ class Trailers:
             records = database.Records()
             category_list = records.fetch( sql, params, all=True )
             records.close()
-            if ( category_list ):
+            if ( category_list is not None):
                 self.categories = []
                 for category in category_list:
                     self.categories += [ Category( id=category[ 0 ], title=category[ 1 ], count=category[ 2 ] ) ]
             else: self.categories = None
         except: traceback.print_exc()
         dialog.close()
+
+    def updateRecord( self, table, columns, values, key="title" ):
+        try:
+            records = database.Records()
+            success = records.update( table, columns, values, key, True )
+            records.close()
+        except:
+            traceback.print_exc()
+            success = False
+        return success
+
