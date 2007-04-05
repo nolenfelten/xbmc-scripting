@@ -7,13 +7,13 @@ from sgmllib import SGMLParser
 import socket
 import traceback
 
-sys.path.append( os.path.join( os.getcwd().replace( ';', '' ), 'resources', 'lib' ) )
+sys.path.append( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib" ) )
 import language
 _ = language.Language().localized
 
 socket.setdefaulttimeout( 10 )
 
-__scriptname__ = 'T3CH Downloader'
+__scriptname__ = "T3CH Downloader"
 
 
 class Parser( SGMLParser ):
@@ -23,45 +23,38 @@ class Parser( SGMLParser ):
 
     def start_a( self, attrs ):
         for key, value in attrs:
-            if ( key == 'href' and value.find( '/STABLE/' ) == -1 and value.find( 'ARCHIVE/' ) == -1 
-                and value.find( '/t3ch/XBMC-SVN' ) != -1 and value.find( '.rar' ) != -1 ):
+            if ( key == "href" and value.find( "/STABLE/" ) == -1 and value.find( "ARCHIVE/" ) == -1 
+                and value.find( "/t3ch/XBMC-SVN" ) != -1 and value.find( ".rar" ) != -1 ):
                 self.url = value
     
 class Main:
     def __init__( self ):
-        #self.base_url = 'http://t3ch.xil.us/'
+        #self.base_url = "http://t3ch.xil.us/"
         self.base_url = "http://217.118.215.116/"
         self._get_settings()
         self._download_build()
         
     def _get_settings( self ):
         try:
-            settings_file = open( os.path.join( 'T:\\script_data', __scriptname__, 'settings.txt' ), 'r' )
-            settings = settings_file.read().split( '|' )
+            settings_file = open( os.path.join( "T:\\script_data", __scriptname__, "settings.txt" ), "r" )
+            self.settings = eval( settings_file.read() )
             settings_file.close()
-            self.download_path = settings[ 0 ]
-            self.unrar_path = settings[ 1 ]
-            self.xbmc_folder = settings[ 2 ]
         except:
             self._set_default_settings()
            
     def _set_default_settings( self ):
-        self.download_path = self._browse_for_path( _( 200 ) )
-        self.unrar_path = self._browse_for_path( _( 201 ) )
-        self.xbmc_folder = 'XBMC'#self._browse_for_path( _( 202 ) )
+        self.settings = {}
+        self.settings[ "download_path" ] = self._browse_for_path( _( 200 ) )
+        self.settings[ "unrar_path" ] = self._browse_for_path( _( 201 ) )
+        self.settings[ "xbmc_folder" ] = "XBMC"#self._browse_for_path( _( 202 ) )
         self._save_settings()
 
     def _save_settings( self ):
         try:
-            settings = '%s|%s|%s' % (
-            self.download_path,
-            self.unrar_path,
-            self.xbmc_folder,
-            )
-            if ( not os.path.isdir( os.path.join( 'T:\\script_data', __scriptname__ ) ) ):
-                os.makedirs( os.path.join( 'T:\\script_data', __scriptname__ ) )
-            settings_file = open( os.path.join( 'T:\\script_data', __scriptname__, 'settings.txt' ), 'w' )
-            settings_file.write( settings )
+            if ( not os.path.isdir( os.path.join( "T:\\script_data", __scriptname__ ) ) ):
+                os.makedirs( os.path.join( "T:\\script_data", __scriptname__ ) )
+            settings_file = open( os.path.join( "T:\\script_data", __scriptname__, "settings.txt" ), "w" )
+            settings_file.write( repr( self.settings ) )
             settings_file.close()
         except:
             traceback.print_exc()
@@ -69,14 +62,14 @@ class Main:
 
     def _browse_for_path( self, heading ):
         dialog = xbmcgui.Dialog()
-        path = dialog.browse( 3, heading, 'files')
+        path = dialog.browse( 3, heading, "files")
         return path
 
     def _download_build( self ):
         try:
             url = self._get_latest_version()
             if ( url ):
-                file_path = os.path.join( self.download_path, os.path.split( url )[ 1 ], )
+                file_path = os.path.join( self.settings[ "download_path" ], os.path.split( url )[ 1 ], )
                 ok = xbmcgui.Dialog().yesno( _( 0 ), _( 500 ), os.path.split( url )[ 1 ], _( 501 ), _( 401 ), _( 400 ) )
                 if ( ok ):
                     self._fetch_current_build( url, file_path )
@@ -118,10 +111,10 @@ class Main:
     def _extract_rar( self, file_path ):
         try:
             dialog = xbmcgui.DialogProgress()
-            dialog.create( _( 0 ), _( 504 ), '%s' % ( os.path.join( self.unrar_path, os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
-            xbmc.executebuiltin( 'XBMC.extract(%s,%s\\%s)' % ( file_path, self.unrar_path, os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ], ) )
+            dialog.create( _( 0 ), _( 504 ), "%s" % ( os.path.join( self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
+            xbmc.executebuiltin( "XBMC.extract(%s,%s\\%s)" % ( file_path, self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ], ) )
             dialog.close()
-            ok = xbmcgui.Dialog().ok( _( 0 ), _( 505 ), '%s' % ( os.path.join( self.unrar_path, os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
+            ok = xbmcgui.Dialog().ok( _( 0 ), _( 505 ), "%s" % ( os.path.join( self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
         except: 
             dialog.close()
             traceback.print_exc()
@@ -143,6 +136,6 @@ class Main:
             return parser.url
         except: return None
             
-if ( __name__ == '__main__' ):
+if ( __name__ == "__main__" ):
     Main()
     
