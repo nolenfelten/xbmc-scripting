@@ -355,6 +355,19 @@
 			<shadowcolor>a0dadada</shadowcolor>
 			<animation effect="fade" time="100">WindowOpen</animation>
 		</control>
+	        
+        <control type="label" id="8">
+			<description>Scraper</description>
+			<posx>105</posx>
+			<posy>373</posy>
+			<width>160</width>
+			<label>-</label>
+			<align>left</align>
+			<font>font12</font>
+			<textcolor>FF000000</textcolor>
+			<shadowcolor>a0dadada</shadowcolor>
+			<animation effect="fade" time="100">WindowOpen</animation>
+		</control>
 
 	</controls>
 

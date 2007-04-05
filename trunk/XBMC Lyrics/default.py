@@ -64,8 +64,7 @@ class GUI( xbmcgui.WindowDialog ):
         sys.path.append( os.path.join( resource_path, "scrapers", self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
-        try: self.controls[ 8 ][ "control" ].setLabel( sys.modules[ "lyricsScraper" ].__title__ )
-        except: pass
+        self.controls[ 8 ][ "control" ].setLabel( sys.modules[ "lyricsScraper" ].__title__ )
 
     def setup_variables( self ):
         self.artist = None
@@ -99,7 +98,9 @@ class GUI( xbmcgui.WindowDialog ):
         if ( lyrics is not None ):
             if ( current_song == self.song ):
                 self.show_lyrics( lyrics )
+                self.controls[ 8 ][ "control" ].setEnabled( False )
         else:
+            self.controls[ 8 ][ "control" ].setEnabled( True )
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
             if ( current_song == self.song ):
                 if ( isinstance( lyrics, basestring ) ):
