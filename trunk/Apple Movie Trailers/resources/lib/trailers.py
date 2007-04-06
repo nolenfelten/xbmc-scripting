@@ -118,7 +118,7 @@ class Trailers:
                     record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
-                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )#'[]', '', '', '', '', 0, 0, '', 0, '', ) )
+                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
                         success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                     else:
                         #print "EXIST", url

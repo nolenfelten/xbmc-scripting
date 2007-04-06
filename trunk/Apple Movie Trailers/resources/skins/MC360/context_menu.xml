@@ -80,7 +80,7 @@
 			<texturefocus>dialog-context-button-FO.png</texturefocus>
 			<onleft>1000</onleft>
 			<onright>1000</onright>
-			<onup>1050</onup>
+			<onup>1070</onup>
 			<ondown>1010</ondown>
 			<visible>true</visible>
 		</control>
@@ -196,6 +196,52 @@
 			<onleft>1050</onleft>
 			<onright>1050</onright>
 			<onup>1040</onup>
+			<ondown>1060</ondown>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1060">
+			<description>Context Menu Button7</description>
+			<posx>10</posx>
+			<posy>178</posy>
+			<width>165</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<focusedcolor>ff000000</focusedcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturenofocus>dialog-context-button-NF.png</texturenofocus>
+			<texturefocus>dialog-context-button-FO.png</texturefocus>
+			<onleft>1060</onleft>
+			<onright>1060</onright>
+			<onup>1050</onup>
+			<ondown>1070</ondown>
+			<visible>false</visible>
+		</control>
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1070">
+			<description>Context Menu Button8</description>
+			<posx>10</posx>
+			<posy>178</posy>
+			<width>165</width>
+			<height>32</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<label>-</label>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<focusedcolor>ff000000</focusedcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>10</textoffsetx>
+			<texturenofocus>dialog-context-button-NF.png</texturenofocus>
+			<texturefocus>dialog-context-button-FO.png</texturefocus>
+			<onleft>1070</onleft>
+			<onright>1070</onright>
+			<onup>1060</onup>
 			<ondown>1000</ondown>
 			<visible>false</visible>
 		</control>
