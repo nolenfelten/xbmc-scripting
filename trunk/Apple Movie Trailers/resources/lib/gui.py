@@ -521,9 +521,9 @@ class GUI( xbmcgui.Window ):
             if ( not self.trailers.complete ): 
                 labels += ( _( 508 ), )
                 functions += ( self.force_full_update, )
-            self.context_menu.show_context_menu( box=( x, y, w, h, ), labels=labels )
-            if ( self.context_menu.function is not None ):
-                functions[ self.context_menu.function ]()
+            self.context_menu.show_context_menu( area=( x, y, w, h, ), labels=labels )
+            if ( self.context_menu.selection is not None ):
+                functions[ self.context_menu.selection ]()
 
     def force_full_update( self ):
         self.trailers.fullUpdate()

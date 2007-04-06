@@ -7,7 +7,6 @@ Nuka1195
 import xbmcgui
 import guibuilder
 import utilities
-#import traceback
 
 
 class GUI( xbmcgui.WindowDialog ):
@@ -22,14 +21,13 @@ class GUI( xbmcgui.WindowDialog ):
         gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="context_menu", language=self._ )
         return gui_loaded
 
-    def show_context_menu( self, box, labels ):
+    def show_context_menu( self, area, labels ):
         try:
             xbmcgui.lock()
             self._hide_buttons()
-            self._set_button_labels( labels )
-            self._set_menu_position( box )
+            self._setup_menu( area, labels )
             self.setFocus( self.controls[ "Context Menu Button1" ][ "control" ] )
-        except: pass#traceback.print_exc()
+        except: pass
         xbmcgui.unlock()
         self.doModal()
 
@@ -38,13 +36,8 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls[ "Context Menu Button%d" % ( button, ) ][ "control" ].setVisible( False )
             self.controls[ "Context Menu Button%d" % ( button, ) ][ "control" ].setEnabled( False )
 
-    def _set_button_labels( self, labels ):
-        self.buttons = len( labels )
-        for count in range( self.buttons ):
-            self.controls[ "Context Menu Button%d" % ( count + 1, )][ "control" ].setLabel( labels[ count ] )
-    
-    def _set_menu_position( self, box ):
-        """ centers the context_menu within a box """
+    def _setup_menu( self, area, labels ):
+        """ centers the context_menu within an area """
         # get positions and dimensions
         button_height = self.controls[ "Context Menu Button1" ][ "control" ].getHeight()
         button_posx, button_posy = self.controls[ "Context Menu Button1" ][ "control" ].getPosition()
@@ -54,32 +47,32 @@ class GUI( xbmcgui.WindowDialog ):
         dialog_top_posx, dialog_top_posy = self.controls[ "Context Menu Background Top" ][ "control" ].getPosition()
         dialog_middle_posy = self.controls[ "Context Menu Background Middle" ][ "control" ].getPosition()[ 1 ]
         dialog_middle_offsety = dialog_middle_posy - dialog_top_posy
-        
         # calculate position
         button_offsetx = button_posx - dialog_top_posx
         button_offsety = button_posy - dialog_top_posy
         button_gap = 2
-        dialog_middle_height = ( self.buttons * ( button_height + button_gap ) ) - button_gap
+        dialog_middle_height = ( len( labels ) * ( button_height + button_gap ) ) - button_gap
         dialog_height = dialog_middle_height + dialog_top_height + dialog_bottom_height
-        dialog_posx = int( float( box[ 2 ] - dialog_width ) / 2 ) + box[ 0 ]
-        dialog_posy = int( float( box[ 3 ] - dialog_height ) / 2 ) + box[ 1 ]
+        dialog_posx = int( float( area[ 2 ] - dialog_width ) / 2 ) + area[ 0 ]
+        dialog_posy = int( float( area[ 3 ] - dialog_height ) / 2 ) + area[ 1 ]
         button_posx = dialog_posx + button_offsetx
         button_posy = dialog_posy + button_offsety
-        
         # position and size menu
         self.controls[ "Context Menu Background Middle" ][ "control" ].setHeight( dialog_middle_height )
         self.controls[ "Context Menu Background Top" ][ "control" ].setPosition( dialog_posx, dialog_posy )
         self.controls[ "Context Menu Background Middle" ][ "control" ].setPosition( dialog_posx, dialog_posy + dialog_middle_offsety )
         self.controls[ "Context Menu Background Bottom" ][ "control" ].setPosition( dialog_posx, dialog_posy + dialog_middle_offsety + dialog_middle_height )
-        for button in range( self.buttons ):
+        # position buttons and set labels
+        for button in range( len( labels ) ):
             self.controls[ "Context Menu Button%d" % ( button + 1, ) ][ "control" ].setPosition( button_posx, button_posy + ( ( button_height + button_gap ) * button ) )
+            self.controls[ "Context Menu Button%d" % ( button + 1, ) ][ "control" ].setLabel( labels[ button ] )
             self.controls[ "Context Menu Button%d" % ( button + 1, ) ][ "control" ].setVisible( True )
             self.controls[ "Context Menu Button%d" % ( button + 1, ) ][ "control" ].setEnabled( True )
 
-    def _close_dialog( self, function=None ):
-        self.function = function
+    def _close_dialog( self, selection=None ):
+        self.selection = selection
         self.close()
-        
+
     def onControl( self, control ):
         if ( control is self.controls[ "Context Menu Button1" ][ "control" ] ):
             self._close_dialog( 0 )
