@@ -731,34 +731,17 @@ class GUI( xbmcgui.Window ):
                         self.showContextMenu( "Trailer List" )
                     else:
                         self.showTrailerInfo()
-                elif ( control is self.controls["Trailer List Scrollbar Position Indicator"]["control"] ):
-                    if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                        self.pageIndicator( "Trailer List", -1 )
-                    elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                        self.pageIndicator( "Trailer List", 1 )
                 elif ( control is self.controls["Category List"]["control"] ):
                     if ( action.getButtonCode() in utilities.CONTEXT_MENU ):
                         self.showContextMenu( "Category List" )
                     else:
                         self.setScrollbarIndicator( "Category List" )
                         choice = self.setCountLabel( "Category List" )
-                elif ( control is self.controls["Category List Scrollbar Position Indicator"]["control"] ):
-                    if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                        self.pageIndicator( "Category List", -1 )
-                        choice = self.setCountLabel( "Category List" )
-                    elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                        self.pageIndicator( "Category List", 1 )
-                        choice = self.setCountLabel( "Category List" )
                 elif ( control is self.controls["Cast List"]["control"] ):
                     if ( action.getButtonCode() in utilities.CONTEXT_MENU ):
                         self.showContextMenu( "Cast List" )
                     else:
                         self.setScrollbarIndicator( "Cast List" )
-                elif ( control is self.controls["Cast List Scrollbar Position Indicator"]["control"] ):
-                    if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                        self.pageIndicator( "Cast List", -1 )
-                    elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                        self.pageIndicator( "Cast List", 1 )
                 elif ( control is self.controls["Shortcut1 Button"]["control"] ):
                     self.setControlNavigation( "Shortcut1 Button" )
                 elif ( control is self.controls["Shortcut2 Button"]["control"] ):
@@ -776,6 +759,29 @@ class GUI( xbmcgui.Window ):
                 elif ( control is self.controls["Settings Button"]["control"] ):
                     self.setControlNavigation( "Settings Button" )
                 else:
+                    try:
+                        if ( control is self.controls["Trailer List Scrollbar Position Indicator"]["control"] ):
+                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
+                                self.pageIndicator( "Trailer List", -1 )
+                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                                self.pageIndicator( "Trailer List", 1 )
+                    except: pass
+                    try:
+                        if ( control is self.controls["Category List Scrollbar Position Indicator"]["control"] ):
+                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
+                                self.pageIndicator( "Category List", -1 )
+                                choice = self.setCountLabel( "Category List" )
+                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                                self.pageIndicator( "Category List", 1 )
+                                choice = self.setCountLabel( "Category List" )
+                    except: pass
+                    try:
+                        if ( control is self.controls["Cast List Scrollbar Position Indicator"]["control"] ):
+                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
+                                self.pageIndicator( "Cast List", -1 )
+                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                                self.pageIndicator( "Cast List", 1 )
+                    except: pass
                     try:
                         if ( control is self.controls[ "Optional Button" ][ "control" ] ):
                             self.setControlNavigation( "Optional Button" )
