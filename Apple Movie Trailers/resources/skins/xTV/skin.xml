@@ -320,6 +320,14 @@
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="image" id="202">
+			<description>Trailer Rating</description>
+            <posx>-500000000</posx>
+            <height>0</height>
+            <width>0</width>
+		</control>
+		
+        <!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
 			<posx>290</posx>
@@ -449,127 +457,11 @@
 		</control>
 		<!-- special controls for media playing info -->
 		
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="300">
-			<description>X Button On</description>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="image" id="301">
-			<description>X Button Off</description>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="302">
-			<description>Full-Screen Visualisation Label</description>
-			<textcolor>00000000</textcolor>
-		</control>
-
-		<!-- ** Optional w/ all (300-303) ** Do not change <description> or <type> -->
-		<control type="label" id="303">
-			<description>Full-Screen Video Label</description>
-			<textcolor>00000000</textcolor>
-		</control>
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Trailer List Scrollbar Up Arrow</description>
-		</control>
-
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Trailer List Scrollbar Middle</description>
-		</control>
-		
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Trailer List Scrollbar Down Arrow</description>
-		</control>
-		
-		<!-- ** Optional w/ all Trailer List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="button" id="900">
-			<description>Trailer List Scrollbar Position Indicator</description>
-		</control>
-
-		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
-			<description>Trailer List Backdrop</description>
-		</control>
-
-		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
-			<description>Cast List Backdrop</description>
-		</control>
-
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Cast List Scrollbar Up Arrow</description>
-		</control>
-
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Cast List Scrollbar Middle</description>
-		</control>
-		
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Cast List Scrollbar Down Arrow</description>
-		</control>
-		
-		<!-- ** Optional w/ all Cast List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="button" id="95">
-			<description>Cast List Scrollbar Position Indicator</description>
-		</control>
-
-		<!-- ** Optional ** Do not change <description> -->
-		<control type="list" id="0">
-			<description>Category List Backdrop</description>
-		</control>
-
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Category List Scrollbar Up Arrow</description>
-		</control>
-
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Category List Scrollbar Middle</description>
-		</control>
-		
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="image" id="1">
-			<description>Category List Scrollbar Down Arrow</description>
-		</control>
-		
-		<!-- ** Optional w/ all Category List Scrollbar controls ** Do not change <description> or <type> -->
-		<control type="button" id="91">
-			<description>Category List Scrollbar Position Indicator</description>
-		</control>
-
-        <!-- 
-            Uncomment the following control and uncomment the pair of <label> and <onclick> you prefer 
-            and add them to the control. Don't forget to adjust you <on*> tags.
-        -->
-			<!--label>209</label
-			<onclick>self.showCredits()</onclick-->
-			<!--label>228</label>
-			<onclick>self.updateScript()</onclick-->
-			<!--label>227</label>
-			<onclick>self.exitScript()</onclick-->
-
-		<!-- ** Optional ** Do not change <description> or <type> -->
-		<!--control type="button" id="80">
-			<description>Optional Button</description>
-		</control-->
 
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="1">
 			<description>Title Label</description>
 			<textcolor>00000000</textcolor>
-		</control>
-
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="200">
-			<description>Poster Backdrop</description>
 		</control>
 
 		<!-- ** Required ** Do not change <description> -->
@@ -583,13 +475,6 @@
 			<textcolor>00000000</textcolor>
 		</control>
 
-		<!-- ** Required ** Do not change <description> or <type> -->
-		<control type="image" id="202">
-			<description>Trailer Rating</description>
-                        <posx>-500000000</posx>
-                        <height>0</height>
-                        <width>0</width>
-		</control>
 
 	</controls>
 
