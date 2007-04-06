@@ -12,28 +12,21 @@ import utilities
 
 class GUI( xbmcgui.WindowDialog ):
     def __init__( self, *args, **kwargs ):
-        try:
-            self._ = kwargs['language']
-            self.skin = kwargs['skin']
-            self.gui_loaded = self.setupGUI()
-            if ( not self.gui_loaded ): self.close()
-            else:
-                self.setupVariables()
-                self.showCredits()
-        except: 
-            self.close()
-                
-    def setupVariables( self ):
-        self.controller_action = utilities.setControllerAction()
-
-    def setupGUI( self ):
+        self._ = kwargs['language']
+        self.gui_loaded = self._load_gui( kwargs['skin'] )
+        if ( not self.gui_loaded ): self._close_dialog()
+        else:
+            self._show_credits()
+            
+    def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, skin=self.skin, xml_name="credits", language=self._ )
-        return ok
+        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="credits", language=self._ )
+        return gui_loaded
         
-    def showCredits( self ):
+    def _show_credits( self ):
         try:
+            xbmcgui.lock()
             # Team credits
             self.controls['Credits Label']['control'].setLabel( sys.modules[ "__main__" ].__scriptname__ )
             self.controls['Credits Version Label']['control'].setLabel( '%s: %s' % ( self._( 900 ), sys.modules[ "__main__" ].__version__, ) )
@@ -55,18 +48,15 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Additional Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( sys.modules[ "__main__" ].__acredits_l3__, sys.modules[ "__main__" ].__acredits_r3__ )
             self.controls['Additional Credits List']['control'].addItem( l )
-            
         except: print 'Credits Removed'
-    
-    def closeDialog( self ):
+        xbmcgui.unlock()
+        
+    def _close_dialog( self ):
         self.close()
         
     def onControl( self, control ):
         pass
     
     def onAction( self, action ):
-        button_key = self.controller_action.get( action.getButtonCode(), 'n/a' )
-        if ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back Button' ):
-            self.closeDialog()
-        elif ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.closeDialog()
+        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
+            self._close_dialog()

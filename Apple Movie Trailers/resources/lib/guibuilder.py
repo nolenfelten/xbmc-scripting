@@ -14,6 +14,7 @@ import os
 import xbmc
 import xbmcgui
 import xml.dom.minidom
+#import traceback
 
 
 class GUIBuilder:
@@ -42,7 +43,8 @@ class GUIBuilder:
                 self._set_visibility_and_animations()
                 self._clear_variables()
             else: raise
-        except: 
+        except:
+            #traceback.print_exc()
             succeeded = False
         return succeeded, image_path
 

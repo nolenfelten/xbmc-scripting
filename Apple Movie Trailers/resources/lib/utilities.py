@@ -7,24 +7,37 @@ Nuka1195
 import os
 import default
 
+# comapatble versions
 DATABASE_VERSIONS = [ "pre-0.97.4", "0.97.4" ]
 SETTINGS_VERSIONS = DATABASE_VERSIONS + [ "pre-0.97.2", "0.97.2", "pre-0.97.3", "0.97.3" ]
+# special categories
 GENRES = -1
 STUDIOS = -2
 ACTORS = -3
 FAVORITES = -6
 DOWNLOADED = -7
+# base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", default.__scriptname__ )
+BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", default.__scriptname__ )
+BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+# special action codes
 EXIT_SCRIPT = ( 247, 275, 61467, )
+CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
 TOGGLE_DISPLAY = ( 216, 257, 61448, )
 CONTEXT_MENU = ( 229, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
-if ( not os.path.isdir( BASE_DATA_PATH ) ):
-    os.makedirs( BASE_DATA_PATH )
 
+def _create_base_paths():
+    """ creates the base folders """
+    if ( not os.path.isdir( BASE_DATA_PATH ) ):
+        os.makedirs( BASE_DATA_PATH )
+    if ( not os.path.isdir( BASE_SETTINGS_PATH ) ):
+        os.makedirs( BASE_SETTINGS_PATH )
+_create_base_paths()
 
 def setControllerAction():
+    """ depreciated: button codes dictionary """
     return {
                 61478 : "Keyboard Up Arrow",
                 61480 : "Keyboard Down Arrow",
@@ -53,13 +66,11 @@ def setControllerAction():
 
 
 class Settings:
-    def __init__( self, *args, **kwargs ):
-        pass
-
+    """ Settings class """
     def get_settings( self ):
+        """ read settings from a settings.txt file in BASE_SETTINGS_PATH """
         try:
-            settings_path = os.path.join( "P:\\script_data", default.__scriptname__ )
-            settings_file = open( os.path.join( settings_path, "settings.txt" ), "r" )
+            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
@@ -69,6 +80,7 @@ class Settings:
         return settings
 
     def _use_defaults( self, show_dialog=False ):
+        """ setup default values if none obtained """
         settings = {  
             "version": default.__version__,
             "skin": "Default",
@@ -86,11 +98,9 @@ class Settings:
         return settings
 
     def save_settings( self, settings ):
+        """ save settings to a settings.txt file in BASE_SETTINGS_PATH """
         try:
-            settings_path = os.path.join( "P:\\script_data", default.__scriptname__ )
-            if ( not os.path.isdir( settings_path ) ):
-                os.makedirs( settings_path )
-            settings_file = open( os.path.join( settings_path, "settings.txt" ), "w" )
+            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "w" )
             settings_file.write( repr( settings ) )
             settings_file.close()
             return True

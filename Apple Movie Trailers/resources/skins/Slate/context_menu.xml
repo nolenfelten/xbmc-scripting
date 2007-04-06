@@ -67,7 +67,7 @@
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<texturefocus>\button-dialog-focus.png</texturefocus>
             <ondown>1002</ondown>
-            <onup>1006</onup>
+            <onup>1008</onup>
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -161,8 +161,46 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
 			<texturefocus>\button-dialog-focus.png</texturefocus>
-            <ondown>1001</ondown>
+            <ondown>1007</ondown>
             <onup>1005</onup>
+		</control>
+
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1007">
+			<description>Context Menu Button7</description>
+			<posx>12</posx>
+			<posy>0</posy>
+			<width>185</width>
+			<height>32</height>
+			<font>font13</font>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>FF000000</textcolor>
+			<focusedcolor>FFFFFFFF</focusedcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
+			<texturefocus>\button-dialog-focus.png</texturefocus>
+            <ondown>1008</ondown>
+            <onup>1006</onup>
+		</control>
+
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1008">
+			<description>Context Menu Button8</description>
+			<posx>12</posx>
+			<posy>0</posy>
+			<width>185</width>
+			<height>32</height>
+			<font>font13</font>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>FF000000</textcolor>
+			<focusedcolor>FFFFFFFF</focusedcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<texturenofocus>\button-dialog-nofocus.png</texturenofocus>
+			<texturefocus>\button-dialog-focus.png</texturefocus>
+            <ondown>1001</ondown>
+            <onup>1007</onup>
 		</control>
 
 	</controls>

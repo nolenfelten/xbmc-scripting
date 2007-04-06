@@ -18,10 +18,11 @@ class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         try:
+            self.chooser = None
             self._ = kwargs[ "language" ]
             self.skin = kwargs[ "skin" ]
             self.genres = kwargs[ "genres" ]
-            self.gui_loaded = self.setupGUI()
+            self.gui_loaded = self._load_gui()
             if ( not self.gui_loaded ): self._close_dialog()
             else:
                 self._set_variables()
@@ -29,14 +30,14 @@ class GUI( xbmcgui.WindowDialog ):
                 self._setup_special()
                 self._set_controls_values()
                 self._set_restart_required()
-                self.chooser = chooser.GUI( skin=self.skin, language=self._ )
+                ##self.chooser = chooser.GUI( skin=self.skin, language=self._ )
         except: pass#traceback.print_exc()
             
-    def setupGUI( self ):
+    def _load_gui( self ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, skin=self.skin, xml_name="settings", language=self._ )
-        return ok
+        gui_loaded, image_path = gb.create_gui( self, skin=self.skin, xml_name="settings", language=self._ )
+        return gui_loaded
 
     def _set_variables( self ):
         """ initializes variables """
@@ -172,7 +173,7 @@ class GUI( xbmcgui.WindowDialog ):
         if ( self.chooser.selection is not None ):
             self.current_skin = self.chooser.selection
             self.settings[ "skin" ] = self.skins[ self.current_skin ]
-
+            
     def _change_setting2( self ):
         """ changes settings #2 """
         self.chooser.show_chooser( choices=self.quality, selection=self.settings[ "trailer_quality" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 202 ) ) )
@@ -184,7 +185,7 @@ class GUI( xbmcgui.WindowDialog ):
         self.chooser.show_chooser( choices=self.mode, selection=self.settings[ "mode" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 203 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "mode" ] = self.chooser.selection
-
+        
     def _change_setting4( self ):
         """ changes settings #4 """
         shares = [ "video", "files" ][ self.settings[ "mode" ] == 3 ]
@@ -195,28 +196,28 @@ class GUI( xbmcgui.WindowDialog ):
         self.chooser.show_chooser( choices=self.thumbnail, selection=self.settings[ "thumbnail_display" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 205 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "thumbnail_display" ] = self.chooser.selection
-
+        
     def _change_setting6( self ):
         """ changes settings #6 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
         self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 206 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( self.chooser.selection )
-
+        
     def _change_setting7( self ):
         """ changes settings #7 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
         self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 207 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( self.chooser.selection )
-
+        
     def _change_setting8( self ):
         """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
         self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 208 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( self.chooser.selection )
-
+        
     def _change_setting9( self ):
         """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
@@ -257,6 +258,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ closes this dialog window """
         self.changed = changed
         self.restart = restart
+        ##if ( self.chooser is not None ): del self.chooser
         self.close()
         
     def get_control( self, key ):
@@ -265,6 +267,7 @@ class GUI( xbmcgui.WindowDialog ):
         except: return None
 
     def onControl( self, control ):
+        #xbmc.sleep( 5 )
         if ( control is self.get_control( "Ok Button" ) ):
             self._save_settings()
         elif ( control is self.get_control( "Cancel Button" ) ):
@@ -273,32 +276,32 @@ class GUI( xbmcgui.WindowDialog ):
             self._update_script()
         elif ( control is self.get_control( "Credits Button" ) ):
             self._show_credits()
-        else: #if ( self.chooser.gui_loaded ):
-            if ( control is self.get_control( "Setting1 Button" ) ):
-                self._change_setting1()
-            elif ( control is self.get_control( "Setting2 Button" ) ):
-                self._change_setting2()
-            elif ( control is self.get_control( "Setting3 Button" ) ):
-                self._change_setting3()
-            elif ( control is self.get_control( "Setting4 Button" ) ):
-                self._change_setting4()
-            elif ( control is self.get_control( "Setting5 Button" ) ):
-                self._change_setting5()
-            elif ( control is self.get_control( "Setting6 Button" ) ):
-                self._change_setting6()
-            elif ( control is self.get_control( "Setting7 Button" ) ):
-                self._change_setting7()
-            elif ( control is self.get_control( "Setting8 Button" ) ):
-                self._change_setting8()
-            elif ( control is self.get_control( "Setting9 Button" ) ):
-                self._change_setting9()
-            elif ( control is self.get_control( "Setting10 Button" ) ):
-                self._change_setting10()
-            self._set_controls_values()
-            
+        else:
+            self.chooser = chooser.GUI( skin=self.skin, language=self._ )
+            if ( self.chooser.gui_loaded ):
+                if ( control is self.get_control( "Setting1 Button" ) ):
+                    self._change_setting1()
+                elif ( control is self.get_control( "Setting2 Button" ) ):
+                    self._change_setting2()
+                elif ( control is self.get_control( "Setting3 Button" ) ):
+                    self._change_setting3()
+                elif ( control is self.get_control( "Setting4 Button" ) ):
+                    self._change_setting4()
+                elif ( control is self.get_control( "Setting5 Button" ) ):
+                    self._change_setting5()
+                elif ( control is self.get_control( "Setting6 Button" ) ):
+                    self._change_setting6()
+                elif ( control is self.get_control( "Setting7 Button" ) ):
+                    self._change_setting7()
+                elif ( control is self.get_control( "Setting8 Button" ) ):
+                    self._change_setting8()
+                elif ( control is self.get_control( "Setting9 Button" ) ):
+                    self._change_setting9()
+                elif ( control is self.get_control( "Setting10 Button" ) ):
+                    self._change_setting10()
+                self._set_controls_values()
+            del self.chooser
+
     def onAction( self, action ):
-        button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
-        if ( button_key == "Keyboard Backspace Button" or button_key == "B Button" or button_key == "Remote Back Button" ):
+        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
             self._close_dialog()
-        elif ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
-            self._save_settings()

@@ -66,7 +66,7 @@
 			<texturenofocus>keyboard-btn-space.png</texturenofocus>
 			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
             <ondown>1002</ondown>
-            <onup>1006</onup>
+            <onup>1008</onup>
 		</control>
         
         <!-- ** Required ** Do not change <description> or <type> -->
@@ -155,8 +155,42 @@
 			<disabledcolor>60ffffff</disabledcolor>
 			<texturenofocus>keyboard-btn-space.png</texturenofocus>
 			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
-            <ondown>1001</ondown>
+            <ondown>1007</ondown>
             <onup>1005</onup>
+		</control>
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1007">
+			<description>Context Menu Button7</description>
+			<posx>24</posx>
+			<posy>0</posy>
+			<width>200</width>
+			<height>32</height>
+			<font>font13</font>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<texturenofocus>keyboard-btn-space.png</texturenofocus>
+			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+            <ondown>1008</ondown>
+            <onup>1006</onup>
+		</control>
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="button" id="1008">
+			<description>Context Menu Button8</description>
+			<posx>24</posx>
+			<posy>0</posy>
+			<width>200</width>
+			<height>32</height>
+			<font>font13</font>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<texturenofocus>keyboard-btn-space.png</texturenofocus>
+			<texturefocus>keyboard-btn-space-focus2.png</texturefocus>
+            <ondown>1001</ondown>
+            <onup>1007</onup>
 		</control>
 	</controls>
 </window>
