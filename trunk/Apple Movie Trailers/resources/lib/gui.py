@@ -54,7 +54,7 @@ class GUI( xbmcgui.Window ):
             base_path = os.getcwd().replace( ";", "" )
             self.debug = os.path.isfile( os.path.join( base_path, "debug.txt" ))
             self.getSettings()
-            self.gui_loaded = self._load_gui()
+            self.gui_loaded = self._load_gui( self.settings[ "skin" ] )
             if ( not self.gui_loaded ): raise
             else:
                 updateProgressDialog( _( 67 ) )
@@ -73,10 +73,10 @@ class GUI( xbmcgui.Window ):
     def getSettings( self ):
         self.settings = utilities.Settings().get_settings()
 
-    def _load_gui( self ):
+    def _load_gui( self, skin ):
         updateProgressDialog( _( 55 ) )
         gb = guibuilder.GUIBuilder()
-        gui_loaded, self.image_path = gb.create_gui( self, skin=self.settings[ "skin" ], language=_ )
+        gui_loaded, self.image_path = gb.create_gui( self, skin=skin, language=_ )
         #closeProgessDialog()
         #if ( not ok ):
         #    xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
@@ -95,7 +95,7 @@ class GUI( xbmcgui.Window ):
         self.display_cast = False
         ##self.dummy()
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
-        #self.controller_action = utilities.setControllerAction()
+        #self.controller_action = utilities.buttoncode_dict()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
 
@@ -511,6 +511,8 @@ class GUI( xbmcgui.Window ):
                     labels += ( _( 511 ), )
                     labels += ( _( 507 ), )
                     functions += ( self.refreshGenre, )
+                    labels += ( _( 514 ), )
+                    functions += ( self.refreshAllGenres, )
                 elif ( self.category_id ==  utilities.STUDIOS ):
                     labels += ( _( 512 ), )
                 elif ( self.category_id ==  utilities.ACTORS ):
@@ -609,19 +611,28 @@ class GUI( xbmcgui.Window ):
                 force_update = False
             self.showTrailers( self.sql, params = params, choice = choice, force_update = force_update )
     
+    def refreshAllGenres( self ):
+        genre = self.controls["Category List"]["control"].getSelectedPosition()
+        self.sql_category = ""
+        self.sql = ""
+        genres = range( len( self.genres ) )
+        self.trailers.refreshGenre( genres )
+        sql = self.query[ "genre_category_list" ]
+        self.showCategories( sql, choice=genre, force_update=True )
+        
     def refreshGenre( self ):
         genre = self.controls["Category List"]["control"].getSelectedPosition()
         self.sql_category = ""
         if ( self.current_display[ 1 ][ 0 ] == genre ):
             self.sql = ""
+        self.trailers.refreshGenre( ( genre, ) )
         sql = self.query[ "genre_category_list" ]
-        self.trailers.refreshGenre( genre )
         self.showCategories( sql, choice=genre, force_update=True )
 
     def refreshCurrentGenre( self ):
         trailer = self.setCountLabel( "Trailer List" )
         self.sql_category = ""
-        self.trailers.refreshGenre( self.category_id )
+        self.trailers.refreshGenre( ( self.category_id, ) )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
     def refreshInfo( self ):

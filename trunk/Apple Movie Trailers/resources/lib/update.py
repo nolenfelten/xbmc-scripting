@@ -1,10 +1,18 @@
-import sys, os
+"""
+Update module
+
+Nuka1195
+"""
+
+import sys
+import os
 import xbmcgui
 import urllib
-from sgmllib import SGMLParser
 import socket
+from sgmllib import SGMLParser
 
 socket.setdefaulttimeout( 10 )
+
 
 class Parser( SGMLParser ):
     """ Parser Class: grabs all tag versions and urls """
@@ -31,6 +39,7 @@ class Parser( SGMLParser ):
         if ( tag == "h2" ):
             self.url_found = True
 
+
 class Update:
     """ Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
     def __init__( self, language ):
@@ -53,14 +62,14 @@ class Update:
             self.versions, url = self._parse_html_source( htmlsource )
             self.url = url[url.find( ":%20" ) + 4:]
             if ( self.versions ):
-                new = ( self.__version__ < self.versions[-1][:-1] or ( self.__version__.startswith( "pre-" ) and self.__version__.replace( "pre-", "" ) <= self.versions[-1][:-1] ) )
+                new = ( self.__version__ < self.versions[ -1 ][ : -1 ] or ( self.__version__.startswith( "pre-" ) and self.__version__.replace( "pre-", "" ) <= self.versions[ -1 ][ : -1 ] ) )
         self.dialog.close()
         return new
                 
     def _update_script( self ):
         """ main update function """
         try:
-            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[-1][:-1], self._( 1002 ), ), self._( 1003 ), "", self._( 251 ), self._( 252 ) ) ):
+            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[ -1 ][ : -1 ], self._( 1002 ), ), self._( 1003 ), "", self._( 251 ), self._( 252 ) ) ):
                 self.dialog.create( self.__scriptname__, self._( 1004 ), self._( 1005 ) )
                 script_files = []
                 folders = ["%s/%s" % ( self.url, self.versions[-1], )]
@@ -70,17 +79,17 @@ class Update:
                         if ( htmlsource ):
                             items, url = self._parse_html_source( htmlsource )
                             files, dirs = self._parse_items( items )
-                            url = url[url.find( ":%20" ) + 4:]
+                            url = url[ url.find( ":%20" ) + 4 : ]
                             for file in files:
                                 script_files.append( "%s/%s" % ( url, file, ) )
                             for folder in dirs:
-                                folders.append( "%s/%s" % ( folders[0], folder, ) )
+                                folders.append( "%s/%s" % ( folders[ 0 ], folder, ) )
                         else: 
                             raise
-                        folders = folders[1:]
+                        folders = folders[ 1 : ]
                     except:
                         folders = None
-                self._get_files( script_files, self.versions[-1][:-1] )
+                self._get_files( script_files, self.versions[ -1 ][ : -1 ] )
         except:
             self.dialog.close()
             xbmcgui.Dialog().ok( self.__scriptname__, self._( 1031 ) )
@@ -90,8 +99,8 @@ class Update:
         try:
             for cnt, url in enumerate( script_files ):
                 items = os.path.split( url )
-                path = items[0].replace( "/tags/%s/" % ( self.__scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( self.__scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
-                file = items[1].replace( "%20", " " )
+                path = items[ 0 ].replace( "/tags/%s/" % ( self.__scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( self.__scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
+                file = items[ 1 ].replace( "%20", " " )
                 pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
                 self.dialog.update( pct, "%s %s" % ( self._( 1007 ), url, ), "%s %s" % ( self._( 1008 ), path, ), "%s %s" % ( self._( 1009 ), file, ) )
                 if ( self.dialog.iscanceled() ): raise
@@ -126,7 +135,7 @@ class Update:
         folders = []
         files = []
         for item in items:
-            if ( item[-1] == "/" ):
+            if ( item.endswith( "/" ) ):
                 folders.append( item )
             else:
                 files.append( item )

@@ -65,13 +65,25 @@
 		</control>
 
 		<control type="image" id="1">
-			<description>backdrop image</description>
+			<description>backdrop image categories</description>
 			<posx>260</posx>
 			<posy>130</posy>
 			<width>375</width>
 			<height>373</height>
 			<aspectratio>keep</aspectratio>
 			<texture>\backdrop.png</texture>
+			<visible>Control.IsVisible(110)</visible> 
+		</control>
+
+		<control type="image" id="1">
+			<description>backdrop image trailers</description>
+			<posx>231</posx>
+			<posy>115</posy>
+			<width>250</width>
+			<height>250</height>
+			<aspectratio>keep</aspectratio>
+			<texture>\backdrop.png</texture>
+			<visible>Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- labels -->
@@ -442,7 +454,7 @@
 		<control type="label" id="1">
 			<description>Trailer List Count Label</description>
 			<width>100</width>
-			<posx>500</posx>
+			<posx>480</posx>
 			<posy>355</posy>
 			<align>right</align>
 			<label>-</label>
@@ -627,7 +639,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="202">
 			<description>Trailer Rating</description>
-			<posx>540</posx>
+			<posx>528</posx>
 			<posy>350</posy>
 			<width>66</width>
 			<height>15</height>
@@ -639,7 +651,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="203">
 			<description>Trailer Favorite Overlay</description>
-			<posx>645</posx>
+			<posx>665</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>
@@ -651,7 +663,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="204">
 			<description>Trailer Watched Overlay</description>
-			<posx>645</posx>
+			<posx>665</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>
@@ -663,7 +675,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="205">
 			<description>Trailer Saved Overlay</description>
-			<posx>645</posx>
+			<posx>665</posx>
 			<posy>350</posy>
 			<width>16</width>
 			<height>16</height>

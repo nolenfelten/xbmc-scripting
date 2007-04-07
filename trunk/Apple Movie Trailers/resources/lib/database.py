@@ -174,7 +174,7 @@ class Database:
 
 class Tables( dict ):
     """ Database tables dictionary class """
-    def __init__( self, *args, **kwargs ):
+    def __init__( self ):
         #{ column name, type, auto increment, index , index columns }
         self[ "version" ] = (
             ( "idVersion", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ),

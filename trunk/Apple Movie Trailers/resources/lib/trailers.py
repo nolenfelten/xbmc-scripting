@@ -73,7 +73,7 @@ class Trailers:
         self.query = database.Query()
         newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
-            self.refreshGenre( newest_genre, last_updated )
+            self.refreshGenre( ( newest_genre, ), last_updated )
         
     def ns( self, text ):
         base_ns = '{http://www.apple.com/itms/}'
@@ -82,32 +82,37 @@ class Trailers:
             result += [ base_ns + each ]
         return '/'.join( result )
             
-    def refreshGenre( self, genre, last_updated=False ):
+    def refreshGenre( self, genres, last_updated=False ):
         """
             Updates the xml for each genre from the site.
         """
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0 ):
-            __line1__ =  '%s: %s' % (_( 87 ), title, )
-            if ( not count ):
-                dialog.create( _( 42 ), __line1__, _( 45 ) )
-            elif ( count > 0 ):
-                percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
-                __line2__ = '%s: (%d of %d)' % ( _( 88 ), count, len( trailer_urls ), )
-                __line3__ = url[ 0 ]
-                dialog.update( percent, __line1__, __line2__, __line3__ )
-                if ( dialog.iscanceled() ): return False
-                else: return True
+            if ( count is None ):
+                dialog.create( _( 42 ) )
             else:
-                dialog.close()
+                __line1__ =  "%s: %s - (%d of %d)" % ( _( 87 ), title, g_count + 1, len( genres ) )
+                if ( not count ):
+                    dialog.update( -1, __line1__, _( 45 ), "" )
+                elif ( count > 0 ):
+                    percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
+                    __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, len( trailer_urls ), )
+                    __line3__ = url[ 0 ]
+                    dialog.update( percent, __line1__, __line2__, __line3__ )
+                    if ( dialog.iscanceled() ): return False
+                    else: return True
+                else:
+                    dialog.close()
         
         updated_date = datetime.date.today()
-        if ( str( updated_date ) != str( last_updated ) ):
-            try:
+        if ( last_updated and str( updated_date ) == str( last_updated ) ): return
+        _progress_dialog( None )
+        records = database.Records()
+        try:
+            for g_count, genre in enumerate( genres ):
                 title = self.categories[ genre ].title
                 _progress_dialog()
                 idGenre = self.categories[ genre ].id
-                records = database.Records()
                 record = records.fetch( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
                 self.removeXML( urls )
@@ -133,10 +138,11 @@ class Trailers:
                     success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
                 success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
                 self.categories[ genre ] = Category( id=idGenre, title=title ) 
-            except: pass
-            success = records.commit()
-            records.close()
-            _progress_dialog( -1 )
+                success = records.commit()
+        except: pass
+        success = records.commit()
+        records.close()
+        _progress_dialog( -1 )
             
     def removeXML( self, urls ):
         for url in urls:
