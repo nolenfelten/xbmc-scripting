@@ -24,15 +24,18 @@ class GUI( xbmcgui.WindowDialog ):
         return gui_loaded
             
     def show_chooser( self, choices, selection, list_control, title ):
-        self.controls[ "Chooser Label" ][ "control" ].setLabel( title )
-        self.list_control = list_control
-        self._setup_list( choices, selection )
-        if ( list_control == 1 ):
-            self._get_thumb( self.controls[ "Chooser List1" ][ "control" ].getSelectedItem().getLabel() )
+        try:
+            xbmcgui.lock()
+            self.controls[ "Chooser Label" ][ "control" ].setLabel( title )
+            self.list_control = list_control
+            self._setup_list( choices, selection )
+            if ( list_control == 1 ):
+                self._get_thumb( self.controls[ "Chooser List1" ][ "control" ].getSelectedItem().getLabel() )
+        except: pass
+        xbmcgui.unlock()
         self.doModal()
 
     def _setup_list( self, choices, selection ):
-        xbmcgui.lock()
         self.controls[ "Chooser List1" ][ "control" ].setVisible( self.list_control == 1 )
         self.controls[ "Chooser List2" ][ "control" ].setVisible( self.list_control == 2 )
         self.controls[ "Chooser Warning Label" ][ "control" ].setVisible( False )
@@ -42,7 +45,6 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls[ "Chooser List%d" % self.list_control ][ "control" ].addItem( choice )
         self.controls[ "Chooser List%d" % self.list_control ][ "control" ].selectItem( selection )
         self.setFocus( self.controls[ "Chooser List%d" % self.list_control ][ "control" ] )
-        xbmcgui.unlock()
 
     def _get_thumb( self, choice ):
         thumbnail = os.path.join( self.base_path, choice, "thumbnail.tbn" )

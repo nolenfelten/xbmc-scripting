@@ -11,9 +11,9 @@ import utilities
 
 
 class GUI( xbmcgui.WindowDialog ):
-    def __init__( self, *args, **kwargs ):
-        self._ = kwargs['language']
-        self.gui_loaded = self._load_gui( kwargs['skin'] )
+    def __init__( self, skin="Default", language=None ):
+        self._ = language
+        self.gui_loaded = self._load_gui( skin )
         if ( not self.gui_loaded ): self._close_dialog()
         else:
             self._show_credits()

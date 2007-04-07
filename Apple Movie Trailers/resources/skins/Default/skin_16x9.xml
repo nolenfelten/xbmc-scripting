@@ -65,13 +65,25 @@
 		</control>
 
 		<control type="image" id="1">
-			<description>backdrop image</description>
+			<description>backdrop image categories</description>
 			<posx>260</posx>
 			<posy>130</posy>
 			<width>375</width>
 			<height>373</height>
 			<aspectratio>keep</aspectratio>
 			<texture>\backdrop.png</texture>
+			<visible>Control.IsVisible(110)</visible> 
+		</control>
+
+		<control type="image" id="1">
+			<description>backdrop image trailers</description>
+			<posx>231</posx>
+			<posy>115</posy>
+			<width>250</width>
+			<height>250</height>
+			<aspectratio>keep</aspectratio>
+			<texture>\backdrop.png</texture>
+			<visible>Control.IsVisible(100)</visible> 
 		</control>
 
 		<!-- labels -->

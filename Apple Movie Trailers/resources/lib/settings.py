@@ -16,13 +16,13 @@ import chooser
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
-    def __init__( self, *args, **kwargs ):
+    def __init__( self, skin="Default", language=None, genres=None ):
         try:
             self.chooser = None
-            self._ = kwargs[ "language" ]
-            self.skin = kwargs[ "skin" ]
-            self.genres = kwargs[ "genres" ]
-            self.gui_loaded = self._load_gui()
+            self.skin = skin
+            self._ = language
+            self.genres = genres
+            self.gui_loaded = self._load_gui( skin )
             if ( not self.gui_loaded ): self._close_dialog()
             else:
                 self._set_variables()
@@ -33,15 +33,14 @@ class GUI( xbmcgui.WindowDialog ):
                 ##self.chooser = chooser.GUI( skin=self.skin, language=self._ )
         except: pass#traceback.print_exc()
             
-    def _load_gui( self ):
+    def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        gui_loaded, image_path = gb.create_gui( self, skin=self.skin, xml_name="settings", language=self._ )
+        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="settings", language=self._ )
         return gui_loaded
 
     def _set_variables( self ):
         """ initializes variables """
-        self.controller_action = utilities.setControllerAction()
         self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
         self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
         # setEnabled( False ) if not used

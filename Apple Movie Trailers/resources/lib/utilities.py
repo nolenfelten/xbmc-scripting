@@ -36,7 +36,7 @@ def _create_base_paths():
         os.makedirs( BASE_SETTINGS_PATH )
 _create_base_paths()
 
-def setControllerAction():
+def buttoncode_dict():
     """ depreciated: button codes dictionary """
     return {
                 61478 : "Keyboard Up Arrow",
@@ -63,7 +63,6 @@ def setControllerAction():
                     272 : "DPad Left",
                     273 : "DPad Right"
                 }
-
 
 class Settings:
     """ Settings class """
