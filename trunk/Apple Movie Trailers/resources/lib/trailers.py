@@ -394,17 +394,16 @@ class Trailers:
                     element = ET.fromstring( source )
                 
                 # -- poster & thumbnails --
-                #if ( not self.poster ):
                 poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
-                # download the actual poster to the local filesystem (or get the cached filename)
-                poster = fetcher.urlretrieve( poster )
                 if poster:
-                    self.poster = poster.replace( base_cache_path, '' )
-                    # make thumbnails
-                    success = pil_util.makeThumbnails( poster )
+                    # download the actual poster to the local filesystem (or get the cached filename)
+                    poster = fetcher.urlretrieve( poster )
+                    if poster:
+                        # make thumbnails
+                        success = pil_util.makeThumbnails( poster )
+                        self.poster = poster.replace( base_cache_path, '' )
 
                 # -- plot --
-                #if ( not self.plot ):
                 plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
                 if plot:
                     # remove any linefeeds so we can wrap properly to the text control this is displayed in
@@ -414,7 +413,6 @@ class Trailers:
                     self.plot = plot
                 
                 # -- actors --
-                #if ( not ( self.actors ) ):
                 SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
                 actors = list()
                 for i in range( 5, 10 ):
@@ -429,7 +427,6 @@ class Trailers:
                 self.actors.sort()
                 
                 # -- studio --
-                #if ( not self.studio ):
                 studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
                 if studio:
                     studio_id = records.fetch( self.query[ 'studio_exists' ], ( studio.upper(), ) )
@@ -439,7 +436,6 @@ class Trailers:
                     self.studio = studio
                 
                 # -- rating --
-                #if ( not self.rating ):
                 temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
                 if temp_url:
                     if '/mpaa' in temp_url:
@@ -449,7 +445,6 @@ class Trailers:
                             self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
                 
                 # -- trailer urls --
-                #if ( not self.trailer_urls ):
                 urls = list()
                 for each in element.getiterator( self.ns('GotoURL') ):
                     temp_url = each.get( 'url' )
@@ -487,6 +482,7 @@ class Trailers:
             except:
                 #traceback.print_exc()
                 print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
+            
             info_list = ( self.idMovie, self.title, self.url, repr( self.trailer_urls ), self.poster, self.plot, self.rating,
                             self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
                             self.actors, self.studio, )
