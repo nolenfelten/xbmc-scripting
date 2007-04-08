@@ -226,7 +226,7 @@ if ( __name__ == "__main__" ):
     #lyrics = LyricsFetcher().get_lyrics_from_list( url )
     
     # print the results
-    if ( type( lyrics ) == list ):
+    if ( isinstance( lyrics, list ) ):
         for song in lyrics:
             print song
     else:

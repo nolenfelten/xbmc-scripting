@@ -60,7 +60,7 @@ if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
     artist = None
     song = [ "The Verve - Bitter Sweet Symphony.mp3", "S.O.S.mp3", "S.O.S_wma.mp3", "Steve Miller Band - Abracadabra.mp3" ]
-    lyrics = LyricsFetcher().get_lyrics( artist, path + song[ 1 ] )
+    lyrics = LyricsFetcher().get_lyrics( artist, path + song[ 0 ] )
     
     # print the results
     print lyrics.encode( "utf-8", "ignore" )

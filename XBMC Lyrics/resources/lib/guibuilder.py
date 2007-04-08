@@ -11,10 +11,11 @@ Nuka1195
 """
 
 import os
-import xbmc, xbmcgui
+import xbmc
+import xbmcgui
 import xml.dom.minidom
-import re
 #import traceback
+
 
 class GUIBuilder:
     """ Class to create a dictionary of controls and add them to a Window or WindowDialog """
@@ -37,12 +38,12 @@ class GUIBuilder:
             succeeded = self._parse_xml_file( xml_file, image_path )
             if ( succeeded ):
                 self._set_navigation()
-                if ( self.defaultControl and self.navigation[ self.defaultControl ][ 0 ] in self.win.controls ):
+                if ( self.defaultControl and self.defaultControl in self.navigation and self.navigation[ self.defaultControl ][ 0 ] in self.win.controls ):
                     self.win.setFocus( self.win.controls[ self.navigation[ self.defaultControl ][ 0 ] ][ "control" ] )
                 self._set_visibility_and_animations()
                 self._clear_variables()
             else: raise
-        except: 
+        except:
             #traceback.print_exc()
             succeeded = False
         return succeeded, image_path
@@ -66,9 +67,8 @@ class GUIBuilder:
         self.win.controls = {}
         #self.win.controlKey = {}
         self.navigation = {}
-        self.resPath = {}
         self.resolutions = { "1080i" : 0, "720p" : 1, "480p" : 2, "480p16x9" : 3, "ntsc" : 4, "ntsc16x9" : 5, "pal" : 6, "pal16x9" : 7, "pal60" : 8, "pal6016x9" : 9 }
-        for key, value in self.resolutions.items(): self.resPath[ value ] = key
+        self.resPath = dict( zip( self.resolutions.values(), self.resolutions.keys() ) )
         self.currentResolution = self.win.getResolution()
         self.include_doc = []
         self.resolution = self.resolutions[ "pal" ]
@@ -572,6 +572,7 @@ class GUIBuilder:
 
     def _set_visibility_and_animations( self ):
         """ corrects control id's for some visible conditions and set's visible status """
+        import re
         pattern = [ "control.hasfocus\(([0-9]+)\)", "control.isvisible\(([0-9]+)\)" ]
         rvalue = [ "control.hasfocus(##)", "control.isvisible(##)" ]
         for key in self.win.controls.keys():
@@ -587,7 +588,7 @@ class GUIBuilder:
                 # fix Control.HasFocus(id) visibility condition and Control.IsVisible(id) visibility condition
                 for item in items:
                     visibleChanged = True
-                    if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ] == int( item ) ):
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ] == int( item ) ):
                         actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
                         visible = visible.replace( "##", str( actualId ), 1 )
                 items = re.findall( pattern[ cnt ], enable )
@@ -595,7 +596,7 @@ class GUIBuilder:
                 # fix Control.HasFocus(id) enabled condition and Control.IsVisible(id) enabled condition
                 for item in items:
                     enableChanged = True
-                    if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
                         actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
                         enable = enable.replace( "##", str( actualId ), 1 )
                 # fix Control.HasFocus(id) animation condition and Control.IsVisible(id) animation condition
@@ -604,7 +605,7 @@ class GUIBuilder:
                     anim_attr = re.sub( pattern[ cnt ], rvalue[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
                     for item in items:
                         animChanged = True
-                        if ( self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                        if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
                             actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
                             anim_attr = anim_attr.replace( "##", str( actualId ), 1 )
                     if ( items ): final_anim += [ ( self.win.controls[ key ][ "animation" ][ acnt ][ 0 ], anim_attr, ) ]
