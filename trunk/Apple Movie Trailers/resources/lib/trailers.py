@@ -1,18 +1,21 @@
 import sys
 import os
-import traceback
-import datetime
 import xbmc
 import xbmcgui
-import cacheurl
+import traceback
+import datetime
 import elementtree.ElementTree as ET
-import language
+
+import cacheurl
 import pil_util
 import database
 
 fetcher = cacheurl.HTTP()
 base_cache_path = fetcher.cache_dir + os.sep
-_ = language.Language().localized
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 
 class Movie( object ):
@@ -84,7 +87,7 @@ class Trailers:
             
     def refreshGenre( self, genres, last_updated=False ):
         """
-            Updates the xml for each genre from the site.
+            Updates the xml for each genre in genres from the site.
         """
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0 ):
@@ -93,7 +96,7 @@ class Trailers:
             else:
                 __line1__ =  "%s: %s - (%d of %d)" % ( _( 87 ), title, g_count + 1, len( genres ) )
                 if ( not count ):
-                    dialog.update( -1, __line1__, _( 45 ), "" )
+                    dialog.update( -1, __line1__, _( 65 ), _( 67 ) )
                 elif ( count > 0 ):
                     percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
                     __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, len( trailer_urls ), )

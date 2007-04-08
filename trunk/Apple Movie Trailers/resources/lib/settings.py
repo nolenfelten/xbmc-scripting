@@ -8,19 +8,23 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import guibuilder
-import utilities
-import chooser
 #import traceback
+
+import guibuilder
+import chooser
+import utilities
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
-    def __init__( self, skin="Default", language=None, genres=None ):
+    def __init__( self, skin="Default", genres=None ):
         try:
             self.chooser = None
             self.skin = skin
-            self._ = language
             self.genres = genres
             self.gui_loaded = self._load_gui( skin )
             if ( not self.gui_loaded ): self._close_dialog()
@@ -30,19 +34,19 @@ class GUI( xbmcgui.WindowDialog ):
                 self._setup_special()
                 self._set_controls_values()
                 self._set_restart_required()
-                ##self.chooser = chooser.GUI( skin=self.skin, language=self._ )
+                ##self.chooser = chooser.GUI( skin=self.skin )
         except: pass#traceback.print_exc()
             
     def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="settings", language=self._ )
+        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="settings", language=_ )
         return gui_loaded
 
     def _set_variables( self ):
         """ initializes variables """
-        self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
-        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
+        self.get_control( "Title Label" ).setLabel( __scriptname__ )
+        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( _( 1006 ), __version__, ) )
         # setEnabled( False ) if not used
         #self.get_control( "Credits Button" ).setVisible( False )
         #self.get_control( "Credits Button" ).setEnabled( False )
@@ -55,7 +59,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ saves settings """
         ok = utilities.Settings().save_settings( self.settings )
         if ( not ok ):
-            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__scriptname__, self._( 230 ) )
+            ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
         else:
             self._check_for_restart()
     
@@ -111,21 +115,20 @@ class GUI( xbmcgui.WindowDialog ):
         self.startup_titles = []
         for count, genre in enumerate( self.genres ):
             self.startup_categories[ count ] = str( genre.title )
-        self.startup_categories[ utilities.FAVORITES ] = self._( 152 )
-        self.startup_categories[ utilities.DOWNLOADED ] = self._( 153 )
+        self.startup_categories[ utilities.FAVORITES ] = _( 152 )
+        self.startup_categories[ utilities.DOWNLOADED ] = _( 153 )
         for title in self.startup_categories.values():
             self.startup_titles += [ title ]
         self.startup_titles.sort()
-            
 
     def _setup_thumbnail_display( self ):
-        self.thumbnail = ( self._( 2050 ), self._( 2051 ), self._( 2052 ), )
+        self.thumbnail = ( _( 2050 ), _( 2051 ), _( 2052 ), )
         
     def _setup_playback_mode( self ):
-        self.mode = ( self._( 2030 ), self._( 2031 ), "%s (videos)" % self._( 2032 ), "%s (files)" % self._( 2032 ), )
+        self.mode = ( _( 2030 ), _( 2031 ), "%s (videos)" % _( 2032 ), "%s (files)" % _( 2032 ), )
     
     def _setup_trailer_quality( self ):
-        self.quality = ( self._( 2020 ), self._( 2021 ), self._( 2022 ), )
+        self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), )
 
     def _setup_skins( self ):
         """ special def for setting up scraper choices """
@@ -168,59 +171,59 @@ class GUI( xbmcgui.WindowDialog ):
     
     def _change_setting1( self ):
         """ changes settings #1 """
-        self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1, title="%s %s" % ( self._( 200 ), self._( 201 ) ) )
+        self.chooser.show_chooser( choices=self.skins, selection=self.current_skin, list_control=1, title="%s %s" % ( _( 200 ), _( 201 ) ) )
         if ( self.chooser.selection is not None ):
             self.current_skin = self.chooser.selection
             self.settings[ "skin" ] = self.skins[ self.current_skin ]
             
     def _change_setting2( self ):
         """ changes settings #2 """
-        self.chooser.show_chooser( choices=self.quality, selection=self.settings[ "trailer_quality" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 202 ) ) )
+        self.chooser.show_chooser( choices=self.quality, selection=self.settings[ "trailer_quality" ], list_control=2, title="%s %s" % ( _( 200 ), _( 202 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "trailer_quality" ] = self.chooser.selection
         
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.chooser.show_chooser( choices=self.mode, selection=self.settings[ "mode" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 203 ) ) )
+        self.chooser.show_chooser( choices=self.mode, selection=self.settings[ "mode" ], list_control=2, title="%s %s" % ( _( 200 ), _( 203 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "mode" ] = self.chooser.selection
         
     def _change_setting4( self ):
         """ changes settings #4 """
         shares = [ "video", "files" ][ self.settings[ "mode" ] == 3 ]
-        self.settings[ "save_folder" ] = self._get_browse_dialog( self.settings[ "save_folder" ], self._( 204 ), 3, shares )
+        self.settings[ "save_folder" ] = self._get_browse_dialog( self.settings[ "save_folder" ], _( 204 ), 3, shares )
         
     def _change_setting5( self ):
         """ changes settings #5 """
-        self.chooser.show_chooser( choices=self.thumbnail, selection=self.settings[ "thumbnail_display" ], list_control=2, title="%s %s" % ( self._( 200 ), self._( 205 ) ) )
+        self.chooser.show_chooser( choices=self.thumbnail, selection=self.settings[ "thumbnail_display" ], list_control=2, title="%s %s" % ( _( 200 ), _( 205 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "thumbnail_display" ] = self.chooser.selection
         
     def _change_setting6( self ):
         """ changes settings #6 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
-        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 206 ) ) )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( _( 200 ), _( 206 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( self.chooser.selection )
         
     def _change_setting7( self ):
         """ changes settings #7 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
-        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 207 ) ) )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( _( 200 ), _( 207 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( self.chooser.selection )
         
     def _change_setting8( self ):
         """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
-        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 208 ) ) )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( _( 200 ), _( 208 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( self.chooser.selection )
         
     def _change_setting9( self ):
         """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
-        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( self._( 200 ), self._( 209 ) ) )
+        self.chooser.show_chooser( choices=self.startup_titles, selection=selection, list_control=2, title="%s %s" % ( _( 200 ), _( 209 ) ) )
         if ( self.chooser.selection is not None ):
             self.settings[ "shortcut3" ] = self._get_setting_from_category( self.chooser.selection )
 
@@ -233,15 +236,14 @@ class GUI( xbmcgui.WindowDialog ):
     def _update_script( self ):
         """ checks for updates to the script """
         import update
-        updt = update.Update( language=self._ )
+        updt = update.Update()
         del updt
             
     def _show_credits( self ):
         """ shows a credit window """
         import credits
-        c = credits.GUI( skin=self.skin, language=self._ )
-        if ( c.gui_loaded ):
-            c.doModal()
+        c = credits.GUI( skin=self.skin )
+        if ( c.gui_loaded ): c.doModal()
         del c
 
     def _check_for_restart( self ):
@@ -276,7 +278,7 @@ class GUI( xbmcgui.WindowDialog ):
         elif ( control is self.get_control( "Credits Button" ) ):
             self._show_credits()
         else:
-            self.chooser = chooser.GUI( skin=self.skin, language=self._ )
+            self.chooser = chooser.GUI( skin=self.skin )
             if ( self.chooser.gui_loaded ):
                 if ( control is self.get_control( "Setting1 Button" ) ):
                     self._change_setting1()

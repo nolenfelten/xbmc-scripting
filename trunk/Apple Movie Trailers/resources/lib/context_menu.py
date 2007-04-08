@@ -4,21 +4,26 @@ Context menu module
 Nuka1195
 """
 
+import sys
 import xbmcgui
+
 import guibuilder
 import utilities
 
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
+
 
 class GUI( xbmcgui.WindowDialog ):
-    def __init__( self, skin="Default", language=None ):
-        self._ = language
+    def __init__( self, skin="Default" ):
         self.gui_loaded = self._load_gui( skin )
         if ( not self.gui_loaded ): self._close_dialog()
             
     def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="context_menu", language=self._ )
+        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="context_menu", language=_ )
         return gui_loaded
 
     def show_context_menu( self, area, labels ):

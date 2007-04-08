@@ -1,13 +1,10 @@
 import sys
 import os
-import traceback
-
-sys.path.append( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib" ) )
-import gui
 
 __scriptname__ = "Apple Movie Trailers"
 __author__ = "Apple Movie Trailers (AMT) Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
+__svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Apple%20Movie%20Trailers"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
 __version__ = "pre-0.97.4"
 
@@ -25,11 +22,14 @@ __acredits_r2__ = "Spiff"
 __acredits_l3__ = ""
 __acredits_r3__ = ""
 
+BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import language
+__language__ = language.Language().localized
+
 if __name__ == "__main__":
-    try:
-        ui = gui.GUI()
-        if ui.gui_loaded:
-            ui.doModal()
-            del ui
-    except:
-        traceback.print_exc()
+    import gui
+    ui = gui.GUI()
+    if ui.gui_loaded:
+        ui.doModal()
+        del ui

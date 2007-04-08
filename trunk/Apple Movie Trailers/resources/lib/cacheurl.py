@@ -4,6 +4,7 @@ Url retrieve and cache module
 Killarny
 """
 
+import sys
 import os
 import xbmc
 import xbmcgui
@@ -12,7 +13,6 @@ import md5
 import traceback
 import time
 import socket
-import language
 import utilities
 
 socket.setdefaulttimeout( 10 )
@@ -22,7 +22,8 @@ __version__ = '0.1'
 __useragent__ = 'iTunes/4.7'
 #__useragent__ = '%s/%s' % ( __scriptname__, __version__ )
 
-_ = language.Language().localized
+_ = sys.modules[ "__main__" ].__language__
+
 
 def percent_from_ratio( top, bottom ):
     return int( float( top ) / bottom * 100 )

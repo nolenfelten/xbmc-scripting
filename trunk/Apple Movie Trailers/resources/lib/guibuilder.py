@@ -38,7 +38,7 @@ class GUIBuilder:
             succeeded = self._parse_xml_file( xml_file, image_path )
             if ( succeeded ):
                 self._set_navigation()
-                if ( self.defaultControl and self.navigation[ self.defaultControl ][ 0 ] in self.win.controls ):
+                if ( self.defaultControl and self.defaultControl in self.navigation and self.navigation[ self.defaultControl ][ 0 ] in self.win.controls ):
                     self.win.setFocus( self.win.controls[ self.navigation[ self.defaultControl ][ 0 ] ][ "control" ] )
                 self._set_visibility_and_animations()
                 self._clear_variables()
@@ -67,9 +67,8 @@ class GUIBuilder:
         self.win.controls = {}
         #self.win.controlKey = {}
         self.navigation = {}
-        self.resPath = {}
         self.resolutions = { "1080i" : 0, "720p" : 1, "480p" : 2, "480p16x9" : 3, "ntsc" : 4, "ntsc16x9" : 5, "pal" : 6, "pal16x9" : 7, "pal60" : 8, "pal6016x9" : 9 }
-        for key, value in self.resolutions.items(): self.resPath[ value ] = key
+        self.resPath = dict( zip( self.resolutions.values(), self.resolutions.keys() ) )
         self.currentResolution = self.win.getResolution()
         self.include_doc = []
         self.resolution = self.resolutions[ "pal" ]
