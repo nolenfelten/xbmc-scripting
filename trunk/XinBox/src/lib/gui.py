@@ -26,7 +26,7 @@ def closeProgessDialog():
     global dialog
     dialog.close()
     
-import xbmcgui, language, time
+import xbmcgui, language, time, settings
 lang = language.Language().string
 
 __line1__ = lang(60)
@@ -40,8 +40,6 @@ updateProgressDialog( '%s os' % ( lang( 62 ), ))
 import os
 updateProgressDialog( '%s threading' % ( lang( 62 ), ))
 import threading
-updateProgressDialog( '%s guibuilder' % ( lang( 62 ), ))
-import guibuilder
 updateProgressDialog( '%s xib_util' % ( lang( 62 ), ))
 import xib_util
 updateProgressDialog( '%s shutil' % ( lang( 62 ), ))
@@ -66,24 +64,25 @@ IDFOLDER = "ids\\"
 NEWFOLDER = "new\\"
 CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
-SCRITPFOLDER = default.__scriptpath__
-MEDIAFOLDER = SCRITPFOLDER + "src//media//"
+SCRIPTFOLDER = default.__scriptpath__
+MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        self.url = "http://xboxmediacenter.com"
-
-    def onInit(self):
-        self.setupcontrols()
+        xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
         self.createdirs()
         self.getSettings()
         self.getmmSettings()
+        self.setupvars()      
+
+    def onInit(self):
+        self.setupcontrols()
         self.adjustcontrols()
-        self.setupvars()
         xbmcgui.unlock()
+        print "welcome"
 
     def setupcontrols ( self ):
-        self.list = self.getControl(68)
         self.txtbox = self.getControl(67)
         self.xb1butn = self.getControl(61)
         self.xb2butn = self.getControl(62)
@@ -101,6 +100,7 @@ class GUI( xbmcgui.WindowXML ):
         return
         
     def setupvars( self ):
+        self.listsize = 0
         self.box1 = 0
         self.box2 = 0
         self.Fullscreen = False
@@ -111,6 +111,7 @@ class GUI( xbmcgui.WindowXML ):
         return
         
     def adjustcontrols ( self ):
+        print "hereeeee"
         self.delbutn.setVisible( False )
         self.attbutn.setVisible( False )
         self.fsmsgbody.setVisible( False )
@@ -118,7 +119,6 @@ class GUI( xbmcgui.WindowXML ):
         self.emailrec.setVisible( False )        
         self.fsoverlay.setVisible( False )
         self.xbempty.setVisible( False )
-        self.list.setVisible( False )
         self.mmbutn.setLabel( lang(200) )
         self.sebutn.setLabel( lang(201) )
         if self.mmsettings.disablemmb:
@@ -174,9 +174,10 @@ class GUI( xbmcgui.WindowXML ):
             return
 
     def disablexinbox (self):
+        xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
         self.txtbox.reset()
         self.txtbox.setVisible( False )
-        self.list.setVisible( False )
         self.xbempty.setVisible( True )
         self.xbempty.setLabel( lang(58) )
         if self.box2 ==1:
@@ -204,8 +205,9 @@ class GUI( xbmcgui.WindowXML ):
             self.disablexinbox()
         else:
             self.addme()
-            if self.list.size() == 0:
+            if self.listsize == 0:
                 self.disablexinbox()
+            
 
     def clearfolder(self, folder):
         for root, dirs, files in os.walk(folder, topdown=False):
@@ -213,12 +215,13 @@ class GUI( xbmcgui.WindowXML ):
                 os.remove(os.path.join(root, name))
                    
     def addme( self ):
+        xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        self.listsize = 0
         self.xbempty.setVisible( False )
         self.txtbox.reset()
         self.txtbox.setVisible( True )
         self.clearfolder(self.emfolder + CORFOLDER)
-        self.list.setVisible( True )
-        self.list.reset()
+        self.clearList()
         self.gettally()
         self.count = 0
         self.count2 = 0
@@ -243,12 +246,14 @@ class GUI( xbmcgui.WindowXML ):
                             self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ self.emails[self.count2].get('from'))
                         except:
                             self.myemail = xbmcgui.ListItem("BAD EMAIL")
+                    self.addItem(self.myemail)
                     if self.readstatus == "UNREAD":
                         self.myemail.setThumbnailImage(self.notread)
                     else:
                         self.myemail.setThumbnailImage(self.read)
-                    self.list.addItem(self.myemail)
-                    f = open(self.emfolder + CORFOLDER + str(self.list.size()-1) +".cor", "w")
+                    self.getListItem(2).setLabel("test")
+                    self.listsize  = self.listsize + 1
+                    f = open(self.emfolder + CORFOLDER + str(self.listsize-1) +".cor", "w")
                     f.write(str(self.count3))
                     f.close()
                     self.count = self.count+1 
@@ -311,8 +316,8 @@ class GUI( xbmcgui.WindowXML ):
         return
 
     def getemailinfo(self):
-        self.temp = self.list.getSelectedPosition()
-        self.temp2 = self.list.getSelectedItem()
+        self.temp = self.getCurrentListPosition()
+        self.temp2 = self.getListItem(self.getCurrentListPosition())
         self.temp3 = self.temp2.getLabel()
         fh = open(self.emfolder + CORFOLDER + str(self.temp)+ ".cor")
         self.updateme = fh.read()
@@ -332,17 +337,19 @@ class GUI( xbmcgui.WindowXML ):
         dialog = xbmcgui.Dialog()
         ret = dialog.select( lang( 66 ), [ lang( 67 ), lang( 68 ), lang( 69 )])
         if ret == 0:
-            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss") 
+            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
+            self.listsize  = self.listsize - 1
             self.addme()
             self.undoFullscreen()
-            if self.list.size() == 0:
+            if self.listsize == 0:
                 self.disablexinbox()
             else:
-                self.setFocus(self.list)
+                self.setFocusId(50)
                 try:
-                    self.list.selectItem(self.temp)
+                    print "hello"
+                   # self.list.selectItem(self.temp)
                 except:pass
-                self.printEmail(self.list.getSelectedPosition())    
+                self.printEmail(self.getCurrentListPosition())    
         elif ret == 1:
             if self.box1 == 1:
                 self.delemail(1, self.mailid)
@@ -357,16 +364,18 @@ class GUI( xbmcgui.WindowXML ):
                 self.delemail(2, self.mailid)
             self.getemailinfo()
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
+            self.listsize  = self.listsize - 1
             self.addme()
             self.undoFullscreen()
-            if self.list.size() == 0:
+            if self.listsize == 0:
                 self.disablexinbox()
             else:
-                self.setFocus(self.list)
+                self.setFocusId(50)
                 try:
-                    self.list.selectItem(self.temp)
+                    print "hello"
+                  #  self.list.selectItem(self.temp)
                 except:pass
-                self.printEmail(self.list.getSelectedPosition())
+                self.printEmail(self.getCurrentListPosition())
         else:self.setFocus(self.delbutn)
         return
     
@@ -392,7 +401,9 @@ class GUI( xbmcgui.WindowXML ):
         self.fsmsgbody.reset()
         self.getemailinfo()
         self.getstatus()
+        print "self.temp2 = " + str(self.temp2)
         self.temp2.setThumbnailImage(self.read)
+        self.refreshList()
         self.readstatus = "READ"
         self.writestatus()
         self.processEmail(self.temp)
@@ -422,11 +433,18 @@ class GUI( xbmcgui.WindowXML ):
         self.emailrec.setVisible(False)
         self.fsmsgbody.setVisible(False)
         self.Fullscreen = False
-        self.setFocus(self.list)
+        self.setFocusId(50)
         return
+
+    def launchsettings( self ):
+        import settings
+        ws = settings.Settings("XinBox_Settings.xml",SCRIPTFOLDER + "src","DefaultSkin")
+        ws.doModal()
+        del ws
+
         
     def onFocus(self, controlID):
-        print 'The control with id="5" just got focus'
+        pass
 
     def onClick(self, controlID):
         if ( controlID == 61):
@@ -445,26 +463,39 @@ class GUI( xbmcgui.WindowXML ):
                 self.openinbox(2)
         elif ( controlID == 76):
                 self.deletemail()
-                
+        elif ( controlID == 63):
+                self.launchsettings()    
+
+    def exitscript (self):
+        xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        self.close()
+        
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
-        try: control = self.getFocus()
+        try:
+            focusid = self.getFocusId()
+            print "focusid = " + str(focusid)
+        except:
+            focusid = 0
+            print "bang" 
+        print "action id = " + str(actionID)
+        try:
+            control = self.getFocus()
+            print "control = " + str(control)
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if self.Fullscreen == True:
                 self.undoFullscreen()
             else:
-                self.close()
+                self.exitscript()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
-            if control == self.list:
-                self.goFullscreen()                
+            if (50 <= focusid <= 59):
+                print "howdy hoe"
+                try:
+                    self.goFullscreen()
+                except:traceback.print_exc()
         else:
-            if control == self.list:
-                self.printEmail(self.list.getSelectedPosition())
-                
-            
-        
-
-
+            if (50 <= focusid <= 59):
+                self.printEmail(self.getCurrentListPosition()) 
 

@@ -134,7 +134,7 @@ class main:
             xbmc.log ("ERROR: writing settings")
 
     def launchgui( self ):
-        w = gui.GUI("skin.xml",self.cwd + "src","DefaultSkin")
+        w = gui.GUI("XinBox_Main.xml",self.cwd + "src","DefaultSkin")
         xbmcgui.lock()
         w.doModal()
         del w  
