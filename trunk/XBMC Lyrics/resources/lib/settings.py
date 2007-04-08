@@ -8,15 +8,19 @@ import sys
 import os
 import xbmc
 import xbmcgui
+
 import guibuilder
 import utilities
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 
 class GUI( xbmcgui.WindowDialog ):
     """ Settings module: used for changing settings """
-    def __init__( self, *args, **kwargs ):
-        self._ = kwargs[ "language" ]
-        self.gui_loaded = self.setupGUI()
+    def __init__( self, skin="Default" ):
+        self.gui_loaded = self._load_gui( skin )
         if ( not self.gui_loaded ): self._close_dialog()
         else:
             self._set_variables()
@@ -25,17 +29,16 @@ class GUI( xbmcgui.WindowDialog ):
             self._set_controls_values()
             self._set_restart_required()
             
-    def setupGUI( self ):
+    def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, xml_name="settings", language=self._ )
+        ok, image_path = gb.create_gui( self, skin=skin, xml_name="settings", language=_ )
         return ok
 
     def _set_variables( self ):
         """ initializes variables """
-        self.controller_action = utilities.setControllerAction()
         self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
-        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( self._( 1006 ), sys.modules[ "__main__" ].__version__, ) )
+        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( _( 1006 ), sys.modules[ "__main__" ].__version__, ) )
         # setEnabled( False ) if not used
         self.get_control( "Credits Button" ).setVisible( False )
         self.get_control( "Credits Button" ).setEnabled( False )
@@ -48,7 +51,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ saves settings """
         ok = utilities.Settings().save_settings( self.settings )
         if ( not ok ):
-            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__scriptname__, self._( 230 ) )
+            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__scriptname__, _( 230 ) )
         else:
             self._check_for_restart()
 
@@ -142,7 +145,7 @@ class GUI( xbmcgui.WindowDialog ):
         
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], self._( 203 ), 3 )
+        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
 
     def _change_setting4( self ):
         """ changes settings #4 """
@@ -157,14 +160,14 @@ class GUI( xbmcgui.WindowDialog ):
     def _update_script( self ):
         """ checks for updates to the script """
         import update
-        updt = update.Update( language=self._ )
+        updt = update.Update()
         del updt
             
     def _show_credits( self ):
         """ shows a credit window """
         import credits
-        c = credits.GUI( language=self._ )
-        c.doModal()
+        c = credits.GUI()
+        if ( c.gui_loaded ): c.doModal()
         del c
 
     def _check_for_restart( self ):
@@ -210,8 +213,5 @@ class GUI( xbmcgui.WindowDialog ):
             self._set_controls_values()
             
     def onAction( self, action ):
-        button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
-        if ( button_key == "Keyboard Backspace Button" or button_key == "B Button" or button_key == "Remote Back Button" ):
+        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
             self._close_dialog()
-        elif ( button_key == "Keyboard ESC Button" or button_key == "Back Button" or button_key == "Remote Menu Button" ):
-            self._save_settings()
