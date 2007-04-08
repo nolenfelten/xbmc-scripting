@@ -6,17 +6,21 @@ Nuka1195
 
 import sys
 import os
+#import traceback
 import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
+
 import utilities
-#import traceback
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 
 class Database:
     """ Main database class """
     def __init__( self, *args, **kwargs ):
-        self._ = kwargs[ "language" ]
         self.query = Query()
         self.db_version, self.complete = self._get_version()
         if ( not self.db_version ): 
@@ -39,10 +43,10 @@ class Database:
             dialog = xbmcgui.DialogProgress()
             def _progress_dialog( count=0 ):
                 if ( not count ):
-                    dialog.create( self._( 44 ) )
+                    dialog.create( _( 44 ) )
                 elif ( count > 0 ):
                     percent = int( count * ( float( 100 ) / len( records.tables.keys() ) ) )
-                    __line1__ = "%s: %s" % ( self._( 47 ), table, )
+                    __line1__ = "%s: %s" % ( _( 47 ), table, )
                     dialog.update( percent, __line1__ )
                     if ( dialog.iscanceled() ): return False
                     else: return True
@@ -50,7 +54,7 @@ class Database:
                     dialog.close()
 
             def _write_version():
-                return records.add( "version", ( sys.modules[ "__main__" ].__version__, False, ), True )
+                return records.add( "version", ( __version__, False, ), True )
 
             def _create_table( table ):
                 try:
@@ -78,12 +82,12 @@ class Database:
                 ok = _write_version()
                 records.close()
                 _progress_dialog( -1 )
-                if ( ok ): return sys.modules[ "__main__" ].__version__
+                if ( ok ): return __version__
                 else: raise
             except:
                 records.close()
                 _progress_dialog( -1 )
-                xbmcgui.Dialog().ok( self._( 44 ), self._( 89 ) )
+                xbmcgui.Dialog().ok( _( 44 ), _( 89 ) )
                 return False
         
         version = _create_tables()
@@ -92,12 +96,12 @@ class Database:
     def _convert_database( self, version, complete ):
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0, total_count=None, movie=None ):
-            __line1__ = self._( 63 )
+            __line1__ = _( 63 )
             if ( not count ):
-                dialog.create( self._( 59 ), __line1__ )
+                dialog.create( _( 59 ), __line1__ )
             elif ( count > 0 ):
                 percent = int( count * ( float( 100 ) / total_count ) )
-                __line2__ = "%s: (%d of %d)" % ( self._( 88 ), count, total_count, )
+                __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, total_count, )
                 __line3__ = movie[ 1 ]
                 dialog.update( percent, __line1__, __line2__, __line3__ )
                 if ( dialog.iscanceled() ): return False
@@ -146,11 +150,11 @@ class Database:
         
         def _update_version():
             records = Records()
-            ok = records.update( "version", ( "version", ), ( sys.modules[ "__main__" ].__version__, 1, ), "idVersion", True )
+            ok = records.update( "version", ( "version", ), ( __version__, 1, ), "idVersion", True )
             records.close()
             return ok
 
-        msg = ( self._( 53 ), self._( 54 ), )
+        msg = ( _( 53 ), _( 54 ), )
         if ( version == "pre-0.97.1" or version == "pre-0.97.2" or version == "pre-0.97.3" ):
             try:
                 _progress_dialog()
@@ -165,9 +169,9 @@ class Database:
                 ok = _update_version()
                 if ( not ok ): raise
             except:
-                msg = ( self._( 59 ), self._( 46 ), )
+                msg = ( _( 59 ), _( 46 ), )
             _progress_dialog( -1 )
-            if ( ok ): return ( sys.modules[ "__main__" ].__version__, complete )
+            if ( ok ): return ( __version__, complete )
         xbmcgui.Dialog().ok( msg[ 0 ], msg[ 1 ] )
         raise
 

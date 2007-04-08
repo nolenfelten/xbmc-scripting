@@ -18,34 +18,39 @@ def closeProgessDialog():
     global dialog
     dialog.close()
     
+import sys
 import xbmcgui
-import language
-_ = language.Language().localized
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 try:
-    createProgressDialog( _(51), "%s xbmc" % ( _( 52 ), ))
-    import xbmc
-    updateProgressDialog( _(51), "%s sys" % ( _( 52 ), ))
-    import sys
+    createProgressDialog( _(51), "%s os" % ( _( 52 ), ))
     import os
+    updateProgressDialog( _(51), "%s xbmc" % ( _( 52 ), ))
+    import xbmc
     updateProgressDialog( _(51), "%s traceback" % ( _( 52 ), ))
     import traceback
     updateProgressDialog( _(51), "%s threading" % ( _( 52 ), ))
     import threading
     updateProgressDialog( _(51), "%s guibuilder" % ( _( 52 ), ))
     import guibuilder
-    updateProgressDialog( _(51), "%s utilities" % ( _( 52 ), ))
-    import utilities, context_menu
+    updateProgressDialog( _(51), "%s context_menu" % ( _( 52 ), ))
+    import context_menu
+    import utilities
     updateProgressDialog( _(51), "%s cacheurl" % ( _( 52 ), ))
     import cacheurl
-    updateProgressDialog( _(51), "%s shutil" % ( _( 52 ), ))
-    import shutil, datetime
+    updateProgressDialog( _(51), "%s shutil, datetime" % ( _( 52 ), ))
+    import shutil
+    import datetime
 except:
     closeProgessDialog()
     traceback.print_exc()
     xbmcgui.Dialog().ok( _( 0 ), _( 81 ) )
     raise
-    
+
+
 class GUI( xbmcgui.Window ):
     def __init__( self ):
         try:
@@ -88,7 +93,7 @@ class GUI( xbmcgui.Window ):
         self.trailers = trailers.Trailers()
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
-        self.context_menu = context_menu.GUI( skin=self.skin, language=_ )
+        self.context_menu = context_menu.GUI( skin=self.skin )
         self.flat_cache = ( unicode( "", "utf-8" ), "", )
         self.sql = ""
         self.params = None
@@ -486,7 +491,7 @@ class GUI( xbmcgui.Window ):
             labels = ()
             functions = ()
             if ( list_control == "Trailer List" ):
-                labels += ( _( 510 ), )
+                labels += ( _( 501 ), )
                 functions += ( self.playTrailer, )
                 labels += ( _( 502 + self.trailers.movies[ selection ].favorite ), )
                 functions += ( self.toggleAsFavorite, )
@@ -497,31 +502,31 @@ class GUI( xbmcgui.Window ):
                 labels += ( _( 506 ), )
                 functions += ( self.refreshInfo, )
                 if ( self.category_id >= 0 and self.list_category == 1 ):
-                    labels += ( _( 507 ), )
+                    labels += ( _( 512 ), )
                     functions += ( self.refreshCurrentGenre, )
                 if ( self.trailers.movies[ selection ].saved ):
-                    labels += ( _( 509 ), )
+                    labels += ( _( 508 ), )
                     functions += ( self.deleteSavedTrailer, )
                 elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
-                    labels += ( _( 501 ), )
+                    labels += ( _( 507 ), )
                     functions += ( self.saveCachedMovie, )
             elif ( list_control == "Category List" ):
                 functions += ( self.getTrailerGenre, )
                 if ( self.category_id == utilities.GENRES ):
                     labels += ( _( 511 ), )
-                    labels += ( _( 507 ), )
+                    labels += ( _( 512 ), )
                     functions += ( self.refreshGenre, )
-                    labels += ( _( 514 ), )
+                    labels += ( _( 513 ), )
                     functions += ( self.refreshAllGenres, )
                 elif ( self.category_id ==  utilities.STUDIOS ):
-                    labels += ( _( 512 ), )
+                    labels += ( _( 521 ), )
                 elif ( self.category_id ==  utilities.ACTORS ):
-                    labels += ( _( 513 ), )
+                    labels += ( _( 531 ), )
             elif ( list_control == "Cast List" ):
-                    labels += ( _( 513 ), )
+                    labels += ( _( 531 ), )
                     functions += ( self.getActorChoice, )
             if ( not self.trailers.complete ): 
-                labels += ( _( 508 ), )
+                labels += ( _( 550 ), )
                 functions += ( self.force_full_update, )
             self.context_menu.show_context_menu( area=( x, y, w, h, ), labels=labels )
             if ( self.context_menu.selection is not None ):
@@ -542,14 +547,14 @@ class GUI( xbmcgui.Window ):
         import settings
         #self.debugWrite("changeSettings", 2)
         thumbnail_display = self.settings[ "thumbnail_display" ]
-        settings = settings.GUI( language=_ , genres=self.genres, skin=self.skin )
+        settings = settings.GUI( skin=self.skin, genres=self.genres )
         if ( settings.gui_loaded ):
             settings.doModal()
             ok = False
             if ( settings.changed ):
                 self.getSettings()
                 if ( settings.restart ):
-                    ok = xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
+                    ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
             del settings
             if ( not ok ):
                 if ( thumbnail_display != self.settings[ "thumbnail_display" ] and self.category_id != utilities.GENRES and self.category_id != utilities.STUDIOS and self.category_id != utilities.ACTORS ):
@@ -580,7 +585,7 @@ class GUI( xbmcgui.Window ):
 
     def showCredits( self ):
         import credits
-        cw = credits.GUI( language=_, skin=self.skin )
+        cw = credits.GUI( skin=self.skin )
         if ( cw.gui_loaded ):
             cw.doModal()
         del cw
@@ -612,16 +617,17 @@ class GUI( xbmcgui.Window ):
             self.showTrailers( self.sql, params = params, choice = choice, force_update = force_update )
     
     def refreshAllGenres( self ):
-        genre = self.controls["Category List"]["control"].getSelectedPosition()
-        self.sql_category = ""
         self.sql = ""
         genres = range( len( self.genres ) )
         self.trailers.refreshGenre( genres )
-        sql = self.query[ "genre_category_list" ]
-        self.showCategories( sql, choice=genre, force_update=True )
+        if ( self.category_id == utilities.GENRES ):
+            sql = self.query[ "genre_category_list" ]
+            genre = self.controls[ "Category List" ][ "control" ].getSelectedPosition()
+            self.sql_category = ""
+            self.showCategories( sql, choice=genre, force_update=True )
         
     def refreshGenre( self ):
-        genre = self.controls["Category List"]["control"].getSelectedPosition()
+        genre = self.controls[ "Category List" ][ "control" ].getSelectedPosition()
         self.sql_category = ""
         if ( self.current_display[ 1 ][ 0 ] == genre ):
             self.sql = ""

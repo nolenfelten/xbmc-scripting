@@ -4,12 +4,16 @@ Catchall module for shared functions and constants
 Nuka1195
 """
 
+import sys
 import os
-import default
+
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = [ "pre-0.97.4", "0.97.4" ]
-SETTINGS_VERSIONS = DATABASE_VERSIONS + [ "pre-0.97.2", "0.97.2", "pre-0.97.3", "0.97.3" ]
+DATABASE_VERSIONS = ( "pre-0.97.4", "0.97.4", )
+SETTINGS_VERSIONS = DATABASE_VERSIONS + ( "pre-0.97.2", "0.97.2", "pre-0.97.3", "0.97.3", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -17,9 +21,9 @@ ACTORS = -3
 FAVORITES = -6
 DOWNLOADED = -7
 # base paths
-BASE_DATA_PATH = os.path.join( "T:\\script_data", default.__scriptname__ )
-BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", default.__scriptname__ )
-BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
+BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
+BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes
 EXIT_SCRIPT = ( 247, 275, 61467, )
 CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
@@ -27,6 +31,7 @@ TOGGLE_DISPLAY = ( 216, 257, 61448, )
 CONTEXT_MENU = ( 229, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
+
 
 def _create_base_paths():
     """ creates the base folders """
@@ -81,7 +86,7 @@ class Settings:
     def _use_defaults( self, show_dialog=False ):
         """ setup default values if none obtained """
         settings = {  
-            "version": default.__version__,
+            "version": __version__,
             "skin": "Default",
             "trailer_quality": 2,
             "mode": 0,
@@ -105,4 +110,3 @@ class Settings:
             return True
         except:
             return False
-            

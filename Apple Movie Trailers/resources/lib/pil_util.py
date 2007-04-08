@@ -1,7 +1,14 @@
-import sys, os
+"""
+    Module for creating thumbs
+"""
+
+import sys
+import os
+
 sys.path.append( os.path.join( os.path.dirname( sys.modules[ "pil_util" ].__file__ ), "_PIL.zip" ) )
 from PIL import Image, ImageEnhance
-    
+
+
 def makeThumbnails( poster ):
     try:
         size = ( 26, 38 )

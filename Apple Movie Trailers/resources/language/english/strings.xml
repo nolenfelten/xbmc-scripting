@@ -29,9 +29,9 @@
     <!--string id="62">Are you sure you want to do this?</string-->
     <string id="63">Updating can take anywhere from 1 - 5 minutes.</string>
     <string id="64">Error</string>
-    <!--string id="65">Unable to properly update AMT.pk</string-->
+    <string id="65">Parsing xml files for all trailer urls.</string>
     <string id="66">Fetching genre information...</string>
-    <string id="67">Please wait a moment.</string>
+    <string id="67">Please wait a moment...</string>
     <!--string id="68">Fetching:</string-->
     <string id="69">Error retrieving information for one or more genres.</string>
     <string id="70">Fetching movie information...</string>
@@ -127,21 +127,21 @@
     <string id="401">*No cast listing could be retrieved for this title.</string>
 
     <!-- Context Menu -->
-    <string id="500">Theater Showtimes</string>
-    <string id="501">Move to save folder</string>
+    <string id="501">Play Trailer</string>
     <string id="502">Add to Favorites</string>
     <string id="503">Remove from Favorites</string>
     <string id="504">Mark as Watched</string>
     <string id="505">Mark as Unwatched</string>
     <string id="506">Refresh Trailer Info</string>
-    <string id="507">Refresh Genre</string>
-    <string id="508">Complete a full install</string>
-    <string id="509">Delete Saved Trailer</string>
-    <string id="510">Play Trailer</string>
-    <string id="511">View this Genre</string>
-    <string id="512">View this Studio</string>
-    <string id="513">View this Actor</string>
-    <string id="514">Refresh All</string>
+    <string id="507">Move to Save Folder</string>
+    <string id="508">Delete Saved Trailer</string>
+    <string id="509">Theater Showtimes</string>
+    <string id="511">View Genre</string>
+    <string id="512">Refresh Genre</string>
+    <string id="513">Refresh All Genres</string>
+    <string id="521">View Studio</string>
+    <string id="531">View Actor</string>
+    <string id="550">Complete a Full Install</string>
     
     <!-- Credits -->
     <string id="900">Version</string>

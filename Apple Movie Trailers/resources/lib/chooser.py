@@ -4,23 +4,29 @@ helper module for settings
 Nuka1195
 """
 
+import sys
 import os
 import xbmcgui
 #import xbmc
+
 import guibuilder
 import utilities
 
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
+
 
 class GUI( xbmcgui.WindowDialog ):
-    def __init__( self, skin="Default", language=None ):
+    def __init__( self, skin="Default" ):
         self.base_path = os.path.join( utilities.BASE_RESOURCE_PATH, "skins" )
-        self.gui_loaded = self._load_gui( skin, language )
+        self.gui_loaded = self._load_gui( skin )
         if ( not self.gui_loaded ): self._close_dialog()
             
-    def _load_gui( self, skin, language ):
+    def _load_gui( self, skin ):
         """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="chooser", language=language )
+        gui_loaded, image_path = gb.create_gui( self, skin=skin, xml_name="chooser", language=_ )
         return gui_loaded
             
     def show_chooser( self, choices, selection, list_control, title ):
@@ -50,7 +56,7 @@ class GUI( xbmcgui.WindowDialog ):
         thumbnail = os.path.join( self.base_path, choice, "thumbnail.tbn" )
         self.controls[ "Chooser Thumb" ][ "control" ].setImage( thumbnail )
         self.controls[ "Chooser Warning Label" ][ "control" ].setVisible( os.path.isfile( os.path.join( self.base_path, choice, "warning.txt" ) ) )
-            
+
     def _close_dialog( self, selection=None ):
         self.selection = selection
         self.close()

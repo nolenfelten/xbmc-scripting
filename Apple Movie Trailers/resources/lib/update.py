@@ -13,6 +13,10 @@ from sgmllib import SGMLParser
 
 socket.setdefaulttimeout( 10 )
 
+_ = sys.modules[ "__main__" ].__language__
+__scriptname__ = sys.modules[ "__main__" ].__scriptname__
+__version__ = sys.modules[ "__main__" ].__version__
+
 
 class Parser( SGMLParser ):
     """ Parser Class: grabs all tag versions and urls """
@@ -42,35 +46,32 @@ class Parser( SGMLParser ):
 
 class Update:
     """ Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
-    def __init__( self, language ):
-        self._ = language
-        self.__scriptname__ = sys.modules[ "__main__" ].__scriptname__
-        self.__version__ = sys.modules[ "__main__" ].__version__
+    def __init__( self ):
         self.base_url = "http://xbmc-scripting.googlecode.com/svn"
         self.dialog = xbmcgui.DialogProgress()
         new = self._check_for_new_version()
         if ( new ): self._update_script()
-        else: xbmcgui.Dialog().ok( self.__scriptname__, self._( 1000 + ( 30 * ( new is None ) ) ) )
+        else: xbmcgui.Dialog().ok( __scriptname__, _( 1000 + ( 30 * ( new is None ) ) ) )
             
     def _check_for_new_version( self ):
         """ checks for a newer version """
-        self.dialog.create( self.__scriptname__, self._( 1001 ) )
+        self.dialog.create( __scriptname__, _( 1001 ) )
         # get version tags
         new = None
-        htmlsource = self._get_html_source( "%s/tags/%s" % ( self.base_url, self.__scriptname__.replace( " ", "%20" ), ) )
+        htmlsource = self._get_html_source( "%s/tags/%s" % ( self.base_url, __scriptname__.replace( " ", "%20" ), ) )
         if ( htmlsource ):
             self.versions, url = self._parse_html_source( htmlsource )
             self.url = url[url.find( ":%20" ) + 4:]
             if ( self.versions ):
-                new = ( self.__version__ < self.versions[ -1 ][ : -1 ] or ( self.__version__.startswith( "pre-" ) and self.__version__.replace( "pre-", "" ) <= self.versions[ -1 ][ : -1 ] ) )
+                new = ( __version__ < self.versions[ -1 ][ : -1 ] or ( __version__.startswith( "pre-" ) and __version__.replace( "pre-", "" ) <= self.versions[ -1 ][ : -1 ] ) )
         self.dialog.close()
         return new
                 
     def _update_script( self ):
         """ main update function """
         try:
-            if ( xbmcgui.Dialog().yesno( self.__scriptname__, "%s %s %s." % ( self._( 1006 ), self.versions[ -1 ][ : -1 ], self._( 1002 ), ), self._( 1003 ), "", self._( 251 ), self._( 252 ) ) ):
-                self.dialog.create( self.__scriptname__, self._( 1004 ), self._( 1005 ) )
+            if ( xbmcgui.Dialog().yesno( __scriptname__, "%s %s %s." % ( _( 1006 ), self.versions[ -1 ][ : -1 ], _( 1002 ), ), _( 1003 ), "", _( 251 ), _( 252 ) ) ):
+                self.dialog.create( __scriptname__, _( 1004 ), _( 1005 ) )
                 script_files = []
                 folders = ["%s/%s" % ( self.url, self.versions[-1], )]
                 while folders:
@@ -92,17 +93,17 @@ class Update:
                 self._get_files( script_files, self.versions[ -1 ][ : -1 ] )
         except:
             self.dialog.close()
-            xbmcgui.Dialog().ok( self.__scriptname__, self._( 1031 ) )
+            xbmcgui.Dialog().ok( __scriptname__, _( 1031 ) )
         
     def _get_files( self, script_files, version ):
         """ fetch the files """
         try:
             for cnt, url in enumerate( script_files ):
                 items = os.path.split( url )
-                path = items[ 0 ].replace( "/tags/%s/" % ( self.__scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( self.__scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
+                path = items[ 0 ].replace( "/tags/%s/" % ( __scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( __scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
                 file = items[ 1 ].replace( "%20", " " )
                 pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
-                self.dialog.update( pct, "%s %s" % ( self._( 1007 ), url, ), "%s %s" % ( self._( 1008 ), path, ), "%s %s" % ( self._( 1009 ), file, ) )
+                self.dialog.update( pct, "%s %s" % ( _( 1007 ), url, ), "%s %s" % ( _( 1008 ), path, ), "%s %s" % ( _( 1009 ), file, ) )
                 if ( self.dialog.iscanceled() ): raise
                 if ( not os.path.isdir( path ) ): os.makedirs( path )
                 urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), "%s\\%s" % ( path, file, ) )
@@ -110,7 +111,7 @@ class Update:
             raise
         else:
             self.dialog.close()
-            xbmcgui.Dialog().ok( self.__scriptname__, self._( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( self.__scriptname__, version, ) )
+            xbmcgui.Dialog().ok( __scriptname__, _( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, version, ) )
             
     def _get_html_source( self, url ):
         """ fetch the SVN html source """
