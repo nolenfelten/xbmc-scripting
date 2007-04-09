@@ -12,7 +12,7 @@ def createProgressDialog( __line2__, __line3__="" ):
 def updateProgressDialog( __line2__, __line3__="" ):
     global dialog, pct
     pct += 10
-    dialog.update( pct, _(50), __line2__, __line3__ )
+    dialog.update( pct, _( 50 ), __line2__, __line3__ )
 
 def closeProgessDialog():
     global dialog
@@ -26,22 +26,22 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 try:
-    createProgressDialog( _(51), "%s os" % ( _( 52 ), ))
+    createProgressDialog( _( 51 ), "%s os" % ( _( 52 ), ))
     import os
-    updateProgressDialog( _(51), "%s xbmc" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s xbmc" % ( _( 52 ), ))
     import xbmc
-    updateProgressDialog( _(51), "%s traceback" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s traceback" % ( _( 52 ), ))
     import traceback
-    updateProgressDialog( _(51), "%s threading" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s threading" % ( _( 52 ), ))
     import threading
-    updateProgressDialog( _(51), "%s guibuilder" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s guibuilder" % ( _( 52 ), ))
     import guibuilder
-    updateProgressDialog( _(51), "%s context_menu" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s context_menu" % ( _( 52 ), ))
     import context_menu
     import utilities
-    updateProgressDialog( _(51), "%s cacheurl" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s cacheurl" % ( _( 52 ), ))
     import cacheurl
-    updateProgressDialog( _(51), "%s shutil, datetime" % ( _( 52 ), ))
+    updateProgressDialog( _( 51 ), "%s shutil, datetime" % ( _( 52 ), ))
     import shutil
     import datetime
 except:
@@ -364,8 +364,6 @@ class GUI( xbmcgui.Window ):
         try:
             #self.debugWrite("showTrailerInfo", 2)
             xbmcgui.lock()
-            #trailer = self.controls["Trailer List"]["control"].getSelectedPosition()
-            #self.controls["Trailer Count Label"]["control"].setLabel( "%d of %d" % ( trailer + 1, self.controls["Trailer List"]["control"].size(), ))
             trailer = self.setCountLabel( "Trailer List" )
             poster = self.trailers.movies[trailer].poster
             if ( not poster ): poster = os.path.join( self.image_path, "blank-poster.tbn" )
@@ -500,7 +498,7 @@ class GUI( xbmcgui.Window ):
                 labels += ( "%s" % ( _( 504 + ( self.trailers.movies[ selection ].watched > 0 ) ) + watched_lbl, ), )
                 functions += ( self.toggleAsWatched, )
                 labels += ( _( 506 ), )
-                functions += ( self.refreshInfo, )
+                functions += ( self.refreshTrailerInfo, )
                 if ( self.category_id >= 0 and self.list_category == 1 ):
                     labels += ( _( 512 ), )
                     functions += ( self.refreshCurrentGenre, )
@@ -641,11 +639,13 @@ class GUI( xbmcgui.Window ):
         self.trailers.refreshGenre( ( self.category_id, ) )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
-    def refreshInfo( self ):
-        pass
-        #    self.trailers.movies[self.list_item].__update__()
-        #self.showTrailers( self.sql, choice = self.list_item )
-        
+    def refreshTrailerInfo( self ):
+        trailer = self.setCountLabel( "Trailer List" )
+        self.controls[ "Trailer Poster" ][ "control" ].setImage( "" )
+        self.controls[ "Trailer Rating" ][ "control" ].setImage( "" )
+        self.trailers.refreshTrailerInfo( trailer )
+        self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
+
     def saveCachedMovie( self ):
         try:
             trailer = self.setCountLabel( "Trailer List" )

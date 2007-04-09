@@ -346,20 +346,20 @@ class Query( dict ):
     def __init__( self ):
         #good sql statements
         self[ "movie_by_movie_id" ]		= "SELECT movies.* FROM movies WHERE movies.idMovie=?;"
-        self[ "studio_by_movie_id" ]		= "SELECT studios.studio FROM studio_link_movie, studios, movies WHERE studio_link_movie.idMovie = movies.idMovie AND studio_link_movie.idStudio = studios.idStudio AND movies.idMovie=?;"
-        self[ "actors_by_movie_id" ]		= "SELECT actors.actor FROM actor_link_movie, actors, movies WHERE actor_link_movie.idMovie = movies.idMovie AND actor_link_movie.idActor = actors.idActor AND movies.idMovie=? ORDER BY actors.actor;"
+        self[ "studio_by_movie_id" ]		= "SELECT studios.studio FROM studio_link_movie, studios WHERE studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie=?;"
+        self[ "actors_by_movie_id" ]		= "SELECT actors.actor FROM actor_link_movie, actors WHERE actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie=? ORDER BY actors.actor;"
 
-        self[ "movies_by_genre_id" ]		= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.idGenre=? ORDER BY movies.title;"
-        self[ "movies_by_studio_id" ]		= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND studios.idStudio=? ORDER BY movies.title;"
-        self[ "movies_by_actor_id" ]		= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND actors.idActor=? ORDER BY movies.title;"
+        self[ "movies_by_genre_id" ]		= "SELECT movies.* FROM movies, genre_link_movie WHERE genre_link_movie.idMovie=movies.idMovie AND genre_link_movie.idGenre=? ORDER BY movies.title;"
+        self[ "movies_by_studio_id" ]		= "SELECT movies.* FROM movies, studio_link_movie WHERE studio_link_movie.idMovie=movies.idMovie AND studio_link_movie.idStudio=? ORDER BY movies.title;"
+        self[ "movies_by_actor_id" ]		= "SELECT movies.* FROM movies, actor_link_movie WHERE actor_link_movie.idMovie=movies.idMovie AND actor_link_movie.idActor=? ORDER BY movies.title;"
 
         self[ "movies_by_genre_name" ]	= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.genre=? ORDER BY movies.title;"
         self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
         self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
-        
+
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
-        
+
         self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
         self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
@@ -368,7 +368,7 @@ class Query( dict ):
         self[ "genre_urls_by_genre_id" ]	= "SELECT urls FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
-        
+
         self[ "movie_exists" ]				= "SELECT idMovie FROM movies WHERE upper(title)=?;"
         self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE upper(actor)=?;"
         self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE upper(studio)=?;"
