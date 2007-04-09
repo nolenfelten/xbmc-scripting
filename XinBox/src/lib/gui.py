@@ -10,51 +10,22 @@
 #                                    #
 ######################################
 
-def createProgressDialog( __line3__ ):
-    global dialog, pct
-    pct = 0
-    dialog = xbmcgui.DialogProgress()
-    dialog.create( lang( 0 ) )
-    updateProgressDialog( __line3__ )
-
-def updateProgressDialog( __line3__ ):
-    global dialog, pct
-    pct += 5
-    dialog.update( pct, __line1__, __line2__, __line3__ )
-
-def closeProgessDialog():
-    global dialog
-    dialog.close()
     
 import xbmcgui, language, time, settings
 lang = language.Language().string
 
-__line1__ = lang(60)
-__line2__ = lang(61)
-
-createProgressDialog( '%s xbmc' % ( lang( 62 ), ))
 import xbmc
-updateProgressDialog( '%s sys' % ( lang( 62 ), ))
 import sys
-updateProgressDialog( '%s os' % ( lang( 62 ), ))
 import os
-updateProgressDialog( '%s threading' % ( lang( 62 ), ))
 import threading
-updateProgressDialog( '%s xib_util' % ( lang( 62 ), ))
 import xib_util
-updateProgressDialog( '%s shutil' % ( lang( 62 ), ))
 import shutil
-updateProgressDialog( '%s default' % ( lang( 62 ), ))
 import default
-updateProgressDialog( '%s traceback' % ( lang( 62 ), ))
 import traceback
-updateProgressDialog( '%s mailchecker' % ( lang( 62 ), ))
 import mailchecker
-updateProgressDialog( '%s email' % ( lang( 62 ), ))
 import email
-updateProgressDialog( '%s poplib' % ( lang( 62 ), ))
 import poplib, mimetypes
-closeProgessDialog()
+import emaildialog
 
 SETTINGDIR = default.__scriptsettings__
 SCRIPTSETDIR = SETTINGDIR + default.__scriptname__ + "\\"
@@ -69,6 +40,7 @@ MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
+        xbmcgui.lock()
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
         self.createdirs()
@@ -80,7 +52,6 @@ class GUI( xbmcgui.WindowXML ):
         self.setupcontrols()
         self.adjustcontrols()
         xbmcgui.unlock()
-        print "welcome"
 
     def setupcontrols ( self ):
         self.txtbox = self.getControl(67)
@@ -91,12 +62,6 @@ class GUI( xbmcgui.WindowXML ):
         self.title = self.getControl(66)
         self.bkimage = self.getControl(65)
         self.xbempty = self.getControl(70)
-        self.fsoverlay = self.getControl(71)
-        self.fsmsgbody = self.getControl(72)
-        self.emailinfo = self.getControl(73)
-        self.emailrec = self.getControl(74)
-        self.attbutn = self.getControl(75)
-        self.delbutn = self.getControl(76)
         return
         
     def setupvars( self ):
@@ -111,13 +76,6 @@ class GUI( xbmcgui.WindowXML ):
         return
         
     def adjustcontrols ( self ):
-        print "hereeeee"
-        self.delbutn.setVisible( False )
-        self.attbutn.setVisible( False )
-        self.fsmsgbody.setVisible( False )
-        self.emailinfo.setVisible( False )
-        self.emailrec.setVisible( False )        
-        self.fsoverlay.setVisible( False )
         self.xbempty.setVisible( False )
         self.mmbutn.setLabel( lang(200) )
         self.sebutn.setLabel( lang(201) )
@@ -142,7 +100,7 @@ class GUI( xbmcgui.WindowXML ):
     def gettally(self):
         self.readtally()
         if self.tally == "-":
-            self.tally = 1
+            self.tally = 2
         self.tally = int(self.tally)
         self.writetally()
         return
@@ -186,8 +144,9 @@ class GUI( xbmcgui.WindowXML ):
             self.setFocus(self.xb1butn)
         return
     
-    def openinbox( self , inbox):
-        if inbox == 1:
+    def openinbox( self , inboxy):
+        self.inbox = inboxy
+        if self.inbox == 1:
     	    self.box1 = 1
     	    self.box2 = 0
     	    self.title.setLabel( lang(0) + " - " + self.settings.user1)
@@ -263,35 +222,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.count = self.count+1
                     self.count3 = self.count3-1
         return
-
-    def processEmail(self, selected):
-        self.attachments = []
-        if self.emails[selected].is_multipart():
-            for part in self.emails[selected].walk():
-                if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
-                    filename = part.get_filename()
-                    if not filename:
-                        ext = mimetypes.guess_extension(part.get_type())
-                        if not ext:
-                            # Use a generic extension
-                            ext = '.bin'
-                        filename = 'temp' + ext
-                    try:
-                        f=open(TEMPFOLDER + filename, "wb")
-                        f.write(part.get_payload(decode=1))
-                        f.close()
-                    except:
-                        print "problem saving attachment " + filename
-                    self.attachments.append(filename)       
-        if len(self.attachments)==0:
-            self.attbutn.setEnabled( False )
-        else:
-            self.attbutn.setEnabled( True )
-        self.printEmail(selected)        
-
-    def parse_email(self, email):
-        self.parsemail = email
-        return str(self.parsemail)
+       
 
 
     def printEmail(self, selected):
@@ -314,70 +245,8 @@ class GUI( xbmcgui.WindowXML ):
                 print self.msgText
         self.txtbox.setText(self.msgText)
         return
-
-    def getemailinfo(self):
-        self.temp = self.getCurrentListPosition()
-        self.temp2 = self.getListItem(self.getCurrentListPosition())
-        self.temp3 = self.temp2.getLabel()
-        fh = open(self.emfolder + CORFOLDER + str(self.temp)+ ".cor")
-        self.updateme = fh.read()
-        fh.close()
-        fh = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss")
-        self.tempStr = fh.read()
-        fh.close()
-        return
-
-    def delemail (self, inbox, emailid):
-        w = mailchecker.Checkemail(inbox, 0, emailid)
-        w.deletemail()
-        del w
-        return
     
-    def deletemail(self):
-        dialog = xbmcgui.Dialog()
-        ret = dialog.select( lang( 66 ), [ lang( 67 ), lang( 68 ), lang( 69 )])
-        if ret == 0:
-            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
-            self.listsize  = self.listsize - 1
-            self.addme()
-            self.undoFullscreen()
-            if self.listsize == 0:
-                self.disablexinbox()
-            else:
-                self.setFocusId(50)
-                try:
-                    print "hello"
-                   # self.list.selectItem(self.temp)
-                except:pass
-                self.printEmail(self.getCurrentListPosition())    
-        elif ret == 1:
-            if self.box1 == 1:
-                self.delemail(1, self.mailid)
-            else:
-                self.delemail(2, self.mailid)
-            self.setFocus(self.delbutn)
-            return
-        elif ret == 2:
-            if self.box1 == 1:
-                self.delemail(1, self.mailid)
-            else:
-                self.delemail(2, self.mailid)
-            self.getemailinfo()
-            os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
-            self.listsize  = self.listsize - 1
-            self.addme()
-            self.undoFullscreen()
-            if self.listsize == 0:
-                self.disablexinbox()
-            else:
-                self.setFocusId(50)
-                try:
-                    print "hello"
-                  #  self.list.selectItem(self.temp)
-                except:pass
-                self.printEmail(self.getCurrentListPosition())
-        else:self.setFocus(self.delbutn)
-        return
+
     
     def checkemail ( self, inbox, minimode):
         w = mailchecker.Checkemail(inbox, minimode, 0)
@@ -394,47 +263,13 @@ class GUI( xbmcgui.WindowXML ):
         self.mailid = s[3]
         self.emailbody = s[4]
         return
-    
+        
     def goFullscreen(self):
-        self.emailinfo.reset()
-        self.emailrec.reset()
-        self.fsmsgbody.reset()
-        self.getemailinfo()
-        self.getstatus()
-        print "self.temp2 = " + str(self.temp2)
-        self.temp2.setThumbnailImage(self.read)
-        self.refreshList()
-        self.readstatus = "READ"
-        self.writestatus()
-        self.processEmail(self.temp)
-        self.attbutn.setVisible( True )
-        self.delbutn.setVisible( True )
-        self.fsoverlay.setVisible(True)
-        self.fsmsgbody.setVisible(True)
-        self.fsmsgbody.setText(self.msgText)
-        self.setFocus(self.fsmsgbody)
-        self.emailinfo.addLabel(self.temp3)
-        self.emailrec.addLabel( lang( 63 ) + str(self.time) + " - " + str(self.date))
-        self.emailinfo.setVisible(True)
-        self.emailrec.setVisible(True)
-        self.Fullscreen = True
-
-    def writestatus (self):  
-        f = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss", "w")
-        f.write(self.readstatus + "|" + self.time + "|" + self.date + "|" + self.mailid + "|" + self.emailbody)
-        f.close()
-        return
-    
-    def undoFullscreen(self):
-        self.attbutn.setVisible( False )
-        self.delbutn.setVisible( False )
-        self.fsoverlay.setVisible(False)
-        self.emailinfo.setVisible(False)
-        self.emailrec.setVisible(False)
-        self.fsmsgbody.setVisible(False)
-        self.Fullscreen = False
-        self.setFocusId(50)
-        return
+        self.temp = self.getCurrentListPosition()
+        self.temp2 = self.getListItem(self.temp)
+        self.temp3 = self.temp2.getLabel()
+        self.temp2.setIconImage(self.read)
+        self.launchemaildialog()
 
     def launchsettings( self ):
         import settings
@@ -442,6 +277,24 @@ class GUI( xbmcgui.WindowXML ):
         ws.doModal()
         del ws
 
+    def launchemaildialog( self ):
+        ws = emaildialog.gui("XinBox_EmailDialog.xml",SCRIPTFOLDER + "src","DefaultSkin")
+        ws.setupvars(self.temp3, self.listsize, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
+        ws.doModal()
+        self.listsize = ws.returnvar1
+        print "self.listsize = " + str(self.listsize)
+        del ws
+        self.doitit()
+        
+    def doitit(self):
+        self.addme()
+        if self.listsize == 0:
+            self.disablexinbox()
+        else:
+            self.setFocusId(50)
+            self.setCurrentListPosition(self.temp)
+            self.printEmail(self.getCurrentListPosition())
+    
         
     def onFocus(self, controlID):
         pass
@@ -461,11 +314,13 @@ class GUI( xbmcgui.WindowXML ):
                     self.addme()
             else:
                 self.openinbox(2)
-        elif ( controlID == 76):
-                self.deletemail()
         elif ( controlID == 63):
-                self.launchsettings()    
-
+                self.launchsettings()
+                
+    def parse_email(self, email):
+        self.parsemail = email
+        return str(self.parsemail)
+    
     def exitscript (self):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.close()
@@ -473,16 +328,9 @@ class GUI( xbmcgui.WindowXML ):
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
-        try:
-            focusid = self.getFocusId()
-            print "focusid = " + str(focusid)
-        except:
-            focusid = 0
-            print "bang" 
-        print "action id = " + str(actionID)
-        try:
-            control = self.getFocus()
-            print "control = " + str(control)
+        try:focusid = self.getFocusId()
+        except:focusid = 0
+        try:control = self.getFocus()
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if self.Fullscreen == True:
@@ -491,11 +339,9 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitscript()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
             if (50 <= focusid <= 59):
-                print "howdy hoe"
-                try:
-                    self.goFullscreen()
-                except:traceback.print_exc()
+                self.goFullscreen()
         else:
             if (50 <= focusid <= 59):
-                self.printEmail(self.getCurrentListPosition()) 
+                self.printEmail(self.getCurrentListPosition())
+                
 

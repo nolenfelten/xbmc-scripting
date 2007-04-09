@@ -1,0 +1,81 @@
+<window>
+	<defaultcontrol>72</defaultcontrol>
+	<controls>
+		<control type="image" id="71">
+			<description>fsoverlay</description>
+			<posx>100</posx>
+			<posy>100</posy>
+			<width>500</width>
+			<height>400</height>
+			<texture>fs.png</texture>
+		</control>
+        	<control type="textbox" id="72">
+            		<description>fsmsgbody</description>
+            		<posx>150</posx>
+            		<posy>150</posy>
+            		<width>390</width>
+            		<height>300</height>
+            		<spinposx>230</spinposx>
+            		<spinposy>290</spinposy>
+            		<textureup>scroll-up.png</textureup>
+            		<texturedown>scroll-down.png</texturedown>
+            		<textureupfocus>scroll-up-focus.png</textureupfocus>
+            		<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            		<font>font13</font>
+            		<textcolor>FFFFFFFF</textcolor>
+            		<onup>72</onup>
+            		<ondown>72</ondown>
+            		<onleft>72</onleft>
+           		<onright>75</onright>
+        	</control>	
+
+        	<control type="fadelabel" id="73">
+			<description>emailinfo</description>
+			<width>405</width>
+			<posx>150</posx>
+			<posy>130</posy>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
+     	
+		<control type="fadelabel" id="74">
+			<description>emailrec</description>
+			<posx>150</posx>
+			<posy>440</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
+		<control type="button" id="75">
+			<description>Attach button</description>
+			<posx>420</posx>
+			<posy>440</posy>
+			<label>A</label>
+			<width>17</width>
+			<height>17</height>
+			<onleft>72</onleft>
+			<onright>76</onright>
+			<onup>75</onup>
+			<textoffsetx>5</textoffsetx>
+			<ondown>75</ondown>
+			<disabledcolor>60ffffff</disabledcolor>
+		</control>
+		<control type="button" id="76">
+			<description>Del button</description>
+			<posx>437</posx>
+			<textoffsetx>5</textoffsetx>
+			<posy>440</posy>
+			<label>D</label>
+			<width>17</width>
+			<height>17</height>
+			<onleft>75</onleft>
+			<onright>76</onright>
+			<onup>76</onup>
+			<ondown>76</ondown>
+		</control>
+
+    </controls>
+
+</window>

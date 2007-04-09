@@ -69,7 +69,7 @@ class Checkemail:
         if not os.path.exists(self.emfolder + CORFOLDER):
             os.mkdir(self.emfolder + CORFOLDER)
         if not os.path.exists(self.emfolder + MAILFOLDER):
-            os.mkdir(self.emfolder + MAILFOLDER)
+            os.mkdir(self.emfolder + MAILFOLDER)   
         self.gettally()
         return
     
@@ -271,7 +271,7 @@ class Checkemail:
     def gettally(self):
         self.readtally()
         if self.tally == "-":
-            self.tally = 1
+            self.tally = 2
         self.tally = int(self.tally)
         self.writetally()
         return
