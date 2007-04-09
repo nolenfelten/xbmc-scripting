@@ -20,7 +20,7 @@
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
-		<posy>103</posy>
+		<posy>88</posy>
 	</coordinates>
 	
     <controls>
@@ -30,7 +30,7 @@
 			<posx>60</posx>
 			<posy>40</posy>
 			<width>280</width>
-			<height>290</height>
+			<height>320</height>
 			<texture>\dialog-panel.png</texture>
 			<visible>true</visible>
 		</control>
@@ -58,6 +58,18 @@
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>-</label>
+			<visible>true</visible>
+		</control>
+
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="fadelabel" id="708">
+			<description>SVN URL Label</description>
+			<posx>75</posx>
+			<posy>315</posy>
+			<width>250</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
 			<visible>true</visible>
 		</control>
 

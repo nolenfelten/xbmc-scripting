@@ -23,10 +23,11 @@ class Movie( object ):
         Exposes the following:
         - idMovie (integer - movies id#)
         - title (string)
+        - url (string - xml url)
         - trailer_urls (string - list of movie urls)
         - poster (string - path to poster)
         - thumbnail (string - path to thumbnail)
-        - thumbnail_watched (string - pathe to watched thumbnail)
+        - thumbnail_watched (string - path to watched thumbnail)
         - plot (string - movie plot)
         - rating (string - movie rating)
         - rating_url (string - path to rating image file)
@@ -77,14 +78,20 @@ class Trailers:
         newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
             self.refreshGenre( ( newest_genre, ), last_updated )
-        
+
     def ns( self, text ):
         base_ns = '{http://www.apple.com/itms/}'
         result = list()
         for each in text.split( '/' ):
             result += [ base_ns + each ]
         return '/'.join( result )
-            
+
+    def refreshTrailerInfo( self, trailer ):
+        records = database.Records()
+        self.removeXML( ( self.base_url + self.movies[ trailer ].url, ) )
+        ok = records.update( "movies", ( 3, 4, ), ( None, self.movies[ trailer ].idMovie, ), "idMovie", True )
+        records.close()
+
     def refreshGenre( self, genres, last_updated=False ):
         """
             Updates the xml for each genre in genres from the site.
@@ -118,21 +125,23 @@ class Trailers:
                 idGenre = self.categories[ genre ].id
                 record = records.fetch( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
+                #print urls
                 self.removeXML( urls )
                 trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
                 idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
                 for cnt, url in enumerate( trailer_urls ):
                     if ( not _progress_dialog( cnt + 1 ) ): raise
+                    #print cnt, url[ 0 ]
                     record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                     if ( record is None ):
                         #print "ADDED", url
                         idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
                         success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                     else:
-                        #print "EXIST", url
                         try:
                             i = idMovie_list.index( record )
                             idMovie_list.pop( i )
+                            #print "EXIST", url
                         except:
                             #print "ADDED TO G_L_M table", record[ 0 ]
                             success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
@@ -151,7 +160,8 @@ class Trailers:
         for url in urls:
             try:
                 filename = fetcher.make_cache_filename( url )
-                filename = os.path.join( base_cache_path, filename )
+                filename = str( os.path.join( base_cache_path, filename ) )
+                #print filename
                 if os.path.isfile( filename ):
                     #print "REMOVED", filename
                     os.remove( filename )
@@ -198,9 +208,7 @@ class Trailers:
 
                 _progress_dialog()
                 updated_date = datetime.date.today()
-                
                 base_xml = fetcher.urlopen( self.base_xml )
-                
                 base_xml = ET.fromstring( base_xml )
 
                 view_matrix = {
@@ -381,7 +389,7 @@ class Trailers:
             try:
                 _set_default_movie_info( movie )
                 
-                if ( self.url[:7] != 'http://' ):
+                if ( not self.url.startswith( 'http://' ) ):
                     url = self.base_url + self.url
                 else:
                     url = self.url
@@ -390,7 +398,7 @@ class Trailers:
                 source = fetcher.urlopen( url )
                 try: element = ET.fromstring( source )
                 except:
-                    source = source.replace(" & ", "&amp;")
+                    source = source.replace( " & ", " &amp; " )
                     element = ET.fromstring( source )
                 
                 # -- poster & thumbnails --
@@ -422,6 +430,7 @@ class Trailers:
                         actor_id = records.fetch( self.query[ 'actor_exists' ], ( actor.upper(), ) )
                         if ( actor_id is None ): idActor = records.add( 'actors', ( actor, ) )
                         else: idActor = actor_id[ 0 ]
+                        #print idActor, actor
                         records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
                 self.actors = actors
                 self.actors.sort()
@@ -462,7 +471,7 @@ class Trailers:
                     source = fetcher.urlopen( temp_url )
                     try: element = ET.fromstring( source )
                     except:
-                        source = source.replace(" & ", "&amp;")
+                        source = source.replace( " & ", " &amp; " )
                         element = ET.fromstring( source )
                     trailer_urls = list()
                     for each in element.getiterator( self.ns('string') ):
@@ -520,6 +529,7 @@ class Trailers:
                             Movie(
                                 idMovie = movie[ 0 ],
                                 title = movie[1],
+                                url = movie[2], ##maybe not use##
                                 trailer_urls = eval( movie[3] ),
                                 poster = os.path.join( base_cache_path, movie[4] ),
                                 thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) ),
