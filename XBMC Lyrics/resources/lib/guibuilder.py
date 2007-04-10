@@ -19,9 +19,6 @@ import xml.dom.minidom
 
 class GUIBuilder:
     """ Class to create a dictionary of controls and add them to a Window or WindowDialog """
-    def __init__( self ):
-        pass
-        
     def create_gui( self,
         win, skin="Default", xml_name="skin", skin_path="resources\\skins", image_path="gfx",
         use_desc_as_key=True, language=False
@@ -481,9 +478,9 @@ class GUIBuilder:
 
                     if ( control_type == "list" or control_type == "button" or control_type == "listcontrol" ):
                         if (not "texturefocus" in current_control ): current_control[ "texturefocus" ] = ""
-                        elif ( current_control[ "texturefocus" ][ 0 ] == "\\" ): current_control[ "texturefocus" ] = os.path.join( image_path, current_control[ "texturefocus" ][ 1 : ] )
+                        elif ( current_control[ "texturefocus" ].startswith( "\\" ) ): current_control[ "texturefocus" ] = os.path.join( image_path, current_control[ "texturefocus" ][ 1 : ] )
                         if ( not "texturenofocus" in current_control ): current_control[ "texturenofocus" ] = ""
-                        elif ( current_control[ "texturenofocus" ][ 0 ] == "\\" ): current_control[ "texturenofocus" ] = os.path.join( image_path, current_control[ "texturenofocus" ][ 1 : ] )
+                        elif ( current_control[ "texturenofocus" ].startswith( "\\" ) ): current_control[ "texturenofocus" ] = os.path.join( image_path, current_control[ "texturenofocus" ][ 1 : ] )
                         
                     if ( control_type == "image" ):
                         try: current_control[ "aspectratio" ] = [ "stretch", "scale", "keep" ].index( current_control[ "aspectratio" ] )
@@ -491,7 +488,7 @@ class GUIBuilder:
                         if (not "colorkey" in current_control ): current_control[ "colorkey" ] = ""
                         if (not "colordiffuse" in current_control ): current_control[ "colordiffuse" ] = "0xFFFFFFFF"
                         if (not "texture" in current_control ): current_control[ "texture" ] = ""
-                        elif ( current_control[ "texture" ][ 0 ] == "\\" ): current_control[ "texture" ] = os.path.join( image_path, current_control[ "texture" ][ 1 : ] )
+                        elif ( current_control[ "texture" ].startswith( "\\" ) ): current_control[ "texture" ] = os.path.join( image_path, current_control[ "texture" ][ 1 : ] )
 
                     elif ( control_type == "label" ):
                         if ( not "haspath" in current_control ): current_control[ "haspath" ] = "false"
@@ -507,9 +504,9 @@ class GUIBuilder:
 
                     elif ( control_type == "checkmark" ):
                         if (not "texturecheckmark" in current_control ): current_control[ "texturecheckmark" ] = ""
-                        elif ( current_control[ "texturecheckmark" ][ 0 ] == "\\" ): current_control[ "texturecheckmark" ] = os.path.join( image_path, current_control[ "texturecheckmark" ][ 1 : ] )
+                        elif ( current_control[ "texturecheckmark" ].startswith( "\\" ) ): current_control[ "texturecheckmark" ] = os.path.join( image_path, current_control[ "texturecheckmark" ][ 1 : ] )
                         if (not "texturecheckmarknofocus" in current_control ): current_control[ "texturecheckmarknofocus" ] = ""
-                        elif ( current_control[ "texturecheckmarknofocus" ][ 0 ] == "\\" ): current_control[ "texturecheckmarknofocus" ] = os.path.join( image_path, current_control[ "texturecheckmarknofocus" ][ 1 : ] )
+                        elif ( current_control[ "texturecheckmarknofocus" ].startswith( "\\" ) ): current_control[ "texturecheckmarknofocus" ] = os.path.join( image_path, current_control[ "texturecheckmarknofocus" ][ 1 : ] )
                         if ( not "markwidth" in current_control ): current_control[ "markwidth" ] = 20
                         else: current_control[ "markwidth" ] = int( current_control[ "markwidth" ] )
                         if ( not "markheight" in current_control ): current_control[ "markheight" ] = 20
@@ -517,15 +514,15 @@ class GUIBuilder:
 
                     elif ( control_type == "progress" ):
                         if ( not "texturebg" in current_control ): current_control[ "texturebg" ] = ""
-                        elif ( current_control[ "texturebg" ][ 0 ] == "\\" ): current_control[ "texturebg" ] = os.path.join( image_path, current_control[ "texturebg" ][ 1 : ] )
+                        elif ( current_control[ "texturebg" ].startswith( "\\" ) ): current_control[ "texturebg" ] = os.path.join( image_path, current_control[ "texturebg" ][ 1 : ] )
                         if ( not "lefttexture" in current_control ): current_control[ "lefttexture" ] = ""
-                        elif ( current_control[ "lefttexture" ][ 0 ] == "\\" ): current_control[ "lefttexture" ] = os.path.join( image_path, current_control[ "lefttexture" ][ 1 : ] )
+                        elif ( current_control[ "lefttexture" ].startswith( "\\" ) ): current_control[ "lefttexture" ] = os.path.join( image_path, current_control[ "lefttexture" ][ 1 : ] )
                         if ( not "midtexture" in current_control ): current_control[ "midtexture" ] = ""
-                        elif ( current_control[ "midtexture" ][ 0 ] == "\\" ): current_control[ "midtexture" ] = os.path.join( image_path, current_control[ "midtexture" ][ 1 : ] )
+                        elif ( current_control[ "midtexture" ].startswith( "\\" ) ): current_control[ "midtexture" ] = os.path.join( image_path, current_control[ "midtexture" ][ 1 : ] )
                         if ( not "righttexture" in current_control ): current_control[ "righttexture" ] = ""
-                        elif ( current_control[ "righttexture" ][ 0 ] == "\\" ): current_control[ "righttexture" ] = os.path.join( image_path, current_control[ "righttexture" ][ 1 : ] )
+                        elif ( current_control[ "righttexture" ].startswith( "\\" ) ): current_control[ "righttexture" ] = os.path.join( image_path, current_control[ "righttexture" ][ 1 : ] )
                         if ( not "overlaytexture" in current_control ): current_control[ "overlaytexture" ] = ""
-                        elif ( current_control[ "overlaytexture" ][ 0 ] == "\\" ): current_control[ "overlaytexture" ] = os.path.join( image_path, current_control[ "overlaytexture" ][ 1 : ] )
+                        elif ( current_control[ "overlaytexture" ].startswith( "\\" ) ): current_control[ "overlaytexture" ] = os.path.join( image_path, current_control[ "overlaytexture" ][ 1 : ] )
 
                     elif ( control_type == "list" or control_type == "listcontrol" ):
                         current_control[ "label2" ] = label2_tags
@@ -547,7 +544,7 @@ class GUIBuilder:
                         current_control[ "hidespinner"] = current_control[ "hidespinner" ] in [ "true", "yes", "1" ]
                         if ( not "image" in current_control ): current_control[ "image" ] = [ " " ]
                         for img in range( len( current_control[ "image" ] ) ):
-                            if ( current_control[ "image" ][ img ][ 0 ] == "\\" ): current_control[ "image" ][ img ] = os.path.join( image_path, current_control[ "image" ][ img ][ 1 : ] )
+                            if ( current_control[ "image" ][ img ].startswith( "\\" ) ): current_control[ "image" ][ img ] = os.path.join( image_path, current_control[ "image" ][ img ][ 1 : ] )
 
                 ok = self._add_control(current_control)
                 if ( not ok ): raise
