@@ -11,7 +11,7 @@
 			<colorkey>0</colorkey>
 			<textcolor>ffffffff</textcolor>
 			<colordiffuse>ffffffff</colordiffuse>
-			<texture>background.png</texture>
+			<texture>dbackground.png</texture>
 		</control>
 		<control type="label">
 			<description>description label</description>
