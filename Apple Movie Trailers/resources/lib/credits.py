@@ -43,7 +43,6 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Team Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( sys.modules[ "__main__" ].__credits_l3__, sys.modules[ "__main__" ].__credits_r3__ )
             self.controls['Team Credits List']['control'].addItem( l )
-
             # Additional credits
             self.controls['Additional Credits Label']['control'].setLabel( _( 902 ) )
             self.controls['Additional Credits List']['control'].reset()
@@ -53,6 +52,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.controls['Additional Credits List']['control'].addItem( l )
             l = xbmcgui.ListItem( sys.modules[ "__main__" ].__acredits_l3__, sys.modules[ "__main__" ].__acredits_r3__ )
             self.controls['Additional Credits List']['control'].addItem( l )
+            # Script SVN url
             self.controls['SVN URL Label']['control'].addLabel( __svn_url__ )
         except: print 'Credits Removed'
         xbmcgui.unlock()

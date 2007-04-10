@@ -31,7 +31,7 @@ class Database:
         records = Records()
         record = records.fetch( self.query[ "version" ] )
         records.close()
-        if ( record ):
+        if ( record is not None ):
             idVersion, version, complete = record
             if ( version not in utilities.DATABASE_VERSIONS ): 
                 version, complete = self._convert_database( version, complete )
@@ -281,7 +281,7 @@ class Records:
         except:
             print "*** ERROR: Records.delete() ***"
             print sql
-            print params
+            #print params
             #traceback.print_exc()
             return False
 
@@ -319,26 +319,6 @@ class Records:
         except:
             retval = None
         return retval
-
-        """
-    def fetchone( self, sql, params=None ):
-        try:
-            if ( params ): self.cursor.execute( sql , params )
-            else: self.cursor.execute( sql )
-            retval = self.cursor.fetchone()
-        except:
-            retval = None
-        return retval
-        
-    def fetchall( self, sql, params=None ):
-        try:
-            if ( params ): self.cursor.execute( sql , params )
-            else: self.cursor.execute( sql )
-            retval = self.cursor.fetchall()
-        except:
-            retval = None
-        return retval
-        """
 
 
 class Query( dict ):
