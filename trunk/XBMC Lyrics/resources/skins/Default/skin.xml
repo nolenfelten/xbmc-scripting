@@ -240,7 +240,7 @@
                     <textcolor>FF9FCA4F</textcolor>
                     <font>font12</font>
                 </control>
-                <control type="label">
+                <control type="label" id="100">
                     <description>Playlist Pos No</description>
                     <posx>655</posx>
                     <posy>148</posy>
@@ -251,7 +251,7 @@
                     <font>font12</font>
                     <textcolor>FF9FCA4F</textcolor>
                 </control>
-                <control type="label">
+                <control type="label" id="101">
                     <description>PartyMode Enabled</description>
                     <posx>655</posx>
                     <posy>148</posy>

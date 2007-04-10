@@ -275,7 +275,9 @@ class MyPlayer( xbmc.Player ):
         self.function( 0 )
     
     def onPlayBackEnded( self ):
-        self.function( 1 )
+        xbmc.sleep( 300 )
+        if ( not xbmc.Player().isPlayingAudio() ):
+            self.function( 1 )
     
     def onPlayBackStarted( self ):
         self.function( 2 )

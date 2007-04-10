@@ -28,6 +28,9 @@
     <string id="255">Restart</string>
     <string id="256">Later</string>
     
+    <!-- Special XBMC strings -->
+    <string id="589">Party Mode</string>
+    
     <!-- Error messages -->
     <string id="630">Unusual page layout, no parsing built in yet!</string>
     <string id="631">Artist not found!</string>
