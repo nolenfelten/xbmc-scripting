@@ -174,6 +174,7 @@ class GUI( xbmcgui.WindowXML ):
                 os.remove(os.path.join(root, name))
                    
     def addme( self ):
+        xbmcgui.lock()
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.listsize = 0
         self.xbempty.setVisible( False )
@@ -221,6 +222,7 @@ class GUI( xbmcgui.WindowXML ):
                 else:
                     self.count = self.count+1
                     self.count3 = self.count3-1
+        xbmcgui.unlock()
         return
        
 
@@ -242,7 +244,6 @@ class GUI( xbmcgui.WindowXML ):
             else:
                 email3 = self.parse_email(self.emails[selected].get_payload())
                 self.msgText = email3
-                print self.msgText
         self.txtbox.setText(self.msgText)
         return
     
@@ -282,8 +283,8 @@ class GUI( xbmcgui.WindowXML ):
         ws.setupvars(self.temp3, self.listsize, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
         ws.doModal()
         self.listsize = ws.returnvar1
-        print "self.listsize = " + str(self.listsize)
         del ws
+        xbmcgui.lock()
         self.doitit()
         
     def doitit(self):
@@ -294,6 +295,7 @@ class GUI( xbmcgui.WindowXML ):
             self.setFocusId(50)
             self.setCurrentListPosition(self.temp)
             self.printEmail(self.getCurrentListPosition())
+        xbmcgui.unlock()
     
         
     def onFocus(self, controlID):

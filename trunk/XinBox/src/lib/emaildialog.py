@@ -30,10 +30,14 @@ CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
+TEMPFOLDER = SCRIPTSETDIR + "temp\\"
+
 
 class gui( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
+        print "_init here"
         self.control_action = xib_util.setControllerAction()
+        xbmcgui.lock()
 
     def setupvars(self, arg1, arg2, arg3, arg4, arg5, arg6):
         self.temp3 = arg1
@@ -53,13 +57,19 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.openit()
 
     def openit(self):
-        xbmcgui.lock()
+        xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        self.attachlabel = self.getControl(79)
+        self.attlist = self.getControl(77)
         self.fsoverlay = self.getControl(71)
         self.fsmsgbody = self.getControl(72)
         self.emailinfo = self.getControl(73)
+        time.sleep(0.1)
         self.emailrec = self.getControl(74)
         self.attbutn = self.getControl(75)
         self.delbutn = self.getControl(76)
+        self.attachlabel.setLabel( lang(202) )
+        self.attopen = False
         self.getemailinfo()
         self.getstatus()
         self.readstatus = "READ"
@@ -69,6 +79,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.emailrec.reset()
         self.fsmsgbody.reset()
         self.fsmsgbody.setText(self.msgText)
+        time.sleep(0.1)
         self.setFocus(self.fsmsgbody)
         self.emailinfo.addLabel(self.temp3)
         self.emailrec.addLabel( lang( 63 ) + str(self.time) + " - " + str(self.date))
@@ -77,12 +88,24 @@ class gui( xbmcgui.WindowXMLDialog ):
     def onClick(self, controlID):
         if ( controlID == 76):
             self.deletemail()
-                
+        elif ( controlID == 75):
+            if not self.attopen:
+                self.attopen = True
+                xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
+                time.sleep(0.1)
+                #self.setFocus(self.attlist)
+            else:
+                self.attopen = False
+                xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
+                xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+                time.sleep(0.1)
+                self.setFocus(self.attbutn)                
+            
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-                self.exitme()
+                self.exitme()         
                 
     def exitme(self):
         self.returnvar1 = self.listsize
@@ -108,18 +131,17 @@ class gui( xbmcgui.WindowXMLDialog ):
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
                     filename = part.get_filename()
                     if not filename:
-                        ext = mimetypes.guess_extension(part.get_type())
-                        if not ext:
-                            # Use a generic extension
-                            ext = '.bin'
-                        filename = 'temp' + ext
-                    try:
-                        f=open(TEMPFOLDER + filename, "wb")
-                        f.write(part.get_payload(decode=1))
-                        f.close()
-                    except:
-                        print "problem saving attachment " + filename
-                    self.attachments.append(filename)       
+                        print "Bad attachment - no Filename, Attachment not saved."
+                    else:
+                        try:
+                            f=open(TEMPFOLDER + filename, "wb")
+                            f.write(part.get_payload(decode=1))
+                            f.close()
+                            self.attachments.append(filename)
+                        except:
+                            print "problem saving attachment " + filename
+        for attachment in self.attachments:
+            self.attlist.addItem(attachment)        
         if len(self.attachments)==0:
             self.attbutn.setEnabled( False )
         else:
