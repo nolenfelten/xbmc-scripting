@@ -57,16 +57,7 @@ class SVTMedia:
 
 		data = self.retrieve(url)
 
-		if data.endswith('rm'):
-			ram = data
-		else:
-			try:
-				ram = data[:data.index('\r')]
-			except ValueError, e:
-				msg = 'Unable to parse RAM file.'
-				raise ParseError(msg)
-
-		return ram 
+		return data.split('\r')
 
 	def _parse_asx(self, url):
 		mms = None
@@ -80,7 +71,7 @@ class SVTMedia:
 			msg = 'Unable to parse ASX file.'
 			raise ParseError(msg)
 
-		return mms
+		return [mms]
 
 	def list_directory(self, url):
 		data = self.retrieve(url)
@@ -129,17 +120,21 @@ class SVTMedia:
 			if not node.a.has_key('href'): # hack, should be removed
 				continue
 
+			# fixup the url
 			if node.a['href'].startswith('http'):
 				url = node.a['href']
 			else:
 				url = 'http://svt.se' + node.a['href']
 
-			if url.endswith('ram'):
-				url = self._parse_ram(url)
-			elif url.endswith('asx'):
-				url = self._parse_asx(url)
+			entries = []
 
-			list.append(url)
+			# get the real video clip urls
+			if url.endswith('ram'):
+				entries = self._parse_ram(url)
+			elif url.endswith('asx'):
+				entries = self._parse_asx(url)
+
+			list = list + entries
 
 		return list
 
@@ -192,10 +187,11 @@ if __name__ == '__main__':
 		else:
 			t = 'video'
 
-		print '%28s - %s (%s)' % (name, url[url.rindex('/'):], t)
+		print '%28s - %s (%s)' % (name.encode('UTF-8'), url[url.rindex('/'):].encode('UTF-8'), t)
 		u = url
 
 	print svt.parse_video(u)
 
 	print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743767')
+	print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
 
