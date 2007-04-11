@@ -93,14 +93,39 @@ class SVTGui(xbmcgui.Window):
 		       'Felrapporter: XBMC Forum - Python Script Development')
 
 	def list_contents(self, url):
-		data = self.download_data(url, self.svt.parse_directory)
-		if data is None:
+		data = self.download_data(url, self.svt.list_directory)
+		if not self.populate_content_list(data):
 			# Nothing to update.
 			return False
 
-		self.data = data
-
+		# Push directory to browsing stack
 		self.stack.append(url)
+
+		return True
+
+	def search(self, term=None):
+		if term is None:
+			term = xbmcutils.gui.get_input('Search')
+		
+		# Only update the list if the user entered something.
+		if term is None:
+			return False
+
+		data = self.download_data(term, self.svt.search)
+		if not self.populate_content_list(data):
+			return False
+
+		# Dummy entry on the stack, search will only
+		# return clips so no problemo.
+		self.stack.append('search')
+
+		return True
+
+	def populate_content_list(self, data):
+		if data is None:
+			return False
+
+		self.data = data
 
 		list = self.get_control('Content List')
 
@@ -136,6 +161,8 @@ class SVTGui(xbmcgui.Window):
 					self.play_clip(url)
 			elif control is self.get_control('About Button'):
 				self.show_about()
+			elif control is self.get_control('Search Button'):
+				self.search()
 		except:
 			xbmc.log('Exception (onControl): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
@@ -178,6 +205,7 @@ class SVTGui(xbmcgui.Window):
 		except ParseError, e:
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('Sveriges Television', 'Kunde inte tolka data.')
+			print e
 		except DownloadError, e:
 			err_dlg = xbmcgui.Dialog()
 			err_dlg.ok('Sveriges Television', 'Kunde inte hamta data.')
@@ -191,5 +219,3 @@ class SVTGui(xbmcgui.Window):
 svt = SVTGui()
 svt.doModal()
 del svt
-
-

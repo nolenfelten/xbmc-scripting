@@ -39,7 +39,11 @@ class SVTMedia:
 	VIDEO = 1
 
 	def __init__(self):
-		self.base_url = 'http://svt.se/svt/road/Classic/shared/mediacenter/'
+		play_url = 'http://svt.se/svt/road/Classic/shared'
+
+		self.base_url = play_url + '/mediacenter/'
+		self.search_url = play_url + '/search/video/MediaplayerSearch.jsp'
+
 		self.default_url = self.base_url+'navigation.jsp?&frameset=true'
 	
 	def get_start_url(self):
@@ -78,10 +82,13 @@ class SVTMedia:
 
 		return mms
 
-	def parse_directory(self, url):
+	def list_directory(self, url):
+		data = self.retrieve(url)
+		return self.parse_directory(data)
+
+	def parse_directory(self, data):
 		list = []
 
-		data = self.retrieve(url)
 		soup = BeautifulSoup(data)
 
 		for node in soup.findAll('div', {'class':'enddep'}):
@@ -104,8 +111,10 @@ class SVTMedia:
 
 			if node.a['href'].startswith('http'):
 				url = node.a['href']
+			elif node.a['href'].startswith('player'):
+				url = self.base_url + node.a['href']
 			else:
-				url = self.base_url+node.a['href']
+				url = 'http://svt.se' + node.a['href']
 			list.append((desc, url, SVTMedia.VIDEO))
 
 		return list
@@ -123,7 +132,7 @@ class SVTMedia:
 			if node.a['href'].startswith('http'):
 				url = node.a['href']
 			else:
-				url = 'http://svt.se'+node.a['href']
+				url = 'http://svt.se' + node.a['href']
 
 			if url.endswith('ram'):
 				url = self._parse_ram(url)
@@ -135,11 +144,20 @@ class SVTMedia:
 		return list
 
 	def set_report_hook(self, func, udata=None):
-		self.rhook = func
-		self.rudata = udata
+		self.report_hook = func
+		self.report_udata = udata
 
-	def retrieve(self, url):
-		return xbmcutils.net.retrieve(url, rhook=self.rhook, rudata=self.rudata)
+	def retrieve(self, url, data=None, headers={}):
+		return xbmcutils.net.retrieve(url, data, headers,
+		                              self.report_hook,
+		                              self.report_udata)
+
+	def search(self, term):
+		post = {'queryString':term}
+		data = self.retrieve(self.search_url, post)
+
+		return self.parse_directory(data)
+
 
 if __name__ == '__main__':
 	def test(done, size, udata):
@@ -147,8 +165,27 @@ if __name__ == '__main__':
 
 	svt = SVTMedia()
 	svt.set_report_hook(test)
-	#list = svt.parse_directory('http://svt.se/svt/road/Classic/shared/mediacenter/navigation.jsp?d=2156')
-	list = svt.parse_directory('http://svt.se/svt/road/Classic/shared/mediacenter/navigation.jsp?d=37689')
+	print 'downloading'
+	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=2156')
+	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=37689')
+	list = svt.list_directory(svt.base_url + '/navigation.jsp?d=63330')
+	print 'download complete'
+	for name, url, type in list:
+		if type == SVTMedia.DIR:
+			t = 'dir'
+		else:
+			t = 'video'
+
+		print '%28s - %s (%s)' % (name, url, t)
+
+	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=37689', test)
+	#print list
+	#soup = SVTMedia.make_soup(svt.base_url + '/navigation.jsp?d=40370', test)
+	#if soup != None:
+	#	list = svt.list_directory(soup)
+	#	print list
+
+	list = svt.search('percy')
 	for name, url, type in list:
 		if type == SVTMedia.DIR:
 			t = 'dir'
@@ -156,10 +193,9 @@ if __name__ == '__main__':
 			t = 'video'
 
 		print '%28s - %s (%s)' % (name, url[url.rindex('/'):], t)
+		u = url
 
-	#list = svt.parse_directory('http://svt.se/svt/road/Classic/shared/mediacenter//navigation.jsp?d=37689', test)
-	#print list
-	#soup = SVTMedia.make_soup('http://svt.se/svt/road/Classic/shared/mediacenter//navigation.jsp?d=40370', test)
-	#if soup != None:
-	#	list = svt.parse_directory(soup)
-	#	print list
+	print svt.parse_video(u)
+
+	print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743767')
+
