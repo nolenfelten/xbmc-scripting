@@ -62,6 +62,23 @@
 			<width>150</width>
 			<height>30</height>
 			<onright>5</onright>
+			<onup>11</onup>
+			<ondown>11</ondown>
+			<texturefocus>\button-focus.png</texturefocus>
+			<texturenofocus>\button-nofocus.png</texturenofocus>
+			<textcolor>ffffffff</textcolor>
+			<disabledcolor>60ffffff</disabledcolor>
+			<textoffsetx>17</textoffsetx>
+			<aligny>center</aligny>
+		</control>
+		<control type="button" id="11">
+			<description>Search Button</description>
+			<label>Sok</label>
+			<posx>40</posx>
+			<posy>143</posy>
+			<width>150</width>
+			<height>30</height>
+			<onright>5</onright>
 			<onup>10</onup>
 			<ondown>10</ondown>
 			<texturefocus>\button-focus.png</texturefocus>
