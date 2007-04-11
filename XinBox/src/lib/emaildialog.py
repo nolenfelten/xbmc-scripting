@@ -19,6 +19,7 @@ import traceback
 import mailchecker
 import email
 import poplib, mimetypes
+import string
 
 SETTINGDIR = default.__scriptsettings__
 SCRIPTSETDIR = SETTINGDIR + default.__scriptname__ + "\\"
@@ -64,12 +65,13 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.fsoverlay = self.getControl(71)
         self.fsmsgbody = self.getControl(72)
         self.emailinfo = self.getControl(73)
-        time.sleep(0.1)
         self.emailrec = self.getControl(74)
         self.attbutn = self.getControl(75)
         self.delbutn = self.getControl(76)
+        self.imgagebox = self.getControl(80)
         self.attachlabel.setLabel( lang(202) )
         self.attopen = False
+        self.showingimage = False
         self.getemailinfo()
         self.getstatus()
         self.readstatus = "READ"
@@ -79,7 +81,6 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.emailrec.reset()
         self.fsmsgbody.reset()
         self.fsmsgbody.setText(self.msgText)
-        time.sleep(0.1)
         self.setFocus(self.fsmsgbody)
         self.emailinfo.addLabel(self.temp3)
         self.emailrec.addLabel( lang( 63 ) + str(self.time) + " - " + str(self.date))
@@ -90,23 +91,107 @@ class gui( xbmcgui.WindowXMLDialog ):
             self.deletemail()
         elif ( controlID == 75):
             if not self.attopen:
+                self.click = 0
+                self.click2 = 0
                 self.attopen = True
                 xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-                time.sleep(0.1)
-                #self.setFocus(self.attlist)
+              #  time.sleep(0.1)
             else:
                 self.attopen = False
                 xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                time.sleep(0.1)
-                self.setFocus(self.attbutn)                
+                self.RemoveImage()
+              #  time.sleep(0.1)               
             
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
+        try:focusid = self.getFocusId()
+        except:focusid = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-                self.exitme()         
-                
+                self.exitme()
+        elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
+            if (focusid == 77):
+                self.openattach(self.attlist.getSelectedPosition())
+
+    def openattach(self, arg1):
+        filetype = string.split(self.attachments[arg1], '.').pop()
+        lcfiletype = string.lower(filetype)
+        if lcfiletype=="jpg" or lcfiletype=="jpeg" or lcfiletype=="gif" or lcfiletype=="png" or lcfiletype=="bmp":
+            self.click2 = 0
+            if not self.showingimage:
+                self.click = self.click + 1
+                self.ShowImage(self.attachments[arg1])
+            else:
+                if self.currentimage != self.attachments[arg1]:
+                    self.click = 1
+                    self.RemoveImage()
+                    self.ShowImage(self.attachments[arg1])
+                else:
+                    self.click = self.click + 1
+                    if self.click == 2:
+                        self.saveattachment(self.attachments[arg1])
+                        self.click = 2
+                    elif self.click == 3:
+                        self.RemoveImage()
+                        self.click = 0
+        else:
+            if self.click2 == 0:
+                self.click2 = 1
+                if not self.PlayMedia(self.attachments[arg1]):
+                    print "In-compatible file type"
+                    self.RemoveImage()
+                    self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
+                    self.showingimage = True
+                else:
+                   self.RemoveImage()
+                   self.showingimage = False
+            elif self.click2 == 1:
+                self.RemoveImage()
+                self.showingimage = False
+                self.saveattachment(self.attachments[arg1])
+                self.click2 = 2
+            elif self.click2 == 2:
+                if not self.PlayMedia(self.attachments[arg1]):
+                    self.RemoveImage()
+                    self.showingimage = False
+                    self.click2 = 0
+                else:
+                    self.RemoveImage()
+                    self.showingimage = False
+                    self.click2 = 1
+            
+
+    def saveattachment(self, filename):
+        dialog = xbmcgui.Dialog()
+        fn = dialog.browse(0, 'Save Attachment to...', 'files')
+        if fn:
+            path = fn
+            print str(path)
+            shutil.copy(TEMPFOLDER + filename, path)
+            return
+        else:return
+        
+
+    def PlayMedia(self, filename):
+        try:
+            xbmc.Player().stop()
+        except:pass
+        xbmc.Player().play(TEMPFOLDER + filename)
+        if xbmc.Player().isPlaying():
+            return True
+        else:
+            return False
+        
+    def RemoveImage(self):
+        self.imgagebox.setImage(MEDIAFOLDER + "XB.png")
+        self.showingimage = False   
+        
+    def ShowImage(self, filename):
+        self.currentimage = filename
+        self.imgagebox.setImage(TEMPFOLDER + filename)
+        self.showingimage = True
+        
     def exitme(self):
         self.returnvar1 = self.listsize
         self.close()
@@ -153,7 +238,6 @@ class gui( xbmcgui.WindowXMLDialog ):
         if self.emails[selected].is_multipart():
             for part in self.emails[selected].walk():
                 if part.get_content_type() == "text/plain":
-                    print part.get_payload()
                     email = self.parse_email(part.get_payload())
                     self.msgText = email
                     break
