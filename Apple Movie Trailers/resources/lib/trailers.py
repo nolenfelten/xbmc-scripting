@@ -128,29 +128,30 @@ class Trailers:
                 #print urls
                 self.removeXML( urls )
                 trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
-                idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
-                for cnt, url in enumerate( trailer_urls ):
-                    if ( not _progress_dialog( cnt + 1 ) ): raise
-                    #print cnt, url[ 0 ]
-                    record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
-                    if ( record is None ):
-                        #print "ADDED", url
-                        idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
-                        success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
-                    else:
-                        try:
-                            i = idMovie_list.index( record )
-                            idMovie_list.pop( i )
-                            #print "EXIST", url
-                        except:
-                            #print "ADDED TO G_L_M table", record[ 0 ]
-                            success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
-                for record in idMovie_list:
-                    #print "DELETED", record
-                    success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
-                success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                self.categories[ genre ] = Category( id=idGenre, title=title ) 
-                success = records.commit()
+                if ( trailer_urls ):
+                    idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
+                    for cnt, url in enumerate( trailer_urls ):
+                        if ( not _progress_dialog( cnt + 1 ) ): raise
+                        #print cnt, url[ 0 ]
+                        record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                        if ( record is None ):
+                            #print "ADDED", url
+                            idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
+                            success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                        else:
+                            try:
+                                i = idMovie_list.index( record )
+                                idMovie_list.pop( i )
+                                #print "EXIST", url
+                            except:
+                                #print "ADDED TO G_L_M table", record[ 0 ]
+                                success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
+                    for record in idMovie_list:
+                        #print "DELETED", record
+                        success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
+                    success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
+                    self.categories[ genre ] = Category( id=idGenre, title=title ) 
+                    success = records.commit()
         except: pass
         success = records.commit()
         records.close()
