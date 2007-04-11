@@ -37,6 +37,7 @@ CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
+TEMPFOLDER = SCRIPTSETDIR + "temp\\"
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
@@ -69,8 +70,8 @@ class GUI( xbmcgui.WindowXML ):
         self.box1 = 0
         self.box2 = 0
         self.Fullscreen = False
-        self.notread = MEDIAFOLDER + "emailnotread.png"
-        self.read = MEDIAFOLDER + "emailread.png"
+        self.notread = MEDIAFOLDER + "XBemailnotread.png"
+        self.read = MEDIAFOLDER + "XBemailread.png"
         self.control_action = xib_util.setControllerAction()
         xbmc.log ("setup variables OK")
         return
@@ -232,7 +233,6 @@ class GUI( xbmcgui.WindowXML ):
         if self.emails[selected].is_multipart():
             for part in self.emails[selected].walk():
                 if part.get_content_type() == "text/plain":
-                    print part.get_payload()
                     email = self.parse_email(part.get_payload())
                     self.msgText = email
                     break
@@ -325,6 +325,7 @@ class GUI( xbmcgui.WindowXML ):
     
     def exitscript (self):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        self.clearfolder(TEMPFOLDER)
         self.close()
         
     def onAction( self, action ):

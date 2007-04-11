@@ -8,7 +8,7 @@
 			<width>500</width>
 			<visible>Skin.HasSetting(attachlistnotempty)</visible>
 			<height>400</height>
-			<texture>attach.png</texture>
+			<texture>XBattach.png</texture>
 		</control>
 		<control type="image" id="71">
 			<description>fsoverlay</description>
@@ -16,7 +16,7 @@
 			<posy>100</posy>
 			<width>500</width>
 			<height>400</height>
-			<texture>fs.png</texture>
+			<texture>XBfs.png</texture>
 		</control>
         	<control type="label" id="79">
 			<description>attachmentlabel</description>
@@ -34,12 +34,12 @@
             		<posy>150</posy>
             		<width>390</width>
             		<height>300</height>
-            		<spinposx>230</spinposx>
+            		<spinposx>240</spinposx>
             		<spinposy>290</spinposy>
-            		<textureup>scroll-up.png</textureup>
-            		<texturedown>scroll-down.png</texturedown>
-            		<textureupfocus>scroll-up-focus.png</textureupfocus>
-            		<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            		<textureup>XBscroll-up.png</textureup>
+            		<texturedown>XBscroll-down.png</texturedown>
+            		<textureupfocus>XBscroll-up-focus.png</textureupfocus>
+            		<texturedownfocus>XBscroll-down-focus.png</texturedownfocus>
             		<font>font13</font>
             		<textcolor>FFFFFFFF</textcolor>
             		<onup>72</onup> 
@@ -51,7 +51,7 @@
 			<posx>560</posx>
 			<posy>150</posy>
 			<width>140</width>
-			<height>280</height>
+			<height>120</height>
 			<onleft>76</onleft>
 			<onright>77</onright>
 			<onup>77</onup>
@@ -64,7 +64,7 @@
 					<height>25</height>
 					<posx>0</posx>
 					<posy>0</posy>
-					<texture>list-nofocus.png</texture>
+					<texture>XBlist-nofocus.png</texture>
 				</control>
 				<control type="image">
 					<posx>5</posx>
@@ -101,17 +101,8 @@
 					<height>25</height>
 					<posx>-5</posx>
 					<posy>0</posy>
-					<visible>!Control.HasFocus(77)</visible>
-					<colordiffuse>FF000000</colordiffuse>
-					<texture>dlist-focus.png</texture>
-				</control>
-				<control type="image">
-					<width>150</width>
-					<height>25</height>
-					<posx>-5</posx>
-					<posy>0</posy>
 					<visible>Control.HasFocus(77)</visible>
-					<texture>dlist-focus.png</texture>
+					<texture>XBlist-focus.png</texture>
 				</control>
 				<control type="image">
 					<posx>0</posx>
@@ -156,14 +147,14 @@
 			<description>emailrec</description>
 			<posx>150</posx>
 			<posy>440</posy>
-			<width>200</width>
+			<width>210</width>
 			<align>left</align>
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control>
 		<control type="button" id="75">
 			<description>Attach button</description>
-			<posx>420</posx>
+			<posx>430</posx>
 			<posy>440</posy>
 			<label>A</label>
 			<width>17</width>
@@ -177,7 +168,7 @@
 		</control>
 		<control type="button" id="76">
 			<description>Del button</description>
-			<posx>437</posx>
+			<posx>447</posx>
 			<textoffsetx>5</textoffsetx>
 			<posy>440</posy>
 			<label>D</label>
@@ -187,6 +178,16 @@
 			<onright>77</onright>
 			<onup>76</onup>
 			<ondown>76</ondown>
+		</control>
+		<control type="image" id="80">
+			<description>attachimage</description>
+			<posx>565</posx>
+			<posy>280</posy>
+			<width>130</width>
+			<height>170</height>
+			<texture>-</texture>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+			<aspectratio>keep</aspectratio>
 		</control>
 
     </controls>
