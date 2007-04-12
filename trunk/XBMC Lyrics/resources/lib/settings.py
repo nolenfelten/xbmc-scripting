@@ -9,7 +9,6 @@ import os
 import xbmc
 import xbmcgui
 
-import guibuilder
 import utilities
 
 _ = sys.modules[ "__main__" ].__language__
@@ -17,31 +16,41 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 
-class GUI( xbmcgui.WindowDialog ):
+class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
-    def __init__( self, skin="Default" ):
-        self.gui_loaded = self._load_gui( skin )
-        if ( not self.gui_loaded ): self._close_dialog()
-        else:
-            self._set_variables()
-            self._get_settings()
-            self._setup_special()
-            self._set_controls_values()
-            self._set_restart_required()
-            
-    def _load_gui( self, skin ):
-        """ sets up the gui using guibuilder """
-        gb = guibuilder.GUIBuilder()
-        ok, image_path = gb.create_gui( self, skin=skin, xml_name="settings", language=_ )
-        return ok
+    def __init__( self, *args, **kwargs ):
+        pass
+
+    def onInit( self ):
+        self._set_labels()
+        self._set_variables()
+        self._get_settings()
+        self._setup_special()
+        self._set_controls_values()
+        self._set_restart_required()
+
+    def _set_labels( self ):
+        xbmcgui.lock()
+        try:
+            self.getControl( 20 ).setLabel( __scriptname__ )
+            self.getControl( 30 ).setLabel( "%s: %s" % ( _( 1006 ), __version__, ) )
+            self.getControl( 201 ).setLabel( _( 201 ) )
+            self.getControl( 202 ).setLabel( _( 202 ) )
+            self.getControl( 203 ).setLabel( _( 203 ) )
+            self.getControl( 204 ).setLabel( _( 204 ) )
+            self.getControl( 205 ).setLabel( _( 205 ) )
+            self.getControl( 250 ).setLabel( _( 250 ) )
+            self.getControl( 251 ).setLabel( _( 251 ) )
+            self.getControl( 252 ).setLabel( _( 252 ) )
+            self.getControl( 253 ).setLabel( _( 253 ) )
+        except: pass
+        xbmcgui.unlock()
 
     def _set_variables( self ):
         """ initializes variables """
-        self.get_control( "Title Label" ).setLabel( sys.modules[ "__main__" ].__scriptname__ )
-        self.get_control( "Version Label" ).setLabel( "%s: %s" % ( _( 1006 ), sys.modules[ "__main__" ].__version__, ) )
         # setEnabled( False ) if not used
-        self.get_control( "Credits Button" ).setVisible( False )
-        self.get_control( "Credits Button" ).setEnabled( False )
+        self.getControl( 253 ).setVisible( False )
+        self.getControl( 253 ).setEnabled( False )
 
     def _get_settings( self ):
         """ reads settings """
@@ -51,7 +60,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ saves settings """
         ok = utilities.Settings().save_settings( self.settings )
         if ( not ok ):
-            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__scriptname__, _( 230 ) )
+            ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
         else:
             self._check_for_restart()
 
@@ -123,13 +132,13 @@ class GUI( xbmcgui.WindowDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.get_control( "Setting1 Value" ).setLabel( self.scrapers_title[ self.current_scraper ] )
-            self.get_control( "Setting2 Value" ).setSelected( self.settings[ "save_lyrics" ] )
-            self.get_control( "Setting3 Button" ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.get_control( "Setting3 Value" ).setLabel( self.settings[ "lyrics_path" ] )
-            self.get_control( "Setting3 Value" ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.get_control( "Setting4 Value" ).setSelected( self.settings[ "smooth_scrolling" ] )
-            self.get_control( "Setting5 Value" ).setSelected( self.settings[ "show_viz" ] )
+            self.getControl( 221 ).setLabel( self.scrapers_title[ self.current_scraper ] )
+            self.getControl( 222 ).setSelected( self.settings[ "save_lyrics" ] )
+            self.getControl( 203 ).setEnabled( self.settings[ "save_lyrics" ] )
+            self.getControl( 223 ).setLabel( self.settings[ "lyrics_path" ] )
+            self.getControl( 223 ).setEnabled( self.settings[ "save_lyrics" ] )
+            self.getControl( 224 ).setSelected( self.settings[ "smooth_scrolling" ] )
+            self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
         except: pass
         xbmcgui.unlock()
     
@@ -167,7 +176,7 @@ class GUI( xbmcgui.WindowDialog ):
         """ shows a credit window """
         import credits
         c = credits.GUI()
-        if ( c.gui_loaded ): c.doModal()
+        c.doModal()
         del c
 
     def _check_for_restart( self ):
@@ -185,32 +194,30 @@ class GUI( xbmcgui.WindowDialog ):
         self.restart = restart
         self.close()
         
-    def get_control( self, key ):
-        """ returns the control that matches the key """
-        try: return self.controls[ key ][ "control" ]
-        except: return None
-
-    def onControl( self, control ):
-        if ( control is self.get_control( "Ok Button" ) ):
+    def onClick( self, controlId ):
+        if ( controlId == 250 ):
             self._save_settings()
-        elif ( control is self.get_control( "Cancel Button" ) ):
+        elif ( controlId == 251 ):
             self._close_dialog()
-        elif ( control is self.get_control( "Update Button" ) ):
+        elif ( controlId == 252 ):
             self._update_script()
-        elif ( control is self.get_control( "Credits Button" ) ):
+        elif ( controlId == 253 ):
             self._show_credits()
         else:
-            if ( control is self.get_control( "Setting1 Button" ) ):
+            if ( controlId == 201 ):
                 self._change_setting1()
-            elif ( control is self.get_control( "Setting2 Button" ) ):
+            elif ( controlId == 202 ):
                 self._change_setting2()
-            elif ( control is self.get_control( "Setting3 Button" ) ):
+            elif ( controlId == 203 ):
                 self._change_setting3()
-            elif ( control is self.get_control( "Setting4 Button" ) ):
+            elif ( controlId == 204 ):
                 self._change_setting4()
-            elif ( control is self.get_control( "Setting5 Button" ) ):
+            elif ( controlId == 205 ):
                 self._change_setting5()
             self._set_controls_values()
+
+    def onFocus( self, controlId ):
+        pass
             
     def onAction( self, action ):
         if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):

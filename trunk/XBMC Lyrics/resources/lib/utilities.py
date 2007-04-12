@@ -12,12 +12,13 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.4.2", )
+SETTINGS_VERSIONS = ( "1.5", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes
+SELECT_ITEM = ( 11, 256, 61453, )
 EXIT_SCRIPT = ( 247, 275, 61467, )
 CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
 GET_EXCEPTION = ( 216, 260, 61448, )

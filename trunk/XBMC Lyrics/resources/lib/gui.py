@@ -17,8 +17,8 @@ import os
 import xbmc
 import xbmcgui
 import threading
+#import traceback
 
-import guibuilder
 import utilities
 
 try: current_dlg_id = xbmcgui.getCurrentWindowDialogId()
@@ -30,21 +30,22 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 
-class GUI( xbmcgui.WindowDialog ):
-    def __init__( self ):
-        try:
-            self.Timer = None
-            self.gui_loaded, image_path = self.load_gui()
-            if ( not self.gui_loaded ): self.exit_script()
-            else:
-                Start( function=self.setup_all ).start()
-        except: 
-            self.exit_script()
-            
-    def load_gui( self ):
-        gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, use_desc_as_key=False, language=_ )
-        return ok
+class GUI( xbmcgui.WindowXMLDialog ):
+    def __init__( self, *args, **kwargs ):
+        pass
+
+    def onInit( self ):
+        self.set_controls()
+        self.setup_all()#Start( function=self.setup_all ).start()
+
+    def set_controls( self ):
+        self.controls = {}
+        self.controls[ 100 ] = self.getControl( 100 )
+        try: self.controls[ 101 ] = self.getControl( 101 )
+        except: pass
+        self.controls[ 110 ] = self.getControl( 110 )
+        self.controls[ 120 ] = self.getControl( 120 )
+        self.controls[ 200 ] = self.getControl( 200 )
 
     def setup_all( self ):
         self.get_settings()
@@ -61,12 +62,14 @@ class GUI( xbmcgui.WindowDialog ):
         sys.path.append( os.path.join( utilities.BASE_RESOURCE_PATH, "scrapers", self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
-        self.controls[ 8 ][ "control" ].setLabel( sys.modules[ "lyricsScraper" ].__title__ )
+        self.controls[ 200 ].setLabel( lyricsScraper.__title__ )
 
     def setup_variables( self ):
         self.artist = None
         self.song = None
-    
+        self.Timer = None
+        self.controlId = -1
+
     def show_viz_window( self, startup=True ):
         if ( self.settings[ "show_viz" ] ):
             xbmc.executebuiltin( "XBMC.ActivateWindow(2006)" )
@@ -75,16 +78,15 @@ class GUI( xbmcgui.WindowDialog ):
                 xbmc.executebuiltin( "XBMC.ActivateWindow(%s)" % ( current_win_id, ) )
 
     def show_control( self, controlId ):
-        self.controls[ 3 ][ "control" ].setVisible( controlId == 3 )
-        self.controls[ 4 ][ "control" ].setVisible( controlId == 4 )
-        self.controls[ 5 ][ "control" ].setVisible( controlId == 5 )
-        try:
-            self.controls[ 7 ][ "control" ].setVisible( controlId == 4 or controlId == 5 )
-        except: pass
-        self.setFocus( self.controls[ controlId ][ "control" ] )
-        self.controlId = controlId
-        self.update_label()
-        
+        #print controlId
+        self.controls[ 100 ].setVisible( controlId == 100 )
+        self.controls[ 110 ].setVisible( controlId == 110 )
+        self.controls[ 120 ].setVisible( controlId == 120 )
+        if ( controlId == 100 ): page_control = 1
+        else: page_control = 0
+        try: self.setFocus( self.controls[ controlId + page_control ] )
+        except: self.setFocus( self.controls[ controlId ] )
+
     def get_lyrics(self, artist, song):
         self.menu_items = []
         self.reset_controls()
@@ -94,9 +96,9 @@ class GUI( xbmcgui.WindowDialog ):
         if ( lyrics is not None ):
             if ( current_song == self.song ):
                 self.show_lyrics( lyrics )
-                self.controls[ 8 ][ "control" ].setEnabled( False )
+                self.controls[ 200 ].setEnabled( False )
         else:
-            self.controls[ 8 ][ "control" ].setEnabled( True )
+            self.controls[ 200 ].setEnabled( True )
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
             if ( current_song == self.song ):
                 if ( isinstance( lyrics, basestring ) ):
@@ -108,6 +110,7 @@ class GUI( xbmcgui.WindowDialog ):
                     self.allow_exception = True
 
     def get_lyrics_from_list( self, item ):
+        ##self.reset_controls()
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
         self.show_lyrics( lyrics, True )
 
@@ -145,65 +148,50 @@ class GUI( xbmcgui.WindowDialog ):
     def show_lyrics( self, lyrics, save=False ):
         xbmcgui.lock()
         if ( lyrics == "" ):
-            self.controls[ 3 ][ "control" ].setText( _( 632 ) )
-            self.controls[ 4 ][ "control" ].addItem( _( 632 ) )
+            self.controls[ 100 ].setText( _( 632 ) )
+            self.controls[ 110 ].addItem( _( 632 ) )
         else:
-            self.controls[ 3 ][ "control" ].setText( lyrics )
+            self.controls[ 100 ].setText( lyrics )
             for x in lyrics.split( "\n" ):
-                self.controls[ 4 ][ "control" ].addItem( x )
-            self.controls[ 4 ][ "control" ].selectItem( 0 )
+                self.controls[ 110 ].addItem( x )
+            self.controls[ 110 ].selectItem( 0 )
             if ( self.settings[ "save_lyrics" ] and save ): success = self.save_lyrics_to_file( lyrics )
-        self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
+        self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
         xbmcgui.unlock()
         
     def show_choices( self, choices ):
         xbmcgui.lock()
         for song in choices:
-            self.controls[ 5 ][ "control" ].addItem( song[ 0 ] )
-        self.controls[ 5 ][ "control" ].selectItem( 0 )
+            self.controls[ 120 ].addItem( song[ 0 ] )
+        self.controls[ 120 ].selectItem( 0 )
         self.menu_items = choices
-        self.show_control( 5 )
+        self.show_control( 120 )
         xbmcgui.unlock()
     
     def reset_controls( self ):
-        self.controls[ 3 ][ "control" ].reset()
-        self.controls[ 4 ][ "control" ].reset()
-        self.controls[ 5 ][ "control" ].reset()
+        self.controls[ 100 ].reset()
+        self.controls[ 110 ].reset()
+        self.controls[ 120 ].reset()
         
-    def update_label( self ):
-        xbmcgui.lock()
-        try:
-            current_control = self.getFocus()
-            item_height = current_control.getItemHeight() + current_control.getSpace()
-            total_height = current_control.getHeight() - item_height
-            items_per_page = int( float( total_height ) / float( item_height ) )
-            item = current_control.getSelectedPosition()
-            total_pages = int( float( current_control.size() ) / items_per_page + 0.99 )
-            current_page = int( float( item ) / items_per_page + 1 )
-            self.controls[ 7 ][ "control" ].setLabel( "%d/%d" % ( current_page, total_pages, ) )
-        except: pass
-        xbmcgui.unlock()
-
     def change_settings( self ):
         import settings
-        settings = settings.GUI()
-        if ( settings.gui_loaded ):
-            settings.doModal()
-            ok = False
-            if ( settings.changed ):
-                self.get_settings()
-                if ( settings.restart ):
-                    ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
-            del settings
+        settings = settings.GUI( "script-XBMC_Lyrics-settings.xml", utilities.BASE_RESOURCE_PATH, "Default" )
+        settings.doModal()
+        ok = False
+        if ( settings.changed ):
+            self.get_settings()
+            if ( settings.restart ):
+                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
             if ( not ok ):
-                if ( self.controlId == 3 or self.controlId == 4 ): 
-                    self.show_control( 3 + self.settings[ "smooth_scrolling" ] )
+                if ( self.controlId == 100 or self.controlId == 101 or self.controlId == 110 or self.controlId == 111 ): 
+                    self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
                 self.show_viz_window( False )
             else: self.exit_script( True )
-            
+        del settings
+
     def get_exception( self ):
         """ user modified exceptions """
-        if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
+        if ( lyricsScraper.__allow_exceptions__ ):
             artist = self.LyricsScraper._format_param( self.artist, False )
             alt_artist = self.get_keyboard( artist, "%s %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
@@ -224,9 +212,11 @@ class GUI( xbmcgui.WindowDialog ):
         self.close()
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
-    def onControl( self, control ):
-        if ( control is self.controls[ 5 ][ "control" ] ):
-            self.get_lyrics_from_list( self.controls[ 5 ][ "control" ].getSelectedPosition() )
+    def onClick( self, controlId ):
+        pass
+
+    def onFocus( self, controlId ):
+        self.controlId = controlId
 
     def onAction( self, action ):
         if ( action.getButtonCode() in utilities.EXIT_SCRIPT ):
@@ -235,8 +225,9 @@ class GUI( xbmcgui.WindowDialog ):
             self.change_settings()
         elif ( self.allow_exception and ( action.getButtonCode() in utilities.GET_EXCEPTION ) ):
             self.get_exception()
-        else: self.update_label()
-    
+        elif ( self.controlId == 120 and action.getButtonCode() in utilities.SELECT_ITEM ):
+            self.get_lyrics_from_list( self.controls[ 120 ].getSelectedPosition() )
+
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def getDummyTimer( self ):
@@ -259,7 +250,7 @@ class GUI( xbmcgui.WindowDialog ):
                 xbmc.sleep( 50 )
             if ( song != self.song or force_update ):
                 self.artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                self.controls[ 6 ][ "control" ].setImage( xbmc.getInfoImage( "MusicPlayer.Cover" ) )
+                #self.controls[ 6 ].setImage( xbmc.getInfoImage( "MusicPlayer.Cover" ) )
                 if ( self.song and self.artist ): self.get_lyrics( self.artist, self.song )
                 else: self.reset_controls()
 
@@ -283,11 +274,11 @@ class MyPlayer( xbmc.Player ):
         self.function( 2 )
 
 
-class Start( threading.Thread ):
-    """ Thread Class used to allow gui to show before all checks are done at start of script """
-    def __init__( self, *args, **kwargs ):
-        threading.Thread.__init__( self )
-        self.function = kwargs[ "function" ]
-
-    def run(self):
-        self.function()
+#class Start( threading.Thread ):
+#    """ Thread Class used to allow gui to show before all checks are done at start of script """
+#    def __init__( self, *args, **kwargs ):
+#        threading.Thread.__init__( self )
+#        self.function = kwargs[ "function" ]
+#
+#    def run(self):
+#        self.function()
