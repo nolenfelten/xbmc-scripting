@@ -100,6 +100,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                 self.click = 0
                 self.click2 = 0
                 self.click3 = 0
+                self.click4 = 0
                 self.attopen = True
                 xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
             else:
@@ -127,6 +128,7 @@ class gui( xbmcgui.WindowXMLDialog ):
             self.RemoveText()
             self.click2 = 0
             self.click3 = 0
+            self.click4 = 0
             if not self.showingimage:
                 self.click = self.click + 1
                 self.ShowImage(self.attachments[arg1])
@@ -148,6 +150,7 @@ class gui( xbmcgui.WindowXMLDialog ):
             self.RemoveText()
             self.click = 0
             self.click3 = 0
+            self.click4 = 0
             if self.click2 == 0:
                 self.PlayMedia(self.attachments[arg1])
                 self.click2 = 1
@@ -158,6 +161,7 @@ class gui( xbmcgui.WindowXMLDialog ):
             self.RemoveImage()
             self.click = 0
             self.click2 = 0
+            self.click4 = 0
             if not self.showingtext:
                 self.click3 = self.click3 + 1
                 self.ShowText(self.attachments[arg1])
@@ -175,7 +179,28 @@ class gui( xbmcgui.WindowXMLDialog ):
                         self.RemoveText()
                         self.click3 = 0          
         else:
-            print "wtf"
+            self.RemoveText()
+            self.click = 0
+            self.click2 = 0
+            self.click3 = 0
+            if not self.showingimage:
+                self.currentimage = self.attachments[arg1]
+                self.click4 = self.click4 + 1
+                self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
+                self.showingimage = True
+            else:
+                self.click4 = self.click4 + 1
+                if self.currentimage != self.attachments[arg1]:
+                    self.currentimage = self.attachments[arg1]
+                    self.click4 =1
+                    self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
+                    self.showingimage = True                    
+                if self.click4 == 2:
+                    self.saveattachment(self.attachments[arg1])
+                    self.click4 = 2
+                elif self.click4 == 3:
+                    self.RemoveImage()
+                    self.click4 = 0
                 
                 
             
