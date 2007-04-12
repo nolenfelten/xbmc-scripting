@@ -212,7 +212,6 @@ class GUI( xbmcgui.WindowXML ):
                         self.myemail.setThumbnailImage(self.notread)
                     else:
                         self.myemail.setThumbnailImage(self.read)
-                    self.getListItem(2).setLabel("test")
                     self.listsize  = self.listsize + 1
                     f = open(self.emfolder + CORFOLDER + str(self.listsize-1) +".cor", "w")
                     f.write(str(self.count3))

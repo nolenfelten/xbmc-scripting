@@ -32,7 +32,9 @@ MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
 TEMPFOLDER = SCRIPTSETDIR + "temp\\"
-
+IMAGEFILETYPES = ["jpg","jpeg","gif","png","bmp"]
+MEDIAFILETYPES = ["wav","mp3","avi", "mpa"]
+TEXTFILETYPES = ["txt", "doc", "rtf"]
 
 class gui( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
@@ -72,19 +74,23 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.attachlabel.setLabel( lang(202) )
         self.attopen = False
         self.showingimage = False
+        self.showingtext = False
         self.getemailinfo()
         self.getstatus()
         self.readstatus = "READ"
         self.writestatus()
         self.processEmail(self.temp)
+        self.setuplabels()
+        self.setFocus(self.fsmsgbody)
+        xbmcgui.unlock()
+
+    def setuplabels (self):
         self.emailinfo.reset()
         self.emailrec.reset()
         self.fsmsgbody.reset()
         self.fsmsgbody.setText(self.msgText)
-        self.setFocus(self.fsmsgbody)
         self.emailinfo.addLabel(self.temp3)
         self.emailrec.addLabel( lang( 63 ) + str(self.time) + " - " + str(self.date))
-        xbmcgui.unlock()        
         
     def onClick(self, controlID):
         if ( controlID == 76):
@@ -93,15 +99,15 @@ class gui( xbmcgui.WindowXMLDialog ):
             if not self.attopen:
                 self.click = 0
                 self.click2 = 0
+                self.click3 = 0
                 self.attopen = True
                 xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-              #  time.sleep(0.1)
             else:
                 self.attopen = False
                 xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
                 self.RemoveImage()
-              #  time.sleep(0.1)               
+                self.RemoveText()
             
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -117,8 +123,10 @@ class gui( xbmcgui.WindowXMLDialog ):
     def openattach(self, arg1):
         filetype = string.split(self.attachments[arg1], '.').pop()
         lcfiletype = string.lower(filetype)
-        if lcfiletype=="jpg" or lcfiletype=="jpeg" or lcfiletype=="gif" or lcfiletype=="png" or lcfiletype=="bmp":
+        if lcfiletype in IMAGEFILETYPES:
+            self.RemoveText()
             self.click2 = 0
+            self.click3 = 0
             if not self.showingimage:
                 self.click = self.click + 1
                 self.ShowImage(self.attachments[arg1])
@@ -135,31 +143,41 @@ class gui( xbmcgui.WindowXMLDialog ):
                     elif self.click == 3:
                         self.RemoveImage()
                         self.click = 0
-        else:
+        elif lcfiletype in MEDIAFILETYPES:
+            self.RemoveImage()
+            self.RemoveText()
+            self.click = 0
+            self.click3 = 0
             if self.click2 == 0:
+                self.PlayMedia(self.attachments[arg1])
                 self.click2 = 1
-                if not self.PlayMedia(self.attachments[arg1]):
-                    print "In-compatible file type"
-                    self.RemoveImage()
-                    self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
-                    self.showingimage = True
-                else:
-                   self.RemoveImage()
-                   self.showingimage = False
             elif self.click2 == 1:
-                self.RemoveImage()
-                self.showingimage = False
                 self.saveattachment(self.attachments[arg1])
-                self.click2 = 2
-            elif self.click2 == 2:
-                if not self.PlayMedia(self.attachments[arg1]):
-                    self.RemoveImage()
-                    self.showingimage = False
-                    self.click2 = 0
+                self.click2 = 0
+        elif lcfiletype in TEXTFILETYPES:
+            self.RemoveImage()
+            self.click = 0
+            self.click2 = 0
+            if not self.showingtext:
+                self.click3 = self.click3 + 1
+                self.ShowText(self.attachments[arg1])
+            else:
+                if self.currenttext != self.attachments[arg1]:
+                    self.click3 = 1
+                    self.RemoveText()
+                    self.ShowText(self.attachments[arg1])
                 else:
-                    self.RemoveImage()
-                    self.showingimage = False
-                    self.click2 = 1
+                    self.click3 = self.click3 + 1
+                    if self.click3 == 2:
+                        self.saveattachment(self.attachments[arg1])
+                        self.click3 = 2
+                    elif self.click3 == 3:
+                        self.RemoveText()
+                        self.click3 = 0          
+        else:
+            print "wtf"
+                
+                
             
 
     def saveattachment(self, filename):
@@ -174,14 +192,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         
 
     def PlayMedia(self, filename):
-        try:
-            xbmc.Player().stop()
-        except:pass
         xbmc.Player().play(TEMPFOLDER + filename)
-        if xbmc.Player().isPlaying():
-            return True
-        else:
-            return False
         
     def RemoveImage(self):
         self.imgagebox.setImage(MEDIAFOLDER + "XB.png")
@@ -191,6 +202,24 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.currentimage = filename
         self.imgagebox.setImage(TEMPFOLDER + filename)
         self.showingimage = True
+        
+    def RemoveText (self):
+        self.setuplabels()
+        self.delbutn.setEnabled( True )
+        self.showingtext = False
+        
+    def ShowText(self, filename):
+        self.delbutn.setEnabled( False )
+        self.currenttext = filename
+        fh = open(TEMPFOLDER + filename)
+        text = fh.read()
+        self.fsmsgbody.reset()
+        self.emailinfo.reset()
+        self.emailrec.reset()
+        self.emailinfo.addLabel( lang(202)+ " - " + filename)
+        self.fsmsgbody.setText(text)
+        self.showingtext = True
+
         
     def exitme(self):
         self.returnvar1 = self.listsize
@@ -225,6 +254,18 @@ class gui( xbmcgui.WindowXMLDialog ):
                             self.attachments.append(filename)
                         except:
                             print "problem saving attachment " + filename
+                else:
+                    filename = part.get_filename()
+                    if filename != None:
+                        try:
+                            f=open(TEMPFOLDER + filename, "wb")
+                            f.write(part.get_payload(decode=1))
+                            f.close()
+                            self.attachments.append(filename)
+                        except:
+                            print "problem saving attachment " + filename
+                    else:
+                        print "no attachment bitch"
         for attachment in self.attachments:
             self.attlist.addItem(attachment)        
         if len(self.attachments)==0:
@@ -282,7 +323,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         ret = dialog.select( lang( 66 ), [ lang( 67 ), lang( 68 ), lang( 69 )])
         if ret == 0:
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
-            self.listsize  = self.listsize - 1
+            self.listsize = self.listsize - 1
             self.exitme()
         elif ret == 1:
             if self.box1 == 1:
