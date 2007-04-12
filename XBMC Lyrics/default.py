@@ -8,7 +8,7 @@ __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Lyrics"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.4.2"
+__version__ = "1.5"
 
 BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
@@ -18,8 +18,8 @@ __language__ = language.Language().localized
 if ( __name__ == "__main__" ):
     if ( xbmc.Player().isPlayingAudio() ):
         import gui
-        ui = gui.GUI()
-        if ( ui.gui_loaded ): ui.doModal()
+        ui = gui.GUI( "script-XBMC_Lyrics-main.xml", BASE_RESOURCE_PATH, "Default" )
+        ui.doModal()
         del ui
     else:
         xbmcgui.Dialog().ok( __scriptname__, __language__( 638 ), __language__( 639 ) )

@@ -61,7 +61,7 @@ class Update:
         htmlsource = self._get_html_source( "%s/tags/%s" % ( self.base_url, __scriptname__.replace( " ", "%20" ), ) )
         if ( htmlsource ):
             self.versions, url = self._parse_html_source( htmlsource )
-            self.url = url[url.find( ":%20" ) + 4:]
+            self.url = url[ url.find( ":%20" ) + 4 : ]
             if ( self.versions ):
                 new = ( __version__ < self.versions[ -1 ][ : -1 ] or ( __version__.startswith( "pre-" ) and __version__.replace( "pre-", "" ) <= self.versions[ -1 ][ : -1 ] ) )
         self.dialog.close()
