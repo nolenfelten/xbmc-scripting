@@ -34,7 +34,7 @@
             		<posy>150</posy>
             		<width>390</width>
             		<height>300</height>
-            		<spinposx>240</spinposx>
+            		<spinposx>230</spinposx>
             		<spinposy>290</spinposy>
             		<textureup>XBscroll-up.png</textureup>
             		<texturedown>XBscroll-down.png</texturedown>
@@ -143,6 +143,15 @@
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control> 
+        	<control type="fadelabel" id="81">
+			<description>emailsize</description>
+			<width>210</width>
+			<posx>458</posx>
+			<posy>440</posy>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
 		<control type="fadelabel" id="74">
 			<description>emailrec</description>
 			<posx>150</posx>
@@ -154,7 +163,7 @@
 		</control>
 		<control type="button" id="75">
 			<description>Attach button</description>
-			<posx>430</posx>
+			<posx>420</posx>
 			<posy>440</posy>
 			<label>A</label>
 			<width>17</width>
@@ -168,7 +177,7 @@
 		</control>
 		<control type="button" id="76">
 			<description>Del button</description>
-			<posx>447</posx>
+			<posx>437</posx>
 			<textoffsetx>5</textoffsetx>
 			<posy>440</posy>
 			<label>D</label>
@@ -189,6 +198,16 @@
 			<visible>Skin.HasSetting(attachlistnotempty)</visible>
 			<aspectratio>keep</aspectratio>
 		</control>
+        	<control type="fadelabel" id="82">
+			<description>attachmentsize</description>
+			<width>210</width>
+			<posx>570</posx>
+			<posy>440</posy>
+			<align>left</align>
+			<font>font18</font>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
 
     </controls>
 
