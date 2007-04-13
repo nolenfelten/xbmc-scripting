@@ -42,6 +42,8 @@
   <string id="71">Email deleted off server OK!</string>
   <string id="72">Email NOT deleted off server!</string>
   <string id="73">Email not present on server</string>
+  <string id="74">Email Size:</string>
+  <string id="75">Attachment Size:</string>
 
 
   <string id="200">Mini Mode</string>

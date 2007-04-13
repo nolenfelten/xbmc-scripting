@@ -63,6 +63,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
         self.attachlabel = self.getControl(79)
+        self.filesizeinfo = self.getControl(81)
         self.attlist = self.getControl(77)
         self.fsoverlay = self.getControl(71)
         self.fsmsgbody = self.getControl(72)
@@ -71,6 +72,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.attbutn = self.getControl(75)
         self.delbutn = self.getControl(76)
         self.imgagebox = self.getControl(80)
+        self.attachsize = self.getControl(82)
         self.attachlabel.setLabel( lang(202) )
         self.attopen = False
         self.showingimage = False
@@ -85,10 +87,12 @@ class gui( xbmcgui.WindowXMLDialog ):
         xbmcgui.unlock()
 
     def setuplabels (self):
+        self.filesizeinfo.reset()
         self.emailinfo.reset()
         self.emailrec.reset()
         self.fsmsgbody.reset()
         self.fsmsgbody.setText(self.msgText)
+        self.filesizeinfo.addLabel( lang( 74 ) + self.emailsiselabel)
         self.emailinfo.addLabel(self.temp3)
         self.emailrec.addLabel( lang( 63 ) + str(self.time) + " - " + str(self.date))
         
@@ -109,6 +113,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
                 self.RemoveImage()
                 self.RemoveText()
+                self.attachsize.reset()
             
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -136,6 +141,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                 if self.currentimage != self.attachments[arg1]:
                     self.click = 1
                     self.RemoveImage()
+                    self.attachsize.reset()
                     self.ShowImage(self.attachments[arg1])
                 else:
                     self.click = self.click + 1
@@ -144,6 +150,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                         self.click = 2
                     elif self.click == 3:
                         self.RemoveImage()
+                        self.attachsize.reset()
                         self.click = 0
         elif lcfiletype in MEDIAFILETYPES:
             self.RemoveImage()
@@ -169,6 +176,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                 if self.currenttext != self.attachments[arg1]:
                     self.click3 = 1
                     self.RemoveText()
+                    self.attachsize.reset()
                     self.ShowText(self.attachments[arg1])
                 else:
                     self.click3 = self.click3 + 1
@@ -177,6 +185,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                         self.click3 = 2
                     elif self.click3 == 3:
                         self.RemoveText()
+                        self.attachsize.reset()
                         self.click3 = 0          
         else:
             self.RemoveText()
@@ -187,6 +196,9 @@ class gui( xbmcgui.WindowXMLDialog ):
                 self.currentimage = self.attachments[arg1]
                 self.click4 = self.click4 + 1
                 self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
+                self.attachsize.reset()
+                self.attsize = os.path.getsize(TEMPFOLDER + self.attachments[arg1])
+                self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
                 self.showingimage = True
             else:
                 self.click4 = self.click4 + 1
@@ -194,12 +206,16 @@ class gui( xbmcgui.WindowXMLDialog ):
                     self.currentimage = self.attachments[arg1]
                     self.click4 =1
                     self.imgagebox.setImage(MEDIAFOLDER + "XBbadfile.png")
+                    self.attachsize.reset()
+                    self.attsize = os.path.getsize(TEMPFOLDER + self.attachments[arg1])
+                    self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
                     self.showingimage = True                    
                 if self.click4 == 2:
                     self.saveattachment(self.attachments[arg1])
                     self.click4 = 2
                 elif self.click4 == 3:
                     self.RemoveImage()
+                    self.attachsize.reset()
                     self.click4 = 0
                 
                 
@@ -217,13 +233,29 @@ class gui( xbmcgui.WindowXMLDialog ):
         
 
     def PlayMedia(self, filename):
+        self.attachsize.reset()
+        self.attsize = os.path.getsize(TEMPFOLDER + filename)
+        self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
         xbmc.Player().play(TEMPFOLDER + filename)
         
     def RemoveImage(self):
         self.imgagebox.setImage(MEDIAFOLDER + "XB.png")
         self.showingimage = False   
+
+    def getsizelabel (self, size):
+        if size >= 1024:
+            size = size/1024.0
+            sizeext = "KB"
+            if size >= 1024:
+                size = size/1024.0
+                sizeext = "MB"
+        else:sizeext = "bytes"
+        return "%.1f %s" % (size,  sizeext)
         
     def ShowImage(self, filename):
+        self.attachsize.reset()
+        self.attsize = os.path.getsize(TEMPFOLDER + filename)
+        self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
         self.currentimage = filename
         self.imgagebox.setImage(TEMPFOLDER + filename)
         self.showingimage = True
@@ -234,6 +266,9 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.showingtext = False
         
     def ShowText(self, filename):
+        self.attachsize.reset()
+        self.attsize = os.path.getsize(TEMPFOLDER + filename)
+        self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))        
         self.delbutn.setEnabled( False )
         self.currenttext = filename
         fh = open(TEMPFOLDER + filename)
@@ -261,9 +296,11 @@ class gui( xbmcgui.WindowXMLDialog ):
         fh = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss")
         self.tempStr = fh.read()
         fh.close()
-        return
+        self.emailsize = os.path.getsize(self.emfolder + MAILFOLDER + str(self.updateme) +".sss")
+        self.emailsiselabel = self.getsizelabel(self.emailsize)
 
     def processEmail(self, selected):
+       # temp = self.Emus[self.index]['emupath'].split("\\")
         self.attachments = []
         if self.emails[selected].is_multipart():
             for part in self.emails[selected].walk():
