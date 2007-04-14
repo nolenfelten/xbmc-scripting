@@ -42,6 +42,7 @@ TEMPFOLDER = SCRIPTSETDIR + "temp\\"
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
         xbmcgui.lock()
+        self.initon = 0
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
         self.createdirs()
@@ -50,8 +51,9 @@ class GUI( xbmcgui.WindowXML ):
         self.setupvars()      
 
     def onInit(self):
-        self.setupcontrols()
-        self.adjustcontrols()
+        if self.initon == 0:
+            self.setupcontrols()
+            self.adjustcontrols()
         xbmcgui.unlock()
 
     def setupcontrols ( self ):
@@ -132,6 +134,13 @@ class GUI( xbmcgui.WindowXML ):
             f.close()
             return
 
+    def correctarray(self):
+        templistitems = self.mylistitems
+        self.mylistitems = []
+        for item in templistitems:
+            if item == self.temp4:pass
+            else:self.mylistitems.append(item)
+        
     def disablexinbox (self):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
@@ -173,9 +182,36 @@ class GUI( xbmcgui.WindowXML ):
         for root, dirs, files in os.walk(folder, topdown=False):
             for name in files:
                 os.remove(os.path.join(root, name))
-                   
+
+    def buildcor(self):
+        self.emails = []
+        self.clearfolder(self.emfolder + CORFOLDER)
+        self.gettally()
+        self.count = 0
+        self.count3 = self.tally
+        self.count4 = 0
+        for self.count in range(self.tally):
+            self.temp99 = self.emfolder + MAILFOLDER + str(self.count3) +".sss"
+            if os.path.exists(self.temp99):
+                fh = open(self.temp99)
+                self.tempStr = fh.read()
+                fh.close()
+                self.getstatus()
+                self.emails.append(email.message_from_string(self.emailbody))
+                f = open(self.emfolder + CORFOLDER + str(self.count4) +".cor", "w")
+                f.write(str(self.count3))
+                f.close()
+                self.count4 = self.count4 + 1
+                self.count = self.count+1 
+                self.count3 = self.count3-1
+            else:
+                self.count = self.count+1
+                self.count3 = self.count3-1
+        
     def addme( self ):
         xbmcgui.lock()
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( lang(0), lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.listsize = 0
         self.xbempty.setVisible( False )
@@ -188,7 +224,9 @@ class GUI( xbmcgui.WindowXML ):
         self.count2 = 0
         self.count3 = self.tally
         self.emails = []
+        self.mylistitems = []
         for self.count in range(self.tally):
+                dialog.update((self.count*100)/self.tally)
                 self.temp2 = self.emfolder + MAILFOLDER + str(self.count3) +".sss"
                 if os.path.exists(self.temp2):
                     fh = open(self.temp2)
@@ -208,6 +246,7 @@ class GUI( xbmcgui.WindowXML ):
                         except:
                             self.myemail = xbmcgui.ListItem("BAD EMAIL")
                     self.addItem(self.myemail)
+                    self.mylistitems.append(self.myemail)
                     if self.readstatus == "UNREAD":
                         self.myemail.setThumbnailImage(self.notread)
                     else:
@@ -222,10 +261,10 @@ class GUI( xbmcgui.WindowXML ):
                 else:
                     self.count = self.count+1
                     self.count3 = self.count3-1
+        dialog.close()
         xbmcgui.unlock()
         return
        
-
 
     def printEmail(self, selected):
         self.msgText = ""
@@ -266,9 +305,9 @@ class GUI( xbmcgui.WindowXML ):
         
     def goFullscreen(self):
         self.temp = self.getCurrentListPosition()
-        self.temp2 = self.getListItem(self.temp)
-        self.temp3 = self.temp2.getLabel()
-        self.temp2.setIconImage(self.read)
+        self.temp4 = self.mylistitems[self.temp]
+        self.temp3 = self.temp4.getLabel()
+        self.temp4.setThumbnailImage(self.read)
         self.launchemaildialog()
 
     def launchsettings( self ):
@@ -279,24 +318,26 @@ class GUI( xbmcgui.WindowXML ):
 
     def launchemaildialog( self ):
         ws = emaildialog.gui("XinBox_EmailDialog.xml",SCRIPTFOLDER + "src","DefaultSkin")
-        ws.setupvars(self.temp3, self.listsize, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
+        ws.setupvars(self.temp3, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
         ws.doModal()
-        self.listsize = ws.returnvar1
+        self.deleteme = ws.returnvar2
         del ws
         xbmcgui.lock()
         self.doitit()
         
     def doitit(self):
-        self.addme()
+        if self.deleteme != 0:
+            self.removeItem(self.temp)
+            self.correctarray()
+            self.buildcor()
+            self.listsize = self.listsize - 1
+            print "listsize after delete = " + str(self.listsize)
         if self.listsize == 0:
             self.disablexinbox()
-        else:
-            self.setFocusId(50)
-            self.setCurrentListPosition(self.temp)
-            self.printEmail(self.getCurrentListPosition())
+        else:self.printEmail(self.getCurrentListPosition())
         xbmcgui.unlock()
     
-        
+            
     def onFocus(self, controlID):
         pass
 
@@ -307,6 +348,7 @@ class GUI( xbmcgui.WindowXML ):
                 if self.newmails != 0:
                     self.addme()
             else:
+                self.bypass = 0
                 self.openinbox(1)
         elif ( controlID == 62):
             if self.box2 == 1:
@@ -341,7 +383,9 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitscript()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
             if (50 <= focusid <= 59):
-                self.goFullscreen()
+                try:
+                    self.goFullscreen()
+                except:traceback.print_exc()
         else:
             if (50 <= focusid <= 59):
                 self.printEmail(self.getCurrentListPosition())

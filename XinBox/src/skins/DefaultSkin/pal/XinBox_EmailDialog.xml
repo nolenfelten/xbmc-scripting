@@ -193,7 +193,7 @@
 			<posx>565</posx>
 			<posy>280</posy>
 			<width>130</width>
-			<height>170</height>
+			<height>160</height>
 			<texture>-</texture>
 			<visible>Skin.HasSetting(attachlistnotempty)</visible>
 			<aspectratio>keep</aspectratio>
@@ -201,7 +201,7 @@
         	<control type="fadelabel" id="82">
 			<description>attachmentsize</description>
 			<width>210</width>
-			<posx>570</posx>
+			<posx>575</posx>
 			<posy>440</posy>
 			<align>left</align>
 			<font>font18</font>
