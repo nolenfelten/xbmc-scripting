@@ -218,22 +218,18 @@ class gui( xbmcgui.WindowXMLDialog ):
                     self.RemoveImage()
                     self.attachsize.reset()
                     self.click4 = 0
-                
-                
-            
-
+                    
     def saveattachment(self, filename):
         dialog = xbmcgui.Dialog()
         fn = dialog.browse(0, lang(77) % filename , 'files')
         if fn:
-            path = fn
-            print str(path)
-            shutil.copy(TEMPFOLDER + filename, path)
-            dialog = xbmcgui.Dialog()
-            fn = dialog.ok(lang(0), lang(77) % (filename, path))
+            try:
+                path = fn
+                shutil.copy(TEMPFOLDER + filename, path)
+                fn = dialog.ok(lang(0), lang(78) % (filename, path))
+            except:
+                fn = dialog.ok(lang(0), lang(79) % (filename, path))
             
-        
-
     def PlayMedia(self, filename):
         self.attachsize.reset()
         self.attsize = os.path.getsize(TEMPFOLDER + filename)

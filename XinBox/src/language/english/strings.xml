@@ -45,9 +45,10 @@
   <string id="74">Email Size:</string>
   <string id="75">Attachment Size:</string>
   <string id="76">Building XinBox....</string>
-  <string id="77">%s saved to %s</string>
   <string id="77">Save %s to....</string>
-  <string id="78">XinBox Size:</string>	
+  <string id="78">%s saved to %s</string>
+  <string id="79">%s FAILED to save to %s</string>
+  <string id="80">XinBox Size:</string>	
 
 
   <string id="200">Mini Mode</string>

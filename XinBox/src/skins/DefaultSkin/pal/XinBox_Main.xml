@@ -29,7 +29,7 @@
 			<width>200</width>
 			<height>100</height>
 			<align>left</align>
-			<font>special13</font>
+			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control>
         	<control type="label" id="70">
