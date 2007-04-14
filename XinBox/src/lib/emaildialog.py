@@ -57,38 +57,34 @@ class gui( xbmcgui.WindowXMLDialog ):
         except:traceback.print_exc()
     
     def onInit(self):
-        try:
-            self.openit()
-            xbmcgui.unlock()
-        except:traceback.print_exc()
+        self.openit()
+        xbmcgui.unlock()
         
     def openit(self):
-        try:
-            xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-            self.attachlabel = self.getControl(79)
-            self.filesizeinfo = self.getControl(81)
-            self.attlist = self.getControl(77)
-            self.fsoverlay = self.getControl(71)
-            self.fsmsgbody = self.getControl(72)
-            self.emailinfo = self.getControl(73)
-            self.emailrec = self.getControl(74)
-            self.attbutn = self.getControl(75)
-            self.delbutn = self.getControl(76)
-            self.imgagebox = self.getControl(80)
-            self.attachsize = self.getControl(82)
-            self.attachlabel.setLabel( lang(202) )
-            self.attopen = False
-            self.showingimage = False
-            self.showingtext = False
-            self.getemailinfo()
-            self.getstatus()
-            self.readstatus = "READ"
-            self.writestatus()
-            self.processEmail(self.temp)
-            self.setuplabels()
-            self.setFocus(self.fsmsgbody)
-        except:traceback.print_exc()
+        xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        self.attachlabel = self.getControl(79)
+        self.filesizeinfo = self.getControl(81)
+        self.attlist = self.getControl(77)
+        self.fsoverlay = self.getControl(71)
+        self.fsmsgbody = self.getControl(72)
+        self.emailinfo = self.getControl(73)
+        self.emailrec = self.getControl(74)
+        self.attbutn = self.getControl(75)
+        self.delbutn = self.getControl(76)
+        self.imgagebox = self.getControl(80)
+        self.attachsize = self.getControl(82)
+        self.attachlabel.setLabel( lang(202) )
+        self.attopen = False
+        self.showingimage = False
+        self.showingtext = False
+        self.getemailinfo()
+        self.getstatus()
+        self.readstatus = "READ"
+        self.writestatus()
+        self.processEmail(self.temp)
+        self.setuplabels()
+        self.setFocus(self.fsmsgbody)
 
     def setuplabels (self):
         self.filesizeinfo.reset()

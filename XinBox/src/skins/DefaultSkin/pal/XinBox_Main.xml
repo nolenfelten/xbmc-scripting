@@ -22,6 +22,16 @@
 			<font>special13</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control>
+        	<control type="label" id="71">
+			<description>size</description>
+			<posx>450</posx>
+			<posy>70</posy>
+			<width>200</width>
+			<height>100</height>
+			<align>left</align>
+			<font>special13</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
         	<control type="label" id="70">
 			<description>xinbox empty</description>
 			<posx>300</posx>
