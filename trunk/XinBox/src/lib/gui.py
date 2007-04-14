@@ -65,6 +65,7 @@ class GUI( xbmcgui.WindowXML ):
         self.title = self.getControl(66)
         self.bkimage = self.getControl(65)
         self.xbempty = self.getControl(70)
+        self.xbsize = self.getControl(71)
         return
         
     def setupvars( self ):
@@ -80,6 +81,8 @@ class GUI( xbmcgui.WindowXML ):
         
     def adjustcontrols ( self ):
         self.xbempty.setVisible( False )
+        self.xbempty.setLabel( lang(58) )
+        self.xbsize.setVisible( False )
         self.mmbutn.setLabel( lang(200) )
         self.sebutn.setLabel( lang(201) )
         if self.mmsettings.disablemmb:
@@ -145,9 +148,9 @@ class GUI( xbmcgui.WindowXML ):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
         self.txtbox.reset()
+        self.xbsize.setVisible( False )
         self.txtbox.setVisible( False )
         self.xbempty.setVisible( True )
-        self.xbempty.setLabel( lang(58) )
         if self.box2 ==1:
             self.setFocus(self.xb2butn)
         else:
@@ -155,6 +158,7 @@ class GUI( xbmcgui.WindowXML ):
         return
     
     def openinbox( self , inboxy):
+        self.xbsize.setVisible( False )
         self.inbox = inboxy
         if self.inbox == 1:
     	    self.box1 = 1
@@ -176,8 +180,33 @@ class GUI( xbmcgui.WindowXML ):
             self.addme()
             if self.listsize == 0:
                 self.disablexinbox()
+            else:
+                self.setsizelabel()
+                
+    def setsizelabel(self):
+        mylabel = self.getxinboxsize()
+        self.xbsize.setLabel( lang(78) + mylabel)
+        self.xbsize.setVisible( True )
+        
+    def getxinboxsize(self):
+        size = 0
+        for files in os.listdir(self.emfolder + MAILFOLDER):
+            print str(files)
+            temp = os.path.getsize(self.emfolder + MAILFOLDER + str(files))
+            size = size + temp
+        label = self.getsizelabel(size)
+        return label
             
-
+    def getsizelabel (self, size):
+        if size >= 1024:
+            size = size/1024.0
+            sizeext = "KB"
+            if size >= 1024:
+                size = size/1024.0
+                sizeext = "MB"
+        else:sizeext = "bytes"
+        return "%.1f %s" % (size,  sizeext)            
+            
     def clearfolder(self, folder):
         for root, dirs, files in os.walk(folder, topdown=False):
             for name in files:
@@ -331,7 +360,7 @@ class GUI( xbmcgui.WindowXML ):
             self.correctarray()
             self.buildcor()
             self.listsize = self.listsize - 1
-            print "listsize after delete = " + str(self.listsize)
+            self.setsizelabel()
         if self.listsize == 0:
             self.disablexinbox()
         else:self.printEmail(self.getCurrentListPosition())
