@@ -185,7 +185,7 @@ class GUI( xbmcgui.WindowXML ):
                 
     def setsizelabel(self):
         mylabel = self.getxinboxsize()
-        self.xbsize.setLabel( lang(78) + mylabel)
+        self.xbsize.setLabel( lang(80) + mylabel)
         self.xbsize.setVisible( True )
         
     def getxinboxsize(self):
