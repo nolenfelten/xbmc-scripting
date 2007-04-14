@@ -38,53 +38,57 @@ TEXTFILETYPES = ["txt", "doc", "rtf"]
 
 class gui( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        print "_init here"
         self.control_action = xib_util.setControllerAction()
         xbmcgui.lock()
 
-    def setupvars(self, arg1, arg2, arg3, arg4, arg5, arg6):
-        self.temp3 = arg1
-        self.listsize = arg2
-        self.emfolder = arg3
-        self.CurrentListPosition = arg4
-        self.emails = arg5
-        inbox = arg6
-        if inbox == 1:
-    	    self.box1 = 1
-    	    self.box2 = 0
-        else:
-    	    self.box2 = 1
-    	    self.box1 = 0    	    
+    def setupvars(self, arg1, arg3, arg4, arg5, arg6):
+        try:
+            self.temp3 = arg1
+            self.emfolder = arg3
+            self.CurrentListPosition = arg4
+            self.emails = arg5
+            inbox = arg6
+            if inbox == 1:
+                self.box1 = 1
+                self.box2 = 0
+            else:
+                self.box2 = 1
+                self.box1 = 0
+        except:traceback.print_exc()
     
     def onInit(self):
-        self.openit()
-
+        try:
+            self.openit()
+            xbmcgui.unlock()
+        except:traceback.print_exc()
+        
     def openit(self):
-        xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-        self.attachlabel = self.getControl(79)
-        self.filesizeinfo = self.getControl(81)
-        self.attlist = self.getControl(77)
-        self.fsoverlay = self.getControl(71)
-        self.fsmsgbody = self.getControl(72)
-        self.emailinfo = self.getControl(73)
-        self.emailrec = self.getControl(74)
-        self.attbutn = self.getControl(75)
-        self.delbutn = self.getControl(76)
-        self.imgagebox = self.getControl(80)
-        self.attachsize = self.getControl(82)
-        self.attachlabel.setLabel( lang(202) )
-        self.attopen = False
-        self.showingimage = False
-        self.showingtext = False
-        self.getemailinfo()
-        self.getstatus()
-        self.readstatus = "READ"
-        self.writestatus()
-        self.processEmail(self.temp)
-        self.setuplabels()
-        self.setFocus(self.fsmsgbody)
-        xbmcgui.unlock()
+        try:
+            xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
+            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+            self.attachlabel = self.getControl(79)
+            self.filesizeinfo = self.getControl(81)
+            self.attlist = self.getControl(77)
+            self.fsoverlay = self.getControl(71)
+            self.fsmsgbody = self.getControl(72)
+            self.emailinfo = self.getControl(73)
+            self.emailrec = self.getControl(74)
+            self.attbutn = self.getControl(75)
+            self.delbutn = self.getControl(76)
+            self.imgagebox = self.getControl(80)
+            self.attachsize = self.getControl(82)
+            self.attachlabel.setLabel( lang(202) )
+            self.attopen = False
+            self.showingimage = False
+            self.showingtext = False
+            self.getemailinfo()
+            self.getstatus()
+            self.readstatus = "READ"
+            self.writestatus()
+            self.processEmail(self.temp)
+            self.setuplabels()
+            self.setFocus(self.fsmsgbody)
+        except:traceback.print_exc()
 
     def setuplabels (self):
         self.filesizeinfo.reset()
@@ -121,6 +125,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+                self.deleteme = 0
                 self.exitme()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
             if (focusid == 77):
@@ -223,13 +228,14 @@ class gui( xbmcgui.WindowXMLDialog ):
 
     def saveattachment(self, filename):
         dialog = xbmcgui.Dialog()
-        fn = dialog.browse(0, 'Save Attachment to...', 'files')
+        fn = dialog.browse(0, lang(77) % filename , 'files')
         if fn:
             path = fn
             print str(path)
             shutil.copy(TEMPFOLDER + filename, path)
-            return
-        else:return
+            dialog = xbmcgui.Dialog()
+            fn = dialog.ok(lang(0), lang(77) % (filename, path))
+            
         
 
     def PlayMedia(self, filename):
@@ -266,6 +272,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.showingtext = False
         
     def ShowText(self, filename):
+        self.filesizeinfo.reset()
         self.attachsize.reset()
         self.attsize = os.path.getsize(TEMPFOLDER + filename)
         self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))        
@@ -282,7 +289,7 @@ class gui( xbmcgui.WindowXMLDialog ):
 
         
     def exitme(self):
-        self.returnvar1 = self.listsize
+        self.returnvar2 = self.deleteme
         self.close()
 
     def onFocus(self, controlID):
@@ -385,7 +392,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         ret = dialog.select( lang( 66 ), [ lang( 67 ), lang( 68 ), lang( 69 )])
         if ret == 0:
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
-            self.listsize = self.listsize - 1
+            self.deleteme = 1
             self.exitme()
         elif ret == 1:
             if self.box1 == 1:
@@ -399,7 +406,7 @@ class gui( xbmcgui.WindowXMLDialog ):
             else:
                 self.delemail(2, self.mailid)
             self.getemailinfo()
+            self.deleteme = 1
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
-            self.listsize  = self.listsize - 1
             self.exitme()
         else:self.setFocus(self.delbutn)
