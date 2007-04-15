@@ -41,7 +41,6 @@ TEMPFOLDER = SCRIPTSETDIR + "temp\\"
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        xbmcgui.lock()
         self.initon = 0
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(xblistnotempty)")
@@ -237,7 +236,6 @@ class GUI( xbmcgui.WindowXML ):
         
     def addme( self ):
         xbmcgui.lock()
-        self.setsizelabel()
         dialog = xbmcgui.DialogProgress()
         dialog.create( lang(0), lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
@@ -290,6 +288,8 @@ class GUI( xbmcgui.WindowXML ):
                     self.count = self.count+1
                     self.count3 = self.count3-1
         dialog.close()
+        if self.listsize != 0:
+            self.setsizelabel()
         xbmcgui.unlock()
         return
        
@@ -345,6 +345,7 @@ class GUI( xbmcgui.WindowXML ):
         del ws
 
     def launchemaildialog( self ):
+        xbmcgui.lock()
         ws = emaildialog.gui("XinBox_EmailDialog.xml",SCRIPTFOLDER + "src","DefaultSkin")
         ws.setupvars(self.temp3, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
         ws.doModal()

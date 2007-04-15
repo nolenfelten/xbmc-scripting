@@ -40,22 +40,19 @@ TEXTFILETYPES = ["txt", "doc", "rtf"]
 class gui( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
         self.control_action = xib_util.setControllerAction()
-        xbmcgui.lock()
 
     def setupvars(self, arg1, arg3, arg4, arg5, arg6):
-        try:
-            self.temp3 = arg1
-            self.emfolder = arg3
-            self.CurrentListPosition = arg4
-            self.emails = arg5
-            inbox = arg6
-            if inbox == 1:
-                self.box1 = 1
-                self.box2 = 0
-            else:
-                self.box2 = 1
-                self.box1 = 0
-        except:traceback.print_exc()
+        self.temp3 = arg1
+        self.emfolder = arg3
+        self.CurrentListPosition = arg4
+        self.emails = arg5
+        inbox = arg6
+        if inbox == 1:
+            self.box1 = 1
+            self.box2 = 0
+        else:
+            self.box2 = 1
+            self.box1 = 0
     
     def onInit(self):
         self.openit()
