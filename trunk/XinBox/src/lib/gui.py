@@ -340,6 +340,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def launchsettings( self ):
         import settings
+        xbmcgui.lock()
         ws = settings.Settings("XinBox_Settings.xml",SCRIPTFOLDER + "src","DefaultSkin")
         ws.doModal()
         del ws

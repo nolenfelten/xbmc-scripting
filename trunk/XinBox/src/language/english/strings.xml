@@ -48,8 +48,23 @@
   <string id="77">Save %s to....</string>
   <string id="78">%s saved to %s</string>
   <string id="79">%s FAILED to save to %s</string>
-  <string id="80">XinBox Size:</string>	
-
+  <string id="80">XinBox Size:</string>
+  <string id="81">Enter Server1 eg: pop.ihug.co.nz</string>
+  <string id="82">Enter User1 eg: user</string>	
+  <string id="83">Enter Pass1 eg: hushhush</string>	
+  <string id="84">Enable SSL1 eg: 995</string>	
+  <string id="85">Enter Server2 eg: pop.ihug.co.nz</string>
+  <string id="86">Enter User2 eg: user2</string>	
+  <string id="87">Enter Pass2 eg: hushhush</string>	
+  <string id="88">Enable SSL2 eg: 995</string>		
+  <string id="89">Server1</string>
+  <string id="90">User1</string>	
+  <string id="91">Pass1</string>	
+  <string id="92">SSL1</string>	
+  <string id="93">Server2</string>
+  <string id="94">User2</string>	
+  <string id="95">Pass2</string>	
+  <string id="96">SSL2</string>
 
   <string id="200">Mini Mode</string>
   <string id="201">Settings</string>
