@@ -12,7 +12,7 @@
 
 import xbmcgui, language, time
 lang = language.Language().string
-import xbmc, sys,os, threading ,xib_util
+import xbmc, sys,os, threading ,xib_util, re
 import shutil
 import default
 import traceback
@@ -129,7 +129,8 @@ class gui( xbmcgui.WindowXMLDialog ):
         filetype = string.split(self.attachments[arg1], '.').pop()
         lcfiletype = string.lower(filetype)
         if lcfiletype in IMAGEFILETYPES:
-            self.RemoveText()
+            if self.showingtext:
+                self.RemoveText()
             self.click2 = 0
             self.click3 = 0
             self.click4 = 0
@@ -157,7 +158,8 @@ class gui( xbmcgui.WindowXMLDialog ):
             elif lcfiletype in VIDEOFILETYPES:
                 self.media = 0
             self.RemoveImage()
-            self.RemoveText()
+            if self.showingtext:
+                self.RemoveText()
             self.click = 0
             self.click3 = 0
             self.click4 = 0
@@ -191,7 +193,8 @@ class gui( xbmcgui.WindowXMLDialog ):
                         self.attachsize.reset()
                         self.click3 = 0          
         else:
-            self.RemoveText()
+            if self.showingtext:
+                self.RemoveText()
             self.click = 0
             self.click2 = 0
             self.click3 = 0
@@ -382,7 +385,21 @@ class gui( xbmcgui.WindowXMLDialog ):
         return
     
     def parse_email(self, email):
-        self.parsemail = email
+        self.parsemail = re.sub('<STYLE.*?>', '<!--', email)
+        self.parsemail = re.sub('&copy', '©', self.parsemail)
+        self.parsemail = re.sub('&#174;', '®', self.parsemail)
+        self.parsemail = re.sub('<SCRIPT.*?>', '<!--', self.parsemail)
+        self.parsemail = re.sub('<style.*?>', '<!--', self.parsemail)
+        self.parsemail = re.sub('<script.*?>', '<!--', self.parsemail)
+        self.parsemail = re.sub('</STYLE>', '-->', self.parsemail)
+        self.parsemail = re.sub('</SCRIPT>', '-->', self.parsemail)
+        self.parsemail = re.sub('</style>', '-->', self.parsemail)
+        self.parsemail = re.sub('</script>', '-->', self.parsemail)
+        self.parsemail = re.sub('(?s)<!--.*?-->', '', self.parsemail)
+        self.parsemail = re.sub('(?s)<.*?>', ' ', self.parsemail)
+        self.parsemail = re.sub('&nbsp;', ' ', self.parsemail)
+        self.parsemail = re.sub('=0D=0A', ' ', self.parsemail)
+        self.parsemail = re.sub('	', ' ', self.parsemail)
         return str(self.parsemail)
     
     def deletemail(self):
