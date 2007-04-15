@@ -10,7 +10,7 @@
 #                                    #
 ######################################
 
-    
+from sgmllib import SGMLParser    
 import xbmcgui, language, time, settings, re
 lang = language.Language().string
 
@@ -390,22 +390,11 @@ class GUI( xbmcgui.WindowXML ):
                 self.launchsettings()
                 
     def parse_email(self, email):
-        self.parsemail = re.sub('<STYLE.*?>', '<!--', email)
-        self.parsemail = re.sub('&copy', '©', self.parsemail)
-        self.parsemail = re.sub('&#174;', '®', self.parsemail)
-        self.parsemail = re.sub('<SCRIPT.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('<style.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('<script.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('</STYLE>', '-->', self.parsemail)
-        self.parsemail = re.sub('</SCRIPT>', '-->', self.parsemail)
-        self.parsemail = re.sub('</style>', '-->', self.parsemail)
-        self.parsemail = re.sub('</script>', '-->', self.parsemail)
-        self.parsemail = re.sub('(?s)<!--.*?-->', '', self.parsemail)
-        self.parsemail = re.sub('(?s)<.*?>', ' ', self.parsemail)
-        self.parsemail = re.sub('&nbsp;', ' ', self.parsemail)
-        self.parsemail = re.sub('=0D=0A', ' ', self.parsemail)
-        self.parsemail = re.sub('	', ' ', self.parsemail)
-        return str(self.parsemail)
+        parser = html2txt()
+        parser.reset()
+        parser.feed(email)
+        parser.close()
+        return parser.output()
     
     def exitscript (self):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
@@ -433,4 +422,17 @@ class GUI( xbmcgui.WindowXML ):
             if (50 <= focusid <= 59):
                 self.printEmail(self.getCurrentListPosition())
                 
+class html2txt(SGMLParser):
+    def reset(self):
+        SGMLParser.reset(self)
+        self.pieces = []
 
+    def handle_data(self, text):
+        self.pieces.append(text)
+
+    def handle_entityref(self, ref):
+        if ref=='amp':
+            self.pieces.append("&")
+
+    def output(self):
+        return " ".join(self.pieces)
