@@ -180,8 +180,6 @@ class GUI( xbmcgui.WindowXML ):
             self.addme()
             if self.listsize == 0:
                 self.disablexinbox()
-            else:
-                self.setsizelabel()
                 
     def setsizelabel(self):
         mylabel = self.getxinboxsize()
@@ -239,6 +237,7 @@ class GUI( xbmcgui.WindowXML ):
         
     def addme( self ):
         xbmcgui.lock()
+        self.setsizelabel()
         dialog = xbmcgui.DialogProgress()
         dialog.create( lang(0), lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
