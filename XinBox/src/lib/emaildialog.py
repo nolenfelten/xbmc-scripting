@@ -9,7 +9,7 @@
 #   A pop3 email client for XBMC     #
 #                                    #
 ######################################
-
+from sgmllib import SGMLParser
 import xbmcgui, language, time
 lang = language.Language().string
 import xbmc, sys,os, threading ,xib_util, re
@@ -385,6 +385,16 @@ class gui( xbmcgui.WindowXMLDialog ):
         return
     
     def parse_email(self, email):
+        parser = html2txt()
+        parser.reset()
+        parser.feed(email)
+        parser.close()
+        self.parsemail = parser.output()
+       # self.parsemail = self.parse_email2(self.parsemail)
+        return self.parsemail
+
+        
+    def parse_email2(self, email):
         self.parsemail = re.sub('<STYLE.*?>', '<!--', email)
         self.parsemail = re.sub('&copy', '©', self.parsemail)
         self.parsemail = re.sub('&#174;', '®', self.parsemail)
@@ -399,7 +409,6 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.parsemail = re.sub('(?s)<.*?>', ' ', self.parsemail)
         self.parsemail = re.sub('&nbsp;', ' ', self.parsemail)
         self.parsemail = re.sub('=0D=0A', ' ', self.parsemail)
-        self.parsemail = re.sub('	', ' ', self.parsemail)
         return str(self.parsemail)
     
     def deletemail(self):
@@ -425,3 +434,19 @@ class gui( xbmcgui.WindowXMLDialog ):
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
             self.exitme()
         else:self.setFocus(self.delbutn)
+
+class html2txt(SGMLParser):
+    def reset(self):
+        SGMLParser.reset(self)
+        self.pieces = []
+
+    def handle_data(self, text):
+        self.pieces.append(text)
+
+    def handle_entityref(self, ref):
+        if ref=='amp':
+            self.pieces.append("&")
+
+    def output(self):
+        return " ".join(self.pieces)
+
