@@ -6,6 +6,8 @@ Nuka1195
 
 import sys
 import os
+import xbmc
+import xbmcgui
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -34,6 +36,36 @@ def _create_base_paths():
     if ( not os.path.isdir( BASE_SETTINGS_PATH ) ):
         os.makedirs( BASE_SETTINGS_PATH )
 _create_base_paths()
+
+def get_keyboard( default="", heading="", hidden=False ):
+    """ shows a keyboard and returns a value """
+    keyboard = xbmc.Keyboard( default, heading, hidden )
+    keyboard.doModal()
+    if ( keyboard.isConfirmed() ):
+        return keyboard.getText()
+    return default
+
+def get_numeric( default="", heading="", type=3 ):
+    """ shows a numeric dialog and returns a value
+        - 0 : ShowAndGetNumber		(default format: #)
+        - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
+        - 2 : ShowAndGetTime			(default format: HH:MM)
+        - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
+    """
+    dialog = xbmcgui.Dialog()
+    value = dialog.numeric( type, heading, default )
+    return value
+
+def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
+    """ shows a browse dialog and returns a value
+        - 0 : ShowAndGetDirectory
+        - 1 : ShowAndGetFile
+        - 2 : ShowAndGetImage
+        - 3 : ShowAndGetWriteableDirectory
+    """
+    dialog = xbmcgui.Dialog()
+    value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+    return value
 
 def buttoncode_dict():
     """ depreciated: not used """

@@ -1,7 +1,5 @@
-<window id="3000">
-    <allowoverlay>no</allowoverlay>
-    <defaultcontrol always="false">4</defaultcontrol>
-    <resolution>PAL</resolution>
+<window>
+    <defaultcontrol always="false">101</defaultcontrol>
     <coordinates>
         <system>1</system>
         <posx>0</posx>
@@ -10,7 +8,7 @@
 
     <controls>
 
-        <control type="image" id="100">
+        <control type="image">
             <description>background image</description>
             <posx>188</posx>
             <posy>30</posy>
@@ -22,7 +20,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="image" id="101">
+        <control type="image">
             <description>background image</description>
             <posx>228</posx>
             <posy>70</posy>
@@ -34,7 +32,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="image" id="102">
+        <control type="image">
             <description>divider image</description>
             <posx>248</posx>
             <posy>182</posy>
@@ -46,7 +44,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
         
-        <control type="image" id="103">
+        <control type="image">
             <description>background image</description>
             <posx>410</posx>
             <posy>390</posy>
@@ -58,7 +56,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="textbox" id="3">
+        <control type="textbox" id="100">
             <description>textarea</description>
             <posx>240</posx>
             <posy>195</posy>
@@ -82,7 +80,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="list" id="4">
+        <control type="list" id="110">
             <description>lyrics list</description>
             <posx>240</posx>
             <posy>202</posy>
@@ -121,7 +119,7 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="list" id="5">
+        <control type="list" id="120">
             <description>link list</description>
             <posx>240</posx>
             <posy>202</posy>
@@ -160,27 +158,12 @@
             <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
         </control>
 
-        <control type="label" id="7">
-            <description>list label</description>
-            <posx>647</posx>
-            <posy>481</posy>
-            <width>100</width>
-            <label>1/4</label>
-            <align>right</align>
-            <font>font13</font>
-            <textcolor>DDFFFFFF</textcolor>
-            <visible>false</visible>
-            <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-            <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-        </control>
-
         <control type="group">
-            <visible>Player.ShowInfo</visible>
-            <animation effect="fade" time="1000">VisibleChange</animation>
+            <!--animation effect="fade" time="1000">VisibleChange</animation-->
             <control type="group">
-                <posx>40</posx>
-                <posy>350</posy>
-                <control type="image" id="200">
+                <posx>0</posx>
+                <posy>0</posy>
+                <control type="image">
                     <description>Dialog Header</description>
                     <posx>40</posx>
                     <posy>350</posy>
@@ -190,7 +173,7 @@
                     <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="image" id="201">
+                <control type="image">
                     <description>Dialog Text Area</description>
                     <posx>60</posx>
                     <posy>372</posy>
@@ -201,7 +184,7 @@
                     <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="image" id="202">
+                <control type="image">
                     <description>Dialog Footer</description>
                     <posx>76</posx>
                     <posy>469</posy>
@@ -211,7 +194,7 @@
                     <animation effect="slide" time="500" start="-200,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="-200,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="image" id="6">
+                <control type="image">
                     <description>CD Cover Image</description>
                     <posx>65</posx>
                     <posy>377</posy>
@@ -225,8 +208,8 @@
             </control>
 
             <control type="group">
-                <posx>350</posx>
-                <posy>400</posy>
+                <posx>0</posx>
+                <posy>0</posy>
                 <!--control type="image">
                     <description>Dialog Footer</description>
                     <posx>212</posx>
@@ -244,7 +227,7 @@
                     <colordiffuse>BBFFFFFF</colordiffuse>
                     <texture border="10">dialog_middle.png</texture>
                 </control-->
-                <control type="fadelabel" id="203">
+                <control type="fadelabel">
                     <description>Artist label</description>
                     <posx>240</posx>
                     <posy>78</posy>
@@ -256,7 +239,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="label" id="8">
+                <control type="label" id="200">
                     <description>Scraper</description>
                     <posx>655</posx>
                     <posy>78</posy>
@@ -268,7 +251,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="fadelabel" id="204">
+                <control type="fadelabel">
                     <description>Title label</description>
                     <posx>240</posx>
                     <posy>99</posy>
@@ -280,7 +263,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="fadelabel" id="205">
+                <control type="fadelabel">
                     <description>Album label</description>
                     <posx>240</posx>
                     <posy>125</posy>
@@ -292,7 +275,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="fadelabel" id="206">
+                <control type="fadelabel">
                     <description>time label</description>
                     <posx>240</posx>
                     <posy>148</posy>
@@ -304,7 +287,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="label" id="207">
+                <control type="label">
                     <description>Playlist Pos No</description>
                     <posx>655</posx>
                     <posy>148</posy>
@@ -317,7 +300,7 @@
                     <animation effect="slide" time="500" start="600,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
                     <animation effect="slide" time="300" start="0,0" end="600,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
                 </control>
-                <control type="label" id="208">
+                <control type="label">
                     <description>PartyMode Enabled</description>
                     <posx>655</posx>
                     <posy>148</posy>

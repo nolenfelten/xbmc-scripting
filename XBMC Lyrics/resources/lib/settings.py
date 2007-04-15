@@ -8,6 +8,7 @@ import sys
 import os
 import xbmc
 import xbmcgui
+#import traceback
 
 import utilities
 
@@ -25,9 +26,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._set_labels()
         self._set_variables()
         self._get_settings()
+        self._set_functions()
         self._setup_special()
-        self._set_controls_values()
         self._set_restart_required()
+        self._set_controls_values()
 
     def _set_labels( self ):
         xbmcgui.lock()
@@ -56,53 +58,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ reads settings """
         self.settings = utilities.Settings().get_settings()
 
-    def _save_settings( self ):
-        """ saves settings """
-        ok = utilities.Settings().save_settings( self.settings )
-        if ( not ok ):
-            ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
-        else:
-            self._check_for_restart()
-
-    def _get_keyboard( self, default="", heading="", hidden=False ):
-        """ shows a keyboard and returns a value """
-        keyboard = xbmc.Keyboard( default, heading, hidden )
-        keyboard.doModal()
-        if ( keyboard.isConfirmed() ):
-            return keyboard.getText()
-        return default
-
-    def _get_numeric( self, default="", heading="", type=3 ):
-        """ shows a numeric dialog and returns a value
-            - 0 : ShowAndGetNumber		(default format: #)
-            - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
-            - 2 : ShowAndGetTime			(default format: HH:MM)
-            - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
-        """
-        dialog = xbmcgui.Dialog()
-        value = dialog.numeric( type, heading, default )
-        return value
-
-    def _get_browse_dialog( self, default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
-        """ shows a browse dialog and returns a value
-            - 0 : ShowAndGetDirectory
-            - 1 : ShowAndGetFile
-            - 2 : ShowAndGetImage
-            - 3 : ShowAndGetWriteableDirectory
-        """
-        dialog = xbmcgui.Dialog()
-        value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
-        return value
-
-##### Start of unique defs #####################################################
+    def _set_functions( self ):
+        self.functions = {}
+        self.functions[ 250 ] = self._save_settings
+        self.functions[ 251 ] = self._close_dialog
+        self.functions[ 252 ] = self._update_script
+        self.functions[ 253 ] = self._show_credits
+        for x in range( 1, len( self.settings ) ):
+            self.functions[ 200 + x ] = eval( "self._change_setting%d" % x )
 
 ##### Special defs, script dependent, remember to call them from _setup_special #################
     
-    def _set_restart_required( self ):
-        """ copies self.settings and adds any settings that require a restart on change """
-        self.settings_original = self.settings.copy()
-        self.settings_restart = ( "scraper", )
-
     def _setup_special( self ):
         """ calls any special defs """
         self._setup_scrapers()
@@ -112,7 +78,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         import re
         self.scrapers_title = []
         pattern = """__title__.*?["'](.*?)["']"""
-        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "scrapers" )
+        base_path = os.path.join( utilities.BASE_RESOURCE_PATH, "scrapers" )
         self.scrapers = os.listdir( base_path )
         for scraper in self.scrapers:
             try:
@@ -125,6 +91,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.scrapers_title += title
         try: self.current_scraper = self.scrapers.index( self.settings[ "scraper" ] )
         except: self.current_scraper = 0
+
+    def _set_restart_required( self ):
+        """ copies self.settings and adds any settings that require a restart on change """
+        self.settings_original = self.settings.copy()
+        self.settings_restart = ( "scraper", )
 
 ###### End of Special defs #####################################################
 
@@ -141,43 +112,43 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
         except: pass
         xbmcgui.unlock()
-    
+
     def _change_setting1( self ):
         """ changes settings #1 """
         self.current_scraper += 1
         if ( self.current_scraper == len( self.scrapers ) ): self.current_scraper = 0
         self.settings[ "scraper" ] = self.scrapers[ self.current_scraper ]
-    
+        self._set_controls_values()
+
     def _change_setting2( self ):
         """ changes settings #2 """
         self.settings[ "save_lyrics" ] = not self.settings[ "save_lyrics" ]
-        
+        self._set_controls_values()
+
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "lyrics_path" ] = self._get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
+        self.settings[ "lyrics_path" ] = utilities.get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
+        self._set_controls_values()
 
     def _change_setting4( self ):
         """ changes settings #4 """
         self.settings[ "smooth_scrolling" ] = not self.settings[ "smooth_scrolling" ]
-        
+        self._set_controls_values()
+
     def _change_setting5( self ):
         """ changes settings #5 """
         self.settings[ "show_viz" ] = not self.settings[ "show_viz" ]
-    
+        self._set_controls_values()
+
 ##### End of unique defs ######################################################
     
-    def _update_script( self ):
-        """ checks for updates to the script """
-        import update
-        updt = update.Update()
-        del updt
-            
-    def _show_credits( self ):
-        """ shows a credit window """
-        import credits
-        c = credits.GUI()
-        c.doModal()
-        del c
+    def _save_settings( self ):
+        """ saves settings """
+        ok = utilities.Settings().save_settings( self.settings )
+        if ( not ok ):
+            ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
+        else:
+            self._check_for_restart()
 
     def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
@@ -187,38 +158,33 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 restart = True
                 break
         self._close_dialog( True, restart )
+    
+    def _update_script( self ):
+        """ checks for updates to the script """
+        import update
+        updt = update.Update()
+        del updt
+
+    def _show_credits( self ):
+        """ shows a credit window """
+        import credits
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, "Default" )
+        c.doModal()
+        del c
 
     def _close_dialog( self, changed=False, restart=False ):
         """ closes this dialog window """
         self.changed = changed
         self.restart = restart
         self.close()
-        
+
     def onClick( self, controlId ):
-        if ( controlId == 250 ):
-            self._save_settings()
-        elif ( controlId == 251 ):
-            self._close_dialog()
-        elif ( controlId == 252 ):
-            self._update_script()
-        elif ( controlId == 253 ):
-            self._show_credits()
-        else:
-            if ( controlId == 201 ):
-                self._change_setting1()
-            elif ( controlId == 202 ):
-                self._change_setting2()
-            elif ( controlId == 203 ):
-                self._change_setting3()
-            elif ( controlId == 204 ):
-                self._change_setting4()
-            elif ( controlId == 205 ):
-                self._change_setting5()
-            self._set_controls_values()
+        #xbmc.sleep(5)
+        self.functions[ controlId ]()
 
     def onFocus( self, controlId ):
         pass
-            
+
     def onAction( self, action ):
         if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
             self._close_dialog()
