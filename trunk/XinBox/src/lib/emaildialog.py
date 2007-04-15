@@ -308,7 +308,6 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.emailsiselabel = self.getsizelabel(self.emailsize)
 
     def processEmail(self, selected):
-       # temp = self.Emus[self.index]['emupath'].split("\\")
         self.attachments = []
         if self.emails[selected].is_multipart():
             for part in self.emails[selected].walk():
@@ -317,13 +316,8 @@ class gui( xbmcgui.WindowXMLDialog ):
                     if not filename:
                         print "Bad attachment - no Filename, Attachment not saved."
                     else:
-                        try:
-                            f=open(TEMPFOLDER + filename, "wb")
-                            f.write(part.get_payload(decode=1))
-                            f.close()
-                            self.attachments.append(filename)
-                        except:
-                            print "problem saving attachment " + filename
+                        self.attachments.append(filename)
+                        print "problem saving attachment " + filename
                 else:
                     filename = part.get_filename()
                     if filename != None:
