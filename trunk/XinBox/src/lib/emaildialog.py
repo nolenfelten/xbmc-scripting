@@ -234,7 +234,8 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.attachsize.reset()
         self.attsize = os.path.getsize(TEMPFOLDER + filename)
         self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
-        xbmc.Player().play(TEMPFOLDER + filename)
+        xbmc.playSFX(TEMPFOLDER + filename)
+        
         
     def RemoveImage(self):
         self.imgagebox.setImage(MEDIAFOLDER + "XB.png")
