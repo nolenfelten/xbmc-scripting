@@ -72,8 +72,10 @@ class GUI( xbmcgui.WindowXML ):
         self.box1 = 0
         self.box2 = 0
         self.Fullscreen = False
+        self.notreadattach = MEDIAFOLDER + "XBemailnotreadattach.png"
         self.notread = MEDIAFOLDER + "XBemailnotread.png"
         self.read = MEDIAFOLDER + "XBemailread.png"
+        self.readattach = MEDIAFOLDER + "XBemailreadattach.png"
         self.control_action = xib_util.setControllerAction()
         xbmc.log ("setup variables OK")
         return
@@ -260,6 +262,7 @@ class GUI( xbmcgui.WindowXML ):
                     fh.close()
                     self.getstatus()
                     self.emails.append(email.message_from_string(self.emailbody))
+                    attachmenty = self.checkattachment(self.count2)
                     try:
                         temp = self.emails[self.count2].get('subject')
                         if temp == "":
@@ -274,9 +277,15 @@ class GUI( xbmcgui.WindowXML ):
                     self.addItem(self.myemail)
                     self.mylistitems.append(self.myemail)
                     if self.readstatus == "UNREAD":
-                        self.myemail.setThumbnailImage(self.notread)
+                        if attachmenty:
+                            self.myemail.setThumbnailImage(self.notreadattach)
+                        else:
+                            self.myemail.setThumbnailImage(self.notread)
                     else:
-                        self.myemail.setThumbnailImage(self.read)
+                        if attachmenty:
+                            self.myemail.setThumbnailImage(self.readattach)
+                        else:
+                            self.myemail.setThumbnailImage(self.read)
                     self.listsize  = self.listsize + 1
                     f = open(self.emfolder + CORFOLDER + str(self.listsize-1) +".cor", "w")
                     f.write(str(self.count3))
@@ -313,7 +322,19 @@ class GUI( xbmcgui.WindowXML ):
         self.txtbox.setText(self.msgText)
         return
     
-
+    def checkattachment(self, selected):
+        if self.emails[selected].is_multipart():
+            for part in self.emails[selected].walk():
+                if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
+                    filename = part.get_filename()
+                    if not filename:pass
+                    else:return True
+                else:
+                    filename = part.get_filename()
+                    if filename != None:return True
+                    else:pass
+        else:return False
+        return False
     
     def checkemail ( self, inbox, minimode):
         w = mailchecker.Checkemail(inbox, minimode, 0)
@@ -335,7 +356,11 @@ class GUI( xbmcgui.WindowXML ):
         self.temp = self.getCurrentListPosition()
         self.temp4 = self.mylistitems[self.temp]
         self.temp3 = self.temp4.getLabel()
-        self.temp4.setThumbnailImage(self.read)
+        attach = self.checkattachment(self.temp)
+        if attach:
+            self.temp4.setThumbnailImage(self.readattach)
+        else:
+            self.temp4.setThumbnailImage(self.read)
         self.launchemaildialog()
 
     def launchsettings( self ):
