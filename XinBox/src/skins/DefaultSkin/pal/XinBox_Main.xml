@@ -191,10 +191,10 @@
             		<posy>340</posy>
             		<width>456</width>
             		<height>200</height>
-            		<textureup>XBscroll-up.png</textureup>
-            		<texturedown>XBscroll-down.png</texturedown>
-            		<textureupfocus>XBscroll-up-focus.gif</textureupfocus>
-            		<texturedownfocus>XBscroll-down-focus.gif</texturedownfocus>
+            		<textureup>scroll-up.png</textureup>
+            		<texturedown>scroll-down.png</texturedown>
+            		<textureupfocus>scroll-up-focus.gif</textureupfocus>
+            		<texturedownfocus>scroll-down-focus.gif</texturedownfocus>
             		<font>font13</font>
             		<textcolor>FFFFFFFF</textcolor>
             		<onup>67</onup>
@@ -207,11 +207,11 @@
 			<posy>100</posy>
 			<width>17</width>
 			<height>200</height>
-			<texturesliderbackground border="4">XBscrollbar_background.png</texturesliderbackground>
-			<texturesliderbar border="3">XBscrollbar_bar.png</texturesliderbar>
-			<texturesliderbarfocus border="3">XBscrollbar_bar_focus.png</texturesliderbarfocus>
-			<textureslidernib>XBscrollbar_nib.png</textureslidernib>
-			<textureslidernibfocus>XBscrollbar_nib_focus.png</textureslidernibfocus>
+			<texturesliderbackground border="4">scrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="3">scrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="3">scrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>scrollbar_nib.png</textureslidernib>
+			<textureslidernibfocus>scrollbar_nib_focus.png</textureslidernibfocus>
 			<onleft>50</onleft>
 			<onright>9000</onright>
 			<showonepage>false</showonepage>
