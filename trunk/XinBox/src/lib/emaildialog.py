@@ -33,7 +33,8 @@ SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
 TEMPFOLDER = SCRIPTSETDIR + "temp\\"
 IMAGEFILETYPES = ["jpg","jpeg","gif","png","bmp"]
-MEDIAFILETYPES = ["wav","mp3","avi", "mpa"]
+AUDIOFILETYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
+VIDEOFILETYPES = ["avi"]
 TEXTFILETYPES = ["txt", "doc", "rtf"]
 
 class gui( xbmcgui.WindowXMLDialog ):
@@ -153,7 +154,11 @@ class gui( xbmcgui.WindowXMLDialog ):
                         self.RemoveImage()
                         self.attachsize.reset()
                         self.click = 0
-        elif lcfiletype in MEDIAFILETYPES:
+        elif lcfiletype in (AUDIOFILETYPES + VIDEOFILETYPES):
+            if lcfiletype in AUDIOFILETYPES:
+                self.media = 1
+            elif lcfiletype in VIDEOFILETYPES:
+                self.media = 0
             self.RemoveImage()
             self.RemoveText()
             self.click = 0
@@ -234,7 +239,10 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.attachsize.reset()
         self.attsize = os.path.getsize(TEMPFOLDER + filename)
         self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
-        xbmc.playSFX(TEMPFOLDER + filename)
+        if self.media == 1:
+            xbmc.playSFX(TEMPFOLDER + filename)
+        else:
+            xbmc.Player().play(TEMPFOLDER + filename)
         
         
     def RemoveImage(self):
