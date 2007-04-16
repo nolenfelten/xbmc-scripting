@@ -103,6 +103,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 223 ).setEnabled( self.settings[ "save_lyrics" ] )
             self.getControl( 224 ).setSelected( self.settings[ "smooth_scrolling" ] )
             self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
+            self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
 
