@@ -18,6 +18,7 @@ Echo.
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
 xcopy skins "BUILD\%ScriptName%\skins" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+xcopy txt "BUILD\%ScriptName%\txt" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 copy default.* "BUILD\%ScriptName%\"
 Echo.
 Echo Build Complete - Scroll Up to check for errors.
