@@ -23,40 +23,33 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onInit( self ):
-        self._set_labels()
-        self._set_variables()
         self._get_settings()
+        self._set_labels()
         self._set_functions()
         self._setup_special()
         self._set_restart_required()
         self._set_controls_values()
+
+    def _get_settings( self ):
+        """ reads settings """
+        self.settings = utilities.Settings().get_settings()
 
     def _set_labels( self ):
         xbmcgui.lock()
         try:
             self.getControl( 20 ).setLabel( __scriptname__ )
             self.getControl( 30 ).setLabel( "%s: %s" % ( _( 1006 ), __version__, ) )
-            self.getControl( 201 ).setLabel( _( 201 ) )
-            self.getControl( 202 ).setLabel( _( 202 ) )
-            self.getControl( 203 ).setLabel( _( 203 ) )
-            self.getControl( 204 ).setLabel( _( 204 ) )
-            self.getControl( 205 ).setLabel( _( 205 ) )
             self.getControl( 250 ).setLabel( _( 250 ) )
             self.getControl( 251 ).setLabel( _( 251 ) )
             self.getControl( 252 ).setLabel( _( 252 ) )
             self.getControl( 253 ).setLabel( _( 253 ) )
+            ## setEnabled( False ) if not used
+            self.getControl( 253 ).setVisible( False )
+            self.getControl( 253 ).setEnabled( False )
+            for x in range( 1, len( self.settings ) ):
+                self.getControl( 200 + x ).setLabel( _( 200 + x ) )
         except: pass
         xbmcgui.unlock()
-
-    def _set_variables( self ):
-        """ initializes variables """
-        # setEnabled( False ) if not used
-        self.getControl( 253 ).setVisible( False )
-        self.getControl( 253 ).setEnabled( False )
-
-    def _get_settings( self ):
-        """ reads settings """
-        self.settings = utilities.Settings().get_settings()
 
     def _set_functions( self ):
         self.functions = {}
