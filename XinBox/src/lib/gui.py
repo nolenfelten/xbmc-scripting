@@ -30,10 +30,6 @@ import emaildialog
 SETTINGDIR = default.__scriptsettings__
 SCRIPTSETDIR = SETTINGDIR + default.__scriptname__ + "\\"
 DATADIR = SCRIPTSETDIR + "data\\"
-DELETEFOLDER = "deleted\\"
-IDFOLDER = "ids\\"
-NEWFOLDER = "new\\"
-CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
@@ -137,13 +133,6 @@ class GUI( xbmcgui.WindowXML ):
             f.write("\t<tally>-</tally>\n")
             f.close()
             return
-
-    def correctarray(self):
-        templistitems = self.mylistitems
-        self.mylistitems = []
-        for item in templistitems:
-            if item == self.temp4:pass
-            else:self.mylistitems.append(item)
         
     def disablexinbox (self):
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
@@ -159,6 +148,7 @@ class GUI( xbmcgui.WindowXML ):
         return
     
     def openinbox( self , inboxy):
+        self.resetlists()
         self.xbsize.setVisible( False )
         self.inbox = inboxy
         if self.inbox == 1:
@@ -181,6 +171,14 @@ class GUI( xbmcgui.WindowXML ):
             self.addme()
             if self.listsize == 0:
                 self.disablexinbox()
+
+    def resetlists(self):
+        self.clearList()
+        self.mainarray = []
+        self.mylistitems = []
+        self.emails = []
+        self.listsize = 0
+        
                 
     def setsizelabel(self):
         mylabel = self.getxinboxsize()
@@ -190,7 +188,6 @@ class GUI( xbmcgui.WindowXML ):
     def getxinboxsize(self):
         size = 0
         for files in os.listdir(self.emfolder + MAILFOLDER):
-            print str(files)
             temp = os.path.getsize(self.emfolder + MAILFOLDER + str(files))
             size = size + temp
         label = self.getsizelabel(size)
@@ -211,48 +208,18 @@ class GUI( xbmcgui.WindowXML ):
             for name in files:
                 os.remove(os.path.join(root, name))
 
-    def buildcor(self):
-        self.emails = []
-        self.clearfolder(self.emfolder + CORFOLDER)
-        self.gettally()
-        self.count = 0
-        self.count3 = self.tally
-        self.count4 = 0
-        for self.count in range(self.tally):
-            self.temp99 = self.emfolder + MAILFOLDER + str(self.count3) +".sss"
-            if os.path.exists(self.temp99):
-                fh = open(self.temp99)
-                self.tempStr = fh.read()
-                fh.close()
-                self.getstatus()
-                self.emails.append(email.message_from_string(self.emailbody))
-                f = open(self.emfolder + CORFOLDER + str(self.count4) +".cor", "w")
-                f.write(str(self.count3))
-                f.close()
-                self.count4 = self.count4 + 1
-                self.count = self.count+1 
-                self.count3 = self.count3-1
-            else:
-                self.count = self.count+1
-                self.count3 = self.count3-1
         
     def addme( self ):
         xbmcgui.lock()
         dialog = xbmcgui.DialogProgress()
         dialog.create( lang(0), lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
-        self.listsize = 0
         self.xbempty.setVisible( False )
         self.txtbox.reset()
         self.txtbox.setVisible( True )
-        self.clearfolder(self.emfolder + CORFOLDER)
-        self.clearList()
         self.gettally()
         self.count = 0
-        self.count2 = 0
         self.count3 = self.tally
-        self.emails = []
-        self.mylistitems = []
         for self.count in range(self.tally):
                 dialog.update((self.count*100)/self.tally)
                 self.temp2 = self.emfolder + MAILFOLDER + str(self.count3) +".sss"
@@ -261,19 +228,25 @@ class GUI( xbmcgui.WindowXML ):
                     self.tempStr = fh.read()
                     fh.close()
                     self.getstatus()
-                    self.emails.append(email.message_from_string(self.emailbody))
-                    attachmenty = self.checkattachment(self.count2)
+                    temp = email.message_from_string(self.emailbody)
+                    self.emails.append(temp)
+                    attachmenty = self.checkattachment(temp)
                     try:
-                        temp = self.emails[self.count2].get('subject')
-                        if temp == "":
-                            self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ self.emails[self.count2].get('from'))
+                        subject = temp.get('subject')
+                        subject = subject.replace("\n","")
+                        ffrom = temp.get('from')
+                        ffrom = ffrom.replace("\n","")
+                        if subject == "":
+                            self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ ffrom)
                         else:
-                            self.myemail = xbmcgui.ListItem(self.emails[self.count2].get('subject') +" "+ lang(23) + " "+ self.emails[self.count2].get('from'))
+                            self.myemail = xbmcgui.ListItem(subject +" "+ lang(23) + " "+ ffrom)
                     except:
                         try:
-                            self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ self.emails[self.count2].get('from'))
+                            ffrom = temp.get('from')
+                            ffrom = ffrom.replace("\n","")
+                            self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ ffrom)
                         except:
-                            self.myemail = xbmcgui.ListItem("BAD EMAIL")
+                            self.myemail = xbmcgui.ListItem(lang(96))
                     self.addItem(self.myemail)
                     self.mylistitems.append(self.myemail)
                     if self.readstatus == "UNREAD":
@@ -287,11 +260,8 @@ class GUI( xbmcgui.WindowXML ):
                         else:
                             self.myemail.setThumbnailImage(self.read)
                     self.listsize  = self.listsize + 1
-                    f = open(self.emfolder + CORFOLDER + str(self.listsize-1) +".cor", "w")
-                    f.write(str(self.count3))
-                    f.close()
+                    self.mainarray.append(self.count3)
                     self.count = self.count+1 
-                    self.count2 = self.count2+1
                     self.count3 = self.count3-1
                 else:
                     self.count = self.count+1
@@ -301,7 +271,6 @@ class GUI( xbmcgui.WindowXML ):
             self.setsizelabel()
         xbmcgui.unlock()
         return
-       
 
     def printEmail(self, selected):
         self.msgText = ""
@@ -313,7 +282,6 @@ class GUI( xbmcgui.WindowXML ):
                     break
         else:
             if self.emails[selected].get_content_type() == "text/html":
-                # email in html only, so strip html tags
                 email2 = self.parse_email(self.emails[selected].get_payload())
                 self.msgText = email2
             else:
@@ -322,9 +290,9 @@ class GUI( xbmcgui.WindowXML ):
         self.txtbox.setText(self.msgText)
         return
     
-    def checkattachment(self, selected):
-        if self.emails[selected].is_multipart():
-            for part in self.emails[selected].walk():
+    def checkattachment(self, myemail):
+        if myemail.is_multipart():
+            for part in myemail.walk():
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
                     filename = part.get_filename()
                     if not filename:pass
@@ -340,8 +308,62 @@ class GUI( xbmcgui.WindowXML ):
         w = mailchecker.Checkemail(inbox, minimode, 0)
         w.setupemail()
         self.newmails = w.returnvar
+        self.newids = w.returnvar2
         del w
-        return
+        if self.newids != []:
+            self.addmylistitem()
+
+    def addmylistitem(self):
+        xbmcgui.lock()
+        dialog = xbmcgui.DialogProgress()
+        dialog.create( lang(0), lang(97))  
+        xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
+        self.xbempty.setVisible( False )
+        self.myemail = xbmcgui.ListItem("test")
+        self.txtbox.reset()
+        self.txtbox.setVisible( True )
+        for ids in self.newids:
+            self.listsize = self.listsize + 1
+            temp = self.emfolder + MAILFOLDER + str(ids) +".sss"
+            fh = open(temp)
+            self.tempStr = fh.read()
+            fh.close()
+            self.getstatus()
+            temp = email.message_from_string(self.emailbody)
+            attachmenty = self.checkattachment(temp)
+            try:
+                subject = temp.get('subject')
+                subject = subject.replace("\n","")
+                ffrom = temp.get('from')
+                ffrom = ffrom.replace("\n","")
+                if subject == "":
+                    self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ ffrom)
+                else:
+                    self.myemail = xbmcgui.ListItem(subject +" "+ lang(23) + " "+ ffrom)
+            except:
+                try:
+                    ffrom = temp.get('from')
+                    ffrom = ffrom.replace("\n","")
+                    self.myemail = xbmcgui.ListItem(lang(22) +" "+ lang(23) + " "+ ffrom)
+                except:
+                    self.myemail = xbmcgui.ListItem(lang(96))
+            self.addItem(self.myemail,0)
+            if self.readstatus == "UNREAD":
+                if attachmenty:
+                    self.myemail.setThumbnailImage(self.notreadattach)
+                else:
+                    self.myemail.setThumbnailImage(self.notread)
+            else:
+                if attachmenty:
+                    self.myemail.setThumbnailImage(self.readattach)
+                else:
+                    self.myemail.setThumbnailImage(self.read)
+            self.mainarray.insert( 0, ids)
+            self.mylistitems.insert( 0, self.myemail)
+            self.emails.insert( 0, temp)
+        self.setsizelabel()
+        dialog.close()
+        xbmcgui.unlock()
     
     def getstatus( self ):
         s = self.tempStr.split('|')
@@ -356,7 +378,7 @@ class GUI( xbmcgui.WindowXML ):
         self.temp = self.getCurrentListPosition()
         self.temp4 = self.mylistitems[self.temp]
         self.temp3 = self.temp4.getLabel()
-        attach = self.checkattachment(self.temp)
+        attach = self.checkattachment(self.emails[self.temp])
         if attach:
             self.temp4.setThumbnailImage(self.readattach)
         else:
@@ -373,7 +395,7 @@ class GUI( xbmcgui.WindowXML ):
     def launchemaildialog( self ):
         xbmcgui.lock()
         ws = emaildialog.gui("XinBox_EmailDialog.xml",SCRIPTFOLDER + "src","DefaultSkin")
-        ws.setupvars(self.temp3, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox)
+        ws.setupvars(self.temp3, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox,self.mainarray)
         ws.doModal()
         self.deleteme = ws.returnvar2
         del ws
@@ -383,8 +405,11 @@ class GUI( xbmcgui.WindowXML ):
     def doitit(self):
         if self.deleteme != 0:
             self.removeItem(self.temp)
-            self.correctarray()
-            self.buildcor()
+            temp = self.mainarray[self.temp]
+            self.mainarray.remove(temp)
+            self.mylistitems.remove(self.temp4)
+            temp = self.emails[self.temp]
+            self.emails.remove(temp)
             self.listsize = self.listsize - 1
             self.setsizelabel()
         if self.listsize == 0:
@@ -400,16 +425,11 @@ class GUI( xbmcgui.WindowXML ):
         if ( controlID == 61):
             if self.box1 == 1:
                 self.checkemail(1,0)
-                if self.newmails != 0:
-                    self.addme()
             else:
-                self.bypass = 0
                 self.openinbox(1)
         elif ( controlID == 62):
             if self.box2 == 1:
                 self.checkemail(2,0)
-                if self.newmails != 0:
-                    self.addme()
             else:
                 self.openinbox(2)
         elif ( controlID == 63):
@@ -441,9 +461,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitscript()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
             if (50 <= focusid <= 59):
-                try:
-                    self.goFullscreen()
-                except:traceback.print_exc()
+                self.goFullscreen()
         else:
             if (50 <= focusid <= 59):
                 self.printEmail(self.getCurrentListPosition())

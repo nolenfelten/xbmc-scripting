@@ -24,10 +24,6 @@ import string
 SETTINGDIR = default.__scriptsettings__
 SCRIPTSETDIR = SETTINGDIR + default.__scriptname__ + "\\"
 DATADIR = SCRIPTSETDIR + "data\\"
-DELETEFOLDER = "deleted\\"
-IDFOLDER = "ids\\"
-NEWFOLDER = "new\\"
-CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
 MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
@@ -41,12 +37,13 @@ class gui( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
         self.control_action = xib_util.setControllerAction()
 
-    def setupvars(self, arg1, arg3, arg4, arg5, arg6):
+    def setupvars(self, arg1, arg3, arg4, arg5, arg6, arg7):
         self.temp3 = arg1
         self.emfolder = arg3
         self.CurrentListPosition = arg4
         self.emails = arg5
         inbox = arg6
+        self.mainarray = arg7
         if inbox == 1:
             self.box1 = 1
             self.box2 = 0
@@ -123,7 +120,9 @@ class gui( xbmcgui.WindowXMLDialog ):
                 self.exitme()
         elif ( button_key == 'A Button' or button_key == 'Keyboard Menu Button'):
             if (focusid == 77):
-                self.openattach(self.attlist.getSelectedPosition())
+                try:
+                    self.openattach(self.attlist.getSelectedPosition())
+                except:traceback.print_exc()
 
     def openattach(self, arg1):
         filetype = string.split(self.attachments[arg1], '.').pop()
@@ -236,13 +235,15 @@ class gui( xbmcgui.WindowXMLDialog ):
                 fn = dialog.ok(lang(0), lang(79) % (filename, path))
             
     def PlayMedia(self, filename):
-        self.attachsize.reset()
-        self.attsize = os.path.getsize(TEMPFOLDER + filename)
-        self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
-        if self.media == 1:
-            xbmc.playSFX(TEMPFOLDER + filename)
-        else:
-            xbmc.Player().play(TEMPFOLDER + filename)
+        try:
+            self.attachsize.reset()
+            self.attsize = os.path.getsize(TEMPFOLDER + filename)
+            self.attachsize.addLabel(lang( 75 ) + self.getsizelabel(self.attsize))
+            if self.media == 1:
+                xbmc.playSFX(TEMPFOLDER + filename)
+            else:
+                xbmc.Player().play(TEMPFOLDER + filename)
+        except:traceback.print_exc()
         
         
     def RemoveImage(self):
@@ -298,9 +299,7 @@ class gui( xbmcgui.WindowXMLDialog ):
 
     def getemailinfo(self):
         self.temp = self.CurrentListPosition
-        fh = open(self.emfolder + CORFOLDER + str(self.temp)+ ".cor")
-        self.updateme = fh.read()
-        fh.close()
+        self.updateme = self.mainarray[self.temp]
         fh = open(self.emfolder + MAILFOLDER + str(self.updateme) +".sss")
         self.tempStr = fh.read()
         fh.close()
@@ -308,35 +307,36 @@ class gui( xbmcgui.WindowXMLDialog ):
         self.emailsiselabel = self.getsizelabel(self.emailsize)
 
     def processEmail(self, selected):
-        self.attachments = []
-        if self.emails[selected].is_multipart():
-            for part in self.emails[selected].walk():
-                if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
-                    filename = part.get_filename()
-                    if not filename:
-                        print "Bad attachment - no Filename, Attachment not saved."
+        try:
+            self.attachments = []
+            if self.emails[selected].is_multipart():
+                for part in self.emails[selected].walk():
+                    if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
+                        filename = part.get_filename()
+                        if filename:
+                            try:
+                                f=open(TEMPFOLDER + filename, "wb")
+                                f.write(part.get_payload(decode=1))
+                                f.close()
+                                self.attachments.append(filename)
+                            except:pass
                     else:
-                        self.attachments.append(filename)
-                        print "problem saving attachment " + filename
-                else:
-                    filename = part.get_filename()
-                    if filename != None:
-                        try:
-                            f=open(TEMPFOLDER + filename, "wb")
-                            f.write(part.get_payload(decode=1))
-                            f.close()
-                            self.attachments.append(filename)
-                        except:
-                            print "problem saving attachment " + filename
-                    else:
-                        print "no attachment bitch"
-        for attachment in self.attachments:
-            self.attlist.addItem(attachment)        
-        if len(self.attachments)==0:
-            self.attbutn.setEnabled( False )
-        else:
-            self.attbutn.setEnabled( True )
-        self.printEmail(selected) 
+                        filename = part.get_filename()
+                        if filename != None:
+                            try:
+                                f=open(TEMPFOLDER + filename, "wb")
+                                f.write(part.get_payload(decode=1))
+                                f.close()
+                                self.attachments.append(filename)
+                            except:pass
+            for attachment in self.attachments:
+                self.attlist.addItem(attachment)        
+            if len(self.attachments)==0:
+                self.attbutn.setEnabled( False )
+            else:
+                self.attbutn.setEnabled( True )
+            self.printEmail(selected)
+        except:traceback.print_exc()
 
     def printEmail(self, selected):
         self.msgText = ""
@@ -348,7 +348,6 @@ class gui( xbmcgui.WindowXMLDialog ):
                     break
         else:
             if self.emails[selected].get_content_type() == "text/html":
-                # email in html only, so strip html tags
                 email2 = self.parse_email(self.emails[selected].get_payload())
                 self.msgText = email2
             else:
@@ -384,26 +383,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         parser.feed(email)
         parser.close()
         self.parsemail = parser.output()
-       # self.parsemail = self.parse_email2(self.parsemail)
         return self.parsemail
-
-        
-    def parse_email2(self, email):
-        self.parsemail = re.sub('<STYLE.*?>', '<!--', email)
-        self.parsemail = re.sub('&copy', '©', self.parsemail)
-        self.parsemail = re.sub('&#174;', '®', self.parsemail)
-        self.parsemail = re.sub('<SCRIPT.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('<style.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('<script.*?>', '<!--', self.parsemail)
-        self.parsemail = re.sub('</STYLE>', '-->', self.parsemail)
-        self.parsemail = re.sub('</SCRIPT>', '-->', self.parsemail)
-        self.parsemail = re.sub('</style>', '-->', self.parsemail)
-        self.parsemail = re.sub('</script>', '-->', self.parsemail)
-        self.parsemail = re.sub('(?s)<!--.*?-->', '', self.parsemail)
-        self.parsemail = re.sub('(?s)<.*?>', ' ', self.parsemail)
-        self.parsemail = re.sub('&nbsp;', ' ', self.parsemail)
-        self.parsemail = re.sub('=0D=0A', ' ', self.parsemail)
-        return str(self.parsemail)
     
     def deletemail(self):
         dialog = xbmcgui.Dialog()

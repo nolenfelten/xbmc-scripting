@@ -34,7 +34,7 @@
             		<posy>150</posy>
             		<width>390</width>
             		<height>300</height>
-            		<spinposx>230</spinposx>
+            		<spinposx>232</spinposx>
             		<spinposy>290</spinposy>
             		<textureup>scroll-up.png</textureup>
             		<texturedown>scroll-down.png</texturedown>
