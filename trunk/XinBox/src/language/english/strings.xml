@@ -65,6 +65,8 @@
   <string id="94">User2</string>	
   <string id="95">Pass2</string>	
   <string id="96">SSL2</string>
+  <string id="96">[No Subject] from [No Sender]</string>
+  <string id="97">Adding new emails to XinBox....</string>
 
   <string id="200">Mini Mode</string>
   <string id="201">Settings</string>

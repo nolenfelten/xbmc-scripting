@@ -30,7 +30,6 @@ SRCDIR = ROOTDIR + "src\\"
 EMAILDIR = SCRIPTSETDIR + "data\\"
 DATADIR = SCRIPTSETDIR + "data\\"
 TEMPDIR = SCRIPTSETDIR + "temp\\"
-CORFOLDER = "cor\\"
 MAILFOLDER = "mail\\"
 MESSAGELIST = "message.list"
 
@@ -44,7 +43,9 @@ class Checkemail:
     def setupemail(self):
         self.setemail()
         self.checkme()
-        self.returnvar = self.nummails        
+        self.returnvar = self.nummails
+        self.returnvar2 = self.newids
+        
         
 
     def setemail ( self ):
@@ -66,8 +67,6 @@ class Checkemail:
     def buildinbox ( self ):
         if not os.path.exists(self.emfolder):
             os.mkdir(self.emfolder)
-        if not os.path.exists(self.emfolder + CORFOLDER):
-            os.mkdir(self.emfolder + CORFOLDER)
         if not os.path.exists(self.emfolder + MAILFOLDER):
             os.mkdir(self.emfolder + MAILFOLDER)   
         self.gettally()
@@ -86,13 +85,10 @@ class Checkemail:
         mail.pass_(self.passw)
         self.numEmails = mail.stat()[0]
         count = 0
-        print "emailid = " + str(self.emailid)
         for count in range(1, self.numEmails+1):
             dialog.update((count*100)/self.numEmails, _( 70 ))
             mailID = mail.uidl(count).split()[2]
-            print "mailID = " + str(mailID)
             if mailID == self.emailid:
-                print "success"
                 mail.dele(count)
                 mail.quit()
                 deleteok = 1
@@ -105,7 +101,6 @@ class Checkemail:
         if deleteok == 1:
             dialog.ok( _( 0 ) + " - " + self.user, _( 71 ) )
         else:
-            print "fail"
             dialog.ok( _( 0 ) + " - " + self.user, _( 72 ), _( 73 ))
         return
     
@@ -129,6 +124,7 @@ class Checkemail:
         
             
     def checkme ( self ):
+        self.newids = []
         self.writelist = []
         if self.minimode == 0:
             dialog = xbmcgui.DialogProgress()
@@ -141,7 +137,6 @@ class Checkemail:
             mail.user(self.user)
             mail.pass_(self.passw)
         except:
-            traceback.print_exc()
             if self.minimode == 0:
                 dialog.close()
                 dialog = xbmcgui.Dialog()
@@ -211,12 +206,13 @@ class Checkemail:
                             f = open(self.emfolder + MAILFOLDER + str(self.tally) +".sss", "w")
                             f.write("UNREAD" + "|" + str(self.time) + "|" + str(self.date) + "|" + str(mailID) + "|" + str(self.email))
                             f.close()
+                            print "new id = " + str(self.tally)
+                            self.newids.append(self.tally)
                             self.tally = self.tally+1
                             count = count + 1
                             count2 = count2 + 1
                             self.writetally()
                         except:
-                            traceback.print_exc()
                             if self.minimode == 0:
                                 dialog.close()
                                 dialog = xbmcgui.Dialog()
@@ -230,7 +226,6 @@ class Checkemail:
                         dialog.ok( _( 0 ) + " - " + self.user, _(57) % self.nummails)
                     return
         except:
-            traceback.print_exc()
             if self.minimode == 0:
                 dialog.close()
                 dialog = xbmcgui.Dialog()
