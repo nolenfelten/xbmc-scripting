@@ -61,6 +61,7 @@ class GUI( xbmcgui.WindowXML ):
         self.bkimage = self.getControl(65)
         self.xbempty = self.getControl(70)
         self.xbsize = self.getControl(71)
+        self.servsize = self.getControl(72)
         return
         
     def setupvars( self ):
@@ -88,6 +89,7 @@ class GUI( xbmcgui.WindowXML ):
             self.xb1butn.setEnabled( False )
         if self.settings.disablexb2:
             self.xb2butn.setEnabled( False )
+        self.servsize.setVisible( False )  
         xbmc.log ("adjusted controls OK")
         return
 
@@ -169,9 +171,28 @@ class GUI( xbmcgui.WindowXML ):
             self.disablexinbox()
         else:
             self.addme()
+            self.getservsize()          
             if self.listsize == 0:
                 self.disablexinbox()
-
+            else:
+                 self.setsizelabel()
+                     
+    def getservsize(self):
+        if self.inbox == 1:
+            server = self.settings.serversize1
+        else:server = self.settings.serversize2
+        if server != "-":
+            test = self.getxinboxsize()
+            if self.xbsizeb != 0:
+                temp1 = int(server)*1024.0
+                temp2 = (self.xbsizeb/temp1)*100.0
+                self.mypercent = "%.0f" % (temp2) + "%"
+                self.servsize.setVisible( True )
+                self.servsize.setLabel(lang(98)%(test,self.mypercent,server))
+            else:
+                self.mypercent = "0%"
+                self.servsize.setLabel(lang(98)%(test,self.mypercent,server))
+        
     def resetlists(self):
         self.clearList()
         self.mainarray = []
@@ -197,10 +218,13 @@ class GUI( xbmcgui.WindowXML ):
         if size >= 1024:
             size = size/1024.0
             sizeext = "KB"
+            self.xbsizeb = size
             if size >= 1024:
                 size = size/1024.0
                 sizeext = "MB"
-        else:sizeext = "bytes"
+        else:
+            self.xbsizeb = 0
+            sizeext = "bytes"
         return "%.1f %s" % (size,  sizeext)            
             
     def clearfolder(self, folder):
@@ -267,8 +291,6 @@ class GUI( xbmcgui.WindowXML ):
                     self.count = self.count+1
                     self.count3 = self.count3-1
         dialog.close()
-        if self.listsize != 0:
-            self.setsizelabel()
         xbmcgui.unlock()
         return
 
@@ -312,6 +334,7 @@ class GUI( xbmcgui.WindowXML ):
         del w
         if self.newids != []:
             self.addmylistitem()
+            self.getservsize() 
 
     def addmylistitem(self):
         xbmcgui.lock()
@@ -412,6 +435,7 @@ class GUI( xbmcgui.WindowXML ):
             self.emails.remove(temp)
             self.listsize = self.listsize - 1
             self.setsizelabel()
+            self.getservsize() 
         if self.listsize == 0:
             self.disablexinbox()
         else:self.printEmail(self.getCurrentListPosition())
