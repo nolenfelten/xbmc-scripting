@@ -39,6 +39,16 @@
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control>
+        	<control type="label" id="72">
+			<description>serversize</description>
+			<posx>200</posx>
+			<posy>50</posy>
+			<width>400</width>
+			<height>100</height>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
         	<control type="label" id="70">
 			<description>xinbox empty</description>
 			<posx>300</posx>

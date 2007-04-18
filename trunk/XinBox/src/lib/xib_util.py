@@ -136,10 +136,12 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
             self.user1 = s[3]
             self.pass1 = s[4]
             self.ssl1 = s[5]
-            self.server2 = s[6]
-            self.user2 = s[7]
-            self.pass2 = s[8]
-            self.ssl2 = s[9]
+            self.serversize1 = s[6]
+            self.server2 = s[7]
+            self.user2 = s[8]
+            self.pass2 = s[9]
+            self.ssl2 = s[10]
+            self.serversize2 = s[11]
             print 'read settings OK'
         except:
             print 'ERROR: reading settings'
@@ -167,10 +169,12 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
         self.user1 = "-"
         self.pass1 = "-"
         self.ssl1 = "-"
+        self.serversize1 = "-"
         self.server2 = "-"
         self.user2 = "-"
         self.pass2 = "-"
         self.ssl2 = "-"
+        self.serversize2 = "-"
         print 'used default settings OK'
         success = self.writeSettings()
         self.usedDefaults = True
@@ -178,17 +182,19 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
         
     def writeSettings( self ):
         try:
-            strSettings = '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % ( 
+            strSettings = '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % ( 
                 self.mpenable,
                 self.mp, 
                 self.server1,
                 self.user1,
                 self.pass1,
                 self.ssl1,
+                self.serversize1,
                 self.server2,
                 self.user2,
                 self.pass2,
-                self.ssl2, )
+                self.ssl2,
+                self.serversize2,)
             f = open( SETTINGSFILE, 'w' )
             f.write(strSettings)
             f.close()
