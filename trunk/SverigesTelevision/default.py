@@ -204,6 +204,6 @@ class SVTGui(xbmcgui.WindowXML):
 
 
 res_path = os.getcwd()[:-1]
-svt = SVTGui('skin.xml', res_path)
+svt = SVTGui('main.xml', res_path)
 svt.doModal()
 del svt
