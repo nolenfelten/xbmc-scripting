@@ -86,7 +86,7 @@ class Settings:
         return settings
 
     def _use_defaults( self, show_dialog=False ):
-        LOG( 1, "%s used default settings values - version: %s", __scriptname__, __version__ )
+        LOG( 1, "%s used default settings - version: %s", __scriptname__, __version__ )
         settings = {
             "version": __version__,
             "scraper": "lyricwiki",
