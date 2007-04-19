@@ -48,28 +48,23 @@ class SVTGui(xbmcgui.WindowXML):
 	SEARCH_BUTTON = 11
 
 	def __init__(self, *args, **kwargs):
-		pass
+		self.stack = []
+		self.data = []
+
+		self.base_path = os.getcwd().replace(';','')
+
+		self.img_path = os.path.join(os.getcwd()[:-1], 'skins', 'media')
+		self.svt = SVTMedia()
+
+		self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
 
 	def onInit(self):
 		try:
-			self.stack = []
-			self.data = []
-
-			self.base_path = os.getcwd().replace(';','')
-
-			self.img_path = os.path.join(os.getcwd()[:-1], 'skins', 'media')
-			self.svt = SVTMedia()
-
-			self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
-
 			self.list_contents(self.svt.get_start_url())
 		except:
 			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
 			self.close()
-
-	def onFocus(self, control_id):
-		pass
 
 	def show_about(self):
 		dlg = xbmcgui.Dialog()
@@ -134,6 +129,43 @@ class SVTGui(xbmcgui.WindowXML):
 		if file is not None:
 			self.player.play(str(file[0]))
 
+	def update_progress(self, done, size, dlg):
+		msg = 'Hamtar data (%dkB)' % int(done / 1024)
+		percent = min(int((done * 100.0) / size), size)
+		dlg.update(percent, msg)
+
+		return not dlg.iscanceled()
+	
+	def download_data(self, url, func):
+		data = None
+
+		dlg = xbmcgui.DialogProgress()
+		dlg.create('Sveriges Television', 'Hämtar data')
+
+		self.svt.set_report_hook(self.update_progress, dlg)
+
+		try:
+			data = func(url)
+		except ParseError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('Sveriges Television',
+			           'Ett fel i programmet har påträffats.',
+			           'Posta din XBMC\\xbmc.log på forumet.')
+			print e
+		except DownloadError, e:
+			err_dlg = xbmcgui.Dialog()
+			err_dlg.ok('Sveriges Television', 'Fel vid hämtning av data.')
+			print e
+		except DownloadAbort, e:
+			pass
+
+		dlg.close()
+
+		return data
+
+	def onFocus(self, control_id):
+		pass
+
 	def onClick(self, control_id):
 		try: 
 			if control_id == SVTGui.CONTENT_LIST:
@@ -170,39 +202,6 @@ class SVTGui(xbmcgui.WindowXML):
 			traceback.print_exc()
 			self.close()
 
-	def update_progress(self, done, size, dlg):
-		msg = 'Hamtar data (%dkB)' % int(done / 1024)
-		percent = min(int((done * 100.0) / size), size)
-		dlg.update(percent, msg)
-
-		return not dlg.iscanceled()
-	
-	def download_data(self, url, func):
-		data = None
-
-		dlg = xbmcgui.DialogProgress()
-		dlg.create('Sveriges Television', 'Hämtar data')
-
-		self.svt.set_report_hook(self.update_progress, dlg)
-
-		try:
-			data = func(url)
-		except ParseError, e:
-			err_dlg = xbmcgui.Dialog()
-			err_dlg.ok('Sveriges Television',
-			           'Ett fel i programmet har påträffats.',
-			           'Posta din XBMC\\xbmc.log på forumet.')
-			print e
-		except DownloadError, e:
-			err_dlg = xbmcgui.Dialog()
-			err_dlg.ok('Sveriges Television', 'Fel vid hämtning av data.')
-			print e
-		except DownloadAbort, e:
-			pass
-
-		dlg.close()
-
-		return data
 
 res_path = os.getcwd()[:-1]
 svt = SVTGui('skin.xml', res_path)
