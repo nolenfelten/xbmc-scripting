@@ -150,6 +150,7 @@ class GUI( xbmcgui.WindowXML ):
         return
     
     def openinbox( self , inboxy):
+        self.servsize.setVisible( False )
         self.resetlists()
         self.xbsize.setVisible( False )
         self.inbox = inboxy
@@ -160,6 +161,7 @@ class GUI( xbmcgui.WindowXML ):
     	    self.xb1butn.setLabel( lang(65))
     	    self.xb2butn.setLabel("XinBox 2")
     	    self.emfolder = DATADIR + self.settings.user1 + "@" + self.settings.server1 + "\\"
+    	    self.serversize = self.settings.serversize1
         else:
     	    self.box2 = 1
     	    self.box1 = 0
@@ -167,31 +169,62 @@ class GUI( xbmcgui.WindowXML ):
     	    self.xb2butn.setLabel( lang(65))
     	    self.xb1butn.setLabel("XinBox 1")
     	    self.emfolder = DATADIR + self.settings.user2 + "@" + self.settings.server2 + "\\"
+    	    self.serversize = self.settings.serversize2
         if not os.path.exists(self.emfolder):
             self.disablexinbox()
         else:
             self.addme()
-            self.getservsize()          
             if self.listsize == 0:
                 self.disablexinbox()
             else:
                  self.setsizelabel()
+            self.getmailboxsize()
+            self.dialog.close()
+            xbmcgui.unlock()
                      
     def getservsize(self):
+        self.servsize.setEnabled(True)
         if self.inbox == 1:
             server = self.settings.serversize1
         else:server = self.settings.serversize2
         if server != "-":
-            test = self.getxinboxsize()
             if self.xbsizeb != 0:
                 temp1 = int(server)*1024.0
                 temp2 = (self.xbsizeb/temp1)*100.0
                 self.mypercent = "%.0f" % (temp2) + "%"
                 self.servsize.setVisible( True )
-                self.servsize.setLabel(lang(98)%(test,self.mypercent,server))
+                if temp2 >= 90:
+                    self.servsize.setLabel(lang(98)%(self.label,self.mypercent,server))
+                    self.servsize.setEnabled(False)
+                else:
+                    self.servsize.setLabel(lang(98)%(self.label,self.mypercent,server))
             else:
                 self.mypercent = "0%"
-                self.servsize.setLabel(lang(98)%(test,self.mypercent,server))
+                self.servsize.setLabel(lang(98)%(self.label,self.mypercent,server))
+
+    def getmailboxsize(self):
+        if self.serversize != "-":
+            if self.inbox == 1:
+                self.user = self.settings.user1
+                self.server = self.settings.server1
+                self.passw = self.settings.pass1
+                self.ssl = self.settings.ssl1
+            else:
+                self.user = self.settings.user2
+                self.server = self.settings.server2
+                self.passw = self.settings.pass2
+                self.ssl = self.settings.ssl2
+            try:
+                if self.ssl == "-":
+                    mail = poplib.POP3(self.server)
+                else:
+                    mail = poplib.POP3_SSL(self.server, self.ssl)
+                mail.user(self.user)
+                mail.pass_(self.passw)
+                self.label = self.getsizelabel(mail.stat()[1])
+                self.getservsize()
+                mail.quit()
+            except:traceback.print_exc()
         
     def resetlists(self):
         self.clearList()
@@ -202,7 +235,8 @@ class GUI( xbmcgui.WindowXML ):
         
                 
     def setsizelabel(self):
-        mylabel = self.getxinboxsize()
+        size = self.getxinboxsize()
+        mylabel = self.getsizelabel(size)
         self.xbsize.setLabel( lang(80) + mylabel)
         self.xbsize.setVisible( True )
         
@@ -211,8 +245,7 @@ class GUI( xbmcgui.WindowXML ):
         for files in os.listdir(self.emfolder + MAILFOLDER):
             temp = os.path.getsize(self.emfolder + MAILFOLDER + str(files))
             size = size + temp
-        label = self.getsizelabel(size)
-        return label
+        return size
             
     def getsizelabel (self, size):
         if size >= 1024:
@@ -235,8 +268,8 @@ class GUI( xbmcgui.WindowXML ):
         
     def addme( self ):
         xbmcgui.lock()
-        dialog = xbmcgui.DialogProgress()
-        dialog.create( lang(0), lang(76))        
+        self.dialog = xbmcgui.DialogProgress()
+        self.dialog.create( lang(0), lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.xbempty.setVisible( False )
         self.txtbox.reset()
@@ -245,7 +278,7 @@ class GUI( xbmcgui.WindowXML ):
         self.count = 0
         self.count3 = self.tally
         for self.count in range(self.tally):
-                dialog.update((self.count*100)/self.tally)
+                self.dialog.update((self.count*100)/self.tally)
                 self.temp2 = self.emfolder + MAILFOLDER + str(self.count3) +".sss"
                 if os.path.exists(self.temp2):
                     fh = open(self.temp2)
@@ -290,9 +323,6 @@ class GUI( xbmcgui.WindowXML ):
                 else:
                     self.count = self.count+1
                     self.count3 = self.count3-1
-        dialog.close()
-        xbmcgui.unlock()
-        return
 
     def printEmail(self, selected):
         self.msgText = ""
@@ -334,12 +364,19 @@ class GUI( xbmcgui.WindowXML ):
         del w
         if self.newids != []:
             self.addmylistitem()
-            self.getservsize() 
+            try:
+                self.getmailboxsize()
+                dialog.close()
+                xbmcgui.unlock()
+            except:
+                traceback.print_exc()
+                self.dialog.close()
+                xbmcgui.unlock()
 
     def addmylistitem(self):
         xbmcgui.lock()
-        dialog = xbmcgui.DialogProgress()
-        dialog.create( lang(0), lang(97))  
+        self.dialog = xbmcgui.DialogProgress()
+        self.dialog.create( lang(0), lang(97))  
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.xbempty.setVisible( False )
         self.myemail = xbmcgui.ListItem("test")
@@ -385,8 +422,6 @@ class GUI( xbmcgui.WindowXML ):
             self.mylistitems.insert( 0, self.myemail)
             self.emails.insert( 0, temp)
         self.setsizelabel()
-        dialog.close()
-        xbmcgui.unlock()
     
     def getstatus( self ):
         s = self.tempStr.split('|')
@@ -421,25 +456,29 @@ class GUI( xbmcgui.WindowXML ):
         ws.setupvars(self.temp3, self.emfolder, self.getCurrentListPosition(), self.emails, self.inbox,self.mainarray)
         ws.doModal()
         self.deleteme = ws.returnvar2
+        self.servchanged = ws.returnvar1
         del ws
         xbmcgui.lock()
         self.doitit()
         
     def doitit(self):
-        if self.deleteme != 0:
-            self.removeItem(self.temp)
-            temp = self.mainarray[self.temp]
-            self.mainarray.remove(temp)
-            self.mylistitems.remove(self.temp4)
-            temp = self.emails[self.temp]
-            self.emails.remove(temp)
-            self.listsize = self.listsize - 1
-            self.setsizelabel()
-            self.getservsize() 
-        if self.listsize == 0:
-            self.disablexinbox()
-        else:self.printEmail(self.getCurrentListPosition())
-        xbmcgui.unlock()
+        try:
+            if self.servchanged  == 1:
+                self.getmailboxsize()
+            if self.deleteme != 0:
+                self.removeItem(self.temp)
+                temp = self.mainarray[self.temp]
+                self.mainarray.remove(temp)
+                self.mylistitems.remove(self.temp4)
+                temp = self.emails[self.temp]
+                self.emails.remove(temp)
+                self.listsize = self.listsize - 1
+                self.setsizelabel()
+            if self.listsize == 0:
+                self.disablexinbox()
+            else:self.printEmail(self.getCurrentListPosition())
+            xbmcgui.unlock()
+        except:traceback.print_exc()
     
             
     def onFocus(self, controlID):
@@ -489,6 +528,9 @@ class GUI( xbmcgui.WindowXML ):
         else:
             if (50 <= focusid <= 59):
                 self.printEmail(self.getCurrentListPosition())
+
+            
+        
                 
 class html2txt(SGMLParser):
     def reset(self):
