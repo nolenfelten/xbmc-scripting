@@ -32,7 +32,6 @@ import traceback
 from xbmcutils.net import DownloadAbort, DownloadError
 
 import xbmcutils.gui
-import xbmcutils.guibuilder
 
 from SVT import SVTMedia, ParseError
 
@@ -43,18 +42,22 @@ class Logger:
 sys.stdout = Logger
 sys.stderr = Logger
 
-class SVTGui(xbmcgui.Window):
-	def __init__(self):
+class SVTGui(xbmcgui.WindowXML):
+	CONTENT_LIST = 50
+	ABOUT_BUTTON = 10
+	SEARCH_BUTTON = 11
+
+	def __init__(self, *args, **kwargs):
+		pass
+
+	def onInit(self):
 		try:
 			self.stack = []
 			self.data = []
 
 			self.base_path = os.getcwd().replace(';','')
 
-			if not self.load_skin('default'):
-				self.close()
-
-			self.img_path = os.path.join(os.getcwd()[:-1], 'gfx')
+			self.img_path = os.path.join(os.getcwd()[:-1], 'skins', 'media')
 			self.svt = SVTMedia()
 
 			self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
@@ -65,26 +68,8 @@ class SVTGui(xbmcgui.Window):
 			traceback.print_exc()
 			self.close()
 
-	def get_control(self, desc):
-		"""Return the control that matches the widget description."""
-
-		return self.controls[desc]['control']
-
-	def load_skin(self, name=None):
-		"""Loads the GUI skin."""
-
-		if not name:
-			name = 'default'
-
-		skin_path = os.path.join(self.base_path, 'skins', name)
-		skin = os.path.join(skin_path, 'skin.xml')
-
-		self.img_path = os.path.join(skin_path, 'gfx')
-
-		xbmcutils.guibuilder.GUIBuilder(self, skin, self.img_path,
-		                                useDescAsKey=True, fastMethod=True)
-
-		return self.SUCCEEDED
+	def onFocus(self, control_id):
+		pass
 
 	def show_about(self):
 		dlg = xbmcgui.Dialog()
@@ -127,7 +112,7 @@ class SVTGui(xbmcgui.Window):
 
 		self.data = data
 
-		list = self.get_control('Content List')
+		list = self.getControl(SVTGui.CONTENT_LIST)
 
 		xbmcgui.lock()
 		list.reset()
@@ -149,19 +134,19 @@ class SVTGui(xbmcgui.Window):
 		if file is not None:
 			self.player.play(str(file[0]))
 
-	def onControl(self, control):
+	def onClick(self, control_id):
 		try: 
-			if control is self.get_control('Content List'):
-				list = self.get_control('Content List')
+			if control_id == SVTGui.CONTENT_LIST:
+				list = self.getControl(SVTGui.CONTENT_LIST)
 				pos = list.getSelectedPosition()
 				desc, url, type = self.data[pos]
 				if type is SVTMedia.DIR:
 					self.list_contents(url)
 				elif type is SVTMedia.VIDEO:
 					self.play_clip(url)
-			elif control is self.get_control('About Button'):
+			elif control_id is SVTGui.ABOUT_BUTTON:
 				self.show_about()
-			elif control is self.get_control('Search Button'):
+			elif control_id is SVTGui.SEARCH_BUTTON:
 				self.search()
 		except:
 			xbmc.log('Exception (onControl): ' + str(sys.exc_info()[0]))
@@ -176,7 +161,7 @@ class SVTGui(xbmcgui.Window):
 				cur = self.stack.pop()
 				prev = self.stack.pop()
 				if not self.list_contents(prev):
-					# Still at the same ol' position.
+					# User aborted, still at the same ol' position.
 					self.stack.append(prev)
 					self.stack.append(cur)
 
@@ -196,7 +181,7 @@ class SVTGui(xbmcgui.Window):
 		data = None
 
 		dlg = xbmcgui.DialogProgress()
-		dlg.create('Sveriges Television', 'Hamtar data')
+		dlg.create('Sveriges Television', 'Hämtar data')
 
 		self.svt.set_report_hook(self.update_progress, dlg)
 
@@ -204,11 +189,14 @@ class SVTGui(xbmcgui.Window):
 			data = func(url)
 		except ParseError, e:
 			err_dlg = xbmcgui.Dialog()
-			err_dlg.ok('Sveriges Television', 'Kunde inte tolka data.')
+			err_dlg.ok('Sveriges Television',
+			           'Ett fel i programmet har påträffats.',
+			           'Posta din XBMC\\xbmc.log på forumet.')
 			print e
 		except DownloadError, e:
 			err_dlg = xbmcgui.Dialog()
-			err_dlg.ok('Sveriges Television', 'Kunde inte hamta data.')
+			err_dlg.ok('Sveriges Television', 'Fel vid hämtning av data.')
+			print e
 		except DownloadAbort, e:
 			pass
 
@@ -216,6 +204,7 @@ class SVTGui(xbmcgui.Window):
 
 		return data
 
-svt = SVTGui()
+res_path = os.getcwd()[:-1]
+svt = SVTGui('skin.xml', res_path)
 svt.doModal()
 del svt
