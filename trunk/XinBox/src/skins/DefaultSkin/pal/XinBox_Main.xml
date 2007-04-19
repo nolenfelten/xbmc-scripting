@@ -48,6 +48,7 @@
 			<align>left</align>
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
+			<disabledcolor>FFFF0000</disabledcolor>
 		</control>
         	<control type="label" id="70">
 			<description>xinbox empty</description>

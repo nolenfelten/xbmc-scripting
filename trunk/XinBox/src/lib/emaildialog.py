@@ -56,6 +56,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         xbmcgui.unlock()
         
     def openit(self):
+        self.serverchanged = 0
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
         self.attachlabel = self.getControl(79)
@@ -292,6 +293,7 @@ class gui( xbmcgui.WindowXMLDialog ):
         
     def exitme(self):
         self.returnvar2 = self.deleteme
+        self.returnvar1 = self.serverchanged
         self.close()
 
     def onFocus(self, controlID):
@@ -397,6 +399,7 @@ class gui( xbmcgui.WindowXMLDialog ):
                 self.delemail(1, self.mailid)
             else:
                 self.delemail(2, self.mailid)
+            self.serverchanged = 1
             self.setFocus(self.delbutn)
         elif ret == 2:
             if self.box1 == 1:
@@ -404,6 +407,7 @@ class gui( xbmcgui.WindowXMLDialog ):
             else:
                 self.delemail(2, self.mailid)
             self.getemailinfo()
+            self.serverchanged = 1
             self.deleteme = 1
             os.remove(self.emfolder + MAILFOLDER + str(self.updateme)+".sss")
             self.exitme()

@@ -220,6 +220,7 @@ class Checkemail:
                             mail.quit()
                             return
                     self.updateoc()
+                    mail.quit()
                     if self.minimode == 0:
                         dialog.close()
                         dialog = xbmcgui.Dialog()
