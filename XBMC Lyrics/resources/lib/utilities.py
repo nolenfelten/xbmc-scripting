@@ -68,7 +68,7 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
     return value
 
 def LOG( status, format, *args ): 
-    xbmc.output( "%s: %s" % ( ( "INFO", "NOTICE", "ERROR", "DEBUG", )[ status ], format % args, ), )
+    xbmc.output( "%s: %s\n" % ( ( "INFO", "NOTICE", "ERROR", "DEBUG", )[ status ], format % args, ) )
 
 
 class Settings:
@@ -106,4 +106,5 @@ class Settings:
             settings_file.close()
             return True
         except:
+            LOG( 2, "%s saving settings failed! - version: %s", __scriptname__, __version__ )
             return False
