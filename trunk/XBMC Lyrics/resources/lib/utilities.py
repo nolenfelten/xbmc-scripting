@@ -27,7 +27,8 @@ GET_EXCEPTION = ( 216, 260, 61448, )
 SETTINGS_MENU = ( 229, 259, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
-
+# Log status codes
+LOG_INFO, LOG_NOTICE, LOG_ERROR, LOG_DEBUG = range( 4 )
 
 def _create_base_paths():
     """ creates the base folders """
@@ -86,7 +87,7 @@ class Settings:
         return settings
 
     def _use_defaults( self, show_dialog=False ):
-        LOG( 1, "%s used default settings - version: %s", __scriptname__, __version__ )
+        LOG( LOG_NOTICE, "%s used default settings - version: %s", __scriptname__, __version__ )
         settings = {
             "version": __version__,
             "scraper": "lyricwiki",
@@ -106,5 +107,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( 2, "%s saving settings failed! - version: %s", __scriptname__, __version__ )
+            LOG( LOG_ERROR, "%s saving settings failed! - version: %s", __scriptname__, __version__ )
             return False
