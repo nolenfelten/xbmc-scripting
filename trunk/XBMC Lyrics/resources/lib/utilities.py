@@ -9,6 +9,8 @@ import os
 import xbmc
 import xbmcgui
 
+DEBUG_MODE = 0
+
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
@@ -28,7 +30,7 @@ SETTINGS_MENU = ( 229, 259, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
 # Log status codes
-LOG_INFO, LOG_NOTICE, LOG_ERROR, LOG_DEBUG = range( 4 )
+LOG_INFO, LOG_ERROR, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 
 def _create_base_paths():
     """ creates the base folders """
@@ -68,8 +70,9 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
     value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
 
-def LOG( status, format, *args ): 
-    xbmc.output( "%s: %s\n" % ( ( "INFO", "NOTICE", "ERROR", "DEBUG", )[ status ], format % args, ) )
+def LOG( status, format, *args ):
+    if ( DEBUG_MODE >= status ):
+        xbmc.output( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
 
 
 class Settings:
