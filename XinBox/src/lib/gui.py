@@ -49,6 +49,7 @@ class GUI( xbmcgui.WindowXML ):
         if self.initon == 0:
             self.setupcontrols()
             self.adjustcontrols()
+            self.initon = 1
         xbmcgui.unlock()
 
     def setupcontrols ( self ):
@@ -78,6 +79,7 @@ class GUI( xbmcgui.WindowXML ):
         return
         
     def adjustcontrols ( self ):
+        self.title.setVisible( False )
         self.xbempty.setVisible( False )
         self.xbempty.setLabel( lang(58) )
         self.xbsize.setVisible( False )
@@ -150,6 +152,7 @@ class GUI( xbmcgui.WindowXML ):
         return
     
     def openinbox( self , inboxy):
+        self.title.setVisible( True )
         self.servsize.setVisible( False )
         self.resetlists()
         self.xbsize.setVisible( False )
@@ -157,7 +160,7 @@ class GUI( xbmcgui.WindowXML ):
         if self.inbox == 1:
     	    self.box1 = 1
     	    self.box2 = 0
-    	    self.title.setLabel( lang(0) + " - " + self.settings.user1)
+    	    self.title.setLabel(self.settings.user1)
     	    self.xb1butn.setLabel( lang(65))
     	    self.xb2butn.setLabel("XinBox 2")
     	    self.emfolder = DATADIR + self.settings.user1 + "@" + self.settings.server1 + "\\"
@@ -165,7 +168,7 @@ class GUI( xbmcgui.WindowXML ):
         else:
     	    self.box2 = 1
     	    self.box1 = 0
-    	    self.title.setLabel( lang(0) + " - " + self.settings.user2)
+    	    self.title.setLabel(self.settings.user2)
     	    self.xb2butn.setLabel( lang(65))
     	    self.xb1butn.setLabel("XinBox 1")
     	    self.emfolder = DATADIR + self.settings.user2 + "@" + self.settings.server2 + "\\"
