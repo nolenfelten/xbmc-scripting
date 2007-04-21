@@ -90,7 +90,7 @@ class Settings:
         return settings
 
     def _use_defaults( self, show_dialog=False ):
-        LOG( LOG_NOTICE, "%s used default settings - version: %s", __scriptname__, __version__ )
+        LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
         settings = {
             "version": __version__,
             "scraper": "lyricwiki",
@@ -110,5 +110,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s saving settings failed! - version: %s", __scriptname__, __version__ )
+            LOG( LOG_ERROR, "%s (ver: %s) Settings::save_settings [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
             return False
