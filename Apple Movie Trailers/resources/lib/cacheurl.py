@@ -15,7 +15,7 @@ import time
 import socket
 import utilities
 
-socket.setdefaulttimeout( 10 )
+socket.setdefaulttimeout( 20 )
 
 __scriptname__ = 'cacheurl'
 __version__ = '0.1'

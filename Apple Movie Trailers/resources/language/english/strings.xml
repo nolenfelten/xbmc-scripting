@@ -90,9 +90,10 @@
     <string id="208">Shortcut #2</string>
     <string id="209">Shortcut #3</string>
     <string id="210">Refresh newest at startup</string>
-    <string id="211">Check version at startup</string>
+    <string id="211">Video player resolution</string>
     <string id="212">Showtimes scraper</string>
     <string id="213">Zip code</string>
+    <string id="214">Check version at startup</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
@@ -104,6 +105,7 @@
     <string id="2050">Movie Poster</string>
     <string id="2051">Generic Thumb</string>
     <string id="2052">Off</string>
+    <string id="2110">Do not change</string>
     
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>
