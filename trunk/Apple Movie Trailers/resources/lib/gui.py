@@ -54,10 +54,11 @@ except:
 class GUI( xbmcgui.Window ):
     def __init__( self ):
         try:
-            self.Timer = None
+            ##self.Timer = None
             self.context_menu = None
             base_path = os.getcwd().replace( ";", "" )
             self.debug = os.path.isfile( os.path.join( base_path, "debug.txt" ))
+            ##self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
             self.getSettings()
             self.gui_loaded = self._load_gui( self.settings[ "skin" ] )
             if ( not self.gui_loaded ): raise
@@ -77,6 +78,10 @@ class GUI( xbmcgui.Window ):
                 
     def getSettings( self ):
         self.settings = utilities.Settings().get_settings()
+        ##if ( self.settings[ "videoplayer_displayresolution" ] != 10 ):
+        ##    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
+        ##else:
+        ##    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
 
     def _load_gui( self, skin ):
         updateProgressDialog( _( 55 ) )
@@ -99,20 +104,19 @@ class GUI( xbmcgui.Window ):
         self.params = None
         self.display_cast = False
         ##self.dummy()
-        self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
+        #self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         #self.controller_action = utilities.buttoncode_dict()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
 
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
-    def dummy( self ):
-        #self.debugWrite("dummy", 2)
-        self.Timer = threading.Timer( 60*60*60, self.dummy,() )
-        self.Timer.start()
+    ##def dummy( self ):
+        ##self.Timer = threading.Timer( 60*60*60, self.dummy,() )
+        ##self.Timer.start()
 
-    def myPlayerChanged( self, event ):
-        pass
+    ##def myPlayerChanged( self, event ):
+    ##    pass
         #self.debugWrite("myPlayerChanged", 2)
         #if ( event == 0 and self.currently_playing_movie[1] >= 0 ):
         #    self.markAsWatched( self.currently_playing_movie[0] + 1, self.currently_playing_movie[1], self.currently_playing_movie[2] )
@@ -438,15 +442,22 @@ class GUI( xbmcgui.Window ):
                 choice = len( trailer_urls ) - 1
             else:
                 choice = self.settings[ "trailer_quality" ]
-            while ( "p.mov" in trailer_urls[ choice ] or choice == -1 ): choice -= 1
-            
+            if ( self.settings[ "mode" ] == 0 ):
+                while ( "p.mov" in trailer_urls[ choice ] and choice != -1 ): choice -= 1
+            #while ( "p.mov" in trailer_urls[ choice ] or choice == -1 ): choice -= 1
+            url = trailer_urls[ choice ]
+            #utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [core player=%d]", __scriptname__, __version__, core )
+            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [url=%s]", __scriptname__, __version__, url )
+
             if ( choice >= 0 ):
                 filename = str( self.trailers.movies[ trailer ].saved )
+                self.core = xbmc.PLAYER_CORE_DVDPLAYER
                 if ( not os.path.isfile( filename ) ):
                     if ( self.settings[ "mode" ] == 0 ):
-                        filename = trailer_urls[choice]
+                        self.core = xbmc.PLAYER_CORE_MPLAYER
+                        filename = url#trailer_urls[choice]
                     else:
-                        url = trailer_urls[choice]
+                        #url = trailer_urls[choice]
                         ext = os.path.splitext( url )[ 1 ]
                         title = "%s%s" % (self.trailers.movies[trailer].title, ext, )
                         if ( self.settings[ "mode" ] == 1):
@@ -461,8 +472,10 @@ class GUI( xbmcgui.Window ):
                                 if ( not poster ): poster = os.path.join( self.image_path, "blank-poster.tbn" )
                                 self.saveThumbnail( filename, trailer, poster )
             else: filename = ""
-            if ( filename ):
-                self.MyPlayer.play( filename )
+            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [%s]", __scriptname__, __version__, filename )
+            if ( filename != "None" ):
+                ##self.MyPlayer.play( filename )
+                xbmc.Player( self.core ).play( filename )
                 xbmc.sleep( 500 )
                 self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                 #self.changed_trailers = False
@@ -683,8 +696,9 @@ class GUI( xbmcgui.Window ):
                 self.showTrailers( self.sql, self.params, choice = trailer, force_update = force_update )
 
     def exitScript( self, restart=False ):
-        if ( self.Timer is not None ): self.Timer.cancel()
+        ##if ( self.Timer is not None ): self.Timer.cancel()
         if ( self.context_menu is not None ): del self.context_menu
+        ##xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
         self.close()
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
         """
@@ -818,16 +832,16 @@ class GUI( xbmcgui.Window ):
 
 
 ## Thanks Thor918 for this class ##
-class MyPlayer( xbmc.Player ):
-    def  __init__( self, *args, **kwargs ):
-        xbmc.Player.__init__( self )
-        self.function = kwargs["function"]
-
-    def onPlayBackStopped( self ):
-        self.function( 0 )
-    
-    def onPlayBackEnded( self ):
-        self.function( 1 )
-    
-    def onPlayBackStarted( self ):
-        self.function( 2 )
+#class MyPlayer( xbmc.Player ):
+#    def  __init__( self, *args, **kwargs ):
+#        xbmc.Player.__init__( self )
+#        self.function = kwargs["function"]
+#
+#    def onPlayBackStopped( self ):
+#        self.function( 0 )
+#    
+#    def onPlayBackEnded( self ):
+#        self.function( 1 )
+#    
+#    def onPlayBackStarted( self ):
+#        self.function( 2 )

@@ -109,6 +109,7 @@ class GUI( xbmcgui.WindowDialog ):
         self._setup_playback_mode()
         self._setup_trailer_quality()
         self._setup_skins()
+        self._setup_videoplayer()
         
     def _setup_startup_categories( self ):
         self.startup_categories = {}
@@ -128,13 +129,16 @@ class GUI( xbmcgui.WindowDialog ):
         self.mode = ( _( 2030 ), _( 2031 ), "%s (videos)" % _( 2032 ), "%s (files)" % _( 2032 ), )
     
     def _setup_trailer_quality( self ):
-        self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), )
+        self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), "480p", "720p", "1080p" )
 
     def _setup_skins( self ):
         """ special def for setting up scraper choices """
         self.skins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" ) )
         try: self.current_skin = self.skins.index( self.settings[ "skin" ] )
         except: self.current_skin = 0
+
+    def _setup_videoplayer( self ):
+        self.videoplayer_displayresolutions = ( "1080i 16x9", "720p 16x9", "480p 4x3", "480p 16x9", "NTSC 4x3", "NTSC 16x9", "PAL 4x3", "PAL 16x9", "PAL60 4x3", "PAL60 16x9", _( 2110 ) )
 
 ###### End of Special defs #####################################################
 
@@ -166,6 +170,7 @@ class GUI( xbmcgui.WindowDialog ):
             self.get_control( "Setting8 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
             self.get_control( "Setting9 Value" ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
             self.get_control( "Setting10 Value" ).setSelected( self.settings[ "refresh_newest" ] )
+            self.get_control( "Setting11 Value" ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
         except: pass
         xbmcgui.unlock()
     
@@ -231,6 +236,12 @@ class GUI( xbmcgui.WindowDialog ):
         """ changes settings #10 """
         self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]
     
+    def _change_setting11( self ):
+        """ changes settings #11 """
+        self.chooser.show_chooser( choices=self.videoplayer_displayresolutions, selection=self.settings[ "videoplayer_displayresolution" ], list_control=2, title="%s %s" % ( _( 200 ), _( 211 ), ) )
+        if ( self.chooser.selection is not None ):
+            self.settings[ "videoplayer_displayresolution" ] = self.chooser.selection
+        
 ##### End of unique defs ######################################################
     
     def _update_script( self ):
@@ -300,6 +311,8 @@ class GUI( xbmcgui.WindowDialog ):
                     self._change_setting9()
                 elif ( control is self.get_control( "Setting10 Button" ) ):
                     self._change_setting10()
+                elif ( control is self.get_control( "Setting11 Button" ) ):
+                    self._change_setting11()
                 self._set_controls_values()
             del self.chooser
 
