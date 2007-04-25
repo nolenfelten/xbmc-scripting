@@ -132,16 +132,18 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
             f.close()
             self.mpenable = s[0]
             self.mp = s[1]
-            self.server1 = s[2]
-            self.user1 = s[3]
-            self.pass1 = s[4]
-            self.ssl1 = s[5]
-            self.serversize1 = s[6]
-            self.server2 = s[7]
-            self.user2 = s[8]
-            self.pass2 = s[9]
-            self.ssl2 = s[10]
-            self.serversize2 = s[11]
+            self.name1 = s[2]
+            self.server1 = s[3]
+            self.user1 = s[4]
+            self.pass1 = s[5]
+            self.ssl1 = s[6]
+            self.serversize1 = s[7]
+            self.name2 = s[8]
+            self.server2 = s[9]
+            self.user2 = s[10]
+            self.pass2 = s[11]
+            self.ssl2 = s[12]
+            self.serversize2 = s[13]
             print 'read settings OK'
         except:
             print 'ERROR: reading settings'
@@ -165,11 +167,13 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
     def setDefaults( self, show_dialog = False ):
         self.mpenable = "-"
         self.mp = "-"
+        self.name1 = "-"
         self.server1 = "-"
         self.user1 = "-"
         self.pass1 = "-"
         self.ssl1 = "-"
         self.serversize1 = "-"
+        self.name2 = "-"
         self.server2 = "-"
         self.user2 = "-"
         self.pass2 = "-"
@@ -182,14 +186,16 @@ class Settings:#Based on code by TEAM AMT - THANKS TEAM! :-D
         
     def writeSettings( self ):
         try:
-            strSettings = '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % ( 
+            strSettings = '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s' % ( 
                 self.mpenable,
-                self.mp, 
+                self.mp,
+                self.name1,
                 self.server1,
                 self.user1,
                 self.pass1,
                 self.ssl1,
                 self.serversize1,
+                self.name2,
                 self.server2,
                 self.user2,
                 self.pass2,
