@@ -16,7 +16,7 @@
 			<posy>10</posy>
 			<width>128</width>
 			<height>128</height>
-			<texture>XinBoXText.png</texture>
+			<texture>XBXinBoXText.png</texture>
 		</control>
         	<control type="label" id="66">
 			<description>title</description>
@@ -233,11 +233,11 @@
 			<posy>90</posy>
 			<width>17</width>
 			<height>260</height>
-			<texturesliderbackground border="4">scrollbar_background.png</texturesliderbackground>
-			<texturesliderbar border="3">scrollbar_bar.png</texturesliderbar>
-			<texturesliderbarfocus border="3">scrollbar_bar_focus.png</texturesliderbarfocus>
-			<textureslidernib>scrollbar_nib.png</textureslidernib>
-			<textureslidernibfocus>scrollbar_nib_focus.png</textureslidernibfocus>
+			<texturesliderbackground border="4">XBscrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="3">XBscrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="3">XBscrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>XBscrollbar_nib.png</textureslidernib>
+			<textureslidernibfocus>XBscrollbar_nib_focus.png</textureslidernibfocus>
 			<onleft>50</onleft>
 			<onright>9000</onright>
 			<showonepage>false</showonepage>
