@@ -36,10 +36,10 @@
             		<height>300</height>
             		<spinposx>232</spinposx>
             		<spinposy>290</spinposy>
-            		<textureup>scroll-up.png</textureup>
-            		<texturedown>scroll-down.png</texturedown>
-            		<textureupfocus>scroll-up-focus.png</textureupfocus>
-            		<texturedownfocus>scroll-down-focus.png</texturedownfocus>
+            		<textureup>XBscroll-up.png</textureup>
+            		<texturedown>XBscroll-down.png</texturedown>
+            		<textureupfocus>XBscroll-up-focus.png</textureupfocus>
+            		<texturedownfocus>XBscroll-down-focus.png</texturedownfocus>
             		<font>font13</font>
             		<textcolor>FFFFFFFF</textcolor>
             		<onup>72</onup> 

@@ -32,7 +32,6 @@ SCRIPTSETDIR = SETTINGDIR + default.__scriptname__ + "\\"
 DATADIR = SCRIPTSETDIR + "data\\"
 MAILFOLDER = "mail\\"
 SCRIPTFOLDER = default.__scriptpath__
-MEDIAFOLDER = SCRIPTFOLDER + "src//skins//media//"
 TEMPFOLDER = SCRIPTSETDIR + "temp\\"
 
 class GUI( xbmcgui.WindowXML ):
@@ -70,10 +69,10 @@ class GUI( xbmcgui.WindowXML ):
         self.box1 = 0
         self.box2 = 0
         self.Fullscreen = False
-        self.notreadattach = MEDIAFOLDER + "XBemailnotreadattach.png"
-        self.notread = MEDIAFOLDER + "XBemailnotread.png"
-        self.read = MEDIAFOLDER + "XBemailread.png"
-        self.readattach = MEDIAFOLDER + "XBemailreadattach.png"
+        self.notreadattach = "XBemailnotreadattach.png"
+        self.notread = "XBemailnotread.png"
+        self.read = "XBemailread.png"
+        self.readattach = "XBemailreadattach.png"
         self.control_action = xib_util.setControllerAction()
         xbmc.log ("setup variables OK")
         return
