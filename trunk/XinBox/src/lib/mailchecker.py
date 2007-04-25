@@ -50,16 +50,18 @@ class Checkemail:
 
     def setemail ( self ):
         if self.inbox == 1:
+            self.boxname = self.settings.name1
             self.user = self.settings.user1
             self.server = self.settings.server1
             self.passw = self.settings.pass1
             self.ssl = self.settings.ssl1
         elif self.inbox == 2:
+            self.boxname = self.settings.name2
             self.user = self.settings.user2
             self.server = self.settings.server2
             self.passw = self.settings.pass2
             self.ssl = self.settings.ssl2
-        self.emfolder = DATADIR + self.user + "@" + self.server + "\\"
+        self.emfolder = DATADIR + self.boxname + "\\"
         return
 
        
@@ -76,7 +78,7 @@ class Checkemail:
         deleteok = 0
         self.setemail()
         dialog = xbmcgui.DialogProgress()
-        dialog.create( _( 0 ) + " - " + self.user,)
+        dialog.create( _( 0 ) + " - " + self.boxname,)
         if self.ssl == "-":
             mail = poplib.POP3(self.server)
         else:
@@ -99,9 +101,9 @@ class Checkemail:
         dialog.close()
         dialog = xbmcgui.Dialog()
         if deleteok == 1:
-            dialog.ok( _( 0 ) + " - " + self.user, _( 71 ) )
+            dialog.ok( _( 0 ) + " - " + self.boxname, _( 71 ) )
         else:
-            dialog.ok( _( 0 ) + " - " + self.user, _( 72 ), _( 73 ))
+            dialog.ok( _( 0 ) + " - " + self.boxname, _( 72 ), _( 73 ))
         return
     
     def removeid (self):
@@ -128,7 +130,7 @@ class Checkemail:
         self.writelist = []
         if self.minimode == 0:
             dialog = xbmcgui.DialogProgress()
-            dialog.create( _( 0 ) + " - " + self.user, _( 50 ))
+            dialog.create( _( 0 ) + " - " + self.boxname, _( 50 ))
         try:
             if self.ssl == "-":
                 mail = poplib.POP3(self.server)
@@ -140,7 +142,7 @@ class Checkemail:
             if self.minimode == 0:
                 dialog.close()
                 dialog = xbmcgui.Dialog()
-                dialog.ok( _( 0 ) + " - " + self.user, _( 55 ) )
+                dialog.ok( _( 0 ) + " - " + self.boxname, _( 55 ) )
             mail.quit()
             return
         self.buildinbox()
@@ -152,7 +154,7 @@ class Checkemail:
                 if self.minimode == 0:
                     dialog.close()
                     dialog = xbmcgui.Dialog()
-                    dialog.ok( _( 0 ) + " - " + self.user,_( 52 ) )
+                    dialog.ok( _( 0 ) + " - " + self.boxname,_( 52 ) )
                 return        
             else:
                 self.nummails = 0
@@ -180,14 +182,14 @@ class Checkemail:
                     if self.minimode == 0:
                         dialog.close()
                         dialog = xbmcgui.Dialog()
-                        dialog.ok( _( 0 ) + " - " + self.user, _( 52 ) )
+                        dialog.ok( _( 0 ) + " - " + self.boxname, _( 52 ) )
                     return
                 else:
                     count = 0
                     count2 = 1
                     if self.minimode == 0:
                         dialog = xbmcgui.DialogProgress()
-                        dialog.create( _( 0 ) + " - " + self.user,)
+                        dialog.create( _( 0 ) + " - " + self.boxname,)
                     for i in range(1, self.nummails+1):
                         try:
                             if self.minimode == 0:
@@ -216,7 +218,7 @@ class Checkemail:
                             if self.minimode == 0:
                                 dialog.close()
                                 dialog = xbmcgui.Dialog()
-                                dialog.ok( _( 0 ) + " - " + self.user, _(56) )
+                                dialog.ok( _( 0 ) + " - " + self.boxname, _(56) )
                             mail.quit()
                             return
                     self.updateoc()
@@ -224,13 +226,13 @@ class Checkemail:
                     if self.minimode == 0:
                         dialog.close()
                         dialog = xbmcgui.Dialog()
-                        dialog.ok( _( 0 ) + " - " + self.user, _(57) % self.nummails)
+                        dialog.ok( _( 0 ) + " - " + self.boxname, _(57) % self.nummails)
                     return
         except:
             if self.minimode == 0:
                 dialog.close()
                 dialog = xbmcgui.Dialog()
-                dialog.ok( _( 0 ) + " - " + self.user, _(56) )
+                dialog.ok( _( 0 ) + " - " + self.boxname, _(56) )
             mail.quit()
             return
         

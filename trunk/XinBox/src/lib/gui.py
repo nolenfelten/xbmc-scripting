@@ -88,9 +88,13 @@ class GUI( xbmcgui.WindowXML ):
             self.mmbutn.setEnabled( False )
         if self.settings.disablexb1:
             self.xb1butn.setEnabled( False )
+        else:
+            self.xb1butn.setLabel(self.settings.name1)
         if self.settings.disablexb2:
             self.xb2butn.setEnabled( False )
-        self.servsize.setVisible( False )  
+        else:
+            self.xb2butn.setLabel(self.settings.name2)
+        self.servsize.setVisible( False )
         xbmc.log ("adjusted controls OK")
         return
 
@@ -159,18 +163,20 @@ class GUI( xbmcgui.WindowXML ):
         if self.inbox == 1:
     	    self.box1 = 1
     	    self.box2 = 0
-    	    self.title.setLabel(self.settings.user1)
+    	    self.boxname = self.settings.name1
+    	    self.title.setLabel(self.boxname)
     	    self.xb1butn.setLabel( lang(65))
-    	    self.xb2butn.setLabel("XinBox 2")
-    	    self.emfolder = DATADIR + self.settings.user1 + "@" + self.settings.server1 + "\\"
+    	    self.xb2butn.setLabel(self.settings.name2)
+    	    self.emfolder = DATADIR + self.settings.name1 + "\\"
     	    self.serversize = self.settings.serversize1
         else:
     	    self.box2 = 1
     	    self.box1 = 0
-    	    self.title.setLabel(self.settings.user2)
+    	    self.boxname = self.settings.name2
+    	    self.title.setLabel(self.boxname)
     	    self.xb2butn.setLabel( lang(65))
-    	    self.xb1butn.setLabel("XinBox 1")
-    	    self.emfolder = DATADIR + self.settings.user2 + "@" + self.settings.server2 + "\\"
+    	    self.xb1butn.setLabel(self.settings.name1)
+    	    self.emfolder = DATADIR + self.settings.name2 + "\\"
     	    self.serversize = self.settings.serversize2
         if not os.path.exists(self.emfolder):
             self.disablexinbox()
@@ -244,6 +250,7 @@ class GUI( xbmcgui.WindowXML ):
         
     def getxinboxsize(self):
         size = 0
+        filecount = 0
         for files in os.listdir(self.emfolder + MAILFOLDER):
             temp = os.path.getsize(self.emfolder + MAILFOLDER + str(files))
             size = size + temp
@@ -271,7 +278,7 @@ class GUI( xbmcgui.WindowXML ):
     def addme( self ):
         xbmcgui.lock()
         self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create( lang(0), lang(76))        
+        self.dialog.create( lang(0) + " - " + self.boxname, lang(76))        
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.xbempty.setVisible( False )
         self.txtbox.reset()
@@ -378,7 +385,7 @@ class GUI( xbmcgui.WindowXML ):
     def addmylistitem(self):
         xbmcgui.lock()
         self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create( lang(0), lang(97))  
+        self.dialog.create( lang(0) + " - " + self.boxname, lang(97))  
         xbmc.executebuiltin("Skin.SetBool(xblistnotempty)")
         self.xbempty.setVisible( False )
         self.myemail = xbmcgui.ListItem("test")
