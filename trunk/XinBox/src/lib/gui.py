@@ -73,6 +73,8 @@ class GUI( xbmcgui.WindowXML ):
         self.notread = "XBemailnotread.png"
         self.read = "XBemailread.png"
         self.readattach = "XBemailreadattach.png"
+        self.newnotreadattach = "XBnewemailnotreadattach.png"
+        self.newnotread = "XBnewemailnotread.png"
         self.control_action = xib_util.setControllerAction()
         xbmc.log ("setup variables OK")
         return
@@ -417,16 +419,10 @@ class GUI( xbmcgui.WindowXML ):
                 except:
                     self.myemail = xbmcgui.ListItem(lang(96))
             self.addItem(self.myemail,0)
-            if self.readstatus == "UNREAD":
-                if attachmenty:
-                    self.myemail.setThumbnailImage(self.notreadattach)
-                else:
-                    self.myemail.setThumbnailImage(self.notread)
+            if attachmenty:
+                self.myemail.setThumbnailImage(self.newnotreadattach)
             else:
-                if attachmenty:
-                    self.myemail.setThumbnailImage(self.readattach)
-                else:
-                    self.myemail.setThumbnailImage(self.read)
+                self.myemail.setThumbnailImage(self.newnotread)
             self.mainarray.insert( 0, ids)
             self.mylistitems.insert( 0, self.myemail)
             self.emails.insert( 0, temp)
