@@ -14,14 +14,14 @@
 			<posy>-96</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>black.png</texture>
+			<texture>default-black.png</texture>
 		</control>
 		<control type="image" id="1">
 			<posx>-45</posx>
 			<posy>-11</posy>
 			<width>486</width>
 			<height>406</height>
-			<texture>dialog-panel2.png</texture>
+			<texture>default-panel.png</texture>
             <animation effect="fade" time="200">WindowOpen</animation>
             <animation effect="fade" time="200">WindowClose</animation>
 		</control>
@@ -98,7 +98,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -140,7 +140,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -159,8 +159,8 @@
                     <label>-</label>
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
-                    <texturecheckmark>settings-check-box.png</texturecheckmark>
-                    <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+                    <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                    <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
                     <markwidth>16</markwidth>
                     <markheight>20</markheight>
                     <disabledcolor>00d0d0d0</disabledcolor>
@@ -182,7 +182,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -224,7 +224,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -243,8 +243,8 @@
                     <label>-</label>
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
-                    <texturecheckmark>settings-check-box.png</texturecheckmark>
-                    <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+                    <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                    <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
                     <markwidth>16</markwidth>
                     <markheight>20</markheight>
                     <disabledcolor>00d0d0d0</disabledcolor>
@@ -266,7 +266,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -285,8 +285,8 @@
                     <label>-</label>
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
-                    <texturecheckmark>settings-check-box.png</texturecheckmark>
-                    <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+                    <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                    <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
                     <markwidth>16</markwidth>
                     <markheight>20</markheight>
                     <disabledcolor>00d0d0d0</disabledcolor>
@@ -309,7 +309,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -352,7 +352,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -395,7 +395,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -438,7 +438,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -481,7 +481,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -524,7 +524,7 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>list-focus.png</texturefocus>
+                    <texturefocus>default-list-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
@@ -543,8 +543,8 @@
                     <label>-</label>
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
-                    <texturecheckmark>settings-check-box.png</texturecheckmark>
-                    <texturecheckmarknofocus>settings-check-boxNF.png</texturecheckmarknofocus>
+                    <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                    <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
                     <markwidth>16</markwidth>
                     <markheight>20</markheight>
                     <disabledcolor>00d0d0d0</disabledcolor>
@@ -568,9 +568,10 @@
                 <label>-</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
+                <textcolor>60ffffff</textcolor>
                 <textoffsetx>17</textoffsetx>
-                <texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-                <texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+                <texturenofocus>default-keyboard-btn.png</texturenofocus>
+                <texturefocus>default-keyboard-btn-focus.png</texturefocus>
                 <onleft>9000</onleft>
                 <onright>9000</onright>
                 <onup>253</onup>
@@ -589,8 +590,8 @@
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>17</textoffsetx>
-                <texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-                <texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+                <texturenofocus>default-keyboard-btn.png</texturenofocus>
+                <texturefocus>default-keyboard-btn-focus.png</texturefocus>
                 <onleft>9000</onleft>
                 <onright>9000</onright>
                 <onup>250</onup>
@@ -610,8 +611,8 @@
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
                 <textoffsetx>17</textoffsetx>
-                <texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-                <texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+                <texturenofocus>default-keyboard-btn.png</texturenofocus>
+                <texturefocus>default-keyboard-btn-focus.png</texturefocus>
                 <onleft>9000</onleft>
                 <onright>9000</onright>
                 <onup>251</onup>
@@ -632,8 +633,8 @@
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
                 <textoffsetx>17</textoffsetx>
-                <texturenofocus>keyboard-btn-backspace.png</texturenofocus>
-                <texturefocus>keyboard-btn-backspace-focus.png</texturefocus>
+                <texturenofocus>default-keyboard-btn.png</texturenofocus>
+                <texturefocus>default-keyboard-btn-focus.png</texturefocus>
                 <onleft>9000</onleft>
                 <onright>9000</onright>
                 <onup>252</onup>

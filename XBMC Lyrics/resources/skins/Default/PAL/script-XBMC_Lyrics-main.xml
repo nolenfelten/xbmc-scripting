@@ -14,9 +14,10 @@
             <posy>70</posy>
             <width>450</width>
             <height>470</height>
-            <texture border="20,20,20,20">dialog-panel2.png</texture>
+            <texture border="20,20,20,20">default-panel.png</texture>
             <colordiffuse>BBFFFFFF</colordiffuse>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
 		<!-- ** Required ** Do not change <id> or <type> -->
@@ -33,7 +34,8 @@
 			<pagecontrol>101</pagecontrol>
             <font>font12</font>
             <textcolor>DDFFFFFF</textcolor>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
   		<control type="spincontrol" id="101">
 			<description>Next page button</description>
@@ -41,12 +43,18 @@
 			<posy>492</posy>
 			<subtype>page</subtype>
 			<font>font12</font>
+       		<textcolor>ffffffff</textcolor>
 			<onleft>101</onleft>
 			<onright>101</onright>
 			<ondown>101</ondown>
 			<onup>101</onup>
 			<showonepage>false</showonepage>
-			<include>contentpanelslide</include>
+            <textureup>default-scroll-up.png</textureup>
+            <texturedown>default-scroll-down.png</texturedown>
+            <textureupfocus>default-scroll-up-focus.png</textureupfocus>
+            <texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<visible>Control.IsVisible(100)</visible>
 		</control>
         
@@ -63,7 +71,8 @@
 			<viewtype label="535">list</viewtype>
 			<pagecontrol>111</pagecontrol>
 			<scrolltime>200</scrolltime>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<itemlayout height="29">
 				<control type="label">
 					<posx>3</posx>
@@ -72,7 +81,8 @@
 					<height>22</height>
 					<font>font13</font>
 					<aligny>center</aligny>
-					<include>listselectedcolor</include>
+                    <textcolor>DDFFFFFF</textcolor>
+                    <selectedcolor>FFe2ff43</selectedcolor>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
@@ -84,7 +94,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>Control.HasFocus(110)</visible>
-					<texture>list-focus.png</texture>
+					<texture>default-list-focus.png</texture>
 				</control>
 				<control type="label">
 					<posx>3</posx>
@@ -94,7 +104,7 @@
 					<font>font13</font>
 					<aligny>center</aligny>
                     <textcolor>FFe2ff43</textcolor>
-					<include>listselectedcolor</include>
+                    <selectedcolor>FFe2ff43</selectedcolor>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
@@ -110,8 +120,14 @@
 			<onright>110</onright>
 			<ondown>110</ondown>
 			<onup>110</onup>
+            <textcolor>ffffffff</textcolor>
+            <textureup>default-scroll-up.png</textureup>
+            <texturedown>default-scroll-down.png</texturedown>
+            <textureupfocus>default-scroll-up-focus.png</textureupfocus>
+            <texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
 			<showonepage>false</showonepage>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<visible>Control.IsVisible(110)</visible>
 		</control>
 
@@ -128,7 +144,8 @@
 			<viewtype label="535">list</viewtype>
 			<pagecontrol>121</pagecontrol>
 			<scrolltime>200</scrolltime>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<itemlayout height="29">
 				<control type="label">
 					<posx>3</posx>
@@ -136,8 +153,9 @@
 					<width>410</width>
 					<height>22</height>
 					<font>font13</font>
+                    <textcolor>ddffffff</textcolor>
 					<aligny>center</aligny>
-					<include>listselectedcolor</include>
+                    <selectedcolor>FFe2ff43</selectedcolor>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
@@ -149,7 +167,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>Control.HasFocus(120)</visible>
-					<texture>list-focus.png</texture>
+					<texture>default-list-focus.png</texture>
 				</control>
 				<control type="label">
 					<posx>3</posx>
@@ -158,7 +176,8 @@
 					<height>22</height>
 					<font>font13</font>
 					<aligny>center</aligny>
-					<include>listselectedcolor</include>
+                    <textcolor>ddffffff</textcolor>
+                    <selectedcolor>FFe2ff43</selectedcolor>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
@@ -170,12 +189,18 @@
 			<posy>492</posy>
 			<subtype>page</subtype>
 			<font>font12</font>
+            <textcolor>ffffffff</textcolor>
 			<onleft>120</onleft>
 			<onright>120</onright>
 			<ondown>120</ondown>
 			<onup>120</onup>
+            <textureup>default-scroll-up.png</textureup>
+            <texturedown>default-scroll-down.png</texturedown>
+            <textureupfocus>default-scroll-up-focus.png</textureupfocus>
+            <texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
 			<showonepage>false</showonepage>
-			<include>contentpanelslide</include>
+            <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+            <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<visible>Control.IsVisible(120)</visible>
 		</control>
 
@@ -204,7 +229,8 @@
 				<disabledcolor>60FFFFFF</disabledcolor>
 				<textcolor>FFFFFFFF</textcolor>
 				<font>special12</font>
-                <include>contentpanelslide</include>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>Artist label</description>
@@ -214,7 +240,9 @@
 				<info>MusicPlayer.Artist</info>
 				<align>left</align>
 				<font>special12</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>Title label</description>
@@ -224,7 +252,9 @@
 				<info>MusicPlayer.Title</info>
 				<align>left</align>
 				<font>special13</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>Album label</description>
@@ -234,7 +264,9 @@
 				<info>MusicPlayer.Album</info>
 				<align>left</align>
 				<font>font10</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>time label</description>
@@ -244,7 +276,9 @@
 				<label>$INFO[musicplayer.Time]$INFO[musicplayer.Duration, / ]</label>
 				<align>left</align>
 				<font>font10</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>Playlist Pos No</description>
@@ -255,7 +289,9 @@
 				<visible>!MusicPartyMode.Enabled</visible>
 				<align>right</align>
 				<font>font10</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="label" id="1">
 				<description>PartyMode Enabled</description>
@@ -266,7 +302,9 @@
 				<visible>MusicPartyMode.Enabled</visible>
 				<align>right</align>
 				<font>font10</font>
-                <include>contentpanelslide</include>
+                <textcolor>ffffffff</textcolor>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 			<control type="progress" id="1">
 				<description>Progressbar</description>
@@ -275,12 +313,13 @@
 				<width>420</width>
 				<height>5</height>
 				<info>Player.Progress</info>
-				<texturebg>progress_back.png</texturebg>
-				<lefttexture>progress_left.png</lefttexture>
-				<midtexture>progress_mid.png</midtexture>
-				<righttexture>progress_right.png</righttexture>
+				<texturebg>default-progress_back.png</texturebg>
+				<lefttexture>default-progress_left.png</lefttexture>
+				<midtexture>default-progress_mid.png</midtexture>
+				<righttexture>default-progress_right.png</righttexture>
 				<overlaytexture>-</overlaytexture>
-                <include>contentpanelslide</include>
+                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			</control>
 		</control>
     </controls>
