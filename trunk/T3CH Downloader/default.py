@@ -112,7 +112,7 @@ class Main:
         try:
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 0 ), _( 504 ), "%s" % ( os.path.join( self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
-            xbmc.executebuiltin( "XBMC.extract(%s,%s\\%s)" % ( file_path, self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ], ) )
+            xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_path, os.path.join( self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ], ), ) )
             dialog.close()
             ok = xbmcgui.Dialog().ok( _( 0 ), _( 505 ), "%s" % ( os.path.join( self.settings[ "unrar_path" ], os.path.splitext( os.path.split( file_path )[ 1 ] )[ 0 ] ), ) )
         except: 
