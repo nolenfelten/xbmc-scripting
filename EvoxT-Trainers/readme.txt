@@ -6,12 +6,12 @@ The script displays the trainers, the nfo's and it downloads\unzips\installs to 
 trainerpath.
 
 Install:
-1. build script. doubleclick the "Build.bat" in "EvoxT-Trainers\xbmc\scripts\EvoxT-Trainers\"
-2. copy/ftp "EvoxT-Trainers" folder from "EvoxT-Trainers\xbmc\scripts\EvoxT-Trainers\BUILD\"
+1. build script. doubleclick the "Build.bat" in "EvoxT-Trainers\"
+2. copy/ftp "EvoxT-Trainers" folder from "EvoxT-Trainers\BUILD\xbmc\scripts\"
    to your xbmc script dir ("q:\scripts\")
-3. copy/ftp "evt_nfo.ttf" from "EvoxT-Trainers\xbmc\media\Fonts\" to
+3. copy/ftp "evt_nfo.ttf" from "EvoxT-Trainers\BUILD\xbmc\media\Fonts\" to
    "q:\media\Fonts\"
-4. copy/ftp "Font.xml" from "EvoxT-Trainers\xbmc\skins\<skinname>\PAL\"
+4. copy/ftp "Font.xml" from "EvoxT-Trainers\BUILD\xbmc\skins\<skinname>\PAL\"
    to "q:\skins\<skinname>\PAL\". Maybe you want to rename the orig "Font.xml"
    first (e.g. "Font.xml-orig")
 5. Done!

@@ -17,8 +17,8 @@ Echo Desktop.ini>>"BUILD\exclude.txt"
 Echo.
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
-xcopy skins "BUILD\%ScriptName%\skins" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-copy default.* "BUILD\%ScriptName%\"
+xcopy xbmc "BUILD\xbmc" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+copy xbmc\scripts\%ScriptName%\default.* "BUILD\xbmc\scripts\%ScriptName%\"
 Echo.
 Echo Build Complete - Scroll Up to check for errors.
 Echo Final build is located in the BUILD folder.
