@@ -1,117 +1,170 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-	<strings>
-		<string id="0">Apple Movie Trailers</string>
-		<string id="1">xbox media center</string>
-		<string id="40">Kaikki tiedot noudetaan, kesto n.(10 - 60 minuuttia)</string>
-		<string id="41">Tiedot on päivitetään tyyleittäin. (1 - 5 minuuttia)</string>
-		<string id="42">Tallennetaan elokuva tietoja tietokantaan...</string>
-		<string id="43">Puretaan tallenteita tietokannasta...</string>
-		<string id="44">Tietokannan luonti...</string>
-		<string id="45">Munnetaan tallennetta...</string>
-		<string id="46">Tietokannan muunnos epäonnistui...</string>
-		<string id="47">Nykyinen taulukko</string>
-		<string id="48">Noudetaan tallenteita...</string>
-		<string id="49">*Voit lopettaa tietokannan luomisen milloin vain.</string>
-		<string id="50">Asetetaan skriptia:</string>
-		<string id="51">Ladataan modulia &amp; asennetaan...</string>
-		<string id="52">moduli:</string>
-		<string id="53">Tietokanta versio on epäyhteensopiva</string>
-		<string id="54">Sinun täytyy päivittää kaikki tyyli ja elokuvatiedot.</string>
-		<string id="56">Skini ei vaihdu ennenkuin käynnistät ohjelman uudestaan.</string>
-		<string id="57">Sinun käyttöliittymän asetuksissa on virhe.</string>
-		<string id="58">Tarkista skini tiedosto:</string>
-		<string id="59">Tietokanta virheellinen...</string>
-		<string id="60">Tietokantasi on sopimaton tämän ohjelmaversion kanssa.|Se täytyy muodostaa uudelleen.</string>
-		<string id="61">Päivitetään kaikki tyyli ja elokuva tiedot...</string>
-		<string id="62">Haluatko varmasti tehdä sen?</string>
-		<string id="63">Päivitys vie aikaa noin 5 - 15 minuuttia,|riippuen sinun yhteyden tiedonsiirtonopeudesta.</string>
-		<string id="64">Virhe</string>
-		<string id="65">Et voida varmasti päivittää AMT.pk tiedostoa</string>
-		<string id="66">Haetaan tyyli tietoja...</string>
-		<string id="67">Odota hetki.</string>
-		<string id="69">Tietojen haussa ilmeni virhe yhdessä tai useamassa tyylissä.</string>
-		<string id="70">Haetaan elokuvan tietoja...</string>
-		<string id="71">Tyyli:</string>
-		<string id="72">Tietojen haussa ilmeni virhe yhdessä tai useamassa elokuvassa.</string>
-		<string id="73">Tyhjennetään välimuistikansio...</string>
-		<string id="74">Jos et tyhjennä välimuistia, päivitys on|nopeampaa, mutta kaikkia tiedostoja ei päivitetä.</string>
-		<string id="75">Asemassa ei ole tarpeeksi tyhjää tilaa</string>
-		<string id="76">Asema</string>
-		<string id="77">Vapaana</string>
-		<string id="78">Tilaa tarvitaan</string>
-		<string id="79">Ladataan...</string>
-		<string id="80">KB/s</string>
-		<string id="81">Kaikkia tarvittavia moduleja ei löytynyt</string>
-		<string id="82">Haluatko varmasti poistaa</string>
-		<string id="83">Ladataan tietokanta...</string>
-		<string id="84">Tallennetaan tietokanta...</string>
-		<string id="85">Suoritetaan kysely...</string>
-		<string id="86">Toiminto keskeytetty.</string>
-		<string id="87">Nykyinen tyyli</string>
-		<string id="88">Nykyinen elokuva</string>
-		<string id="89">Tietokannan luonnissa tapahtui virhe.</string>
-		<string id="103">Tyyli...</string>
-		<string id="104">Studio...</string>
-		<string id="105">Näyttelijä...</string>
-		<string id="106">Etsi...</string>
-		<string id="107">Asetukset...</string>
-		<string id="113">Tyyli</string>
-		<string id="114">Studio</string>
-		<string id="115">Näyttelijä</string>
-		<string id="150">Uusimmat</string>
-		<string id="151">Erinomaiset</string>
-		<string id="152">Suosikit</string>
-		<string id="153">Ladatut</string>
-		<string id="156">Juoni</string>
-		<string id="157">Näyttelijät</string>
-		<string id="158">Täysi</string>
-		<string id="159">Minimi</string>
-		<string id="201">Skini</string>
-		<string id="203">Muoto</string>
-		<string id="207">Pikakuvake #1</string>
-		<string id="208">Pikakuvake #2</string>
-		<string id="209">Pikakuvake #3</string>
-		<string id="231">*Skinistä riippuvainen</string>
-		<string id="250">Ok</string>
-		<string id="251">Peruuta</string>
-		<string id="252">Päivitä</string>
-		<string id="253">Tekijät</string>
-		<string id="400">*Juonta ei löydy tälle nimikkeelle.</string>
-		<string id="401">*Näyttelijä luetteloa ei löydy tälle nimikkeelle.</string>
-        <string id="501">Toista elokuva</string>
-        <string id="502">Lisää suosikkeihin</string>
-        <string id="503">Poista suosikeista</string>
-        <string id="504">Merkitse katsotuksi </string>
-        <string id="505">Merkitse katsomattomaksi</string>
-        <string id="506">Päivitä elokuvan tiedot</string>
-        <string id="508">Poista tallennetut elokuvat</string>
-        <string id="509">Esitysmäärä teattereissa</string>
-        <string id="511">Näytä tämä Tyyli</string>
-        <string id="512">Päivitä tyyli</string>
-        <string id="521">Näytä tämä Studio</string>
-        <string id="531">Näytä tämä Näyttelijä</string>
-        <string id="550">Viimeistele täysi asennus</string>
-        <string id="901">Tekijät:</string>
-		<string id="902">Kiitokset:</string>
-		<string id="903">Skinin tekijät:</string>
-		<string id="1000">Sinun ohjelmaa ei tarvitse päivittää.</string>
-		<string id="1001">Uudempi versio ohjelmasta...</string>
-		<string id="1002">on saatavilla</string>
-		<string id="1003">Haluatako päivittää ohjelman?</string>
-		<string id="1004">Noudetaan tiedostolistaa...</string>
-		<string id="1005">Odota hetki...</string>
-		<string id="1006">Versio</string>
-		<string id="1007">Haetaan:</string>
-		<string id="1008">Polku:</string>
-		<string id="1009">Tiedosto:</string>
-		<string id="1010">Uusi versio on tallennettu:</string>
-		<string id="2020">Matala</string>
-		<string id="2021">Keski</string>
-		<string id="2022">Korkea</string>
-		<string id="2030">Striimaa</string>
-		<string id="2031">Lataa</string>
-		<string id="2032">Lataa &amp; tallenna</string>
-		<string id="2050">Elokuva juliste</string>
-		<string id="2051">Yleinen pienoiskuvake</string>
-		<string id="2052">Pois</string>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- v.5.5.2007 Finnish -->
+  <string id="0">Apple Movie Trailers</string>
+  <string id="1">xbox media center</string>
+  <!-- Dialog Messages -->
+  <string id="40">Kaikki tiedot noudetaan, kesto n.(10 - 60 minuuttia)</string>
+  <string id="41">Tiedot on päivitetään tyyleittäin. (1 - 5 minuuttia)</string>
+  <string id="42">Tallennetaan elokuva tietoja tietokantaan...</string>
+  <string id="43">Puretaan tallenteita tietokannasta...</string>
+  <string id="44">Tietokannan luonti...</string>
+  <string id="45">Munnetaan tallennetta...</string>
+  <string id="46">Tietokannan muunnos epäonnistui...</string>
+  <string id="47">Nykyinen taulukko</string>
+  <string id="48">Noudetaan tallenteita...</string>
+  <string id="49">Voit lopettaa tietokannan luomisen milloin vain.</string>
+  <string id="50">Käynnistetään skriptia:</string>
+  <string id="51">Ladataan modulia &amp; asennetaan...</string>
+  <string id="52">moduli:</string>
+  <string id="53">Tietokanta versio on epäyhteensopiva</string>
+  <string id="54">Sinun täytyy päivittää kaikki tyyli ja elokuvatiedot.</string>
+  <string id="55">Ladataan skini ja luodaan käyttöliittymä.</string>
+  <string id="56">Siirretään elokuvaa tallennuskansioon.</string>
+  <string id="57">Sinun käyttöliittymän asetuksissa on virhe.</string>
+  <string id="58">Tarkista skini tiedosto:</string>
+  <string id="59">Tietokanta täytyy päivittää...</string>
+  <string id="60">Tietokantasi on sopimaton tämän ohjelmaversion kanssa.\nSe täytyy muodostaa uudelleen.</string>
+  <string id="61">Päivitetään kaikki tyyli ja elokuva tiedot...</string>
+  <string id="62">Haluatko varmasti tehdä sen?</string>
+  <string id="63">Päivitys vie aikaa noin 5 - 15 minuuttia.</string>
+  <string id="64">Virhe</string>
+  <string id="65">Käsitellään xml tiedostoja kaikkien esittelyjen verkko-osoitteille</string>
+  <string id="66">Haetaan tyyli tietoja...</string>
+  <string id="67">Odota hetki.</string>
+  <string id="68">Haetaan:</string>
+  <string id="69">Tietojen haussa ilmeni virhe yhdessä tai useamassa tyylissä.</string>
+  <string id="70">Haetaan elokuvan tietoja...</string>
+  <string id="71">Tyyli:</string>
+  <string id="72">Tietojen haussa ilmeni virhe yhdessä tai useamassa elokuvassa.</string>
+  <string id="73">Tyhjennetään välimuistikansio...</string>
+  <string id="74">Jos et tyhjennä välimuistia, päivitys on|nopeampaa, mutta kaikkia tietoja ei päivitetä.</string>
+  <string id="75">Asemassa ei ole tarpeeksi tyhjää tilaa</string>
+  <string id="76">Asema</string>
+  <string id="77">Vapaana</string>
+  <string id="78">Tilaa tarvitaan</string>
+  <string id="79">Ladataan...</string>
+  <string id="80">KB/s</string>
+  <string id="81">Kaikkia tarvittavia moduleja ei löydy!</string>
+  <string id="82">Haluatko varmasti poistaa</string>
+  <string id="83">Ladataan tietokanta...</string>
+  <string id="84">Tallennetaan tietokanta...</string>
+  <string id="85">Suoritetaan kysely...</string>
+  <string id="86">Toiminto keskeytettiin.</string>
+  <string id="87">Nykyinen tyyli</string>
+  <string id="88">Nykyinen elokuva</string>
+  <string id="89">Tietokannan luonnissa tapahtui virhe.</string>
+  <string id="90">Elokuvan siirrossa tapahtui virhe!</string>
+
+  <!-- Buttons and Labels -->
+  <string id="103">Tyyli...</string>
+  <string id="104">Studio...</string>
+  <string id="105">Näyttelijä...</string>
+  <string id="106">Etsi...</string>
+  <string id="107">Asetukset...</string>
+
+  <string id="113">Tyyli</string>
+  <string id="114">Studio</string>
+  <string id="115">Näyttelijä</string>
+    
+  <string id="150">Uusimmat</string>
+  <string id="151">Erinomaiset</string>
+  <string id="152">Suosikit</string>
+  <string id="203">Ladatut</string>
+  <string id="154">Päivitä</string>
+  <string id="155">Tekijät</string>
+  <string id="156">Juoni</string>
+  <string id="157">Pääosissa</string>
+  <string id="158">Täysi</string>
+  <string id="159">Minimi</string>
+  
+  <!-- Settings labels -->
+  <string id="200">Valitse:</string>
+  <string id="201">Skini</string>
+  <string id="202">Esittelyn laatu</string>
+  <string id="203">Muoto</string>
+  <string id="204">Tallennuskansio</string>
+  <string id="205">Kuvakenäkymä</string>
+  <string id="206">Aloitus kategoria</string>
+  <string id="207">Pikavalinta #1</string>
+  <string id="208">Pikavalinta #2</string>
+  <string id="209">Pikavalinta #3</string>
+  <string id="210">Päivitä käynnistyessä uusimmat</string>
+  <string id="211">Video soittimen resoluutio</string>
+  <string id="212">Esitysten etsijä</string>
+  <string id="213">Zip koodi</string>
+  <string id="214">Tarkista päivitykset käynnistyessä</string>
+  
+  <!-- Settings choices -->
+  <string id="2020">Matala</string>
+  <string id="2021">Keski</string>
+  <string id="2022">Korkea</string>
+  <string id="2030">Striimaa</string>
+  <string id="2031">Lataa</string>
+  <string id="2032">Lataa &amp; tallenna</string>
+  <string id="2050">Elokuva juliste</string>
+  <string id="2051">Yleinen kuvake</string>
+  <string id="2052">Pois</string>
+  <string id="2110">Ei muuteta</string>
+  
+  <!-- Settings error messages -->
+  <string id="230">Asetusten tallennuksessa tapahtui virhe!</string>
+  <string id="231">Skinistä riippuva</string>
+
+  <!-- Settings restart required message -->
+  <string id="240">Muutokset vaativat ohjelman uudelleenkäynnistyksen.</string>
+  <string id="241">Haluatko uudellenkäynnistää nyt ?</string>
+ 
+  <!-- Settings buttons -->
+  <string id="250">Ok</string>
+  <string id="251">Peruuta</string>
+  <string id="252">Päivitä</string>
+  <string id="253">Tekijät</string>
+  <string id="254">Sivu</string>
+  <string id="255">Käynnistä</string>
+  <string id="256">Myöhemmin</string>
+ 
+  <!-- Plot/Cast Error Information -->
+  <string id="400">Tälle nimikkeelle ei löydy juonta.</string>
+  <string id="401">Näyttelijä luetteloa ei löydy tälle nimikkeelle.</string>
+ 
+  <!-- Context Menu -->
+  <string id="501">Toista esittely</string>
+  <string id="502">Lisää suosikkeihin</string>
+  <string id="503">Poista suosikeista</string>
+  <string id="504">Merkitse katsotuksi </string>
+  <string id="505">Merkitse katsomattomaksi</string>
+  <string id="506">Päivitä elokuvan tiedot</string>
+  <string id="507">Siirrä tallennuskansioon</string>
+  <string id="508">Poista tallennut esittelyt</string>
+  <string id="509">Teatterin esityskerrat</string>
+  <string id="511">Näytä tyyli</string>
+  <string id="512">Päivitä tyyli</string>
+  <string id="513">Päivitä kaikki tyylit</string>
+  <string id="521">Näytä studio</string>
+  <string id="531">Näytä näyttelijä</string>
+  <string id="550">Viimeistele täysiasennus</string>
+    
+  <!-- Credits -->
+  <string id="900">Versio</string>
+  <string id="901">Tekijät:</string>
+  <string id="902">Kiitokset:</string>
+  <string id="903">Skinin tekijät:</string>
+
+  <!-- Update messages -->  
+  <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
+  <string id="1001">Noudetaan uusinta versiota...</string>
+  <string id="1002">on uudempi</string>
+  <string id="1003">Haluatko päivittää ohjelman?</string>
+  <string id="1004">Haetaan tiedostoluetteloa...</string>
+  <string id="1005">Odota...</string>
+  <string id="1006">Versio</string>
+  <string id="1007">Haetaan:</string>
+  <string id="1008">Polku:</string>
+  <string id="1009">Tiedosto:</string>
+  <string id="1010">Ohjelma tallennettiin kansioon:</string>
+
+  <!-- Update error messages -->
+  <string id="1030">Nimettyä versiota ei löydetty!</string>
+  <string id="1031">Päivitys ei onnistunut!</string>
 </strings>

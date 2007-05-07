@@ -9,7 +9,7 @@ import os
 import xbmc
 import xbmcgui
 
-DEBUG_MODE = 4
+DEBUG_MODE = 0
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
