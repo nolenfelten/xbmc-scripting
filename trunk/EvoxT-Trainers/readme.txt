@@ -1,5 +1,5 @@
 
-Version: 0.8
+Version: 0.9
 
 Release notes:
 EvoxT-Trainers is a Xbox trainer downloader script for XBMC. It grabs all
