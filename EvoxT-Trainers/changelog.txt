@@ -1,0 +1,9 @@
+
+version 0.9:
+- added: default.tbn icon (big thanks to Hack0r)
+- changed: new banner (big thanks to Hack0r)
+- changed: date position
+- fixed: creating settings dir problem
+
+version 0.8:
+- first public release
