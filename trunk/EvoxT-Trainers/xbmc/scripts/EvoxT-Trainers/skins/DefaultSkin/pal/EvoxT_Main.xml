@@ -13,18 +13,18 @@
 		</control>
 
 		<control type="image" id="61">
-			<description>EvoxT Logo</description>
-			<posx>10</posx>
-			<posy>8</posy>
-			<width>440</width>
-			<height>75</height>
-			<texture>evt_logo.png</texture>
+			<description>EvoxT Banner</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>720</width>
+			<height>90</height>
+			<texture>evt_banner.png</texture>
 		</control>
 
 		<control type="label" id="62">
 			<description>date label</description>
 			<posx>700</posx>
-			<posy>30</posy>
+			<posy>10</posy>
 			<align>right</align>
 			<label>$INFO[System.Date]</label>
 			<width>500</width>

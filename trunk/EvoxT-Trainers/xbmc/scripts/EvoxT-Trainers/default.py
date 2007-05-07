@@ -27,7 +27,8 @@ Section8_URL = Main_URL + '/t-browse.php?section=8'
 
 SCRIPTDIR = os.getcwd().replace(';','')+'\\'
 TEMPDIR = os.path.join(SCRIPTDIR,'temp')
-SETTINGSDIR = os.path.join('P:\\script_data',__scriptname__)
+SETTINGSDIR = 'P:\\script_data\\'
+SCRIPTSETDIR = SETTINGSDIR + __scriptname__ + '\\'
 
 def setControllerAction(): #Thanks to AMT Team for this :-D
     return {
@@ -59,10 +60,10 @@ def setControllerAction(): #Thanks to AMT Team for this :-D
 class EvoxTGUI( xbmcgui.WindowXML ):
 
     def onInit(self):
+        self.make_dirs()
         self.getmycontrols()
         self.textarea.setVisible(False)
         self.resetlist()
-        self.make_dirs()
         self.set_trainerpath()
         self.control_action = setControllerAction()
         dialog.update(30, 'Fetching recently added trainers')
@@ -229,15 +230,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         return date
 
     def set_trainerpath(self):
-        if os.path.exists(os.path.join(SETTINGSDIR,'settings.txt')):
-            data = open(os.path.normpath(os.path.join(SETTINGSDIR,'settings.txt')), 'r')
+        if os.path.exists(os.path.join(SCRIPTSETDIR,'settings.txt')):
+            data = open(os.path.normpath(os.path.join(SCRIPTSETDIR,'settings.txt')), 'r')
             settings = data.read().split('\n')
             settings.pop()
             data.close()
             tpath = settings[0]
         else:
             tpath = dia.browse(0,'Trainerpath:','files')
-            settings_file = open(os.path.join(SETTINGSDIR,'settings.txt'), 'w')
+            settings_file = open(os.path.join(SCRIPTSETDIR,'settings.txt'), 'w')
             settings_file.write(os.path.normpath(os.path.join(tpath + '\n')))
             settings_file.close()
         self.TRAINERPATH = os.path.normpath(os.path.join(tpath))
@@ -255,6 +256,8 @@ class EvoxTGUI( xbmcgui.WindowXML ):
     def make_dirs(self):
         if not os.path.exists(SETTINGSDIR):
             os.mkdir(SETTINGSDIR)
+        if not os.path.exists(SCRIPTSETDIR):
+            os.mkdir(SCRIPTSETDIR)
         if not os.path.exists(TEMPDIR):
             os.mkdir(TEMPDIR)
         return
@@ -313,8 +316,8 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         elif ( button_key == 'White Button' or button_key == 'Keyboard Backspace Button' ):
             if (focusid != 5):
                 try:
-                    if os.path.exists(os.path.join(SETTINGSDIR,'settings.txt')):
-                        os.remove(os.path.join(SETTINGSDIR,'settings.txt'))
+                    if os.path.exists(os.path.join(SCRIPTSETDIR,'settings.txt')):
+                        os.remove(os.path.join(SCRIPTSETDIR,'settings.txt'))
                     self.set_trainerpath()
                 except:pass
 
