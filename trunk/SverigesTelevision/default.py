@@ -53,7 +53,6 @@ class SVTGui(xbmcgui.WindowXML):
 
 		self.base_path = os.getcwd().replace(';','')
 
-		self.img_path = os.path.join(os.getcwd()[:-1], 'skins', 'media')
 		self.svt = SVTMedia()
 
 		self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
@@ -114,11 +113,9 @@ class SVTGui(xbmcgui.WindowXML):
 		for desc, url, type in self.data:
 			item = xbmcgui.ListItem (label=desc)
 			if type is SVTMedia.DIR:
-				img = os.path.join(self.img_path, 'folder.png')
-				item.setThumbnailImage(img)
+				item.setThumbnailImage('folder.png')
 			elif type is SVTMedia.VIDEO:
-				img = os.path.join(self.img_path, 'video-x-generic.png')
-				item.setThumbnailImage(img)
+				item.setThumbnailImage('video-x-generic.png')
 			list.addItem(item)
 		xbmcgui.unlock()
 
