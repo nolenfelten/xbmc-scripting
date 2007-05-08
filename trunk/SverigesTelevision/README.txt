@@ -1,23 +1,32 @@
 --------------------------------------------------------------------------------
- Sveriges Television for Xbox Media Center v0.91
+ Sveriges Television for Xbox Media Center v0.93
 --------------------------------------------------------------------------------
+
  By: Daniel Svensson, <dsvensson@gmail.com>
 
- To get the high quality streams you need to update the video core of XBMC.
+ Requirements: T3CH XBMC 2007-05-07 SVN rev8807 is known to work.
 
- 1. http://www.xboxmediacenter.com/forum/showthread.php?t=23969
-    The mplayer snapshot from 2007-01-17 seems to work well, haven't tried
-    earlier or later versions.
+ With this script you don't need any antenna to your TV any longer to enjoy
+ the contents of Swedish Television. I myself gave up the antenna cable up
+ months ago, and soon I've forgotten what it feels like to bang your head
+ against crappy shows just because you got stuck in the sofa. This script
+ does in fact make you spend your time much more efficient than you used
+ to. You can watch the news at any time you wish, get your latest Kobra
+ fix or laugh at Kvarteret Skatan seven o'clock in the morning.
 
- 2. Extract the zip file and put mplayer.dll and codecs.conf
-    in XBMC/system/players/mplayer on the xbox.
+ In the dark ages of XBMC you needed to mess around with snapshots of
+ mplayer builds to get the good quality clips. Thanks to the workings
+ of some leet spare time hackers this is no longer needed and you can
+ now just lean back in your sofa and chillax to all the great content
+ SVT has to offer.
 
- If you like this script and feel like chipping in a buck or two for
- my future TV licenses, and XBMC script hacks, you can donate using
- the email above over at http://www.paypal.com
+ If you like this script and feel like chipping in a buck or two, so that
+ I can pay my future my future TV licenses, and spend more time on XBMC
+ script hacks, you can donate using the email above over at PayPal.
 
  If you are a Swede and have no TV license yourself I strongly suggest
  you use that money to get one on your own pronto!
 
- http://svt.se/svt/jsp/Crosslink.jsp?d=50813&lid=Fri_television
+ Long Live Free (as in speech) Television!
 
+ http://svt.se/svt/jsp/Crosslink.jsp?d=50813&lid=Fri_television
