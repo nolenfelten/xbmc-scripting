@@ -531,7 +531,7 @@
 			<onup>100</onup>
 			<ondown>10</ondown>
             <visible allowhiddenfocus="true">Control.IsVisible(100)</visible> 
-		</control-->
+		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="111">

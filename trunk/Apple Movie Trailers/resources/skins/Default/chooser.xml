@@ -44,7 +44,6 @@
 			<width>300</width>
 			<height>290</height>
 			<texture>\dialog-panel.png</texture>
-			<visible>false</visible>
 		</control>
 		
         <!-- ** Optional ** Do not change <description> or <type> -->
@@ -70,7 +69,6 @@
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>214</label>
-			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -81,7 +79,6 @@
 			<width>128</width>
 			<height>72</height>
 			<texture>-</texture>
-			<visible>false</visible>
 			<aspectratio>keep</aspectratio>
 		</control>
 		
@@ -96,7 +93,6 @@
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 			<label>231</label>
-			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -127,7 +123,6 @@
 			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
-			<visible>false</visible>
 		</control>
 
 		<!-- ** Required ** Do not change <description> or <type> -->
@@ -159,7 +154,6 @@
 			<textxoff>0</textxoff>
 			<textxoff2>0</textxoff2>
 			<aligny>center</aligny>
-			<visible>false</visible>
 		</control>
 
 	</controls>
