@@ -1,6 +1,6 @@
 __scriptname__ = 'EvoxT-Trainers'
 __author__ = 'bootsy'
-__version__ = '0.9'
+__version__ = '0.91'
 import xbmc, xbmcgui
 
 dia = xbmcgui.Dialog()
@@ -27,6 +27,7 @@ Section8_URL = Main_URL + '/t-browse.php?section=8'
 
 SCRIPTDIR = os.getcwd().replace(';','')+'\\'
 TEMPDIR = os.path.join(SCRIPTDIR,'temp')
+DEFAULTTRAINERDIR = os.path.join(SCRIPTDIR,'trainers')
 SETTINGSDIR = 'P:\\script_data\\'
 SCRIPTSETDIR = SETTINGSDIR + __scriptname__ + '\\'
 
@@ -237,11 +238,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
             data.close()
             tpath = settings[0]
         else:
-            tpath = dia.browse(0,'Trainerpath:','files')
+            tpath = dia.browse(0,'Select Trainerpath:','files', '', False, False, DEFAULTTRAINERDIR)
             settings_file = open(os.path.join(SCRIPTSETDIR,'settings.txt'), 'w')
             settings_file.write(os.path.normpath(os.path.join(tpath + '\n')))
             settings_file.close()
+            dia.ok(__scriptname__,'Actual Trainerpath:', tpath)
         self.TRAINERPATH = os.path.normpath(os.path.join(tpath))
+
+    def get_trainerpath(self):
+        dia.ok(__scriptname__,'Actual Trainerpath:', self.TRAINERPATH)
 
     def set_section(self, sec):
         self.section = sec
@@ -258,6 +263,8 @@ class EvoxTGUI( xbmcgui.WindowXML ):
             os.mkdir(SETTINGSDIR)
         if not os.path.exists(SCRIPTSETDIR):
             os.mkdir(SCRIPTSETDIR)
+        if not os.path.exists(DEFAULTTRAINERDIR):
+            os.mkdir(DEFAULTTRAINERDIR)
         if not os.path.exists(TEMPDIR):
             os.mkdir(TEMPDIR)
         return
@@ -289,8 +296,6 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 self.trainerlist.setVisible(True)
                 self.setFocus(self.trainerlist)
             elif dia.yesno(__scriptname__, 'Exit script?'):
-                #if os.path.exists(os.path.join(TEMPDIR)):
-                    #os.remove(os.path.join(TEMPDIR))
                 self.close()
         elif ( button_key == 'Y Button' or button_key == 'Keyboard Menu Button'or button_key == 'Remote Title' ):
             if (focusid == 81):
@@ -316,9 +321,10 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         elif ( button_key == 'White Button' or button_key == 'Keyboard Backspace Button' ):
             if (focusid != 5):
                 try:
-                    if os.path.exists(os.path.join(SCRIPTSETDIR,'settings.txt')):
-                        os.remove(os.path.join(SCRIPTSETDIR,'settings.txt'))
-                    self.set_trainerpath()
+                    if dia.yesno(__scriptname__, 'Change Trainerpath?', 'Actual: ' + self.TRAINERPATH):
+                        if os.path.exists(os.path.join(SCRIPTSETDIR,'settings.txt')):
+                            os.remove(os.path.join(SCRIPTSETDIR,'settings.txt'))
+                        self.set_trainerpath()
                 except:pass
 
     def onClick(self, controlID):
