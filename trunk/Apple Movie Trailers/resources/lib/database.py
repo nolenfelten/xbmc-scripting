@@ -6,10 +6,10 @@ Nuka1195
 
 import sys
 import os
-#import traceback
 import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
+#import traceback
 
 import utilities
 
@@ -23,8 +23,8 @@ class Database:
     def __init__( self, *args, **kwargs ):
         self.query = Query()
         self.db_version, self.complete = self._get_version()
-        if ( not self.db_version ): 
-            print "***ERROR: Incompatible database!"
+        if ( not self.db_version ):
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Incompatible database!", __scriptname__, __version__, )
             raise
 
     def _get_version( self ):
@@ -155,13 +155,16 @@ class Database:
             return ok
 
         msg = ( _( 53 ), _( 54 ), )
-        if ( version == "pre-0.97.1" or version == "pre-0.97.2" or version == "pre-0.97.3" ):
+        if ( version == "pre-0.97.1" or version == "pre-0.97.2" or version == "pre-0.97.3" or version == "pre-0.97.4" or version == "pre-0.97.5"  or version == "pre-0.97.6" ):
             try:
                 _progress_dialog()
+                ok = True
                 if ( version == "pre-0.97.1" ):
                     ok = _update_table()
+                if ( not ok ): raise
                 if ( version == "pre-0.97.1" or version == "pre-0.97.2" ):
                     ok = _update_records()
+                if ( not ok ): raise
                 if ( version == "pre-0.97.3" ):
                     ok, updated = _update_completed()
                     if ( updated ): complete = False
@@ -172,7 +175,7 @@ class Database:
                 msg = ( _( 59 ), _( 46 ), )
             _progress_dialog( -1 )
             if ( ok ): return ( __version__, complete )
-        xbmcgui.Dialog().ok( msg[ 0 ], msg[ 1 ] )
+        xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
         raise
 
 
@@ -263,10 +266,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return self.cursor.lastrowid
         except:
-            print "*** ERROR: Records.add() ***"
-            print sql
-            #print params
-            #traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::add [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def delete( self, table, columns, params, commit=False ):
@@ -279,10 +279,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            print "*** ERROR: Records.delete() ***"
-            print sql
-            #print params
-            #traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::delete [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def update( self, table, columns, params, key, commit=False ):
@@ -304,10 +301,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            print "*** ERROR: Records.update() ***"
-            print sql
-            #print params
-            #traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::update [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def fetch( self, sql, params=None, all=False ):
@@ -355,3 +349,5 @@ class Query( dict ):
 
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
+
+        self[ "HD_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE '%p.mov%' ORDER BY title;"

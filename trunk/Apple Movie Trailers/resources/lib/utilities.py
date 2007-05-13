@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.97.4", "0.97.4", "pre-0.97.5", "0.97.5", )
-SETTINGS_VERSIONS = ( "pre-0.97.5", "0.97.5", )
+DATABASE_VERSIONS = ( "pre-0.98", "0.98", )
+SETTINGS_VERSIONS = DATABASE_VERSIONS
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -36,6 +36,7 @@ TOGGLE_DISPLAY = ( 216, 257, 61448, )
 CONTEXT_MENU = ( 229, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
+MOVEMENT = ( 166, 167, 168, 169, 270, 271, 272, 273, 61477, 61478, 61479, 61480 )
 # Log status codes
 LOG_INFO, LOG_ERROR, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 

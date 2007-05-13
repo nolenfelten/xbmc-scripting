@@ -11,7 +11,7 @@ from PIL import Image, ImageEnhance
 
 def makeThumbnails( poster ):
     try:
-        size = ( 26, 38 )
+        size = ( 104, 154 )#( 26, 38 )261x385
         thumbnail = "%s.png" % ( os.path.splitext( poster )[0], )
         watched_thumbnail = "%s-w.png" % ( os.path.splitext( poster )[0], )
         im = Image.open( poster )
