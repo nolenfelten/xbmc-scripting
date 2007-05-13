@@ -40,12 +40,14 @@ class GUI( xbmcgui.WindowXML ):
     CONTROL_BUTTON_GROUP_END = 109
     CONTROL_TRAILER_LIST_START = 50
     CONTROL_TRAILER_LIST_END = 59
-    CONTROL_TRAILER_LIST_PAGE = 2050
+    CONTROL_TRAILER_LIST_PAGE_START = 2050
+    CONTROL_TRAILER_LIST_PAGE_END = 2059
     CONTROL_TRAILER_LIST_COUNT = 2150
     CONTROL_CATEGORY_LIST = 60
     CONTROL_CATEGORY_LIST_PAGE = 2060
     CONTROL_CATEGORY_LIST_COUNT = 2160
     CONTROL_CAST_LIST = 70
+    CONTROL_CAST_LIST_PAGE = 2070
     CONTROL_CAST_BUTTON = 170
     CONTROL_PLOT_TEXTBOX = 75
     CONTROL_PLOT_BUTTON = 175
@@ -711,7 +713,7 @@ class GUI( xbmcgui.WindowXML ):
                     elif ( action.getButtonCode() in utilities.MOVEMENT or action.getButtonCode() in ( 262, 263, ) ):
                         self.showTrailerInfo()
                     ###############################################################
-                elif ( self.controlId == self.CONTROL_TRAILER_LIST_PAGE ):
+                elif ( self.CONTROL_TRAILER_LIST_PAGE_START <= self.controlId <= self.CONTROL_TRAILER_LIST_PAGE_END ):
                     if ( action.getButtonCode() in utilities.MOVEMENT_UP or action.getButtonCode() in utilities.MOVEMENT_DOWN ):
                         self.showTrailerInfo()
                 elif ( self.controlId == self.CONTROL_CATEGORY_LIST ):
