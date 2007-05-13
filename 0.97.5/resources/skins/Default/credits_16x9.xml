@@ -1,0 +1,220 @@
+<window>
+
+<!--
+    The <resolution> tag is used for the setCoordinateResolution() function.
+    
+	You may move, add or delete any controls you want as long as they're not Required.
+	With one exception, required controls <description> tag and <type> tag MUST NOT be changed.
+	The exception is <type>label</type> may be changed to <type>button</type>.	This allows 
+	<shadowcolor> tag to be used. (set <texturenofocus>-</texturenofocus> if doing this.)
+	
+	<include> tags DO NOT work and the defaults.xml file WILL NOT be used for any missing tags.
+	
+	To use special images from the /gfx/ folder prepend a \. (eg <texture>\background.png</texture>)
+	
+	The Skin Credits Label and List is where you add your credits.
+-->
+	
+	<!--defaultcontrol>703</defaultcontrol-->
+	<resolution>PAL16x9</resolution>
+	<coordinates>
+		<system>1</system>
+		<posx>161</posx>
+		<posy>88</posy>
+	</coordinates>
+	
+    <controls>
+        <!-- ** Optional ** -->
+		<control type="image" id="1">
+			<description>Background Image</description>
+			<posx>60</posx>
+			<posy>40</posy>
+			<width>280</width>
+			<height>320</height>
+			<texture>\dialog-panel.png</texture>
+			<visible>true</visible>
+		</control>
+		
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="700">
+			<description>Credits Label</description>
+			<posx>75</posx>
+			<posy>48</posy>
+			<width>175</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>-</label>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="701">
+			<description>Credits Version Label</description>
+			<posx>330</posx>
+			<posy>48</posy>
+			<width>150</width>
+			<align>right</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<label>-</label>
+			<visible>true</visible>
+		</control>
+
+        <!-- ** Required ** Do not change <description> or <type> -->
+		<control type="fadelabel" id="708">
+			<description>SVN URL Label</description>
+			<posx>75</posx>
+			<posy>315</posy>
+			<width>250</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>DDced8da</textcolor>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="label" id="702">
+			<description>Team Credits Label</description>
+			<posx>85</posx>
+			<posy>80</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>901</label>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="703">
+			<description>Team Credits List</description>
+			<posx>73</posx>
+			<posy>100</posy>
+			<width>267</width>
+			<height>100</height>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>0</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="704">
+			<description>Additional Credits Label</description>
+			<posx>85</posx>
+			<posy>170</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>902</label>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<control type="list" id="705">
+			<description>Additional Credits List</description>
+			<posx>73</posx>
+			<posy>190</posy>
+			<width>267</width>
+			<height>100</height>
+			<label>Xbox Media Center</label>
+			<label2>Team XBMC</label2>
+			<label>Graphics</label>
+			<label2>Chokemaniac</label2>
+			<label>Usability</label>
+			<label2>Spiff</label2>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>0</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>true</visible>
+		</control>
+		
+		<!-- ** Required ** Do not change <description> -->
+		<control type="label" id="706">
+			<description>Skin Credits Label</description>
+			<posx>85</posx>
+			<posy>260</posy>
+			<width>200</width>
+			<align>left</align>
+			<font>font10</font>
+			<textcolor>60ffffff</textcolor>
+			<label>903</label>
+			<visible>true</visible>
+		</control>
+
+		<!-- ** Required ** Do not change <description> or <type> -->
+		<!-- This control is where you add your credits.
+				( <label> for left column and <label2> for right column )
+				( you may have multiple <label> and <label2> tags )-->
+		<control type="list" id="707">
+			<description>Skin Credits List</description>
+			<posx>73</posx>
+			<posy>280</posy>
+			<width>267</width>
+			<height>100</height>
+			<label>Graphics</label>
+			<label2>Chokemaniac</label2>
+			<spinwidth>18</spinwidth>
+			<spinheight>16</spinheight>
+			<spinposx>419</spinposx>
+			<spinposy>404</spinposy>
+			<spincolor>ffffffff</spincolor>
+			<spinfont>font10</spinfont>
+			<textureup>\scroll-up.png</textureup>
+			<texturedown>\scroll-down.png</texturedown>
+			<textureupfocus>\scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>\scroll-down-focus.png</texturedownfocus>
+			<texturefocus>-</texturefocus>
+			<texturenofocus>-</texturenofocus>
+			<image>-</image>
+			<textureheight>20</textureheight>
+			<itemwidth>0</itemwidth>
+			<font>font10</font>
+			<textcolor>ffffffff</textcolor>
+			<suffix>|</suffix>
+			<textxoff>0</textxoff>
+			<textxoff2>0</textxoff2>
+			<aligny>center</aligny>
+			<visible>true</visible>
+		</control>
+
+	</controls>
+</window>
