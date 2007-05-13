@@ -1,0 +1,81 @@
+Index: GUIPythonWindowXML.cpp
+===================================================================
+--- GUIPythonWindowXML.cpp	(revision 8918)
++++ GUIPythonWindowXML.cpp	(working copy)
+@@ -192,6 +192,11 @@
+   UpdateButtons();
+ }
+ 
++void CGUIPythonWindowXML::Select(bool bOnOff)
++{
++  int iItem = m_viewControl.GetSelectedItem();
++  m_vecItems[iItem]->Select(bOnOff);
++}
+ 
+ int CGUIPythonWindowXML::GetCurrentListPosition()
+ {
+Index: GUIPythonWindowXML.h
+===================================================================
+--- GUIPythonWindowXML.h	(revision 8918)
++++ GUIPythonWindowXML.h	(working copy)
+@@ -25,6 +25,7 @@
+   CFileItem*      GetListItem(int position);
+   int             GetCurrentListPosition();
+   void            SetCurrentListPosition(int item);
++  void            Select(bool bOnOff);
+ protected:
+   CGUIControl     *GetFirstFocusableControl(int id);
+   virtual void    UpdateButtons();
+Index: winxml.cpp
+===================================================================
+--- winxml.cpp	(revision 8918)
++++ winxml.cpp	(working copy)
+@@ -244,7 +244,32 @@
+     Py_INCREF(sListItem);
+     return (PyObject *)sListItem;
+   }
+-  
++
++  PyDoc_STRVAR(select__doc__,
++    "select(selected) -- Sets the media listitem's selected status.\n"
++    "\n"
++    "selected        : bool - True=selected/False=not selected\n"
++    "\n"
++    "example:\n"
++    "  - self.select(True)\n");
++
++  PyObject* WindowXML_Select(WindowXML *self, PyObject *args)
++  {
++    if (!self->pWindow) return NULL;
++    
++    CGUIPythonWindowXML * pwx = (CGUIPythonWindowXML*)self->pWindow;
++
++    bool bOnOff = false;
++    if (!PyArg_ParseTuple(args, "b", &bOnOff)) return NULL;
++
++    PyGUILock();
++    pwx->Select(bOnOff);
++    PyGUIUnlock();
++
++    Py_INCREF(Py_None);
++    return Py_None;
++  }
++
+   PyDoc_STRVAR(windowXML__doc__,
+     "WindowXML class.\n"
+     "\n"
+@@ -257,12 +282,13 @@
+     );
+   PyMethodDef WindowXML_methods[] = {
+     {"addItem", (PyCFunction)WindowXML_AddItem, METH_VARARGS, addItem__doc__},
+-	{"removeItem", (PyCFunction)WindowXML_RemoveItem, METH_VARARGS, removeItem__doc__},
++	  {"removeItem", (PyCFunction)WindowXML_RemoveItem, METH_VARARGS, removeItem__doc__},
+     {"refreshList", (PyCFunction)WindowXML_RefreshList, METH_VARARGS, RefreshList__doc__},
+     {"getCurrentListPosition", (PyCFunction)WindowXML_GetCurrentListPosition, METH_VARARGS,getCurrentListPosition__doc__},
+     {"setCurrentListPosition", (PyCFunction)WindowXML_SetCurrentListPosition, METH_VARARGS,setCurrentListPosition__doc__},
+     {"getListItem", (PyCFunction)WindowXML_GetListItem, METH_VARARGS,getListItem__doc__},
+     {"clearList", (PyCFunction)WindowXML_ClearList, METH_VARARGS, ClearList__doc__},
++    {"select", (PyCFunction)WindowXML_Select, METH_VARARGS, select__doc__},
+     {NULL, NULL, 0, NULL}
+   };
+ // Restore code and data sections to normal.
