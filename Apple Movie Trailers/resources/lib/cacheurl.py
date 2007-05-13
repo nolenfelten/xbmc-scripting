@@ -10,17 +10,17 @@ import xbmc
 import xbmcgui
 import urllib2
 import md5
-import traceback
+#import traceback
 import time
 import socket
 import utilities
 
 socket.setdefaulttimeout( 20 )
 
-__scriptname__ = 'cacheurl'
-__version__ = '0.1'
+__module_name__ = 'cacheurl'
+__module_version__ = '0.1'
 __useragent__ = 'iTunes/4.7'
-#__useragent__ = '%s/%s' % ( __scriptname__, __version__ )
+#__useragent__ = '%s/%s' % ( __module_name__, __module_version__ )
 
 _ = sys.modules[ "__main__" ].__language__
 
@@ -66,7 +66,7 @@ def byte_measurement( bytes, detailed = False ):
 
 class HTTP:
     def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
-        # set the cache directory; default to a .cache directory off of the location where this module is
+        # set the cache directory; default to a .cache directory in BASE_DATA_PATH
         self.cache_dir = cache
         if self.cache_dir.startswith( '.' ):
             self.cache_dir = os.path.join( utilities.BASE_DATA_PATH, self.cache_dir )
@@ -74,7 +74,7 @@ class HTTP:
         # title is the real name of the trailer, used for saving
         self.title = title
         
-        # flat_cache means that each request will be cached in a single reused file; basically a non-persistent cache
+        # flat_cache means that each request will be cached to a special folder; basically a non-persistent cache
         self.flat_cache = flat_cache
 
         # normally, an md5 hexdigest will be used to determine a unique filename for each request, but with actual_filename set to True, the real filename will be used
@@ -93,7 +93,7 @@ class HTTP:
                     os.remove( os.path.join( root, name ) )
                 os.rmdir( root )
         except:
-            traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
 
     def urlopen( self, url ):
         # retrieve the file so it is cached
@@ -146,7 +146,7 @@ class HTTP:
             except:
                 opened = urllib2.urlopen( request )
         except:
-            traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
             return ""
 
@@ -189,7 +189,7 @@ class HTTP:
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
                     return ''
         except:
-            traceback.print_exc()
+            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::freespace [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
             return ""
             
@@ -219,7 +219,7 @@ class HTTP:
                     xbmcgui.Dialog().ok( _(64), '[%i] %s' % ( errno, strerror ) )
                     break
                 except:
-                    traceback.print_exc()
+                    utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
                     break
             filehandle.close()
         except:
@@ -292,6 +292,5 @@ class HTTPProgressSave( HTTPProgress ):
                     f.write( 'nocache=1' )
                     f.close()
             except:
-                traceback.print_exc()
-                pass
+                utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
         return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )

@@ -62,6 +62,8 @@
     <string id="105">Actor...</string>
     <string id="106">Search...</string>
     <string id="107">Settings...</string>
+    <string id="108">Show credits</string>
+    <string id="109">Update script</string>
 
     <string id="113">Genre</string>
     <string id="114">Studio</string>
@@ -106,7 +108,7 @@
     <string id="2051">Generic Thumb</string>
     <string id="2052">Off</string>
     <string id="2110">Do not change</string>
-    
+
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>
     <string id="231">*Skin dependent</string>

@@ -77,7 +77,10 @@ class Trailers:
         self.query = database.Query()
         newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
-            self.refreshGenre( ( newest_genre, ), last_updated )
+            import utilities
+            settings = utilities.Settings().get_settings()
+            if ( settings[ "refresh_newest" ] ):
+                self.refreshGenre( ( newest_genre, ), last_updated )
 
     def ns( self, text ):
         base_ns = '{http://www.apple.com/itms/}'

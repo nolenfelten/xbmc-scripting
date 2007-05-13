@@ -2,109 +2,103 @@
 Main GUI for Apple Movie Trailers
 """
 
-def createProgressDialog( __line2__, __line3__="" ):
-    global dialog, pct
-    pct = 0
-    dialog = xbmcgui.DialogProgress()
-    dialog.create( _( 0 ) )
-    updateProgressDialog( __line2__, __line3__ )
-
-def updateProgressDialog( __line2__, __line3__="" ):
-    global dialog, pct
-    pct += 10
-    dialog.update( pct, _( 50 ), __line2__, __line3__ )
-
-def closeProgessDialog():
-    global dialog
-    dialog.close()
-    
 import sys
 import xbmcgui
 
+dialog = xbmcgui.DialogProgress()
+def _progress_dialog( count=0, msg="" ):
+    if ( count is None ):
+        dialog.create( __scriptname__ )
+    elif ( count > 0 ):
+        percent = int( count * ( float( 100 ) / ( len( modules ) + 1 ) ) )
+        dialog.update( percent, _( 50 ), _( 51 ), msg )
+    else:
+        dialog.close()
+    
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 try:
-    createProgressDialog( _( 51 ), "%s os" % ( _( 52 ), ))
-    import os
-    updateProgressDialog( _( 51 ), "%s xbmc" % ( _( 52 ), ))
-    import xbmc
-    updateProgressDialog( _( 51 ), "%s traceback" % ( _( 52 ), ))
-    import traceback
-    updateProgressDialog( _( 51 ), "%s threading" % ( _( 52 ), ))
-    import threading
-    updateProgressDialog( _( 51 ), "%s guibuilder" % ( _( 52 ), ))
-    import guibuilder
-    updateProgressDialog( _( 51 ), "%s context_menu" % ( _( 52 ), ))
-    import context_menu
-    import utilities
-    updateProgressDialog( _( 51 ), "%s cacheurl" % ( _( 52 ), ))
-    import cacheurl
-    updateProgressDialog( _( 51 ), "%s shutil, datetime" % ( _( 52 ), ))
-    import shutil
-    import datetime
+    _progress_dialog( None )
+    modules = ( "os", "xbmc", "traceback", "utilities", "context_menu", "cacheurl", "shutil", "datetime", )
+    for count, module in enumerate( modules ):
+        _progress_dialog( count + 1, "%s %s" % ( _( 52 ), module, ) )
+        exec "import %s" % module
 except:
-    closeProgessDialog()
     traceback.print_exc()
-    xbmcgui.Dialog().ok( _( 0 ), _( 81 ) )
+    _progress_dialog( -1 )
+    xbmcgui.Dialog().ok( __scriptname__, _( 81 ) )
     raise
 
 
-class GUI( xbmcgui.Window ):
-    def __init__( self ):
+class GUI( xbmcgui.WindowXML ):
+    # control id's
+    CONTROL_TITLE_LABEL = 20
+    CONTROL_CATEGORY_LABEL = 30
+    CONTROL_BUTTON_GROUP_START = 103
+    CONTROL_BUTTON_GROUP_END = 109
+    CONTROL_TRAILER_LIST_START = 50
+    CONTROL_TRAILER_LIST_END = 59
+    CONTROL_TRAILER_LIST_PAGE = 2050
+    CONTROL_TRAILER_LIST_COUNT = 2150
+    CONTROL_CATEGORY_LIST = 60
+    CONTROL_CATEGORY_LIST_PAGE = 2060
+    CONTROL_CATEGORY_LIST_COUNT = 2160
+    CONTROL_CAST_LIST = 70
+    CONTROL_CAST_BUTTON = 170
+    CONTROL_PLOT_TEXTBOX = 75
+    CONTROL_PLOT_BUTTON = 175
+
+    def __init__( self, *args, **kwargs ):
+        xbmcgui.lock()
+        self.startup = True
+        ########self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
+        ##self.Timer = None
+        self._get_settings()
+        
+    def onInit( self ):
+        if ( self.startup ):
+            self.startup = False
+            ## remove when search is done ##
+            self.getControl( 106 ).setEnabled( False )
+            self._set_video_resolution()
+            self._set_labels()
+            xbmcgui.unlock()
+            self._setup_variables()
+            self._set_startup_choices()
+            self._set_startup_category()
+
+    def _set_labels( self ):
         try:
-            ##self.Timer = None
-            self.context_menu = None
-            base_path = os.getcwd().replace( ";", "" )
-            self.debug = os.path.isfile( os.path.join( base_path, "debug.txt" ))
-            ##self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
-            self.getSettings()
-            self.gui_loaded = self._load_gui( self.settings[ "skin" ] )
-            if ( not self.gui_loaded ): raise
-            else:
-                updateProgressDialog( _( 67 ) )
-                ## enable when ready
-                self.controls["Search Button"]["control"].setEnabled( False )
-                self.setupVariables()
-                closeProgessDialog()
-                self.setStartupChoices()
-                self.setStartupCategory()
+            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( __scriptname__ )
+            for button_id in range( self.CONTROL_BUTTON_GROUP_START, self.CONTROL_BUTTON_GROUP_END + 1 ):
+                self.getControl( button_id ).setLabel( _( button_id ) )
         except:
-            closeProgessDialog()
-            traceback.print_exc()
-            self.gui_loaded = False
-            self.exitScript()
-                
-    def getSettings( self ):
+            pass
+
+    def _get_settings( self ):
         self.settings = utilities.Settings().get_settings()
-        ##if ( self.settings[ "videoplayer_displayresolution" ] != 10 ):
-        ##    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
-        ##else:
-        ##    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
 
-    def _load_gui( self, skin ):
-        updateProgressDialog( _( 55 ) )
-        gb = guibuilder.GUIBuilder()
-        gui_loaded, self.image_path = gb.create_gui( self, skin=skin, language=_ )
-        #closeProgessDialog()
-        #if ( not ok ):
-        #    xbmcgui.Dialog().ok( _( 0 ), _( 57 ), _( 58 ), os.path.join( skin_path, xml_file ))
-        return gui_loaded
+    def _set_video_resolution( self, default=False ):
+        pass
+        #if ( self.settings[ "videoplayer_displayresolution" ] != 10 and not default ):
+        #    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
+        #else:
+        #    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
 
-    def setupVariables( self ):
+    def _setup_variables( self ):
         import trailers
         import database
         self.trailers = trailers.Trailers()
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
-        self.context_menu = context_menu.GUI( skin=self.skin )
         self.flat_cache = ( unicode( "", "utf-8" ), "", )
         self.sql = ""
         self.params = None
         self.display_cast = False
         ##self.dummy()
-        #self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
+        ##self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         #self.controller_action = utilities.buttoncode_dict()
         self.update_method = 0
         self.list_control_pos = [ 0, 0, 0, 0 ]
@@ -112,34 +106,32 @@ class GUI( xbmcgui.Window ):
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     ##def dummy( self ):
-        ##self.Timer = threading.Timer( 60*60*60, self.dummy,() )
-        ##self.Timer.start()
+    ##    self.Timer = threading.Timer( 60*60*60, self.dummy,() )
+    ##    self.Timer.start()
 
     ##def myPlayerChanged( self, event ):
     ##    pass
-        #self.debugWrite("myPlayerChanged", 2)
         #if ( event == 0 and self.currently_playing_movie[1] >= 0 ):
         #    self.markAsWatched( self.currently_playing_movie[0] + 1, self.currently_playing_movie[1], self.currently_playing_movie[2] )
         #elif ( event == 2 ):
         #    self.currently_playing_movie = -1
         #    self.currently_playing_genre = -1
         
-    def setStartupChoices( self ):
-        self.sql_category = ""#"SELECT title, count, url, id, loaded FROM Genres ORDER BY title"
+    def _set_startup_choices( self ):
+        self.sql_category = ""
         self.params_category = None
         self.main_category = utilities.GENRES
         self.genres = self.trailers.categories
         self.current_display = [ [ utilities.GENRES , 0 ], [ 0, 1 ] ]
         self.setShortcutLabels()
 
-    def setStartupCategory( self ):
+    def _set_startup_category( self ):
         startup_button = "Shortcut1"
         if ( self.settings[ "startup_category_id" ] == self.settings[ "shortcut2" ] ): startup_button = "Shortcut2"
         elif ( self.settings[ "startup_category_id" ] == self.settings[ "shortcut3" ] ): startup_button = "Shortcut3"
-        self.setControlNavigation( "%s Button" % ( startup_button, ) )
         self.setCategory( self.settings[ "startup_category_id" ], 1 )
 
-    def setCategory( self, category_id = utilities.GENRES, list_category = 0 ):
+    def setCategory( self, category_id=utilities.GENRES, list_category=0 ):
         self.category_id = category_id
         self.list_category = list_category
         if ( list_category > 0 ):
@@ -176,155 +168,101 @@ class GUI( xbmcgui.Window ):
             self.showCategories( sql )
         self.showControls( self.category_id <= utilities.GENRES and self.category_id > utilities.FAVORITES )
         if ( self.category_id <= utilities.GENRES and self.category_id > utilities.FAVORITES ):
-            if ( self.trailers.categories ): self.setFocus( self.controls[ "Category List" ][ "control" ] )
+            if ( self.trailers.categories ): self.setFocus( self.getControl( self.CONTROL_CATEGORY_LIST ) )
         else:
-            if ( self.trailers.movies ): self.setFocus( self.controls[ "Trailer List" ][ "control" ] )
+            if ( self.trailers.movies ): self.setFocus( self.getControl( self.CONTROL_TRAILER_LIST_START ) )
     
-    def showCategories( self, sql, params=None, choice = 0, force_update = False ):
+    def showCategories( self, sql, params=None, choice=0, force_update=False ):
+        xbmcgui.lock()
         try:
-            #self.debugWrite("getGenreCategories", 2)
-            xbmcgui.lock()
             if ( sql != self.sql_category or params != self.params_category or force_update ):
                 self.list_control_pos[ self.list_category ] = choice
                 self.trailers.getCategories( sql, params )
                 self.sql_category = sql
                 self.params_category = params
-                self.controls[ "Category List" ][ "control" ].reset()
+                self.getControl( self.CONTROL_CATEGORY_LIST ).reset()
                 if ( self.trailers.categories ):
+                    thumbnail = "generic-%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], )
                     for category in self.trailers.categories:
-                        if ( self.category_id ) == utilities.GENRES: thumb_category = "genre"
-                        elif ( self.category_id ) == utilities.STUDIOS: thumb_category = "studio"
-                        else: thumb_category = "actor"
-                        thumbnail = os.path.join( self.image_path, "%s.tbn" % ( category.title, ))
-                        if ( not os.path.isfile( thumbnail )):
-                            thumbnail = os.path.join( self.image_path, "generic-%s.tbn" % ( thumb_category, ) )
                         count = "(%d)" % ( category.count, )
-                        self.controls[ "Category List" ][ "control" ].addItem( xbmcgui.ListItem( category.title, count, thumbnail, thumbnail ) )
-                    ################
-                    self.setSelection( "Category List", self.list_control_pos[ self.list_category ] )
-                    #self.setSelection( "Trailer List", choice + ( choice == -1 ) )
+                        self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( xbmcgui.ListItem( category.title, count, "", thumbnail ) )
+                    self._set_selection( self.CONTROL_CATEGORY_LIST, self.list_control_pos[ self.list_category ] )
         except: traceback.print_exc()
         xbmcgui.unlock()
 
-    def showTrailers( self, sql, params=None, choice = 0, force_update = False ):
+    def showTrailers( self, sql, params=None, choice=0, force_update=False ):
         try:
             if ( sql != self.sql or params != self.params or force_update ):
                 self.list_control_pos[ self.list_category ] = choice
-                self.trailers.getMovies( sql, params )
-            else: choice = self.list_control_pos[ self.list_category ]
-            xbmcgui.lock()
-            self.sql = sql
-            self.params = params
-            self.controls[ "Trailer List" ][ "control" ].reset()
-            if ( self.trailers.movies ):
-                for movie in self.trailers.movies: # now fill the list control
-                    if ( self.settings[ "thumbnail_display" ] == 0 ): 
-                        if ( movie.watched ): thumbnail = movie.thumbnail_watched
-                        else: thumbnail = movie.thumbnail
-                    elif ( self.settings[ "thumbnail_display" ] == 1 ): thumbnail = os.path.join( self.image_path, "generic-trailer.tbn" )
-                    else: thumbnail = ""
-                    favorite = [ "", "*" ][ movie.favorite ]
-                    favorite = [ favorite, "!" ][ not movie.trailer_urls ]
-                    if ( movie.rating ): rating = "[%s]" % movie.rating
-                    else: rating = ""
-                    self.controls[ "Trailer List" ][ "control" ].addItem( xbmcgui.ListItem( "%s%s" % ( favorite, movie.title, ), rating, thumbnail, thumbnail ) )
-                self.setSelection( "Trailer List", choice + ( choice == -1 ) )
-            else: self.clearTrailerInfo()
+                if ( force_update != 2 ):
+                    self.trailers.getMovies( sql, params )
+                ##else:
+                ##    choice = self.list_control_pos[ self.list_category ]
+                #print "showTrailers Inside If"
+                #xbmcgui.lock()
+                self.sql = sql
+                self.params = params
+                self.clearList()
+                #print "passed clearList"
+                if ( self.trailers.movies ):
+                    #print "movies exists"
+                    for movie in self.trailers.movies: # now fill the list control
+                        ## remove poster if can't use ListItem.Icon
+                        poster = ( movie.poster, "blank-poster.tbn", )[ not movie.poster ]
+                        thumbnail = ( ( movie.thumbnail_watched, movie.thumbnail )[ not movie.watched ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+                        favorite = ( "", "*", )[ movie.favorite ]
+                        urls = ( "", "!", )[ not movie.trailer_urls ]
+                        rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
+                        list_item = xbmcgui.ListItem( "%s%s%s" % ( favorite, urls, movie.title, ), rating, poster, thumbnail )
+                        list_item.select( movie.favorite )
+                        self.addItem( list_item )
+                        #print "pass addItem"
+                    self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
+                else: self.clearTrailerInfo()
         except:
             traceback.print_exc()
-        xbmcgui.unlock()
+        #xbmcgui.unlock()
 
-    def calcScrollbarVisibilty( self, list_control ):
-        if ( self.controls[list_control]["special"] ):
-            if ( ( ( self.category_id >= 0 or self.category_id <= utilities.FAVORITES ) and list_control != "Category List" ) or 
-                ( self.category_id <= utilities.GENRES and self.category_id > utilities.FAVORITES and list_control == "Category List" ) ):
-                visible = ( self.controls[list_control]["control"].size() > self.getListControlItemsPerPage( list_control ) )
-                if ( list_control == "Cast List" and not self.display_cast ):
-                    visible = False
-                self.showScrollbar( visible, list_control )
-                ######self.setSelection( list_control )
-            else: self.showScrollbar( False, list_control )
-
-    def getListControlItemsPerPage( self, list_control ):
-        height = self.controls[ list_control ][ "control" ].getItemHeight() + self.controls[ list_control ][ "control" ].getSpace()
-        totalheight = self.controls[ list_control ][ "control" ].getHeight() - height
-        items_per_page = int(float(totalheight) / float(height))
-        return items_per_page
-        
-    def showScrollbar( self, visible, list_control ):
-        try:
-            self.controls["%s Scrollbar Position Indicator" % ( list_control, )]["control"].setVisible( visible )
-            self.controls["%s Scrollbar Position Indicator" % ( list_control, )]["control"].setEnabled( visible )
-        except: pass
-            
-    def setScrollbarIndicator( self, list_control ):
-        try:
-            if ( self.controls[list_control]["special"] ):
-                if ( self.controls[list_control]["control"].size() > self.getListControlItemsPerPage( list_control ) ):
-                    offset = float( self.controls["%s Scrollbar Middle" % ( list_control, )][ "control" ].getHeight() - self.controls["%s Scrollbar Position Indicator" % ( list_control, )][ "control" ].getHeight() ) / float( self.controls[list_control]["control"].size() - 1 )
-                    posy = int( self.controls["%s Scrollbar Middle" % ( list_control, )][ "control" ].getPosition()[ 1 ] + ( offset * self.controls[list_control]["control"].getSelectedPosition() ) )
-                    self.controls["%s Scrollbar Position Indicator" % ( list_control, )]["control"].setPosition( self.controls["%s Scrollbar Position Indicator" % ( list_control, )][ "control" ].getPosition()[ 0 ], posy )
-        except: pass
-        if ( list_control != "Cast List" ): self.list_control_pos[ self.list_category ] = self.controls[list_control]["control"].getSelectedPosition()
-            
-    def setSelection( self, list_control, pos = 0 ):
-        #self.debugWrite("setSelection", 2)
-        self.controls[list_control]["control"].selectItem( pos )
+    def _set_selection( self, list_control, pos=0 ):
+        ##self.controls[list_control]["control"].selectItem( pos )
         #self.setFocus( self.controls[list_control]["control"] )
-        if ( list_control == "Trailer List" ): self.showTrailerInfo()
-        elif ( list_control == "Category List" ): choice = self.setCountLabel( "Category List" )
-        self.setScrollbarIndicator( list_control )
-
-    def pageIndicator( self, list_control, page ):
-        #self.debugWrite("pageIndicator", 2)
-        current_pos = self.controls[list_control]["control"].getSelectedPosition()
-        total_items = self.controls[list_control]["control"].size()
-        items_per_page = self.getListControlItemsPerPage( list_control )
-        current_pos += page * items_per_page
-        if ( current_pos < 0 ): current_pos = 0
-        elif ( current_pos >= total_items ): current_pos = total_items - 1
-        self.setSelection( list_control, current_pos )
-
-    def setControlNavigation( self, button ):
-        #self.debugWrite("setControlNavigation", 2)
-        self.controls["Trailer List"]["control"].controlLeft( self.controls[button]["control"] )
+        #print "_set_selection", list_control, pos
         try:
-            self.controls["Cast List Scrollbar Position Indicator"]["control"].controlRight( self.controls[button]["control"] )
-        except:
-            self.controls["Cast List"]["control"].controlRight( self.controls[button]["control"] )
-            
-        
+            if ( list_control == self.CONTROL_TRAILER_LIST_START ): 
+                self.setCurrentListPosition( pos )
+                #print "setCurrentListPosition", pos
+                self.showTrailerInfo()
+                #print "showTrailerInfo from _set_selection"
+            elif ( list_control == self.CONTROL_CATEGORY_LIST ):
+                choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
+        except: traceback.print_exc()
+
     def showControls( self, category ):
+        xbmcgui.lock()
         try:
-            xbmcgui.lock()
-            self.controls["Category List"]["control"].setVisible( category )
-            self.controls["Category List"]["control"].setEnabled( category and self.trailers.categories != None )
-            self.controls["Trailer List"]["control"].setVisible( not category )
-            self.controls["Trailer List"]["control"].setEnabled( not category and self.trailers.movies != None )
-            self.calcScrollbarVisibilty( "Trailer List" )
-            self.calcScrollbarVisibilty( "Category List" )
+            self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( category )
+            self.getControl( self.CONTROL_CATEGORY_LIST ).setEnabled( category and self.trailers.categories is not None )
+            #self.getControl( self.CONTROL_TRAILER_LIST_START ).setVisible( not category )
+            #self.getControl( self.CONTROL_TRAILER_LIST_START ).setEnabled( not category and self.trailers.movies is not None )
             self.showPlotCastControls( category )
             self.setCategoryLabel()
-        except: pass
+        except: traceback.print_exc()#pass
         xbmcgui.unlock()
             
     def showPlotCastControls( self, category ):
+        xbmcgui.lock()
         try:
-            xbmcgui.lock()
-            self.controls["Plot Button"]["control"].setVisible( self.display_cast and not category )
-            self.controls["Plot Button"]["control"].setEnabled( self.display_cast and not category )
-            self.controls["Cast Button"]["control"].setVisible( not self.display_cast and not category )
-            self.controls["Cast Button"]["control"].setEnabled( not self.display_cast and not category )
-            self.calcScrollbarVisibilty( "Cast List" )
+            #print "showPlotCastControls",self.display_cast
+            self.getControl( self.CONTROL_PLOT_BUTTON ).setVisible( self.display_cast and not category )
+            self.getControl( self.CONTROL_PLOT_BUTTON ).setEnabled( self.display_cast and not category )
         except: pass
         xbmcgui.unlock()
             
     def togglePlotCast( self ):
-        #self.debugWrite("togglePlotCast", 2)
         self.display_cast = not self.display_cast
         self.showPlotCastControls( False )
-        if ( self.display_cast ): self.setFocus( self.controls["Plot Button"]["control"] )
-        else: self.setFocus( self.controls["Cast Button"]["control"] )
+        if ( self.display_cast ): self.setFocus( self.getControl( self.CONTROL_PLOT_BUTTON ) )
+        else: self.setFocus( self.getControl( self.CONTROL_CAST_BUTTON ) )
 
     def setCategoryLabel( self ):
         category= "oops"
@@ -342,122 +280,123 @@ class GUI( xbmcgui.Window ):
             if ( self.list_category == 3 ):
                 category = self.actor
             elif ( self.list_category == 2 ):
-                category = self.trailers.categories[self.category_id].title
+                category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
-                category = self.genres[self.category_id].title
-        self.controls["Category Label"]["control"].setLabel( category )
+                category = self.genres[ self.category_id ].title
+        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( category )
             
-    def setCountLabel( self, list_control ):
-        pos = self.controls["%s" % list_control]["control"].getSelectedPosition()
-        self.controls["%s Count Label" % list_control]["control"].setLabel( "%d of %d" % ( pos + 1, self.controls["%s" % list_control]["control"].size(), ))
+    def _set_count_label( self, list_control ):
+        if ( list_control == self.CONTROL_TRAILER_LIST_START ):
+            pos = self.getCurrentListPosition()
+            self.getControl( self.CONTROL_TRAILER_LIST_COUNT ).setLabel( "%d of %d" % ( pos + 1, len( self.trailers.movies ), ) )
+        else:
+            pos = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
+            self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "%d of %d" % ( pos + 1, self.getControl( self.CONTROL_CATEGORY_LIST ).size(), ) )
+        self.list_control_pos[ self.list_category ] = pos
         return pos
     
     def clearTrailerInfo( self ):
-        self.controls["Trailer Poster"]["control"].setImage( "" )
-        self.controls["Trailer Rating"]["control"].setImage( "" )
-        self.controls["Trailer Title"]["control"].setLabel( "" )
+        self.getControl( 201 ).setImage( "" )
+        self.getControl( 202 ).setImage( "" )
+        self.getControl( 206 ).setLabel( "" )
         # Plot
-        self.controls["Trailer Plot"]["control"].reset()
-        self.controls["Trailer Plot"]["control"].setText( "" )
+        self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
+        #self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( "" )
         # Cast
-        self.controls["Cast List"]["control"].reset()
-        self.controls["Trailer List Count Label"]["control"].setLabel( "" )
+        self.getControl( self.CONTROL_CAST_LIST ).reset()
+        #self.controls["Trailer List Count Label"]["control"].setLabel( "" )
         self.showOverlays( -1 )
         
     def showTrailerInfo( self ):
+        xbmcgui.lock()
         try:
-            #self.debugWrite("showTrailerInfo", 2)
-            xbmcgui.lock()
-            trailer = self.setCountLabel( "Trailer List" )
-            poster = self.trailers.movies[trailer].poster
-            if ( not poster ): poster = os.path.join( self.image_path, "blank-poster.tbn" )
-            self.controls["Trailer Poster"]["control"].setImage( poster )
-            self.controls["Trailer Rating"]["control"].setImage( self.trailers.movies[trailer].rating_url )
-            self.controls["Trailer Title"]["control"].setLabel( self.trailers.movies[trailer].title )
+            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+            ##poster = self.trailers.movies[ trailer ].poster
+            ##if ( not poster ):
+            ##    poster = "blank-poster.tbn"
+            poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+            self.getControl( 201 ).setImage( poster )
+            #print xbmc.getInfoImage("ListItem.Thumb")
+            #print xbmc.getInfoImage("ListItem.Icon")
+            self.getControl( 202 ).setImage( self.trailers.movies[ trailer ].rating_url )
+            self.getControl( 206 ).setLabel( self.trailers.movies[ trailer ].title )
             # Plot
-            self.controls["Trailer Plot"]["control"].reset()
-            plot = self.trailers.movies[trailer].plot
-            if ( plot ):
-                self.controls["Trailer Plot"]["control"].setText( plot )
-            else: self.controls["Trailer Plot"]["control"].setText( _( 400 ) )
+            self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
+            self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] )
+            #plot = self.trailers.movies[ trailer ].plot
+            #if ( plot ):
+            #    self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( plot )
+            #else:
+            #    self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( _( 400 ) )
             # Cast
-            self.controls["Cast List"]["control"].reset()
-            cast = self.trailers.movies[trailer].cast
+            self.getControl( self.CONTROL_CAST_LIST ).reset()
+            cast = self.trailers.movies[ trailer ].cast
             if ( cast ):
                 self.cast_exists = True
+                thumbnail = "generic-actor.tbn"
                 for actor in cast:
-                    thumbnail = os.path.join( self.image_path, "generic-actor.tbn" )
-                    self.controls["Cast List"]["control"].addItem( xbmcgui.ListItem( actor[ 0 ], "", thumbnail, thumbnail ) )
+                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", "", thumbnail ) )
             else: 
                 self.cast_exists = False
-                self.controls["Cast List"]["control"].addItem( _( 401 ) )
+                self.getControl( self.CONTROL_CAST_LIST ).addItem( _( 401 ) )
             self.showPlotCastControls( False )
-            #self.calcScrollbarVisibilty( "Cast List" )
-            self.setScrollbarIndicator( "Trailer List" )
-            self.setScrollbarIndicator( "Cast List" )
             self.showOverlays( trailer )
         except: pass
         xbmcgui.unlock()
         
     def showOverlays( self, trailer=-1 ):
-        if ( trailer >= 0 ):
-            posx, posy = self.controls["Trailer Favorite Overlay"][ "control" ].getPosition()
-            favorite = self.trailers.movies[trailer].favorite
-            posx = posx - ( favorite * self.controls["Trailer Favorite Overlay"][ "control" ].getWidth() )
-            watched = self.trailers.movies[trailer].watched > 0
-            self.controls["Trailer Watched Overlay"]["control"].setPosition( posx, posy )
-            posx = posx - ( watched * self.controls["Trailer Watched Overlay"][ "control" ].getWidth() )
-            saved = ( self.trailers.movies[trailer].saved != "" )
-            self.controls["Trailer Saved Overlay"]["control"].setPosition( posx, posy )
-        else:
-            favorite = False
-            watched = False
-            saved = False
-        self.controls["Trailer Favorite Overlay"]["control"].setVisible( favorite )
-        self.controls["Trailer Watched Overlay"]["control"].setVisible( watched )
-        self.controls["Trailer Saved Overlay"]["control"].setVisible( saved )
+        #if ( trailer >= 0 ):
+        #    posx, posy = self.getControl( 203 ).getPosition()
+        #    favorite = self.trailers.movies[trailer].favorite
+        #    posx = posx - ( favorite * self.getControl( 203 ).getWidth() )
+        #    watched = self.trailers.movies[trailer].watched > 0
+        #    self.getControl( 204 ).setPosition( posx, posy )
+        #    posx = posx - ( watched * self.getControl( 204 ).getWidth() )
+        #    saved = ( self.trailers.movies[trailer].saved != "" )
+        #    self.getControl( 205 ).setPosition( posx, posy )
+        #else:
+        #    favorite = False
+        #    watched = False
+        #    saved = False
+        #self.getControl( 203 ).setVisible( favorite )
+        #self.getControl( 204 ).setVisible( watched )
+        #self.getControl( 205 ).setVisible( saved )
+        self.getControl( 203 ).setVisible( self.trailers.movies[trailer].favorite )
+        self.getControl( 204 ).setVisible( self.trailers.movies[trailer].watched )
+        self.getControl( 205 ).setVisible( self.trailers.movies[trailer].saved != "" )
 
     def getTrailerGenre( self ):
-        #self.debugWrite("getTrailerGenre", 2)
-        genre = self.controls["Category List"]["control"].getSelectedPosition()
+        genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
         if ( self.main_category == utilities.STUDIOS ): 
             list_category = 2
         elif ( self.main_category == utilities.ACTORS ): 
             list_category = 3
-            self.actor = self.controls["Category List"]["control"].getSelectedItem().getLabel()
+            self.actor = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedItem().getLabel()
         else: list_category = 1
         self.setCategory( genre, list_category )
 
     def getActorChoice( self ):
-        choice = self.controls["Cast List"]["control"].getSelectedPosition()
-        self.actor = self.controls["Cast List"]["control"].getSelectedItem().getLabel()
+        choice = self.getControl( self.CONTROL_CAST_LIST ).getSelectedPosition()
+        self.actor = self.getControl( self.CONTROL_CAST_LIST ).getSelectedItem().getLabel()
         self.setCategory( choice, 3 )
 
     def playTrailer( self ):
         try:
-            #self.debugWrite("PlayTrailer", 2)
-            trailer = self.controls["Trailer List"]["control"].getSelectedPosition()
-            trailer_urls = self.trailers.movies[trailer].trailer_urls
-            if ( self.settings[ "trailer_quality" ] >= len( trailer_urls )):
-                choice = len( trailer_urls ) - 1
-            else:
-                choice = self.settings[ "trailer_quality" ]
-            if ( self.settings[ "mode" ] == 0 ):
+            trailer = self.getCurrentListPosition()
+            trailer_urls = self.trailers.movies[ trailer ].trailer_urls
+            choice = ( self.settings[ "trailer_quality" ], len( trailer_urls ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailer_urls ) ]
+            if ( self.settings[ "mode" ] == 0 or self.settings[ "trailer_quality" ] <= 2 ):
                 while ( "p.mov" in trailer_urls[ choice ] and choice != -1 ): choice -= 1
-            #while ( "p.mov" in trailer_urls[ choice ] or choice == -1 ): choice -= 1
             url = trailer_urls[ choice ]
-            #utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [core player=%d]", __scriptname__, __version__, core )
-            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [url=%s]", __scriptname__, __version__, url )
-
+            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [choice=%d url=%s]", __scriptname__, __version__, choice, url )
             if ( choice >= 0 ):
                 filename = str( self.trailers.movies[ trailer ].saved )
                 self.core = xbmc.PLAYER_CORE_DVDPLAYER
                 if ( not os.path.isfile( filename ) ):
                     if ( self.settings[ "mode" ] == 0 ):
                         self.core = xbmc.PLAYER_CORE_MPLAYER
-                        filename = url#trailer_urls[choice]
+                        filename = url
                     else:
-                        #url = trailer_urls[choice]
                         ext = os.path.splitext( url )[ 1 ]
                         title = "%s%s" % (self.trailers.movies[trailer].title, ext, )
                         if ( self.settings[ "mode" ] == 1):
@@ -468,21 +407,17 @@ class GUI( xbmcgui.Window ):
                             fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
                             filename = str( fetcher.urlretrieve( url ) )
                             if ( filename ):
-                                poster = self.trailers.movies[trailer].poster
-                                if ( not poster ): poster = os.path.join( self.image_path, "blank-poster.tbn" )
+                                poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                                 self.saveThumbnail( filename, trailer, poster )
             else: filename = ""
-            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [%s]", __scriptname__, __version__, filename )
-            if ( filename != "None" ):
-                ##self.MyPlayer.play( filename )
+            utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) [%s -> %s]", __scriptname__, __version__, "GUI::playTrailer", filename )
+            if ( filename and filename != "None" ):
                 xbmc.Player( self.core ).play( filename )
                 xbmc.sleep( 500 )
                 self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
-                #self.changed_trailers = False
         except: traceback.print_exc()
 
     def saveThumbnail( self, filename, trailer, poster ):
-        #self.debugWrite( "saveThumbnail", 2 )
         try: 
             new_filename = "%s.tbn" % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
@@ -493,126 +428,138 @@ class GUI( xbmcgui.Window ):
                 #self.showTrailers( trailer )
         except: traceback.print_exc()
     
-    def showContextMenu( self, list_control ):
-        if ( self.context_menu.gui_loaded ):
-            selection = self.controls[ list_control ]["control"].getSelectedPosition()
-            x, y = self.controls[ list_control ][ "control" ].getPosition()
-            w = self.controls[ list_control ]["control"].getWidth()
-            h = self.controls[ list_control ]["control"].getHeight() - self.controls[ list_control ][ "control" ].getItemHeight()
-            labels = ()
-            functions = ()
-            if ( list_control == "Trailer List" ):
-                labels += ( _( 501 ), )
-                functions += ( self.playTrailer, )
-                labels += ( _( 502 + self.trailers.movies[ selection ].favorite ), )
-                functions += ( self.toggleAsFavorite, )
-                if ( self.trailers.movies[ selection ].watched ): watched_lbl = "  (%d)" % ( self.trailers.movies[ selection ].watched, )
-                else: watched_lbl = ""
-                labels += ( "%s" % ( _( 504 + ( self.trailers.movies[ selection ].watched > 0 ) ) + watched_lbl, ), )
-                functions += ( self.toggleAsWatched, )
-                labels += ( _( 506 ), )
-                functions += ( self.refreshTrailerInfo, )
-                if ( self.category_id >= 0 and self.list_category == 1 ):
-                    labels += ( _( 512 ), )
-                    functions += ( self.refreshCurrentGenre, )
-                if ( self.trailers.movies[ selection ].saved ):
-                    labels += ( _( 508 ), )
-                    functions += ( self.deleteSavedTrailer, )
-                elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
-                    labels += ( _( 507 ), )
-                    functions += ( self.saveCachedMovie, )
-            elif ( list_control == "Category List" ):
-                functions += ( self.getTrailerGenre, )
-                if ( self.category_id == utilities.GENRES ):
-                    labels += ( _( 511 ), )
-                    labels += ( _( 512 ), )
-                    functions += ( self.refreshGenre, )
-                    labels += ( _( 513 ), )
-                    functions += ( self.refreshAllGenres, )
-                elif ( self.category_id ==  utilities.STUDIOS ):
-                    labels += ( _( 521 ), )
-                elif ( self.category_id ==  utilities.ACTORS ):
-                    labels += ( _( 531 ), )
-            elif ( list_control == "Cast List" ):
-                    labels += ( _( 531 ), )
-                    functions += ( self.getActorChoice, )
-            if ( not self.trailers.complete ): 
-                labels += ( _( 550 ), )
-                functions += ( self.force_full_update, )
-            self.context_menu.show_context_menu( area=( x, y, w, h, ), labels=labels )
-            if ( self.context_menu.selection is not None ):
-                functions[ self.context_menu.selection ]()
+    def showContextMenu( self ):
+        #print "showContextMenu ID", self.controlId
+        if ( self.controlId == self.CONTROL_CATEGORY_LIST or self.controlId == self.CONTROL_CAST_LIST ):
+            selection = self.getControl( self.controlId ).getSelectedPosition()
+            controlId= self.controlId
+        else:
+            selection = self.getCurrentListPosition()
+            controlId = self.CONTROL_TRAILER_LIST_START
+        #print "showContextMenu selection", selection
+        x, y = self.getControl( controlId ).getPosition()
+        w = self.getControl( controlId ).getWidth()
+        h = self.getControl( controlId ).getHeight() - self.getControl( controlId ).getItemHeight()
+        #print "showContextMenu dim",x,y,w,h
+        labels = ()
+        functions = ()
+        if ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
+            labels += ( _( 501 ), )
+            functions += ( self.playTrailer, )
+            labels += ( _( 502 + self.trailers.movies[ selection ].favorite ), )
+            functions += ( self.toggleAsFavorite, )
+            if ( self.trailers.movies[ selection ].watched ): watched_lbl = "  (%d)" % ( self.trailers.movies[ selection ].watched, )
+            else: watched_lbl = ""
+            labels += ( "%s" % ( _( 504 + ( self.trailers.movies[ selection ].watched > 0 ) ) + watched_lbl, ), )
+            functions += ( self.toggleAsWatched, )
+            labels += ( _( 506 ), )
+            functions += ( self.refreshTrailerInfo, )
+            if ( self.category_id >= 0 and self.list_category == 1 ):
+                labels += ( _( 512 ), )
+                functions += ( self.refreshCurrentGenre, )
+            if ( self.trailers.movies[ selection ].saved ):
+                labels += ( _( 508 ), )
+                functions += ( self.deleteSavedTrailer, )
+            elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
+                labels += ( _( 507 ), )
+                functions += ( self.saveCachedMovie, )
+        elif ( controlId == self.CONTROL_CATEGORY_LIST ):
+            functions += ( self.getTrailerGenre, )
+            if ( self.category_id == utilities.GENRES ):
+                labels += ( _( 511 ), )
+                labels += ( _( 512 ), )
+                functions += ( self.refreshGenre, )
+                labels += ( _( 513 ), )
+                functions += ( self.refreshAllGenres, )
+            elif ( self.category_id ==  utilities.STUDIOS ):
+                labels += ( _( 521 ), )
+            elif ( self.category_id ==  utilities.ACTORS ):
+                labels += ( _( 531 ), )
+        elif ( controlId == self.CONTROL_CAST_LIST ):
+                labels += ( _( 531 ), )
+                functions += ( self.getActorChoice, )
+        if ( not self.trailers.complete ): 
+            labels += ( _( 550 ), )
+            functions += ( self.force_full_update, )
+        force_fallback = self.skin != "Default"
+        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels )
+        #self.context_menu.show_context_menu( area=( x, y, w, h, ), labels=labels )
+        if ( cm.selection is not None ):
+            functions[ cm.selection ]()
+        del cm
 
     def force_full_update( self ):
         self.trailers.fullUpdate()
 
     def markAsWatched( self, watched, trailer ):
-        if ( watched ): date = datetime.date.today()
-        else: date = ""
-        success = self.trailers.updateRecord( "movies", ( "times_watched", "last_watched", ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
-        if ( success ):
-            self.trailers.movies[trailer].watched = watched
-            self.showTrailers( self.sql, self.params, choice = trailer )
+        try:
+            date = ( datetime.date.today(), "", )[ not watched ]
+            success = self.trailers.updateRecord( "movies", ( "times_watched", "last_watched", ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
+            if ( success ):
+                self.trailers.movies[ trailer ].watched = watched
+                self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
+            print "markAsWatched succeeded"
+        except: traceback.print_exc()
 
     def changeSettings( self ):
         import settings
-        #self.debugWrite("changeSettings", 2)
+        force_fallback = self.skin != "Default"
         thumbnail_display = self.settings[ "thumbnail_display" ]
-        settings = settings.GUI( skin=self.skin, genres=self.genres )
-        if ( settings.gui_loaded ):
-            settings.doModal()
+        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, self.skin, force_fallback, skin=self.skin, genres=self.genres )
+        settings.doModal()
+        if ( settings.changed ):
+            self._get_settings()
             ok = False
-            if ( settings.changed ):
-                self.getSettings()
-                if ( settings.restart ):
-                    ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
-            del settings
+            if ( settings.restart ):
+                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
             if ( not ok ):
                 if ( thumbnail_display != self.settings[ "thumbnail_display" ] and self.category_id != utilities.GENRES and self.category_id != utilities.STUDIOS and self.category_id != utilities.ACTORS ):
-                    trailer = self.controls[ "Trailer List" ][ "control" ].getSelectedPosition()
-                    self.showTrailers( self.sql, self.params, choice = trailer )
+                    trailer = self.getCurrentListPosition()
+                    self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
                 self.setShortcutLabels()
             else: self.exitScript( True )
+        del settings
 
     def setShortcutLabels( self ):
         if ( self.settings[ "shortcut1" ] == utilities.FAVORITES ):
-            self.controls[ "Shortcut1 Button" ][ "control" ].setLabel( _( 152 ) )
+            self.getControl( 100 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut1" ] == utilities.DOWNLOADED ):
-            self.controls[ "Shortcut1 Button" ][ "control" ].setLabel( _( 153 ) )
+            self.getControl( 100 ).setLabel( _( 153 ) )
         else:
-            self.controls[ "Shortcut1 Button" ][ "control" ].setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
+            self.getControl( 100 ).setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
         if ( self.settings[ "shortcut2" ] == utilities.FAVORITES ):
-            self.controls[ "Shortcut2 Button" ][ "control" ].setLabel( _( 152 ) )
+            self.getControl( 101 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut2" ] == utilities.DOWNLOADED ):
-            self.controls[ "Shortcut2 Button" ][ "control" ].setLabel( _( 153 ) )
+            self.getControl( 101 ).setLabel( _( 153 ) )
         else:
-            self.controls[ "Shortcut2 Button" ][ "control" ].setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
+            self.getControl( 101 ).setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
         if ( self.settings[ "shortcut3" ] == utilities.FAVORITES ):
-            self.controls[ "Shortcut3 Button" ][ "control" ].setLabel( _( 152 ) )
+            self.getControl( 102 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut3" ] == utilities.DOWNLOADED ):
-            self.controls[ "Shortcut3 Button" ][ "control" ].setLabel( _( 153 ) )
+            self.getControl( 102 ).setLabel( _( 153 ) )
         else:
-            self.controls[ "Shortcut3 Button" ][ "control" ].setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
+            self.getControl( 102 ).setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
 
     def showCredits( self ):
+        """ shows a credit window """
         import credits
-        cw = credits.GUI( skin=self.skin )
-        if ( cw.gui_loaded ):
-            cw.doModal()
-        del cw
+        force_fallback = self.skin != "Default"
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c.doModal()
+        del c
 
     def updateScript( self ):
         import update
-        updt = update.Update( language=_ )
+        updt = update.Update()
         del updt
-        
+
     def toggleAsWatched( self ):
-        trailer = self.setCountLabel( "Trailer List" )
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         watched = not ( self.trailers.movies[ trailer ].watched > 0 )
         self.markAsWatched( watched, trailer )
   
     def toggleAsFavorite( self ):
-        trailer = self.setCountLabel( "Trailer List" )
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         favorite = not self.trailers.movies[ trailer ].favorite
         success = self.trailers.updateRecord( "movies", ( "favorite", ), ( favorite, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
         if ( success ):
@@ -624,8 +571,10 @@ class GUI( xbmcgui.Window ):
             else: 
                 params = self.params
                 choice = trailer
-                force_update = False
-            self.showTrailers( self.sql, params = params, choice = choice, force_update = force_update )
+                force_update = 2
+            self.showTrailers( self.sql, params=params, choice=choice, force_update=force_update )
+            #try: self.select( favorite )
+            #except: traceback.print_exc()
     
     def refreshAllGenres( self ):
         self.sql = ""
@@ -633,12 +582,12 @@ class GUI( xbmcgui.Window ):
         self.trailers.refreshGenre( genres )
         if ( self.category_id == utilities.GENRES ):
             sql = self.query[ "genre_category_list" ]
-            genre = self.controls[ "Category List" ][ "control" ].getSelectedPosition()
+            genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
             self.sql_category = ""
             self.showCategories( sql, choice=genre, force_update=True )
         
     def refreshGenre( self ):
-        genre = self.controls[ "Category List" ][ "control" ].getSelectedPosition()
+        genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
         self.sql_category = ""
         if ( self.current_display[ 1 ][ 0 ] == genre ):
             self.sql = ""
@@ -647,29 +596,30 @@ class GUI( xbmcgui.Window ):
         self.showCategories( sql, choice=genre, force_update=True )
 
     def refreshCurrentGenre( self ):
-        trailer = self.setCountLabel( "Trailer List" )
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         self.sql_category = ""
         self.trailers.refreshGenre( ( self.category_id, ) )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
     def refreshTrailerInfo( self ):
-        trailer = self.setCountLabel( "Trailer List" )
-        self.controls[ "Trailer Poster" ][ "control" ].setImage( "" )
-        self.controls[ "Trailer Rating" ][ "control" ].setImage( "" )
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+        #self.getControl( 201 ).setImage( "" )
+        self.getControl( 202 ).setImage( "" )
         self.trailers.refreshTrailerInfo( trailer )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
     def saveCachedMovie( self ):
         try:
-            trailer = self.setCountLabel( "Trailer List" )
+            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             new_filename = os.path.join( self.settings[ "save_folder" ], os.path.split( self.flat_cache[ 1 ] )[ 1 ] )
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 56 ), "%s %s" % ( _( 1008 ), new_filename, ) )
             if ( not os.path.isfile( new_filename ) ):
                 shutil.move( self.flat_cache[ 1 ], new_filename )
                 shutil.move( "%s.conf" % self.flat_cache[ 1 ], "%s.conf" % new_filename )
-                poster = self.trailers.movies[trailer].poster
-                if ( not poster ): poster = os.path.join( self.image_path, "blank-poster.tbn" )
+                poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                #if ( not poster ):
+                #    poster = "blank-poster.tbn"
                 self.saveThumbnail( new_filename, trailer, poster )
                 self.showTrailerInfo()
             dialog.close()
@@ -679,7 +629,7 @@ class GUI( xbmcgui.Window ):
             traceback.print_exc()
                 
     def deleteSavedTrailer( self ):
-        trailer = self.setCountLabel( "Trailer List" )
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         saved_trailer = self.trailers.movies[ trailer ].saved
         if ( xbmcgui.Dialog().yesno( "%s?" % ( _( 509 ), ), _( 82 ), saved_trailer ) ):
             if ( os.path.isfile( saved_trailer ) ):
@@ -691,61 +641,59 @@ class GUI( xbmcgui.Window ):
             success = self.trailers.updateRecord( "Movies", ( "saved_location", ), ( "", self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
             if ( success ):
                 self.trailers.movies[ trailer ].saved = ""
-                if ( self.category_id == utilities.DOWNLOADED ): force_update = True
-                else: force_update = False
-                self.showTrailers( self.sql, self.params, choice = trailer, force_update = force_update )
+                force_update = ( self.category_id==utilities.DOWNLOADED * 2 )
+                #if ( self.category_id == utilities.DOWNLOADED ): force_update = True
+                #else: force_update = False
+                self.showTrailers( self.sql, self.params, choice=trailer, force_update=force_update )
 
     def exitScript( self, restart=False ):
         ##if ( self.Timer is not None ): self.Timer.cancel()
-        if ( self.context_menu is not None ): del self.context_menu
-        ##xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
+        #if ( self.context_menu is not None ): del self.context_menu
+        self._set_video_resolution( True )
         self.close()
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
-        """
-    def setShortcut( self, shortcut ):
-        if ( self.main_category == -1 ):
-            self.sql_category = "SELECT title, count, url, id, loaded FROM Genres ORDER BY title"
-            self.params_category = None
-            self.main_category = -1
-            #self.trailers.getCategories( self.sql_category, self.params_category )
-            self.trailers.categories = self.genres
-        self.setCategory( shortcut, 1 )
-        """
-    def onControl( self, control ):
+
+    def onClick( self, controlId ):
+        #print "onClick", controlId
         try:
-            if ( control is self.controls["Shortcut1 Button"]["control"] ):
-                #self.setShortcut( self.settings[ "shortcut1" ] )
+            if ( controlId == 100 ):
                 self.setCategory( self.settings[ "shortcut1" ], 1 )
-            elif ( control is self.controls["Shortcut2 Button"]["control"] ):
-                #self.setShortcut( self.settings[ "shortcut2" ] )
+            elif ( controlId == 101 ):
                 self.setCategory( self.settings[ "shortcut2" ], 1 )
-            elif ( control is self.controls["Shortcut3 Button"]["control"] ):
+            elif ( controlId == 102 ):
                 self.setCategory( self.settings[ "shortcut3" ], 1 )
-            elif ( control is self.controls["Genre Button"]["control"] ):
+            elif ( controlId == 103 ):
                 self.setCategory( utilities.GENRES, 0 )
-            elif ( control is self.controls["Studio Button"]["control"] ):
+            elif ( controlId == 104 ):
                 self.setCategory( utilities.STUDIOS, 0 )
-            elif ( control is self.controls["Actor Button"]["control"] ):
+            elif ( controlId == 105 ):
                 self.setCategory( utilities.ACTORS, 0 )
-            elif ( control is self.controls["Search Button"]["control"] ):
-                pass#self.search
-            elif ( control is self.controls["Settings Button"]["control"] ):
+            elif ( controlId == 106 ):
+                pass#self.search()
+            elif ( controlId == 107 ):
                 self.changeSettings()
-            elif ( control is self.controls["Plot Button"]["control"] or control is self.controls["Cast Button"]["control"] ):
+            elif ( controlId == 108 ):
+                self.showCredits()
+            elif ( controlId == 109 ):
+                self.updateScript()
+            elif ( controlId in ( self.CONTROL_PLOT_BUTTON, self.CONTROL_CAST_BUTTON ) ):
                 self.togglePlotCast()
-            elif ( control is self.controls["Category List"]["control"] ):
+            ##elif ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
+            ##    self.playTrailer()
+            elif ( controlId == self.CONTROL_CATEGORY_LIST ):
                 self.getTrailerGenre()
-            elif ( control is self.controls["Trailer List"]["control"] ):
-                self.playTrailer()
-            elif ( control is self.controls["Cast List"]["control"] ):
+            elif ( controlId == self.CONTROL_CAST_LIST ):
                 self.getActorChoice()
-            else:
-                try:
-                    if ( control is self.controls[ "Optional Button" ][ "control" ] ):
-                        exec self.controls[ "Optional Button" ][ "onclick" ]
-                except: pass
         except: traceback.print_exc()
-        
+
+    def onFocus( self, controlId ):
+        #self.getControl( 108 ).setLabel( str( controlId ) )
+        xbmc.sleep( 10 )
+        #print "onfocus", controlId
+        #print "REAL", self.getFocusId()
+        self.controlId = controlId#self.getFocusId()#controlId
+        #print "onFocus",controlId
+
     def onAction( self, action ):
         try:
             if ( action.getButtonCode() in utilities.EXIT_SCRIPT ):
@@ -753,95 +701,60 @@ class GUI( xbmcgui.Window ):
             elif ( action.getButtonCode() in utilities.TOGGLE_DISPLAY ):
                 self.setCategory( self.current_display[ self.list_category == 0 ][ 0 ], self.current_display[ self.list_category == 0 ][ 1 ] )
             else:
-                #button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
-                control = self.getFocus()
-                if ( control is self.controls["Trailer List"]["control"] ):
-                    #if ( button_key == "Y" or button_key == "Remote 0" ):
-                    #    pass#self.toggleAsFavorite()##change to queue
+                if ( self.CONTROL_TRAILER_LIST_START <= self.controlId <= self.CONTROL_TRAILER_LIST_END ):
+                    #print action.getButtonCode()
                     if ( action.getButtonCode() in utilities.CONTEXT_MENU ):
-                        self.showContextMenu( "Trailer List" )
-                    else:
+                        self.showContextMenu()
+                    elif ( action.getButtonCode() in utilities.SELECT_ITEM ):
+                        self.playTrailer()
+                    ###############################################################
+                    elif ( action.getButtonCode() in utilities.MOVEMENT or action.getButtonCode() in ( 262, 263, ) ):
                         self.showTrailerInfo()
-                elif ( control is self.controls["Category List"]["control"] ):
+                    ###############################################################
+                elif ( self.controlId == self.CONTROL_TRAILER_LIST_PAGE ):
+                    if ( action.getButtonCode() in utilities.MOVEMENT_UP or action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                        self.showTrailerInfo()
+                elif ( self.controlId == self.CONTROL_CATEGORY_LIST ):
                     if ( action.getButtonCode() in utilities.CONTEXT_MENU ):
-                        self.showContextMenu( "Category List" )
-                    else:
-                        self.setScrollbarIndicator( "Category List" )
-                        choice = self.setCountLabel( "Category List" )
-                elif ( control is self.controls["Cast List"]["control"] ):
+                        self.showContextMenu()
+                    #elif ( action.getButtonCode() in utilities.SELECT_ITEM ):
+                    #    self.getTrailerGenre()
+                    elif ( action.getButtonCode() in utilities.MOVEMENT_UP or action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                        choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
+                elif ( self.controlId == self.CONTROL_CATEGORY_LIST_PAGE ):
+                    if ( action.getButtonCode() in utilities.MOVEMENT_UP or action.getButtonCode() in utilities.MOVEMENT_DOWN ):
+                        self._set_count_label( self.CONTROL_CATEGORY_LIST )
+                elif ( self.controlId == self.CONTROL_CAST_LIST ):
                     if ( action.getButtonCode() in utilities.CONTEXT_MENU ):
-                        self.showContextMenu( "Cast List" )
-                    else:
-                        self.setScrollbarIndicator( "Cast List" )
-                elif ( control is self.controls["Shortcut1 Button"]["control"] ):
-                    self.setControlNavigation( "Shortcut1 Button" )
-                elif ( control is self.controls["Shortcut2 Button"]["control"] ):
-                    self.setControlNavigation( "Shortcut2 Button" )
-                elif ( control is self.controls["Shortcut3 Button"]["control"] ):
-                    self.setControlNavigation( "Shortcut3 Button" )
-                elif ( control is self.controls["Genre Button"]["control"] ):
-                    self.setControlNavigation( "Genre Button" )
-                elif ( control is self.controls["Studio Button"]["control"] ):
-                    self.setControlNavigation( "Studio Button" )
-                elif ( control is self.controls["Actor Button"]["control"] ):
-                    self.setControlNavigation( "Actor Button" )
-                elif ( control is self.controls["Search Button"]["control"] ):
-                    self.setControlNavigation( "Search Button" )
-                elif ( control is self.controls["Settings Button"]["control"] ):
-                    self.setControlNavigation( "Settings Button" )
-                else:
-                    try:
-                        if ( control is self.controls["Trailer List Scrollbar Position Indicator"]["control"] ):
-                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                                self.pageIndicator( "Trailer List", -1 )
-                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                                self.pageIndicator( "Trailer List", 1 )
-                    except: pass
-                    try:
-                        if ( control is self.controls["Category List Scrollbar Position Indicator"]["control"] ):
-                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                                self.pageIndicator( "Category List", -1 )
-                                choice = self.setCountLabel( "Category List" )
-                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                                self.pageIndicator( "Category List", 1 )
-                                choice = self.setCountLabel( "Category List" )
-                    except: pass
-                    try:
-                        if ( control is self.controls["Cast List Scrollbar Position Indicator"]["control"] ):
-                            if ( action.getButtonCode() in utilities.MOVEMENT_UP ):
-                                self.pageIndicator( "Cast List", -1 )
-                            elif ( action.getButtonCode() in utilities.MOVEMENT_DOWN ):
-                                self.pageIndicator( "Cast List", 1 )
-                    except: pass
-                    try:
-                        if ( control is self.controls[ "Optional Button" ][ "control" ] ):
-                            self.setControlNavigation( "Optional Button" )
-                    except: pass
-        except: traceback.print_exc()
-        
-    def debugWrite( self, function, action, lines=[], values=[] ):
-        if ( self.debug ):
-            Action = ( "Failed", "Succeeded", "Started" )
-            Highlight = ( "__", "__", "<<<<< ", "__", "__", " >>>>>" )
-            xbmc.output( "%s%s%s : (%s)\n" % ( Highlight[action], function, Highlight[action + 3], Action[action] ) )
-            try:
-                for cnt, line in enumerate( lines ):
-                    finished_line = "%s\n" % ( line, )
-                    xbmc.output( finished_line % values[cnt] )
-            except: traceback.print_exc()
+                        self.showContextMenu()
+                    #elif ( action.getButtonCode() in utilities.SELECT_ITEM ):
+                    #    self.getActorChoice()
+        except:
+            traceback.print_exc()
 
+def main():
+    _progress_dialog( len( modules ) + 1, _( 55 ) )
+    settings = utilities.Settings().get_settings()
+    force_fallback = settings[ "skin" ] != "Default"
+    ui = GUI( "script-%s-main.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, settings[ "skin" ], force_fallback )
+    _progress_dialog( -1 )
+    ui.doModal()
+    del ui
+main()
 
+"""
 ## Thanks Thor918 for this class ##
-#class MyPlayer( xbmc.Player ):
-#    def  __init__( self, *args, **kwargs ):
-#        xbmc.Player.__init__( self )
-#        self.function = kwargs["function"]
-#
-#    def onPlayBackStopped( self ):
-#        self.function( 0 )
-#    
-#    def onPlayBackEnded( self ):
-#        self.function( 1 )
-#    
-#    def onPlayBackStarted( self ):
-#        self.function( 2 )
+class MyPlayer( xbmc.Player ):
+    def  __init__( self, *args, **kwargs ):
+        xbmc.Player.__init__( self )
+        self.function = kwargs["function"]
+
+    def onPlayBackStopped( self ):
+        self.function( 0 )
+    
+    def onPlayBackEnded( self ):
+        self.function( 1 )
+    
+    def onPlayBackStarted( self ):
+        self.function( 2 )
+"""
