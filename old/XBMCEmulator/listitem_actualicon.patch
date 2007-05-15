@@ -1,0 +1,50 @@
+Index: GUIInfoManager.cpp
+===================================================================
+--- GUIInfoManager.cpp	(revision 8967)
++++ GUIInfoManager.cpp	(working copy)
+@@ -453,6 +453,7 @@
+   {
+     if (strTest.Equals("listitem.thumb")) ret = LISTITEM_THUMB;
+     else if (strTest.Equals("listitem.icon")) ret = LISTITEM_ICON;
++    else if (strTest.Equals("listitem.actualicon")) ret = LISTITEM_ACTUAL_ICON;
+     else if (strTest.Equals("listitem.overlay")) ret = LISTITEM_OVERLAY;
+     else if (strTest.Equals("listitem.label")) ret = LISTITEM_LABEL;
+     else if (strTest.Equals("listitem.label2")) ret = LISTITEM_LABEL2;
+@@ -1597,8 +1598,8 @@
+       return m_currentFile.HasThumbnail() ? m_currentFile.GetThumbnailImage() : "defaultVideoCover.png";
+     else return m_currentMovieThumb;
+   }
+-  else if (info == LISTITEM_THUMB || info == LISTITEM_ICON || info == LISTITEM_OVERLAY ||
+-           info == CONTAINER_FOLDERTHUMB || info == LISTITEM_RATING)
++  else if (info == LISTITEM_THUMB || info == LISTITEM_ICON || info == LISTITEM_ACTUAL_ICON ||
++          info == LISTITEM_OVERLAY || info == CONTAINER_FOLDERTHUMB || info == LISTITEM_RATING)
+   {
+     CGUIWindow *window = m_gWindowManager.GetWindow(contextWindow);
+     if (!window || !window->IsMediaWindow())
+@@ -2779,10 +2780,12 @@
+ CStdString CGUIInfoManager::GetItemImage(const CFileItem *item, int info)
+ {
+   if (!item) return "";
+-  if (info == LISTITEM_ICON && !item->HasThumbnail() && item->HasIcon())
++  if ((info == LISTITEM_ICON && !item->HasThumbnail() && item->HasIcon()) ||
++      info == LISTITEM_ACTUAL_ICON)
+   {
+     CStdString strThumb = item->GetIconImage();
+-    strThumb.Insert(strThumb.Find("."), "Big");
++    if (info == LISTITEM_ICON)
++      strThumb.Insert(strThumb.Find("."), "Big");
+     return strThumb;
+   }
+   if (info == LISTITEM_OVERLAY)
+Index: GUIInfoManager.h
+===================================================================
+--- GUIInfoManager.h	(revision 8967)
++++ GUIInfoManager.h	(working copy)
+@@ -213,6 +213,7 @@
+ #define LISTITEM_PREMIERED          335
+ #define LISTITEM_COMMENT            336
+ #define LISTITEM_END                340
++#define LISTITEM_ACTUAL_ICON        341
+ 
+ #define MUSICPM_ENABLED             350
+ #define MUSICPM_SONGSPLAYED         351
