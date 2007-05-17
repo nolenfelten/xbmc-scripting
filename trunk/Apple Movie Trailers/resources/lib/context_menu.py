@@ -54,6 +54,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         dialog_middle_height = ( len( self.labels ) * ( button_height + button_gap ) ) - button_gap
         dialog_height = dialog_middle_height + dialog_top_height + dialog_bottom_height
         dialog_posx = int( float( self.area[ 2 ] - dialog_width ) / 2 ) + self.area[ 0 ]
+        if ( dialog_posx + dialog_width > 700 ):
+            dialog_posx = 700 - dialog_width
+        elif ( dialog_posx < 20 ):
+            dialog_posx = 20
         dialog_posy = int( float( self.area[ 3 ] - dialog_height ) / 2 ) + self.area[ 1 ]
         button_posx = dialog_posx + button_offsetx
         button_posy = dialog_posy + button_offsety

@@ -87,15 +87,16 @@
     <string id="203">Mode</string>
     <string id="204">Save folder</string>
     <string id="205">Thumbnail display</string>
-    <string id="206">Startup category</string>
-    <string id="207">Shortcut #1</string>
-    <string id="208">Shortcut #2</string>
-    <string id="209">Shortcut #3</string>
-    <string id="210">Refresh newest at startup</string>
-    <string id="211">Video player resolution</string>
-    <string id="212">Showtimes scraper</string>
+    <string id="206">Use watched thumbnail</string>
+    <string id="207">Startup category</string>
+    <string id="208">Shortcut #1</string>
+    <string id="209">Shortcut #2</string>
+    <string id="210">Shortcut #3</string>
+    <string id="211">Refresh newest at startup</string>
+    <string id="212">Video player resolution</string>
     <string id="213">Zip code</string>
     <string id="214">Check version at startup</string>
+    <string id="215">Showtimes scraper</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>

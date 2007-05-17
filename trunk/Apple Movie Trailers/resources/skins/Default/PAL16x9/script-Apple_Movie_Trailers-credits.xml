@@ -192,17 +192,17 @@
 			<font>font10</font>
 			<aligny>center</aligny>
 			<align>left</align>
-			<label>Graphics</label>
+			<label>Graphics &amp; Skinning</label>
 		</control>
 		<control type="label">
 			<posx>338</posx>
 			<posy>281</posy>
-			<width>90</width>
+			<width>150</width>
 			<height>20</height>
 			<font>font10</font>
 			<aligny>center</aligny>
 			<align>right</align>
-			<label>Chokemaniac</label>
+			<label>Chokemaniac &amp; Jezz_X</label>
 		</control>
 	</controls>
 </window>

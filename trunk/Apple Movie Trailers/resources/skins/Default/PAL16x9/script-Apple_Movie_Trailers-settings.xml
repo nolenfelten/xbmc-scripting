@@ -34,24 +34,24 @@
 			<align>left</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>
-			<label>-</label>
+			<label></label>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="30">
 			<description>Version Label</description>
-			<posx>450</posx>
+			<posx>495</posx>
 			<posy>-2</posy>
-			<width>150</width>
+			<width>200</width>
 			<align>right</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>
-			<label>-</label>
+			<label></label>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="spincontrol" id="900">
 			<description>page label</description>
-			<posx>360</posx>
-			<posy>335</posy>
+			<posx>500</posx>
+			<posy>345</posy>
 			<subtype>page</subtype>
 			<font>special12</font>
 			<textcolor>ffffffff</textcolor>
@@ -68,7 +68,7 @@
 			<posx>10</posx>
 			<posy>40</posy>
 			<width>380</width>
-			<height>288</height>
+			<height>318</height>
 			<itemgap>2</itemgap>
 			<pagecontrol>900</pagecontrol>
 			<control type="group">
@@ -91,7 +91,7 @@
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
 					<onright>2000</onright>
-					<onup>211</onup>
+					<onup>212</onup>
 					<ondown>202</ondown>
 				</control>
 				<control type="button" id="221">
@@ -299,22 +299,22 @@
 					<onup>205</onup>
 					<ondown>207</ondown>
 				</control>
-				<control type="button" id="226">
-					<description>Setting6 Value</description>
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>380</width>
+				<control type="checkmark" id="226">
+					<description>Setting6 Button</description>
+					<posx>350</posx>
+					<posy>5</posy>
+					<width>50</width>
 					<height>30</height>
-					<align>right</align>
-					<aligny>center</aligny>
+					<align>left</align>
 					<label>-</label>
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
-					<textoffsetx>10</textoffsetx>
-					<texturefocus>-</texturefocus>
-					<texturenofocus>-</texturenofocus>
-					<disabledcolor>60d0d0d0</disabledcolor>
-					<shadowcolor>ff000000</shadowcolor>
+					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<markwidth>16</markwidth>
+					<markheight>20</markheight>
+					<disabledcolor>00d0d0d0</disabledcolor>
+					<shadowcolor>00000000</shadowcolor>
 				</control>
 			</control>
 			<control type="group">
@@ -463,22 +463,22 @@
 					<onup>209</onup>
 					<ondown>211</ondown>
 				</control>
-				<control type="checkmark" id="230">
+				<control type="button" id="230">
 					<description>Setting10 Value</description>
-					<posx>350</posx>
-					<posy>5</posy>
-					<width>50</width>
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
 					<height>30</height>
-					<align>left</align>
+					<align>right</align>
+					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
-					<markwidth>16</markwidth>
-					<markheight>20</markheight>
-					<disabledcolor>00d0d0d0</disabledcolor>
-					<shadowcolor>00000000</shadowcolor>
+					<textoffsetx>10</textoffsetx>
+					<texturefocus>-</texturefocus>
+					<texturenofocus>-</texturenofocus>
+					<disabledcolor>60d0d0d0</disabledcolor>
+					<shadowcolor>ff000000</shadowcolor>
 				</control>
 			</control>
 			<control type="group">
@@ -502,10 +502,51 @@
 					<onleft>2000</onleft>
 					<onright>2000</onright>
 					<onup>210</onup>
+					<ondown>212</ondown>
+				</control>
+				<control type="checkmark" id="231">
+					<description>Setting11 Value</description>
+					<posx>350</posx>
+					<posy>5</posy>
+					<width>50</width>
+					<height>30</height>
+					<align>left</align>
+					<label>-</label>
+					<font>font13</font>
+					<textcolor>ffffffff</textcolor>
+					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<markwidth>16</markwidth>
+					<markheight>20</markheight>
+					<disabledcolor>00d0d0d0</disabledcolor>
+					<shadowcolor>00000000</shadowcolor>
+				</control>
+			</control>
+			<control type="group">
+				<height>30</height>
+				<control type="button" id="212">
+					<description>Setting12 Button</description>
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>30</height>
+					<align>left</align>
+					<aligny>center</aligny>
+					<label>-</label>
+					<font>font13</font>
+					<textcolor>ffffffff</textcolor>
+					<textoffsetx>10</textoffsetx>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<disabledcolor>60d0d0d0</disabledcolor>
+					<shadowcolor>ff000000</shadowcolor>
+					<onleft>2000</onleft>
+					<onright>2000</onright>
+					<onup>211</onup>
 					<ondown>201</ondown>
 				</control>
-				<control type="button" id="231">
-					<description>Setting11 Value</description>
+				<control type="button" id="232">
+					<description>Setting12 Value</description>
 					<posx>0</posx>
 					<posy>0</posy>
 					<width>380</width>

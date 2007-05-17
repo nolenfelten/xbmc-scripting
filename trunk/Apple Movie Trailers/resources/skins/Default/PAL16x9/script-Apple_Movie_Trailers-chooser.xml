@@ -38,10 +38,10 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="501">
 			<description>Chooser Thumb</description>
-			<posx>220</posx>
+			<posx>200</posx>
 			<posy>40</posy>
-			<width>190</width>
-			<height>190</height>
+			<width>241</width>
+			<height>135</height>
 			<texture>-</texture>
 			<aspectratio>keep</aspectratio>
 		</control>
@@ -133,8 +133,8 @@
 			<height>224</height>
 			<onleft>514</onleft>
 			<onright>514</onright>
-			<onup>503</onup>
-			<ondown>503</ondown>
+			<onup>504</onup>
+			<ondown>504</ondown>
 			<viewtype label="535">list</viewtype>
 			<pagecontrol>514</pagecontrol>
 			<scrolltime>200</scrolltime>

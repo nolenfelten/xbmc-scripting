@@ -8,7 +8,7 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import traceback
+#import traceback
 
 import utilities
 import chooser
@@ -103,6 +103,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "skin", )
+        self.settings_refresh = ( "thumbnail_display", "fade_thumb", )
 
     def _setup_videoplayer( self ):
         self.videoplayer_displayresolutions = ( "1080i 16x9", "720p 16x9", "480p 4x3", "480p 16x9", "NTSC 4x3", "NTSC 16x9", "PAL 4x3", "PAL 16x9", "PAL60 4x3", "PAL60 16x9", _( 2110 ) )
@@ -138,12 +139,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 224 ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.getControl( 204 ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.getControl( 225 ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
-            self.getControl( 226 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
-            self.getControl( 227 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
-            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
-            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
-            self.getControl( 230 ).setSelected( self.settings[ "refresh_newest" ] )
-            self.getControl( 231 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 226 ).setSelected( self.settings[ "fade_thumb" ] )
+            self.getControl( 226 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
+            self.getControl( 206 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
+            self.getControl( 227 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
+            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
+            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
+            self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
+            self.getControl( 231 ).setSelected( self.settings[ "refresh_newest" ] )
+            self.getControl( 232 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
 
@@ -186,6 +191,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting6( self ):
         """ changes settings #6 """
+        self.settings[ "fade_thumb" ] = not self.settings[ "fade_thumb" ]
+        self._set_controls_values()
+    
+    def _change_setting7( self ):
+        """ changes settings #7 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "startup_category_id" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 206 ), ) )
@@ -193,8 +203,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting7( self ):
-        """ changes settings #7 """
+    def _change_setting8( self ):
+        """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut1" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 207 ), ) )
@@ -202,8 +212,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting8( self ):
-        """ changes settings #8 """
+    def _change_setting9( self ):
+        """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut2" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 208 ), ) )
@@ -211,8 +221,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting9( self ):
-        """ changes settings #9 """
+    def _change_setting10( self ):
+        """ changes settings #10 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut3" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 209 ), ) )
@@ -220,13 +230,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut3" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting10( self ):
-        """ changes settings #10 """
+    def _change_setting11( self ):
+        """ changes settings #11 """
         self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]
         self._set_controls_values()
 
-    def _change_setting11( self ):
-        """ changes settings #11 """
+    def _change_setting12( self ):
+        """ changes settings #12 """
         selection = self._get_chooser( self.videoplayer_displayresolutions, self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( 211 ), ) )
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
@@ -245,11 +255,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
         restart = False
+        refresh = False
         for setting in self.settings_restart:
             if ( self.settings_original[ setting ] != self.settings[ setting ] ):
                 restart = True
                 break
-        self._close_dialog( True, restart )
+        for setting in self.settings_refresh:
+            if ( self.settings_original[ setting ] != self.settings[ setting ] ):
+                refresh = True
+                break
+        self._close_dialog( True, restart, refresh )
     
     def _update_script( self ):
         """ checks for updates to the script """
@@ -265,10 +280,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         c.doModal()
         del c
 
-    def _close_dialog( self, changed=False, restart=False ):
+    def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """
         self.changed = changed
         self.restart = restart
+        self.refresh = refresh
         self.close()
 
     def onClick( self, controlId ):
