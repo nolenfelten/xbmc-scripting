@@ -153,7 +153,7 @@ class Trailers:
                         #print "DELETED", record
                         success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
                     success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                    self.categories[ genre ] = Category( id=idGenre, title=title ) 
+                    self.categories[ genre ] = Category( id=idGenre, title=title, count=len( trailer_urls ) ) 
                     success = records.commit()
         except: pass
         success = records.commit()

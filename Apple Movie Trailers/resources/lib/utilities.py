@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98", "0.98", )
-SETTINGS_VERSIONS = DATABASE_VERSIONS
+DATABASE_VERSIONS = ( "pre-0.98", "0.98", "pre-0.98.1", "0.98.1", )
+SETTINGS_VERSIONS = ( "pre-0.98.1", "0.98.1", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -134,12 +134,13 @@ class Settings:
             "mode": 0,
             "save_folder": "f:\\",
             "thumbnail_display": 1,
+            "fade_thumb": True,
             "startup_category_id": 10,
             "shortcut1": 10,
             "shortcut2": 4,
             "shortcut3": FAVORITES,
             "refresh_newest": False,
-            "videoplayer_displayresolution": 10
+            "videoplayer_displayresolution": 10,
             }
         ok = self.save_settings( settings )
         return settings
