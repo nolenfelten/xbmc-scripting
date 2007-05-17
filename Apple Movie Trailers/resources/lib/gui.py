@@ -216,12 +216,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.sql = sql
                 self.params = params
                 self.clearList()
-                print sql
                 if ( self.trailers.movies ):
-                    print "YUP movies found\n", sql
                     for movie in self.trailers.movies: # now fill the list control
-                        #print movie.title
-                        ## remove poster if can't use ListItem.Icon
                         poster = ( movie.poster, "blank-poster.tbn", )[ not movie.poster ]
                         thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
                         #favorite = ( "", "*", )[ movie.favorite ]
@@ -545,7 +541,6 @@ class GUI( xbmcgui.WindowXML ):
     def toggleAsWatched( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         watched = not ( self.trailers.movies[ trailer ].watched > 0 )
-        print "toggleAsWatched", watched
         self.markAsWatched( watched, trailer )
 
     def toggleAsFavorite( self ):
