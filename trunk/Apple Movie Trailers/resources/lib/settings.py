@@ -80,6 +80,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.startup_categories[ count ] = str( genre.title )
         self.startup_categories[ utilities.FAVORITES ] = _( 152 )
         self.startup_categories[ utilities.DOWNLOADED ] = _( 153 )
+        self.startup_categories[ utilities.HD_TRAILERS ] = _( 160 )
         for title in self.startup_categories.values():
             self.startup_titles += [ title ]
         self.startup_titles.sort()
