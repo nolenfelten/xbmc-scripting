@@ -24,6 +24,7 @@ STUDIOS = -2
 ACTORS = -3
 FAVORITES = -6
 DOWNLOADED = -7
+HD_TRAILERS = -8
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )

@@ -350,4 +350,4 @@ class Query( dict ):
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
 
-        self[ "HD_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE '%p.mov%' ORDER BY title;"
+        self[ "hd_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE ? ORDER BY title;"

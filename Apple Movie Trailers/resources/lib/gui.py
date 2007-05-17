@@ -150,6 +150,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == utilities.DOWNLOADED ):
                 sql = self.query[ "downloaded" ]
                 params = ( "", )
+            elif ( category_id == utilities.HD_TRAILERS ):
+                sql = self.query[ "hd_trailers" ]
+                params = ( "%p.mov%", )
             elif ( list_category == 1 ):
                 sql = self.query[ "movies_by_genre_id" ]
                 params = ( self.genres[category_id].id, )
@@ -213,8 +216,11 @@ class GUI( xbmcgui.WindowXML ):
                 self.sql = sql
                 self.params = params
                 self.clearList()
+                print sql
                 if ( self.trailers.movies ):
+                    print "YUP movies found\n", sql
                     for movie in self.trailers.movies: # now fill the list control
+                        #print movie.title
                         ## remove poster if can't use ListItem.Icon
                         poster = ( movie.poster, "blank-poster.tbn", )[ not movie.poster ]
                         thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
@@ -275,6 +281,8 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 152 )
         elif ( self.category_id == utilities.DOWNLOADED ):
             category = _( 153 )
+        elif ( self.category_id == utilities.HD_TRAILERS ):
+            category = _( 160 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -500,18 +508,24 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( 100 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut1" ] == utilities.DOWNLOADED ):
             self.getControl( 100 ).setLabel( _( 153 ) )
+        elif ( self.settings[ "shortcut1" ] == utilities.HD_TRAILERS ):
+            self.getControl( 100 ).setLabel( _( 160 ) )
         else:
             self.getControl( 100 ).setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
         if ( self.settings[ "shortcut2" ] == utilities.FAVORITES ):
             self.getControl( 101 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut2" ] == utilities.DOWNLOADED ):
             self.getControl( 101 ).setLabel( _( 153 ) )
+        elif ( self.settings[ "shortcut2" ] == utilities.HD_TRAILERS ):
+            self.getControl( 101 ).setLabel( _( 160 ) )
         else:
             self.getControl( 101 ).setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
         if ( self.settings[ "shortcut3" ] == utilities.FAVORITES ):
             self.getControl( 102 ).setLabel( _( 152 ) )
         elif ( self.settings[ "shortcut3" ] == utilities.DOWNLOADED ):
             self.getControl( 102 ).setLabel( _( 153 ) )
+        elif ( self.settings[ "shortcut3" ] == utilities.HD_TRAILERS ):
+            self.getControl( 102 ).setLabel( _( 160 ) )
         else:
             self.getControl( 102 ).setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
 
