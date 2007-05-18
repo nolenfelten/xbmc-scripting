@@ -326,7 +326,7 @@
 				<onup>50</onup>
 				<ondown>50</ondown>
 				<viewtype label="535">list</viewtype>
-                <visible>!Control.IsVisible(60)</visible>
+                <!--visible>!Control.IsVisible(60)</visible-->
 				<pagecontrol>2050</pagecontrol>
 				<scrolltime>200</scrolltime>
 				<itemlayout height="29">
@@ -819,7 +819,7 @@
 					<onup>2050</onup>
 					<ondown>70</ondown>
 					<onclick>-</onclick>
-                    <visible allowhiddenfocus="false">!Control.IsVisible(51) + !Control.IsVisible(54) + !Control.IsVisible(60)</visible>
+                    <visible allowhiddenfocus="false">Control.IsVisible(50) | Control.IsVisible(52)</visible>
 				</control>
 
                 <control type="button" id="170">
@@ -843,7 +843,7 @@
 					<onup>2050</onup>
 					<ondown>2075</ondown>
 					<onclick>-</onclick>
-                    <visible allowhiddenfocus="false">!Control.IsVisible(51) + !Control.IsVisible(54) + !Control.IsVisible(60)</visible>
+                    <visible allowhiddenfocus="false">Control.IsVisible(50) | Control.IsVisible(52)</visible>
 				</control>
 			</control>
 

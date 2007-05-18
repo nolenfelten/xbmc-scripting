@@ -68,6 +68,8 @@ class GUI( xbmcgui.WindowXML ):
     def onInit( self ):
         if ( self.startup ):
             self.startup = False
+            self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( False )
+            self.getControl( self.CONTROL_TRAILER_LIST_START ).setVisible( False )
             ## remove when search is done ##
             self.getControl( 106 ).setEnabled( False )
             self._set_video_resolution()
@@ -179,12 +181,6 @@ class GUI( xbmcgui.WindowXML ):
             self.current_display = [ [ category_id, list_category ], self.current_display[ 1 ] ]
             self.showCategories( sql )
         self.showControls( self.category_id <= utilities.GENRES and self.category_id > utilities.FAVORITES )
-        if ( self.category_id <= utilities.GENRES and self.category_id > utilities.FAVORITES ):
-            if ( self.trailers.categories ): self.setFocus( self.getControl( self.CONTROL_CATEGORY_LIST ) )
-        else:
-            if ( self.trailers.movies ): 
-                #xbmc.sleep(20)
-                self.setFocus( self.getControl( self.CONTROL_TRAILER_LIST_START ) )
     
     def showCategories( self, sql, params=None, choice=0, force_update=False ):
         xbmcgui.lock()
@@ -233,30 +229,25 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
 
     def _set_selection( self, list_control, pos=0 ):
-        ##self.controls[list_control]["control"].selectItem( pos )
-        #self.setFocus( self.controls[list_control]["control"] )
-        try:
-            if ( list_control == self.CONTROL_TRAILER_LIST_START ): 
-                self.setCurrentListPosition( pos )
-                self.showTrailerInfo()
-            elif ( list_control == self.CONTROL_CATEGORY_LIST ):
-                choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
-        except: traceback.print_exc()
+        if ( list_control == self.CONTROL_TRAILER_LIST_START ): 
+            self.setCurrentListPosition( pos )
+            self.showTrailerInfo()
+        elif ( list_control == self.CONTROL_CATEGORY_LIST ):
+            choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
 
     def showControls( self, category ):
         xbmcgui.lock()
-        try:
-            self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( category )
-            self.getControl( self.CONTROL_CATEGORY_LIST ).setEnabled( category and self.trailers.categories is not None )
-            self.showPlotCastControls( category )
-            self.setCategoryLabel()
-        except: traceback.print_exc()#pass
+        self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( category )
+        self.getControl( self.CONTROL_TRAILER_LIST_START ).setVisible( not category )
+        self.setCategoryLabel()
         xbmcgui.unlock()
+        self.showPlotCastControls( category )
+        self.setFocus( self.getControl( ( self.CONTROL_TRAILER_LIST_START, self.CONTROL_CATEGORY_LIST, )[ category ] ) )
             
     def showPlotCastControls( self, category ):
         xbmcgui.lock()
         self.getControl( self.CONTROL_PLOT_BUTTON ).setVisible( self.display_cast and not category )
-        self.getControl( self.CONTROL_PLOT_BUTTON ).setEnabled( self.display_cast and not category )
+        #self.getControl( self.CONTROL_PLOT_BUTTON ).setEnabled( self.display_cast and not category )
         xbmcgui.unlock()
             
     def togglePlotCast( self ):
@@ -295,7 +286,6 @@ class GUI( xbmcgui.WindowXML ):
         else:
             pos = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
             self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "%d of %d" % ( pos + 1, self.getControl( self.CONTROL_CATEGORY_LIST ).size(), ) )
-        #self.list_control_pos[ self.list_category ] = pos
         return pos
     
     def clearTrailerInfo( self ):
