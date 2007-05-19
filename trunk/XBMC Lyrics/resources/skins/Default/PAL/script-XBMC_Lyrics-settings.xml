@@ -568,7 +568,7 @@
                 <label>-</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
-                <textcolor>60ffffff</textcolor>
+                <disabledcolor>60ffffff</disabledcolor>
                 <textoffsetx>17</textoffsetx>
                 <texturenofocus>default-keyboard-btn.png</texturenofocus>
                 <texturefocus>default-keyboard-btn-focus.png</texturefocus>
