@@ -21,6 +21,7 @@ _ = language.Language().localized
 __scriptname__ = "Kaid Control Pad"
 __author__ = "Nuka1195"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
+__svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Kaid%20Control%20Pad"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
 __version__ = "pre-2.1"
 

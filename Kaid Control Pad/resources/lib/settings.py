@@ -8,6 +8,7 @@ import sys
 import os
 import xbmc
 import xbmcgui
+
 import utilities
 
 
@@ -220,11 +221,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.restart = restart
         self.close()
         
-    def get_control( self, key ):
-        """ returns the control that matches the key """
-        try: return self.controls[ key ][ "control" ]
-        except: return None
-
     def onClick( self, controlId ):
         if ( controlId == 200 ):
             self._save_settings()
