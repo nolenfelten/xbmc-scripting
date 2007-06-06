@@ -55,6 +55,7 @@
     <string id="88">Current trailer</string>
     <string id="89">There was an error creating the database.</string>
     <string id="90">There was an error moving the movie!</string>
+    <string id="91">time remaining</string>
 
     <!-- Buttons -->
     <string id="103">Genre...</string>

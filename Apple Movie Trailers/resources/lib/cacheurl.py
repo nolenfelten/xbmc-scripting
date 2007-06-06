@@ -13,7 +13,7 @@ import md5
 #import traceback
 import time
 import socket
-import utilities
+from utilities import *
 
 socket.setdefaulttimeout( 20 )
 
@@ -69,7 +69,7 @@ class HTTP:
         # set the cache directory; default to a .cache directory in BASE_DATA_PATH
         self.cache_dir = cache
         if self.cache_dir.startswith( '.' ):
-            self.cache_dir = os.path.join( utilities.BASE_DATA_PATH, self.cache_dir )
+            self.cache_dir = os.path.join( BASE_DATA_PATH, self.cache_dir )
 
         # title is the real name of the trailer, used for saving
         self.title = title
@@ -93,7 +93,7 @@ class HTTP:
                     os.remove( os.path.join( root, name ) )
                 os.rmdir( root )
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
 
     def urlopen( self, url ):
         # retrieve the file so it is cached
@@ -146,7 +146,7 @@ class HTTP:
             except:
                 opened = urllib2.urlopen( request )
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
             return ""
 
@@ -189,7 +189,7 @@ class HTTP:
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
                     return ''
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::freespace [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) HTTP::freespace [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
             return ""
             
@@ -219,7 +219,7 @@ class HTTP:
                     xbmcgui.Dialog().ok( _(64), '[%i] %s' % ( errno, strerror ) )
                     break
                 except:
-                    utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+                    LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
                     break
             filehandle.close()
         except:
@@ -250,10 +250,11 @@ class HTTPProgress( HTTP ):
     def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
         HTTP.__init__( self, cache, title, actual_filename, flat_cache )
         self.dialog = xbmcgui.DialogProgress()
-        self.status_symbols = [ '-', '\\', '|', '/' ]
-        self.status_symbol = 0
+        self.status_symbols = ( '-', '\\', '|', '/', )
+        self.status_symbol = len( self.status_symbols )
         self.download_start_time = time.time()
-        
+        self.download_current_time_elapsed = -1
+
     def urlretrieve( self, url ):
         # Downloading...
         self.dialog.create( _(79), url.split( '/' )[-1] )
@@ -261,21 +262,30 @@ class HTTPProgress( HTTP ):
         return HTTP.urlretrieve( self, url )
 
     def on_data( self, url, filepath, filesize, size_read_so_far ):
-        percentage = percent_from_ratio( size_read_so_far, filesize )
         so_far = byte_measurement( size_read_so_far )
         fsize = byte_measurement( filesize )
-        rate = '%d %s' % ( size_read_so_far / 1024 / ( time.time() - self.download_start_time ), _(80) )
+        percentage = percent_from_ratio( size_read_so_far, filesize )
         self.status_symbol += 1
         if self.status_symbol >= len( self.status_symbols ):
             self.status_symbol = 0
-        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s ' % ( percentage, so_far, fsize, rate, self.status_symbols[self.status_symbol] ) )
+        
+        current_time_elapsed = time.time() - self.download_start_time
+        if int( current_time_elapsed ) > self.download_current_time_elapsed:
+            self.download_current_time_elapsed = current_time_elapsed
+            total_time = int( current_time_elapsed / ( float( size_read_so_far ) / filesize ) - current_time_elapsed )
+            minutes = int( total_time / 60 )
+            seconds = total_time - ( minutes * 60 )
+            self.download_rate = '%d %s' % ( size_read_so_far / 1024 / current_time_elapsed, _(80) )
+            self.download_time_remaining = "%s: %02d:%02d" % ( _(91), minutes, seconds, )
+        
+        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s' % ( percentage, so_far, fsize, self.download_rate, self.status_symbols[self.status_symbol] ), self.download_time_remaining )
         if self.dialog.iscanceled():
             return False
         return True
 
     def on_finished( self, url, filepath, filesize, is_completed ):
         self.dialog.close()
-        self.status_symbol = 0
+        #self.status_symbol = 0
 
 class HTTPProgressSave( HTTPProgress ):
     def __init__( self, save_location = None, save_title = '' ):
@@ -292,5 +302,5 @@ class HTTPProgressSave( HTTPProgress ):
                     f.write( 'nocache=1' )
                     f.close()
             except:
-                utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+                LOG( LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
         return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )

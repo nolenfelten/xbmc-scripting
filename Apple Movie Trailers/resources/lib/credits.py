@@ -7,7 +7,7 @@ Nuka1195
 import sys
 import xbmcgui
 
-import utilities
+from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -61,5 +61,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
+        if ( action.getButtonCode() in CANCEL_DIALOG ):
             self._close_dialog()

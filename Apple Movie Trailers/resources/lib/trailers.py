@@ -11,14 +11,14 @@ import pil_util
 import database
 
 fetcher = cacheurl.HTTP()
-base_cache_path = fetcher.cache_dir + os.sep
+BASE_CACHE_PATH = fetcher.cache_dir + os.sep
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 
-class Movie( object ):
+class Movie:
     '''
         Exposes the following:
         - idMovie (integer - movies id#)
@@ -36,17 +36,15 @@ class Movie( object ):
         - watched_date (string - last watched date)
         - favorite (integer - 1=favorite)
         - saved (string - path to saved movie)
+        - saved_core (integer - xbmc.PLAYER_CORE_DVDPLAYER or xbmc.PLAYER_CORE_MPLAYER)
         - cast (list - list of actors)
         - studio (string - movies studio)
     '''
     def __init__( self, *args, **kwargs ):
-        for name, value in kwargs.items():
-            self.__setattr__( name, value )
-    
-    def __setattr__( self, name, value ):
-        self.__dict__[ name ] = value
+        self.__dict__.update( kwargs )
 
-class Category( object ):
+
+class Category:
     """
         Exposes the following:
         - id (integer)
@@ -55,11 +53,7 @@ class Category( object ):
         - count (integer - number of movies in category)
     """
     def __init__( self, *args, **kwargs ):
-        for name, value in kwargs.items():
-            self.__setattr__( name, value )
-    
-    def __setattr__( self, name, value ):
-        self.__dict__[ name ] = value
+        self.__dict__.update( kwargs )
 
 
 class Trailers:
@@ -77,8 +71,8 @@ class Trailers:
         self.query = database.Query()
         newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
-            import utilities
-            settings = utilities.Settings().get_settings()
+            from utilities import *
+            settings = Settings().get_settings()
             if ( settings[ "refresh_newest" ] ):
                 self.refreshGenre( ( newest_genre, ), last_updated )
 
@@ -143,8 +137,7 @@ class Trailers:
                             success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                         else:
                             try:
-                                i = idMovie_list.index( record )
-                                idMovie_list.pop( i )
+                                idMovie_list.remove( record )
                                 #print "EXIST", url
                             except:
                                 #print "ADDED TO G_L_M table", record[ 0 ]
@@ -164,7 +157,7 @@ class Trailers:
         for url in urls:
             try:
                 filename = fetcher.make_cache_filename( url )
-                filename = str( os.path.join( base_cache_path, filename ) )
+                filename = str( os.path.join( BASE_CACHE_PATH, filename ) )
                 #print filename
                 if os.path.isfile( filename ):
                     #print "REMOVED", filename
@@ -387,6 +380,7 @@ class Trailers:
                 self.last_watched = ""
                 self.favorite = 0
                 self.saved_location = ""
+                self.saved_core = None
                 self.actors = []
                 self.studio = ""
 
@@ -413,7 +407,7 @@ class Trailers:
                     if poster:
                         # make thumbnails
                         success = pil_util.makeThumbnails( poster )
-                        self.poster = poster.replace( base_cache_path, '' )
+                        self.poster = poster.replace( BASE_CACHE_PATH, '' )
 
                 # -- plot --
                 plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
@@ -454,7 +448,7 @@ class Trailers:
                     if '/mpaa' in temp_url:
                         rating_url = fetcher.urlretrieve( temp_url )
                         if rating_url:
-                            self.rating_url = rating_url.replace( base_cache_path, '' )
+                            self.rating_url = rating_url.replace( BASE_CACHE_PATH, '' )
                             self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
                 
                 # -- trailer urls --
@@ -498,8 +492,8 @@ class Trailers:
             
             info_list = ( self.idMovie, self.title, self.url, repr( self.trailer_urls ), self.poster, self.plot, self.rating,
                             self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
-                            self.actors, self.studio, )
-            success = records.update( "movies", ( 3, 13, ), ( info_list[ 3 : 13 ] ) + ( self.idMovie, ), "idMovie" )
+                            self.saved_core, self.actors, self.studio, )
+            success = records.update( "movies", ( 3, 14, ), ( info_list[ 3 : 14 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
 
         def _get_actor_and_studio( movie ):
@@ -528,26 +522,26 @@ class Trailers:
                             commit = True
                         dialog_ok = _progress_dialog( cnt + 1, commit )
                     if ( not full and movie is not None ):
-                        #self.movies += [Movie( movie )]
                         self.movies += [ 
                             Movie(
                                 idMovie = movie[ 0 ],
                                 title = movie[1],
-                                url = movie[2], ##maybe not use##
+                                url = movie[2],
                                 trailer_urls = eval( movie[3] ),
-                                poster = os.path.join( base_cache_path, movie[4] ),
-                                thumbnail = os.path.join( base_cache_path, '%s.png' % ( os.path.splitext( movie[4] )[0], ) ),
-                                thumbnail_watched = os.path.join( base_cache_path, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) ),
+                                poster = os.path.join( BASE_CACHE_PATH, movie[4] ),
+                                thumbnail = os.path.join( BASE_CACHE_PATH, '%s.png' % ( os.path.splitext( movie[4] )[0], ) ),
+                                thumbnail_watched = os.path.join( BASE_CACHE_PATH, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) ),
                                 plot = movie[5],
                                 rating = movie[6],
-                                rating_url = os.path.join( base_cache_path, movie[7] ),
+                                rating_url = os.path.join( BASE_CACHE_PATH, movie[7] ),
                                 year = movie[8],
                                 watched = movie[9],
                                 watched_date = movie[10],
                                 favorite = movie[11],
                                 saved = movie[12],
-                                cast = movie[13],
-                                studio = movie[14]
+                                saved_core = movie[13],
+                                cast = movie[14],
+                                studio = movie[15]
                                 )
                             ]
 

@@ -9,7 +9,7 @@ import os
 import xbmcgui
 import xbmc
 
-import utilities
+from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -21,7 +21,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.lock()
         self.controlId = 0
-        self.base_path = os.path.join( utilities.BASE_RESOURCE_PATH, "skins" )
+        self.base_path = os.path.join( BASE_RESOURCE_PATH, "skins" )
         self.choices = kwargs[ "choices" ]
         self.original = kwargs[ "original" ]
         self.selection = kwargs[ "selection" ]
@@ -73,9 +73,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.controlId = controlId
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
+        if ( action.getButtonCode() in CANCEL_DIALOG ):
             self._close_dialog()
-        #elif ( self.controlId in ( 503, 504, ) and action.getButtonCode() in utilities.SELECT_ITEM ):
+        #elif ( self.controlId in ( 503, 504, ) and action.getButtonCode() in SELECT_ITEM ):
         #    self._close_dialog( self.getControl( self.controlId ).getSelectedPosition() )
         elif ( self.controlId == 503 ):
             self._get_thumb( self.getControl( 503 ).getSelectedItem().getLabel() )

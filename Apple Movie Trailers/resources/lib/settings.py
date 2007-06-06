@@ -10,7 +10,7 @@ import xbmc
 import xbmcgui
 #import traceback
 
-import utilities
+from utilities import *
 import chooser
 
 _ = sys.modules[ "__main__" ].__language__
@@ -36,7 +36,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _get_settings( self ):
         """ reads settings """
-        self.settings = utilities.Settings().get_settings()
+        self.settings = Settings().get_settings()
 
     def _set_labels( self ):
         try:
@@ -78,9 +78,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.startup_titles = []
         for count, genre in enumerate( self.genres ):
             self.startup_categories[ count ] = str( genre.title )
-        self.startup_categories[ utilities.FAVORITES ] = _( 152 )
-        self.startup_categories[ utilities.DOWNLOADED ] = _( 153 )
-        self.startup_categories[ utilities.HD_TRAILERS ] = _( 160 )
+        self.startup_categories[ FAVORITES ] = _( 152 )
+        self.startup_categories[ DOWNLOADED ] = _( 153 )
+        self.startup_categories[ HD_TRAILERS ] = _( 160 )
         for title in self.startup_categories.values():
             self.startup_titles += [ title ]
         self.startup_titles.sort()
@@ -112,7 +112,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 ###### End of Special defs #####################################################
     def _get_chooser( self, choices, original, selection, list_control, title ):
         force_fallback = self.skin != "Default"
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title )
         selection = ch.selection
         del ch
         return selection
@@ -180,7 +180,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _change_setting4( self ):
         """ changes settings #4 """
         shares = [ "video", "files" ][ self.settings[ "mode" ] == 3 ]
-        self.settings[ "save_folder" ] = utilities.get_browse_dialog( self.settings[ "save_folder" ], _( 204 ), 3, shares )
+        self.settings[ "save_folder" ] = get_browse_dialog( self.settings[ "save_folder" ], _( 204 ), 3, shares )
         self._set_controls_values()
 
     def _change_setting5( self ):
@@ -247,7 +247,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     
     def _save_settings( self ):
         """ saves settings """
-        ok = utilities.Settings().save_settings( self.settings )
+        ok = Settings().save_settings( self.settings )
         if ( not ok ):
             ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
         else:
@@ -277,7 +277,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
         c.doModal()
         del c
 
@@ -296,5 +296,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
+        if ( action.getButtonCode() in CANCEL_DIALOG ):
             self._close_dialog()
