@@ -11,7 +11,7 @@ import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
 #import traceback
 
-import utilities
+from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -24,7 +24,7 @@ class Database:
         self.query = Query()
         self.db_version, self.complete = self._get_version()
         if ( not self.db_version ):
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Incompatible database!", __scriptname__, __version__, )
+            LOG( LOG_ERROR, "%s (ver: %s) Incompatible database!", __scriptname__, __version__, )
             raise
 
     def _get_version( self ):
@@ -33,7 +33,7 @@ class Database:
         records.close()
         if ( record is not None ):
             idVersion, version, complete = record
-            if ( version not in utilities.DATABASE_VERSIONS ): 
+            if ( version not in DATABASE_VERSIONS ): 
                 version, complete = self._convert_database( version, complete )
         else: version, complete = self._create_database()
         return version, complete
@@ -147,7 +147,16 @@ class Database:
             except: 
                 records.close()
                 return False
-        
+
+        def _update_table_movies():
+            try:
+                sql = "ALTER TABLE movies ADD saved_core integer"
+                records = Records()
+                records.cursor.execute( sql )
+                records.close()
+                return True
+            except: return False
+
         def _update_version():
             records = Records()
             ok = records.update( "version", ( "version", ), ( __version__, 1, ), "idVersion", True )
@@ -155,7 +164,7 @@ class Database:
             return ok
 
         msg = ( _( 53 ), _( 54 ), )
-        if ( version == "pre-0.97.1" or version == "pre-0.97.2" or version == "pre-0.97.3" or version == "pre-0.97.4" or version == "pre-0.97.5"  or version == "pre-0.97.6" ):
+        if ( version in ( "pre-0.98", "pre-0.98.1", ) ):
             try:
                 _progress_dialog()
                 ok = True
@@ -168,6 +177,7 @@ class Database:
                 if ( version == "pre-0.97.3" ):
                     ok, updated = _update_completed()
                     if ( updated ): complete = False
+                ok = _update_table_movies()
                 if ( not ok ): raise
                 ok = _update_version()
                 if ( not ok ): raise
@@ -217,6 +227,7 @@ class Tables( dict ):
             ( "last_watched", "text", "", "", "" ),
             ( "favorite", "integer", "", "", "" ),
             ( "saved_location", "text", "", "", "" ),
+            ( "saved_core", "integer", "", "", "" ),
         )
         self[ "genre_link_movie" ] = ( 
             ( "idGenre", "integer", "", "UNIQUE INDEX", "(idGenre, idMovie)" ),
@@ -239,7 +250,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( utilities.BASE_DATA_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        self.db = sqlite.connect( os.path.join( BASE_DATA_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
         self.cursor = self.db.cursor()
     
     def commit( self ):
@@ -266,7 +277,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return self.cursor.lastrowid
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::add [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) Records::add [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def delete( self, table, columns, params, commit=False ):
@@ -279,7 +290,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::delete [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) Records::delete [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def update( self, table, columns, params, key, commit=False ):
@@ -301,7 +312,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) Records::update [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) Records::update [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def fetch( self, sql, params=None, all=False ):

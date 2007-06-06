@@ -1,5 +1,5 @@
 <window>
-	<defaultcontrol>2</defaultcontrol>
+	<defaultcontrol>9000</defaultcontrol>
     <allowoverlays>false</allowoverlays>
 	<controls>
 		<control type="image">
@@ -313,9 +313,11 @@
 		
         <!-- Trailer list controls -->
         <!-- ** Group control is optional  ** Do not change id or type-->
-		<control type="group">
+		<control type="group" id="3000">
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <!--onleft>9000</onleft>
+            <onright>4000</onright-->
 			<control type="list" id="50">
 				<posx>190</posx>
 				<posy>100</posy>
@@ -325,8 +327,7 @@
 				<onright>2050</onright>
 				<onup>50</onup>
 				<ondown>50</ondown>
-				<viewtype label="535">list</viewtype>
-                <!--visible>!Control.IsVisible(60)</visible-->
+				<viewtype label="544">Media Info</viewtype>
 				<pagecontrol>2050</pagecontrol>
 				<scrolltime>200</scrolltime>
 				<itemlayout height="29">
@@ -420,7 +421,7 @@
 				</focusedlayout>
 			</control>
             <control type="group">
-                <visible>Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(54)</visible>
+                <visible>!Control.IsVisible(52) + !Control.IsVisible(60)</visible>
                 <control type="image">
                     <description>Trailer List Scrollbar Up Arrow</description>
                     <posx>525</posx>
@@ -475,9 +476,7 @@
 				<scrolltime>200</scrolltime>
 				<viewtype label="536">icon</viewtype>
 				<pagecontrol>2050</pagecontrol>
-                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
-                <visible>!Control.IsVisible(60)</visible>
+                <!--visible>!Control.IsVisible(60)</visible-->
 				<itemlayout height="141" width="96">
 					<control type="image">
 						<posx>8</posx>
@@ -544,7 +543,7 @@
 				</focusedlayout>
 			</control>
 
-            <control type="fixedlist" id="52">
+            <control type="wraplist" id="52">
                 <posx>190</posx>
                 <posy>100</posy>
                 <width>520</width>
@@ -558,9 +557,7 @@
                 <pagecontrol>2050</pagecontrol>
                 <orientation>horizontal</orientation>
                 <focusposition>3</focusposition>
-                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
-                <visible>!Control.IsVisible(60)</visible>
+                <!--visible>!Control.IsVisible(60)</visible-->
                 <itemlayout height="300" width="104">
                     <control type="image">
                         <posx>2</posx>
@@ -630,9 +627,7 @@
                 <scrolltime>200</scrolltime>
                 <viewtype label="542">bigicon</viewtype>
                 <pagecontrol>2050</pagecontrol>
-                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
-                <visible>!Control.IsVisible(60)</visible>
+                <!--visible>!Control.IsVisible(60)</visible-->
                 <itemlayout height="185" width="97">
                     <control type="image">
                         <posx>8</posx>
@@ -687,41 +682,6 @@
                 <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
                 <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
             </control>
-
-            <!--control type="image">
-				<description>Poster Backdrop</description>
-				<posx>545</posx>
-				<posy>100</posy>
-				<width>150</width>
-				<height>232</height>
-				<texture>default-poster_backdrop.png</texture>
-				<aspectratio>keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control-->
-
-            <control type="image">
-				<description>Trailer Poster</description>
-				<posx>532</posx>
-				<posy>100</posy>
-				<width>175</width>
-				<height>256</height>
-				<info>ListItem.ActualIcon</info>
-				<texture>-</texture>
-                <aspectratio aligny="bottom">keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-            <control type="image">
-				<description>Trailer Poster</description>
-				<posx>532</posx>
-				<posy>356</posy>
-				<width>175</width>
-				<height>256</height>
-				<info>ListItem.ActualIcon</info>
-                <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
-                <aspectratio aligny="top">keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-            
             <control type="label" id="2150">
 				<description>Trailer List Count Label</description>
 				<width>100</width>
@@ -731,61 +691,96 @@
 				<label>-</label>
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
-				<visible>Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(54)</visible>
+				<visible>!Control.IsVisible(60)</visible>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(51)">Conditional</animation>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(52)">Conditional</animation>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(54)">Conditional</animation>
 			</control>
 
-            <control type="image" id="202">
-				<description>Trailer Rating</description>
-				<posx>553</posx>
-				<posy>335</posy>
-				<width>66</width>
-				<height>15</height>
-				<texture>-</texture>
-				<aspectratio>keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-
-            <control type="image" id="203">
-				<description>Trailer Favorite Overlay</description>
-				<posx>665</posx>
-				<posy>335</posy>
-				<width>16</width>
-				<height>16</height>
-				<texture>default-overlay-favorite.png</texture>
-				<aspectratio>keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-
-            <control type="image" id="204">
-				<description>Trailer Watched Overlay</description>
-				<posx>653</posx>
-				<posy>335</posy>
-				<width>16</width>
-				<height>16</height>
-				<texture>default-overlay-watched.png</texture>
-				<aspectratio>keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-
-            <control type="image" id="205">
-				<description>Trailer Saved Overlay</description>
-				<posx>641</posx>
-				<posy>335</posy>
-				<width>16</width>
-				<height>16</height>
-				<texture>default-overlay-saved.png</texture>
-				<aspectratio>keep</aspectratio>
-				<visible>Control.IsVisible(50)</visible>
-			</control>
-
-            <control type="label" id="206">
+            <control type="group" id="3050">
+                <!--visible>Control.IsVisible(50) | Control.IsVisible(52)</visible-->
+                <!--control type="image">
+                    <description>Poster Backdrop</description>
+                    <posx>545</posx>
+                    <posy>100</posy>
+                    <width>150</width>
+                    <height>232</height>
+                    <texture>default-poster_backdrop.png</texture>
+                    <aspectratio>keep</aspectratio>
+                </control-->
+                <control type="image">
+                    <description>Trailer Poster</description>
+                    <posx>532</posx>
+                    <posy>100</posy>
+                    <width>175</width>
+                    <height>256</height>
+                    <info>ListItem.ActualIcon</info>
+                    <texture>-</texture>
+                    <aspectratio aligny="bottom">keep</aspectratio>
+                    <visible>Control.IsVisible(50)</visible>
+                </control>
+                <control type="image">
+                    <description>Trailer Poster</description>
+                    <posx>532</posx>
+                    <posy>356</posy>
+                    <width>175</width>
+                    <height>256</height>
+                    <info>ListItem.ActualIcon</info>
+                    <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
+                    <aspectratio aligny="top">keep</aspectratio>
+                    <visible>Control.IsVisible(50)</visible>
+                </control>
+                <control type="image" id="202">
+                    <description>Trailer Rating</description>
+                    <posx>553</posx>
+                    <posy>335</posy>
+                    <width>66</width>
+                    <height>15</height>
+                    <texture>-</texture>
+                    <aspectratio>keep</aspectratio>
+                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                    <animation effect="slide" time="0" end="-67,27" condition="Control.IsVisible(52)">Conditional</animation>
+                </control>
+                <control type="image" id="203">
+                    <description>Trailer Favorite Overlay</description>
+                    <posx>665</posx>
+                    <posy>335</posy>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>default-overlay-favorite.png</texture>
+                    <aspectratio>keep</aspectratio>
+                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                </control>
+                <control type="image" id="204">
+                    <description>Trailer Watched Overlay</description>
+                    <posx>653</posx>
+                    <posy>335</posy>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>default-overlay-watched.png</texture>
+                    <aspectratio>keep</aspectratio>
+                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                </control>
+                <control type="image" id="205">
+                    <description>Trailer Saved Overlay</description>
+                    <posx>641</posx>
+                    <posy>335</posy>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>default-overlay-saved.png</texture>
+                    <aspectratio>keep</aspectratio>
+                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                </control>
+            </control>
+            
+            <control type="fadelabel" id="206">
 				<description>Trailer Title</description>
 				<posx>200</posx>
 				<posy>350</posy>
-				<width>500</width>
+				<width>350</width>
 				<height>32</height>
 				<align>left</align>
 				<aligny>center</aligny>
@@ -796,57 +791,59 @@
 				<visible>Control.IsVisible(50) | Control.IsVisible(52) | Control.IsVisible(54)</visible>
                 <animation effect="slide" time="0" end="60,135" condition="Control.IsVisible(54)">Conditional</animation>
 			</control>
+		</control>
 
-            <control type="group" id="3001">
-				<control type="button" id="175">
-					<description>Plot Button</description>
-					<label>215</label>
-					<posx>200</posx>
-					<posy>350</posy>
-					<width>32</width>
-					<height>32</height>
-					<texturefocus>-</texturefocus>
-					<texturenofocus>-</texturenofocus>
-					<font>font13</font>
-					<textcolor>00FFFFFF</textcolor>
-					<shadowcolor>00FFFFFF</shadowcolor>
-					<disabledcolor>60ffffff</disabledcolor>
-					<textoffsetx>17</textoffsetx>
-					<align>center</align>
-					<aligny>center</aligny>
-					<onleft>2050</onleft>
-					<onright>70</onright>
-					<onup>2050</onup>
-					<ondown>70</ondown>
-					<onclick>-</onclick>
-                    <visible allowhiddenfocus="false">Control.IsVisible(50) | Control.IsVisible(52)</visible>
-				</control>
+        <control type="group" id="3001">
+            <control type="button" id="175">
+                <description>Plot Button</description>
+                <label>215</label>
+                <posx>200</posx>
+                <posy>350</posy>
+                <width>32</width>
+                <height>32</height>
+                <texturefocus>-</texturefocus>
+                <texturenofocus>-</texturenofocus>
+                <font>font13</font>
+                <textcolor>00FFFFFF</textcolor>
+                <shadowcolor>00FFFFFF</shadowcolor>
+                <disabledcolor>60ffffff</disabledcolor>
+                <textoffsetx>17</textoffsetx>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>2050</onleft>
+                <onright>70</onright>
+                <onup>2050</onup>
+                <ondown>70</ondown>
+                <onclick>-</onclick>
+                <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+            </control>
 
-                <control type="button" id="170">
-					<description>Cast Button</description>
-					<label>216</label>
-					<posx>200</posx>
-					<posy>350</posy>
-					<width>32</width>
-					<height>32</height>
-					<texturefocus>-</texturefocus>
-					<texturenofocus>-</texturenofocus>
-					<font>font13</font>
-					<textcolor>00FFFFFF</textcolor>
-					<shadowcolor>00FFFFFF</shadowcolor>
-					<disabledcolor>60ffffff</disabledcolor>
-					<textoffsetx>17</textoffsetx>
-					<align>center</align>
-					<aligny>center</aligny>
-					<onleft>2050</onleft>
-					<onright>2075</onright>
-					<onup>2050</onup>
-					<ondown>2075</ondown>
-					<onclick>-</onclick>
-                    <visible allowhiddenfocus="false">Control.IsVisible(50) | Control.IsVisible(52)</visible>
-				</control>
-			</control>
+            <control type="button" id="170">
+                <description>Cast Button</description>
+                <label>216</label>
+                <posx>200</posx>
+                <posy>350</posy>
+                <width>32</width>
+                <height>32</height>
+                <texturefocus>-</texturefocus>
+                <texturenofocus>-</texturenofocus>
+                <font>font13</font>
+                <textcolor>00FFFFFF</textcolor>
+                <shadowcolor>00FFFFFF</shadowcolor>
+                <disabledcolor>60ffffff</disabledcolor>
+                <textoffsetx>17</textoffsetx>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>2050</onleft>
+                <onright>2075</onright>
+                <onup>2050</onup>
+                <ondown>2075</ondown>
+                <onclick>-</onclick>
+                <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+            </control>
+        </control>
 
+        <control type="group" id="3070">
             <control type="textbox" id="75">
 				<description>Trailer Plot</description>
 				<posx>190</posx>
@@ -1013,8 +1010,12 @@
                 <texture>default-scrollbar-down-arrow.png</texture>
 				<visible>Control.IsVisible(70)</visible>
             </control-->
-			<!-- Category list controls -->
+        </control>
+        <control type="group" id="4000">
+            <!-- Category list controls -->
 			<!-- ** Required ** Do not change <description> or <type> -->
+            <onleft>9000</onleft>
+            <onright>3000</onright>
 			<control type="list" id="60">
 				<posx>190</posx>
 				<posy>100</posy>
@@ -1170,6 +1171,6 @@
 				<textcolor>CCFFFFFF</textcolor>
                 <visible>Control.IsVisible(60)</visible>
 			</control>
-		</control>
-	</controls>
+        </control>
+    </controls>
 </window>

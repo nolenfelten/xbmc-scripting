@@ -8,7 +8,7 @@ import sys
 import xbmcgui
 import traceback
 
-import utilities
+from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -84,5 +84,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in ( utilities.CANCEL_DIALOG + utilities.CONTEXT_MENU ) ):
+        if ( action.getButtonCode() in ( CANCEL_DIALOG + CONTEXT_MENU ) ):
             self._close_dialog()

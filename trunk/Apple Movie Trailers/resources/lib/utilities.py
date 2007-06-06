@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98", "0.98", "pre-0.98.1", "0.98.1", )
-SETTINGS_VERSIONS = ( "pre-0.98.1", "0.98.1", )
+DATABASE_VERSIONS = ( "pre-0.98.2", "0.98.2", )
+SETTINGS_VERSIONS = ( "pre-0.98.1", "0.98.1", ) + DATABASE_VERSIONS
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -82,34 +82,6 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
 def LOG( status, format, *args ):
     if ( DEBUG_MODE >= status ):
         xbmc.output( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
-
-def buttoncode_dict():
-    """ depreciated: button codes dictionary """
-    return {
-                61478 : "Keyboard Up Arrow",
-                61480 : "Keyboard Down Arrow",
-                61448 : "Keyboard Backspace Button",
-                61533 : "Keyboard Menu Button",
-                61467 : "Keyboard ESC Button",
-                    216 : "Remote Back Button",
-                    247 : "Remote Menu Button",
-                    229 : "Remote Title Button",
-                    207 : "Remote 0",
-                    166 : "Remote Up",
-                    167 : "Remote Down",
-                    256 : "A Button",
-                    257 : "B Button",
-                    258 : "X Button",
-                    259 : "Y Button",
-                    260 : "Black Button",
-                    261 : "White Button",
-                    274 : "Start Button",
-                    275 : "Back Button",
-                    270 : "DPad Up",
-                    271 : "DPad Down",
-                    272 : "DPad Left",
-                    273 : "DPad Right"
-                }
 
 class Settings:
     """ Settings class """
