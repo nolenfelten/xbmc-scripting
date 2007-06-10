@@ -164,7 +164,7 @@ class Database:
             return ok
 
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.98", "pre-0.98.1", ) ):
+        if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "pre-0.98", "pre-0.98.1", ) ):
             try:
                 _progress_dialog()
                 ok = True

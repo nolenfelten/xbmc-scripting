@@ -37,9 +37,9 @@ TOGGLE_DISPLAY = ( 216, 257, 61448, )
 CONTEXT_MENU = ( 229, 261, 61533, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
-MOVEMENT = ( 166, 167, 168, 169, 270, 271, 272, 273, 61477, 61478, 61479, 61480 )
+MOVEMENT = ( 166, 167, 168, 169, 270, 271, 272, 273, 61477, 61478, 61479, 61480, )
 # Log status codes
-LOG_INFO, LOG_ERROR, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
+LOG_ERROR, LOG_INFO, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 
 def _create_base_paths():
     """ creates the base folders """
@@ -81,7 +81,7 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
 
 def LOG( status, format, *args ):
     if ( DEBUG_MODE >= status ):
-        xbmc.output( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
+        xbmc.output( "%s: %s\n" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
 
 class Settings:
     """ Settings class """

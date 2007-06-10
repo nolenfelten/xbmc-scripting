@@ -271,7 +271,7 @@ class HTTPProgress( HTTP ):
         
         current_time_elapsed = time.time() - self.download_start_time
         if int( current_time_elapsed ) > self.download_current_time_elapsed:
-            self.download_current_time_elapsed = current_time_elapsed
+            self.download_current_time_elapsed = int( current_time_elapsed )
             total_time = int( current_time_elapsed / ( float( size_read_so_far ) / filesize ) - current_time_elapsed )
             minutes = int( total_time / 60 )
             seconds = total_time - ( minutes * 60 )
