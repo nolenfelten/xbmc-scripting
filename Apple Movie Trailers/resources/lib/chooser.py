@@ -7,7 +7,7 @@ Nuka1195
 import sys
 import os
 import xbmcgui
-import xbmc
+#import xbmc
 
 from utilities import *
 
@@ -60,10 +60,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 502 ).setVisible( os.path.isfile( os.path.join( self.base_path, choice, "warning.txt" ) ) )
 
     def _close_dialog( self, selection=None ):
-        xbmc.sleep( 5 )
+        #xbmc.sleep( 5 )
         self.selection = selection
         self.close()
-        
+
     def onClick( self, controlId ):
         if ( controlId in ( 503, 504, ) ):
             self._close_dialog( self.getControl( controlId ).getSelectedPosition() )
