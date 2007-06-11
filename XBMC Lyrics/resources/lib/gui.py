@@ -19,7 +19,7 @@ import xbmcgui
 import threading
 #import traceback
 
-import utilities
+from utilities import *
 
 try: current_dlg_id = xbmcgui.getCurrentWindowDialogId()
 except: current_dlg_id = 0
@@ -46,10 +46,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.show_viz_window()
 
     def get_settings( self ):
-        self.settings = utilities.Settings().get_settings()
+        self.settings = Settings().get_settings()
         
     def get_scraper( self ):
-        sys.path.append( os.path.join( utilities.BASE_RESOURCE_PATH, "scrapers", self.settings[ "scraper" ] ) )
+        sys.path.append( os.path.join( BASE_RESOURCE_PATH, "scrapers", self.settings[ "scraper" ] ) )
         import lyricsScraper
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
         self.getControl( 200 ).setLabel( lyricsScraper.__title__ )
@@ -122,11 +122,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             lyrics_file.close()
             return True
         except:
-            utilities.LOG( utilities.LOG_ERROR, "%s (ver: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
             return False
 
     def make_fatx_compatible( self, name, extension=False ):
-        if len( name ) > 42:
+        if ( len( name ) > 42 ):
             if ( extension ): name = "%s_%s" % ( name[ : 37 ], name[ -4 : ], )
             else: name = name[ : 42 ]
         name = name.replace( ",", "_" ).replace( "*", "_" ).replace( "=", "_" ).replace( "\\", "_" ).replace( "|", "_" )
@@ -166,7 +166,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def change_settings( self ):
         import settings
-        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, "Default" )
+        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
         settings.doModal()
         ok = False
         if ( settings.changed ):
@@ -184,7 +184,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ user modified exceptions """
         if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
             artist = self.LyricsScraper._format_param( self.artist, False )
-            alt_artist = utilities.get_keyboard( artist, "%s: %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
+            alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
                 exception = ( artist, alt_artist, )
                 self.LyricsScraper._set_exceptions( exception )
@@ -202,13 +202,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.controlId = controlId
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in utilities.EXIT_SCRIPT ):
+        if ( action.getButtonCode() in EXIT_SCRIPT ):
             self.exit_script()
-        elif ( action.getButtonCode() in utilities.SETTINGS_MENU ):
+        elif ( action.getButtonCode() in SETTINGS_MENU ):
             self.change_settings()
-        elif ( self.allow_exception and ( action.getButtonCode() in utilities.GET_EXCEPTION ) ):
+        elif ( self.allow_exception and ( action.getButtonCode() in GET_EXCEPTION ) ):
             self.get_exception()
-        elif ( self.controlId == 120 and action.getButtonCode() in utilities.SELECT_ITEM ):
+        elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
             self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
@@ -222,7 +222,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.myPlayerChanged( 2 )
 
     def myPlayerChanged( self, event, force_update=False ):
-        utilities.LOG( utilities.LOG_DEBUG, "%s (ver: %s) GUI::myPlayerChanged [%s]", __scriptname__, __version__, ["stopped","ended","started"][event] )
+        LOG( LOG_DEBUG, "%s (ver: %s) GUI::myPlayerChanged [%s]", __scriptname__, __version__, ["stopped","ended","started"][event] )
         if ( event < 2 ): 
             self.exit_script()
         else:
