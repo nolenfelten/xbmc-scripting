@@ -10,7 +10,7 @@ import xbmc
 import xbmcgui
 #import traceback
 
-import utilities
+from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -32,7 +32,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _get_settings( self ):
         """ reads settings """
-        self.settings = utilities.Settings().get_settings()
+        self.settings = Settings().get_settings()
 
     def _set_labels( self ):
         xbmcgui.lock()
@@ -71,7 +71,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         import re
         self.scrapers_title = []
         pattern = """__title__.*?["'](.*?)["']"""
-        base_path = os.path.join( utilities.BASE_RESOURCE_PATH, "scrapers" )
+        base_path = os.path.join( BASE_RESOURCE_PATH, "scrapers" )
         self.scrapers = os.listdir( base_path )
         for scraper in self.scrapers:
             try:
@@ -121,7 +121,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "lyrics_path" ] = utilities.get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
+        self.settings[ "lyrics_path" ] = get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
         self._set_controls_values()
 
     def _change_setting4( self ):
@@ -138,7 +138,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     
     def _save_settings( self ):
         """ saves settings """
-        ok = utilities.Settings().save_settings( self.settings )
+        ok = Settings().save_settings( self.settings )
         if ( not ok ):
             ok = xbmcgui.Dialog().ok( __scriptname__, _( 230 ) )
         else:
@@ -162,7 +162,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _show_credits( self ):
         """ shows a credit window """
         import credits
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), utilities.BASE_RESOURCE_PATH, "Default" )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
         c.doModal()
         del c
 
@@ -180,5 +180,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in utilities.CANCEL_DIALOG ):
+        if ( action.getButtonCode() in CANCEL_DIALOG ):
             self._close_dialog()
