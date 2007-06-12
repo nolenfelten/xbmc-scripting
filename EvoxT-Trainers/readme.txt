@@ -1,5 +1,5 @@
 
-Version: 0.91
+Version: 0.95
 
 Release notes:
 EvoxT-Trainers is a Xbox trainer downloader script for XBMC. It grabs all
@@ -9,7 +9,7 @@ to a specified trainerpath.
 
 Install:
 1. build script. doubleclick the "Build.bat"
-2. copy/ftp "EvoxT-Trainers" folder from "EvoxT-Trainers\BUILD\"
+2. copy/ftp "EvoxT-Trainers" folder from "BUILD"
    to your xbmc script dir ("q:\scripts\")
 3. Done!
 
