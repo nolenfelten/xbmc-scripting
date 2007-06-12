@@ -1,4 +1,10 @@
 
+version 0.95:
+- removed: evt_nfo.ttf. nfo´s arent displayed perfect, but it´s much easier
+  to install the script now.
+- changed: buttonkeys. 'Remote Back' to change trainerpath, 'Remote Info' to
+  show the nfo (see readme.txt)
+
 version 0.91:
 - added: default trainerpath (q:\scripts\EvoxT-Trainers\trainers)
 - added: ok dialog after choosing trainerpath
