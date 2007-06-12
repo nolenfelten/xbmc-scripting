@@ -93,26 +93,26 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         try:
             zip = zipfile.ZipFile(file_, 'r')
             namelist = zip.namelist()
-            namelista = namelist[0]
-            roota, namea = os.path.split(namelista)
-            if os.path.exists(os.path.join(tpath,namea)):
-                if dia.yesno('Overwrite?', 'The file ' + namea + ' already exists.', 'Overwrite existing file?') != True:
+            for item in namelist:
+                if item.endswith('.etm'):
+                    root, name = os.path.split(item)
+            if os.path.exists(os.path.join(tpath,name)):
+                if dia.yesno('Overwrite?', 'The file ' + name + ' already exists.', 'Overwrite existing file?') != True:
                     zip.close()
                     os.remove(file_)
                     dialog.close()
                     return False, None
-            dialog.update(90,'Copying ...', 'File: ' + namea, 'Path: ' + tpath)
+            dialog.update(90,'Copying ...', 'File: ' + name, 'Path: ' + tpath)
             for item in namelist:
                 if item.endswith('.etm'):
-                    root, name = os.path.split(item)
                     directory = os.path.normpath(os.path.join(tpath))
                     file(os.path.join(directory,name),'wb').write(zip.read(item))
             zip.close()
-            if os.path.exists(os.path.join(tpath,namea)):
+            if os.path.exists(os.path.join(tpath,name)):
                 os.remove(file_)
             dialog.update(100)
             dialog.close()
-            dia.ok(__scriptname__,'Successesfully installed trainer:',namea, 'to: ' + tpath)
+            dia.ok(__scriptname__,'Successesfully installed trainer:',name, 'to: ' + tpath)
             #namelist[0][0:-1] returns the name of the folder the script was installed into (root folder in zip).
             return True, namelist[0][0:-1]
         except:pass
@@ -542,7 +542,6 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                     filename = self.get_filename(url)
                     dialog.update(40, 'Downloading Trainer...')
                     self.dl_trainer(dllink, filename)
-                    #time.sleep(4)
                     self.unzip(filename)
                 except:pass
 
