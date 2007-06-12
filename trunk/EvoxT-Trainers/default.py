@@ -41,6 +41,7 @@ def setControllerAction(): #Thanks to AMT Team for this :-D
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',
+                    195 : 'Remote Info',
                     207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
@@ -297,7 +298,7 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 self.setFocus(self.trainerlist)
             elif dia.yesno(__scriptname__, 'Exit script?'):
                 self.close()
-        elif ( button_key == 'Y Button' or button_key == 'Keyboard Menu Button'or button_key == 'Remote Title' ):
+        elif ( button_key == 'Y Button' or button_key == 'Keyboard Menu Button' or button_key == 'Remote Info' ):
             if (focusid == 81):
                 try:
                     dialog.create(__scriptname__)
@@ -318,7 +319,7 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                     dialog.update(100)
                     dialog.close()
                 except:pass
-        elif ( button_key == 'White Button' or button_key == 'Keyboard Backspace Button' ):
+        elif ( button_key == 'White Button' or button_key == 'Keyboard Backspace Button' or button_key == 'Remote Back Button' ):
             if (focusid != 5):
                 try:
                     if dia.yesno(__scriptname__, 'Change Trainerpath?', 'Actual: ' + self.TRAINERPATH):
