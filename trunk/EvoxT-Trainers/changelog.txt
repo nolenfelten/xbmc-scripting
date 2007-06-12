@@ -1,7 +1,7 @@
 
 version 0.95:
 - fixed: some unzip issues, should work fine now
-- removed: evt_nfo.ttf. nfo´s arent displayed perfect, but it´s much easier
+- removed: evt_nfo.ttf. nfo's arent displayed perfect, but it's much easier
   to install the script now.
 - changed: buttonkeys. 'Remote Back' to change trainerpath, 'Remote Info' to
   show the nfo (see readme.txt)
