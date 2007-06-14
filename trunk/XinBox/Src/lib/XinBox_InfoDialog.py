@@ -23,7 +23,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.label = label
         
     def onInit(self):
-        self.getControl(20).setLabel(_(51) % self.label)
+        self.getControl(20).setLabel(_(99) % self.label)
         self.getControl(21).setText(_(self.focusid))
         
     def onFocus(self, controlID):

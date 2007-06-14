@@ -10,13 +10,23 @@
 	<string id="17">a new Xinbox account</string>
 	<string id="18">the Xinbox settings</string>
 	<string id="19">the Xinbox script</string>
+	<string id="20">Select</string>
+	<string id="21">Help</string>
 	
 	<!-- Login Menu Labels -->
-	<string id="20">Login Menu</string>
+	<string id="30">Login Menu</string>
 
+	<!-- Create Account Menu Labels -->
+	<string id="50">Create Account</string>
+	<string id="51">Account Name:</string>
+	<string id="52">Account Password:</string>
+	<string id="53">Enter Account Name Here</string>
+	<string id="54">Enter Account Password Here</string>
+		
+	
 
 	<!-- Help Labels -->
-	<string id="51">XinBox Help - %s Control</string>
+	<string id="99">XinBox Help : -( %s )-</string>
 	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
 	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
 	<string id="102">Select if you wish to CHANGE the XinBox settings.</string>

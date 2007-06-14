@@ -24,8 +24,11 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
 
     def setupcontrols(self):
-        MenuLabel = self.getControl(80)
-        MenuLabel.setLabel(_(30))
+        ListItems = [xbmcgui.ListItem(_(51),_(53)),
+                     xbmcgui.ListItem(_(52),_(54)),]
+        for item in ListItems:
+            self.addItem(item)
+        self.getControl(80).setLabel(_(50))
 
     def setupvars(self):
         self.control_action = xib_util.setControllerAction()
