@@ -11,7 +11,10 @@
 ######################################
 import xbmc, sys, os, default,xib_util
 import xbmcgui, language, time, traceback
-import XinBox_LoginMenu, XinBox_InfoDialog
+import XinBox_InfoDialog
+
+import XinBox_LoginMenu, XinBox_CreateAccountMenu
+
 scriptpath = default.__scriptpath__
 _ = language.Language().string  
 
@@ -34,10 +37,10 @@ class GUI( xbmcgui.WindowXML ):
                      xbmcgui.ListItem(_(15),_(19),"XBquiticon.png","XBquiticon.png")]
         for item in MenuItems:
             self.addItem(item)
-        MenuLabel = self.getControl(80)
-        MenuLabel.setLabel(_(10))
-        VersionLabel = self.getControl(81)
-        VersionLabel.setLabel(VERSION)
+        self.getControl(80).setLabel(_(10))
+        self.getControl(81).setLabel(VERSION)
+        self.getControl(82).setLabel(_(20))
+        self.getControl(83).setLabel(_(21))
 
     def setupvars(self):
         self.control_action = xib_util.setControllerAction()
@@ -50,7 +53,7 @@ class GUI( xbmcgui.WindowXML ):
             if self.getCurrentListPosition() == 0: 
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 1:
-                self.launchmenu("XinBox_LoginMenu")
+                self.launchmenu("XinBox_CreateAccountMenu")
             elif self.getCurrentListPosition() == 2:
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 3:
@@ -65,11 +68,11 @@ class GUI( xbmcgui.WindowXML ):
         except:focusid = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.close()
-        elif ( button_key == 'Keyboard Menu Button' or button_key == 'White Button' or button_key == 'Remote Title' ):
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             self.launchinfo(focusid*2 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
     def launchmenu(self, ID):
-        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu}
+        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu,"XinBox_CreateAccountMenu":XinBox_CreateAccountMenu}
         w = Menus[ID].GUI(ID + ".xml",scriptpath + "src","DefaultSkin")
         w.doModal()
         del w
