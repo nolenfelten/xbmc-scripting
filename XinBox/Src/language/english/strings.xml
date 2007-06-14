@@ -1,0 +1,25 @@
+<strings>
+	<!-- Main Menu Labels -->
+  	<string id="10">Main Menu</string>
+  	<string id="11">Login</string>
+	<string id="12">Create</string>
+	<string id="13">Change</string>
+	<string id="14">About</string>
+	<string id="15">Exit</string>
+	<string id="16">to a Xinbox account</string>
+	<string id="17">a new Xinbox account</string>
+	<string id="18">the Xinbox settings</string>
+	<string id="19">the Xinbox script</string>
+	
+	<!-- Login Menu Labels -->
+	<string id="20">Login Menu</string>
+
+
+	<!-- Help Labels -->
+	<string id="51">XinBox Help - %s Control</string>
+	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
+	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
+	<string id="102">Select if you wish to CHANGE the XinBox settings.</string>
+	<string id="103">Select if you wish to find out ABOUT the XinBox script.</string>
+	<string id="104">Select if you wish to EXIT the XinBox script and return to XBMC.</string>
+</strings>
