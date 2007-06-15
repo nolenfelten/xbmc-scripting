@@ -1,0 +1,121 @@
+<window>
+    <defaultcontrol>51</defaultcontrol>
+    <allowoverlay>yes</allowoverlay>
+    <controls>
+        <control type="image">
+            <description>banner image</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>720</width>
+            <height>88</height>
+            <texture>background-plain.png</texture>
+        </control>
+        <control type="image">
+            <description>background image</description>
+            <posx>0</posx>
+            <posy>88</posy>
+            <width>720</width>
+            <height>488</height>
+            <texture>background-bottom.png</texture>
+        </control>
+        <control type="label">
+            <description>xbox media center label</description>
+            <posx>200</posx>
+            <posy>63</posy>
+            <align>right</align>
+            <label>xbox media center</label>
+            <font>special12</font>
+            <textcolor>ffffffff</textcolor>
+        </control>
+        <control type="label" id="1">
+            <description>title label</description>
+            <posx>207</posx>
+            <posy>63</posy>
+            <align>left</align>
+            <label>ircXBMC - Settings</label>
+            <font>special13</font>
+        </control>
+        <control type="list" id="51">
+            <posx>150</posx>
+            <posy>130</posy>
+            <width>400</width>
+            <height>400</height>
+            <onleft>2</onleft>
+            <onright>298</onright>
+            <onup>2</onup>
+            <ondown>98</ondown>
+            <animation effect="slide" time="500" start="0,600" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+            <animation effect="slide" time="300" start="0,0" end="0,600" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+            <viewtype label="535">list</viewtype>
+            <scrolltime>200</scrolltime>
+            <itemlayout height="25">
+                <control type="image">
+                    <posx>5</posx>
+                    <posy>3</posy>
+                    <width>20</width>
+                    <height>20</height>
+                    <info>ListItem.Icon</info>
+                </control>
+                <control type="label">
+                    <posx>30</posx>
+                    <posy>2</posy>
+                    <width>380</width>
+                    <height>22</height>
+                    <font>font13</font>
+                    <include>listselectedcolor</include>
+                    <align>left</align>
+                    <info>ListItem.Label</info>
+                </control>
+                <control type="label">
+                    <posx>390</posx>
+                    <posy>2</posy>
+                    <width>300</width>
+                    <height>22</height>
+                    <font>font13</font>
+                    <include>listselectedcolor</include>
+                    <textcolor>60ffffff</textcolor>
+                    <align>right</align>
+                    <info>ListItem.Label2</info>
+                </control>
+            </itemlayout>
+            <focusedlayout height="25">
+                <control type="image">
+                    <width>400</width>
+                    <height>25</height>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <visible>Control.HasFocus(51)</visible>
+                    <texture>list-focus.png</texture>
+                </control>
+                <control type="image">
+                    <posx>5</posx>
+                    <posy>3</posy>
+                    <width>20</width>
+                    <height>20</height>
+                    <info>ListItem.Icon</info>
+                </control>
+                <control type="label">
+                    <posx>30</posx>
+                    <posy>2</posy>
+                    <width>380</width>
+                    <height>22</height>
+                    <font>font13</font>
+                    <include>listselectedcolor</include>
+                    <align>left</align>
+                    <info>ListItem.Label</info>
+                </control>
+                <control type="label">
+                    <posx>390</posx>
+                    <posy>2</posy>
+                    <width>300</width>
+                    <height>22</height>
+                    <font>font13</font>
+                    <include>listselectedcolor</include>
+                    <textcolor>60ffffff</textcolor>
+                    <align>right</align>
+                    <info>ListItem.Label2</info>
+                </control>
+            </focusedlayout>
+        </control>
+    </controls>
+</window>
