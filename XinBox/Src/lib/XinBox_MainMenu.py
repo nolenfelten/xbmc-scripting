@@ -69,7 +69,7 @@ class GUI( xbmcgui.WindowXML ):
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
-            self.launchinfo(focusid*2 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+            self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
     def launchmenu(self, ID):
         Menus = {"XinBox_LoginMenu":XinBox_LoginMenu,"XinBox_CreateAccountMenu":XinBox_CreateAccountMenu}

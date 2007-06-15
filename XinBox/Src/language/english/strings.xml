@@ -20,10 +20,7 @@
 	<string id="50">Create Account</string>
 	<string id="51">Account Name:</string>
 	<string id="52">Account Password:</string>
-	<string id="53">Default:</string>
-
-		
-	
+	<string id="53">Default Account</string>
 
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>
@@ -32,4 +29,7 @@
 	<string id="102">Select if you wish to CHANGE the XinBox settings.</string>
 	<string id="103">Select if you wish to find out ABOUT the XinBox script.</string>
 	<string id="104">Select if you wish to EXIT the XinBox script and return to XBMC.</string>
+	<string id="105">Select to set the Account Name for your XinBox Account.</string>	
+	<string id="106">Select to set the Account Password for your XinBox Account. Select "No Password" to disable a password for this account.</string>
+	<string id="107">Select to toggle if this Account is the Default Account. A Default Account automatically logs in on XinBox startup. Note: There can only be a maximum of one Default Account.</string>	
 </strings>
