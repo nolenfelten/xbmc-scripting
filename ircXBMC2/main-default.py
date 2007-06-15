@@ -100,10 +100,6 @@ class Splash(xbmcgui.WindowDialog):
 def MenuListItem(label1,label2,thumb,icon):
     basePath = os.path.join(scriptPath,'media')
     li = xbmcgui.ListItem(label1,label2,os.path.join(basePath,thumb),os.path.join(basePath,icon))
-    print "getInfo('label') = %s" % li.getInfo("label")
-    print "getInfo('title') = %s" % li.getInfo("title")
-    li.setInfo("title","test")
-    print "getInfo('title') = %s" % li.getInfo("title")
     return  li
 
 class IRCSetup(xbmcgui.WindowXML):
