@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<strings>
+	<string id="0">Launch IRC Client</string>
+	<string id="1">Settings</string>
+	<string id="2">About</string>
+	<string id="3">Quit %s</string>
+
+	<string id="4">Run the client</string>
+	<string id="5">Configure %s</string>
+	<string id="6">About the script</string>
+	<string id="7">Close the script</string>
+	<string id="8">Main Menu</string>
+	<string id="9">Leave %s</string>
+    <string id="10">Change %s</string>
+    <string id="11">Back to %s</string>
+    <string id="12">Add %s</string>
+    <string id="13">Set %s</string>
+    <string id="14">item</string>
+    <string id="15">list</string>
+    <string id="16">Add an item to the list</string>
+    <string id="17">Remove an item from list</string>
+    <string id="18">Remove %s</string>
+    <string id="19">Cancel</string>
+    <string id="20">Cancel the operation</string>
+    <string id="21">Stop the operation</string>
+</strings>
+
