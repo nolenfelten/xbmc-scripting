@@ -1,0 +1,47 @@
+<!--German Strings VER: 0.1-->
+<strings>
+	<!-- Main Menu Labels -->
+  	<string id="10">Hauptmenü</string>
+  	<string id="11">Anmelden</string>
+	<string id="12">Erstelle</string>
+	<string id="13">Ändere</string>
+	<string id="14">Über</string>
+	<string id="15">Beende</string>
+	<string id="16">bei einem XinBox Account</string>
+	<string id="17">einen neuen Xinbox Account</string>
+	<string id="18">die XinBox Einstellungen</string>
+	<string id="19">das XinBox Script</string>
+	<string id="20">Auswählen</string>
+	<string id="21">Hilfe</string>
+	
+	<!-- Login Menu Labels -->
+	<string id="30">Login Menü</string>
+
+	<!-- Create Account Menu Labels -->
+	<string id="50">Account erstellen</string>
+	<string id="51">Account Name:</string>
+	<string id="52">Account Passwort:</string>
+	<string id="53">Bevorzugter Account</string>
+	<string id="61">Hinzufügen XinBox</string>
+	<string id="62">Ändere XinBox</string>
+	<string id="63">Lösche XinBox</string>
+	<string id="64">Speichere Account</string>
+	<string id="65">OK</string>
+	<string id="66">Ändere %s</string>
+
+	<!-- Help Labels -->
+	<string id="99">XinBox Hilfe : -( %s )-</string>
+	<string id="100">Auswählen um dich bei einem XinBox Account anzumelden. Wenn kein Account besteht, musst du erst einen XinBox Account erstellen.</string>
+	<string id="101">Auswählen um einen neuen Xinbox Account zu erstellen. Ein XinBox Account wird benötigt um sich einzuloggen.</string>
+	<string id="102">Auswählen um die XinBox Einstellungen zu ändern.</string>
+	<string id="103">Auswählen um mehr über das XinBox Script zu erfahren.</string>
+	<string id="104">Auswählen um das XinBox Script zu beenden und zu XBMC zurückzukehren.</string>
+	<string id="105">Auswählen um einen Account Namen für dein XinBox Account einzugeben.</string>
+	<string id="106">Auswählen um ein Account Passwort für dein XinBox Account einzugeben. Wähle 'kein Passwort', um das Passwort des Accounts zu deaktivieren.</string>
+	<string id="107">Auswählen um bevorzugten Account festzulegen. Der bevorzugte Account wird beim XinBox-Start automatisch eingeloggt. Beachte: Es kann maximal nur einen bevorzugten Account geben.</string>
+	<string id="108">Auswählen um einen neuen XinBox Account hinzuzufügen.</string>
+	<string id="109">Auswählen um einen bestehenden XinBox Account zu ändern.</string>
+	<string id="110">Auswählen um einen bestehenden XinBox Account zu löschen.</string>
+	<string id="111">Auswählen um den Account zu speichern.</string>
+	<string id="112">Auswählen um zum Hauptmenü zurückzukehren.</string>
+</strings>
