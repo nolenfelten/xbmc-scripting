@@ -27,6 +27,7 @@
 	<string id="63">Delete XinBox</string>
 	<string id="64">Save Account</string>
 	<string id="65">OK</string>
+	<string id="66">Change %s</string>
 
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>
