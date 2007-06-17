@@ -28,7 +28,14 @@
 	<string id="64">Save Account</string>
 	<string id="65">OK</string>
 	<string id="66">Change %s</string>
-
+	<string id="67">Display Name</string>
+	<string id="68">POP Server</string>
+	<string id="69">SMTP Server</string>
+	<string id="70">Server Username</string>
+	<string id="71">Server Password</string>
+	<string id="72">Server Size</string>
+	<string id="73">Inbox</string>
+	
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>
 	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
