@@ -50,11 +50,11 @@ class Language:
             # parse and resolve each <string id="#"> tag
             strings = root.getElementsByTagName( "string" )
             for string in strings:
-                string_id = string.getAttribute( "id" )
+                string_id = int( string.getAttribute( "id" ) )
                 # if a valid id add it to self.strings dictionary
                 if ( string_id and string_id not in self.strings ):
                     if ( string.hasChildNodes() ): 
-                        self.strings[ int( string_id ) ] = string.firstChild.nodeValue
+                        self.strings[ string_id ] = string.firstChild.nodeValue
         except:
             print "ERROR: Language file %s can't be parsed" % ( language_path, )
         try: doc.unlink()
@@ -62,4 +62,4 @@ class Language:
 
     def localized( self, code ):
         """ returns the localized string if it exists """
-        return self.strings.get( int( code ), str( code ) )
+        return self.strings.get( code, str( code ) )
