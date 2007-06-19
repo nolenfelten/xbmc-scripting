@@ -25,26 +25,7 @@ __title__ = "XinBox"
 lang = Language()
 _ = lang.string
 
-
-
-
-defSettingsForAInBox =  {
-    "Display Name": ["-","text"],
-    "POP Server": ["-","text"],
-    "SMTP Server": ["-","text"],
-    "Server Username": ["-","text"],
-    "Server Password": ["-","text"],
-    "Server Size": ["-","text"]}
-defInboxSettings = Settings("",__title__,defSettingsForAInBox,2)
-defSettingsForAnAccount = {
-    "Account Name": ["-","text"],
-    "Account Password": ["-","text"],
-    "Default Account": ["-","boolean"],
-    "Inboxes": [['Inbox',[["XinBoxDefault",defInboxSettings,"settings"]]],"list"]}
-
-defAccountSettings = Settings("",__title__,defSettingsForAnAccount,2)
-defSettings = {
-    "Accounts": [['Account',[["XinBoxDefault",defAccountSettings,"settings"]]],"list"]}
+defSettings = {"Accounts": [['Account',[]],"list"]}
 
 setts = Settings("XinBox_Settings.xml",__title__,defSettings)
 
