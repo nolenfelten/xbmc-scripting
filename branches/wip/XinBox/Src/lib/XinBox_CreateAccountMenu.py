@@ -26,23 +26,30 @@ import os
 # Maybe make add inbox a dialog over the top of this account :-D
 
 
+### Edit Account
+##
+##
 class WindowSettings(xbmcgui.WindowXML):
-    def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title,account):
-        self.account = account
-     #   self.account = "Chloe"
+    def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
+ #       self.account = account
+        self.account = "Chloe"
+        if self.account == "Default":
+            self.newaccount = True
+        else:self.newaccount = False
         
         self.title = title
         self.thescriptPath = thescriptPath
-        self.depth = 0
         self.language = language.string
-        
-        self.settingName = ""
-        self.theSettings = scriptSettings
-        self.curSettings = self.theSettings
 
-        self.accountSettings = self.getaccountsettings(self.account)
-        self.accountinboxes = self.buildinboxdict(self.accountSettings)
-        self.inboxSettings = self.getinboxsettings(self.account,"Default")
+        self.theSettings = scriptSettings
+        
+        if self.newaccount:
+            self.accountname = "-"
+            self.accountpass = "-"
+            self.defaultaccount = False
+        else:
+            self.accountSettings = self.getaccountsettings(self.account)
+            self.accountinboxes = self.buildinboxdict(self.accountSettings)
 
     def buildinboxdict(self,accountsettings):
         self.inboxes = {} 
@@ -50,39 +57,44 @@ class WindowSettings(xbmcgui.WindowXML):
             self.inboxes[set[0]] = set[1]
         return self.inboxes
 
-    def getinboxsettings(self,account,inbox):
-        temp = self.theSettings.getSettingInListbyname("Accounts",account)
-        return temp.getSettingInListbyname("Inboxes",inbox)
+    def getinboxsettings(self,accountsettings,inbox):
+        return accountsettings.getSettingInListbyname("Inboxes",inbox)
 
     def getaccountsettings(self,account):
         return self.theSettings.getSettingInListbyname("Accounts",account)
 
+    
     def onInit(self):
         try:
-            xbmcgui.lock()
+            self.list2 = self.getControl(88)
+            self.buttonids = [61,62,63,64,64]
+            if self.newaccount:
+                self.getControl(80).setLabel(self.language(50))
+            else:self.getControl(80).setLabel(self.language(74))
             self.builsettingsList()
             self.buildinboxlist()
-            self.getControl(80).setLabel(self.language(50))
-            self.buttonids = [61,62,63,64,65]
             for ID in self.buttonids:
                 self.getControl(ID).setLabel(self.language(ID))
             self.getControl(82).setLabel(self.language(20))
             self.getControl(83).setLabel(self.language(21))
-            xbmcgui.unlock()
-        except: traceback.print_exc()
+        except:traceback.print_exc()
     
     def builsettingsList(self):
-        for set in self.accountSettings.settings:
-            if self.accountSettings.getSettingType(set) == "text" or self.accountSettings.getSettingType(set) == "boolean":
-                if self.accountSettings.getSetting(set) == "-":
-                    self.addItem(self.SettingListItem(set, ""))
-                else:
+        if self.newaccount:
+            self.addItem(self.SettingListItem(self.language(51),""))
+            self.addItem(self.SettingListItem(self.language(52),""))
+            self.addItem(self.SettingListItem(self.language(53),""))
+        else:
+            for set in self.accountSettings.settings:
+                if self.accountSettings.getSettingType(set) == "text" or self.accountSettings.getSettingType(set) == "boolean":
                     self.addItem(self.SettingListItem(set, self.accountSettings.getSetting(set)))
 
     def buildinboxlist(self):
-        for set in self.accountinboxes:
-            if set != "Default":
-                self.addItem(self.SettingListItem(set, ""))
+        if self.newaccount:
+            self.list2.addItem(self.SettingListItem(self.language(75), ""))
+        else:
+            for set in self.accountinboxes:
+                self.list2.addItem(self.SettingListItem(set, ""))
 ##        test = self.inboxes[self.getListItem(4).getLabel()]
 ##      # will be able to do: test = self.inboxes[self.getListItem(self.getCurrentListPosition()).getLabel()]  
 ##        print "test for inbox = " + str(test)
@@ -97,23 +109,43 @@ class WindowSettings(xbmcgui.WindowXML):
                 curItem = self.getListItem(curPos)
                 curName = curItem.getLabel()
                 curName2 = curItem.getLabel2()
-                if curName2 == "-":
-                    curName2 = ""
-                type = self.accountSettings.getSettingType(curName)
-                if (type == "text"):
-                    value = self.showKeyboard(self.language(66) % curName,curName2)
-                    curItem.setLabel2(value)
-                    self.Addsetting("Accounts",value)
-                    self.accountSettings = self.getaccountsettings(value)
-                    self.accountSettings.setSetting(curName,value)
+                if self.newaccount:
+                    if curName == self.language(51):
+                        value = self.showKeyboard(self.language(66) % curName,curName2)
+                        self.accountname = value
+                        curItem.setLabel2(value)
+                    elif curName == self.language(52):
+                        value = self.showKeyboard(self.language(66) % curName,curName2)
+                        self.accountpass = value
+                        curItem.setLabel2(value)
+                    elif curName == self.language(53):
+                        self.defaultaccount = not self.defaultaccount
+                        self.getControl(104).setSelected(self.defaultaccount)
+                else:
+                    type = self.accountSettings.getSettingType(curName)
+                    if (type == "text"):
+                        value = self.showKeyboard(self.language(66) % curName,curName2)
+                        curItem.setLabel2(value)
+                        self.accountSettings.setSetting(curName,value)
+                        if curName == self.language(51):
+                            self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                    elif (type == "boolean"):
+                        self.defaultaccount = not self.defaultaccount
+                        self.getControl(104).setSelected(self.defaultaccount)
+                        self.accountSettings.setSetting(curName,str(self.defaultaccount))
             elif ( controlID == 64):
+                if self.newaccount:
+                    self.Addsetting("Accounts",self.accountname)
+                    self.accountSettings = self.getaccountsettings(self.accountname)
+                    self.accountSettings.setSetting(self.language(51),self.accountname)
+                    self.accountSettings.setSetting(self.language(52),self.accountpass)
+                    self.accountSettings.setSetting(self.language(53),str(self.defaultaccount))
                 self.theSettings.saveXMLfromArray()
-            elif ( controlID == 65):
                 self.close()
         except:traceback.print_exc()
 
     def addnewItem(self, settingname,value1,value2="",type="text"):
-        self.curSettings.addSettingInList(settingname,value1,value2,"settings")
+        self.theSettings.addSettingInList(settingname,value1,value2,"settings")
         return
 
     def onFocus(self, controlID):
@@ -129,11 +161,13 @@ class WindowSettings(xbmcgui.WindowXML):
             return default
         
     def SettingListItem(self, label1,label2):
-        if label2 == "true":
-            self.getControl(104).setSelected(True)
+        if label2 == "True":
+            self.defaultaccount = True
+            self.getControl(104).setSelected(self.defaultaccount)
             return xbmcgui.ListItem(label1,"","","")
-        elif label2 == "false":
-            self.getControl(104).setSelected(False)
+        elif label2 == "False":
+            self.defaultaccount = False
+            self.getControl(104).setSelected(self.defaultaccount)
             return xbmcgui.ListItem(label1,"","","")
         else:
             return xbmcgui.ListItem(label1,label2,"","")

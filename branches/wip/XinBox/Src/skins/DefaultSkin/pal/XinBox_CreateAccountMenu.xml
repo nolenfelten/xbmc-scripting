@@ -186,24 +186,6 @@
 				<height>42</height>
 			</control>
 			<control type="button" id="64">
-				<description>Save Account button</description>
-				<posx>6</posx>
-				<posy>177</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>-</label>
-				<onleft>51</onleft>
-				<onup>63</onup>
-				<align>center</align>
-				<aligny>center</aligny>
-				<ondown>65</ondown>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
-				<height>42</height>
-			</control>
-			<control type="button" id="65">
 				<description>OK button</description>
 				<posx>6</posx>
 				<posy>239</posy>
@@ -211,7 +193,7 @@
       				<textoffsety></textoffsety>
 				<label>-</label>
 				<onleft>51</onleft>
-				<onup>64</onup>
+				<onup>63</onup>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
@@ -271,6 +253,85 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>Control.HasFocus(51)</visible>
+					<texture>XBlist-focus.png</texture>
+				</control>
+				<control type="image">
+					<posx>200</posx>
+					<posy>0</posy>
+					<width>25</width>
+					<height>25</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>5</posx>
+					<posy>2</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>285</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</focusedlayout>
+		</control>
+		<control type="list" id="88">
+			<posx>250</posx>
+			<posy>250</posy>
+			<width>290</width>
+			<height>275</height>
+			<onright>9000</onright>
+			<scrolltime>200</scrolltime>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+			<itemlayout height="27">
+				<control type="image">
+					<width>440</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture>XBlist-nofocus.png</texture>
+				</control>
+				<control type="image">
+					<posx>200</posx>
+					<posy>0</posy>
+					<width>25</width>
+					<height>25</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>5</posx>
+					<posy>2</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>285</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="27">
+				<control type="image">
+					<width>290</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(88)</visible>
 					<texture>XBlist-focus.png</texture>
 				</control>
 				<control type="image">
