@@ -24,8 +24,9 @@ SCRIPTPATH = default.__scriptpath__
 SRCPATH = SCRIPTPATH + "src"
 VERSION =  default.__version__
 
-_ = Language().string
-
+lang = Language(TITLE)
+lang.load(SRCPATH + "//language")
+_ = lang.string
 
 defSettings = {"Accounts": [['Account',[]],"list"]}
 setts = Settings("XinBox_Settings.xml",TITLE,defSettings)
@@ -93,8 +94,7 @@ class GUI( xbmcgui.WindowXML ):
         del w
 
     def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin")
-        dialog.setupvars(focusid, label)
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_)
         dialog.doModal()
         del dialog
 

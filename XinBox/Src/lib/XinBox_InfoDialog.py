@@ -9,22 +9,19 @@
 #   A pop3 email client for XBMC     #
 #                                    #
 ######################################
-import xbmc, sys, os, default,xib_util
+import xbmc, sys, os, xib_util
 import xbmcgui, language, time
-
-_ = language.Language().string  
-
+ 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,thefocid=0,thelabel="No Label",language=0):
         self.control_action = xib_util.setControllerAction()
-
-    def setupvars(self, focusid, label):
-        self.focusid = focusid
-        self.label = label
+        self.focusid = thefocid
+        self.label = thelabel
+        self.lang = language
         
     def onInit(self):
-        self.getControl(20).setLabel(_(99) % self.label)
-        self.getControl(21).setText(_(self.focusid))
+        self.getControl(20).setLabel(self.lang(99) % self.label)
+        self.getControl(21).setText(self.lang(self.focusid))
         
     def onFocus(self, controlID):
         pass

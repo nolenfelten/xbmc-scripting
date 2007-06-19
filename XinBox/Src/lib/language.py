@@ -1,42 +1,42 @@
-"""
-    Language Class:
-    Is used to translate a language file like Xbox Media Center's language files.
-    Originally Coded by Rockstar, Recoded by Donno :D
-"""
-import xbmc, re, os ,sys
+import xbmc, xbmcgui, os, re
 
 class Language:
-    def __init__( self ):
-        module_dir = os.path.dirname( sys.modules['language'].__file__ )
-        cwd = os.path.join( os.path.dirname( module_dir ), 'language' )
-        self.strings = {}
-        temp_strings = []
-        language = xbmc.getLanguage().lower()
-        language_path = os.path.join( cwd, language, 'strings.xml' )
-        if ( not os.path.isfile( language_path ) ):
-            language = 'english'
-            language_path = os.path.join( cwd, language, 'strings.xml' )
-        
-        try:
-            f = open( language_path, 'r' )
-            temp_strings = f.read()
-            f.close()
-            pattern = '<string id="(.*?)">(.*?)</string>'
-            strings = re.findall(pattern, temp_strings)
-            for item in strings:
-                self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
-        
-            if ( language != 'english' ):
-                language_path = os.path.join( cwd, 'english', 'strings.xml' )
-                f = open( language_path, 'r' )
-                temp_strings = f.read()
-                f.close()
-                strings = re.findall(pattern, temp_strings)
-                for item in strings:
-                    if ( not self.strings.has_key(int( item[0] ) ) ):
-                        self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
-        except:
-            print "ERROR: Language file %s can't be opened" % ( language_path, )
+    """
+        Language Class
+            For reading in xml for automatiacall of the selected lanauge XBMC is running in
+            And for returning the string in the given Language for a specified id
+            By RockStar and Donno
+    """
+    title = ""
 
-    def string( self, code ):
-        return self.strings.get( int( code ), str( code ) )
+    def __init__(self,title):
+        self.title = title
+    
+    def load(self,thepath):
+        self.strings = {}
+        tempstrings = []
+        self.language = xbmc.getLanguage().lower()
+        
+        if os.path.exists(os.path.join(thepath,self.language,"strings.xml")):
+            self.foundlang = self.language
+        else:
+            self.foundlang = "english"
+        self.langdoc = os.path.join(thepath,self.foundlang,"strings.xml")
+        print "- Loading Language: " + self.foundlang
+        try:
+            f=open(self.langdoc,'r')
+            tempstrings=f.read()
+            f.close()
+        except:
+            print "Error: Languagefile "+self.langdoc+" can not be opened"
+            xbmcgui.Dialog().ok(self.title,"Error: Language file",self.langdoc+" can not be opened")
+        self.exp='<string id="(.*?)">(.*?)</string>'
+        self.res=re.findall(self.exp,tempstrings)
+        for stringdat in self.res:
+            self.strings[int(stringdat[0])] = str(stringdat[1])
+
+    def string(self,number):
+        if int(number) in self.strings:
+            return self.strings[int(number)]
+        else:
+            return "unknown string id"

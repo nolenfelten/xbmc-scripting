@@ -20,9 +20,9 @@ __scriptsettings__ = "P:\\script_data\\"
 __scriptpath__ = os.getcwd().replace(";","")+"\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
-__url__ = 'http://code.google.com/p/xbmc-scripting/'
+__url__ = 'http://xbmc-scripting.googlecode.com/svn/branches/wip/XinBox/'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = '1.0'
+__version__ = 'V.1.0'
 
 __credits_l1__ = 'Head Developer & Coder'
 __credits_r1__ = 'Stanley87'
