@@ -1,5 +1,3 @@
-#Thanks to Donno for some of the code below
-
 import xbmcgui,traceback,XinBox_InfoDialog
 import xbmc
 import os
@@ -14,10 +12,6 @@ import xib_util
 ##
 ##
 
-
-
-keyStr = "XinBox"
-
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
         self.account = account
@@ -27,7 +21,7 @@ class AccountSettings(xbmcgui.WindowXML):
         
         self.title = title
         self.scriptPath = thescriptPath
-        self.language = language.string
+        self.language = language
 
         self.theSettings = scriptSettings
         
@@ -40,10 +34,10 @@ class AccountSettings(xbmcgui.WindowXML):
             self.accountinboxes = self.buildinboxdict(self.accountSettings)
 
     def buildinboxdict(self,accountsettings):
-        self.inboxes = {} 
+        inboxes = {} 
         for set in self.accountSettings.getSetting("Inboxes")[1] :
-            self.inboxes[set[0]] = set[1]
-        return self.inboxes
+            inboxes[set[0]] = set[1]
+        return inboxes
 
     def getinboxsettings(self,accountsettings,inbox):
         return accountsettings.getSettingInListbyname("Inboxes",inbox)
@@ -53,23 +47,28 @@ class AccountSettings(xbmcgui.WindowXML):
     
     def onInit(self):
         xbmcgui.lock()
+        self.setupvars()
+        self.setupcontrols()
+        self.builsettingsList()
+        self.buildinboxlist()
+        xbmcgui.unlock()
+
+    def setupvars(self):
         self.control_action = xib_util.setControllerAction()
-        self.list2 = self.getControl(88)
+        self.inboxlist = self.getControl(88)
+
+    def setupcontrols(self):
+        self.getControl(82).setLabel(self.language(20))
+        self.getControl(83).setLabel(self.language(21))
         self.buttonids = [61,62,63,64]
+        for ID in self.buttonids:
+            self.getControl(ID).setLabel(self.language(ID))        
         if self.newaccount:
             self.getControl(64).setEnabled(False)
             self.getControl(63).setEnabled(False)
             self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
-        else:
-            self.getControl(80).setLabel(self.language(74))
-        self.builsettingsList()
-        self.buildinboxlist()
-        for ID in self.buttonids:
-            self.getControl(ID).setLabel(self.language(ID))
-        self.getControl(82).setLabel(self.language(20))
-        self.getControl(83).setLabel(self.language(21))
-        xbmcgui.unlock()
+        else:self.getControl(80).setLabel(self.language(74))
     
     def builsettingsList(self):
         if self.newaccount:
@@ -86,13 +85,13 @@ class AccountSettings(xbmcgui.WindowXML):
         
     def buildinboxlist(self):
         if self.newaccount:
-            self.list2.addItem(self.SettingListItem(self.language(75), ""))
+            self.inboxlist.addItem(self.SettingListItem(self.language(75), ""))
         else:
             for set in self.accountinboxes:
                 if set != "XinBoxDefault":
-                    self.list2.addItem(self.SettingListItem(set, ""))
-            if self.list2.size() == 0:
-                self.list2.addItem(self.SettingListItem(self.language(75), ""))
+                    self.inboxlist.addItem(self.SettingListItem(set, ""))
+            if self.inboxlist.size() == 0:
+                self.inboxlist.addItem(self.SettingListItem(self.language(75), ""))
                 self.getControl(63).setEnabled(False)
                 self.getControl(62).setEnabled(False)
 
