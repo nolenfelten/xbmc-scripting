@@ -13,10 +13,41 @@ import xbmc, sys, os, default,xib_util
 import xbmcgui, language, time, traceback
 import XinBox_InfoDialog
 
-import XinBox_LoginMenu, XinBox_CreateAccountMenu
+import XinBox_LoginMenu, XinBox_CreateAccountMenu,XinBox_Settings
+from settings import Settings
+
+from language import Language
+
+
+__title__ = "XinBox"
+lang = Language()
+_ = lang.string
+
+defSettingsForAInBox =  {
+    _(67): ["-","text"],
+    _(68): ["-","text"],
+    _(69): ["-","text"],
+    _(70): ["-","text"],
+    _(71): ["-","text"],
+    _(72): ["-","text"]}
+defInboxSettings = Settings("",__title__,defSettingsForAInBox,2)
+defSettingsForAnAccount = {
+    _(51): ["-","text"],
+    _(52): ["-","text"],
+     _(53): ["-","boolean"],
+    "Inboxes": [['Inbox',[["Default",defInboxSettings,"settings"]]],"list"]}
+
+defAccountSettings = Settings("",__title__,defSettingsForAnAccount,2)
+defSettings = {
+    "Accounts": [['Account',[["Default",defAccountSettings,"settings"]]],"list"]}
+
+setts = Settings("XinBox_Settings.xml",__title__,defSettings)
 
 scriptpath = default.__scriptpath__
-_ = language.Language().string  
+
+from XinBox_Settings import ircXBMC_Settings
+
+
 
 VERSION = "V.1.0"
 class GUI( xbmcgui.WindowXML ):
@@ -53,7 +84,9 @@ class GUI( xbmcgui.WindowXML ):
             if self.getCurrentListPosition() == 0: 
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 1:
-                self.launchmenu("XinBox_CreateAccountMenu")
+                try:
+                    self.gosettings()
+                except:traceback.print_exc()
             elif self.getCurrentListPosition() == 2:
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 3:
@@ -83,3 +116,7 @@ class GUI( xbmcgui.WindowXML ):
         dialog.doModal()
         del dialog
 
+    def gosettings(self):
+        winSettings = ircXBMC_Settings("XinBox_CreateAccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="Default")
+        winSettings.doModal()
+        del winSettings

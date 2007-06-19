@@ -1,5 +1,6 @@
 <!--English Strings VER: 0.1-->
 <strings>
+	<string id="0">XinBox</string>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
   	<string id="11">Login</string>
