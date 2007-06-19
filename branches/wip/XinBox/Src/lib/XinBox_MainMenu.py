@@ -19,34 +19,36 @@ from XinBox_Settings import XinBox_Settings
 from language import Language
 
 
-__title__ = "XinBox"
+TITLE = default.__scriptname__
+SCRIPTPATH = default.__scriptpath__
+SRCPATH = SCRIPTPATH + "src"
+VERSION =  default.__version__
 
+_ = Language().string
 
-lang = Language()
-_ = lang.string
 
 defSettings = {"Accounts": [['Account',[]],"list"]}
-
-setts = Settings("XinBox_Settings.xml",__title__,defSettings)
-
+setts = Settings("XinBox_Settings.xml",TITLE,defSettings)
 
 
-
-
-scriptpath = default.__scriptpath__
-
-VERSION = "V.1.0"
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        print "welcome"
+        pass
 
     def onInit(self):
-        self.clearList()
-        self.setupcontrols()
-        self.setupvars()
-        xbmcgui.unlock()
+        xbmcgui.lock()
+        try:
+            self.clearList()
+            self.setupvars()
+            self.setupcontrols()
+            xbmcgui.unlock()
+        except:traceback.print_exc()
 
     def setupcontrols(self):
+        self.getControl(80).setLabel(_(10))
+        self.getControl(81).setLabel(VERSION)
+        self.getControl(82).setLabel(_(20))
+        self.getControl(83).setLabel(_(21))
         MenuItems = [xbmcgui.ListItem(_(11),_(16),"XBlogin.png","XBlogin.png"),
                      xbmcgui.ListItem(_(12),_(17),"XBcreatenew.png","XBcreatenew.png"),
                      xbmcgui.ListItem(_(13),_(18),"XBchangesettings.png","XBchangesettings.png"),
@@ -54,10 +56,6 @@ class GUI( xbmcgui.WindowXML ):
                      xbmcgui.ListItem(_(15),_(19),"XBquiticon.png","XBquiticon.png")]
         for item in MenuItems:
             self.addItem(item)
-        self.getControl(80).setLabel(_(10))
-        self.getControl(81).setLabel(VERSION)
-        self.getControl(82).setLabel(_(20))
-        self.getControl(83).setLabel(_(21))
 
     def setupvars(self):
         self.control_action = xib_util.setControllerAction()
@@ -70,9 +68,7 @@ class GUI( xbmcgui.WindowXML ):
             if self.getCurrentListPosition() == 0: 
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 1:
-                try:
-                    self.gosettings()
-                except:traceback.print_exc()
+                self.launchcreatemenu()
             elif self.getCurrentListPosition() == 2:
                 self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 3:
@@ -91,18 +87,18 @@ class GUI( xbmcgui.WindowXML ):
             self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
     def launchmenu(self, ID):
-        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu,"XinBox_CreateAccountMenu":XinBox_CreateAccountMenu}
-        w = Menus[ID].GUI(ID + ".xml",scriptpath + "src","DefaultSkin")
+        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu}
+        w = Menus[ID].GUI(ID + ".xml",SRCPATH,"DefaultSkin")
         w.doModal()
         del w
 
     def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",scriptpath + "src","DefaultSkin")
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin")
         dialog.setupvars(focusid, label)
         dialog.doModal()
         del dialog
 
-    def gosettings(self):
-        winSettings = XinBox_Settings ("XinBox_AccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="XinBoxDefault")
+    def launchcreatemenu(self):
+        winSettings = XinBox_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="XinBoxDefault")
         winSettings.doModal()
         del winSettings
