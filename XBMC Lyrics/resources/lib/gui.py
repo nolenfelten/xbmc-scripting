@@ -174,7 +174,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( settings.restart ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
             if ( not ok ):
-                if ( self.controlId == 100 or self.controlId == 101 or self.controlId == 110 or self.controlId == 111 ): 
+                if ( self.controlId in ( 100, 101, 110, 111, ) ): 
                     self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
                 self.show_viz_window( False )
             else: self.exit_script( True )
