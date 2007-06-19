@@ -1,6 +1,6 @@
-<!--English Strings VER: 0.1-->
+<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
+<!--English Strings VER: 0.2-->
 <strings>
-	<string id="0">XinBox</string>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
   	<string id="11">Login</string>

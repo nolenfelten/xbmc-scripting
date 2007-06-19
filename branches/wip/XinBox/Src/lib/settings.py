@@ -291,34 +291,3 @@ class Settings:
         fsock = open(filepath,"w")
         fsock.write(xmldoc.toprettyxml(indent="    "))
         fsock.close()
-
-"""
-    OLD CODE:
-
-    ## FOR LOADING ###
-    Load for when it was just <settingnamehere>settinvaluehere</settingnamehere> (pre real DOM days)
-    data = xmlsettings.toxml()
-    regp = '<([^<]*)>([^</]*)</'
-    save_info = re.compile(regp,re.IGNORECASE).findall(data)
-    for x in save_info:
-        self.settings[x[0]] = x[1].strip()
-    print self.settings
-
-    ### FOR WRITTING ###
-
-        <username>Donno</username>  way
-        for key in self.settings:
-            newElem = xmldoc.createElement(key)
-            newElem.appendChild(xmldoc.createTextNode(self.settings[key]))
-            settingElem.appendChild(newElem)
-
-        #   <setting name="username">Donno</username> way
-
-        for key in self.settings:
-            newElem = xmldoc.createElement("setting")
-            newElem.setAttribute("name", key)
-            newElem.appendChild(xmldoc.createTextNode(self.settings[key]))
-            settingElem.appendChild(newElem)
-
-        #   <setting name="username" value="Donno" /> way
-"""

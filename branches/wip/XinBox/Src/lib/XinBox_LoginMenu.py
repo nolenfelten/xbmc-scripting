@@ -9,10 +9,18 @@
 #   A pop3 email client for XBMC     #
 #                                    #
 ######################################
-import xbmc, sys, os, default,xib_util
-import xbmcgui, language, time
+import xbmc, sys, os, xib_util, default
+import xbmcgui, time
+from language import Language
 
-_ = language.Language().string  
+TITLE = default.__scriptname__
+SCRIPTPATH = default.__scriptpath__
+SRCPATH = SCRIPTPATH + "src"
+VERSION =  default.__version__
+
+lang = Language(TITLE)
+lang.load(SRCPATH + "//language")
+_ = lang.string
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
