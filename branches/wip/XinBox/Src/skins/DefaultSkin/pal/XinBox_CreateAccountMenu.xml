@@ -130,11 +130,11 @@
 		<control type="group" id="9000">
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
-			<posx>460</posx>
+			<posx>454</posx>
 			<posy>150</posy>
 			<control type="button" id="61">
 				<description>Add A Xinbox button</description>
-				<posx>6</posx>
+				<posx>0</posx>
 				<posy>-14</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -146,12 +146,12 @@
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
+				<width>107</width>
 				<height>42</height>
 			</control>
 			<control type="button" id="62">
 				<description>Edit A Xinbox button</description>
-				<posx>6</posx>
+				<posx>0</posx>
 				<posy>46</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -164,12 +164,12 @@
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
+				<width>107</width>
 				<height>42</height>
 			</control>
 			<control type="button" id="63">
 				<description>Delete A Xinbox button</description>
-				<posx>6</posx>
+				<posx>0</posx>
 				<posy>111</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -182,13 +182,13 @@
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
+				<width>107</width>
 				<height>42</height>
 			</control>
 			<control type="button" id="64">
 				<description>OK button</description>
-				<posx>6</posx>
-				<posy>239</posy>
+				<posx>0</posx>
+				<posy>177</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
@@ -199,12 +199,12 @@
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
+				<width>107</width>
 				<height>42</height>
 			</control>
 		</control>
 		<control type="list" id="51">
-			<posx>163</posx>
+			<posx>160</posx>
 			<posy>140</posy>
 			<width>290</width>
 			<height>275</height>
@@ -248,7 +248,7 @@
 			</itemlayout>
 			<focusedlayout height="27">
 				<control type="image">
-					<width>290</width>
+					<width>282</width>
 					<height>25</height>
 					<posx>0</posx>
 					<posy>0</posy>
@@ -283,11 +283,10 @@
 			</focusedlayout>
 		</control>
 		<control type="list" id="88">
-			<posx>250</posx>
-			<posy>250</posy>
+			<posx>160</posx>
+			<posy>440</posy>
 			<width>290</width>
 			<height>275</height>
-			<onright>9000</onright>
 			<scrolltime>200</scrolltime>
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
