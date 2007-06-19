@@ -17,7 +17,7 @@
 """
 
 
-import xbmcgui,traceback
+import xbmcgui,traceback,XinBox_InfoDialog
 import xbmc
 import os
 import xib_util
@@ -32,13 +32,13 @@ import xib_util
 ##
 class WindowSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
-        self.account = "Matt"
+        self.account = account
         if self.account == "XinBoxDefault":
             self.newaccount = True
         else:self.newaccount = False
         
         self.title = title
-        self.thescriptPath = thescriptPath
+        self.scriptPath = thescriptPath
         self.language = language.string
 
         self.theSettings = scriptSettings
@@ -65,18 +65,26 @@ class WindowSettings(xbmcgui.WindowXML):
 
     
     def onInit(self):
+        xbmcgui.lock()
         self.control_action = xib_util.setControllerAction()
         self.list2 = self.getControl(88)
-        self.buttonids = [61,62,63,64,64]
+        self.buttonids = [61,62,63,64]
         if self.newaccount:
+            self.getControl(64).setEnabled(False)
+            self.getControl(63).setEnabled(False)
+            self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
-        else:self.getControl(80).setLabel(self.language(74))
+        else:
+            self.getControl(80).setLabel(self.language(74))
+            if self.accountSettings.getSetting(self.language(51)) == "-":
+                self.getControl(64).setEnabled(False)
         self.builsettingsList()
         self.buildinboxlist()
         for ID in self.buttonids:
             self.getControl(ID).setLabel(self.language(ID))
         self.getControl(82).setLabel(self.language(20))
         self.getControl(83).setLabel(self.language(21))
+        xbmcgui.unlock()
     
     def builsettingsList(self):
         if self.newaccount:
@@ -104,6 +112,9 @@ class WindowSettings(xbmcgui.WindowXML):
                     self.list2.addItem(self.SettingListItem(set, ""))
             if self.list2.size() == 0:
                 self.list2.addItem(self.SettingListItem(self.language(75), ""))
+                self.getControl(63).setEnabled(False)
+                self.getControl(62).setEnabled(False)
+
 ##        test = self.inboxes[self.getListItem(4).getLabel()]
 ##      # will be able to do: test = self.inboxes[self.getListItem(self.getCurrentListPosition()).getLabel()]  
 ##        print "test for inbox = " + str(test)
@@ -115,8 +126,11 @@ class WindowSettings(xbmcgui.WindowXML):
         except:focusid = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             self.close()
-##        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
-##            self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+            if focusid == 51:
+                self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+            else:
+                self.launchinfo(focusid+47,self.language(focusid))
 
     def onClick(self, controlID):
         if ( controlID == 51):
@@ -127,8 +141,10 @@ class WindowSettings(xbmcgui.WindowXML):
             if self.newaccount:
                 if curName == self.language(51):
                     value = self.showKeyboard(self.language(66) % curName,curName2)
-                    self.accountname = value
-                    curItem.setLabel2(value)
+                    if value != "":
+                        self.accountname = value
+                        curItem.setLabel2(value)
+                        self.getControl(64).setEnabled(True)
                 elif curName == self.language(52):
                     value = self.showKeyboard(self.language(66) % curName,"",1)
                     if value == "":
@@ -145,9 +161,11 @@ class WindowSettings(xbmcgui.WindowXML):
                 if (type == "text"):
                     if curName == self.language(51):
                         value = self.showKeyboard(self.language(66) % curName,curName2)
-                        curItem.setLabel2(value)
-                        self.accountSettings.setSetting(curName,value)
-                        self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                        if value != "":
+                            curItem.setLabel2(value)
+                            self.accountSettings.setSetting(curName,value)
+                            self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                            self.getControl(64).setEnabled(True)
                     elif curName == self.language(52):
                         value = self.showKeyboard(self.language(66) % curName,"",1)
                         if value == "":
@@ -208,3 +226,9 @@ class WindowSettings(xbmcgui.WindowXML):
             return keyboard.getText()
         else:
             return default
+
+    def launchinfo(self, focusid, label):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin")
+        dialog.setupvars(focusid, label)
+        dialog.doModal()
+        del dialog
