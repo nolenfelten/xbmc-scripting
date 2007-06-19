@@ -13,28 +13,33 @@ import xbmc, sys, os, default,xib_util
 import xbmcgui, language, time, traceback
 import XinBox_InfoDialog
 
-import XinBox_LoginMenu, XinBox_CreateAccountMenu,XinBox_Settings
+import XinBox_LoginMenu, XinBox_Settings
 from settings import Settings
-
+from XinBox_Settings import XinBox_Settings 
 from language import Language
 
 
 __title__ = "XinBox"
+
+
 lang = Language()
 _ = lang.string
 
+
+
+
 defSettingsForAInBox =  {
-    _(67): ["-","text"],
-    _(68): ["-","text"],
-    _(69): ["-","text"],
-    _(70): ["-","text"],
-    _(71): ["-","text"],
-    _(72): ["-","text"]}
+    "Display Name": ["-","text"],
+    "POP Server": ["-","text"],
+    "SMTP Server": ["-","text"],
+    "Server Username": ["-","text"],
+    "Server Password": ["-","text"],
+    "Server Size": ["-","text"]}
 defInboxSettings = Settings("",__title__,defSettingsForAInBox,2)
 defSettingsForAnAccount = {
-    _(51): ["-","text"],
-    _(52): ["-","text"],
-     _(53): ["-","boolean"],
+    "Account Name": ["-","text"],
+    "Account Password": ["-","text"],
+    "Default Account": ["-","boolean"],
     "Inboxes": [['Inbox',[["XinBoxDefault",defInboxSettings,"settings"]]],"list"]}
 
 defAccountSettings = Settings("",__title__,defSettingsForAnAccount,2)
@@ -43,11 +48,11 @@ defSettings = {
 
 setts = Settings("XinBox_Settings.xml",__title__,defSettings)
 
+
+
+
+
 scriptpath = default.__scriptpath__
-
-from XinBox_Settings import ircXBMC_Settings
-
-
 
 VERSION = "V.1.0"
 class GUI( xbmcgui.WindowXML ):
@@ -117,6 +122,6 @@ class GUI( xbmcgui.WindowXML ):
         del dialog
 
     def gosettings(self):
-        winSettings = ircXBMC_Settings("XinBox_CreateAccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="XinBoxDefault")
+        winSettings = XinBox_Settings ("XinBox_AccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="XinBoxDefault")
         winSettings.doModal()
         del winSettings
