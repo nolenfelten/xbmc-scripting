@@ -52,7 +52,7 @@ class Language:
             for string in strings:
                 string_id = int( string.getAttribute( "id" ) )
                 # if a valid id add it to self.strings dictionary
-                if ( string_id and string_id not in self.strings ):
+                if ( string_id not in self.strings ):
                     if ( string.hasChildNodes() ): 
                         self.strings[ string_id ] = string.firstChild.nodeValue
         except:
