@@ -29,8 +29,7 @@ class Settings:
             self.load()
         elif (fromFile == 2):
             # Load from Default Settings
-            self.settings = defaultSettings 
-
+            self.settings = defaultSettings
     def getSettingType(self,settingName):
         """
             Returns the value of the setting
@@ -114,7 +113,7 @@ class Settings:
             add a new item in a list, in the settings array.
         """
         self.settings[settingName][0][1].append([ newName , newValue, type])
-
+        
     def removeSettingInList(self, settingName, itemPosition):
         """
             remove a item in a list or simple list, in the settings array.

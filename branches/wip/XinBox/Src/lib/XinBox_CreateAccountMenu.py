@@ -1,85 +1,133 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
-import xbmc, sys, os, default,xib_util
-import xbmcgui, language, time
-import XinBox_InfoDialog, traceback
-from settings import Settings
- 
-scriptpath = default.__scriptpath__
- 
-_ = language.Language().string
- 
-defSettingsForAInBox =  { _(67): ["Add Display Name Here","text"],
-                          _(68): ["Add Pop3 Server Address Here","text"],
-                          _(69): ["Add SMTP Server Address Here","text"],
-                          _(70): ["Add Server Username Here","text"],
-                          _(71): ["Add Server Password Here","text"],
-                          _(72): ["Add Server Size Here","text"]}
-defInboxSettings = Settings("","",defSettingsForAInBox,2)
-defInboxSettings2 = Settings("","",defSettingsForAInBox,2)
-defSettingsForAnAccount = { _(51): ["Add Acount Name Here","text"],
-                            _(52): ["Add Account Password Here","text"],
-                            _(53): ["false","boolean"],
-                            _(73): [defInboxSettings,"settings"]}
+"""
+    WindowSettings
 
-defSettingsForAnAccount2 = { _(51): ["Add Acount Name Here","text"],
-                            _(52): ["Add Account Password Here","text"],
-                            _(53): ["false","boolean"],
-                            _(73): [defInboxSettings2,"settings"]}
+    A WindowXML setup to handle the basis modifying the settings provided by the settings class
 
-defAccountSettings = Settings("","",defSettingsForAnAccount,2)
+    Author: Sean Donnellan (Donno)  [darkdonno@gmail.com]
+    Depends on: xbmcgui, xbmc, os
+    Requires: A Setting and Language class passed to it
 
-defAccountSettings2 = Settings("","",defSettingsForAnAccount2,2)
+    How to Use:
+        from windowsettings import WindowSettings
+        class className(WindowSettings):
+            def __init__(self,xmlName,thescriptPath,defaultName,forceFallback):
+                WindowSettings.__init__(self, xmlName,thescriptPath,defaultName,forceFallback, scriptSettings, lang, __title__)
+                
+        # the point is u pass all the main info on as well as the settings and language classes and title
+"""
 
-defSettings = {"General Setting1": ["Settings1","text"],
-               "Accounts": [['Account',[["Default",defAccountSettings,"settings"]]],"list"]}
- 
-class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        print "welcome"
- 
+
+import xbmcgui,traceback
+import xbmc
+import os
+
+
+
+# Maybe make add inbox a dialog over the top of this account :-D
+
+
+class WindowSettings(xbmcgui.WindowXML):
+    def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title,account):
+        self.account = account
+     #   self.account = "Chloe"
+        
+        self.title = title
+        self.thescriptPath = thescriptPath
+        self.depth = 0
+        self.language = language.string
+        
+        self.settingName = ""
+        self.theSettings = scriptSettings
+        self.curSettings = self.theSettings
+
+        self.accountSettings = self.getaccountsettings(self.account)
+        self.accountinboxes = self.buildinboxdict(self.accountSettings)
+        self.inboxSettings = self.getinboxsettings(self.account,"Default")
+
+    def buildinboxdict(self,accountsettings):
+        self.inboxes = {} 
+        for set in self.accountSettings.getSetting("Inboxes")[1] :
+            self.inboxes[set[0]] = set[1]
+        return self.inboxes
+
+    def getinboxsettings(self,account,inbox):
+        temp = self.theSettings.getSettingInListbyname("Accounts",account)
+        return temp.getSettingInListbyname("Inboxes",inbox)
+
+    def getaccountsettings(self,account):
+        return self.theSettings.getSettingInListbyname("Accounts",account)
+
     def onInit(self):
         try:
-            self.clearList()
-            self.scriptSettings = Settings("XinBox_Account_Settings.xml","XinBox Settings", defSettings)
-            self.scriptSettings.addSettingInList("Accounts","Temp",defAccountSettings2,"settings")
-            self.setupcontrols()
-            self.getaccountinfo()
-            self.setupvars()
-            self.buildlist()
+            xbmcgui.lock()
+            self.builsettingsList()
+            self.buildinboxlist()
+            self.getControl(80).setLabel(self.language(50))
+            self.buttonids = [61,62,63,64,65]
+            for ID in self.buttonids:
+                self.getControl(ID).setLabel(self.language(ID))
+            self.getControl(82).setLabel(self.language(20))
+            self.getControl(83).setLabel(self.language(21))
+            xbmcgui.unlock()
+        except: traceback.print_exc()
+    
+    def builsettingsList(self):
+        for set in self.accountSettings.settings:
+            if self.accountSettings.getSettingType(set) == "text" or self.accountSettings.getSettingType(set) == "boolean":
+                if self.accountSettings.getSetting(set) == "-":
+                    self.addItem(self.SettingListItem(set, ""))
+                else:
+                    self.addItem(self.SettingListItem(set, self.accountSettings.getSetting(set)))
+
+    def buildinboxlist(self):
+        for set in self.accountinboxes:
+            if set != "Default":
+                self.addItem(self.SettingListItem(set, ""))
+##        test = self.inboxes[self.getListItem(4).getLabel()]
+##      # will be able to do: test = self.inboxes[self.getListItem(self.getCurrentListPosition()).getLabel()]  
+##        print "test for inbox = " + str(test)
+
+    def onAction(self, action):
+        pass
+
+    def onClick(self, controlID):
+        try:
+            if ( controlID == 51):
+                curPos  = self.getCurrentListPosition()
+                curItem = self.getListItem(curPos)
+                curName = curItem.getLabel()
+                curName2 = curItem.getLabel2()
+                if curName2 == "-":
+                    curName2 = ""
+                type = self.accountSettings.getSettingType(curName)
+                if (type == "text"):
+                    value = self.showKeyboard(self.language(66) % curName,curName2)
+                    curItem.setLabel2(value)
+                    self.Addsetting("Accounts",value)
+                    self.accountSettings = self.getaccountsettings(value)
+                    self.accountSettings.setSetting(curName,value)
+            elif ( controlID == 64):
+                self.theSettings.saveXMLfromArray()
+            elif ( controlID == 65):
+                self.close()
         except:traceback.print_exc()
- 
- 
-    def setupcontrols(self):
-        self.clearList()
-        self.getControl(80).setLabel(_(50))
-        self.buttonids = [61,62,63,64,65]
-        for ID in self.buttonids:
-            self.getControl(ID).setLabel(_(ID))
-        self.getControl(82).setLabel(_(20))
-        self.getControl(83).setLabel(_(21))
- 
-    def getaccountinfo(self):
-        self.AccountsSettings = self.scriptSettings.getSettingInListbyname("Accounts","Temp")
+
+    def addnewItem(self, settingname,value1,value2="",type="text"):
+        self.curSettings.addSettingInList(settingname,value1,value2,"settings")
+        return
+
+    def onFocus(self, controlID):
+        pass
+
+    def showKeyboard(self, heading,default=""):
+        # Open the Virutal Keyboard.
+        keyboard = xbmc.Keyboard(default,heading)
+        keyboard.doModal()
+        if (keyboard.isConfirmed()):
+            return keyboard.getText()
+        else:
+            return default
         
-    def buildlist(self):
-        for set in self.AccountsSettings.settings:
-            if self.AccountsSettings.getSettingType(set) == "settings":
-                pass
-            elif self.AccountsSettings.getSettingType(set) == "list":
-                pass
-            else:
-                self.addItem(self.SettingListItem(set, self.AccountsSettings.getSetting(set)))
- 
     def SettingListItem(self, label1,label2):
         if label2 == "true":
             self.getControl(104).setSelected(True)
@@ -89,39 +137,7 @@ class GUI( xbmcgui.WindowXML ):
             return xbmcgui.ListItem(label1,"","","")
         else:
             return xbmcgui.ListItem(label1,label2,"","")
-    
-    def setupvars(self):
-        self.control_action = xib_util.setControllerAction()
-    
-    def onFocus(self, controlID):
-        pass
-    
-    def onClick(self, controlID):
-        if ( controlID == 51):
-            curPos  = self.getCurrentListPosition()
-            curItem = self.getListItem(curPos)
-            curName = curItem.getLabel()
-            type = self.AccountsSettings.getSettingType(curName)
-            if (type == "text"):
-                value = self.showKeyboard(_(66) % curName,"")
-                curItem.setLabel2(value)
-                if curPos == 0:
-                    self.scriptSettings.setSettingnameInList("Accounts","Temp",value)
-                    self.AccountsSettings.setSetting(curName,value)
-                elif curPos == 1:
-                    self.AccountsSettings.setSetting(curName,value)
-##            elif (type == "boolean"):
-##                if self.AccountsSettings.getSetting(curName,"true") == "false":
-##                    self.getControl(104).setSelected(True)
-##                    self.default = "true"
-##                else:
-##                    self.getControl(104).setSelected(False)
-##                    self.default = "false"
-        elif ( controlID == 64 ):
-            self.scriptSettings.saveXMLfromArray()
-        elif ( controlID == 65 ):
-            self.close()
-            
+
     def showKeyboard(self, heading,default=""):
         # Open the Virutal Keyboard.
         keyboard = xbmc.Keyboard(default,heading)
@@ -130,24 +146,3 @@ class GUI( xbmcgui.WindowXML ):
             return keyboard.getText()
         else:
             return default
- 
-    def onAction( self, action ):
-        button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
-        actionID   =  action.getId()
-        try:focusid = self.getFocusId()
-        except:focusid = 0
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.close()
-        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
-            if focusid == 51:
-                self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
-            else:
-                self.launchinfo(focusid+47,_(focusid))
-                
- 
-    def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",scriptpath + "src","DefaultSkin")
-        dialog.setupvars(focusid, label)
-        dialog.doModal()
-        del dialog
-
