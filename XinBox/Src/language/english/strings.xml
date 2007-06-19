@@ -26,8 +26,7 @@
 	<string id="61">Add XinBox</string>
 	<string id="62">Edit XinBox</string>
 	<string id="63">Delete XinBox</string>
-	<string id="64">Save Account</string>
-	<string id="65">OK</string>
+	<string id="64">OK</string>
 	<string id="66">Change %s</string>
 	<string id="67">Display Name</string>
 	<string id="68">POP Server</string>
@@ -36,6 +35,8 @@
 	<string id="71">Server Password</string>
 	<string id="72">Server Size</string>
 	<string id="73">Inbox</string>
+	<string id="74">Edit Account</string>
+	<string id="75">No InBoxes</string>
 	
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>
