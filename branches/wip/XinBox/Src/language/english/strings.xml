@@ -23,9 +23,9 @@
 	<string id="51">Account Name:</string>
 	<string id="52">Account Password:</string>
 	<string id="53">Default Account</string>
-	<string id="61">Add XinBox</string>
-	<string id="62">Edit XinBox</string>
-	<string id="63">Delete XinBox</string>
+	<string id="61">Add Inbox</string>
+	<string id="62">Edit Inbox</string>
+	<string id="63">Delete Inbox</string>
 	<string id="64">OK</string>
 	<string id="66">Change %s</string>
 	<string id="67">Display Name</string>
@@ -37,6 +37,7 @@
 	<string id="73">Inbox</string>
 	<string id="74">Edit Account</string>
 	<string id="75">No InBoxes</string>
+	<string id="76">No Password</string>
 	
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>
@@ -46,11 +47,10 @@
 	<string id="103">Select if you wish to find out ABOUT the XinBox script.</string>
 	<string id="104">Select if you wish to EXIT the XinBox script and return to XBMC.</string>
 	<string id="105">Select to set the Account Name for your XinBox Account.</string>	
-	<string id="106">Select to set the Account Password for your XinBox Account. Select "No Password" to disable a password for this account.</string>
+	<string id="106">Select to set the Account Password for your XinBox Account. Leave empty to disable a password for this account.</string>
 	<string id="107">Select to toggle if this Account is the Default Account. A Default Account automatically logs in on XinBox start-up. Note: There can only be a maximum of one Default Account.</string>	
-	<string id="108">Select to Add a new XinBox to this Account.</string>
-	<string id="109">Select to Edit an existing XinBox in this Account.</string>
-	<string id="110">Select to Delete an existing XinBox in this Account.</string>
-	<string id="111">Select to Save this Account.</string>
-	<string id="112">Select to return to the Main Menu.</string>
+	<string id="108">Select to Add a new Inbox to this Account.</string>
+	<string id="109">Select to Edit an existing Inbox in this Account.</string>
+	<string id="110">Select to Delete an existing Inbox in this Account.</string>
+	<string id="112">Select to save this account and to return to the Main Menu.</string>
 </strings>
