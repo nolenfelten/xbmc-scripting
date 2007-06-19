@@ -30,7 +30,7 @@ class ircXBMC_Settings(WindowSettings):
             self.lang(51): ["-","text"],
             self.lang(52): ["-","text"],
              self.lang(53): ["-","boolean"],
-            "Inboxes": [['Inbox',[["Default",defInboxSettings,"settings"]]],"list"]}
+            "Inboxes": [['Inbox',[["XinBoxDefault",defInboxSettings,"settings"]]],"list"]}
         newSettings = Settings("",__title__,defSettingsForAnAccount,2)
         self.addnewItem(settingname,newName,newSettings,"settings")
 

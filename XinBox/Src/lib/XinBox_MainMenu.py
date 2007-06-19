@@ -35,11 +35,11 @@ defSettingsForAnAccount = {
     _(51): ["-","text"],
     _(52): ["-","text"],
      _(53): ["-","boolean"],
-    "Inboxes": [['Inbox',[["Default",defInboxSettings,"settings"]]],"list"]}
+    "Inboxes": [['Inbox',[["XinBoxDefault",defInboxSettings,"settings"]]],"list"]}
 
 defAccountSettings = Settings("",__title__,defSettingsForAnAccount,2)
 defSettings = {
-    "Accounts": [['Account',[["Default",defAccountSettings,"settings"]]],"list"]}
+    "Accounts": [['Account',[["XinBoxDefault",defAccountSettings,"settings"]]],"list"]}
 
 setts = Settings("XinBox_Settings.xml",__title__,defSettings)
 
@@ -117,6 +117,6 @@ class GUI( xbmcgui.WindowXML ):
         del dialog
 
     def gosettings(self):
-        winSettings = ircXBMC_Settings("XinBox_CreateAccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="Default")
+        winSettings = ircXBMC_Settings("XinBox_CreateAccountMenu.xml",scriptpath + "src","DefaultSkin",0,scriptSettings=setts,language=lang, title=__title__,account="XinBoxDefault")
         winSettings.doModal()
         del winSettings
