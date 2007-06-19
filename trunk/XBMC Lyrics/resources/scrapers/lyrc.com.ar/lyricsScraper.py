@@ -50,20 +50,20 @@ class LyricsFetcher:
                 final = full_lyrics[0].replace("<br />\r\n","\n ")
             except:
                 final = None
-        return str(' ' + final)
+        return str(final)
 
 if ( __name__ == '__main__' ):
     # --------------------------------------------------------------------#
     # Used to test get_lyrics() 
-    #artist = "Kim Mitchell"
-    #song = "Go for Soda"
-    #lyrics = LyricsFetcher().get_lyrics( artist, song )
+    artist = "Alain Souchon"#"Kim Mitchell"
+    song = "Toto 30 ans"#"Go for Soda"
+    lyrics = LyricsFetcher().get_lyrics( artist, song )
     # --------------------------------------------------------------------#
     
     # --------------------------------------------------------------------#
     # Used to test get_lyrics_from_list() 
-    url = ('Big and rich - Save a horse, ride a cowboy', 'tema1en.php?hash=776d8fa28c4621dc943dc3a8caa81a32')
-    lyrics = LyricsFetcher().get_lyrics_from_list( url )
+    #url = ('Big and rich - Save a horse, ride a cowboy', 'tema1en.php?hash=776d8fa28c4621dc943dc3a8caa81a32')
+    #lyrics = LyricsFetcher().get_lyrics_from_list( url )
     # --------------------------------------------------------------------#
     
     # print the results
@@ -71,4 +71,4 @@ if ( __name__ == '__main__' ):
         for song in lyrics:
             print song
     else:
-        print lyrics.encode( "utf-8", "ignore" )
+        print lyrics#.encode( "utf-8", "ignore" )
