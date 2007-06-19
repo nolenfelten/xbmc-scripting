@@ -362,8 +362,8 @@ class GUI( xbmcgui.WindowXML ):
             trailer = self.getCurrentListPosition()
             trailer_urls = self.trailers.movies[ trailer ].trailer_urls
             choice = ( self.settings[ "trailer_quality" ], len( trailer_urls ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailer_urls ) ]
-            if ( self.settings[ "trailer_quality" ] <= 2 ):#self.settings[ "mode" ] == 0 or 
-                while ( "p.mov" in trailer_urls[ choice ] and choice != -1 ): choice -= 1
+            if ( self.settings[ "trailer_quality" ] <= 2 ):
+                while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
             if ( choice >= 0 ):
                 url = trailer_urls[ choice ]
                 LOG( LOG_DEBUG, "%s (ver: %s) [choice=%d url=%s]", __scriptname__, __version__, choice, url )
