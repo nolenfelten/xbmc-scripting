@@ -16,7 +16,7 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5", )
+SETTINGS_VERSIONS = ( "1.5", "1.5.1", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )

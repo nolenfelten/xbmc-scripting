@@ -59,6 +59,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.song = None
         self.Timer = None
         self.controlId = -1
+        self.allow_exception = False
 
     def show_viz_window( self, startup=True ):
         if ( self.settings[ "show_viz" ] ):
@@ -211,6 +212,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
             self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
+    def _get_artist_from_filename( self, filename ):
+        artist = filename.split( "-", 1 )[ 0 ].strip()
+        song = os.path.splitext( filename.split( "-", 1 )[ 1 ].strip() )[ 0 ]
+        return artist, song
+
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
     def getDummyTimer( self ):
@@ -226,15 +232,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if ( event < 2 ): 
             self.exit_script()
         else:
-            song = self.song
             for cnt in range( 5 ):
-                self.song = xbmc.getInfoLabel( "MusicPlayer.Title" )
-                if ( song != self.song and self.song ): break
+                song = xbmc.getInfoLabel( "MusicPlayer.Title" )
+                artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
+                if ( song != self.song and song and self.artist != artist ): break
                 xbmc.sleep( 50 )
-            if ( song != self.song or force_update ):
-                self.artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                if ( self.song and self.artist ): self.get_lyrics( self.artist, self.song )
-                else: self.reset_controls()
+            if ( ( song != self.song and song and self.artist != artist ) or force_update ):
+                self.artist = artist
+                self.song = song
+                if ( not artist ):
+                    artist, song = self._get_artist_from_filename( song )
+                self.get_lyrics( artist, song )
 
 
 ## Thanks Thor918 for this class ##
