@@ -16,18 +16,9 @@ class XinBox_Settings (AccountSettings):
         AccountSettings.__init__(self, xmlName,thescriptPath,defaultName,forceFallback, scriptSettings,language,title,account)
 
     def Addsetting(self,settingname,newName):
-        defSettingsForAInBox =  {
-            "Display Name": ["-","text"],
-            "POP Server": ["-","text"],
-            "SMTP Server": ["-","text"],
-            "Server Username": ["-","text"],
-            "Server Password": ["-","text"],
-            "Server Size": ["-","text"]}
-        defInboxSettings = Settings("",__title__,defSettingsForAInBox,2)
         defSettingsForAnAccount = {
-            "Account Name": ["-","text"],
             "Account Password": ["-","text"],
             "Default Account": ["-","boolean"],
-            "Inboxes": [['Inbox',[["XinBoxDefault",defInboxSettings,"settings"]]],"list"]}
+            "Inboxes": [['Inbox',[]],"list"]}
         newSettings = Settings("",__title__,defSettingsForAnAccount,2)
         self.addnewItem(settingname,newName,newSettings,"settings")

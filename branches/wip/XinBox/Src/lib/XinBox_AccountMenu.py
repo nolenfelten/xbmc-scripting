@@ -15,8 +15,8 @@ import xib_util
 ##
 
 
-g=mkCrcFun(0x104C11DB7,rev=False)
 
+keyStr = "XinBox"
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
@@ -50,7 +50,6 @@ class AccountSettings(xbmcgui.WindowXML):
 
     def getaccountsettings(self,account):
         return self.theSettings.getSettingInListbyname("Accounts",account)
-
     
     def onInit(self):
         xbmcgui.lock()
@@ -64,8 +63,6 @@ class AccountSettings(xbmcgui.WindowXML):
             self.getControl(80).setLabel(self.language(50))
         else:
             self.getControl(80).setLabel(self.language(74))
-            if self.accountSettings.getSetting("Account Name") == "-":
-                self.getControl(64).setEnabled(False)
         self.builsettingsList()
         self.buildinboxlist()
         for ID in self.buttonids:
@@ -80,16 +77,12 @@ class AccountSettings(xbmcgui.WindowXML):
             self.addItem(self.SettingListItem(self.language(52),self.language(76)))
             self.addItem(self.SettingListItem(self.language(53),""))
         else:
-            for set in self.accountSettings.settings:
-                if self.accountSettings.getSettingType(set) == "text" or self.accountSettings.getSettingType(set) == "boolean":
-                    if set == "Account Password":
-                        if self.accountSettings.getSetting(set) == "-":
-                            self.addItem(self.SettingListItem(set, self.language(76)))
-                        else:
-                            self.addItem(self.SettingListItem(set, '*' * len(self.accountSettings.getSetting(set))))
-                    else:
-                        self.addItem(self.SettingListItem(set, self.accountSettings.getSetting(set)))
-
+            self.addItem(self.SettingListItem(self.language(51), self.account))
+            if self.accountSettings.getSetting("Account Password") == "-":
+                self.addItem(self.SettingListItem(self.language(52), self.language(76)))
+            else:
+                self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
+            self.addItem(self.SettingListItem(self.language(53), self.accountSettings.getSetting("Default Account")))
         
     def buildinboxlist(self):
         if self.newaccount:
@@ -103,10 +96,6 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.getControl(63).setEnabled(False)
                 self.getControl(62).setEnabled(False)
 
-##        test = self.inboxes[self.getListItem(4).getLabel()]
-##      # will be able to do: test = self.inboxes[self.getListItem(self.getCurrentListPosition()).getLabel()]  
-##        print "test for inbox = " + str(test)
-
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
@@ -117,8 +106,7 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
-            else:
-                self.launchinfo(focusid+47,self.language(focusid))
+            else:self.launchinfo(focusid+47,self.language(focusid))
 
     def onClick(self, controlID):
         if ( controlID == 51):
@@ -126,55 +114,37 @@ class AccountSettings(xbmcgui.WindowXML):
             curItem = self.getListItem(curPos)
             curName = curItem.getLabel()
             curName2 = curItem.getLabel2()
-            if self.newaccount:
-                if curPos == 0:
-                    value = self.showKeyboard(self.language(66) % curName,curName2)
-                    if value != "":
-                        self.accountname = value
-                        curItem.setLabel2(value)
-                        self.getControl(64).setEnabled(True)
-                elif curPos == 1:
-                    value = self.showKeyboard(self.language(66) % curName,"",1)
-                    if value == "":
-                        self.accountpass = "-"
-                        curItem.setLabel2(self.language(76))
-                    else:
-                        self.accountpass = value
-                        curItem.setLabel2('*' * len(value))
-                elif curPos == 2:
-                    self.defaultaccount = not self.defaultaccount
-                    self.getControl(104).setSelected(self.defaultaccount)
-            else:
-                if curPos == 0:
-                    value = self.showKeyboard(self.language(66) % curName,curName2)
-                    if value != "":
-                        curItem.setLabel2(value)
-                        self.accountSettings.setSetting("Account Name",value)
-                        self.theSettings.setSettingnameInList("Accounts",curName2,value)
-                        self.getControl(64).setEnabled(True)
-                elif curPos == 1:
-                    value = self.showKeyboard(self.language(66) % curName,"",1)
-                    if value == "":
-                        self.accountSettings.setSetting("Account Password","-")
-                        curItem.setLabel2(self.language(76))
-                    else:
-                        self.accountSettings.setSetting("Account Password",value)
-                        curItem.setLabel2('*' * len(value))                            
-                elif curPos == 2:
-                    self.defaultaccount = not self.defaultaccount
-                    self.getControl(104).setSelected(self.defaultaccount)
-                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+            if curPos == 0:
+                value = self.showKeyboard(self.language(66) % curName,curName2)
+                if value != "":
+                    curItem.setLabel2(value)
+                    self.getControl(64).setEnabled(True)
+                    if self.newaccount:self.accountname = value
+                    else:self.theSettings.setSettingnameInList("Accounts",curName2,value)
+            elif curPos == 1:
+                value = self.showKeyboard(self.language(66) % curName,"",1)
+                if value == "":
+                    if self.newaccount:self.accountpass = "-"
+                    else:self.accountSettings.setSetting("Account Password","-")
+                    curItem.setLabel2(self.language(76))
+                else:
+                    if self.newaccount:self.accountpass = value
+                    else:self.accountSettings.setSetting("Account Password",value)
+                    curItem.setLabel2('*' * len(value)) 
+            elif curPos == 2:
+                self.defaultaccount = not self.defaultaccount
+                self.getControl(104).setSelected(self.defaultaccount)
+                if not self.newaccount:self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         elif ( controlID == 64):
-            try:
-                if self.newaccount:
-                    self.Addsetting("Accounts",self.accountname)
-                    self.accountSettings = self.getaccountsettings(self.accountname)
-                    self.accountSettings.setSetting("Account Name",self.accountname)
-                    self.accountSettings.setSetting("Account Password",self.accountpass)
-                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-                self.theSettings.saveXMLfromArray()
-                self.close()
-            except:traceback.print_exc()
+            if self.newaccount:self.crnewaccount()
+            self.theSettings.saveXMLfromArray()
+            self.close()
+
+    def crnewaccount(self):
+        self.Addsetting("Accounts",self.accountname)
+        self.accountSettings = self.getaccountsettings(self.accountname)
+        self.accountSettings.setSetting("Account Password",self.accountpass)
+        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))        
 
     def addnewItem(self, settingname,value1,value2="",type="text"):
         self.theSettings.addSettingInList(settingname,value1,value2,"settings")
@@ -197,7 +167,6 @@ class AccountSettings(xbmcgui.WindowXML):
             return xbmcgui.ListItem(label1,label2,"","")
 
     def showKeyboard(self, heading,default="",hidden=0):
-        # Open the Virutal Keyboard.
         keyboard = xbmc.Keyboard(default,heading)
         if hidden == 1:keyboard.setHiddenInput(True)
         keyboard.doModal()
@@ -208,7 +177,11 @@ class AccountSettings(xbmcgui.WindowXML):
             return default
 
     def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin")
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",scriptpath + "src","DefaultSkin")
         dialog.setupvars(focusid, label)
         dialog.doModal()
         del dialog
+
+
+
+
