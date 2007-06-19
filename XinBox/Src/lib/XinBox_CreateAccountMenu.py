@@ -32,7 +32,7 @@ import xib_util
 ##
 class WindowSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
-        self.account = account
+        self.account = "Matt"
         if self.account == "XinBoxDefault":
             self.newaccount = True
         else:self.newaccount = False
@@ -81,19 +81,29 @@ class WindowSettings(xbmcgui.WindowXML):
     def builsettingsList(self):
         if self.newaccount:
             self.addItem(self.SettingListItem(self.language(51),""))
-            self.addItem(self.SettingListItem(self.language(52),""))
+            self.addItem(self.SettingListItem(self.language(52),self.language(76)))
             self.addItem(self.SettingListItem(self.language(53),""))
         else:
             for set in self.accountSettings.settings:
                 if self.accountSettings.getSettingType(set) == "text" or self.accountSettings.getSettingType(set) == "boolean":
-                    self.addItem(self.SettingListItem(set, self.accountSettings.getSetting(set)))
+                    if set == self.language(52):
+                        if self.accountSettings.getSetting(set) == "-":
+                            self.addItem(self.SettingListItem(set, self.language(76)))
+                        else:
+                            self.addItem(self.SettingListItem(set, '*' * len(self.accountSettings.getSetting(set))))
+                    else:
+                        self.addItem(self.SettingListItem(set, self.accountSettings.getSetting(set)))
 
+        
     def buildinboxlist(self):
         if self.newaccount:
             self.list2.addItem(self.SettingListItem(self.language(75), ""))
         else:
             for set in self.accountinboxes:
-                self.list2.addItem(self.SettingListItem(set, ""))
+                if set != "XinBoxDefault":
+                    self.list2.addItem(self.SettingListItem(set, ""))
+            if self.list2.size() == 0:
+                self.list2.addItem(self.SettingListItem(self.language(75), ""))
 ##        test = self.inboxes[self.getListItem(4).getLabel()]
 ##      # will be able to do: test = self.inboxes[self.getListItem(self.getCurrentListPosition()).getLabel()]  
 ##        print "test for inbox = " + str(test)
@@ -120,20 +130,32 @@ class WindowSettings(xbmcgui.WindowXML):
                     self.accountname = value
                     curItem.setLabel2(value)
                 elif curName == self.language(52):
-                    value = self.showKeyboard(self.language(66) % curName,curName2)
-                    self.accountpass = value
-                    curItem.setLabel2(value)
+                    value = self.showKeyboard(self.language(66) % curName,"",1)
+                    if value == "":
+                        self.accountpass = "-"
+                        curItem.setLabel2(self.language(76))
+                    else:
+                        self.accountpass = value
+                        curItem.setLabel2('*' * len(value))
                 elif curName == self.language(53):
                     self.defaultaccount = not self.defaultaccount
                     self.getControl(104).setSelected(self.defaultaccount)
             else:
                 type = self.accountSettings.getSettingType(curName)
                 if (type == "text"):
-                    value = self.showKeyboard(self.language(66) % curName,curName2)
-                    curItem.setLabel2(value)
-                    self.accountSettings.setSetting(curName,value)
                     if curName == self.language(51):
+                        value = self.showKeyboard(self.language(66) % curName,curName2)
+                        curItem.setLabel2(value)
+                        self.accountSettings.setSetting(curName,value)
                         self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                    elif curName == self.language(52):
+                        value = self.showKeyboard(self.language(66) % curName,"",1)
+                        if value == "":
+                            self.accountSettings.setSetting(curName,"-")
+                            curItem.setLabel2(self.language(76))
+                        else:
+                            self.accountSettings.setSetting(curName,value)
+                            curItem.setLabel2('*' * len(value))                            
                 elif (type == "boolean"):
                     self.defaultaccount = not self.defaultaccount
                     self.getControl(104).setSelected(self.defaultaccount)
@@ -176,10 +198,12 @@ class WindowSettings(xbmcgui.WindowXML):
         else:
             return xbmcgui.ListItem(label1,label2,"","")
 
-    def showKeyboard(self, heading,default=""):
+    def showKeyboard(self, heading,default="",hidden=0):
         # Open the Virutal Keyboard.
         keyboard = xbmc.Keyboard(default,heading)
+        if hidden == 1:keyboard.setHiddenInput(True)
         keyboard.doModal()
+        if hidden == 1:keyboard.setHiddenInput(False)
         if (keyboard.isConfirmed()):
             return keyboard.getText()
         else:
