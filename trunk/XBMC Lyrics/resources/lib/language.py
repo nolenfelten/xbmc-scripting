@@ -50,15 +50,18 @@ class Language:
             # parse and resolve each <string id="#"> tag
             strings = root.getElementsByTagName( "string" )
             for string in strings:
+                # convert id attribute to an integer
                 string_id = int( string.getAttribute( "id" ) )
                 # if a valid id add it to self.strings dictionary
                 if ( string_id not in self.strings and string.hasChildNodes() ):
                     self.strings[ string_id ] = string.firstChild.nodeValue
         except:
-            print "ERROR: Language file %s can't be parsed" % ( language_path, )
+            # print the error message to the log and debug window
+            xbmc.output( "ERROR: Language file %s can't be parsed!" % ( language_path, ) )
+        # clean-up document object
         try: doc.unlink()
         except: pass
 
     def localized( self, code ):
         """ returns the localized string if it exists """
-        return self.strings.get( code, str( code ) )
+        return self.strings.get( code, "Invailid Id %d" % ( code, ) )

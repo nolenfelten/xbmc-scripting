@@ -12,6 +12,12 @@
     <string id="204">Smooth scrolling for lyrics</string>
     <string id="205">Show visualization window</string>
     <string id="206">Use only filename for search</string>
+    <string id="207">Filename format</string>
+
+    <!-- Settings choices -->
+    <string id="2070">Artist - Song.ext</string>
+    <string id="2071">Artist/Album/Song.ext</string>
+    <string id="2072">Artist/Album/Track Song.ext</string>
 
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>

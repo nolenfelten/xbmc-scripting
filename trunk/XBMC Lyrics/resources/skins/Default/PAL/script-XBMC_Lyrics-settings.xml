@@ -337,7 +337,6 @@
             </control>
 
             <control type="group">
-                <visible>false</visible>
                 <height>30</height>
                 <control type="button" id="207">
                     <description>Setting7 Button</description>
