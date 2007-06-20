@@ -215,8 +215,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
     def _get_artist_from_filename( self, filename ):
-        artist = filename.split( "-", 1 )[ 0 ].strip()
-        song = os.path.splitext( filename.split( "-", 1 )[ 1 ].strip() )[ 0 ]
+        try:
+            artist = filename
+            song = filename
+            if ( self.settings[ "filename_format" ] == 0 ):
+                basename = os.path.basename( filename )
+                artist = basename.split( "-", 1 )[ 0 ].strip()
+                song = os.path.splitext( basename.split( "-", 1 )[ 1 ].strip() )[ 0 ]
+            elif ( self.settings[ "filename_format" ] in ( 1, 2, ) ):
+                artist = filename.split( os.sep )[ -3 ]
+                if ( self.settings[ "filename_format" ] == 1 ):
+                    song = os.path.splitext( os.path.basename( filename ) )[ 0 ]
+                elif ( self.settings[ "filename_format" ] == 2 ):
+                    song = os.path.splitext( os.path.basename( filename ) )[ 0 ].split( " ", 1 )[ 1 ]
+        except:
+            # invalid format selected
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::_get_artist_from_filename [Invalid file format]", __scriptname__, __version__, )
+            pass
         return artist, song
 
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
@@ -241,9 +256,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.artist = artist
                     self.song = song
                     if ( not artist or self.settings[ "use_filename" ] ):
-                        if ( self.settings[ "use_filename" ] ):
-                            song = os.path.basename( xbmc.Player().getPlayingFile() )
-                        artist, song = self._get_artist_from_filename( song )
+                        artist, song = self._get_artist_from_filename( xbmc.Player().getPlayingFile() )
                     self.get_lyrics( artist, song )
                     break
                 else: xbmc.sleep( 50 )

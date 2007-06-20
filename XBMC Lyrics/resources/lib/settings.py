@@ -65,6 +65,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _setup_special( self ):
         """ calls any special defs """
         self._setup_scrapers()
+        self._setup_filename_format()
 
     def _setup_scrapers( self ):
         """ special def for setting up scraper choices """
@@ -85,11 +86,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try: self.current_scraper = self.scrapers.index( self.settings[ "scraper" ] )
         except: self.current_scraper = 0
 
+    def _setup_filename_format( self ):
+        self.filename_format = ( _( 2070 ), _( 2071 ), _( 2072 ), )
+    
     def _set_restart_required( self ):
         """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "scraper", )
-        self.settings_refresh = ( "use_filename", "save_lyrics", "lyrics_path", )
+        self.settings_refresh = ( "save_lyrics", "lyrics_path", "use_filename", "filename_format", )
 
 ###### End of Special defs #####################################################
 
@@ -105,6 +109,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 224 ).setSelected( self.settings[ "smooth_scrolling" ] )
             self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
             self.getControl( 226 ).setSelected( self.settings[ "use_filename" ] )
+            self.getControl( 227 ).setLabel( self.filename_format[ self.settings[ "filename_format" ] ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -139,6 +144,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _change_setting6( self ):
         """ changes settings #6 """
         self.settings[ "use_filename" ] = not self.settings[ "use_filename" ]
+        self._set_controls_values()
+
+    def _change_setting7( self ):
+        """ changes settings #7 """
+        self.settings[ "filename_format" ] += 1
+        if ( self.settings[ "filename_format" ] == len( self.filename_format ) ):
+            self.settings[ "filename_format" ] = 0
         self._set_controls_values()
 
 ##### End of unique defs ######################################################

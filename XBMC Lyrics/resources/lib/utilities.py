@@ -16,7 +16,7 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.2", )
+SETTINGS_VERSIONS = ( "1.5.3", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
@@ -100,6 +100,7 @@ class Settings:
             "smooth_scrolling": False,
             "show_viz": True,
             "use_filename": False,
+            "filename_format": 0,
             }
         ok = self.save_settings( settings )
         return settings
