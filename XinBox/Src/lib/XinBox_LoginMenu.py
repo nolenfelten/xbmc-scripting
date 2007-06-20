@@ -9,9 +9,9 @@
 #   A pop3 email client for XBMC     #
 #                                    #
 ######################################
-import xbmc, sys, os, xib_util, default
+import xbmc, sys, os, XinBox_Util, default
 import xbmcgui, time
-from language import Language
+from XinBox_Language import Language
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
@@ -36,7 +36,7 @@ class GUI( xbmcgui.WindowXML ):
         MenuLabel.setLabel(_(30))
 
     def setupvars(self):
-        self.control_action = xib_util.setControllerAction()
+        self.control_action = XinBox_Util.setControllerAction()
         
     def onFocus(self, controlID):
         pass
