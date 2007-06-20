@@ -47,8 +47,8 @@
 	<string id="84">Outgoing Mail(SMTP) Server:</string>
 	<string id="85">Server Account Name:</string>
 	<string id="86">Server Account Password:</string>
-	<string id="87">Server Inbox Size:</string>
-	<string id="88">XinBox Inbox Size:</string>
+	<string id="87">Server Inbox Size (MB):</string>
+	<string id="88">XinBox Inbox Size (MB):</string>
 	<string id="89">Test Inbox</string>
 	<string id="90">SSL</string>
 	<string id="91">POP SSL</string>
