@@ -108,7 +108,7 @@
 			<posy>120</posy>
 			<width>430</width>
 			<height>450</height>
-			<texture>XBcreateaccountmenu.png</texture>
+			<texture>XBaccountmenu.png</texture>
 		</control>
                 <control type="checkmark" id="104">
                     	<description>Default Setting Status</description>

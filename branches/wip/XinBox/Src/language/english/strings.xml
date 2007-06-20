@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.2-->
+<!--English Strings VER: 0.3-->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
@@ -36,8 +36,24 @@
 	<string id="72">Server Size</string>
 	<string id="73">Inbox</string>
 	<string id="74">Edit Account</string>
-	<string id="75">No InBoxes</string>
+	<string id="75">No Inboxes</string>
 	<string id="76">No Password</string>
+
+	<!-- InBox Menu Labels -->
+	<string id="80">Add Inbox</string>
+	<string id="81">Edit Inbox</string>
+	<string id="82">Display Name:</string>
+	<string id="83">Incoming Mail(Pop3) Server:</string>
+	<string id="84">Outgoing Mail(SMTP) Server:</string>
+	<string id="85">Server Account Name:</string>
+	<string id="86">Server Account Password:</string>
+	<string id="87">Server Inbox Size:</string>
+	<string id="88">XinBox Inbox Size:</string>
+	<string id="89">Test Inbox</string>
+	<string id="90">SSL</string>
+	<string id="91">POP SSL</string>
+	<string id="92">SMTP SSL</string>
+
 	
 	<!-- Help Labels -->
 	<string id="99">XinBox Help : -( %s )-</string>

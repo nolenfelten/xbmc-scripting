@@ -17,6 +17,7 @@ def setControllerAction(): #Thanks to AMT Team for this :-D
     return {
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',
+                61479 : 'Keyboard Right Arrow',
                 61448 : 'Keyboard Backspace Button',
                 61533 : 'Keyboard Menu Button',
                 61467 : 'Keyboard ESC Button',
@@ -26,6 +27,7 @@ def setControllerAction(): #Thanks to AMT Team for this :-D
                     207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
+                    168 : 'Remote Right',
                     256 : 'A Button',
                     257 : 'B Button',
                     258 : 'X Button',

@@ -1,8 +1,8 @@
 import xbmcgui,traceback,XinBox_InfoDialog
 import xbmc
 import os
-import xib_util
-
+import XinBox_Util
+import XinBox_InBoxMenu
 
 
 # Maybe make add inbox a dialog over the top of this account :-D
@@ -29,9 +29,11 @@ class AccountSettings(xbmcgui.WindowXML):
             self.accountname = "-"
             self.accountpass = "-"
             self.defaultaccount = False
+            self.inboxsettings = False
         else:
             self.accountSettings = self.getaccountsettings(self.account)
             self.accountinboxes = self.buildinboxdict(self.accountSettings)
+            self.inboxsettings = self.accountSettings
 
     def buildinboxdict(self,accountsettings):
         inboxes = {} 
@@ -48,13 +50,15 @@ class AccountSettings(xbmcgui.WindowXML):
     def onInit(self):
         xbmcgui.lock()
         self.setupvars()
+        self.clearList()
+        self.inboxlist.reset()
         self.setupcontrols()
         self.builsettingsList()
         self.buildinboxlist()
         xbmcgui.unlock()
 
     def setupvars(self):
-        self.control_action = xib_util.setControllerAction()
+        self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
 
     def setupcontrols(self):
@@ -134,11 +138,21 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
                 if not self.newaccount:self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+        elif ( controlID == 61):
+            try:
+                self.launchinboxmenu("XinBoxNew")
+            except:traceback.print_exc()
         elif ( controlID == 64):
             if self.newaccount:self.crnewaccount()
             self.theSettings.saveXMLfromArray()
             self.close()
 
+
+    def launchinboxmenu(self, inbox):
+        w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",bforeFallback=0,inboxsetts=self.inboxsettings,theinbox=inbox)
+        w.doModal()
+        del w
+        
     def crnewaccount(self):
         self.Addsetting("Accounts",self.accountname)
         self.accountSettings = self.getaccountsettings(self.accountname)
@@ -176,11 +190,8 @@ class AccountSettings(xbmcgui.WindowXML):
             return default
 
     def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",scriptpath + "src","DefaultSkin")
-        dialog.setupvars(focusid, label)
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language)
         dialog.doModal()
         del dialog
-
-
 
 

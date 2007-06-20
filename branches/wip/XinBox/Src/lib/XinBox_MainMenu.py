@@ -9,14 +9,15 @@
 #   A pop3 email client for XBMC     #
 #                                    #
 ######################################
-import xbmc, sys, os, default,xib_util
-import xbmcgui, language, time, traceback
-import XinBox_InfoDialog
+import xbmc, sys, os, default
+import xbmcgui, time, traceback
 
+import XinBox_InfoDialog
+import XinBox_Util
 import XinBox_LoginMenu, XinBox_Settings
-from settings import Settings
-from XinBox_Settings import XinBox_Settings 
-from language import Language
+from XinBox_Settings import Settings
+from XinBox_AccountSettings import Account_Settings
+from XinBox_Language import Language
 
 
 TITLE = default.__scriptname__
@@ -37,8 +38,8 @@ class GUI( xbmcgui.WindowXML ):
         pass
 
     def onInit(self):
-        xbmcgui.lock()
         try:
+            xbmcgui.lock()
             self.clearList()
             self.setupvars()
             self.setupcontrols()
@@ -59,7 +60,7 @@ class GUI( xbmcgui.WindowXML ):
             self.addItem(item)
 
     def setupvars(self):
-        self.control_action = xib_util.setControllerAction()
+        self.control_action = XinBox_Util.setControllerAction()
         
     def onFocus(self, controlID):
         pass
@@ -99,6 +100,8 @@ class GUI( xbmcgui.WindowXML ):
         del dialog
 
     def launchcreatemenu(self):
-        winSettings = XinBox_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="XinBoxDefault")
-        winSettings.doModal()
-        del winSettings
+        try:
+            winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="XinBoxDefault")
+            winSettings.doModal()
+            del winSettings
+        except:traceback.print_exc()
