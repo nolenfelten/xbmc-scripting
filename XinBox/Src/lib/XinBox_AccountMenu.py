@@ -42,8 +42,8 @@ class AccountSettings(xbmcgui.WindowXML):
             inboxes[set[0]] = set[1]
         return inboxes
 
-    def getinboxsettings(self,accountsettings,inbox):
-        return accountsettings.getSettingInListbyname("Inboxes",inbox)
+    def getinboxsettings(self,inbox):
+        return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
 
     def getaccountsettings(self,account):
         return self.theSettings.getSettingInListbyname("Accounts",account)
