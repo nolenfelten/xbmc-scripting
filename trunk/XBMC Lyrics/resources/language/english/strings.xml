@@ -16,8 +16,8 @@
 
     <!-- Settings choices -->
     <string id="2070">Artist - Song.ext</string>
-    <string id="2071">Artist/Album/Song.ext</string>
-    <string id="2072">Artist/Album/Track Song.ext</string>
+    <string id="2071">Artist\Album\Song.ext</string>
+    <string id="2072">Artist\Album\Track Song.ext</string>
 
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>

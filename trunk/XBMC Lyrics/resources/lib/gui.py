@@ -214,24 +214,27 @@ class GUI( xbmcgui.WindowXMLDialog ):
         elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
             self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
-    def _get_artist_from_filename( self, filename ):
+    def get_artist_from_filename( self, filename ):
         try:
             artist = filename
             song = filename
+            basename = os.path.basename( filename )
+            # Artist - Song.ext
             if ( self.settings[ "filename_format" ] == 0 ):
-                basename = os.path.basename( filename )
                 artist = basename.split( "-", 1 )[ 0 ].strip()
                 song = os.path.splitext( basename.split( "-", 1 )[ 1 ].strip() )[ 0 ]
+            # Artist/Album/Song.ext or Artist/Album/Track Song.ext
             elif ( self.settings[ "filename_format" ] in ( 1, 2, ) ):
                 artist = filename.split( os.sep )[ -3 ]
+                # Artist/Album/Song.ext
                 if ( self.settings[ "filename_format" ] == 1 ):
-                    song = os.path.splitext( os.path.basename( filename ) )[ 0 ]
+                    song = os.path.splitext( basename )[ 0 ]
+                # Artist/Album/Track Song.ext
                 elif ( self.settings[ "filename_format" ] == 2 ):
-                    song = os.path.splitext( os.path.basename( filename ) )[ 0 ].split( " ", 1 )[ 1 ]
+                    song = os.path.splitext( basename )[ 0 ].split( " ", 1 )[ 1 ]
         except:
             # invalid format selected
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::_get_artist_from_filename [Invalid file format]", __scriptname__, __version__, )
-            pass
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::get_artist_from_filename [Invalid file format]", __scriptname__, __version__, )
         return artist, song
 
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
@@ -252,11 +255,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             for cnt in range( 5 ):
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
                 artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                if ( ( song != self.song and song and self.artist != artist ) or ( force_update and song ) ):
+                if ( song and ( self.song != song or self.artist != artist or force_update ) ):
                     self.artist = artist
                     self.song = song
                     if ( not artist or self.settings[ "use_filename" ] ):
-                        artist, song = self._get_artist_from_filename( xbmc.Player().getPlayingFile() )
+                        artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
                     self.get_lyrics( artist, song )
                     break
                 else: xbmc.sleep( 50 )
