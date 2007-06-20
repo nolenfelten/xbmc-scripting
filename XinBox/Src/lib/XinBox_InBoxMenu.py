@@ -132,7 +132,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.popdefault = False
                     self.getControl(104).setLabel(self.language(90))
                 else:
-                    self.popdefault = not self.popdefault
+                    self.popdefault = True
                     self.getControl(104).setLabel(self.popssl)
                 self.getControl(104).setSelected(self.popdefault)
             else:
@@ -141,7 +141,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.smtpdefault = False
                     self.getControl(105).setLabel(self.language(90))
                 else:
-                    self.smtpdefault = not self.smtpdefault
+                    self.smtpdefault = True
                     self.getControl(105).setLabel(self.smtpssl)
                 self.getControl(105).setSelected(self.smtpdefault)
 
