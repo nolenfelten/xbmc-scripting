@@ -11,10 +11,21 @@ class Account_Settings (AccountSettings):
         self.title = title
         AccountSettings.__init__(self, xmlName,thescriptPath,defaultName,forceFallback, scriptSettings,language,title,account)
 
-    def Addsetting(self,settingname,newName):
+    def Addaccount(self,settingname,newName):
         defSettingsForAnAccount = {
             "Account Password": ["-","text"],
             "Default Account": ["-","boolean"],
             "Inboxes": [['Inbox',[]],"list"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
-        self.addnewItem(settingname,newName,newSettings,"settings")
+        self.addnewaccount(settingname,newName,newSettings,"settings")
+
+    def Addinbox(self,settingname,newName):
+        defSettingsForAnAccount = {
+            "POP Server": ["-","text"],
+            "SMTP Server": ["-","text"],
+            "Account Name": ["-","text"],
+            "Account Password": ["-","text"],
+            "SERV Inbox Size": ["-","text"],
+            "XinBox Inbox Size": ["-","text"]}
+        newSettings = Settings("",self.title,defSettingsForAnAccount,2)
+        self.addinbox(settingname,newName,newSettings,"settings")

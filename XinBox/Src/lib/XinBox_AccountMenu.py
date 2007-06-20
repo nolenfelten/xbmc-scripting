@@ -14,6 +14,7 @@ import XinBox_InBoxMenu
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
+        self.myinit = 1
         self.account = account
         if self.account == "XinBoxDefault":
             self.newaccount = True
@@ -49,17 +50,20 @@ class AccountSettings(xbmcgui.WindowXML):
     
     def onInit(self):
         xbmcgui.lock()
-        self.setupvars()
-        self.clearList()
-        self.inboxlist.reset()
-        self.setupcontrols()
-        self.builsettingsList()
-        self.buildinboxlist()
+        if self.myinit == 1:
+            self.setupvars()
+            self.clearList()
+            self.inboxlist.reset()
+            self.setupcontrols()
+            self.builsettingsList()
+            self.buildinboxlist()
+            self.myinit = 0
         xbmcgui.unlock()
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
+        self.addedinbox = False
 
     def setupcontrols(self):
         self.getControl(82).setLabel(self.language(20))
@@ -139,11 +143,12 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.getControl(104).setSelected(self.defaultaccount)
                 if not self.newaccount:self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         elif ( controlID == 61):
-            try:
-                self.launchinboxmenu("XinBoxNew")
-            except:traceback.print_exc()
+            self.launchinboxmenu("XinBoxNew")
         elif ( controlID == 64):
-            if self.newaccount:self.crnewaccount()
+            if self.newaccount:
+                self.crnewaccount()
+            if self.addedinbox:
+                self.crnewinbox()
             self.theSettings.saveXMLfromArray()
             self.close()
 
@@ -151,17 +156,31 @@ class AccountSettings(xbmcgui.WindowXML):
     def launchinboxmenu(self, inbox):
         w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",bforeFallback=0,inboxsetts=self.inboxsettings,theinbox=inbox)
         w.doModal()
+        self.mysettings = w.mysettings
+        self.addedinbox = True
+        if self.inboxlist.getSelectedItem(0).getLabel() == self.language(75):
+            self.inboxlist.reset()
+            #need to build an array of Inbox settings as if more inboxes are added, self.mysettings is replaced with new settings
+        self.inboxlist.addItem(self.SettingListItem(self.mysettings[0], ""))
+        print "myreturned settings = " + str(self.mysettings)
         del w
+
+    def crnewinbox(self):
+        self.Addinbox("Inboxes",self.mysettings[0])
         
     def crnewaccount(self):
-        self.Addsetting("Accounts",self.accountname)
+        self.Addaccount("Accounts",self.accountname)
         self.accountSettings = self.getaccountsettings(self.accountname)
         self.accountSettings.setSetting("Account Password",self.accountpass)
         self.accountSettings.setSetting("Default Account",str(self.defaultaccount))        
 
-    def addnewItem(self, settingname,value1,value2="",type="text"):
+    def addnewaccount(self, settingname,value1,value2="",type="text"):
         self.theSettings.addSettingInList(settingname,value1,value2,"settings")
         return
+
+    def addinbox(self, settingname,value1,value2="",type="text"):
+        self.accountSettings.addSettingInList(settingname,value1,value2,"settings")
+        return    
 
     def onFocus(self, controlID):
         pass

@@ -46,6 +46,10 @@ class GUI( xbmcgui.WindowXML ):
         except:traceback.print_exc()
 
     def setupvars(self):
+        self.mysettings = {}
+        for x in range (0,8):
+            self.mysettings[x] = "-"
+            
         self.control_action = XinBox_Util.setControllerAction()
         if self.newinbox:
             self.popssl = "0"
@@ -71,14 +75,14 @@ class GUI( xbmcgui.WindowXML ):
         if self.newinbox:
             for x in range(82,89):
                 self.addItem(self.SettingListItem(self.language(x),""))
-##        else:
-##            self.addItem(self.SettingListItem(self.language(51), self.account))
-##            if self.accountSettings.getSetting("Account Password") == "-":
-##                self.addItem(self.SettingListItem(self.language(52), self.language(76)))
-##            else:
-##                self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
-##            self.addItem(self.SettingListItem(self.language(53), self.accountSettings.getSetting("Default Account")))
-##
+        else:
+            self.addItem(self.SettingListItem(self.language(51), self.account))
+            if self.accountSettings.getSetting("Account Password") == "-":
+                self.addItem(self.SettingListItem(self.language(52), self.language(76)))
+            else:
+                self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
+            self.addItem(self.SettingListItem(self.language(53), self.accountSettings.getSetting("Default Account")))
+
     def SettingListItem(self, label1,label2):
         if label2 == "POPTrue":
             self.popdefault = True
@@ -104,7 +108,41 @@ class GUI( xbmcgui.WindowXML ):
         pass
     
     def onClick(self, controlID):
-        pass
+        if ( controlID == 51):
+            curPos  = self.getCurrentListPosition()
+            curItem = self.getListItem(curPos)
+            curName = curItem.getLabel()
+            curName2 = curItem.getLabel2()
+            if curPos == 4:
+                value = self.showKeyboard(self.language(66) % curName,"",1)
+                if value == "":
+                    curItem.setLabel2("")
+                    if self.newinbox:self.mysettings[curPos] = "-"
+                #    else:self.accountSettings.setSetting("Account Password","-")
+                else:
+                    curItem.setLabel2('*' * len(value))
+                    if self.newinbox:self.mysettings[curPos] = value
+                 #   else:self.accountSettings.setSetting("Account Password",value)
+            elif curPos == 5 or curPos == 6:
+                dialog = xbmcgui.Dialog()
+                value = dialog.numeric(0, self.language(66) % curName, curName2)
+                if value == "0":
+                    if self.newinbox:self.mysettings[curPos] = "-"
+                    #else
+                    curItem.setLabel2("")
+                elif value != curName2:
+                   if self.newinbox:self.mysettings[curPos] = value
+                  # else:
+                   curItem.setLabel2(value)                  
+            else:
+                value = self.showKeyboard(self.language(66) % curName,curName2)
+                if value != "":
+                    curItem.setLabel2(value)
+                    if self.newinbox:self.mysettings[curPos] = value
+                   # else:self.theSettings.setSettingnameInList("Accounts",curName2,value)
+        elif ( controlID == 62):
+            print "mysettings = " + str(self.mysettings)
+            self.close()
                     
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -119,8 +157,10 @@ class GUI( xbmcgui.WindowXML ):
             if focusid == 51:
                 if self.getCurrentListPosition() == 1:
                     self.updatessl(91,self.popssl)
+                    self.mysettings[7] = self.popssl
                 elif self.getCurrentListPosition() == 2:
                     self.updatessl(92,self.smtpssl)
+                    self.mysettings[8] = self.smtpssl
                     
     def updatessl(self,ID,currValue):
         dialog = xbmcgui.Dialog()
