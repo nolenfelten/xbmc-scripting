@@ -34,7 +34,7 @@ class AccountSettings(xbmcgui.WindowXML):
         else:
             self.accountSettings = self.getaccountsettings(self.account)
             self.accountinboxes = self.buildinboxdict(self.accountSettings)
-            self.inboxsettings = self.accountSettings
+            self.inboxsettings = self.getinboxsettings
 
     def buildinboxdict(self,accountsettings):
         inboxes = {} 
@@ -63,6 +63,7 @@ class AccountSettings(xbmcgui.WindowXML):
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
+        self.mysettings = []
         self.addedinbox = False
 
     def setupcontrols(self):
@@ -73,7 +74,7 @@ class AccountSettings(xbmcgui.WindowXML):
             self.getControl(ID).setLabel(self.language(ID))        
         if self.newaccount:
             self.getControl(64).setEnabled(False)
-            self.getControl(63).setEnabled(False)
+         #   self.getControl(63).setEnabled(False)   uncomment once i add in the save button
             self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
         else:self.getControl(80).setLabel(self.language(74))
@@ -144,35 +145,44 @@ class AccountSettings(xbmcgui.WindowXML):
                 if not self.newaccount:self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         elif ( controlID == 61):
             self.launchinboxmenu("XinBoxNew")
-        elif ( controlID == 64):
+        elif ( controlID == 63): #will change to a save account button when i add it
             if self.newaccount:
                 self.crnewaccount()
             if self.addedinbox:
                 self.crnewinbox()
             self.theSettings.saveXMLfromArray()
+        elif ( controlID == 64):
             self.close()
 
 
     def launchinboxmenu(self, inbox):
         w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",bforeFallback=0,inboxsetts=self.inboxsettings,theinbox=inbox)
         w.doModal()
-        self.mysettings = w.mysettings
+        self.mysettings.append(w.mysettings)
         self.addedinbox = True
         if self.inboxlist.getSelectedItem(0).getLabel() == self.language(75):
             self.inboxlist.reset()
-            #need to build an array of Inbox settings as if more inboxes are added, self.mysettings is replaced with new settings
-        self.inboxlist.addItem(self.SettingListItem(self.mysettings[0], ""))
-        print "myreturned settings = " + str(self.mysettings)
+        self.inboxlist.addItem(self.SettingListItem(w.mysettings[0], ""))
         del w
 
     def crnewinbox(self):
-        self.Addinbox("Inboxes",self.mysettings[0])
-        
+        for settings in self.mysettings:     
+            self.Addinbox("Inboxes",settings[0])
+            self.inboxsettings = self.getinboxsettings(settings[0])
+            self.inboxsettings.setSetting("POP Server",settings[1])
+            self.inboxsettings.setSetting("SMTP Server",settings[2])
+            self.inboxsettings.setSetting("Account Name",settings[3])
+            self.inboxsettings.setSetting("Account Password",settings[4])
+            self.inboxsettings.setSetting("SERV Inbox Size",settings[5])
+            self.inboxsettings.setSetting("XinBox Inbox Size",settings[6])
+            
     def crnewaccount(self):
         self.Addaccount("Accounts",self.accountname)
         self.accountSettings = self.getaccountsettings(self.accountname)
         self.accountSettings.setSetting("Account Password",self.accountpass)
-        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))        
+        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+        self.newaccount = False
+        self.mysettings = []
 
     def addnewaccount(self, settingname,value1,value2="",type="text"):
         self.theSettings.addSettingInList(settingname,value1,value2,"settings")
