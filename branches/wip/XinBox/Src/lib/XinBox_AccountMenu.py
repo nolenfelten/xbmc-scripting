@@ -175,6 +175,8 @@ class AccountSettings(xbmcgui.WindowXML):
             self.inboxsettings.setSetting("Account Password",settings[4])
             self.inboxsettings.setSetting("SERV Inbox Size",settings[5])
             self.inboxsettings.setSetting("XinBox Inbox Size",settings[6])
+        self.mysettings = []
+        self.addedinbox = False
             
     def crnewaccount(self):
         self.Addaccount("Accounts",self.accountname)
@@ -182,7 +184,6 @@ class AccountSettings(xbmcgui.WindowXML):
         self.accountSettings.setSetting("Account Password",self.accountpass)
         self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         self.newaccount = False
-        self.mysettings = []
 
     def addnewaccount(self, settingname,value1,value2="",type="text"):
         self.theSettings.addSettingInList(settingname,value1,value2,"settings")
