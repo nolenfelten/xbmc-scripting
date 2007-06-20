@@ -109,7 +109,6 @@
 				<onup>51</onup>
 				<align>center</align>
 				<aligny>center</aligny>
-				<ondown>62</ondown>
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
