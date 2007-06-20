@@ -89,6 +89,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "scraper", )
+        self.settings_refresh = ( "use_filename", "save_lyrics", "lyrics_path", )
 
 ###### End of Special defs #####################################################
 
@@ -103,6 +104,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 223 ).setEnabled( self.settings[ "save_lyrics" ] )
             self.getControl( 224 ).setSelected( self.settings[ "smooth_scrolling" ] )
             self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
+            self.getControl( 226 ).setSelected( self.settings[ "use_filename" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -134,6 +136,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.settings[ "show_viz" ] = not self.settings[ "show_viz" ]
         self._set_controls_values()
 
+    def _change_setting6( self ):
+        """ changes settings #6 """
+        self.settings[ "use_filename" ] = not self.settings[ "use_filename" ]
+        self._set_controls_values()
+
 ##### End of unique defs ######################################################
     
     def _save_settings( self ):
@@ -147,11 +154,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _check_for_restart( self ):
         """ checks for any changes that require a restart to take effect """
         restart = False
+        refresh = False
         for setting in self.settings_restart:
             if ( self.settings_original[ setting ] != self.settings[ setting ] ):
                 restart = True
                 break
-        self._close_dialog( True, restart )
+        for setting in self.settings_refresh:
+            if ( self.settings_original[ setting ] != self.settings[ setting ] ):
+                refresh = True
+                break
+        self._close_dialog( True, restart, refresh )
     
     def _update_script( self ):
         """ checks for updates to the script """
@@ -166,10 +178,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         c.doModal()
         del c
 
-    def _close_dialog( self, changed=False, restart=False ):
+    def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """
         self.changed = changed
         self.restart = restart
+        self.refresh = refresh
         self.close()
 
     def onClick( self, controlId ):

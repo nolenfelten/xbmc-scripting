@@ -16,7 +16,7 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5", "1.5.1", )
+SETTINGS_VERSIONS = ( "1.5.2", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
@@ -98,7 +98,8 @@ class Settings:
             "save_lyrics": True,
             "lyrics_path": os.path.join( BASE_DATA_PATH, "lyrics" ),
             "smooth_scrolling": False,
-            "show_viz": True
+            "show_viz": True,
+            "use_filename": False,
             }
         ok = self.save_settings( settings )
         return settings
