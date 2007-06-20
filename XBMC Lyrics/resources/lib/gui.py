@@ -38,9 +38,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.setup_all()#Start( function=self.setup_all ).start()
 
     def setup_all( self ):
+        self.setup_variables()
         self.get_settings()
         self.get_scraper()
-        self.setup_variables()
         self.getDummyTimer()
         self.getMyPlayer()
         self.show_viz_window()
@@ -178,6 +178,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if ( self.controlId in ( 100, 101, 110, 111, ) ): 
                     self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
                 self.show_viz_window( False )
+                if ( settings.refresh ):
+                    self.myPlayerChanged( 2, True )
             else: self.exit_script( True )
         del settings
 
@@ -235,14 +237,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
             for cnt in range( 5 ):
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
                 artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                if ( song != self.song and song and self.artist != artist ): break
-                xbmc.sleep( 50 )
-            if ( ( song != self.song and song and self.artist != artist ) or force_update ):
-                self.artist = artist
-                self.song = song
-                if ( not artist ):
-                    artist, song = self._get_artist_from_filename( song )
-                self.get_lyrics( artist, song )
+                if ( ( song != self.song and song and self.artist != artist ) or ( force_update and song ) ):
+                    self.artist = artist
+                    self.song = song
+                    if ( not artist or self.settings[ "use_filename" ] ):
+                        if ( self.settings[ "use_filename" ] ):
+                            song = os.path.basename( xbmc.Player().getPlayingFile() )
+                        artist, song = self._get_artist_from_filename( song )
+                    self.get_lyrics( artist, song )
+                    break
+                else: xbmc.sleep( 50 )
 
 
 ## Thanks Thor918 for this class ##

@@ -11,6 +11,7 @@
     <string id="203">Save folder</string>
     <string id="204">Smooth scrolling for lyrics</string>
     <string id="205">Show visualization window</string>
+    <string id="206">Use only filename for search</string>
 
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>
