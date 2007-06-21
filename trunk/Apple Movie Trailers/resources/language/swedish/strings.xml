@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 	<strings>
 		<string id="0">Apple Movie Trailers</string>
-		<string id="1">xbox media center</string>
+		<string id="1">Xbox Media Center</string>
+        <string id="2">blittan</string>
 		<string id="40">All info hämtas, sökning är tillgänglig. (10 - 60 minuter)</string>
 		<string id="41">Info uppdateras per genre. (1 - 5 minuter)</string>
 		<string id="42">Spara filminfo till databas...</string>
