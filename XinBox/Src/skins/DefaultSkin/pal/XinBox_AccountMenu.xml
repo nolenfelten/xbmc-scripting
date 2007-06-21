@@ -186,7 +186,7 @@
 				<height>42</height>
 			</control>
 			<control type="button" id="64">
-				<description>OK button</description>
+				<description>Save button</description>
 				<posx>0</posx>
 				<posy>177</posy>
       				<textoffsetx>2</textoffsetx>
@@ -194,6 +194,24 @@
 				<label>-</label>
 				<onleft>51</onleft>
 				<onup>63</onup>
+				<ondown>65</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>107</width>
+				<height>42</height>
+			</control>
+			<control type="button" id="65">
+				<description>OK button</description>
+				<posx>0</posx>
+				<posy>244</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
+				<onleft>51</onleft>
+				<onup>64</onup>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>

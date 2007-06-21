@@ -26,7 +26,8 @@
 	<string id="61">Add Inbox</string>
 	<string id="62">Edit Inbox</string>
 	<string id="63">Delete Inbox</string>
-	<string id="64">OK</string>
+	<string id="64">Save Account</string>
+	<string id="65">OK</string>
 	<string id="66">Change %s</string>
 	<string id="67">Display Name</string>
 	<string id="68">POP Server</string>
