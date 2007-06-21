@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">Apple Movie Trailers</string>
-    <string id="1">xbox media center</string>
+    <string id="1">Xbox Media Center</string>
+    <string id="2">Nuka1195/Killarny/Pike</string>
 
     <!-- Dialog Messages -->
     <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
@@ -155,6 +156,13 @@
     <string id="901">Team Credits:</string>
     <string id="902">Additional Credits:</string>
     <string id="903">Skin Credits:</string>
+    
+    <!-- Credits headings-->
+    <string id="910">Head Developer &amp; Coder</string>
+    <string id="911">Coder &amp; Skinning</string>
+    <string id="912">Graphics &amp; Skinning</string>
+    <string id="913">Usability</string>
+    <string id="914">Language file</string>
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>

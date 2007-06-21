@@ -338,10 +338,15 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
         
     def showOverlays( self, trailer=-1 ):
-        self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( self.trailers.movies[ trailer ].favorite * ( trailer != -1 ) )
-        self.getControl( self.CONTROL_OVERLAY_WATCHED ).setVisible( self.trailers.movies[ trailer ].watched * ( trailer != -1 ) )
-        self.getControl( self.CONTROL_OVERLAY_SAVED ).setVisible( ( self.trailers.movies[ trailer ].saved != "" ) * ( trailer != -1 ) )
-
+        if ( trailer != -1 ):
+            self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( self.trailers.movies[ trailer ].favorite )
+            self.getControl( self.CONTROL_OVERLAY_WATCHED ).setVisible( self.trailers.movies[ trailer ].watched )
+            self.getControl( self.CONTROL_OVERLAY_SAVED ).setVisible( self.trailers.movies[ trailer ].saved != "" )
+        else:
+            self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( False )
+            self.getControl( self.CONTROL_OVERLAY_WATCHED ).setVisible( False )
+            self.getControl( self.CONTROL_OVERLAY_SAVED ).setVisible( False )
+            
     def getTrailerGenre( self ):
         genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
         if ( self.main_category == STUDIOS ): 
