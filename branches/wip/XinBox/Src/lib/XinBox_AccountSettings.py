@@ -26,6 +26,8 @@ class Account_Settings (AccountSettings):
             "Account Name": ["-","text"],
             "Account Password": ["-","text"],
             "SERV Inbox Size": ["-","text"],
-            "XinBox Inbox Size": ["-","text"]}
+            "XinBox Inbox Size": ["-","text"],
+            "POP SSL": ["0","text"],
+            "SMTP SSL": ["0","text"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addinbox(settingname,newName,newSettings,"settings")
