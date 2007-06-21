@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="0">XBMC Lyrics</string>
+    <string id="0">XBMC Lyrics</string>
+
    <!-- User Messages -->
     <string id="100">Poikkeus</string>
 
@@ -10,6 +11,13 @@
     <string id="203">Kansioon</string>
     <string id="204">Sanojen pehmeä vieritys</string>
     <string id="205">Visualisointi käytössä</string>
+    <string id="206">Tiedostonimen haku käytössä</string>
+    <string id="207">Tiedostonimen muoto</string>
+
+    <!-- Settings choices -->
+    <string id="2070">Esittäjä - Kappale.pääte</string>
+    <string id="2071">Esittäjä\Albumi\Kappale.pääte</string>
+    <string id="2072">Esittäjä\Albumi\Raitanro Kappale.pääte</string>
 
     <!-- Settings error messages -->
     <string id="230">Asetusten tallennuksessa tapahtui virhe!</string>
