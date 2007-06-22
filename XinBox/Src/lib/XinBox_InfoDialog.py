@@ -27,7 +27,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
     
     def onClick(self, controlID):
-        if controlID == 22:
+        if controlID == 40:
             self.close()
                     
     def onAction( self, action ):
