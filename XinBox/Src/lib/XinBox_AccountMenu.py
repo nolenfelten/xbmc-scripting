@@ -170,16 +170,29 @@ class AccountSettings(xbmcgui.WindowXML):
 
     def launchinboxmenu(self, inbox):
         try:
-            self.newaccount = True
+            #Need to add a for loop to get whether the inbox is saved to xml or not
             w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",bforeFallback=0,notnewaccount=self.newaccount,inboxsetts=self.inboxsettings,accountsetts=self.accountSettings,theinbox=inbox)
             w.doModal()
-            if w.mysettings != False:
-                self.mysettings[w.mysettings[0]] = w.mysettings
+            returnvalue = w.returnvalue
+            returnsettings = w.returnsettings
+            if returnvalue == 1:#Its a new inbox
+                self.mysettings[returnsettings[0]] = returnsettings
                 self.addedinbox = True
-                self.accountinboxes.append(w.mysettings[0])
+                self.accountinboxes.append(returnsettings[0])
+                self.buildinboxlist() #always add inbox to list as we know it is not been edited
+            elif returnvalue == 2: #Its editing an inbox that hasn't been saved to xml
+                del self.mysettings[inbox] #remove old dict entry with old name and settings
+                self.mysettings[returnsettings[0]] = returnsettings  #add new
+                self.accountinboxes.remove(inbox)
+                self.accountinboxes.append(returnsettings[0])
                 self.buildinboxlist()
-            else:
-                self.accountSettings = w.accountsetts
+            elif returnvalue == 3:  #its editing an inbox that has been saved to xml
+                self.accountinboxes.remove(inbox)
+                #got to get new inbox name from returnsettings
+                print "return settings = " + str(returnsettings)
+             #   self.accountinboxes.append(returnsettings.getSetting("Inboxes")[1])
+                self.buildinboxlist()
+                self.accountSettings = returnsettings
             self.setFocusId(9000)
             del w
         except: traceback.print_exc()

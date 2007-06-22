@@ -36,9 +36,7 @@ class GUI( xbmcgui.WindowXML ):
             else:self.newinbox = False
             if notnewaccount:
                 self.newaccount = False
-            else:
-                self.settings = self.settings
-                self.newaccount = True
+            else:self.newaccount = True
         except:traceback.print_exc()
 
     def onInit(self):
@@ -173,9 +171,15 @@ class GUI( xbmcgui.WindowXML ):
             self.closeme()
 
     def closeme(self):
-        if self.newaccount:
-            self.mysettings = False
-        print "mysettings = " + str(self.mysettings)
+        if self.newinbox:
+            self.returnvalue = 1
+            self.returnsettings = self.mysettings
+        elif not self.newinbox and self.newaccount:
+            self.returnvalue = 2
+            self.returnsettings = self.mysettings
+        elif not self.newinbox and not self.newaccount:
+            self.returnvalue = 3
+            self.returnsettings = self.accountsetts
         self.close()
             
                     
