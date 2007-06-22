@@ -140,6 +140,7 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
+            self.deleteing = False
             self.setFocusId(88)
         elif ( controlID == 63):
             self.deleteing = True
