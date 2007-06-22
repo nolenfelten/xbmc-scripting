@@ -152,6 +152,7 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.buildinboxlist()
                 self.deleteing = False
             else:self.launchinboxmenu(inboxname)
+            self.setFocusId(9000)
         elif ( controlID == 64):
             self.theSettings.saveXMLfromArray()
             self.newaccount = False
