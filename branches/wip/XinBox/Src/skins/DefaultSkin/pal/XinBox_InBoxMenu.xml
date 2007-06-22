@@ -107,6 +107,8 @@
 				<label>-</label>
 				<onright>62</onright>
 				<onup>51</onup>
+				<ondown>61</ondown>
+				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
@@ -124,6 +126,8 @@
 				<label>-</label>
 				<onup>51</onup>
 				<onleft>61</onleft>
+				<onright>62</onright>
+				<ondown>62</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
