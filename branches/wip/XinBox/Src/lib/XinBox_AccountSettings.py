@@ -28,6 +28,7 @@ class Account_Settings (AccountSettings):
             "Account Password": ["-","text"],
             "SERV Inbox Size": ["-","text"],
             "XinBox Inbox Size": ["-","text"],
+            "Keep Copy Emails": ["True","boolean"],
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)

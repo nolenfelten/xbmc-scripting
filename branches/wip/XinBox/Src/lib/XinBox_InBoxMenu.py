@@ -33,11 +33,13 @@ class GUI( xbmcgui.WindowXML ):
         return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
     
     def onInit(self):
-        xbmcgui.lock()
-        self.setupvars()
-        self.setupcontrols()
-        self.builsettingsList()
-        xbmcgui.unlock()
+        try:
+            xbmcgui.lock()
+            self.setupvars()
+            self.setupcontrols()
+            self.builsettingsList()
+            xbmcgui.unlock()
+        except:traceback.print_exc()
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
@@ -49,6 +51,7 @@ class GUI( xbmcgui.WindowXML ):
         self.settnames[5] = "Account Password"
         self.settnames[6] = "SERV Inbox Size"
         self.settnames[7] = "XinBox Inbox Size"
+        self.keepemails = self.settings.getSetting("Keep Copy Emails")
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
         if self.popssl == "0":
@@ -66,6 +69,10 @@ class GUI( xbmcgui.WindowXML ):
             self.smtpdefault = True
             self.getControl(105).setLabel(self.smtpssl)
         self.getControl(105).setSelected(self.smtpdefault)
+        if self.keepemails == "True":
+            self.keepemails = True
+        else:self.keepemails = False
+        self.getControl(106).setSelected(self.keepemails)
 
     def setupcontrols(self):
         self.getControl(61).setLabel(self.language(89))
@@ -90,7 +97,8 @@ class GUI( xbmcgui.WindowXML ):
         else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings.getSetting("Account Password"))))
         self.addItem(self.SettingListItem(self.language(87), self.settings.getSetting("SERV Inbox Size")))
         self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
-
+        self.addItem(self.SettingListItem(self.language(97),""))
+        
     def SettingListItem(self, label1,label2):
         if label2 == "-":
             return xbmcgui.ListItem(label1,"","","")
@@ -123,7 +131,11 @@ class GUI( xbmcgui.WindowXML ):
                     self.settings.setSetting(self.settnames[curPos],"-")
                 elif value != curName2:
                     curItem.setLabel2(value)
-                    self.settings.setSetting(self.settnames[curPos],value)    
+                    self.settings.setSetting(self.settnames[curPos],value)
+            elif curPos == 8:
+                self.keepemails = not self.keepemails
+                self.getControl(106).setSelected(self.keepemails)
+                self.settings.setSetting("Keep Copy Emails",str(self.keepemails))                
             else:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
                 if value != False:
@@ -170,9 +182,9 @@ class GUI( xbmcgui.WindowXML ):
             if focusid == 51:
                 self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             elif focusid == 61:
-                self.launchinfo(121,self.language(89))
+                self.launchinfo(122,self.language(89))
             elif focusid == 62:
-                self.launchinfo(122,self.language(65))
+                self.launchinfo(123,self.language(65))
                     
     def updatessl(self,ID,currValue):
         dialog = xbmcgui.Dialog()
