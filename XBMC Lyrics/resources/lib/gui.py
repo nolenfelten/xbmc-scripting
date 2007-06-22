@@ -225,7 +225,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 song = os.path.splitext( basename.split( "-", 1 )[ 1 ].strip() )[ 0 ]
             # Artist/Album/Song.ext or Artist/Album/Track Song.ext
             elif ( self.settings[ "filename_format" ] in ( 1, 2, ) ):
-                artist = filename.split( os.sep )[ -3 ]
+                artist = os.path.basename( os.path.split( os.path.split( filename )[ 0 ] )[ 0 ] )
                 # Artist/Album/Song.ext
                 if ( self.settings[ "filename_format" ] == 1 ):
                     song = os.path.splitext( basename )[ 0 ]
@@ -254,14 +254,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             for cnt in range( 5 ):
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
-                artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                if ( song and ( self.song != song or self.artist != artist or force_update ) ):
-                    self.artist = artist
-                    self.song = song
+                if ( song ):
+                    artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
                     if ( not artist or self.settings[ "use_filename" ] ):
                         artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
-                    self.get_lyrics( artist, song )
-                    break
+                    if ( self.song != song or self.artist != artist or force_update ):
+                        self.artist = artist
+                        self.song = song
+                        self.get_lyrics( artist, song )
+                        break
                 else: xbmc.sleep( 50 )
 
 
