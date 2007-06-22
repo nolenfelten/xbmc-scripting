@@ -101,7 +101,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def launchcreatemenu(self):
         try:
-            winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="XinBoxDefault")
+            winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="")
             winSettings.doModal()
             del winSettings
         except:traceback.print_exc()

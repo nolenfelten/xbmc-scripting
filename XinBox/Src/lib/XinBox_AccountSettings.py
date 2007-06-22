@@ -14,7 +14,7 @@ class Account_Settings (AccountSettings):
     def Addaccount(self,settingname,newName):
         defSettingsForAnAccount = {
             "Account Password": ["-","text"],
-            "Default Account": ["-","boolean"],
+            "Default Account": ["False","boolean"],
             "Inboxes": [['Inbox',[]],"list"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")

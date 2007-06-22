@@ -14,63 +14,51 @@ import XinBox_InBoxMenu
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
-        try:
-            self.myinit = 1
-            self.account = account
-            if self.account == "XinBoxDefault":
-                self.newaccount = True
-            else:self.newaccount = False
-            
-            self.title = title
-            self.scriptPath = thescriptPath
-            self.language = language
+        self.myinit = 1
+        self.account = account
+        self.title = title
+        self.scriptPath = thescriptPath
+        self.language = language
+        self.theSettings = scriptSettings
+        
+        if self.account == "":
+            self.newaccount = True
+            self.crnewaccount(self.account)
+        else:self.newaccount = False
 
-            self.theSettings = scriptSettings
-            
-            if self.newaccount:
-                self.accountname = "-"
-                self.accountpass = "-"
-                self.defaultaccount = False
-                self.inboxsettings = False
-                self.accountSettings = False
-                self.accountinboxes = []
-            else:
-                self.accountSettings = self.getaccountsettings(self.account)
-                self.accountinboxes = self.buildinboxdict(self.accountSettings)
-                self.inboxsettings = self.getinboxsettings(self.account)
-        except: traceback.print_exc()
+        self.accounts = self.buildaccounts()
+        self.accountSettings = self.getaccountsettings(self.account)
+        self.accountinboxes = self.buildinboxdict(self.accountSettings)
 
     def buildinboxdict(self,accountsettings):
         inboxes = []
-        for set in self.accountSettings.getSetting("Inboxes")[1] :
+        for set in self.accountSettings.getSetting("Inboxes")[1]:
             inboxes.append(set[0])
         return inboxes
 
-    def getinboxsettings(self,inbox):
-        return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
+    def buildaccounts(self):
+        accounts = []
+        for set in self.theSettings.getSetting("Accounts")[1]:
+            accounts.append(set[0])
+        return accounts
 
     def getaccountsettings(self,account):
         return self.theSettings.getSettingInListbyname("Accounts",account)
     
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            if self.myinit == 1:
-                self.setupvars()
-                self.clearList()
-                self.inboxlist.reset()
-                self.setupcontrols()
-                self.builsettingsList()
-                self.buildinboxlist()
-                self.myinit = 0
-            xbmcgui.unlock()
-        except: traceback.print_exc()
+        xbmcgui.lock()
+        if self.myinit == 1:
+            self.setupvars()
+            self.setupcontrols()
+            self.buildsettingsList()
+            self.buildinboxlist()
+            self.myinit = 0
+        xbmcgui.unlock()
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
-        self.mysettings = {}
-        self.addedinbox = False
+        self.defaultaccount = self.accountSettings.getSetting("Default Account")
 
     def setupcontrols(self):
         self.getControl(82).setLabel(self.language(20))
@@ -80,23 +68,19 @@ class AccountSettings(xbmcgui.WindowXML):
             self.getControl(ID).setLabel(self.language(ID))        
         if self.newaccount:
             self.getControl(64).setEnabled(False)
-         #   self.getControl(63).setEnabled(False)   uncomment once i add in the save button
+            self.getControl(63).setEnabled(False)
             self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
         else:self.getControl(80).setLabel(self.language(74))
     
-    def builsettingsList(self):
-        if self.newaccount:
-            self.addItem(self.SettingListItem(self.language(51),""))
-            self.addItem(self.SettingListItem(self.language(52),self.language(76)))
-            self.addItem(self.SettingListItem(self.language(53),""))
+    def buildsettingsList(self):
+        self.clearList()
+        self.addItem(self.SettingListItem(self.language(51), self.account))
+        if self.accountSettings.getSetting("Account Password") == "-":
+            self.addItem(self.SettingListItem(self.language(52), self.language(76)))
         else:
-            self.addItem(self.SettingListItem(self.language(51), self.account))
-            if self.accountSettings.getSetting("Account Password") == "-":
-                self.addItem(self.SettingListItem(self.language(52), self.language(76)))
-            else:
-                self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
-            self.addItem(self.SettingListItem(self.language(53), self.accountSettings.getSetting("Default Account")))
+            self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
+        self.addItem(self.SettingListItem(self.language(53), self.defaultaccount))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -106,8 +90,10 @@ class AccountSettings(xbmcgui.WindowXML):
             self.inboxlist.addItem(self.SettingListItem(self.language(75), ""))
             self.getControl(63).setEnabled(False)
             self.getControl(62).setEnabled(False)
+            self.setFocusId(51)
         else:
             self.getControl(62).setEnabled(True)
+            self.getControl(63).setEnabled(True)
 
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -115,7 +101,9 @@ class AccountSettings(xbmcgui.WindowXML):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.close()
+            if focusid == 88:
+                self.setFocusId(9000)
+            else:self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
@@ -130,94 +118,66 @@ class AccountSettings(xbmcgui.WindowXML):
             if curPos == 0:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
                 if value != "":
-                    curItem.setLabel2(value)
-                    self.getControl(64).setEnabled(True)
-                    if self.newaccount:self.accountname = value
-                    else:self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                    if value in self.accounts:
+                        dialog = xbmcgui.Dialog()
+                        ok = dialog.ok(self.language(93), self.language(95))
+                    else:
+                        curItem.setLabel2(value)
+                        self.getControl(64).setEnabled(True)
+                        self.theSettings.setSettingnameInList("Accounts",curName2,value)
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value == "":
-                    if self.newaccount:self.accountpass = "-"
-                    else:self.accountSettings.setSetting("Account Password","-")
+                    self.accountSettings.setSetting("Account Password","-")
                     curItem.setLabel2(self.language(76))
                 else:
-                    if self.newaccount:self.accountpass = value
-                    else:self.accountSettings.setSetting("Account Password",value)
+                    self.accountSettings.setSetting("Account Password",value)
                     curItem.setLabel2('*' * len(value)) 
             elif curPos == 2:
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
-                if not self.newaccount:self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+                self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         elif ( controlID == 61):
-            self.launchinboxmenu("XinBoxNew")
+            self.launchinboxmenu("")
         elif ( controlID == 62):
+            self.setFocusId(88)
+        elif ( controlID == 63):
+            self.deleteing = True
             self.setFocusId(88)
         elif ( controlID == 88):
             inboxname = self.inboxlist.getSelectedItem(self.inboxlist.getSelectedPosition()).getLabel()
-            try:
-                self.inboxsettings = self.getinboxsettings(inboxname)
-            except:self.inboxsettings = self.mysettings[inboxname]
-            self.launchinboxmenu(inboxname)
+            if self.deleteing:
+                self.accountSettings.removeinbox("Inboxes",inboxname)
+                self.accountinboxes.remove(inboxname)
+                self.buildinboxlist()
+                self.deleteing = False
+            else:self.launchinboxmenu(inboxname)
         elif ( controlID == 64):
-            if self.newaccount:
-                self.crnewaccount()
-            if self.addedinbox:
-                self.crnewinbox()
             self.theSettings.saveXMLfromArray()
+            self.newaccount = False
         elif ( controlID == 65):
             self.close()
 
 
     def launchinboxmenu(self, inbox):
-        try:
-            #Need to add a for loop to get whether the inbox is saved to xml or not
-            w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",bforeFallback=0,notnewaccount=self.newaccount,inboxsetts=self.inboxsettings,accountsetts=self.accountSettings,theinbox=inbox)
-            w.doModal()
-            returnvalue = w.returnvalue
-            returnsettings = w.returnsettings
-            if returnvalue == 1:#Its a new inbox
-                self.mysettings[returnsettings[0]] = returnsettings
-                self.addedinbox = True
-                self.accountinboxes.append(returnsettings[0])
-                self.buildinboxlist() #always add inbox to list as we know it is not been edited
-            elif returnvalue == 2: #Its editing an inbox that hasn't been saved to xml
-                del self.mysettings[inbox] #remove old dict entry with old name and settings
-                self.mysettings[returnsettings[0]] = returnsettings  #add new
+        if inbox == "":self.Addinbox("Inboxes",inbox)
+        inboxes = self.buildinboxdict(self.accountSettings)
+        w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",accountsetts=self.accountSettings,theinbox=inbox,lang=self.language,inboxlist=inboxes)
+        w.doModal()
+        ID = w.returnID
+        if ID != 0:
+            Inboxname = w.inbox
+            if inbox == "":
+                self.accountinboxes.append(Inboxname)
+            else:
                 self.accountinboxes.remove(inbox)
-                self.accountinboxes.append(returnsettings[0])
-                self.buildinboxlist()
-            elif returnvalue == 3:  #its editing an inbox that has been saved to xml
-                self.accountinboxes.remove(inbox)
-                #got to get new inbox name from returnsettings
-                print "return settings = " + str(returnsettings)
-             #   self.accountinboxes.append(returnsettings.getSetting("Inboxes")[1])
-                self.buildinboxlist()
-                self.accountSettings = returnsettings
-            self.setFocusId(9000)
-            del w
-        except: traceback.print_exc()
+                self.accountinboxes.append(Inboxname)
+            self.buildinboxlist()
+        del w
 
-    def crnewinbox(self):
-        for set in self.mysettings:
-            self.Addinbox("Inboxes",self.mysettings[set][0])
-            self.inboxsettings = self.getinboxsettings(self.mysettings[set][0])
-            self.inboxsettings.setSetting("POP Server",self.mysettings[set][1])
-            self.inboxsettings.setSetting("SMTP Server",self.mysettings[set][2])
-            self.inboxsettings.setSetting("Account Name",self.mysettings[set][3])
-            self.inboxsettings.setSetting("Account Password",self.mysettings[set][4])
-            self.inboxsettings.setSetting("SERV Inbox Size",self.mysettings[set][5])
-            self.inboxsettings.setSetting("XinBox Inbox Size",self.mysettings[set][6])
-            self.inboxsettings.setSetting("POP SSL",self.mysettings[set][7])
-            self.inboxsettings.setSetting("SMTP SSL",self.mysettings[set][8])
-        self.mysettings = {}
-        self.addedinbox = False
             
-    def crnewaccount(self):
-        self.Addaccount("Accounts",self.accountname)
-        self.accountSettings = self.getaccountsettings(self.accountname)
-        self.accountSettings.setSetting("Account Password",self.accountpass)
-        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-        self.newaccount = False
+    def crnewaccount(self,accountname):
+        self.Addaccount("Accounts",accountname)
 
     def addnewaccount(self, settingname,value1,value2="",type="text"):
         self.theSettings.addSettingInList(settingname,value1,value2,"settings")
@@ -232,7 +192,9 @@ class AccountSettings(xbmcgui.WindowXML):
 
        
     def SettingListItem(self, label1,label2):
-        if label2 == "True":
+        if label2 == "-":
+            return xbmcgui.ListItem(label1,"","","")
+        elif label2 == "True":
             self.defaultaccount = True
             self.getControl(104).setSelected(self.defaultaccount)
             return xbmcgui.ListItem(label1,"","","")

@@ -10,62 +10,46 @@
 #                                    #
 ######################################
 import xbmc, sys, os, XinBox_Util, default
-import xbmcgui, time
-from XinBox_Language import Language
+import xbmcgui, time,traceback
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
 SRCPATH = SCRIPTPATH + "src"
 VERSION =  default.__version__
 
-lang = Language(TITLE)
-lang.load(SRCPATH + "//language")
-_ = lang.string
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,notnewaccount=True,inboxsetts=False,accountsetts=False,theinbox="XinBoxNew"):
-        try:
-            self.language = _
-            self.inbox = theinbox
-            self.settings = inboxsetts
-            self.accountsetts = accountsetts
-            if self.inbox == "XinBoxNew":
-                self.newinbox = True
-                self.settings = ["-","-","-","-","-","-","-","0","0"]
-                self.mysettings = self.settings
-            else:self.newinbox = False
-            if notnewaccount:
-                self.newaccount = False
-            else:self.newaccount = True
-        except:traceback.print_exc()
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,accountsetts=False,theinbox=False,lang=False,inboxlist=False):
+        self.language = lang
+        self.inbox = theinbox
+        self.inboxlist = inboxlist
+        self.accountSettings = accountsetts
+        if self.inbox == "":
+            self.newinbox = True
+        else:self.newinbox = False
+        self.settings = self.getinboxsettings(self.inbox)
 
+    def getinboxsettings(self,inbox):
+        return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
+    
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            self.setupvars()
-            self.setupcontrols()
-            self.builsettingsList()
-            xbmcgui.unlock()
-        except:traceback.print_exc()
+        xbmcgui.lock()
+        self.setupvars()
+        self.setupcontrols()
+        self.builsettingsList()
+        xbmcgui.unlock()
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
-        if not self.newaccount:
-            self.mysettings = {}
-            for x in range (0,9):
-                self.mysettings[x] = self.settings[x]
-            self.popssl = self.settings[7]
-            self.smtpssl = self.settings[8]
-        else:
-            self.settnames = {}
-            self.settnames[1] = "POP Server"
-            self.settnames[2] = "SMTP Server"
-            self.settnames[3] = "Account Name"
-            self.settnames[4] = "Account Password"
-            self.settnames[5] = "SERV Inbox Size"
-            self.settnames[6] = "XinBox Inbox Size"
-            self.popssl = self.settings.getSetting("POP SSL")
-            self.smtpssl = self.settings.getSetting("SMTP SSL")
+        self.settnames = {}
+        self.settnames[1] = "POP Server"
+        self.settnames[2] = "SMTP Server"
+        self.settnames[3] = "Account Name"
+        self.settnames[4] = "Account Password"
+        self.settnames[5] = "SERV Inbox Size"
+        self.settnames[6] = "XinBox Inbox Size"
+        self.popssl = self.settings.getSetting("POP SSL")
+        self.smtpssl = self.settings.getSetting("SMTP SSL")
         if self.popssl == "0":
             self.popdefault = False
             self.getControl(104).setSelected(self.popdefault)
@@ -83,6 +67,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(105).setSelected(self.smtpdefault)
 
     def setupcontrols(self):
+        self.getControl(62).setEnabled(False)
         self.getControl(61).setLabel(self.language(89))
         self.getControl(62).setLabel(self.language(65))
         if self.newinbox:
@@ -94,26 +79,15 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl(81).setLabel(self.inbox)
 
     def builsettingsList(self):
-        if not self.newaccount:
-                self.addItem(self.SettingListItem(self.language(82), self.settings[0]))
-                self.addItem(self.SettingListItem(self.language(83), self.settings[1]))
-                self.addItem(self.SettingListItem(self.language(84), self.settings[2]))
-                self.addItem(self.SettingListItem(self.language(85), self.settings[3]))
-                if self.settings[4] == "-":
-                    self.addItem(self.SettingListItem(self.language(86), ""))
-                else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings[4])))
-                self.addItem(self.SettingListItem(self.language(87), self.settings[5]))
-                self.addItem(self.SettingListItem(self.language(88), self.settings[6]))               
-        else:
-            self.addItem(self.SettingListItem(self.language(82), self.inbox))
-            self.addItem(self.SettingListItem(self.language(83), self.settings.getSetting("POP Server")))
-            self.addItem(self.SettingListItem(self.language(84), self.settings.getSetting("SMTP Server")))
-            self.addItem(self.SettingListItem(self.language(85), self.settings.getSetting("Account Name")))
-            if self.settings.getSetting("Account Password") == "-":
-                self.addItem(self.SettingListItem(self.language(86), ""))
-            else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings.getSetting("Account Password"))))
-            self.addItem(self.SettingListItem(self.language(87), self.settings.getSetting("SERV Inbox Size")))
-            self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
+        self.addItem(self.SettingListItem(self.language(82), self.inbox))
+        self.addItem(self.SettingListItem(self.language(83), self.settings.getSetting("POP Server")))
+        self.addItem(self.SettingListItem(self.language(84), self.settings.getSetting("SMTP Server")))
+        self.addItem(self.SettingListItem(self.language(85), self.settings.getSetting("Account Name")))
+        if self.settings.getSetting("Account Password") == "-":
+            self.addItem(self.SettingListItem(self.language(86), ""))
+        else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings.getSetting("Account Password"))))
+        self.addItem(self.SettingListItem(self.language(87), self.settings.getSetting("SERV Inbox Size")))
+        self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
 
     def SettingListItem(self, label1,label2):
         if label2 == "-":
@@ -132,57 +106,50 @@ class GUI( xbmcgui.WindowXML ):
             curName2 = curItem.getLabel2()
             if curPos == 4:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
-                if value == "":
-                    curItem.setLabel2("")
-                    if not self.newaccount:self.mysettings[curPos] = "-"
-                    else:
+                if value != False:
+                    if value == "":
+                        curItem.setLabel2("")
                         self.settings.setSetting(self.settnames[curPos],"-")
-                else:
-                    curItem.setLabel2('*' * len(value))
-                    if not self.newaccount:self.mysettings[curPos] = value
                     else:
-                        self.settings.setSetting(self.settnames[curPos],value)
+                        curItem.setLabel2('*' * len(value))
+                    self.settings.setSetting(self.settnames[curPos],value)
             elif curPos == 5 or curPos == 6:
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0, self.language(66) % curName, curName2)
                 if value == "0":
                     curItem.setLabel2("")
-                    if not self.newaccount:self.mysettings[curPos] = "-"
-                    else:
-                        self.settings.setSetting(self.settnames[curPos],"-")
+                    self.settings.setSetting(self.settnames[curPos],"-")
                 elif value != curName2:
                     curItem.setLabel2(value)
-                    if not self.newaccount:self.mysettings[curPos] = value
-                    else:
-                        self.settings.setSetting(self.settnames[curPos],value)    
+                    self.settings.setSetting(self.settnames[curPos],value)    
             else:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
-                if value != "":
-                    curItem.setLabel2(value)
-                 #   self.inbox = value 
-                    if self.newinbox:
-                        self.mysettings[curPos] = value
-                    else:
+                if value != False:
+                    if value != "":
                         if curPos == 0:
-                            if self.newaccount:
-                                self.accountsetts.setSettingnameInList("Inboxes",curName2,value)                            
-                        else:self.settings.setSetting(self.settnames[curPos],value)
+                            if value in self.inboxlist:
+                                dialog = xbmcgui.Dialog()
+                                ok = dialog.ok(self.language(93), self.language(94))
+                            else:
+                                self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
+                                self.inbox = value
+                                self.getControl(62).setEnabled(True)
+                                curItem.setLabel2(value)
+                        else:
+                            self.settings.setSetting(self.settnames[curPos],value)
+                            curItem.setLabel2(value)
         elif ( controlID == 62):
-            self.closeme()
+            self.closeme(1)
 
-    def closeme(self):
-        if self.newinbox:
-            self.returnvalue = 1
-            self.returnsettings = self.mysettings
-        elif not self.newinbox and self.newaccount:
-            self.returnvalue = 2
-            self.returnsettings = self.mysettings
-        elif not self.newinbox and not self.newaccount:
-            self.returnvalue = 3
-            self.returnsettings = self.accountsetts
-        self.close()
-            
-                    
+
+    def closeme(self,ID):
+        if ID == 0:
+            self.returnID = 0
+            self.close()
+        else:
+            self.returnID = 1
+            self.close()
+        
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
@@ -191,8 +158,7 @@ class GUI( xbmcgui.WindowXML ):
         try:control = self.getFocus()
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.mysettings = False
-            self.closeme()
+            self.closeme(0)
         elif ( button_key == 'Keyboard Right Arrow' or button_key == 'DPad Right' or button_key == 'Remote Right' ):
             if focusid == 51:
                 if self.getCurrentListPosition() == 1:
@@ -213,10 +179,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.popdefault = True
                     self.getControl(104).setLabel(self.popssl)
                 self.getControl(104).setSelected(self.popdefault)
-                if not self.newaccount:
-                    self.mysettings[7] = self.popssl
-                else:
-                    self.settings.setSetting("POP SSL",self.popssl)
+                self.settings.setSetting("POP SSL",self.popssl)
             else:
                 self.smtpssl = value
                 if value == "0":
@@ -226,10 +189,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.smtpdefault = True
                     self.getControl(105).setLabel(self.smtpssl)
                 self.getControl(105).setSelected(self.smtpdefault)
-                if not self.newaccount:
-                    self.mysettings[8] = self.smtpssl
-                else:
-                    self.settings.setSetting("SMTP SSL",self.smtpssl)
+                self.settings.setSetting("SMTP SSL",self.smtpssl)
 
     def showKeyboard(self, heading,default="",hidden=0):
         keyboard = xbmc.Keyboard(default,heading)
@@ -239,7 +199,7 @@ class GUI( xbmcgui.WindowXML ):
         if (keyboard.isConfirmed()):
             return keyboard.getText()
         else:
-            return default
+            return False
 
 
 
