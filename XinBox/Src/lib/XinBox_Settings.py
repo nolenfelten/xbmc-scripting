@@ -132,16 +132,12 @@ class Settings:
         # END OF FUNCTION
 
     def removeinbox(self, settingName,inbox):
-        try:
-            count = 0
-            for item in self.settings[settingName][0][1]:
-                print "settings = " + str(item[0])
-                if item[0] == inbox:
-                    print "DELETE NOW"
-                    print "count = " + str(count)
-                    del self.settings[settingName][0][1][count]
-                else:count = count + 1
-        except:traceback.print_exc()
+        count = 0
+        for item in self.settings[settingName][0][1]:
+            if item[0] == inbox:
+                del self.settings[settingName][0][1][count]
+            else:count =+ 1
+                
     def setSetting(self,settingName, value):
         """
             Sets the Setting
