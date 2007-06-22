@@ -79,7 +79,7 @@ class GUI( xbmcgui.WindowXML ):
             if self.getCurrentListPosition() == 0:
                 if self.noaccounts:
                     self.launchinfo(22,"",_(93))
-                else:self.launchmenu("XinBox_LoginMenu")
+                else:self.launchloginmenu()
             elif self.getCurrentListPosition() == 1:
                 self.launchcreatemenu()
             elif self.getCurrentListPosition() == 2:
@@ -99,11 +99,11 @@ class GUI( xbmcgui.WindowXML ):
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
-    def launchmenu(self, ID):
-        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu}
-        w = Menus[ID].GUI(ID + ".xml",SRCPATH,"DefaultSkin")
-        w.doModal()
-        del w
+##    def launchmenu(self, ID):
+##        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu}
+##        w = Menus[ID].GUI(ID + ".xml",SRCPATH,"DefaultSkin")
+##        w.doModal()
+##        del w
 
     def launchinfo(self,focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_,theheading=heading)
@@ -114,3 +114,9 @@ class GUI( xbmcgui.WindowXML ):
         winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="")
         winSettings.doModal()
         del winSettings
+
+    def launchloginmenu(self):
+        self.accounts = self.buildaccounts()
+        w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",accounts=self.accounts)
+        w.doModal()
+        del w
