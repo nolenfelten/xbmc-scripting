@@ -13,14 +13,17 @@ import xbmc, sys, os, XinBox_Util
 import xbmcgui, time
  
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,thefocid=0,thelabel="No Label",language=0):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,thefocid=0,thelabel="No Label",language=0,theheading=False):
         self.control_action = XinBox_Util.setControllerAction()
         self.focusid = thefocid
         self.label = thelabel
         self.lang = language
+        self.heading = theheading
         
     def onInit(self):
-        self.getControl(20).setLabel(self.lang(99) % self.label)
+        if not self.heading:
+            self.getControl(20).setLabel(self.lang(99) % self.label)
+        else:self.getControl(20).setLabel(self.heading)
         self.getControl(21).setText(self.lang(self.focusid))
         
     def onFocus(self, controlID):
