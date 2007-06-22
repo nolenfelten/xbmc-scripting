@@ -1,5 +1,5 @@
 ﻿<window>
-	<defaultcontrol>22</defaultcontrol>
+	<defaultcontrol>40</defaultcontrol>
 	<controls>
 		<control type="image">
 			<posx>165</posx>
