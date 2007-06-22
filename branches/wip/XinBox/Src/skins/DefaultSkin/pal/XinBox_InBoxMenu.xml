@@ -62,7 +62,7 @@
                 <control type="checkmark" id="104">
                     	<description>POP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>180</posy>
+                    	<posy>210</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -79,7 +79,7 @@
                 <control type="checkmark" id="105">
                     	<description>SMTP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>210</posy>
+                    	<posy>240</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>

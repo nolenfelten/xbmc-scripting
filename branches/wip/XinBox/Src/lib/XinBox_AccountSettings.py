@@ -21,6 +21,7 @@ class Account_Settings (AccountSettings):
 
     def Addinbox(self,settingname,newName):
         defSettingsForAnAccount = {
+            "Email Address": ["-","text"],
             "POP Server": ["-","text"],
             "SMTP Server": ["-","text"],
             "Account Name": ["-","text"],

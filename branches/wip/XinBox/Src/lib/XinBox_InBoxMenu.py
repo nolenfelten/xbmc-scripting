@@ -10,7 +10,7 @@
 #                                    #
 ######################################
 import xbmc, sys, os, XinBox_Util, default
-import xbmcgui, time,traceback
+import xbmcgui, time,traceback,XinBox_InfoDialog
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
@@ -42,12 +42,13 @@ class GUI( xbmcgui.WindowXML ):
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
         self.settnames = {}
-        self.settnames[1] = "POP Server"
-        self.settnames[2] = "SMTP Server"
-        self.settnames[3] = "Account Name"
-        self.settnames[4] = "Account Password"
-        self.settnames[5] = "SERV Inbox Size"
-        self.settnames[6] = "XinBox Inbox Size"
+        self.settnames[1] = "Email Address"
+        self.settnames[2] = "POP Server"
+        self.settnames[3] = "SMTP Server"
+        self.settnames[4] = "Account Name"
+        self.settnames[5] = "Account Password"
+        self.settnames[6] = "SERV Inbox Size"
+        self.settnames[7] = "XinBox Inbox Size"
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
         if self.popssl == "0":
@@ -80,6 +81,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def builsettingsList(self):
         self.addItem(self.SettingListItem(self.language(82), self.inbox))
+        self.addItem(self.SettingListItem(self.language(96), self.settings.getSetting("Email Address")))
         self.addItem(self.SettingListItem(self.language(83), self.settings.getSetting("POP Server")))
         self.addItem(self.SettingListItem(self.language(84), self.settings.getSetting("SMTP Server")))
         self.addItem(self.SettingListItem(self.language(85), self.settings.getSetting("Account Name")))
@@ -104,7 +106,7 @@ class GUI( xbmcgui.WindowXML ):
             curItem = self.getListItem(curPos)
             curName = curItem.getLabel()
             curName2 = curItem.getLabel2()
-            if curPos == 4:
+            if curPos == 5:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value != False:
                     if value == "":
@@ -113,7 +115,7 @@ class GUI( xbmcgui.WindowXML ):
                     else:
                         curItem.setLabel2('*' * len(value))
                     self.settings.setSetting(self.settnames[curPos],value)
-            elif curPos == 5 or curPos == 6:
+            elif curPos == 6 or curPos == 7:
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0, self.language(66) % curName, curName2)
                 if value == "0":
@@ -161,10 +163,17 @@ class GUI( xbmcgui.WindowXML ):
             self.closeme(0)
         elif ( button_key == 'Keyboard Right Arrow' or button_key == 'DPad Right' or button_key == 'Remote Right' ):
             if focusid == 51:
-                if self.getCurrentListPosition() == 1:
+                if self.getCurrentListPosition() == 2:
                     self.updatessl(91,self.popssl)
-                elif self.getCurrentListPosition() == 2:
+                elif self.getCurrentListPosition() == 3:
                     self.updatessl(92,self.smtpssl)
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+            if focusid == 51:
+                self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+            elif focusid == 61:
+                self.launchinfo(121,self.language(89))
+            elif focusid == 62:
+                self.launchinfo(122,self.language(65))
                     
     def updatessl(self,ID,currValue):
         dialog = xbmcgui.Dialog()
@@ -202,7 +211,10 @@ class GUI( xbmcgui.WindowXML ):
             return False
 
 
-
+    def launchinfo(self, focusid, label):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language)
+        dialog.doModal()
+        del dialog
 
 
 

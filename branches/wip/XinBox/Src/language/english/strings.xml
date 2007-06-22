@@ -23,10 +23,10 @@
 	<string id="51">Account Name:</string>
 	<string id="52">Account Password:</string>
 	<string id="53">Default Account</string>
-	<string id="61">Add Inbox</string>
-	<string id="62">Edit Inbox</string>
-	<string id="63">Delete Inbox</string>
-	<string id="64">Save Account</string>
+	<string id="61">Add</string>
+	<string id="62">Edit</string>
+	<string id="63">Delete</string>
+	<string id="64">Save</string>
 	<string id="65">OK</string>
 	<string id="66">Change %s</string>
 	<string id="67">Display Name</string>
@@ -57,21 +57,35 @@
 	<string id="93">Error</string>
 	<string id="94">You can not have two Inboxes in the same account with the same Display Name.</string>
 	<string id="95">You can not have two Accounts with the same Account Name.</string>
+	<string id="96">E-Mail Address:</string>
+	<string id="97">Select</string>
+	<string id="98">Please select which Help Item you wish to view.</string>
 
 
 	
 	<!-- Help Labels -->
-	<string id="99">XinBox Help : -( %s )-</string>
+	<string id="99">XinBox Help :   -( %s )-</string>
 	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
 	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
 	<string id="102">Select if you wish to CHANGE the XinBox settings.</string>
 	<string id="103">Select if you wish to find out ABOUT the XinBox script.</string>
 	<string id="104">Select if you wish to EXIT the XinBox script and return to XBMC.</string>
-	<string id="105">Select to set the Account Name for your XinBox Account.</string>	
+	<string id="105">Select to set the Account Name for your XinBox Account. Note: You will be unable to save your account without an Account Name.</string>	
 	<string id="106">Select to set the Account Password for your XinBox Account. Leave empty to disable a password for this account.</string>
-	<string id="107">Select to toggle if this Account is the Default Account. A Default Account automatically logs in on XinBox start-up. Note: There can only be a maximum of one Default Account.</string>	
+	<string id="107">Select to toggle if this Account is the Default Account. A Default Account automatically logs in on script start-up. Note: There can only be a maximum of one Default Account.</string>	
 	<string id="108">Select to Add a new Inbox to this Account.</string>
-	<string id="109">Select to Edit an existing Inbox in this Account.</string>
-	<string id="110">Select to Delete an existing Inbox in this Account.</string>
-	<string id="111">Select to save this account and to return to the Main Menu.</string>
+	<string id="109">Select to Edit a Inbox in this Account.</string>
+	<string id="110">Select to Delete a Inbox in this Account.</string>
+	<string id="111">Select to save this account</string>
+	<string id="112">Select to return to previous menu. Note: Remember to Save account first.</string>
+	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of the outgoing E-mail. Note: You will not be able to add an inbox to your account without a Display Name.</string>
+	<string id="114">Select to change your E-mail Address. This is the E-mail address other people use to send E-mail messages to you.</string>
+	<string id="115">Select to change your Incoming mail (POP3) Server. Eg. pop.gmail.com. SSL: Press right to change your POP3 SSL Server Port Number. Only some servers require this. Eg. Gmail - Pop3 SSL Port# 995</string>
+	<string id="116">Select to change your Outgoing mail (SMTP) Server. Eg. smtp.gmail.com. SSL: Press right to change your SMTP SSL Server Port Number. Only some servers require this. Eg. Gmail - SMTP SSL Port# 465 or 587</string>
+	<string id="117">Select to change your Server Account Name. This is usually the name you use to login to Outlook/Web Mail Inboxes.</string>
+	<string id="118">Select to change your Server Account Password. This is usually the password you use to login to Outlook/Web Mail Inboxes.</string>
+	<string id="119">Select to change your Server Inbox Size. Enter the size(capacity) of your e-mail servers inbox size in megabytes(MB).Leave empty to disable the server inbox Size Warnings.</string>
+	<string id="120">Select to change your XinBox Inbox Size. Enter the size(capacity) you want to allocate on your Xbox to this Inbox in Megabytes(MB).Leave empty to disable the XinBox inbox Size Warnings.</string>
+	<string id="121">Select to Test the above inbox settings. "Test" will communicate with the inbox server and confirm all settings are ok.</string>
+	<string id="122">Select to add inbox to your Account and return to the Account Menu. Note: The inbox will not be saved until Save is pressed in the Account Menu.</string>
 </strings>
