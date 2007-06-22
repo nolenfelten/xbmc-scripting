@@ -14,6 +14,7 @@
 	<string id="19">the Xinbox script</string>
 	<string id="20">Select</string>
 	<string id="21">Help</string>
+	<string id="22">No Accounts have been created. Please Create a new account.</string>
 	
 	<!-- Login Menu Labels -->
 	<string id="30">Login Menu</string>
@@ -58,10 +59,6 @@
 	<string id="94">You can not have two Inboxes in the same account with the same Display Name.</string>
 	<string id="95">You can not have two Accounts with the same Account Name.</string>
 	<string id="96">E-Mail Address:</string>
-	<string id="97">Select</string>
-	<string id="98">Please select which Help Item you wish to view.</string>
-
-
 	
 	<!-- Help Labels -->
 	<string id="99">XinBox Help :   -( %s )-</string>

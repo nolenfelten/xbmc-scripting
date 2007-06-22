@@ -119,8 +119,7 @@ class AccountSettings(xbmcgui.WindowXML):
                 value = self.showKeyboard(self.language(66) % curName,curName2)
                 if value != "":
                     if value in self.accounts:
-                        dialog = xbmcgui.Dialog()
-                        ok = dialog.ok(self.language(93), self.language(95))
+                        self.launchinfo(95,"",self.language(93))
                     else:
                         curItem.setLabel2(value)
                         self.getControl(64).setEnabled(True)
@@ -216,9 +215,9 @@ class AccountSettings(xbmcgui.WindowXML):
             return keyboard.getText()
         else:
             return default
-
-    def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language)
+   
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
         del dialog
 

@@ -68,10 +68,10 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(105).setSelected(self.smtpdefault)
 
     def setupcontrols(self):
-        self.getControl(62).setEnabled(False)
         self.getControl(61).setLabel(self.language(89))
         self.getControl(62).setLabel(self.language(65))
         if self.newinbox:
+            self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(80))
             self.getControl(104).setLabel(self.language(90))
             self.getControl(105).setLabel(self.language(90))
@@ -130,8 +130,7 @@ class GUI( xbmcgui.WindowXML ):
                     if value != "":
                         if curPos == 0:
                             if value in self.inboxlist:
-                                dialog = xbmcgui.Dialog()
-                                ok = dialog.ok(self.language(93), self.language(94))
+                                self.launchinfo(94,"",self.language(93))
                             else:
                                 self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
                                 self.inbox = value
@@ -211,13 +210,10 @@ class GUI( xbmcgui.WindowXML ):
             return False
 
 
-    def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language)
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
         del dialog
-
-
-
 
 
 

@@ -31,11 +31,14 @@ _ = lang.string
 
 defSettings = {"Accounts": [['Account',[]],"list"]}
 setts = Settings("XinBox_Settings.xml",TITLE,defSettings)
-
+print "setts = " + str(setts.settings)
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        pass
+        self.accounts = self.buildaccounts()
+        if self.accounts == []:
+            self.noaccounts = True
+        else:self.noaccounts = False  
 
     def onInit(self):
         try:
@@ -46,6 +49,12 @@ class GUI( xbmcgui.WindowXML ):
             xbmcgui.unlock()
         except:traceback.print_exc()
 
+    def buildaccounts(self):
+        accounts = []
+        for set in setts.getSetting("Accounts")[1]:
+            accounts.append(set[0])
+        return accounts
+    
     def setupcontrols(self):
         self.getControl(80).setLabel(_(10))
         self.getControl(81).setLabel(VERSION)
@@ -67,14 +76,16 @@ class GUI( xbmcgui.WindowXML ):
     
     def onClick(self, controlID):
         if ( controlID == 50):
-            if self.getCurrentListPosition() == 0: 
-                self.launchmenu("XinBox_LoginMenu")
+            if self.getCurrentListPosition() == 0:
+                if self.noaccounts:
+                    self.launchinfo(22,"",_(93))
+                else:self.launchmenu("XinBox_LoginMenu")
             elif self.getCurrentListPosition() == 1:
                 self.launchcreatemenu()
             elif self.getCurrentListPosition() == 2:
-                self.launchmenu("XinBox_LoginMenu")
+                pass
             elif self.getCurrentListPosition() == 3:
-                self.launchmenu("XinBox_LoginMenu")
+                pass
             elif self.getCurrentListPosition() == 4:
                 self.close()
                     
@@ -94,8 +105,8 @@ class GUI( xbmcgui.WindowXML ):
         w.doModal()
         del w
 
-    def launchinfo(self, focusid, label):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_)
+    def launchinfo(self,focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_,theheading=heading)
         dialog.doModal()
         del dialog
 

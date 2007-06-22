@@ -4,7 +4,8 @@ from os.path import join, exists
 from os import mkdir
 import re
 
-SETTINGSDIR = "P:\\script_data\\XinBox"
+DATADIR = "P:\\script_data\\"
+SETTINGSDIR = "P:\\script_data\\XinBox\\"
 
 class Settings:
     """
@@ -293,7 +294,9 @@ class Settings:
         """
         filepath = join(SETTINGSDIR, self.filename)
         if not exists(SETTINGSDIR):
+            mkdir(DATADIR)
             mkdir(SETTINGSDIR)
+            
 
         fsock = open(filepath,"w")
         fsock.write(xmldoc.toprettyxml(indent="    "))
