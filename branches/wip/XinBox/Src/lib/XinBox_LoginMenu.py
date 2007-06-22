@@ -23,8 +23,8 @@ lang.load(SRCPATH + "//language")
 _ = lang.string
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        print "welcome"
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accounts=False):
+        self.accounts = accounts
 
     def onInit(self):
         self.setupcontrols()
@@ -34,6 +34,8 @@ class GUI( xbmcgui.WindowXML ):
     def setupcontrols(self):
         MenuLabel = self.getControl(80)
         MenuLabel.setLabel(_(30))
+        for account in self.accounts:
+            self.addItem(account)
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
