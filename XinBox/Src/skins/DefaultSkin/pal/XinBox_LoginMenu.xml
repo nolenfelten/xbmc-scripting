@@ -63,7 +63,7 @@
             	<posx>165</posx>
             	<posy>160</posy>
             	<width>400</width>
-            	<height>400</height>
+            	<height>370</height>
 		<onleft>9000</onleft>
 		<scrolltime>200</scrolltime>
 		<animation effect="fade" time="800">WindowOpen</animation>

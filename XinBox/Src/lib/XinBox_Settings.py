@@ -31,6 +31,10 @@ class Settings:
         elif (fromFile == 2):
             # Load from Default Settings
             self.settings = defaultSettings
+
+    def resetsettings(self):
+        self.settings = {}
+        
     def getSettingType(self,settingName):
         """
             Returns the value of the setting
@@ -293,8 +297,9 @@ class Settings:
             This function takes a xml Document object and saves it to XML
         """
         filepath = join(SETTINGSDIR, self.filename)
-        if not exists(SETTINGSDIR):
+        if not exists(DATADIR):
             mkdir(DATADIR)
+        if not exists(SETTINGSDIR):
             mkdir(SETTINGSDIR)
             
 

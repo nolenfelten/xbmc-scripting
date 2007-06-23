@@ -304,10 +304,9 @@
 			<posx>160</posx>
 			<posy>440</posy>
 			<width>290</width>
-			<height>275</height>
+			<height>75</height>
 			<scrolltime>200</scrolltime>
 			<onright>9000</onright>
-			<onup>51</onup>
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
 			<itemlayout height="27">
