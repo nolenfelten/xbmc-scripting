@@ -108,7 +108,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.song_filename = self.make_fatx_compatible( song + ".txt", True )
             song_path = os.path.join( self.settings[ "lyrics_path" ], self.artist_filename, self.song_filename )
             lyrics_file = open( song_path, "r" )
-            lyrics = unicode( lyrics_file.read(), "utf-8", "ignore" )
+            lyrics = lyrics_file.read()#unicode( lyrics_file.read(), "utf-8", "ignore" )
             lyrics_file.close()
             return lyrics
         except: return None
@@ -119,7 +119,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( not os.path.isdir( os.path.split( song_path )[ 0 ] ) ):
                 os.makedirs( os.path.split( song_path )[ 0 ] )
             lyrics_file = open( song_path, "w" )
-            lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
+            lyrics_file.write( lyrics )#lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
             return True
         except:
@@ -187,7 +187,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ user modified exceptions """
         if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
             artist = self.LyricsScraper._format_param( self.artist, False )
-            alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
+            alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), self.artist, ) )#unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
                 exception = ( artist, alt_artist, )
                 self.LyricsScraper._set_exceptions( exception )
@@ -254,16 +254,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             for cnt in range( 5 ):
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
-                if ( song ):
-                    artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                    if ( not artist or self.settings[ "use_filename" ] ):
-                        artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
-                    if ( self.song != song or self.artist != artist or force_update ):
-                        self.artist = artist
-                        self.song = song
-                        self.get_lyrics( artist, song )
-                        break
-                else: xbmc.sleep( 50 )
+                if ( not song ):
+                    xbmc.sleep( 50 )
+                    continue
+                artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
+                if ( not artist or self.settings[ "use_filename" ] ):
+                    artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
+                if ( self.song != song or self.artist != artist or force_update ):
+                    self.artist = artist
+                    self.song = song
+                    self.get_lyrics( artist, song )
+                    break
 
 
 ## Thanks Thor918 for this class ##
