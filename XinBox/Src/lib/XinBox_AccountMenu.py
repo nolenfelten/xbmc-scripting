@@ -68,10 +68,10 @@ class AccountSettings(xbmcgui.WindowXML):
             self.getControl(ID).setLabel(self.language(ID))        
         if self.newaccount:
             self.getControl(64).setEnabled(False)
-            self.getControl(63).setEnabled(False)
-            self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
-        else:self.getControl(80).setLabel(self.language(74))
+        else:
+            self.getControl(80).setLabel(self.language(74))
+            self.getControl(81).setLabel(self.account)
     
     def buildsettingsList(self):
         self.clearList()
@@ -131,6 +131,7 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.getControl(64).setEnabled(True)
                         self.theSettings.setSettingnameInList("Accounts",curName2,value)
                         self.account = value
+                        self.getControl(81).setLabel(self.account)
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value == "":
@@ -154,10 +155,11 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( controlID == 88):
             inboxname = self.inboxlist.getSelectedItem().getLabel()
             if self.deleteing:
-                self.accountSettings.removeinbox("Inboxes",inboxname)
-                self.accountinboxes.remove(inboxname)
-                self.buildinboxlist()
-                self.deleteing = False
+                if self.launchinfo(78,"",self.language(77)):
+                    self.accountSettings.removeinbox("Inboxes",inboxname)
+                    self.accountinboxes.remove(inboxname)
+                    self.buildinboxlist()
+                    self.deleteing = False
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
@@ -167,7 +169,8 @@ class AccountSettings(xbmcgui.WindowXML):
             self.theSettings.saveXMLfromArray()
             self.newaccount = False
         elif ( controlID == 65):
-            self.close()
+            if self.launchinfo(79,"",self.language(77)):
+                self.close()
 
 
     def launchinboxmenu(self, inbox):
@@ -229,6 +232,8 @@ class AccountSettings(xbmcgui.WindowXML):
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
+        value = dialog.value
         del dialog
+        return value
 
 
