@@ -78,7 +78,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(82).setLabel(self.language(20))
         self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(89))
-        self.getControl(62).setLabel(self.language(65))
+        self.getControl(62).setLabel(self.language(61))
         if self.newinbox:
             self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(80))
