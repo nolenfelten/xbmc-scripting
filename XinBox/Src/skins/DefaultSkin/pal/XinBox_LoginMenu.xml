@@ -22,11 +22,61 @@
 		</control>
 		<control type="image">
 			<description>XinBox Logo image</description>
-			<posx>300</posx>
+			<posx>160</posx>
 			<posy>45</posy>
 			<width>120</width>
 			<height>120</height>
 			<texture>XBXinBoXLogo.png</texture>
+			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
+			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
+		</control>
+		<control type="image">
+			<description>A Button image</description>
+			<posx>50</posx>
+			<posy>450</posy>
+			<width>30</width>
+			<height>30</height>
+			<texture>XBbutton-A.png</texture>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+		</control>
+  		<control type="label" id="82">
+        		<description>A Button Label</description>
+        		<posx>46</posx>
+        		<posy>480</posy>
+			<label>-</label>
+        		<width>100</width>
+        		<font>font13</font>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+  		</control>
+		<control type="image">
+			<description>Y Button image</description>
+			<posx>650</posx>
+			<posy>450</posy>
+			<width>30</width>
+			<height>30</height>
+			<texture>XBbutton-Y.png</texture>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+		</control>
+  		<control type="label" id="83">
+        		<description>Y Button Label</description>
+        		<posx>650</posx>
+        		<posy>480</posy>
+			<label>-</label>
+        		<width>100</width>
+        		<font>font13</font>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+  		</control>
+		<control type="image">
+			<description>Menu Icon image</description>
+			<posx>330</posx>
+			<posy>60</posy>
+			<width>65</width>
+			<height>65</height>
+			<texture>XBlogin.png</texture>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
 		</control>
@@ -38,16 +88,6 @@
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
-			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
-			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
-  		</control>	
-  		<control type="label" id="81">
-        		<description>Version Label</description>
-        		<posx>170</posx>
-        		<posy>60</posy>
-			<label>-</label>
-        		<width>100</width>
-        		<font>font13</font>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
   		</control>		

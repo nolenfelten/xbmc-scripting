@@ -90,4 +90,5 @@
 	<string id="121">Select to change if copies of emails are kept on the server. Defaults to Yes.</string>
 	<string id="122">Select to Test the above inbox settings. "Test" will communicate with the inbox server and confirm all settings are ok.</string>
 	<string id="123">Select to add inbox to your Account and return to the Account Menu. Note: The inbox will not be saved until Save is pressed in the Account Menu.</string>
+	<string id="124">Select to Login to the above account.</string>
 </strings>
