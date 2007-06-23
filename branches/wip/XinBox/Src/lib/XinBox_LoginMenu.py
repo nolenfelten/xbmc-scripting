@@ -10,31 +10,48 @@
 #                                    #
 ######################################
 import xbmc, sys, os, XinBox_Util, default
-import xbmcgui, time
-from XinBox_Language import Language
+import xbmcgui, time,traceback
+from XinBox_AccountSettings import Account_Settings
+from XinBox_Settings import Settings
+
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
 SRCPATH = SCRIPTPATH + "src"
 VERSION =  default.__version__
 
-lang = Language(TITLE)
-lang.load(SRCPATH + "//language")
-_ = lang.string
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accounts=False):
-        self.accounts = accounts
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,lang=False):
+        self.language = lang
 
+    def buildaccounts(self):
+        accounts = []
+        for set in self.settings.getSetting("Accounts")[1]:
+            accounts.append(set[0])
+        if accounts == []:
+            self.noaccounts = True
+        else:self.noaccounts = False
+        return accounts
+
+    def loadsettings(self):
+        self.settings = Settings("XinBox_Settings.xml",TITLE,"")
+        
     def onInit(self):
-        self.setupcontrols()
-        self.setupvars()
-        xbmcgui.unlock()
+        try:
+            xbmcgui.lock()
+            self.loadsettings()
+            self.buildaccounts()
+            self.setupvars()
+            self.setupcontrols()
+            xbmcgui.unlock()
+        except:traceback.print_exc()
 
     def setupcontrols(self):
+        self.clearList()
         MenuLabel = self.getControl(80)
-        MenuLabel.setLabel(_(30))
-        for account in self.accounts:
+        MenuLabel.setLabel(self.language(30))
+        for account in self.buildaccounts():
             self.addItem(account)
 
     def setupvars(self):
@@ -44,7 +61,11 @@ class GUI( xbmcgui.WindowXML ):
         pass
     
     def onClick(self, controlID):
-        pass
+        print "HEY!"
+        try:
+            inboxname = self.getListItem(self.getCurrentListPosition()).getLabel()
+            self.launchaccountmenu(inboxname)
+        except:traceback.print_exc()
                     
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -54,37 +75,9 @@ class GUI( xbmcgui.WindowXML ):
         try:control = self.getFocus()
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.close()     
-
-class WindowXMLDialogExample(xbmcgui.WindowXMLDialog):
-    def __init__(self,strXMLname, strFallbackPath):
-        self.heading = ""
-        self.line1 = ""
-        self.line2 = ""
-        self.line3 = ""
-
-    def onInit(self):
-        self._setLines()
-
-    def onAction(self, action):
-        buttonCode =  action.getButtonCode()
-        actionID   =  action.getId()
-        if (buttonCode == KEY_BUTTON_BACK or buttonCode == KEY_KEYBOARD_ESC or buttonCode == 61467):
             self.close()
 
-    def onClick(self, controlID):
-        if (controlID == 10):
-            self.close()
-
-    def onFocus(self, controlID):
-        pass
-
-    def _setLines(self):
-        self.getControl(1).setLabel(self.heading)
-        self.getControl(2).setLabel(self.line1)
-
-    def setHeading(self, heading):
-        self.heading = heading
-
-    def setLines(self, line1):
-        self.line1 = line1
+    def launchaccountmenu(self,theaccount):
+        winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=self.language, title=TITLE,account=theaccount)
+        winSettings.doModal()
+        del winSettings

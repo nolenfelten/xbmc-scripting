@@ -90,7 +90,7 @@ class AccountSettings(xbmcgui.WindowXML):
             self.inboxlist.addItem(self.SettingListItem(self.language(75), ""))
             self.getControl(63).setEnabled(False)
             self.getControl(62).setEnabled(False)
-            self.setFocusId(51)
+  #          self.setFocusId(51)
         else:
             self.getControl(62).setEnabled(True)
             self.getControl(63).setEnabled(True)
@@ -145,7 +145,7 @@ class AccountSettings(xbmcgui.WindowXML):
             self.deleteing = True
             self.setFocusId(88)
         elif ( controlID == 88):
-            inboxname = self.inboxlist.getSelectedItem(self.inboxlist.getSelectedPosition()).getLabel()
+            inboxname = self.inboxlist.getSelectedItem().getLabel()
             if self.deleteing:
                 self.accountSettings.removeinbox("Inboxes",inboxname)
                 self.accountinboxes.remove(inboxname)

@@ -30,32 +30,33 @@ lang.load(SRCPATH + "//language")
 _ = lang.string
 
 defSettings = {"Accounts": [['Account',[]],"list"]}
-setts = Settings("XinBox_Settings.xml",TITLE,defSettings)
-print "setts = " + str(setts.settings)
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        self.accounts = self.buildaccounts()
-        if self.accounts == []:
-            self.noaccounts = True
-        else:self.noaccounts = False  
+        print "Welcome to the Jungle"
+
+    def loadsettings(self):
+        self.settings = Settings("XinBox_Settings.xml",TITLE,defSettings)     
 
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            self.clearList()
-            self.setupvars()
-            self.setupcontrols()
-            xbmcgui.unlock()
-        except:traceback.print_exc()
+        xbmcgui.lock()
+        self.loadsettings()
+        self.buildaccounts()
+        self.setupvars()
+        self.setupcontrols()
+        xbmcgui.unlock()
 
     def buildaccounts(self):
         accounts = []
-        for set in setts.getSetting("Accounts")[1]:
+        for set in self.settings.getSetting("Accounts")[1]:
             accounts.append(set[0])
+        if accounts == []:
+            self.noaccounts = True
+        else:self.noaccounts = False
         return accounts
     
     def setupcontrols(self):
+        self.clearList()
         self.getControl(80).setLabel(_(10))
         self.getControl(81).setLabel(VERSION)
         self.getControl(82).setLabel(_(20))
@@ -77,6 +78,7 @@ class GUI( xbmcgui.WindowXML ):
     def onClick(self, controlID):
         if ( controlID == 50):
             if self.getCurrentListPosition() == 0:
+                self.accounts = self.buildaccounts()
                 if self.noaccounts:
                     self.launchinfo(22,"",_(93))
                 else:self.launchloginmenu()
@@ -111,12 +113,13 @@ class GUI( xbmcgui.WindowXML ):
         del dialog
 
     def launchcreatemenu(self):
-        winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=setts,language=_, title=TITLE,account="")
+        winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=_, title=TITLE,account="")
         winSettings.doModal()
+        self.loadsettings()
         del winSettings
 
     def launchloginmenu(self):
         self.accounts = self.buildaccounts()
-        w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",accounts=self.accounts)
+        w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",lang=_)
         w.doModal()
         del w
