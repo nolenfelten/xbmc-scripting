@@ -109,6 +109,12 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
+    def editallaccounts(self,settingname,value,accountname=""):
+        for item in self.theSettings.getSetting("Accounts")[1]:
+            if item[0] != accountname:
+                account = self.theSettings.getSettingInListbyname("Accounts",item[0])
+                account.setSetting(settingname,value)
+
     def onClick(self, controlID):
         if ( controlID == 51):
             curPos  = self.getCurrentListPosition()
@@ -124,6 +130,7 @@ class AccountSettings(xbmcgui.WindowXML):
                         curItem.setLabel2(value)
                         self.getControl(64).setEnabled(True)
                         self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                        self.account = value
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value == "":
@@ -154,6 +161,9 @@ class AccountSettings(xbmcgui.WindowXML):
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
+            if self.defaultaccount:
+                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+                    self.editallaccounts("Default Account","False",self.account)                
             self.theSettings.saveXMLfromArray()
             self.newaccount = False
         elif ( controlID == 65):
