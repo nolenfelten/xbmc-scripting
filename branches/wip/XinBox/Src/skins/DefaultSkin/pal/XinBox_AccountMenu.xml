@@ -93,8 +93,8 @@
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
   		</control>	
   		<control type="label" id="81">
-        		<description>Version Label</description>
-        		<posx>170</posx>
+        		<description>Account Label</description>
+        		<posx>480</posx>
         		<posy>60</posy>
 			<label>-</label>
         		<width>100</width>

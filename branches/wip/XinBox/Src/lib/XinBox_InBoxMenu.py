@@ -148,6 +148,7 @@ class GUI( xbmcgui.WindowXML ):
                             else:
                                 self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
                                 self.inbox = value
+                                self.getControl(81).setLabel(self.inbox)
                                 self.getControl(62).setEnabled(True)
                                 curItem.setLabel2(value)
                         else:

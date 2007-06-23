@@ -40,6 +40,9 @@
 	<string id="74">Edit Account</string>
 	<string id="75">No Inboxes</string>
 	<string id="76">No Password</string>
+	<string id="77">Warning!</string>
+	<string id="78">Are you sure you want to delete this inbox? Press OK to confirm, or press back to decline.</string>
+	<string id="79">Are you sure you want to return without Saving this account first? Press OK to confirm, or press back to decline.</string>
 
 	<!-- InBox Menu Labels -->
 	<string id="80">Add Inbox</string>
