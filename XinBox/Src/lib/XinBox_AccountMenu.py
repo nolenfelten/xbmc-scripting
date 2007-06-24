@@ -1,7 +1,7 @@
 
 
 
-import xbmcgui, xbmc, os
+import xbmcgui, xbmc, os,random
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
@@ -75,7 +75,7 @@ class AccountSettings(xbmcgui.WindowXML):
         if self.accountSettings.getSetting("Account Password") == "-":
             self.addItem(self.SettingListItem(self.language(52), self.language(76)))
         else:
-            self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password"))))
+            self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password").decode("hex"))))
         self.addItem(self.SettingListItem(self.language(53), self.defaultaccount))
         
     def buildinboxlist(self):
@@ -118,7 +118,7 @@ class AccountSettings(xbmcgui.WindowXML):
             curName2 = curItem.getLabel2()
             if curPos == 0:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
-                if value != "" and value != curName2:
+                if value != False and value != "" and value != curName2:
                     if value in self.accounts:
                         self.launchinfo(95,"",self.language(93))
                     else:
@@ -129,12 +129,13 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.getControl(81).setLabel(self.account)
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
-                if value == "":
-                    self.accountSettings.setSetting("Account Password","-")
-                    curItem.setLabel2(self.language(76))
-                else:
-                    self.accountSettings.setSetting("Account Password",value)
-                    curItem.setLabel2('*' * len(value)) 
+                if value != False:
+                    if value == "":
+                        self.accountSettings.setSetting("Account Password","-")
+                        curItem.setLabel2(self.language(76))
+                    else:
+                        self.accountSettings.setSetting("Account Password",value.encode("hex"))
+                        curItem.setLabel2('*' * len(value))
             elif curPos == 2:
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
@@ -224,7 +225,7 @@ class AccountSettings(xbmcgui.WindowXML):
         if (keyboard.isConfirmed()):
             return keyboard.getText()
         else:
-            return default
+            return False
    
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
@@ -232,5 +233,3 @@ class AccountSettings(xbmcgui.WindowXML):
         value = dialog.value
         del dialog
         return value
-
-

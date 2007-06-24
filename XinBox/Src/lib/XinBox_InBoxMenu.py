@@ -83,7 +83,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(85), self.settings.getSetting("Account Name")))
         if self.settings.getSetting("Account Password") == "-":
             self.addItem(self.SettingListItem(self.language(86), ""))
-        else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings.getSetting("Account Password"))))
+        else:self.addItem(self.SettingListItem(self.language(86), '*' * len(self.settings.getSetting("Account Password").decode("hex"))))
         self.addItem(self.SettingListItem(self.language(87), self.settings.getSetting("SERV Inbox Size")))
         self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
         self.addItem(self.SettingListItem(self.language(97),""))
@@ -113,7 +113,7 @@ class GUI( xbmcgui.WindowXML ):
                         self.settings.setSetting(self.settnames[curPos],"-")
                     else:
                         curItem.setLabel2('*' * len(value))
-                    self.settings.setSetting(self.settnames[curPos],value)
+                        self.settings.setSetting(self.settnames[curPos],value.encode("hex"))
             elif curPos == 6 or curPos == 7:
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0, self.language(66) % curName, curName2)

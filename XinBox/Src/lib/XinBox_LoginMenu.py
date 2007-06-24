@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os
+import xbmc, xbmcgui, time, sys, os,traceback
 
 import XinBox_Util
 from XinBox_AccountSettings import Account_Settings
@@ -25,6 +25,9 @@ class GUI( xbmcgui.WindowXML ):
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",self.title,"")
+
+    def getaccountsettings(self,account):
+        return self.settings.getSettingInListbyname("Accounts",account)    
         
     def onInit(self):
         xbmcgui.lock()
@@ -51,8 +54,17 @@ class GUI( xbmcgui.WindowXML ):
     
     def onClick(self, controlID):
         inboxname = self.getListItem(self.getCurrentListPosition()).getLabel()
-        self.launchaccountmenu(inboxname)
-                    
+        self.accountSettings = self.getaccountsettings(inboxname)
+        accountpass = self.accountSettings.getSetting("Account Password")
+        if accountpass == "-":
+            self.launchaccountmenu(inboxname)
+        else:
+            value = self.showKeyboard(self.language(31),"",1)
+            if value != "":
+                if value == accountpass.decode("hex"):
+                    self.launchaccountmenu(inboxname)
+                else:self.launchinfo("","",self.language(93),self.language(32))
+                                  
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
@@ -70,7 +82,19 @@ class GUI( xbmcgui.WindowXML ):
         winSettings.doModal()
         del winSettings
 
-    def launchinfo(self,focusid, label,heading=False):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+    def launchinfo(self, focusid, label,heading=False,text=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading,thetext=text)
         dialog.doModal()
+        value = dialog.value
         del dialog
+        return value
+
+    def showKeyboard(self, heading,default="",hidden=0):
+        keyboard = xbmc.Keyboard(default,heading)
+        if hidden == 1:keyboard.setHiddenInput(True)
+        keyboard.doModal()
+        if hidden == 1:keyboard.setHiddenInput(False)
+        if (keyboard.isConfirmed()):
+            return keyboard.getText()
+        else:return default
+
