@@ -19,6 +19,7 @@
 	<!-- Login Menu Labels -->
 	<string id="30">Login Menu</string>
 
+	<!-- Test Inbox Labels -->
 	<string id="34">Testing Servers</string>
 	<string id="35">No setting entered</string>
 	<string id="36">Server address wrong or wrong SSL</string>
@@ -38,8 +39,8 @@
 	<string id="48">Account saved. OK</string>
 	<string id="49">Success!</string>
 	<string id="50">Create Account</string>
-	<string id="51">User Name:</string>
-	<string id="52">User Password:</string>
+	<string id="51">Account Name:</string>
+	<string id="52">Account Password:</string>
 	<string id="53">Default Account</string>
 	<string id="61">Add</string>
 	<string id="62">Edit</string>
@@ -67,8 +68,8 @@
 	<string id="82">Display Name:</string>
 	<string id="83">Incoming Mail(Pop3) Server:</string>
 	<string id="84">Outgoing Mail(SMTP) Server:</string>
-	<string id="85">Server Account Name:</string>
-	<string id="86">Server Account Password:</string>
+	<string id="85">Server User Name:</string>
+	<string id="86">Server User Password:</string>
 	<string id="87">Server Inbox Size (MB):</string>
 	<string id="88">XinBox Inbox Size (MB):</string>
 	<string id="89">Test Inbox</string>
