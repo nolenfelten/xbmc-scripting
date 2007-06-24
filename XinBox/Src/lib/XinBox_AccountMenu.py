@@ -29,6 +29,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.accounts = self.buildaccounts()
         self.accountSettings = self.getaccountsettings(self.account)
         self.accountinboxes = self.buildinboxdict(self.accountSettings)
+        self.originalSettings = self.theSettings
 
     def buildinboxdict(self,accountsettings):
         inboxes = []
@@ -90,7 +91,6 @@ class AccountSettings(xbmcgui.WindowXML):
             self.inboxlist.addItem(self.SettingListItem(self.language(75), ""))
             self.getControl(63).setEnabled(False)
             self.getControl(62).setEnabled(False)
-  #          self.setFocusId(51)
         else:
             self.getControl(62).setEnabled(True)
             self.getControl(63).setEnabled(True)
@@ -123,7 +123,7 @@ class AccountSettings(xbmcgui.WindowXML):
             curName2 = curItem.getLabel2()
             if curPos == 0:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
-                if value != "":
+                if value != "" and value != curName2:
                     if value in self.accounts:
                         self.launchinfo(95,"",self.language(93))
                     else:
@@ -179,17 +179,18 @@ class AccountSettings(xbmcgui.WindowXML):
         w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",accountsetts=self.accountSettings,theinbox=inbox,lang=self.language,inboxlist=inboxes)
         w.doModal()
         ID = w.returnID
+        Inboxname = w.inbox
         if ID != 0:
-            Inboxname = w.inbox
             if inbox == "":
                 self.accountinboxes.append(Inboxname)
             else:
                 self.accountinboxes.remove(inbox)
                 self.accountinboxes.append(Inboxname)
             self.buildinboxlist()
+        else:
+            if inbox == "":self.accountSettings.removeinbox("Inboxes",Inboxname)
         del w
-
-            
+     
     def crnewaccount(self,accountname):
         self.Addaccount("Accounts",accountname)
 

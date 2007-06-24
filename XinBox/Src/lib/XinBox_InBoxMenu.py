@@ -33,13 +33,11 @@ class GUI( xbmcgui.WindowXML ):
         return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
     
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            self.setupvars()
-            self.setupcontrols()
-            self.builsettingsList()
-            xbmcgui.unlock()
-        except:traceback.print_exc()
+        xbmcgui.lock()
+        self.setupvars()
+        self.setupcontrols()
+        self.builsettingsList()
+        xbmcgui.unlock()
 
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
@@ -104,6 +102,8 @@ class GUI( xbmcgui.WindowXML ):
     def SettingListItem(self, label1,label2):
         if label2 == "-":
             return xbmcgui.ListItem(label1,"","","")
+        elif label2 == "0":
+            return xbmcgui.ListItem(label1,self.language(98),"","")
         return xbmcgui.ListItem(label1,label2,"","")
 
         
@@ -129,7 +129,7 @@ class GUI( xbmcgui.WindowXML ):
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0, self.language(66) % curName, curName2)
                 if value == "0":
-                    curItem.setLabel2("")
+                    curItem.setLabel2(self.language(98))
                     self.settings.setSetting(self.settnames[curPos],"-")
                 elif value != curName2:
                     curItem.setLabel2(value)
@@ -140,8 +140,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.settings.setSetting("Keep Copy Emails",str(self.keepemails))                
             else:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
-                if value != False:
-                    if value != "":
+                if value != False and value != "" and value !=curName2:
                         if curPos == 0:
                             if value in self.inboxlist:
                                 self.launchinfo(94,"",self.language(93))

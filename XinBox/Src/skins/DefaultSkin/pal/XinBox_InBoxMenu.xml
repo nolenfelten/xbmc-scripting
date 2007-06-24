@@ -53,7 +53,7 @@
   		</control>	
   		<control type="label" id="81">
         		<description>Inbox Label</description>
-        		<posx>480</posx>
+        		<posx>440</posx>
         		<posy>60</posy>
 			<label>-</label>
         		<width>100</width>
@@ -231,14 +231,14 @@
 				<control type="label">
 					<posx>5</posx>
 					<posy>2</posy>
-					<width>380</width>
+					<width>390</width>
 					<height>22</height>
 					<font>font13</font>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>278</posx>
+					<posx>313</posx>
 					<posy>2</posy>
 					<width>300</width>
 					<height>22</height>
@@ -266,14 +266,14 @@
 				<control type="label">
 					<posx>5</posx>
 					<posy>2</posy>
-					<width>380</width>
+					<width>390</width>
 					<height>22</height>
 					<font>font13</font>
 					<align>left</align>
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>278</posx>
+					<posx>313</posx>
 					<posy>2</posy>
 					<width>300</width>
 					<height>22</height>

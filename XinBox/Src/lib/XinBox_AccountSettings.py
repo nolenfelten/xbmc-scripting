@@ -26,8 +26,8 @@ class Account_Settings (AccountSettings):
             "SMTP Server": ["-","text"],
             "Account Name": ["-","text"],
             "Account Password": ["-","text"],
-            "SERV Inbox Size": ["-","text"],
-            "XinBox Inbox Size": ["-","text"],
+            "SERV Inbox Size": ["0","text"],
+            "XinBox Inbox Size": ["0","text"],
             "Keep Copy Emails": ["True","boolean"],
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"]}
