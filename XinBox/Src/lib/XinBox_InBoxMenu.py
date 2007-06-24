@@ -218,7 +218,7 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def launchinfo(self, focusid, label,heading=False):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
         del dialog
 
