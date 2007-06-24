@@ -18,8 +18,12 @@ __language__ = language.Language().localized
 if ( __name__ == "__main__" ):
     if ( xbmc.Player().isPlayingAudio() ):
         import gui
-        ui = gui.GUI( "script-XBMC_Lyrics-main.xml", BASE_RESOURCE_PATH, "Default" )
+        ui = gui.GUI( "script-%s-main.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
         ui.doModal()
         del ui
     else:
-        xbmcgui.Dialog().ok( __scriptname__, __language__( 638 ), __language__( 639 ) )
+        #xbmcgui.Dialog().ok( __scriptname__, __language__( 638 ), __language__( 639 ) )
+        import settings
+        ui = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
+        ui.doModal()
+        del ui
