@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui,
+import xbmc, xbmcgui
 import sys, os, time
 
 import XinBox_Util
