@@ -1,19 +1,7 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
 
-import xbmcgui, xbmc
-import os, sys, default
+import os, sys
 
-def setControllerAction(): #Thanks to AMT Team for this :-D
+def setControllerAction():
     return {
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',

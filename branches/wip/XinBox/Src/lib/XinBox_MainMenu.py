@@ -1,20 +1,11 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
-import xbmc, sys, os, default
-import xbmcgui, time, traceback
 
+
+import xbmc, xbmcgui, time, sys, os
+
+import default
 import XinBox_InfoDialog
 import XinBox_Util
-import XinBox_LoginMenu, XinBox_Settings
+import XinBox_LoginMenu
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 from XinBox_Language import Language
@@ -120,6 +111,6 @@ class GUI( xbmcgui.WindowXML ):
 
     def launchloginmenu(self):
         self.accounts = self.buildaccounts()
-        w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",lang=_)
+        w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",lang=_,title=TITLE)
         w.doModal()
         del w

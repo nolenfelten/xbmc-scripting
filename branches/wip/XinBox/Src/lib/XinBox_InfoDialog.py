@@ -1,16 +1,9 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
-import xbmc, sys, os, XinBox_Util
-import xbmcgui, time
+
+
+import xbmc, xbmcgui,
+import sys, os, time
+
+import XinBox_Util
  
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,thefocid=0,thelabel="No Label",language=0,theheading=False,thetext=False):

@@ -1,26 +1,14 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
-import xbmc, sys, os, XinBox_Util, default
-import xbmcgui, time,traceback,XinBox_InfoDialog
-from XinBox_EmailEngine import TestInbox
 
-TITLE = default.__scriptname__
-SCRIPTPATH = default.__scriptpath__
-SRCPATH = SCRIPTPATH + "src"
-VERSION =  default.__version__
+
+import xbmc,xbmcgui, time, sys, os
+import XinBox_Util
+import XinBox_InfoDialog
+from XinBox_EmailEngine import TestInbox
 
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,accountsetts=False,theinbox=False,lang=False,inboxlist=False):
+        self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
         self.inboxlist = inboxlist
@@ -155,7 +143,7 @@ class GUI( xbmcgui.WindowXML ):
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)
         elif ( controlID == 61):
-            w = TestInbox(self.settings,self.language)
+            w = TestInbox(self.settings,self.language,self.srcpath)
             w.testinput()
             del w
         elif ( controlID == 62):
