@@ -165,9 +165,10 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( controlID == 64):
             if self.defaultaccount:
                     self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-                    self.editallaccounts("Default Account","False",self.account)                
+                    self.editallaccounts("Default Account","False",self.account)
             self.theSettings.saveXMLfromArray()
             self.newaccount = False
+            self.launchinfo(48,"",self.language(49))
         elif ( controlID == 65):
             if self.launchinfo(79,"",self.language(77)):
                 self.close()
