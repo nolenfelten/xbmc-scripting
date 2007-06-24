@@ -43,6 +43,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 251 ).setLabel( _( 251 ) )
             self.getControl( 252 ).setLabel( _( 252 ) )
             self.getControl( 253 ).setLabel( _( 253 ) )
+            self.getControl( 254 ).setLabel( _( 254 ) )
             ## setEnabled( False ) if not used
             self.getControl( 253 ).setVisible( False )
             self.getControl( 253 ).setEnabled( False )
@@ -57,6 +58,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ 251 ] = self._close_dialog
         self.functions[ 252 ] = self._update_script
         self.functions[ 253 ] = self._show_credits
+        self.functions[ 254 ] = self._play_music
         for x in range( 1, len( self.settings ) ):
             self.functions[ 200 + x ] = eval( "self._change_setting%d" % x )
 
@@ -110,7 +112,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
             self.getControl( 226 ).setSelected( self.settings[ "use_filename" ] )
             self.getControl( 227 ).setLabel( self.filename_format[ self.settings[ "filename_format" ] ] )
+            self.getControl( 228 ).setLabel( self.settings[ "music_path" ] )
+            self.getControl( 229 ).setSelected( self.settings[ "shuffle" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
+            self.getControl( 254 ).setEnabled( not xbmc.Player().isPlayingAudio() )
         except: pass
         xbmcgui.unlock()
 
@@ -153,6 +158,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "filename_format" ] = 0
         self._set_controls_values()
 
+    def _change_setting8( self ):
+        """ changes settings #8 """
+        self.settings[ "music_path" ] = get_browse_dialog( self.settings[ "music_path" ], _( 208 ), 0 )
+        self._set_controls_values()
+
+    def _change_setting9( self ):
+        """ changes settings #9 """
+        self.settings[ "shuffle" ] = not self.settings[ "shuffle" ]
+        self._set_controls_values()
+
 ##### End of unique defs ######################################################
     
     def _save_settings( self ):
@@ -190,6 +205,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         c.doModal()
         del c
 
+    def _play_music( self ):
+        """ plays a folder of music """
+        self._save_settings()
+        import playlist
+        playlist = playlist.create_playlist( ( self.settings[ "music_path" ], ), self.settings[ "shuffle" ] )
+        xbmc.Player().play( playlist )
+        xbmc.executebuiltin( "RunScript(q:\\scripts\\XBMC Lyrics\\default.py)" )
+        
     def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """
         self.changed = changed
