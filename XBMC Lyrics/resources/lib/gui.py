@@ -254,17 +254,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             for cnt in range( 5 ):
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
-                if ( not song ):
-                    xbmc.sleep( 50 )
-                    continue
                 artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
-                if ( not artist or self.settings[ "use_filename" ] ):
+                if ( song and ( not artist or self.settings[ "use_filename" ] ) ):
                     artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
-                if ( self.song != song or self.artist != artist or force_update ):
+                if ( song and ( self.song != song or self.artist != artist or force_update ) ):
                     self.artist = artist
                     self.song = song
                     self.get_lyrics( artist, song )
                     break
+                xbmc.sleep( 50 )
 
 
 ## Thanks Thor918 for this class ##
