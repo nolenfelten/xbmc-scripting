@@ -1,30 +1,18 @@
-      ##########################
-      #                        #                      
-      #   XinBox (V.0.9)       #         
-      #     By Stanley87       #         
-      #                        #
-#######                        #######             
-#                                    #
-#                                    #
-#   A pop3 email client for XBMC     #
-#                                    #
-######################################
-import xbmc, sys, os, XinBox_Util, default
-import xbmcgui, time,traceback
+
+
+import xbmc, xbmcgui, time, sys, os
+
+import XinBox_Util
 from XinBox_AccountSettings import Account_Settings
 from XinBox_Settings import Settings
 import XinBox_InfoDialog
 
 
-TITLE = default.__scriptname__
-SCRIPTPATH = default.__scriptpath__
-SRCPATH = SCRIPTPATH + "src"
-VERSION =  default.__version__
-
-
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,lang=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,lang=False,title=False):
+        self.scriptPath = strFallbackPath
         self.language = lang
+        self.title = title
 
     def buildaccounts(self):
         accounts = []
@@ -36,7 +24,7 @@ class GUI( xbmcgui.WindowXML ):
         return accounts
 
     def loadsettings(self):
-        self.settings = Settings("XinBox_Settings.xml",TITLE,"")
+        self.settings = Settings("XinBox_Settings.xml",self.title,"")
         
     def onInit(self):
         xbmcgui.lock()
@@ -78,11 +66,11 @@ class GUI( xbmcgui.WindowXML ):
             self.launchinfo(124,self.getListItem(self.getCurrentListPosition()).getLabel())
 
     def launchaccountmenu(self,theaccount):
-        winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=self.language, title=TITLE,account=theaccount)
+        winSettings = Account_Settings("XinBox_AccountMenu.xml",self.scriptPath,"DefaultSkin",0,scriptSettings=self.settings,language=self.language, title=self.title,account=theaccount)
         winSettings.doModal()
         del winSettings
 
     def launchinfo(self,focusid, label,heading=False):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
         del dialog

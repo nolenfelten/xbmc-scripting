@@ -1,16 +1,11 @@
-import xbmcgui,traceback,XinBox_InfoDialog
-import xbmc
-import os
+
+
+
+import xbmcgui, xbmc, os
 import XinBox_Util
 import XinBox_InBoxMenu
+import XinBox_InfoDialog
 
-
-# Maybe make add inbox a dialog over the top of this account :-D
-
-
-### Edit Account
-##
-##
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
