@@ -13,6 +13,8 @@
     <string id="205">Show visualization window</string>
     <string id="206">Use only filename for search</string>
     <string id="207">Filename format</string>
+    <string id="208">Playlist folder</string>
+    <string id="209">Shuffle playlist</string>
 
     <!-- Settings choices -->
     <string id="2070">Artist - Song.ext</string>
@@ -31,7 +33,7 @@
     <string id="251">Cancel</string>
     <string id="252">Update</string>
     <string id="253">Credits</string>
-    <string id="254">Page</string>
+    <string id="254">Play Music</string>
     <string id="255">Restart</string>
     <string id="256">Later</string>
     
