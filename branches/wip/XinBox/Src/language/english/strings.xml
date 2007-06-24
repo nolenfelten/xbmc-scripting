@@ -18,6 +18,8 @@
 	
 	<!-- Login Menu Labels -->
 	<string id="30">Login Menu</string>
+	<string id="31">Please enter Account Password</string>
+	<string id="32">In-correct Password Entered</string>
 
 	<!-- Test Inbox Labels -->
 	<string id="34">Testing Servers</string>
