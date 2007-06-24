@@ -19,10 +19,27 @@
 	<!-- Login Menu Labels -->
 	<string id="30">Login Menu</string>
 
+	<string id="34">Testing Servers</string>
+	<string id="35">No setting entered</string>
+	<string id="36">Server address wrong or wrong SSL</string>
+	<string id="37">Testing Inbox Settings</string>
+	<string id="38">Testing all nesecarry settings have been entered</string>
+	<string id="39">Checking %s</string>
+	<string id="40">POP3 Server Settings</string>
+	<string id="41">SMTP Server Settings</string>
+	<string id="42">Testing Server Login Settings</string>
+	<string id="43">POP3 Login Settings</string>
+	<string id="44">SMTP Login Settings</string>
+	<string id="45">POP3 Server did not accept User Name or User Password</string>
+	<string id="46">SMTP Server did not accept User Name or User Password</string>
+	<string id="47">Inbox Settings. OK</string>
+
 	<!-- Create Account Menu Labels -->
+	<string id="48">Account saved. OK</string>
+	<string id="49">Success!</string>
 	<string id="50">Create Account</string>
-	<string id="51">Account Name:</string>
-	<string id="52">Account Password:</string>
+	<string id="51">User Name:</string>
+	<string id="52">User Password:</string>
 	<string id="53">Default Account</string>
 	<string id="61">Add</string>
 	<string id="62">Edit</string>
@@ -58,7 +75,7 @@
 	<string id="90">SSL</string>
 	<string id="91">POP SSL</string>
 	<string id="92">SMTP SSL</string>
-	<string id="93">Error</string>
+	<string id="93">Error!</string>
 	<string id="94">You can not have two Inboxes in the same account with the same Display Name.</string>
 	<string id="95">You can not have two Accounts with the same Account Name.</string>
 	<string id="96">E-Mail Address:</string>
@@ -78,7 +95,7 @@
 	<string id="108">Select to Add a new Inbox to this Account.</string>
 	<string id="109">Select to Edit a Inbox in this Account.</string>
 	<string id="110">Select to Delete a Inbox in this Account.</string>
-	<string id="111">Select to save this account</string>
+	<string id="111">Select to Save all changed settings in this Account.</string>
 	<string id="112">Select to exit this menu. Note: Any unsaved data will be lost.</string>
 	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of the outgoing E-mail. Note: You will not be able to add an inbox to your account without a Display Name.</string>
 	<string id="114">Select to change your E-mail Address. This is the E-mail address other people use to send E-mail messages to you.</string>

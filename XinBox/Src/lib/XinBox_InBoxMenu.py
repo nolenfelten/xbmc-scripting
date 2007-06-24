@@ -11,6 +11,7 @@
 ######################################
 import xbmc, sys, os, XinBox_Util, default
 import xbmcgui, time,traceback,XinBox_InfoDialog
+from XinBox_EmailEngine import TestInbox
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
@@ -153,6 +154,10 @@ class GUI( xbmcgui.WindowXML ):
                         else:
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)
+        elif ( controlID == 61):
+            w = TestInbox(self.settings,self.language)
+            w.testinput()
+            del w
         elif ( controlID == 62):
             self.closeme(1)
 
