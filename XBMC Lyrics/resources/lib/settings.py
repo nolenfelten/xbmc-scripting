@@ -207,11 +207,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _play_music( self ):
         """ plays a folder of music """
-        self._save_settings()
+        if ( self.settings_original != self.settings ):
+            self._save_settings()
+        else:
+            self._close_dialog()
         import playlist
         playlist = playlist.create_playlist( ( self.settings[ "music_path" ], ), self.settings[ "shuffle" ] )
         xbmc.Player().play( playlist )
-        xbmc.executebuiltin( "RunScript(q:\\scripts\\XBMC Lyrics\\default.py)" )
+        xbmc.executebuiltin( "RunScript(%s)" % os.path.join( os.getcwd().replace( ";", "" ), "default.py" ) )
         
     def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """
