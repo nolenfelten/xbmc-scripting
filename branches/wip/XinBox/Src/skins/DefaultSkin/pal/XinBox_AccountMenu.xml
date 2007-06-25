@@ -120,6 +120,7 @@
                     	<font>font13</font>
                     	<textcolor>ffffffff</textcolor>
                     	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
                     	<markwidth>18</markwidth>
                     	<markheight>22</markheight>
                     	<disabledcolor>00d0d0d0</disabledcolor>
