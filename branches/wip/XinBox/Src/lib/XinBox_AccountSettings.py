@@ -15,6 +15,7 @@ class Account_Settings (AccountSettings):
         defSettingsForAnAccount = {
             "Account Password": ["-","text"],
             "Default Account": ["False","boolean"],
+            "Account Hash": ["-","text"],
             "Inboxes": [['Inbox',[]],"list"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")
@@ -30,6 +31,7 @@ class Account_Settings (AccountSettings):
             "XinBox Inbox Size": ["0","text"],
             "Keep Copy Emails": ["True","boolean"],
             "POP SSL": ["0","text"],
-            "SMTP SSL": ["0","text"]}
+            "SMTP SSL": ["0","text"],
+            "Inbox Hash": ["-","text"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addinbox(settingname,newName,newSettings,"settings")
