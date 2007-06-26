@@ -45,8 +45,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 253 ).setLabel( _( 253 ) )
             self.getControl( 254 ).setLabel( _( 254 ) )
             ## setEnabled( False ) if not used
-            self.getControl( 253 ).setVisible( False )
-            self.getControl( 253 ).setEnabled( False )
+            #self.getControl( 253 ).setVisible( False )
+            #self.getControl( 253 ).setEnabled( False )
             for x in range( 1, len( self.settings ) ):
                 self.getControl( 200 + x ).setLabel( _( 200 + x ) )
         except: pass
@@ -200,10 +200,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _show_credits( self ):
         """ shows a credit window """
-        import credits
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
-        c.doModal()
-        del c
+        show_credits()
 
     def _play_music( self ):
         """ plays a folder of music """

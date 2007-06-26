@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">XBMC Lyrics</string>
+    <string id="1">Xbox Media Center</string>
+    <string id="2">Nuka1195</string>
 
     <!-- User Messages -->
     <string id="100">Exception for</string>
@@ -47,7 +49,20 @@
     <string id="633">Empty page found!</string>
     <string id="638">What do you want to run this for?</string>
     <string id="639">No music is playing fool!</string>
-    
+
+    <!-- Credits -->
+    <string id="900">Version</string>
+    <string id="901">Team Credits:</string>
+    <string id="902">Additional Credits:</string>
+    <string id="903">Skin Credits:</string>
+
+    <!-- Credits headings-->
+    <string id="910">Head Developer &amp; Coder</string>
+    <string id="911">Original Author</string>
+    <string id="912">Original Skinning Mod</string>
+    <string id="913">Unicode Support</string>
+    <string id="914">Language File</string>
+
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>
     <string id="1001">Fetching current tagged versions...</string>

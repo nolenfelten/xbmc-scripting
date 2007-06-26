@@ -27,6 +27,7 @@ EXIT_SCRIPT = ( 247, 275, 61467, )
 CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
 GET_EXCEPTION = ( 216, 260, 61448, )
 SETTINGS_MENU = ( 229, 259, 261, 61533, )
+SHOW_CREDITS = ( 195, 274, 61507, )
 MOVEMENT_UP = ( 166, 270, 61478, )
 MOVEMENT_DOWN = ( 167, 271, 61480, )
 # Log status codes
@@ -73,6 +74,13 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
 def LOG( status, format, *args ):
     if ( DEBUG_MODE >= status ):
         xbmc.output( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
+
+def show_credits():
+    """ shows a credit window """
+    import credits
+    c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
+    c.doModal()
+    del c
 
 
 class Settings:
