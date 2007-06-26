@@ -183,6 +183,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
             else: self.exit_script( True )
         del settings
 
+    def _show_credits( self ):
+        """ shows a credit window """
+        show_credits()
+
     def get_exception( self ):
         """ user modified exceptions """
         if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
@@ -209,6 +213,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.exit_script()
         elif ( action.getButtonCode() in SETTINGS_MENU ):
             self.change_settings()
+        elif ( action.getButtonCode() in SHOW_CREDITS ):
+            self._show_credits()
         elif ( self.allow_exception and ( action.getButtonCode() in GET_EXCEPTION ) ):
             self.get_exception()
         elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
