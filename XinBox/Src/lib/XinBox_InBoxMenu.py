@@ -29,6 +29,7 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
 
     def setupvars(self):
+        self.renameme = []
         self.control_action = XinBox_Util.setControllerAction()
         self.settnames = {}
         self.settnames[1] = "Email Address"
@@ -134,7 +135,9 @@ class GUI( xbmcgui.WindowXML ):
                             if value in self.inboxlist:
                                 self.launchinfo(94,"",self.language(93))
                             else:
+                                self.renameme = [curName2,value]
                                 self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
+                                self.settings.setSetting("Inbox Hash",str(hash(value)))  
                                 self.inbox = value
                                 self.getControl(81).setLabel(self.inbox)
                                 self.getControl(62).setEnabled(True)

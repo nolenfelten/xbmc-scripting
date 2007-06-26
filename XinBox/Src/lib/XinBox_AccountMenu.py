@@ -1,11 +1,14 @@
 
 
 
-import xbmcgui, xbmc, os,random
+import xbmcgui, xbmc, os, random
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
-
+from os.path import join, exists
+from os import mkdir
+DATADIR = "P:\\script_data\\"
+SETTINGSDIR = "P:\\script_data\\XinBox\\Accounts\\"
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
@@ -55,7 +58,16 @@ class AccountSettings(xbmcgui.WindowXML):
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
         self.defaultaccount = self.accountSettings.getSetting("Default Account")
+        self.hashlist = self.buildhashlist()
+        self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
+        self.newaccounthash = self.origaccounthash
 
+    def buildhashlist(self):
+        hashlist = {}
+        for set in self.accountSettings.getSetting("Inboxes")[1]:
+            hashlist[set[0]] = set[0]
+        return hashlist
+        
     def setupcontrols(self):
         self.getControl(82).setLabel(self.language(20))
         self.getControl(83).setLabel(self.language(21))
@@ -125,6 +137,8 @@ class AccountSettings(xbmcgui.WindowXML):
                         curItem.setLabel2(value)
                         self.getControl(64).setEnabled(True)
                         self.theSettings.setSettingnameInList("Accounts",curName2,value)
+                        self.newaccounthash  = str(hash(value))
+                        self.accountSettings.setSetting("Account Hash",self.newaccounthash)
                         self.account = value
                         self.getControl(81).setLabel(self.account)
             elif curPos == 1:
@@ -154,6 +168,8 @@ class AccountSettings(xbmcgui.WindowXML):
                 if self.launchinfo(78,"",self.language(77)):
                     self.accountSettings.removeinbox("Inboxes",inboxname)
                     self.accountinboxes.remove(inboxname)
+                    self.removehash(inboxname)
+                    print "removehash = " + str(inboxname)
                     self.buildinboxlist()
                     self.deleteing = False
             else:self.launchinboxmenu(inboxname)
@@ -163,12 +179,55 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
                     self.editallaccounts("Default Account","False",self.account)
             self.theSettings.saveXMLfromArray()
+            self.builddirs()
             self.newaccount = False
             self.launchinfo(48,"",self.language(49))
         elif ( controlID == 65):
             if self.launchinfo(79,"",self.language(77)):
                 self.close()
 
+    def builddirs(self):
+        accountOrigdir = join(SETTINGSDIR,self.origaccounthash)
+        accountNewDir = join(SETTINGSDIR,self.newaccounthash)
+        if exists(accountOrigdir):
+            print "YAH!"
+            os.rename(accountOrigdir,accountNewDir)
+        else:
+            print "nah"
+            mkdir(accountNewDir)
+        self.origaccounthash = self.newaccounthash
+        for set0 in self.hashlist:
+            set1 = self.hashlist[set0]
+            if set1 == "DELETE":
+                if exists(join(accountNewDir,str(hash(set0)))):
+                    self.removedir(join(accountNewDir,str(hash(set0))))
+            else:
+                Origdir = join(accountNewDir,str(hash(set0)))
+                NewDir = join(accountNewDir,str(hash(set1)))
+                if exists(Origdir):
+                    os.rename(Origdir,NewDir)
+                else:mkdir(NewDir)
+        self.hashlist = self.buildhashlist()
+
+    def removedir(self,mydir):
+        for root, dirs, files in os.walk(mydir, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+        os.rmdir(mydir)
+
+    def gohash(self,inbox,Inboxname):
+        for set in self.hashlist:
+            set1 = self.hashlist[set]
+            if inbox == set1:
+                self.hashlist[set] = Inboxname
+                return
+        self.hashlist[Inboxname] = Inboxname
+
+    def removehash(self,inboxname):
+        for set in self.hashlist:
+            set1 = self.hashlist[set]
+            if inboxname == set1:
+                self.hashlist[set] = "DELETE"
 
     def launchinboxmenu(self, inbox):
         if inbox == "":self.Addinbox("Inboxes",inbox)
@@ -178,6 +237,7 @@ class AccountSettings(xbmcgui.WindowXML):
         ID = w.returnID
         Inboxname = w.inbox
         if ID != 0:
+            self.gohash(inbox, Inboxname)
             if inbox == "":
                 self.accountinboxes.append(Inboxname)
             else:

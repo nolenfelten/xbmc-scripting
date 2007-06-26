@@ -6,6 +6,7 @@ import re
 
 DATADIR = "P:\\script_data\\"
 SETTINGSDIR = "P:\\script_data\\XinBox\\"
+ACCOUNTDIR = "P:\\script_data\\XinBox\\Accounts\\"
 
 class Settings:
     """
@@ -301,6 +302,8 @@ class Settings:
             mkdir(DATADIR)
         if not exists(SETTINGSDIR):
             mkdir(SETTINGSDIR)
+        if not exists(ACCOUNTDIR):
+            mkdir(ACCOUNTDIR)
             
 
         fsock = open(filepath,"w")
