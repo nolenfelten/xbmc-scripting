@@ -224,7 +224,7 @@ class GUI( xbmcgui.WindowXML ):
                         else:
                             thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
                         #favorite = ( "", "*", )[ movie.favorite ]
-                        urls = ( "", "!", )[ not movie.trailer_urls ]
+                        urls = ( "", "! ", )[ not movie.trailer_urls ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
                         list_item = xbmcgui.ListItem( "%s%s" % ( urls, movie.title, ), rating, poster, thumbnail )
                         list_item.select( movie.favorite )
