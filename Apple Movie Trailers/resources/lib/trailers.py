@@ -407,7 +407,7 @@ class Trailers:
                     if poster:
                         # make thumbnails
                         success = pil_util.makeThumbnails( poster )
-                        self.poster = poster.replace( BASE_CACHE_PATH, '' )
+                        self.poster = os.path.basename( poster )
 
                 # -- plot --
                 plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
@@ -448,7 +448,7 @@ class Trailers:
                     if '/mpaa' in temp_url:
                         rating_url = fetcher.urlretrieve( temp_url )
                         if rating_url:
-                            self.rating_url = rating_url.replace( BASE_CACHE_PATH, '' )
+                            self.rating_url = os.path.basename( rating_url )
                             self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
                 
                 # -- trailer urls --
@@ -522,18 +522,22 @@ class Trailers:
                             commit = True
                         dialog_ok = _progress_dialog( cnt + 1, commit )
                     if ( not full and movie is not None ):
+                        if ( movie[4] ): poster = os.path.join( BASE_CACHE_PATH, movie[4][0], movie[4] )
+                        else: poster = ""
+                        if ( movie[7] ): rating_url = os.path.join( BASE_CACHE_PATH, movie[7][0], movie[7] )
+                        else: rating_url = ""
                         self.movies += [ 
                             Movie(
                                 idMovie = movie[ 0 ],
                                 title = movie[1],
                                 url = movie[2],
                                 trailer_urls = eval( movie[3] ),
-                                poster = os.path.join( BASE_CACHE_PATH, movie[4] ),
-                                thumbnail = os.path.join( BASE_CACHE_PATH, '%s.png' % ( os.path.splitext( movie[4] )[0], ) ),
-                                thumbnail_watched = os.path.join( BASE_CACHE_PATH, '%s-w.png' % ( os.path.splitext( movie[4] )[0], ) ),
+                                poster = poster,
+                                thumbnail = '%s.png' % ( os.path.splitext( poster )[0], ),
+                                thumbnail_watched = '%s-w.png' % ( os.path.splitext( poster )[0], ),
                                 plot = movie[5],
                                 rating = movie[6],
-                                rating_url = os.path.join( BASE_CACHE_PATH, movie[7] ),
+                                rating_url = rating_url,
                                 year = movie[8],
                                 watched = movie[9],
                                 watched_date = movie[10],

@@ -220,7 +220,9 @@ class GUI( xbmcgui.WindowXML ):
                 if ( self.trailers.movies ):
                     for movie in self.trailers.movies: # now fill the list control
                         poster = ( movie.poster, "blank-poster.tbn", )[ not movie.poster ]
-                        thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+                        if ( not movie.poster ): thumbnail = poster
+                        else:
+                            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
                         #favorite = ( "", "*", )[ movie.favorite ]
                         urls = ( "", "!", )[ not movie.trailer_urls ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]

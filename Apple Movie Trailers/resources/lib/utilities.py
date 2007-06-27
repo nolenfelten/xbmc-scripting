@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98.2", "0.98.2", )
-SETTINGS_VERSIONS = ( "pre-0.98.1", "0.98.1", ) + DATABASE_VERSIONS
+DATABASE_VERSIONS = ( "pre-0.98.3", "0.98.3", )
+SETTINGS_VERSIONS = ( "pre-0.98.1", "0.98.1", "pre-0.98.2", "0.98.2", ) + DATABASE_VERSIONS
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -26,7 +26,10 @@ FAVORITES = -6
 DOWNLOADED = -7
 HD_TRAILERS = -8
 # base paths
-BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
+if ( os.name == "posix" ):
+    BASE_DATA_PATH = os.path.join( os.environ[ "XBMC_HOME" ], "UserData", "script_data", __scriptname__ )
+else:
+    BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes

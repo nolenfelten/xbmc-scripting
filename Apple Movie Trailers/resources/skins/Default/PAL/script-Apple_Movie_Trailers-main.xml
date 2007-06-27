@@ -421,7 +421,7 @@
 				</focusedlayout>
 			</control>
             <control type="group">
-                <visible>!Control.IsVisible(52) + !Control.IsVisible(60)</visible>
+                <visible>[Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(54)] + !Control.IsVisible(60)</visible>
                 <control type="image">
                     <description>Trailer List Scrollbar Up Arrow</description>
                     <posx>525</posx>
@@ -564,7 +564,7 @@
                         <posy>50</posy>
                         <width>100</width>
                         <height>200</height>
-                        <info>ListItem.Icon</info>
+                        <info>ListItem.ActualIcon</info>
                         <aspectratio aligny="bottom">keep</aspectratio>
                     </control>
                     <control type="image">
@@ -572,7 +572,7 @@
                         <posy>250</posy>
                         <width>100</width>
                         <height>200</height>
-                        <info>ListItem.Icon</info>
+                        <info>ListItem.ActualIcon</info>
                         <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
                         <aspectratio aligny="top">keep</aspectratio>
                     </control>
@@ -590,7 +590,7 @@
                         <posy>50</posy>
                         <width>100</width>
                         <height>200</height>
-                        <info>ListItem.Icon</info>
+                        <info>ListItem.ActualIcon</info>
                         <aspectratio aligny="bottom">keep</aspectratio>
                         <animation effect="zoom" end="-15,-20,150,300" time="150">focus</animation>
                     </control>
@@ -599,7 +599,7 @@
                         <posy>250</posy>
                         <width>100</width>
                         <height>200</height>
-                        <info>ListItem.Icon</info>
+                        <info>ListItem.ActualIcon</info>
                         <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
                         <aspectratio aligny="top">keep</aspectratio>
                         <animation effect="zoom" end="-15,280,150,300" time="150">focus</animation>
@@ -738,8 +738,8 @@
                     <height>15</height>
                     <texture>-</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
-                    <animation effect="slide" time="0" end="-67,27" condition="Control.IsVisible(52)">Conditional</animation>
+                    <visible>Control.IsVisible(50)</visible>
+                    <!--animation effect="slide" time="0" end="-300,120" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
                 <control type="image" id="203">
                     <description>Trailer Favorite Overlay</description>
@@ -749,8 +749,8 @@
                     <height>16</height>
                     <texture>default-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
-                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                    <visible>Control.IsVisible(50)</visible>
+                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
                 <control type="image" id="204">
                     <description>Trailer Watched Overlay</description>
@@ -760,8 +760,8 @@
                     <height>16</height>
                     <texture>default-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
-                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                    <visible>Control.IsVisible(50)</visible>
+                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
@@ -771,15 +771,14 @@
                     <height>16</height>
                     <texture>default-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
-                    <animation effect="slide" time="0" end="-50,27" condition="Control.IsVisible(52)">Conditional</animation>
+                    <visible>Control.IsVisible(50)</visible>
+                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
             </control>
-            
             <control type="fadelabel" id="206">
 				<description>Trailer Title</description>
-				<posx>200</posx>
-				<posy>350</posy>
+				<posx>190</posx>
+				<posy>360</posy>
 				<width>350</width>
 				<height>32</height>
 				<align>left</align>
@@ -789,7 +788,8 @@
 				<textcolor>FFFFFFFF</textcolor>
                 <disabledcolor>FFe2ff43</disabledcolor>
 				<visible>Control.IsVisible(50) | Control.IsVisible(52) | Control.IsVisible(54)</visible>
-                <animation effect="slide" time="0" end="60,135" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" time="0" end="70,130" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" time="0" end="75,30" condition="Control.IsVisible(52)">Conditional</animation>
 			</control>
 		</control>
 
@@ -815,7 +815,7 @@
                 <onup>2050</onup>
                 <ondown>70</ondown>
                 <onclick>-</onclick>
-                <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                <visible>Control.IsVisible(50)</visible>
             </control>
 
             <control type="button" id="170">
@@ -839,11 +839,13 @@
                 <onup>2050</onup>
                 <ondown>2075</ondown>
                 <onclick>-</onclick>
-                <visible>Control.IsVisible(50) | Control.IsVisible(52)</visible>
+                <visible>Control.IsVisible(50)</visible>
             </control>
         </control>
 
         <control type="group" id="3070">
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
             <control type="textbox" id="75">
 				<description>Trailer Plot</description>
 				<posx>190</posx>

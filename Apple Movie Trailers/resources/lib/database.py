@@ -118,6 +118,28 @@ class Database:
                 return True
             except: return False
 
+        def _update_records_poster():
+            try:
+                sql = "SELECT idMovie, title, poster, rating_url FROM movies ORDER BY title;"
+                records = Records()
+                movies = records.fetch( sql, all=True )
+                total_count = len( movies )
+                for count, movie in enumerate( movies ):
+                    ok = _progress_dialog( count + 1, total_count, movie )
+                    if ( movie[ 2 ] ): poster = os.path.basename( movie[ 2 ] )
+                    else: poster = ""
+                    if ( movie[ 3 ] ): rating_url = os.path.basename( movie[ 3 ] )
+                    else: rating_url = ""
+                    ok = records.update( "movies", ( "poster", "rating_url", ), ( poster, rating_url, movie[ 0 ], ), "idMovie" )
+                    if ( not ok ): raise
+                    if ( ( float( count + 1) / 100 == int( ( count + 1 ) / 100) ) or ( ( count + 1 ) == total_count ) ):
+                        ok = records.commit()
+                records.close()
+                return True
+            except:
+                records.close()
+                return False
+
         def _update_completed():
             sql = "SELECT idMovie, trailer_urls FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
             records = Records()
@@ -164,7 +186,7 @@ class Database:
             return ok
 
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "pre-0.98", "pre-0.98.1", ) ):
+        if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", "pre-0.98.2", ) ):
             try:
                 _progress_dialog()
                 ok = True
@@ -177,7 +199,10 @@ class Database:
                 if ( version == "pre-0.97.3" ):
                     ok, updated = _update_completed()
                     if ( updated ): complete = False
-                ok = _update_table_movies()
+                if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", ) ):
+                    ok = _update_table_movies()
+                if ( not ok ): raise
+                ok = _update_records_poster()
                 if ( not ok ): raise
                 ok = _update_version()
                 if ( not ok ): raise
