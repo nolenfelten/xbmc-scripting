@@ -6,7 +6,7 @@ __author__ = "Apple Movie Trailers (AMT) Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Apple%20Movie%20Trailers"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "pre-0.98.2"
+__version__ = "pre-0.98.3"
 
 BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
@@ -24,7 +24,7 @@ __add_credits_l1__ = __language__( 1 )#"Xbox Media Center"
 __add_credits_r1__ = "Team XBMC"
 __add_credits_l2__ = __language__( 913 )#"Usability"
 __add_credits_r2__ = "Spiff"
-__add_credits_l3__ = __language__( 914 )#"Usability"
+__add_credits_l3__ = __language__( 914 )#"Language File"
 __add_credits_r3__ = __language__( 2 )#"Translators name"
 
 
