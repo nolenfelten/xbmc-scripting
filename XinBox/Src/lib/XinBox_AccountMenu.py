@@ -174,17 +174,15 @@ class AccountSettings(xbmcgui.WindowXML):
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
-            try:
-                if self.defaultaccount:
-                        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-                        self.editallaccounts("Default Account","False",self.account)
-                self.theSettings.saveXMLfromArray()
-                self.savedaccountname = self.account
-                self.getControl(81).setLabel(self.account)
-                self.builddirs()
-                self.newaccount = False
-                self.launchinfo(48,"",self.language(49))
-            except:traceback.print_exc()
+            if self.defaultaccount:
+                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+                    self.editallaccounts("Default Account","False",self.account)
+            self.theSettings.saveXMLfromArray()
+            self.savedaccountname = self.account
+            self.getControl(81).setLabel(self.account)
+            self.builddirs()
+            self.newaccount = False
+            self.launchinfo(48,"",self.language(49))
         elif ( controlID == 65):
             if self.launchinfo(79,"",self.language(77)):
                 self.close()
@@ -192,11 +190,11 @@ class AccountSettings(xbmcgui.WindowXML):
     def builddirs(self):
         accountOrigdir = join(SETTINGSDIR,self.origaccounthash)
         accountNewDir = join(SETTINGSDIR,self.newaccounthash)
-        if accountOrigdir != accountNewDir:
-            if exists(accountOrigdir):
+        if exists(accountOrigdir):
+            if accountOrigdir != accountNewDir:
                 os.rename(accountOrigdir,accountNewDir)
-            else:
-                mkdir(accountNewDir)
+        else:
+            mkdir(accountNewDir)
         self.origaccounthash = self.newaccounthash
         for set0 in self.hashlist:
             set1 = self.hashlist[set0]
@@ -206,10 +204,10 @@ class AccountSettings(xbmcgui.WindowXML):
             else:
                 Origdir = join(accountNewDir,str(hash(set0)))
                 NewDir = join(accountNewDir,str(hash(set1)))
-                if Origdir != NewDir:
-                    if exists(Origdir):
+                if exists(Origdir):
+                    if Origdir != NewDir:
                         os.rename(Origdir,NewDir)
-                    else:mkdir(NewDir)
+                else:mkdir(NewDir)
         self.hashlist = self.buildhashlist()
 
     def removedir(self,mydir):
