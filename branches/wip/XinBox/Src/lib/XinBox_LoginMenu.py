@@ -1,12 +1,12 @@
 
 
-import xbmc, xbmcgui, time, sys, os,traceback
+import xbmc, xbmcgui, time, sys, os
 
 import XinBox_Util
 from XinBox_AccountSettings import Account_Settings
 from XinBox_Settings import Settings
 import XinBox_InfoDialog
-
+import XinBox_MyAccountMenu
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,lang=False,title=False):
@@ -18,21 +18,20 @@ class GUI( xbmcgui.WindowXML ):
         accounts = []
         for set in self.settings.getSetting("Accounts")[1]:
             accounts.append(set[0])
-        if accounts == []:
-            self.noaccounts = True
-        else:self.noaccounts = False
         return accounts
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",self.title,"")
 
     def getaccountsettings(self,account):
-        return self.settings.getSettingInListbyname("Accounts",account)    
+        return self.settings.getSettingInListbyname("Accounts",account)
+
+    def getinboxsettings(self,inbox):
+        return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
         
     def onInit(self):
         xbmcgui.lock()
         self.loadsettings()
-        self.buildaccounts()
         self.setupvars()
         self.setupcontrols()
         xbmcgui.unlock()
@@ -53,18 +52,18 @@ class GUI( xbmcgui.WindowXML ):
         pass
     
     def onClick(self, controlID):
-        inboxname = self.getListItem(self.getCurrentListPosition()).getLabel()
-        self.accountSettings = self.getaccountsettings(inboxname)
+        accountname = self.getListItem(self.getCurrentListPosition()).getLabel()
+        self.accountSettings = self.getaccountsettings(accountname)
         accountpass = self.accountSettings.getSetting("Account Password")
         if accountpass == "-":
-            self.launchaccountmenu(inboxname)
+            self.launchaccountmenu(accountname)
         else:
             value = self.showKeyboard(self.language(31),"",1)
             if value != "":
                 if value == accountpass.decode("hex"):
-                    self.launchaccountmenu(inboxname)
+                    self.launchaccountmenu(accountname)
                 else:self.launchinfo("","",self.language(93),self.language(32))
-                                  
+                                                                    
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
@@ -77,10 +76,10 @@ class GUI( xbmcgui.WindowXML ):
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             self.launchinfo(124,self.getListItem(self.getCurrentListPosition()).getLabel())
 
-    def launchaccountmenu(self,theaccount):
-        winSettings = Account_Settings("XinBox_AccountMenu.xml",self.scriptPath,"DefaultSkin",0,scriptSettings=self.settings,language=self.language, title=self.title,account=theaccount)
-        winSettings.doModal()
-        del winSettings
+    def launchaccountmenu(self, account):
+        w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",self.scriptPath,"DefaultSkin",lang=self.language,theaccount=account,title=self.title)
+        w.doModal()
+        del w
 
     def launchinfo(self, focusid, label,heading=False,text=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading,thetext=text)
