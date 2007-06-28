@@ -55,6 +55,7 @@ class AccountSettings(xbmcgui.WindowXML):
         xbmcgui.unlock()
 
     def setupvars(self):
+        self.savedaccountname = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
         self.defaultaccount = self.accountSettings.getSetting("Default Account")
@@ -140,7 +141,6 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.newaccounthash  = str(hash(value))
                         self.accountSettings.setSetting("Account Hash",self.newaccounthash)
                         self.account = value
-                        self.getControl(81).setLabel(self.account)
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value != False:
@@ -169,7 +169,6 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.accountSettings.removeinbox("Inboxes",inboxname)
                     self.accountinboxes.remove(inboxname)
                     self.removehash(inboxname)
-                    print "removehash = " + str(inboxname)
                     self.buildinboxlist()
                     self.deleteing = False
             else:self.launchinboxmenu(inboxname)
@@ -179,6 +178,8 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
                     self.editallaccounts("Default Account","False",self.account)
             self.theSettings.saveXMLfromArray()
+            self.savedaccountname = self.account
+            self.getControl(81).setLabel(self.account)
             self.builddirs()
             self.newaccount = False
             self.launchinfo(48,"",self.language(49))
@@ -190,10 +191,8 @@ class AccountSettings(xbmcgui.WindowXML):
         accountOrigdir = join(SETTINGSDIR,self.origaccounthash)
         accountNewDir = join(SETTINGSDIR,self.newaccounthash)
         if exists(accountOrigdir):
-            print "YAH!"
             os.rename(accountOrigdir,accountNewDir)
         else:
-            print "nah"
             mkdir(accountNewDir)
         self.origaccounthash = self.newaccounthash
         for set0 in self.hashlist:

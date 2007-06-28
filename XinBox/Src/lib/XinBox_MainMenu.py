@@ -24,7 +24,7 @@ defSettings = {"Accounts": [['Account',[]],"list"]}
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
-        print "Welcome to the Jungle"
+        print "Welcome to XinBox"
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",TITLE,defSettings)     
@@ -104,7 +104,7 @@ class GUI( xbmcgui.WindowXML ):
         del dialog
 
     def launchcreatemenu(self):
-        winSettings = Account_Settings("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=_, title=TITLE,account="")
+        winSettings = Account_Settings("XinBox_EditAccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=_, title=TITLE,account="")
         winSettings.doModal()
         self.loadsettings()
         del winSettings

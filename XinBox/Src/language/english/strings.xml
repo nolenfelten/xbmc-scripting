@@ -112,4 +112,13 @@
 	<string id="122">Select to Test the above inbox settings. "Test" will communicate with the inbox server and confirm all settings are ok.</string>
 	<string id="123">Select to add inbox to your Account and return to the Account Menu. Note: The inbox will not be saved until Save is pressed in the Account Menu.</string>
 	<string id="124">Select to Login to the above account.</string>
+	<string id="125">Select to Login to the above inbox.</string>
+	<string id="126">Select to edit current account.</string>
+	<string id="127">Select to delete current account.</string>
+	<string id="128">Select to exit and return to previous menu.</string>
+
+
+
+
+	<string id="200">Account Menu</string>
 </strings>
