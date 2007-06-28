@@ -108,7 +108,7 @@
 	<string id="118">Select to change your Server Account Password. This is usually the password you use to login to Outlook/Web Mail Inboxes.</string>
 	<string id="119">Select to change your Server Inbox Size. Enter the size(capacity) of your e-mail servers inbox in megabytes(MB).Set to 0 to disable the server inbox full warnings.</string>
 	<string id="120">Select to change your XinBox Inbox Size. Enter the size(capacity) you want to allocate on your Xbox to this Inbox in Megabytes(MB).Set to 0 to disable the XinBox inbox full Warnings.</string>
-	<string id="121">Select to change if copies of emails are kept on the server. Defaults to Yes.</string>
+	<string id="121">Select to change if copies of any new emails from when setting is changed are kept on the server. Defaults to Yes.</string>
 	<string id="122">Select to Test the above inbox settings. "Test" will communicate with the inbox server and confirm all settings are ok.</string>
 	<string id="123">Select to add inbox to your Account and return to the Account Menu. Note: The inbox will not be saved until Save is pressed in the Account Menu.</string>
 	<string id="124">Select to Login to the above account.</string>
