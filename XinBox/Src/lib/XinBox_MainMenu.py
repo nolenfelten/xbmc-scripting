@@ -9,7 +9,7 @@ import XinBox_LoginMenu
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 from XinBox_Language import Language
-
+import XinBox_MyAccountMenu
 
 TITLE = default.__scriptname__
 SCRIPTPATH = default.__scriptpath__
@@ -24,6 +24,7 @@ defSettings = {"Accounts": [['Account',[]],"list"]}
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
+        self.init = 0
         print "Welcome to XinBox"
 
     def loadsettings(self):
@@ -32,19 +33,42 @@ class GUI( xbmcgui.WindowXML ):
     def onInit(self):
         xbmcgui.lock()
         self.loadsettings()
-        self.buildaccounts()
+        self.accounts = self.buildaccounts()
+        if self.init == 0:
+            self.init = 1
+            self.checkdefault()
         self.setupvars()
         self.setupcontrols()
         xbmcgui.unlock()
 
+    def checkdefault(self):
+        for account in self.accounts:
+            self.accountsettings = self.getaccountsettings(account)
+            if self.accountsettings.getSetting("Default Account") == "True":
+                print "the account with default = " + str(account)
+                xbmcgui.unlock()
+                self.defaultlogin(account)
+                break
+
+    def defaultlogin(self, account):
+        w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",lang=_,theaccount=account,title=TITLE)
+        w.doModal()
+        del w
+        
     def buildaccounts(self):
         accounts = []
         for set in self.settings.getSetting("Accounts")[1]:
             accounts.append(set[0])
-        if accounts == []:
+        if len(accounts) == 0:
             self.noaccounts = True
         else:self.noaccounts = False
         return accounts
+
+    def getaccountsettings(self,account):
+        return self.settings.getSettingInListbyname("Accounts",account)
+    
+    def getinboxsettings(self,inbox,settings):
+        return settings.getSettingInListbyname("Inboxes",inbox)
     
     def setupcontrols(self):
         self.clearList()
@@ -69,7 +93,6 @@ class GUI( xbmcgui.WindowXML ):
     def onClick(self, controlID):
         if ( controlID == 50):
             if self.getCurrentListPosition() == 0:
-                self.accounts = self.buildaccounts()
                 if self.noaccounts:
                     self.launchinfo(22,"",_(93))
                 else:self.launchloginmenu()
