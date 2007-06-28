@@ -60,7 +60,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.inboxlist = self.getControl(88)
         self.defaultaccount = self.accountSettings.getSetting("Default Account")
         self.hashlist = self.buildhashlist()
-        self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
+        self.origaccounthash = self.accountSettings.getSetting("Account Hash")
         self.newaccounthash = self.origaccounthash
 
     def buildhashlist(self):
@@ -192,10 +192,11 @@ class AccountSettings(xbmcgui.WindowXML):
     def builddirs(self):
         accountOrigdir = join(SETTINGSDIR,self.origaccounthash)
         accountNewDir = join(SETTINGSDIR,self.newaccounthash)
-        if exists(accountOrigdir):
-            os.rename(accountOrigdir,accountNewDir)
-        else:
-            mkdir(accountNewDir)
+        if accountOrigdir != accountNewDir:
+            if exists(accountOrigdir):
+                os.rename(accountOrigdir,accountNewDir)
+            else:
+                mkdir(accountNewDir)
         self.origaccounthash = self.newaccounthash
         for set0 in self.hashlist:
             set1 = self.hashlist[set0]
@@ -205,9 +206,10 @@ class AccountSettings(xbmcgui.WindowXML):
             else:
                 Origdir = join(accountNewDir,str(hash(set0)))
                 NewDir = join(accountNewDir,str(hash(set1)))
-                if exists(Origdir):
-                    os.rename(Origdir,NewDir)
-                else:mkdir(NewDir)
+                if Origdir != NewDir:
+                    if exists(Origdir):
+                        os.rename(Origdir,NewDir)
+                    else:mkdir(NewDir)
         self.hashlist = self.buildhashlist()
 
     def removedir(self,mydir):
