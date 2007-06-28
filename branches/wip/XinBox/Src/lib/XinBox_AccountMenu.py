@@ -1,7 +1,7 @@
 
 
 
-import xbmcgui, xbmc, os, random, traceback
+import xbmcgui, xbmc, os, random
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
