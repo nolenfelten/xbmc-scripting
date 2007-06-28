@@ -1,7 +1,7 @@
 
 
 
-import xbmcgui, xbmc, os, random
+import xbmcgui, xbmc, os, random,traceback
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
@@ -60,7 +60,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.inboxlist = self.getControl(88)
         self.defaultaccount = self.accountSettings.getSetting("Default Account")
         self.hashlist = self.buildhashlist()
-        self.origaccounthash = self.accountSettings.getSetting("Account Hash")
+        self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
         self.newaccounthash = self.origaccounthash
 
     def buildhashlist(self):
@@ -174,15 +174,17 @@ class AccountSettings(xbmcgui.WindowXML):
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
-            if self.defaultaccount:
-                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-                    self.editallaccounts("Default Account","False",self.account)
-            self.theSettings.saveXMLfromArray()
-            self.savedaccountname = self.account
-            self.getControl(81).setLabel(self.account)
-            self.builddirs()
-            self.newaccount = False
-            self.launchinfo(48,"",self.language(49))
+            try:
+                if self.defaultaccount:
+                        self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
+                        self.editallaccounts("Default Account","False",self.account)
+                self.theSettings.saveXMLfromArray()
+                self.savedaccountname = self.account
+                self.getControl(81).setLabel(self.account)
+                self.builddirs()
+                self.newaccount = False
+                self.launchinfo(48,"",self.language(49))
+            except:traceback.print_exc()
         elif ( controlID == 65):
             if self.launchinfo(79,"",self.language(77)):
                 self.close()
