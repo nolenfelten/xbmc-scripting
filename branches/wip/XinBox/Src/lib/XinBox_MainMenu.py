@@ -45,9 +45,15 @@ class GUI( xbmcgui.WindowXML ):
         for account in self.accounts:
             self.accountsettings = self.getaccountsettings(account)
             if self.accountsettings.getSetting("Default Account") == "True":
-                print "the account with default = " + str(account)
                 xbmcgui.unlock()
-                self.defaultlogin(account)
+                accountpass = self.accountsettings.getSetting("Account Password")
+                if accountpass != "-":
+                    value = self.showKeyboard(_(33),"",1)
+                    if value != "":
+                        if value == accountpass.decode("hex"):
+                            self.defaultlogin(account)
+                        else:self.launchinfo("","",_(93),_(32))
+                else:self.defaultlogin(account)
                 break
 
     def defaultlogin(self, account):
@@ -121,11 +127,13 @@ class GUI( xbmcgui.WindowXML ):
 ##        w.doModal()
 ##        del w
 
-    def launchinfo(self,focusid, label,heading=False):
-        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_,theheading=heading)
+    def launchinfo(self, focusid, label,heading=False,text=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_,theheading=heading,thetext=text)
         dialog.doModal()
+        value = dialog.value
         del dialog
-
+        return value
+    
     def launchcreatemenu(self):
         winSettings = Account_Settings("XinBox_EditAccountMenu.xml",SRCPATH,"DefaultSkin",0,scriptSettings=self.settings,language=_, title=TITLE,account="")
         winSettings.doModal()
@@ -137,3 +145,12 @@ class GUI( xbmcgui.WindowXML ):
         w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",SRCPATH,"DefaultSkin",lang=_,title=TITLE)
         w.doModal()
         del w
+
+    def showKeyboard(self, heading,default="",hidden=0):
+        keyboard = xbmc.Keyboard(default,heading)
+        if hidden == 1:keyboard.setHiddenInput(True)
+        keyboard.doModal()
+        if hidden == 1:keyboard.setHiddenInput(False)
+        if (keyboard.isConfirmed()):
+            return keyboard.getText()
+        else:return default

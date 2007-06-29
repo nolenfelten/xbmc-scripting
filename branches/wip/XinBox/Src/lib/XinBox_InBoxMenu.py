@@ -39,6 +39,8 @@ class GUI( xbmcgui.WindowXML ):
         self.settnames[5] = "Account Password"
         self.settnames[6] = "SERV Inbox Size"
         self.settnames[7] = "XinBox Inbox Size"
+        self.settnames[8] = "Keep Copy Emails"
+        self.settnames[9] = "Email Notification"
         self.keepemails = self.settings.getSetting("Keep Copy Emails")
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
@@ -88,6 +90,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(87), self.settings.getSetting("SERV Inbox Size")))
         self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
         self.addItem(self.SettingListItem(self.language(97),""))
+        self.addItem(self.SettingListItem(self.language(240),self.settings.getSetting("Email Notification")))
         
     def SettingListItem(self, label1,label2):
         if label2 == "-":
@@ -127,7 +130,13 @@ class GUI( xbmcgui.WindowXML ):
             elif curPos == 8:
                 self.keepemails = not self.keepemails
                 self.getControl(106).setSelected(self.keepemails)
-                self.settings.setSetting("Keep Copy Emails",str(self.keepemails))                
+                self.settings.setSetting(self.settnames[curPos],str(self.keepemails))
+            elif curPos == 9:
+                dialog = xbmcgui.Dialog()
+                value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))
+                if value != self.settings.getSetting("Email Notification"):
+                    curItem.setLabel2(value)
+                    self.settings.setSetting(self.settnames[curPos],value)
             else:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
                 if value != False and value != "" and value !=curName2:
@@ -177,7 +186,9 @@ class GUI( xbmcgui.WindowXML ):
                     self.updatessl(92,self.smtpssl)
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
-                self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+                if self.getCurrentListPosition() != 9:
+                    self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+                else:self.launchinfo(129,self.getListItem(self.getCurrentListPosition()).getLabel())
             elif focusid == 61:
                 self.launchinfo(122,self.language(89))
             elif focusid == 62:

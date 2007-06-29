@@ -1,6 +1,6 @@
 import os
 import sys
-import xbmcgui, default
+import xbmcgui
 
 from XinBox_Settings import Settings
 from XinBox_AccountMenu import AccountSettings
@@ -9,6 +9,7 @@ from XinBox_AccountMenu import AccountSettings
 class Account_Settings (AccountSettings):
     def __init__(self,xmlName,thescriptPath,defaultName,forceFallback, scriptSettings,language, title="XinBox",account="Default"):
         self.title = title
+        self.srcpath = thescriptPath
         AccountSettings.__init__(self, xmlName,thescriptPath,defaultName,forceFallback, scriptSettings,language,title,account)
 
     def Addaccount(self,settingname,newName):
@@ -32,6 +33,7 @@ class Account_Settings (AccountSettings):
             "Keep Copy Emails": ["True","boolean"],
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"],
-            "Inbox Hash": ["-","text"]}
+            "Inbox Hash": ["-","text"],
+            "Email Notification": [self.srcpath+"\\SFX\\Email Notification\\You Have Mail.wav","text"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addinbox(settingname,newName,newSettings,"settings")
