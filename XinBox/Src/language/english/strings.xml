@@ -20,6 +20,7 @@
 	<string id="30">Login Menu</string>
 	<string id="31">Please enter Account Password</string>
 	<string id="32">In-correct Password Entered</string>
+	<string id="33">Please enter Default Account Password</string>
 
 	<!-- Test Inbox Labels -->
 	<string id="34">Testing Servers</string>
@@ -116,6 +117,7 @@
 	<string id="126">Select to edit current account.</string>
 	<string id="127">Select to delete current account.</string>
 	<string id="128">Select to exit and return to previous menu.</string>
+	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -138,4 +140,8 @@
 	<string id="222">Updating Email Database...</string>
 	<string id="223">Received # %s Emails OK.</string>
 	<string id="224">Error Retrieving Email.</string>
+
+	<!-- MORE InBox Menu Labels -->
+	<string id="240">New Email Notification SFX:</string>
+	<string id="241">Browse for New Email Notification SFX:</string>
 </strings>
