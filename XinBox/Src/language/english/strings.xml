@@ -26,7 +26,7 @@
 	<string id="35">No setting entered</string>
 	<string id="36">Server address wrong or wrong SSL</string>
 	<string id="37">Testing Inbox Settings</string>
-	<string id="38">Testing all nesecarry settings have been entered</string>
+	<string id="38">Testing all necessary settings have been entered</string>
 	<string id="39">Checking %s</string>
 	<string id="40">POP3 Server Settings</string>
 	<string id="41">SMTP Server Settings</string>
@@ -119,12 +119,12 @@
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
-	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted.Press OK to confirm, or press back to decline.</string>
+	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted. Press OK to confirm, or press back to decline.</string>
 
 
 	<!-- Email Labels -->
 	<string id="210">Inbox - </string>
-	<string id="211">Loging In...</string>
+	<string id="211">Logging In...</string>
 	<string id="212">Login OK</string>
 	<string id="213">Login Failed</string>
 	<string id="214">Please check Inbox Settings.</string>
@@ -134,8 +134,8 @@
 	<string id="218">Checking for new Emails....</string>
 	<string id="219">You have %s new emails.</string>
 	<string id="220">You have no new emails.</string>
-	<string id="221">Retrivieng Email # %s</string>
+	<string id="221">Retrieving Email # %s</string>
 	<string id="222">Updating Email Database...</string>
-	<string id="223">Recived # %s Emails OK.</string>
+	<string id="223">Received # %s Emails OK.</string>
 	<string id="224">Error Retrieving Email.</string>
 </strings>
