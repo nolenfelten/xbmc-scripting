@@ -118,10 +118,12 @@
 	<string id="127">Select to delete current account.</string>
 	<string id="128">Select to exit and return to previous menu.</string>
 	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
+	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until Save is pressed in the Account Menu.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
 	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted. Press OK to confirm, or press back to decline.</string>
+	
 
 
 	<!-- Email Labels -->
@@ -138,10 +140,11 @@
 	<string id="220">You have no new emails.</string>
 	<string id="221">Retrieving Email # %s</string>
 	<string id="222">Updating Email Database...</string>
-	<string id="223">Received # %s Emails OK.</string>
+	<string id="223">Received %s New Emails OK.</string>
 	<string id="224">Error Retrieving Email.</string>
 
 	<!-- MORE InBox Menu Labels -->
-	<string id="240">New Email Notification SFX:</string>
-	<string id="241">Browse for New Email Notification SFX:</string>
+	<string id="240">"New Email" Notification SFX:</string>
+	<string id="241">Browse for "New Email" Notification SFX:</string>
+	<string id="242">OK</string>
 </strings>

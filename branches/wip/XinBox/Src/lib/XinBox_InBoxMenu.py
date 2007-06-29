@@ -68,7 +68,9 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(82).setLabel(self.language(20))
         self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(89))
-        self.getControl(62).setLabel(self.language(61))
+        if self.newinbox:
+            self.getControl(62).setLabel(self.language(61))
+        else:self.getControl(62).setLabel(self.language(242))
         if self.newinbox:
             self.getControl(62).setEnabled(False)
             self.getControl(80).setLabel(self.language(80))
@@ -192,7 +194,9 @@ class GUI( xbmcgui.WindowXML ):
             elif focusid == 61:
                 self.launchinfo(122,self.language(89))
             elif focusid == 62:
-                self.launchinfo(123,self.language(65))
+                if self.newinbox:
+                    self.launchinfo(123,self.language(61))
+                else:self.launchinfo(130,self.language(242))
                     
     def updatessl(self,ID,currValue):
         dialog = xbmcgui.Dialog()
