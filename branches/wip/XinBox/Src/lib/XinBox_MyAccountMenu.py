@@ -119,7 +119,7 @@ class GUI( xbmcgui.WindowXML ):
         self.setupcontrols()
 
     def launchinbox(self, inbox, ibsettings):
-        w = Checkemail(ibsettings,inbox,self.account)
+        w = Checkemail(ibsettings,inbox,self.account,self.language)
         w.checkemail()
         del w
 
