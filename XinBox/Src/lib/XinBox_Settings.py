@@ -33,8 +33,6 @@ class Settings:
             # Load from Default Settings
             self.settings = defaultSettings
 
-    def resetsettings(self):
-        self.settings = {}
         
     def getSettingType(self,settingName):
         """
@@ -138,11 +136,10 @@ class Settings:
         # END OF FUNCTION
 
     def removeinbox(self, settingName,inbox):
-        count = 0
-        for item in self.settings[settingName][0][1]:
+        for i,item in enumerate(self.settings[settingName][0][1]):
             if item[0] == inbox:
-                del self.settings[settingName][0][1][count]
-            else:count =+ 1
+                del self.settings[settingName][0][1][i]
+                break
                 
     def setSetting(self,settingName, value):
         """

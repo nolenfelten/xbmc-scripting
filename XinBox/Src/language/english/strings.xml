@@ -62,7 +62,7 @@
 	<string id="76">No Password</string>
 	<string id="77">Warning!</string>
 	<string id="78">Are you sure you want to delete this inbox? Press OK to confirm, or press back to decline.</string>
-	<string id="79">Are you sure you want to exit? Any un-saved account settings will be lost.</string>
+	<string id="79">Are you sure you want to exit? Any un-saved account settings will be lost.Press OK to confirm, or press back to decline.</string>
 
 	<!-- InBox Menu Labels -->
 	<string id="80">Add Inbox</string>
@@ -121,4 +121,5 @@
 
 
 	<string id="200">Account Menu</string>
+	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted.Press OK to confirm, or press back to decline.</string>
 </strings>

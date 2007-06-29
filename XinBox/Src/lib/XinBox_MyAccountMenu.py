@@ -6,6 +6,9 @@ import XinBox_InfoDialog
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 from XinBox_EmailEngine import Checkemail
+from os.path import join, exists
+from os import mkdir
+ACCOUNTSDIR = "P:\\script_data\\XinBox\\Accounts\\"
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theaccount = False, title = False):
@@ -39,17 +42,31 @@ class GUI( xbmcgui.WindowXML ):
             inboxname = self.getListItem(self.getCurrentListPosition()).getLabel()
             ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",inboxname)
             try:
-                self.launchinbox(inboxname, ibsettings, )
-            except:
-                traceback.print_exc()
-                pass
+                self.launchinbox(inboxname, ibsettings)
+            except:pass
         elif ( controlID == 61):
             self.launchaccountmenu(self.account)
         elif ( controlID == 62):
-            pass
+            if self.launchinfo(201,"",self.language(77)):
+                self.deleteaccount()
         elif ( controlID == 63):
             self.close()
-  
+
+    def deleteaccount(self):
+        self.settings.removeinbox("Accounts",self.account)
+        self.settings.saveXMLfromArray()
+        self.removedir(ACCOUNTSDIR + str(hash(self.account)))
+        self.close()
+        
+
+    def removedir(self,mydir):
+        for root, dirs, files in os.walk(mydir, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
+        os.rmdir(mydir)
+     
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
@@ -109,6 +126,8 @@ class GUI( xbmcgui.WindowXML ):
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
         dialog.doModal()
+        value = dialog.value
         del dialog
+        return value
 
     
