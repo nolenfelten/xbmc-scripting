@@ -27,7 +27,29 @@
 			<textcolor>FFFFFFFF</textcolor>
 			<font>special12</font>
 		</control>
-		<control type="group">
+		<!-- ** Required ** Do not change id or type-->
+        <control type="label" id="20">
+			<description>Title Label</description>
+			<width>200</width>
+			<posx>207</posx>
+			<posy>43</posy>
+			<align>left</align>
+			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
+		</control>
+		<!-- ** Required ** Do not change id or type-->
+		<control type="label" id="30">
+			<description>Category Label</description>
+			<posx>650</posx>
+			<posy>43</posy>
+			<width>300</width>
+			<align>right</align>
+            <label></label>
+			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
+		</control>
+
+        <control type="group">
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<control type="image">
@@ -55,36 +77,16 @@
 				<aspectratio>keep</aspectratio>
 				<texture>default-backdrop.png</texture>
 				<visible>!Control.IsVisible(52) + !Control.IsVisible(54)</visible>
-                <animation effect="zoom" end="240,105,230,230" condition="Control.IsVisible(50)">Conditional</animation>
+                <animation effect="zoom" end="240,105,230,230" condition="Control.IsVisible(50) + Control.IsVisible(3000)">Conditional</animation>
 			</control>
 		</control>
 
-		<!-- ** Required ** Do not change id or type-->
-        <control type="label" id="20">
-			<description>Title Label</description>
-			<width>200</width>
-			<posx>207</posx>
-			<posy>43</posy>
-			<align>left</align>
-			<font>special13</font>
-			<textcolor>FFFFFFFF</textcolor>
-		</control>
-		<!-- ** Required ** Do not change id or type-->
-		<control type="label" id="30">
-			<description>Category Label</description>
-			<posx>650</posx>
-			<posy>43</posy>
-			<width>300</width>
-			<align>right</align>
-            <label></label>
-			<font>special13</font>
-			<textcolor>FFFFFFFF</textcolor>
-		</control>
-		
         <!-- Button Group -->
+        <!-- ** Required ** Do not change id or type-->
 		<control type="group" id="9000">
 			<posx>20</posx>
 			<posy>-20</posy>
+            <visible>Control.IsVisible(3000) | Control.IsVisible(4000)</visible>
 			<animation effect="slide" time="300" start="-300,0" end="0,0" acceleration="-1.1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="-300,0" acceleration="1.1">WindowClose</animation>
 			<control type="button" id="2">
@@ -105,7 +107,7 @@
 				<onright>50</onright>
 				<onup>109</onup>
 				<ondown>100</ondown>
-				<enable>!Control.IsVisible(60)</enable>
+				<enable>Control.IsVisible(3000)</enable>
 			</control>
             <!-- ** Required ** Do not change id or type-->
 			<control type="button" id="100">
@@ -312,12 +314,13 @@
 		</control>
 		
         <!-- Trailer list controls -->
-        <!-- ** Group control is optional  ** Do not change id or type-->
+        <!-- ** Required ** Do not change id or type-->
 		<control type="group" id="3000">
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
             <!--onleft>9000</onleft>
             <onright>4000</onright-->
+            <!-- ** Required ** Do not change id or type-->
 			<control type="list" id="50">
 				<posx>190</posx>
 				<posy>100</posy>
@@ -420,50 +423,6 @@
 					</control>
 				</focusedlayout>
 			</control>
-            <control type="group">
-                <visible>[Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(54)] + !Control.IsVisible(60)</visible>
-                <control type="image">
-                    <description>Trailer List Scrollbar Up Arrow</description>
-                    <posx>525</posx>
-                    <posy>100</posy>
-                    <width>12</width>
-                    <height>16</height>
-                    <texture>default-scrollbar-up-arrow.png</texture>
-                    <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
-                    <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
-                </control>
-                <control type="scrollbar" id="2050">
-                    <description>Scroll Bar for Trailer List #50</description>
-                    <posx>525</posx>
-                    <posy>116</posy>
-                    <width>12</width>
-                    <height>200</height>
-                    <texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
-                    <texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
-                    <texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
-                    <textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
-                    <textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
-                    <onleft>50</onleft>
-                    <onright>2075</onright>
-                    <showonepage>true</showonepage>
-                    <orientation>vertical</orientation>
-                    <animation effect="slide" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
-                    <animation effect="zoom" end="680,116,12,391" condition="Control.IsVisible(51)">Conditional</animation>
-                    <animation effect="slide" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
-                    <animation effect="zoom" end="680,116,12,338" condition="Control.IsVisible(54)">Conditional</animation>
-                </control>
-                <control type="image">
-                    <description>Trailer List Scrollbar Down Arrow</description>
-                    <posx>525</posx>
-                    <posy>316</posy>
-                    <width>12</width>
-                    <height>16</height>
-                    <texture>default-scrollbar-down-arrow.png</texture>
-                    <animation effect="slide" time="0" end="155,191" condition="Control.IsVisible(51)">Conditional</animation>
-                    <animation effect="slide" time="0" end="155,138" condition="Control.IsVisible(54)">Conditional</animation>
-                </control>
-            </control>
-			
             <control type="panel" id="51">
 				<posx>190</posx>
 				<posy>100</posy>
@@ -551,13 +510,12 @@
                 <onleft>52</onleft>
                 <onright>52</onright>
                 <onup>9000</onup>
-                <ondown>2075</ondown>
+                <ondown>9000</ondown>
                 <scrolltime>200</scrolltime>
                 <viewtype label="543">wraplist</viewtype>
                 <pagecontrol>2050</pagecontrol>
                 <orientation>horizontal</orientation>
                 <focusposition>3</focusposition>
-                <!--visible>!Control.IsVisible(60)</visible-->
                 <itemlayout height="300" width="104">
                     <control type="image">
                         <posx>2</posx>
@@ -679,9 +637,9 @@
                 <height>106</height>
                 <texture>default-dvdview_bottom.png</texture>
                 <visible>Control.IsVisible(54)</visible>
-                <animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
-                <animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
             </control>
+
+            <!-- ** Required ** Do not change id or type-->
             <control type="label" id="2150">
 				<description>Trailer List Count Label</description>
 				<width>100</width>
@@ -691,14 +649,13 @@
 				<label>-</label>
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
-				<visible>!Control.IsVisible(60)</visible>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(51)">Conditional</animation>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(52)">Conditional</animation>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(54)">Conditional</animation>
 			</control>
 
-            <control type="group" id="3050">
-                <!--visible>Control.IsVisible(50) | Control.IsVisible(52)</visible-->
+            <control type="group">
+                <visible>Control.IsVisible(50)</visible>
                 <!--control type="image">
                     <description>Poster Backdrop</description>
                     <posx>545</posx>
@@ -717,7 +674,6 @@
                     <info>ListItem.ActualIcon</info>
                     <texture>-</texture>
                     <aspectratio aligny="bottom">keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
                 <control type="image">
                     <description>Trailer Poster</description>
@@ -730,6 +686,7 @@
                     <aspectratio aligny="top">keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
+                <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="202">
                     <description>Trailer Rating</description>
                     <posx>553</posx>
@@ -739,8 +696,8 @@
                     <texture>-</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
-                    <!--animation effect="slide" time="0" end="-300,120" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
+                <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
                     <description>Trailer Favorite Overlay</description>
                     <posx>665</posx>
@@ -750,8 +707,8 @@
                     <texture>default-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
-                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
+                <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
                     <description>Trailer Watched Overlay</description>
                     <posx>653</posx>
@@ -761,7 +718,6 @@
                     <texture>default-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
-                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
@@ -772,10 +728,11 @@
                     <texture>default-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
-                    <!--animation effect="slide" time="0" end="-300,50" condition="Control.IsVisible(52)">Conditional</animation-->
                 </control>
             </control>
-            <control type="fadelabel" id="206">
+
+            <!-- ** Required ** Do not change id or type-->
+            <control type="label" id="206">
 				<description>Trailer Title</description>
 				<posx>190</posx>
 				<posy>360</posy>
@@ -786,66 +743,116 @@
 				<info>ListItem.Label</info>
 				<font>special13</font>
 				<textcolor>FFFFFFFF</textcolor>
+                <scroll>true</scroll>
                 <disabledcolor>FFe2ff43</disabledcolor>
 				<visible>Control.IsVisible(50) | Control.IsVisible(52) | Control.IsVisible(54)</visible>
                 <animation effect="slide" time="0" end="70,130" condition="Control.IsVisible(54)">Conditional</animation>
                 <animation effect="slide" time="0" end="75,30" condition="Control.IsVisible(52)">Conditional</animation>
 			</control>
 		</control>
-
-        <control type="group" id="3001">
-            <control type="button" id="175">
-                <description>Plot Button</description>
-                <label>215</label>
-                <posx>200</posx>
-                <posy>350</posy>
-                <width>32</width>
-                <height>32</height>
-                <texturefocus>-</texturefocus>
-                <texturenofocus>-</texturenofocus>
-                <font>font13</font>
-                <textcolor>00FFFFFF</textcolor>
-                <shadowcolor>00FFFFFF</shadowcolor>
-                <disabledcolor>60ffffff</disabledcolor>
-                <textoffsetx>17</textoffsetx>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>2050</onleft>
-                <onright>70</onright>
-                <onup>2050</onup>
-                <ondown>70</ondown>
-                <onclick>-</onclick>
-                <visible>Control.IsVisible(50)</visible>
+        <control type="group">
+            <visible>[Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(54)] + Control.IsVisible(3000)</visible>
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <control type="button">
+                <description>Trailer List Scrollbar Up Arrow</description>
+                <posx>525</posx>
+                <posy>100</posy>
+                <width>12</width>
+                <height>16</height>
+                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <onclick>PageUp(2050)</onclick>
+                <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
             </control>
-
-            <control type="button" id="170">
-                <description>Cast Button</description>
-                <label>216</label>
-                <posx>200</posx>
-                <posy>350</posy>
-                <width>32</width>
-                <height>32</height>
-                <texturefocus>-</texturefocus>
-                <texturenofocus>-</texturenofocus>
-                <font>font13</font>
-                <textcolor>00FFFFFF</textcolor>
-                <shadowcolor>00FFFFFF</shadowcolor>
-                <disabledcolor>60ffffff</disabledcolor>
-                <textoffsetx>17</textoffsetx>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>2050</onleft>
+            <control type="scrollbar" id="2050">
+                <description>Scroll Bar for Trailer List #50</description>
+                <posx>525</posx>
+                <posy>116</posy>
+                <width>12</width>
+                <height>200</height>
+                <texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
+                <texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
+                <texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
+                <textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
+                <textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
+                <onleft>50</onleft>
                 <onright>2075</onright>
-                <onup>2050</onup>
-                <ondown>2075</ondown>
-                <onclick>-</onclick>
-                <visible>Control.IsVisible(50)</visible>
+                <showonepage>true</showonepage>
+                <orientation>vertical</orientation>
+                <animation effect="slide" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="zoom" end="680,116,12,391" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="zoom" end="680,116,12,338" condition="Control.IsVisible(54)">Conditional</animation>
+            </control>
+            <control type="button">
+                <description>Trailer List Scrollbar Down Arrow</description>
+                <posx>525</posx>
+                <posy>316</posy>
+                <width>12</width>
+                <height>16</height>
+                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <onclick>PageDown(2050)</onclick>
+                <animation effect="slide" time="0" end="155,191" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" time="0" end="155,138" condition="Control.IsVisible(54)">Conditional</animation>
             </control>
         </control>
 
-        <control type="group" id="3070">
+        <!-- ** Required ** Do not change id or type-->
+        <control type="button" id="175">
+            <description>Plot Button</description>
+            <label>215</label>
+            <posx>200</posx>
+            <posy>350</posy>
+            <width>32</width>
+            <height>32</height>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <font>font13</font>
+            <textcolor>00FFFFFF</textcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <disabledcolor>60ffffff</disabledcolor>
+            <textoffsetx>17</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <onleft>2050</onleft>
+            <onright>70</onright>
+            <onup>2050</onup>
+            <ondown>70</ondown>
+            <onclick>-</onclick>
+            <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
+        </control>
+        <!-- ** Required ** Do not change id or type-->
+        <control type="button" id="170">
+            <description>Cast Button</description>
+            <label>216</label>
+            <posx>200</posx>
+            <posy>350</posy>
+            <width>32</width>
+            <height>32</height>
+            <texturefocus>-</texturefocus>
+            <texturenofocus>-</texturenofocus>
+            <font>font13</font>
+            <textcolor>00FFFFFF</textcolor>
+            <shadowcolor>00FFFFFF</shadowcolor>
+            <disabledcolor>60ffffff</disabledcolor>
+            <textoffsetx>17</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <onleft>2050</onleft>
+            <onright>2075</onright>
+            <onup>2050</onup>
+            <ondown>2075</ondown>
+            <onclick>-</onclick>
+            <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
+        </control>
+
+        <control type="group">
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <!-- ** Required ** Do not change id or type-->
             <control type="textbox" id="75">
 				<description>Trailer Plot</description>
 				<posx>190</posx>
@@ -865,13 +872,15 @@
 				<texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
 				<visible allowhiddenfocus="false">Control.IsVisible(170)</visible>
 			</control>
-            <control type="image">
+            <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>525</posx>
                 <posy>385</posy>
                 <width>12</width>
                 <height>16</height>
-                <texture>default-scrollbar-up-arrow.png</texture>
+                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <onclick>PageUp(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
             </control>
 			<control type="scrollbar" id="2075">
@@ -890,16 +899,20 @@
 				<orientation>vertical</orientation>
 				<visible>Control.IsVisible(75)</visible>
 			</control>
-            <control type="image">
+            <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
                 <posx>525</posx>
                 <posy>514</posy>
                 <width>12</width>
                 <height>16</height>
-                <texture>default-scrollbar-down-arrow.png</texture>
+                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <onclick>PageDown(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
             </control>
+            <!-- ** Required ** Do not change id or type-->
 			<control type="list" id="70">
+                <description>Cast List</description>
 				<posx>545</posx>
 				<posy>385</posy>
 				<width>150</width>
@@ -978,15 +991,6 @@
 					</control>
 				</focusedlayout>
 			</control>
-            <!--control type="image">
-                <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>693</posx>
-                <posy>385</posy>
-                <width>12</width>
-                <height>16</height>
-                <texture>default-scrollbar-up-arrow.png</texture>
-				<visible>Control.IsVisible(70)</visible>
-            </control-->
 			<control type="scrollbar" id="2070">
 				<posx>693</posx>
 				<posy>401</posy>
@@ -1003,21 +1007,15 @@
 				<orientation>vertical</orientation>
 				<visible allowhiddenfocus="false">false</visible>
 			</control>
-            <!--control type="image">
-                <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>693</posx>
-                <posy>514</posy>
-                <width>12</width>
-                <height>16</height>
-                <texture>default-scrollbar-down-arrow.png</texture>
-				<visible>Control.IsVisible(70)</visible>
-            </control-->
         </control>
+        <!-- ** Required ** Do not change <description> or <type> -->
         <control type="group" id="4000">
             <!-- Category list controls -->
 			<!-- ** Required ** Do not change <description> or <type> -->
-            <onleft>9000</onleft>
-            <onright>3000</onright>
+            <!--onleft>9000</onleft>
+            <onright>3000</onright-->
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
 			<control type="list" id="60">
 				<posx>190</posx>
 				<posy>100</posy>
@@ -1127,14 +1125,20 @@
 					</control>
 				</focusedlayout>
 			</control>
-            <control type="image">
+        </control>
+        <control type="group">
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
+            <visible>Control.IsVisible(4000)</visible>
+            <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>680</posx>
                 <posy>100</posy>
                 <width>12</width>
                 <height>16</height>
-                <texture>default-scrollbar-up-arrow.png</texture>
-				<visible>Control.IsVisible(60)</visible>
+                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <onclick>PageUp(2060)</onclick>
             </control>
 			<control type="scrollbar" id="2060">
 				<posx>680</posx>
@@ -1150,16 +1154,16 @@
 				<onright>9000</onright>
 				<showonepage>true</showonepage>
 				<orientation>vertical</orientation>
-				<visible allowhiddenfocus="false">Control.IsVisible(60)</visible>
 			</control>
-            <control type="image">
+            <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
                 <posx>680</posx>
                 <posy>490</posy>
                 <width>12</width>
                 <height>16</height>
-                <texture>default-scrollbar-down-arrow.png</texture>
-				<visible>Control.IsVisible(60)</visible>
+                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <onclick>PageDown(2060)</onclick>
             </control>
 			<!-- ** Required ** Do not change <description> -->
 			<control type="label" id="2160">
@@ -1171,7 +1175,6 @@
 				<label></label>
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
-                <visible>Control.IsVisible(60)</visible>
 			</control>
         </control>
     </controls>

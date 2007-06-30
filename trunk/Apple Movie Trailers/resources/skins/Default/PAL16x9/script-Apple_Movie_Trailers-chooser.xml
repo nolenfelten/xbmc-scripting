@@ -48,9 +48,9 @@
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="502">
 			<description>Chooser Warning Label</description>
-			<posx>220</posx>
-			<posy>260</posy>
-			<width>128</width>
+			<posx>200</posx>
+			<posy>180</posy>
+			<width>241</width>
 			<height>20</height>
 			<align>center</align>
 			<font>font10</font>
