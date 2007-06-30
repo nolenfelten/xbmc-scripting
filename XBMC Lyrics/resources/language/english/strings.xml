@@ -19,9 +19,14 @@
     <string id="209">Shuffle playlist</string>
 
     <!-- Settings choices -->
-    <string id="2070">Artist - Song.ext</string>
+    <!--string id="2070">Artist - Song.ext</string>
     <string id="2071">Artist\Album\Song.ext</string>
-    <string id="2072">Artist\Album\Track Song.ext</string>
+    <string id="2072">Artist\Album\Track Song.ext</string-->
+
+    <!-- Settings choices -->
+    <string id="2070">%A - %T</string>
+    <string id="2071">%A\%B\%T</string>
+    <string id="2072">%A\%B\%N %T</string>
 
     <!-- Settings error messages -->
     <string id="230">There was an error saving settings!</string>

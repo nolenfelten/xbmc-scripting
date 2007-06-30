@@ -3,14 +3,14 @@
     <string id="0">XBMC Lyrics</string>
 	<string id="1">Xbox Media Center</string>
     <string id="2">Mikko70</string>
-	<!-- v.27.6.2007 Finnish -->
+	<!-- v.30.6.2007 Finnish -->
    <!-- User Messages -->
     <string id="100">Poikkeus</string>
 
     <!-- Settings labels -->
     <string id="201">Hakupaikka</string>
     <string id="202">Tallenna sanat</string>
-    <string id="203">Kansioon</string>
+    <string id="203">Kansioon:</string>
     <string id="204">Sanojen pehmeä vieritys</string>
     <string id="205">Visualisointi käytössä</string>
     <string id="206">Haetaan vain tiedostonimeä</string>
@@ -19,9 +19,14 @@
     <string id="209">Sekoita soittolista</string>
     
     <!-- Settings choices -->
-    <string id="2070">Esittäjä - Kappale.pääte</string>
+    <!--string id="2070">Esittäjä - Kappale.pääte</string>
     <string id="2071">Esittäjä\Albumi\Kappale.pääte</string>
-    <string id="2072">Esittäjä\Albumi\Raitanro Kappale.pääte</string>
+    <string id="2072">Esittäjä\Albumi\Raitanro Kappale.pääte</string-->
+    <!-- Settings choices -->
+    <string id="2070">%A - %T</string>
+    <string id="2071">%A\%B\%T</string>
+    <string id="2072">%A\%B\%N %T</string>
+
 
     <!-- Settings error messages -->
     <string id="230">Asetusten tallennuksessa tapahtui virhe!</string>
@@ -35,7 +40,7 @@
     <string id="251">Peruuta</string>
     <string id="252">Päivitä</string>
     <string id="253">Tekijät</string>
-    <string id="254">Sivu</string>
+    <string id="254">Toista</string>
     <string id="255">Käynnistä</string>
     <string id="256">Ei</string>
 

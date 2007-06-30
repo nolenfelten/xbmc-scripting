@@ -98,8 +98,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -140,8 +140,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -182,8 +182,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -224,8 +224,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -266,8 +266,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -308,8 +308,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -350,8 +350,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -392,8 +392,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -434,8 +434,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -477,8 +477,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
@@ -520,8 +520,8 @@
                     <font>font13</font>
                     <textcolor>ffffffff</textcolor>
                     <textoffsetx>10</textoffsetx>
-                    <texturefocus>default-list-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
                     <disabledcolor>60d0d0d0</disabledcolor>
                     <shadowcolor>ff000000</shadowcolor>
                     <onleft>2000</onleft>
