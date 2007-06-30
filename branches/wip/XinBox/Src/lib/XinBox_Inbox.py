@@ -31,11 +31,12 @@ class GUI( xbmcgui.WindowXML ):
             self.loadsettings()
             self.setupvars()
             self.setupcontrols()
-            self.buildemlist()
             xbmcgui.unlock()
+            self.buildemlist()
         except:traceback.print_exc()
         
     def setupvars(self):
+        self.emaillist = []
         self.control_action = XinBox_Util.setControllerAction()
         
     def onFocus(self, controlID):
@@ -86,6 +87,9 @@ class GUI( xbmcgui.WindowXML ):
     def checkfornew(self, inbox, ibsettings):
         w = Checkemail(ibsettings,inbox,self.account,self.language,False)
         w.checkemail()
+        self.newlist = w.newlist
+        if len(self.newlist) != 0:
+            self.updatelist()
         del w
 
     def buildemlist(self):
@@ -106,15 +110,32 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl(50).setEnabled(False)
             else:self.createlist()
 
+    def updatelist(self):
+        self.getControl(50).setEnabled(True)
+        self.dialog = xbmcgui.DialogProgress()
+        self.dialog.create(self.language(210) + self.inbox, self.language(254))
+        for i,item in enumerate(self.newlist):
+            self.dialog.update((i*100)/len(self.newlist),self.language(254),"")
+            f = open(self.ibfolder + item + ".sss", "r")
+            myemail = email.message_from_string(f.read())
+            self.emaillist.insert(0,myemail)
+            f.close()
+            self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),"XBnewemailnotread.png","XBnewemailnotread.png"),0)
+        self.dialog.close()
+
     def createlist(self):
-        self.emaillist = []
+        self.getControl(50).setEnabled(True)
+        self.dialog = xbmcgui.DialogProgress()
+        self.dialog.create(self.language(210) + self.inbox, self.language(253))
         for i,item in enumerate(self.list):
+            self.dialog.update((i*100)/len(self.list),self.language(253),"")
             myitem = item.split("|")
             f = open(self.ibfolder + myitem[2] + ".sss", "r")
             myemail = email.message_from_string(f.read())
             self.emaillist.insert(0,myemail)
             f.close()
             self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),"XBemailnotread.png","XBemailnotread.png"),0)
+        self.dialog.close()
 
 class html2txt(SGMLParser):
     def reset(self):

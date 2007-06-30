@@ -152,4 +152,6 @@
 	<string id="250">Check</string>
 	<string id="251">Compose</string>
 	<string id="252">Mini-Mode</string>
+	<string id="253">Building Inbox...</string>
+	<string id="254">Adding new Emails....</string>
 </strings>
