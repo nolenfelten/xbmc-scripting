@@ -1,5 +1,4 @@
 ﻿<window>
-	<!--defaultcontrol>101</defaultcontrol-->
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
@@ -7,7 +6,7 @@
 	</coordinates>
 	<controls>
 		<!-- ** Optional ** -->
-		<control type="image" id="1">
+		<control type="image">
 			<description>Background Image</description>
 			<posx>18</posx>
 			<posy>40</posy>

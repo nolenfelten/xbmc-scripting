@@ -735,7 +735,7 @@
             <control type="label" id="206">
 				<description>Trailer Title</description>
 				<posx>190</posx>
-				<posy>360</posy>
+				<posy>357</posy>
 				<width>350</width>
 				<height>32</height>
 				<align>left</align>
@@ -750,6 +750,7 @@
                 <animation effect="slide" time="0" end="75,30" condition="Control.IsVisible(52)">Conditional</animation>
 			</control>
 		</control>
+
         <control type="group">
             <visible>[Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(54)] + Control.IsVisible(3000)</visible>
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
