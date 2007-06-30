@@ -104,10 +104,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def get_lyrics_from_file( self, artist, song ):
         try:
-            self.artist_filename = self.make_fatx_compatible( artist )
-            self.song_filename = self.make_fatx_compatible( song + ".txt", True )
-            song_path = os.path.join( self.settings[ "lyrics_path" ], self.artist_filename, self.song_filename )
-            lyrics_file = open( song_path, "r" )
+            self.song_path = xbmc.makeLegalFilename( os.path.join( self.settings[ "lyrics_path" ], artist, song + ".txt" ) )
+            lyrics_file = open( self.song_path, "r" )
             lyrics = lyrics_file.read()#unicode( lyrics_file.read(), "utf-8", "ignore" )
             lyrics_file.close()
             return lyrics
@@ -115,10 +113,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def save_lyrics_to_file( self, lyrics ):
         try:
-            song_path = os.path.join( self.settings[ "lyrics_path" ], self.artist_filename, self.song_filename )
-            if ( not os.path.isdir( os.path.split( song_path )[ 0 ] ) ):
-                os.makedirs( os.path.split( song_path )[ 0 ] )
-            lyrics_file = open( song_path, "w" )
+            if ( not os.path.isdir( os.path.split( self.song_path )[ 0 ] ) ):
+                os.makedirs( os.path.split( self.song_path )[ 0 ] )
+            lyrics_file = open( self.song_path, "w" )
             lyrics_file.write( lyrics )#lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
             return True
@@ -126,17 +123,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             LOG( LOG_ERROR, "%s (ver: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
             return False
 
-    def make_fatx_compatible( self, name, extension=False ):
-        if ( len( name ) > 42 ):
-            if ( extension ): name = "%s_%s" % ( name[ : 37 ], name[ -4 : ], )
-            else: name = name[ : 42 ]
-        name = name.replace( ",", "_" ).replace( "*", "_" ).replace( "=", "_" ).replace( "\\", "_" ).replace( "|", "_" )
-        name = name.replace( "<", "_" ).replace( ">", "_" ).replace( "?", "_" ).replace( ";", "_" ).replace( ":", "_" )
-        name = name.replace( '"', "_" ).replace( "+", "_" ).replace( "/", "_" )
-        if ( os.path.supports_unicode_filenames ):
-            name = unicode( name, "utf-8", "ignore" )
-        return name
-        
     def show_lyrics( self, lyrics, save=False ):
         xbmcgui.lock()
         if ( lyrics == "" ):
@@ -259,8 +245,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.exit_script()
         else:
             for cnt in range( 5 ):
-                song = xbmc.getInfoLabel( "MusicPlayer.Title" )
                 artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
+                song = xbmc.getInfoLabel( "MusicPlayer.Title" )
                 if ( song and ( not artist or self.settings[ "use_filename" ] ) ):
                     artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
                 if ( song and ( self.song != song or self.artist != artist or force_update ) ):
