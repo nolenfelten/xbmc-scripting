@@ -104,7 +104,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -145,7 +145,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -186,7 +186,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -227,7 +227,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -268,7 +268,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -308,7 +308,8 @@
 					<align>left</align>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
+                    <colordiffuse>DDced8da</colordiffuse>
 					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
 					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
@@ -350,7 +351,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -391,7 +392,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -432,7 +433,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -473,7 +474,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
@@ -513,7 +514,8 @@
 					<align>left</align>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
+                    <colordiffuse>DDced8da</colordiffuse>
 					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
 					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
@@ -555,7 +557,7 @@
 					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
-					<textcolor>ffffffff</textcolor>
+                    <textcolor>DDced8da</textcolor>
 					<textoffsetx>10</textoffsetx>
 					<texturefocus>-</texturefocus>
 					<texturenofocus>-</texturenofocus>
