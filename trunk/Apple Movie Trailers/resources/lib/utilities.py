@@ -25,6 +25,7 @@ ACTORS = -3
 FAVORITES = -6
 DOWNLOADED = -7
 HD_TRAILERS = -8
+NO_TRAILER_URLS = -9
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )

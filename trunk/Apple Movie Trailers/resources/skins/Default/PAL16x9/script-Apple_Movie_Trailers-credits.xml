@@ -7,7 +7,7 @@
 	</coordinates>
 	<controls>
 		<!-- ** Optional ** -->
-		<control type="image" id="1">
+		<control type="image">
 			<description>Background Image</description>
 			<posx>50</posx>
 			<posy>40</posy>

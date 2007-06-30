@@ -160,6 +160,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == HD_TRAILERS ):
                 sql = self.query[ "hd_trailers" ]
                 params = ( "%p.mov%", )
+            elif ( category_id == NO_TRAILER_URLS ):
+                sql = self.query[ "no_trailer_urls" ]
+                params = ( "[]", )
             elif ( list_category == 1 ):
                 sql = self.query[ "movies_by_genre_id" ]
                 params = ( self.genres[category_id].id, )
@@ -277,6 +280,8 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 153 )
         elif ( self.category_id == HD_TRAILERS ):
             category = _( 160 )
+        elif ( self.category_id == NO_TRAILER_URLS ):
+            category = _( 161 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -329,7 +334,8 @@ class GUI( xbmcgui.WindowXML ):
                     self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", "%s.tbn" % actor, thumbnail ) )
             else: 
                 self.cast_exists = False
-                self.getControl( self.CONTROL_CAST_LIST ).addItem( _( 401 ) )
+                thumbnail = "generic-noactor.tbn"
+                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except: traceback.print_exc()#pass
@@ -515,6 +521,8 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( 100 ).setLabel( _( 153 ) )
         elif ( self.settings[ "shortcut1" ] == HD_TRAILERS ):
             self.getControl( 100 ).setLabel( _( 160 ) )
+        elif ( self.settings[ "shortcut1" ] == NO_TRAILER_URLS ):
+            self.getControl( 100 ).setLabel( _( 161 ) )
         else:
             self.getControl( 100 ).setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
         if ( self.settings[ "shortcut2" ] == FAVORITES ):
@@ -523,6 +531,8 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( 101 ).setLabel( _( 153 ) )
         elif ( self.settings[ "shortcut2" ] == HD_TRAILERS ):
             self.getControl( 101 ).setLabel( _( 160 ) )
+        elif ( self.settings[ "shortcut2" ] == NO_TRAILER_URLS ):
+            self.getControl( 100 ).setLabel( _( 161 ) )
         else:
             self.getControl( 101 ).setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
         if ( self.settings[ "shortcut3" ] == FAVORITES ):
@@ -531,6 +541,8 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( 102 ).setLabel( _( 153 ) )
         elif ( self.settings[ "shortcut3" ] == HD_TRAILERS ):
             self.getControl( 102 ).setLabel( _( 160 ) )
+        elif ( self.settings[ "shortcut3" ] == NO_TRAILER_URLS ):
+            self.getControl( 100 ).setLabel( _( 161 ) )
         else:
             self.getControl( 102 ).setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
 
@@ -591,7 +603,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def refreshTrailerInfo( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-        self.getControl( self.CONTROL_TRAILER_POSTER ).setImage( "" )
+        #self.getControl( self.CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
         self.trailers.refreshTrailerInfo( trailer )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
@@ -667,7 +679,7 @@ class GUI( xbmcgui.WindowXML ):
             ##    self.playTrailer()
             elif ( controlId == self.CONTROL_CATEGORY_LIST ):
                 self.getTrailerGenre()
-            elif ( controlId == self.CONTROL_CAST_LIST ):
+            elif ( controlId == self.CONTROL_CAST_LIST and self.cast_exists ):
                 self.getActorChoice()
         except: traceback.print_exc()
 

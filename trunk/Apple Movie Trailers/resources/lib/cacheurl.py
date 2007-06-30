@@ -108,11 +108,7 @@ class HTTP:
     def make_cache_filename( self, url ):
         # construct the filename
         if self.actual_filename:
-            if len( self.title ) > 37:
-                self.title = '%s_%s' % ( self.title[0:32], self.title[-4:] )
-            filename = self.title.replace( ',', '_' ).replace( '*', '_' ).replace( '=', '_' ).replace( '\\', '_' ).replace( '|', '_' )
-            filename = filename.replace( '<', '_' ).replace( '>', '_' ).replace( '?', '_' ).replace( ';', '_' ).replace( ':', '_' )
-            filename = filename.replace( '"', '_' ).replace( '+', '_' ).replace( '/', '_' )
+            filename = self.title
             if self.flat_cache:
                 filename = os.path.join( 'flat_cache', filename )
         else:
@@ -120,7 +116,7 @@ class HTTP:
             filename = os.path.join( filename[0], filename )
 
         # ..and the filepath
-        filepath = os.path.join( self.cache_dir, filename )
+        filepath = xbmc.makeLegalFilename( os.path.join( self.cache_dir, filename ) )
         return filepath
 
     def urlretrieve( self, url ):
