@@ -3,22 +3,22 @@
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
-		<posy>88</posy>
+		<posy>100</posy>
 	</coordinates>
 	<controls>
 		<!-- ** Optional ** -->
 		<control type="image" id="1">
 			<description>Background Image</description>
-			<posx>50</posx>
+			<posx>18</posx>
 			<posy>40</posy>
-			<width>300</width>
+			<width>360</width>
 			<height>320</height>
 			<texture>default-dialog-panel.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="20">
 			<description>Credits Label</description>
-			<posx>65</posx>
+			<posx>35</posx>
 			<posy>48</posy>
 			<width>175</width>
 			<align>left</align>
@@ -28,7 +28,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="30">
 			<description>Credits Version Label</description>
-			<posx>340</posx>
+			<posx>370</posx>
 			<posy>48</posy>
 			<width>150</width>
 			<align>right</align>
@@ -38,9 +38,9 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="fadelabel" id="40">
 			<description>SVN URL Label</description>
-			<posx>65</posx>
+			<posx>35</posx>
 			<posy>315</posy>
-			<width>270</width>
+			<width>330</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
@@ -48,7 +48,7 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="901">
 			<description>Team Credits Label</description>
-			<posx>75</posx>
+			<posx>45</posx>
 			<posy>80</posy>
 			<width>200</width>
 			<align>left</align>
@@ -58,9 +58,9 @@
 		<!-- ** Required ** Do not change <id> or <type> -->
 		<control type="list" id="101">
 			<description>Team Credits List</description>
-			<posx>63</posx>
+			<posx>33</posx>
 			<posy>100</posy>
-			<width>300</width>
+			<width>360</width>
 			<height>60</height>
 			<scrolltime>200</scrolltime>
 			<itemlayout height="20">
@@ -75,9 +75,9 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>275</posx>
+					<posx>335</posx>
 					<posy>1</posy>
-					<width>90</width>
+					<width>100</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -97,9 +97,9 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>275</posx>
+					<posx>335</posx>
 					<posy>1</posy>
-					<width>90</width>
+					<width>100</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -111,7 +111,7 @@
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="902">
 			<description>Additional Credits Label</description>
-			<posx>75</posx>
+			<posx>45</posx>
 			<posy>170</posy>
 			<width>200</width>
 			<align>left</align>
@@ -121,9 +121,9 @@
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="list" id="102">
 			<description>Additional Credits List</description>
-			<posx>63</posx>
+			<posx>33</posx>
 			<posy>190</posy>
-			<width>300</width>
+			<width>360</width>
 			<height>60</height>
 			<scrolltime>200</scrolltime>
 			<itemlayout height="20">
@@ -138,9 +138,9 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>275</posx>
+					<posx>335</posx>
 					<posy>1</posy>
-					<width>90</width>
+					<width>100</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -160,9 +160,9 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>275</posx>
+					<posx>335</posx>
 					<posy>1</posy>
-					<width>90</width>
+					<width>100</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -174,7 +174,7 @@
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="903">
 			<description>Skin Credits Label</description>
-			<posx>75</posx>
+			<posx>45</posx>
 			<posy>260</posy>
 			<width>200</width>
 			<align>left</align>
@@ -185,7 +185,7 @@
 		<!-- This control is where you add your credits. -->
 		<control type="label">
 			<description>Skin Credits</description>
-			<posx>66</posx>
+			<posx>36</posx>
 			<posy>281</posy>
 			<width>200</width>
 			<height>20</height>
@@ -195,9 +195,9 @@
 			<label>Graphics &amp; Skinning</label>
 		</control>
 		<control type="label">
-			<posx>338</posx>
+			<posx>368</posx>
 			<posy>281</posy>
-			<width>150</width>
+			<width>200</width>
 			<height>20</height>
 			<font>font10</font>
 			<aligny>center</aligny>

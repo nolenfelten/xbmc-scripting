@@ -26,10 +26,7 @@ FAVORITES = -6
 DOWNLOADED = -7
 HD_TRAILERS = -8
 # base paths
-if ( os.name == "posix" ):
-    BASE_DATA_PATH = os.path.join( os.environ[ "XBMC_HOME" ], "UserData", "script_data", __scriptname__ )
-else:
-    BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
+BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes

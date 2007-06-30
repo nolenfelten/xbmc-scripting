@@ -23,7 +23,7 @@
 			<posy>-15</posy>
 			<width>520</width>
 			<height>420</height>
-			<texture>default-background-settings.png</texture>
+			<texture>default-background-settings_16x9.png</texture>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="20">

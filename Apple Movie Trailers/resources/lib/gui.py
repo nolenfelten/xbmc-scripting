@@ -66,18 +66,17 @@ class GUI( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.lock()
         self.startup = True
-        ########self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
+        self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
         ##self.Timer = None
         self._get_settings()
         
     def onInit( self ):
         if ( self.startup ):
             self.startup = False
-            self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( False )
-            self.getControl( self.CONTROL_TRAILER_LIST_START ).setVisible( False )
+            self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
+            self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
             ## remove when search is done ##
             self.getControl( 106 ).setEnabled( False )
-            self._set_video_resolution()
             self._set_labels()
             xbmcgui.unlock()
             self._setup_variables()
@@ -98,11 +97,12 @@ class GUI( xbmcgui.WindowXML ):
         self.settings = Settings().get_settings()
 
     def _set_video_resolution( self, default=False ):
-        pass
-        #if ( self.settings[ "videoplayer_displayresolution" ] != 10 and not default ):
-        #    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
-        #else:
-        #    xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
+        if ( self.settings[ "videoplayer_displayresolution" ] != 10 and not default ):
+            # set the videoplayers resolution to AMT setting
+            xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
+        else:
+            # set the videoplayers resolution back to XBMC setting
+            xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
 
     def _setup_variables( self ):
         import trailers
@@ -244,12 +244,12 @@ class GUI( xbmcgui.WindowXML ):
 
     def showControls( self, category ):
         xbmcgui.lock()
-        self.getControl( self.CONTROL_CATEGORY_LIST ).setVisible( category )
-        self.getControl( self.CONTROL_TRAILER_LIST_START ).setVisible( not category )
+        self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( category )
+        self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( not category )
         self.setCategoryLabel()
         xbmcgui.unlock()
         self.showPlotCastControls( category )
-        self.setFocus( self.getControl( ( self.CONTROL_TRAILER_LIST_START, self.CONTROL_CATEGORY_LIST, )[ category ] ) )
+        self.setFocus( self.getControl( ( self.CONTROL_CATEGORY_LIST_GROUP, self.CONTROL_TRAILER_LIST_GROUP, )[ not category ] ) )
             
     def showPlotCastControls( self, category ):
         xbmcgui.lock()
@@ -298,7 +298,6 @@ class GUI( xbmcgui.WindowXML ):
     def clearTrailerInfo( self ):
         #self.getControl( CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
-        ##self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setLabel( "" )
         # Plot
         self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
         #self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( "" )
@@ -316,10 +315,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.setCurrentListPosition( len( self.trailers.movies ) - 1 )
                 trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ trailer ].favorite )
-            ##poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
-            ##self.getControl( self.CONTROL_TRAILER_POSTER ).setImage( poster )
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
-            ##self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setLabel( self.trailers.movies[ trailer ].title )
             # Plot
             self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
             self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] )
@@ -401,6 +397,7 @@ class GUI( xbmcgui.WindowXML ):
             LOG( LOG_DEBUG, "%s (ver: %s) [%s -> %s]", __scriptname__, __version__, "GUI::playTrailer", filename )
             if ( filename and filename != "None" ):
                 self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
+                self._set_video_resolution()
                 xbmc.Player( self.core ).play( filename )
         except: traceback.print_exc()
 
@@ -676,7 +673,12 @@ class GUI( xbmcgui.WindowXML ):
 
     def onFocus( self, controlId ):
         #xbmc.sleep( 10 )
-        self.controlId = controlId
+        if ( controlId == self.CONTROL_TRAILER_LIST_GROUP ):
+            self.controlId = self.CONTROL_TRAILER_LIST_START
+        elif ( controlId == self.CONTROL_CATEGORY_LIST_GROUP ):
+            self.controlId = self.CONTROL_CATEGORY_LIST
+        else:
+            self.controlId = controlId
 
     def onAction( self, action ):
         try:
