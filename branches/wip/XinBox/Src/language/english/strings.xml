@@ -147,4 +147,9 @@
 	<string id="240">"New Email" Notification SFX:</string>
 	<string id="241">Browse for "New Email" Notification SFX:</string>
 	<string id="242">OK</string>
+
+	<!-- InBox Labels -->
+	<string id="250">Check</string>
+	<string id="251">Compose</string>
+	<string id="252">Mini-Mode</string>
 </strings>

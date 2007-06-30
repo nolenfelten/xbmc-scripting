@@ -5,10 +5,10 @@ import XinBox_Util
 import XinBox_InfoDialog
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
-from XinBox_EmailEngine import Checkemail
 from os.path import join, exists
 from os import mkdir
 ACCOUNTSDIR = "P:\\script_data\\XinBox\\Accounts\\"
+import XinBox_Inbox
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theaccount = False, title = False):
@@ -40,10 +40,7 @@ class GUI( xbmcgui.WindowXML ):
     def onClick(self, controlID):
         if ( controlID == 51):
             inboxname = self.getListItem(self.getCurrentListPosition()).getLabel()
-            ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",inboxname)
-            try:
-                self.launchinbox(inboxname, ibsettings)
-            except:pass
+            self.launchinbox(inboxname)
         elif ( controlID == 61):
             self.launchaccountmenu(self.account)
         elif ( controlID == 62):
@@ -118,10 +115,10 @@ class GUI( xbmcgui.WindowXML ):
         self.setupvars()
         self.setupcontrols()
 
-    def launchinbox(self, inbox, ibsettings):
-        w = Checkemail(ibsettings,inbox,self.account,self.language)
-        w.checkemail()
-        del w
+    def launchinbox(self, inbox):
+        winSettings = XinBox_Inbox.GUI("XinBox_Inbox.xml",self.srcpath,"DefaultSkin",lang=self.language,theinbox=inbox,account=self.account,title=self.title)
+        winSettings.doModal()
+        del winSettings      
 
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
