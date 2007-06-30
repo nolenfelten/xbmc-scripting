@@ -95,6 +95,7 @@ class GUI( xbmcgui.WindowXML ):
     def buildemlist(self):
         if not exists(self.ibfolder + "emid.xib"):
             self.addItem("Inbox Empty")
+            self.iboxempty = True
             self.getControl(50).setEnabled(False)
         else:
             self.list = []
@@ -111,7 +112,10 @@ class GUI( xbmcgui.WindowXML ):
             else:self.createlist()
 
     def updatelist(self):
-        self.getControl(50).setEnabled(True)
+        if self.iboxempty:
+            self.iboxempty = False
+            self.getControl(50).setEnabled(True)
+            self.clearList()
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create(self.language(210) + self.inbox, self.language(254))
         for i,item in enumerate(self.newlist):
