@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os,traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -12,13 +12,11 @@ from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
-        try:
-            self.language = lang
-            self.inbox = theinbox
-            self.account = account
-            self.title = title
-            self.ibfolder = join(ACCOUNTSDIR,str(hash(self.account)),str(hash(self.inbox))) + "\\"
-        except:traceback.print_exc()
+        self.language = lang
+        self.inbox = theinbox
+        self.account = account
+        self.title = title
+        self.ibfolder = join(ACCOUNTSDIR,str(hash(self.account)),str(hash(self.inbox))) + "\\"
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",self.title,"")
@@ -26,18 +24,17 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            self.loadsettings()
-            self.setupvars()
-            self.setupcontrols()
-            xbmcgui.unlock()
-            self.buildemlist()
-        except:traceback.print_exc()
+        xbmcgui.lock()
+        self.loadsettings()
+        self.setupvars()
+        self.setupcontrols()
+        xbmcgui.unlock()
+        self.buildemlist()
         
     def setupvars(self):
         self.emaillist = []
         self.control_action = XinBox_Util.setControllerAction()
+        self.iboxempty = True
         
     def onFocus(self, controlID):
         pass
@@ -46,9 +43,7 @@ class GUI( xbmcgui.WindowXML ):
         if controlID == 64:
             self.close()
         elif controlID == 61:
-            try:
-                self.checkfornew(self.inbox,self.ibsettings)
-            except:traceback.print_exc()
+            self.checkfornew(self.inbox,self.ibsettings)
   
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -65,11 +60,12 @@ class GUI( xbmcgui.WindowXML ):
     def printEmail(self, selected):
         if self.emaillist[selected].is_multipart():
             for part in self.emaillist[selected].walk():
-                if part.get_content_type() == "text/plain":
+                if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     self.getControl(67).setText(self.parse_email(part.get_payload()))
                     break
         else:self.getControl(67).setText(self.parse_email(self.emaillist[selected].get_payload()))
 
+    
     def parse_email(self, email):
         parser = html2txt()
         parser.reset()
@@ -97,12 +93,21 @@ class GUI( xbmcgui.WindowXML ):
             self.addItem("Inbox Empty")
             self.iboxempty = True
             self.getControl(50).setEnabled(False)
+            return
         else:
             self.list = []
             f = open(self.ibfolder + "emid.xib", "r")
             for line in f.readlines():
                 theline = line.strip("\n")
                 myline = theline.split("|")
+                if myline[1] == "Account Name":
+                    accountname = myline[2]
+                    popname = myline[3]
+                    if accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
+                        f.close()
+                        self.removefiles(self.ibfolder)
+                        self.buildemlist()
+                        return
                 if myline[0] != "-":
                     self.list.append(theline)
             f.close()
@@ -111,6 +116,11 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl(50).setEnabled(False)
             else:self.createlist()
 
+    def removefiles(self,mydir):
+        for root, dirs, files in os.walk(mydir, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+        
     def updatelist(self):
         if self.iboxempty:
             self.iboxempty = False
@@ -128,6 +138,7 @@ class GUI( xbmcgui.WindowXML ):
         self.dialog.close()
 
     def createlist(self):
+        self.iboxempty = False
         self.getControl(50).setEnabled(True)
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create(self.language(210) + self.inbox, self.language(253))
@@ -138,8 +149,13 @@ class GUI( xbmcgui.WindowXML ):
             myemail = email.message_from_string(f.read())
             self.emaillist.insert(0,myemail)
             f.close()
-            self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),"XBemailnotread.png","XBemailnotread.png"),0)
+            self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),"XBemailnotread.png","XBemailnotread.png"),0)
         self.dialog.close()
+
+    def parsesubject(self, subject):
+        if subject == "":
+            return self.language(255)
+        else:return subject
 
 class html2txt(SGMLParser):
     def reset(self):

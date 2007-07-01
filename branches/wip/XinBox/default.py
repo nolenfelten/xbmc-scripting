@@ -39,4 +39,4 @@ __acredits_r3__ = 'Rockstar & Donno'
 if __name__ == '__main__':
         w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",__scriptpath__ + "src","DefaultSkin")
         w.doModal()
-        del w   
+        del w
