@@ -103,7 +103,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>109</onup>
 				<ondown>100</ondown>
@@ -123,7 +123,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>2</onup>
 				<ondown>101</ondown>
@@ -143,7 +143,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>100</onup>
 				<ondown>102</ondown>
@@ -163,7 +163,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>101</onup>
 				<ondown>103</ondown>
@@ -183,7 +183,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>102</onup>
 				<ondown>104</ondown>
@@ -203,7 +203,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>103</onup>
 				<ondown>105</ondown>
@@ -223,7 +223,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>104</onup>
 				<ondown>106</ondown>
@@ -243,7 +243,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>105</onup>
 				<ondown>107</ondown>
@@ -263,7 +263,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>106</onup>
 				<ondown>108</ondown>
@@ -283,7 +283,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>107</onup>
 				<ondown>109</ondown>
@@ -304,7 +304,7 @@
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
 				<aligny>center</aligny>
-				<onleft>70</onleft>
+				<onleft>2070</onleft>
 				<onright>50</onright>
 				<onup>108</onup>
 				<ondown>2</ondown>
@@ -324,7 +324,7 @@
 			<control type="list" id="50">
 				<posx>190</posx>
 				<posy>100</posy>
-				<width>330</width>
+				<width>300</width>
 				<height>232</height>
 				<onleft>2060</onleft>
 				<onright>2050</onright>
@@ -335,7 +335,7 @@
 				<scrolltime>200</scrolltime>
 				<itemlayout height="29">
 					<control type="image">
-						<width>330</width>
+						<width>300</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -351,7 +351,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>290</width>
+						<width>260</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -361,7 +361,7 @@
 						<info>ListItem.Label</info>
 					</control>
 					<control type="label">
-						<posx>325</posx>
+						<posx>295</posx>
 						<posy>3</posy>
 						<width>200</width>
 						<height>22</height>
@@ -375,7 +375,7 @@
 				</itemlayout>
 				<focusedlayout height="29">
 					<control type="image">
-						<width>330</width>
+						<width>300</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -383,7 +383,7 @@
 						<texture>default-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<width>330</width>
+						<width>300</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -400,7 +400,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>290</width>
+						<width>260</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -410,9 +410,9 @@
 						<info>ListItem.Label</info>
 					</control>
 					<control type="label">
-						<posx>325</posx>
+						<posx>295</posx>
 						<posy>3</posy>
-						<width>200</width>
+						<width>170</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -643,7 +643,7 @@
             <control type="label" id="2150">
 				<description>Trailer List Count Label</description>
 				<width>100</width>
-				<posx>520</posx>
+				<posx>490</posx>
 				<posy>335</posy>
 				<align>right</align>
 				<label>-</label>
@@ -667,7 +667,7 @@
                 </control-->
                 <control type="image">
                     <description>Trailer Poster</description>
-                    <posx>532</posx>
+                    <posx>512</posx>
                     <posy>100</posy>
                     <width>175</width>
                     <height>256</height>
@@ -677,7 +677,7 @@
                 </control>
                 <control type="image">
                     <description>Trailer Poster</description>
-                    <posx>532</posx>
+                    <posx>512</posx>
                     <posy>356</posy>
                     <width>175</width>
                     <height>256</height>
@@ -689,7 +689,7 @@
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="202">
                     <description>Trailer Rating</description>
-                    <posx>553</posx>
+                    <posx>523</posx>
                     <posy>335</posy>
                     <width>66</width>
                     <height>15</height>
@@ -700,7 +700,7 @@
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
                     <description>Trailer Favorite Overlay</description>
-                    <posx>665</posx>
+                    <posx>658</posx>
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
@@ -711,7 +711,7 @@
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
                     <description>Trailer Watched Overlay</description>
-                    <posx>653</posx>
+                    <posx>643</posx>
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
@@ -721,7 +721,7 @@
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
-                    <posx>641</posx>
+                    <posx>628</posx>
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
@@ -734,7 +734,7 @@
             <!-- ** Required ** Do not change id or type-->
             <control type="label" id="206">
 				<description>Trailer Title</description>
-				<posx>190</posx>
+				<posx>230</posx>
 				<posy>357</posy>
 				<width>350</width>
 				<height>32</height>
@@ -757,7 +757,7 @@
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>525</posx>
+                <posx>495</posx>
                 <posy>100</posy>
                 <width>12</width>
                 <height>16</height>
@@ -769,7 +769,7 @@
             </control>
             <control type="scrollbar" id="2050">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>525</posx>
+                <posx>495</posx>
                 <posy>116</posy>
                 <width>12</width>
                 <height>200</height>
@@ -779,7 +779,7 @@
                 <textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
                 <textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
                 <onleft>50</onleft>
-                <onright>2075</onright>
+                <onright>175</onright>
                 <showonepage>true</showonepage>
                 <orientation>vertical</orientation>
                 <animation effect="slide" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
@@ -789,7 +789,7 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>525</posx>
+                <posx>495</posx>
                 <posy>316</posy>
                 <width>12</width>
                 <height>16</height>
@@ -805,12 +805,12 @@
         <control type="button" id="175">
             <description>Plot Button</description>
             <label>215</label>
-            <posx>200</posx>
-            <posy>350</posy>
+            <posx>190</posx>
+            <posy>355</posy>
             <width>32</width>
             <height>32</height>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
+            <texturefocus>default-plot-button-focus.png</texturefocus>
+            <texturenofocus>default-plot-button-nofocus.png</texturenofocus>
             <font>font13</font>
             <textcolor>00FFFFFF</textcolor>
             <shadowcolor>00FFFFFF</shadowcolor>
@@ -819,22 +819,24 @@
             <align>center</align>
             <aligny>center</aligny>
             <onleft>2050</onleft>
-            <onright>70</onright>
-            <onup>2050</onup>
+            <onright>170</onright>
+            <onup>3000</onup>
             <ondown>70</ondown>
             <onclick>-</onclick>
             <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
         <!-- ** Required ** Do not change id or type-->
         <control type="button" id="170">
             <description>Cast Button</description>
             <label>216</label>
-            <posx>200</posx>
-            <posy>350</posy>
+            <posx>190</posx>
+            <posy>355</posy>
             <width>32</width>
             <height>32</height>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
+            <texturefocus>default-cast-button-focus.png</texturefocus>
+            <texturenofocus>default-cast-button-nofocus.png</texturenofocus>
             <font>font13</font>
             <textcolor>00FFFFFF</textcolor>
             <shadowcolor>00FFFFFF</shadowcolor>
@@ -842,12 +844,14 @@
             <textoffsetx>17</textoffsetx>
             <align>center</align>
             <aligny>center</aligny>
-            <onleft>2050</onleft>
+            <onleft>175</onleft>
             <onright>2075</onright>
-            <onup>2050</onup>
+            <onup>3000</onup>
             <ondown>2075</ondown>
             <onclick>-</onclick>
             <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
+			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
         </control>
 
         <control type="group">
@@ -858,7 +862,7 @@
 				<description>Trailer Plot</description>
 				<posx>190</posx>
 				<posy>385</posy>
-				<width>330</width>
+				<width>470</width>
 				<height>145</height>
 				<font>font12</font>
 				<textcolor>FFFFFFFF</textcolor>
@@ -875,7 +879,7 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>525</posx>
+                <posx>667</posx>
                 <posy>385</posy>
                 <width>12</width>
                 <height>16</height>
@@ -885,7 +889,7 @@
 				<visible>Control.IsVisible(75)</visible>
             </control>
 			<control type="scrollbar" id="2075">
-				<posx>525</posx>
+				<posx>667</posx>
 				<posy>401</posy>
 				<width>12</width>
 				<height>113</height>
@@ -894,7 +898,7 @@
 				<texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
 				<textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
 				<textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
-				<onleft>75</onleft>
+				<onleft>170</onleft>
 				<onright>70</onright>
 				<showonepage>true</showonepage>
 				<orientation>vertical</orientation>
@@ -902,7 +906,7 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>525</posx>
+                <posx>667</posx>
                 <posy>514</posy>
                 <width>12</width>
                 <height>16</height>
@@ -914,21 +918,21 @@
             <!-- ** Required ** Do not change id or type-->
 			<control type="list" id="70">
                 <description>Cast List</description>
-				<posx>545</posx>
+				<posx>190</posx>
 				<posy>385</posy>
-				<width>150</width>
+				<width>472</width>
 				<height>145</height>
 				<onleft>2075</onleft>
-				<onright>60</onright>
+				<onright>2070</onright>
 				<onup>70</onup>
 				<ondown>70</ondown>
 				<viewtype label="535">list</viewtype>
 				<pagecontrol>2070</pagecontrol>
 				<scrolltime>200</scrolltime>
-				<visible allowhiddenfocus="false">Control.IsVisible(75)</visible>
+				<visible allowhiddenfocus="false">Control.IsVisible(175)</visible>
 				<itemlayout height="29">
 					<control type="image">
-						<width>150</width>
+						<width>472</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -944,7 +948,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>115</width>
+						<width>400</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -956,7 +960,7 @@
 				</itemlayout>
 				<focusedlayout height="29">
 					<control type="image">
-						<width>150</width>
+						<width>472</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -964,7 +968,7 @@
 						<texture>default-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<width>150</width>
+						<width>472</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -981,7 +985,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>115</width>
+						<width>400</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -992,8 +996,19 @@
 					</control>
 				</focusedlayout>
 			</control>
+            <control type="button">
+                <description>Trailer List Scrollbar Up Arrow</description>
+                <posx>667</posx>
+                <posy>385</posy>
+                <width>12</width>
+                <height>16</height>
+                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <onclick>PageUp(2070)</onclick>
+				<visible>Control.IsVisible(70)</visible>
+            </control>
 			<control type="scrollbar" id="2070">
-				<posx>693</posx>
+				<posx>667</posx>
 				<posy>401</posy>
 				<width>12</width>
 				<height>113</height>
@@ -1003,11 +1018,22 @@
 				<textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
 				<textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
 				<onleft>70</onleft>
-				<onright>9000</onright>
+				<onright>60</onright>
 				<showonepage>true</showonepage>
 				<orientation>vertical</orientation>
-				<visible allowhiddenfocus="false">false</visible>
+				<visible>Control.IsVisible(70)</visible>
 			</control>
+            <control type="button">
+                <description>Trailer List Scrollbar Down Arrow</description>
+                <posx>667</posx>
+                <posy>514</posy>
+                <width>12</width>
+                <height>16</height>
+                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <onclick>PageDown(2070)</onclick>
+				<visible>Control.IsVisible(70)</visible>
+            </control>
         </control>
         <!-- ** Required ** Do not change <description> or <type> -->
         <control type="group" id="4000">

@@ -67,7 +67,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onClick( self, controlId ):
         if ( controlId in ( 503, 504, ) ):
             self._close_dialog( self.getControl( controlId ).getSelectedPosition() )
-        #pass
 
     def onFocus( self, controlId ):
         self.controlId = controlId

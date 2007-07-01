@@ -141,7 +141,7 @@ class Database:
                 return False
 
         def _update_completed():
-            sql = "SELECT idMovie, trailer_urls FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
+            sql = "SELECT idMovie, trailer_urls FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
             records = Records()
             movies = records.fetch( sql, all=True )
             ok = True
@@ -367,7 +367,7 @@ class Query( dict ):
         self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
         self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
 
-        self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls ISNULL ORDER BY title;"
+        self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
 
         self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre) FROM genre_link_movie, genres WHERE genre_link_movie.idGenre=genres.idGenre GROUP BY genres.genre;"
@@ -387,4 +387,4 @@ class Query( dict ):
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
 
         self[ "hd_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE ? ORDER BY title;"
-        self[ "no_trailer_urls" ]				= "SELECT * FROM movies WHERE trailer_urls=? OR trailer_urls ISNULL ORDER BY title;"
+        self[ "no_trailer_urls" ]				= "SELECT * FROM movies WHERE (trailer_urls=? OR trailer_urls IS NULL) AND poster IS NOT NULL ORDER BY title;"
