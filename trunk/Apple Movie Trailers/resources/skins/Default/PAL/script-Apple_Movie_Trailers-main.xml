@@ -759,7 +759,7 @@
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>495</posx>
                 <posy>100</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
@@ -771,7 +771,7 @@
                 <description>Scroll Bar for Trailer List #50</description>
                 <posx>495</posx>
                 <posy>116</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>200</height>
                 <texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -791,7 +791,7 @@
                 <description>Trailer List Scrollbar Down Arrow</description>
                 <posx>495</posx>
                 <posy>316</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
@@ -881,7 +881,7 @@
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>667</posx>
                 <posy>385</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
@@ -891,7 +891,7 @@
 			<control type="scrollbar" id="2075">
 				<posx>667</posx>
 				<posy>401</posy>
-				<width>12</width>
+				<width>16</width>
 				<height>113</height>
 				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -908,7 +908,7 @@
                 <description>Trailer List Scrollbar Down Arrow</description>
                 <posx>667</posx>
                 <posy>514</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
@@ -1000,7 +1000,7 @@
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>667</posx>
                 <posy>385</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
@@ -1010,7 +1010,7 @@
 			<control type="scrollbar" id="2070">
 				<posx>667</posx>
 				<posy>401</posy>
-				<width>12</width>
+				<width>16</width>
 				<height>113</height>
 				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -1027,7 +1027,7 @@
                 <description>Trailer List Scrollbar Down Arrow</description>
                 <posx>667</posx>
                 <posy>514</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
@@ -1161,7 +1161,7 @@
                 <description>Trailer List Scrollbar Up Arrow</description>
                 <posx>680</posx>
                 <posy>100</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
@@ -1170,7 +1170,7 @@
 			<control type="scrollbar" id="2060">
 				<posx>680</posx>
 				<posy>116</posy>
-				<width>12</width>
+				<width>16</width>
 				<height>374</height>
 				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>

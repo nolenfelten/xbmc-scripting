@@ -66,7 +66,11 @@ class GUI( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.lock()
         self.startup = True
-        self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
+        ##Enable once we figure out why it crashes sometimes#################################
+        ##self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
+        ######################################################################
+        
+        
         ##self.Timer = None
         self._get_settings()
         
@@ -76,7 +80,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
             ## remove when search is done ##
-            self.getControl( 106 ).setEnabled( False )
+            #self.getControl( 106 ).setEnabled( False )
             self._set_labels()
             xbmcgui.unlock()
             self._setup_variables()
@@ -97,12 +101,15 @@ class GUI( xbmcgui.WindowXML ):
         self.settings = Settings().get_settings()
 
     def _set_video_resolution( self, default=False ):
+        """
         if ( self.settings[ "videoplayer_displayresolution" ] != 10 and not default ):
             # set the videoplayers resolution to AMT setting
             xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.settings[ "videoplayer_displayresolution" ], ) )
         else:
             # set the videoplayers resolution back to XBMC setting
             xbmc.executehttpapi( "SetGUISetting(0,videoplayer.displayresolution,%d)" % ( self.videoplayer_resolution, ) )
+        """
+        pass
 
     def _setup_variables( self ):
         import trailers
@@ -163,6 +170,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == NO_TRAILER_URLS ):
                 sql = self.query[ "no_trailer_urls" ]
                 params = ( "[]", )
+            elif ( category_id == SEARCH_QUERY ):
+                sql = self.search_sql
+                params = None
             elif ( list_category == 1 ):
                 sql = self.query[ "movies_by_genre_id" ]
                 params = ( self.genres[category_id].id, )
@@ -282,6 +292,8 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 160 )
         elif ( self.category_id == NO_TRAILER_URLS ):
             category = _( 161 )
+        elif ( self.category_id == SEARCH_QUERY ):
+            category = _( 162 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -497,6 +509,16 @@ class GUI( xbmcgui.WindowXML ):
         else:
             LOG( LOG_ERROR, "%s (ver: %s) [%s]", __scriptname__, __version__, "GUI::markAsWatched" )
 
+    def perform_search( self ):
+        import search
+        force_fallback = self.skin != "Default"
+        s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+        s.doModal()
+        if ( s.query ):
+            self.search_sql = s.query
+        self.setCategory( SEARCH_QUERY, 1 )
+        del s
+
     def changeSettings( self ):
         import settings
         force_fallback = self.skin != "Default"
@@ -668,7 +690,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( controlId == 105 ):
                 self.setCategory( ACTORS, 0 )
             elif ( controlId == 106 ):
-                pass#self.search()
+                self.perform_search()
             elif ( controlId == 107 ):
                 self.changeSettings()
             elif ( controlId == 108 ):
