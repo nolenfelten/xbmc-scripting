@@ -257,7 +257,7 @@ class GUI( xbmcgui.WindowXML ):
     def showPlotCastControls( self, category ):
         xbmcgui.lock()
         self.getControl( self.CONTROL_PLOT_BUTTON ).setVisible( self.display_cast and not category )
-        #self.getControl( self.CONTROL_PLOT_BUTTON ).setEnabled( self.display_cast and not category )
+        self.getControl( self.CONTROL_CAST_BUTTON ).setVisible( not self.display_cast and not category )
         xbmcgui.unlock()
             
     def togglePlotCast( self ):
