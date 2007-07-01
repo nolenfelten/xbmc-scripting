@@ -49,7 +49,7 @@ def get_keyboard( default="", heading="", hidden=False ):
         return keyboard.getText()
     return default
 
-def get_numeric( default="", heading="", type=3 ):
+def get_numeric_dialog( default="", heading="", type=3 ):
     """ shows a numeric dialog and returns a value
         - 0 : ShowAndGetNumber		(default format: #)
         - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
