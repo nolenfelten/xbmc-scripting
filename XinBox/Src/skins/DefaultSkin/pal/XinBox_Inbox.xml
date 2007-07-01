@@ -43,6 +43,28 @@
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
   		</control>
+  		<control type="label" id="81">
+        		<description>Serv Size Label</description>
+        		<posx>550</posx>
+        		<posy>0</posy>
+        		<width>100</width>
+        		<label>-</label>
+        		<font>special13</font>
+        		<textcolor>FFB2D4F5</textcolor>
+			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
+			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
+  		</control>
+  		<control type="label" id="82">
+        		<description>Ibox Size Label</description>
+        		<posx>550</posx>
+        		<posy>50</posy>
+        		<width>100</width>
+        		<label>-</label>
+        		<font>special13</font>
+        		<textcolor>FFB2D4F5</textcolor>
+			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
+			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
+  		</control>
 		<control type="image">
 			<description>Inbox Background</description>
 			<posx>0</posx>

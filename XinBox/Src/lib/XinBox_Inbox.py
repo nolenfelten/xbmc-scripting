@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -40,10 +40,14 @@ class GUI( xbmcgui.WindowXML ):
         pass
     
     def onClick(self, controlID):
+        try:focusid = self.getFocusId()
+        except:focusid = 0
+        if (50 <= focusid <= 59):
+            self.deletemail(self.getCurrentListPosition(),0)
         if controlID == 64:
             self.close()
         elif controlID == 61:
-            self.checkfornew(self.inbox,self.ibsettings)
+            self.checkfornew()
   
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -80,19 +84,47 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(63).setLabel(self.language(252))
         self.getControl(64).setLabel(self.language(65))
 
-    def checkfornew(self, inbox, ibsettings):
-        w = Checkemail(ibsettings,inbox,self.account,self.language,False)
-        w.checkemail()
-        self.newlist = w.newlist
-        if len(self.newlist) != 0:
-            self.updatelist()
-        del w
+    def checkfornew(self):
+        try:
+            w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
+            w.checkemail()
+            self.newlist = w.newlist
+            self.servsize = w.serversize
+            if len(self.newlist) != 0:
+                self.serversize = w.serversize
+                self.inboxsize = w.inboxsize
+                self.getControl(81).setLabel(self.getsizelabel(self.serversize))
+                self.getControl(82).setLabel(self.getsizelabel(self.inboxsize))                 
+                self.updatelist()
+            del w
+        except:traceback.print_exc()
+
+    def deletemail(self, pos, setting):
+        try:
+            w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
+            w.deletemail(pos,setting)
+            self.serversize = w.serversize
+            self.inboxsize = w.inboxsize
+            self.getControl(81).setLabel(self.getsizelabel(self.serversize))
+            if self.inboxsize != 0:
+                self.getControl(82).setLabel(self.getsizelabel(self.inboxsize))
+            else:self.setinboxempty()                
+            del w
+            self.removeItem(pos)
+        except:traceback.print_exc()
+
+
+    def setinboxempty(self):
+        self.getControl(82).setLabel("")
+        self.addItem("Inbox Empty")
+        self.iboxempty = True
+        self.getControl(50).setEnabled(False)
+        self.setFocusId(61)
+        self.getControl(67).setText("")
 
     def buildemlist(self):
         if not exists(self.ibfolder + "emid.xib"):
-            self.addItem("Inbox Empty")
-            self.iboxempty = True
-            self.getControl(50).setEnabled(False)
+            self.setinboxempty()
             return
         else:
             self.list = []
@@ -100,6 +132,7 @@ class GUI( xbmcgui.WindowXML ):
             for line in f.readlines():
                 theline = line.strip("\n")
                 myline = theline.split("|")
+                print "myline = " + str(myline)
                 if myline[1] == "Account Name":
                     accountname = myline[2]
                     popname = myline[3]
@@ -108,8 +141,13 @@ class GUI( xbmcgui.WindowXML ):
                         self.removefiles(self.ibfolder)
                         self.buildemlist()
                         return
-                if myline[0] != "-":
-                    self.list.append(theline)
+                elif myline[1] == "Server Size":
+                    self.getControl(81).setLabel(self.getsizelabel(int(myline[2])))
+                elif myline[1] == "Inbox Size":
+                    self.getControl(82).setLabel(self.getsizelabel(int(myline[2])))
+                else:
+                    if myline[0] != "-":
+                        self.list.append(theline)
             f.close()
             if len(self.list) == 0:
                 self.addItem("Inbox Empty")
@@ -120,7 +158,20 @@ class GUI( xbmcgui.WindowXML ):
         for root, dirs, files in os.walk(mydir, topdown=False):
             for name in files:
                 os.remove(os.path.join(root, name))
-        
+
+    def getsizelabel (self, size):
+        if size >= 1024:
+            size = size/1024.0
+            sizeext = "KB"
+            self.xbsizeb = size
+            if size >= 1024:
+                size = size/1024.0
+                sizeext = "MB"
+        else:
+            self.xbsizeb = 0
+            sizeext = "bytes"
+        return "%.1f %s" % (size,  sizeext)  
+   
     def updatelist(self):
         if self.iboxempty:
             self.iboxempty = False
