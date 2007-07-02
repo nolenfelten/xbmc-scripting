@@ -74,10 +74,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ calls any special defs """
         self._setup_trailer_quality()
         self._setup_categories()
-        #self._setup_thumbnail_display()
-        #self._setup_playback_mode()
-        #self._setup_skins()
-        #self._setup_videoplayer()
 
     def _setup_categories( self ):
         try:
@@ -113,25 +109,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
             self.selected[ self.CONTROL_EXTRA_LIST ] = [ False ]
             self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2150 ) )
-            
-            
         except: traceback.print_exc()
 
     def _setup_trailer_quality( self ):
         self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), "480p", "720p", "1080p" )
-
-###### End of Special defs #####################################################
-    def _get_setting_from_category( self, category ):
-        for key, value in self.startup_categories.items():
-            if ( value == self.startup_titles[ category ] ):
-                return key
-        return 0
-
-    def _get_category_from_setting( self, setting ):
-        for count, value in enumerate( self.startup_titles ):
-            if ( value == self.startup_categories[ setting ] ):
-                return count
-        return 0
 
     def _perform_search( self ):
         self._close_dialog( self.sql )
@@ -150,9 +131,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         genres = ""
         for pos, genre in enumerate( self.genres ):
             if ( self.selected[ self.CONTROL_GENRE_LIST ][ pos ] ):
-                genres += "genre_link_movie.idGenre=%d OR " % ( genre[ 0 ], )
+                genres += "genre_link_movie.idGenre=%d\n OR " % ( genre[ 0 ], )
         if ( genres ):
-            genres = "(genre_link_movie.idMovie=movies.idMovie AND (" + genres[ : -4 ] + "))"
+            genres = "(genre_link_movie.idMovie=movies.idMovie\n AND (" + genres[ : -5 ] + "))"
             tables += ", genre_link_movie"
             sql_set = True
 
@@ -160,9 +141,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         studios = ""
         for pos, studio in enumerate( self.studios ):
             if ( self.selected[ self.CONTROL_STUDIO_LIST ][ pos ] ):
-                studios += "studio_link_movie.idStudio=%d OR " % ( studio[ 0 ], )
+                studios += "studio_link_movie.idStudio=%d\n OR " % ( studio[ 0 ], )
         if ( studios ):
-            studios = "(studio_link_movie.idMovie=movies.idMovie AND (" + studios[ : -4 ] + "))"
+            studios = "(studio_link_movie.idMovie=movies.idMovie\n AND (" + studios[ : -5 ] + "))"
             tables += ", studio_link_movie"
             sql_set = True
 
@@ -170,9 +151,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         actors = ""
         for pos, actor in enumerate( self.actors ):
             if ( self.selected[ self.CONTROL_ACTOR_LIST ][ pos ] ):
-                actors += "actor_link_movie.idActor=%d OR " % ( actor[ 0 ], )
+                actors += "actor_link_movie.idActor=%d\n OR " % ( actor[ 0 ], )
         if ( actors ):
-            actors = "(actor_link_movie.idMovie=movies.idMovie AND (" + actors[ : -4 ] + "))"
+            actors = "(actor_link_movie.idMovie=movies.idMovie\n AND (" + actors[ : -5 ] + "))"
             tables += ", actor_link_movie"
             sql_set = True
 
@@ -180,9 +161,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         ratings = ""
         for pos, rating in enumerate( self.ratings ):
             if ( self.selected[ self.CONTROL_RATING_LIST ][ pos ] ):
-                ratings += "movies.rating='%s' OR " % ( ( rating[ 0 ], "", )[ rating[ 0 ] == _( 92 ) ], )
+                ratings += "movies.rating='%s'\n OR " % ( ( rating[ 0 ], "", )[ rating[ 0 ] == _( 92 ) ], )
         if ( ratings ):
-            ratings = "(" + ratings[ : -4 ] + ")"
+            ratings = "(" + ratings[ : -5 ] + ")"
             sql_set = True
 
         # set trailer quality selections
@@ -190,43 +171,42 @@ class GUI( xbmcgui.WindowXMLDialog ):
         for pos, quality in enumerate( self.quality ):
             if ( self.selected[ self.CONTROL_QUALITY_LIST ][ pos ] ):
                 quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ pos ]
-                qualities += "movies.trailer_urls LIKE '%s' OR " % ( quality_text, )
+                qualities += "movies.trailer_urls LIKE '%s'\n OR " % ( quality_text, )
         if ( qualities ):
-            qualities = "(" + qualities[ : -4 ] + ")"
+            qualities = "(" + qualities[ : -5 ] + ")"
             sql_set = True
 
         # set extra settings selections
         include_incomplete = ""
         if ( not self.selected[ self.CONTROL_EXTRA_LIST ][ 0 ] ):
-            include_incomplete = " AND movies.trailer_urls IS NOT NULL"
+            include_incomplete = "\n AND movies.trailer_urls IS NOT NULL"
 
         if ( sql_set ):
-            self.sql = "SELECT DISTINCT movies.* FROM "
+            self.sql = "SELECT DISTINCT movies.*\n FROM "
             self.sql += tables
             where = ""
             
             if ( genres ):
                 where += genres
-                where += " AND "
+                where += "\n AND "
             if ( studios ):
                 where += studios
-                where += " AND "
+                where += "\n AND "
             if ( actors ):
                 where += actors
-                where += " AND "
+                where += "\n AND "
             if ( ratings ):
                 where += ratings
-                where += " AND "
+                where += "\n AND "
             if ( qualities ):
                 where += qualities
-                where += " AND "
-
+                where += "\n AND "
 
             if ( where ):
-                where = " WHERE " + where[ : -5 ]
+                where = "\n WHERE " + where[ : -6 ]
             
             self.sql += where + include_incomplete
-            self.sql += " ORDER BY movies.title;"
+            self.sql += "\n ORDER BY movies.title;"
         self._set_sql()
             
     def _set_sql( self ):
@@ -256,7 +236,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.selected[ controlId ][ pos ] = not self.selected[ controlId ][ pos ]
                 self.getControl( controlId ).getSelectedItem().select( self.selected[ controlId ][ pos ] )
                 self._create_sql()
-                #self.getControl( controlId ).getSelectedItem().select( not self.getControl( controlId ).getSelectedItem().isSelected() )
             elif ( controlId in self.CONTROL_BUTTONS ):
                 self.functions[ controlId ]()
         except: traceback.print_exc()

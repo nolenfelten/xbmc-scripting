@@ -39,7 +39,7 @@
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="30">
 			<description>Version Label</description>
-			<posx>495</posx>
+			<posx>535</posx>
 			<posy>-2</posy>
 			<width>200</width>
 			<align>right</align>

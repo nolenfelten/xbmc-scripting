@@ -58,7 +58,7 @@
     <string id="90">There was an error moving the movie!</string>
     <string id="91">time remaining</string>
     <string id="92">*No rating found</string>
-    <string id="93">Number of records from search</string>
+    <string id="93">Number of records returned from search</string>
 
     <!-- Buttons -->
     <string id="103">Genre...</string>
@@ -135,8 +135,8 @@
     <string id="256">Later</string>
 
     <!-- Search buttons -->
-    <string id="257">Run SQL</string>
-    <string id="258">Save SQL As</string>
+    <string id="257">Test SQL</string>
+    <string id="258">Save SQL</string>
 
     <string id="2150">Include incomplete records</string>
 
