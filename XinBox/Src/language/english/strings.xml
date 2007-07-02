@@ -155,4 +155,8 @@
 	<string id="253">Building Inbox...</string>
 	<string id="254">Adding new Emails....</string>
 	<string id="255">No Subject</string>
+	<string id="256">Inbox Empty</string>
+	<string id="257">Server Size:</string>
+	<string id="258">Inbox Size:</string>
+	<string id="259">Empty</string>
 </strings>

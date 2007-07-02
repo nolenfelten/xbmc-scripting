@@ -36,7 +36,7 @@
         		<description>Menu Label</description>
         		<posx>440</posx>
         		<posy>0</posy>
-        		<width>100</width>
+        		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
@@ -45,9 +45,9 @@
   		</control>
   		<control type="label" id="81">
         		<description>Serv Size Label</description>
-        		<posx>550</posx>
-        		<posy>0</posy>
-        		<width>100</width>
+        		<posx>530</posx>
+        		<posy>20</posy>
+        		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
@@ -56,9 +56,9 @@
   		</control>
   		<control type="label" id="82">
         		<description>Ibox Size Label</description>
-        		<posx>550</posx>
+        		<posx>530</posx>
         		<posy>50</posy>
-        		<width>100</width>
+        		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
