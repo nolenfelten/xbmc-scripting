@@ -138,7 +138,9 @@
     <string id="257">Test SQL</string>
     <string id="258">Save SQL</string>
 
-    <string id="2150">Include incomplete records</string>
+    <string id="2150">Search incomplete records</string>
+    <string id="2151">Search only favorites</string>
+    <string id="2152">Search only saved</string>
 
     <!-- Plot/Cast Error Information -->
     <string id="400">*No plot could be retrieved for this title.</string>
