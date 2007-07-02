@@ -43,23 +43,29 @@
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
   		</control>
-  		<control type="label" id="81">
+  		<control type="button" id="81">
         		<description>Serv Size Label</description>
-        		<posx>530</posx>
+        		<posx>480</posx>
         		<posy>20</posy>
-        		<width>200</width>
+        		<width>300</width>
         		<label>-</label>
+      			<texturefocus>XBFAKE.png</texturefocus>
+			<texturenofocus>XBFAKE.png</texturenofocus>
         		<font>special13</font>
+			<disabledcolor>FFFF0000</disabledcolor>
         		<textcolor>FFB2D4F5</textcolor>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
   		</control>
-  		<control type="label" id="82">
+  		<control type="button" id="82">
         		<description>Ibox Size Label</description>
-        		<posx>530</posx>
+        		<posx>480</posx>
         		<posy>50</posy>
-        		<width>200</width>
+        		<width>250</width>
         		<label>-</label>
+			<disabledcolor>FFFF0000</disabledcolor>
+      			<texturefocus>XBFAKE.png</texturefocus>
+			<texturenofocus>XBFAKE.png</texturenofocus>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
