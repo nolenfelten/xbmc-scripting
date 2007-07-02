@@ -125,7 +125,7 @@ class GUI( xbmcgui.WindowXML ):
                 value = dialog.numeric(0, self.language(66) % curName, curName2)
                 if value == "0":
                     curItem.setLabel2(self.language(98))
-                    self.settings.setSetting(self.settnames[curPos],"-")
+                    self.settings.setSetting(self.settnames[curPos],"0")
                 elif value != curName2:
                     curItem.setLabel2(value)
                     self.settings.setSetting(self.settnames[curPos],value)
