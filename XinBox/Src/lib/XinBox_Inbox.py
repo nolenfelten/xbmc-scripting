@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -24,18 +24,26 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
-        xbmcgui.lock()
-        self.loadsettings()
-        self.setupvars()
-        self.setupcontrols()
-        xbmcgui.unlock()
-        self.buildemlist()
+        try:
+            xbmcgui.lock()
+            self.loadsettings()
+            self.setupvars()
+            self.setupcontrols()
+            xbmcgui.unlock()
+            self.buildemlist()
+        except:traceback.print_exc()
         
     def setupvars(self):
         self.emaillist = []
         self.control_action = XinBox_Util.setControllerAction()
         self.iboxempty = True
         self.readstatus = []
+        if self.ibsettings.getSetting("SERV Inbox Size") != "0":
+            self.theservsize = int(self.ibsettings.getSetting("SERV Inbox Size"))
+        else:self.theservsize = False
+        if self.ibsettings.getSetting("XinBox Inbox Size") != "0":
+            self.ibxsize = int(self.ibsettings.getSetting("XinBox Inbox Size"))
+        else:self.ibxsize = False
         
     def onFocus(self, controlID):
         pass
@@ -44,7 +52,7 @@ class GUI( xbmcgui.WindowXML ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if (50 <= focusid <= 59):
-         #   self.deletemail(self.getCurrentListPosition(),1)
+           # self.deletemail(self.getCurrentListPosition(),0)
             self.openemail(self.getCurrentListPosition())
         if controlID == 64:
             self.close()
@@ -108,8 +116,16 @@ class GUI( xbmcgui.WindowXML ):
         if len(self.newlist) != 0:
             self.serversize = w.serversize
             self.inboxsize = w.inboxsize
-            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
-            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))                 
+            if self.theservsize == False:
+                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
+            else:
+                self.getControl(81).setEnabled(self.checksize(int(self.serversize),self.theservsize))
+                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(self.serversize)) + "/" + str(self.theservsize) +"MB")
+            if self.ibxsize == False:
+                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
+            else:
+                self.getControl(82).setEnabled(self.checksize(int(self.inboxsize),self.ibxsize))
+                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")                
             self.updatelist()
         del w
 
@@ -119,12 +135,25 @@ class GUI( xbmcgui.WindowXML ):
         self.serversize = w.serversize
         self.inboxsize = w.inboxsize
         if self.serversize != 0:
-            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
-        else:self.getControl(81).setLabel(self.language(257) + self.language(259))
-        if self.inboxsize != 0:
-            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
+            if self.theservsize == False:
+                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
+            else:
+                self.getControl(81).setEnabled(self.checksize(int(self.serversize),self.theservsize))
+                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(self.serversize)) + "/" + str(self.theservsize) +"MB")
         else:
-            self.getControl(82).setLabel(self.language(258) + self.language(259))
+            if self.theservsize == False:
+                self.getControl(81).setLabel(self.language(257) + self.language(259))
+            else:self.getControl(81).setLabel(self.language(257) + self.language(259)+ "/" + str(self.theservsize)+"MB")
+        if self.inboxsize != 0:
+            if self.ibxsize == False:
+                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
+            else:
+                self.getControl(82).setEnabled(self.checksize(int(self.inboxsize),self.ibxsize))
+                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")                
+        else:
+            if self.ibxsize == False:
+                self.getControl(82).setLabel(self.language(258) + self.language(259))
+            else:self.getControl(82).setLabel(self.language(258) + self.language(259) + "/" + str(self.ibxsize) + "MB")
             self.setinboxempty()                
         del w
         if setting != 1:
@@ -160,14 +189,27 @@ class GUI( xbmcgui.WindowXML ):
                         return
                 elif myline[1] == "Server Size":
                     if int(myline[2]) != 0:
-                        self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])))
-                    else:self.getControl(81).setLabel(self.language(257) + self.language(259))
+                        if self.theservsize == False:
+                            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])))
+                        else:
+                            self.getControl(81).setEnabled(self.checksize(int(myline[2]),self.theservsize))
+                            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])) + "/" + str(self.theservsize) +"MB")
+                    else:
+                        if self.theservsize == False:
+                            self.getControl(81).setLabel(self.language(257) + self.language(259))
+                        else:self.getControl(81).setLabel(self.language(257) + self.language(259)+ "/" + str(self.theservsize)+"MB")
                 elif myline[1] == "Inbox Size":
                     if int(myline[2]) != 0:
-                        self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2])))
+                        if self.ibxsize == False:
+                            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2])))
+                        else:
+                            self.getControl(82).setEnabled(self.checksize(int(myline[2]),self.ibxsize))
+                            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2]))+ "/" + str(self.ibxsize) + "MB")
                     else:
                         self.setinboxempty()
-                        self.getControl(82).setLabel(self.language(258) + self.language(259))
+                        if self.ibxsize == False:
+                            self.getControl(82).setLabel(self.language(258) + self.language(259))
+                        else:self.getControl(82).setLabel(self.language(258) + self.language(259) + "/" + str(self.ibxsize) + "MB")
                         return
                 else:
                     if myline[0] != "-":
@@ -175,6 +217,14 @@ class GUI( xbmcgui.WindowXML ):
             f.close()
             if len(self.list) == 0:self.setinboxempty()
             else:self.createlist()
+
+    def checksize(self,currsize, limit):
+        limbytes = float(limit*1048576)
+        if (float(currsize/limbytes)*100) >= 90:
+            return False
+        else:return True
+                                            
+                
 
     def removefiles(self,mydir):
         for root, dirs, files in os.walk(mydir, topdown=False):
