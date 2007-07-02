@@ -109,6 +109,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
             self.selected[ self.CONTROL_EXTRA_LIST ] = [ False ]
             self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2150 ) )
+            self.selected[ self.CONTROL_EXTRA_LIST ] += [ False ]
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2151 ) )
+            self.selected[ self.CONTROL_EXTRA_LIST ] += [ False ]
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2152 ) )
         except: traceback.print_exc()
 
     def _setup_trailer_quality( self ):
@@ -177,9 +181,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
             sql_set = True
 
         # set extra settings selections
-        include_incomplete = ""
+        search_incomplete = ""
         if ( not self.selected[ self.CONTROL_EXTRA_LIST ][ 0 ] ):
-            include_incomplete = "\n AND movies.trailer_urls IS NOT NULL"
+            search_incomplete = "\n AND movies.trailer_urls IS NOT NULL"
+        search_favorites = ""
+        if ( self.selected[ self.CONTROL_EXTRA_LIST ][ 1 ] ):
+            search_favorites = "\n AND movies.favorite=1"
+        search_saved = ""
+        if ( self.selected[ self.CONTROL_EXTRA_LIST ][ 2 ] ):
+            search_saved = "\n AND movies.saved_location!=''"
 
         if ( sql_set ):
             self.sql = "SELECT DISTINCT movies.*\n FROM "
@@ -205,7 +215,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( where ):
                 where = "\n WHERE " + where[ : -6 ]
             
-            self.sql += where + include_incomplete
+            self.sql += where + search_incomplete + search_favorites + search_saved
             self.sql += "\n ORDER BY movies.title;"
         self._set_sql()
             
