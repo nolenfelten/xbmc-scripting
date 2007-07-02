@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -35,6 +35,7 @@ class GUI( xbmcgui.WindowXML ):
         self.emaillist = []
         self.control_action = XinBox_Util.setControllerAction()
         self.iboxempty = True
+        self.readstatus = []
         
     def onFocus(self, controlID):
         pass
@@ -43,7 +44,8 @@ class GUI( xbmcgui.WindowXML ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if (50 <= focusid <= 59):
-            self.deletemail(self.getCurrentListPosition(),0)
+         #   self.deletemail(self.getCurrentListPosition(),1)
+            self.openemail(self.getCurrentListPosition())
         if controlID == 64:
             self.close()
         elif controlID == 61:
@@ -62,13 +64,26 @@ class GUI( xbmcgui.WindowXML ):
             self.printEmail(self.getCurrentListPosition())
 
     def printEmail(self, selected):
-        if self.emaillist[selected].is_multipart():
-            for part in self.emaillist[selected].walk():
+        myemail = email.message_from_string(self.emaillist[selected].split("|")[0])
+        if myemail.is_multipart():
+            for part in myemail.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     self.getControl(67).setText(self.parse_email(part.get_payload()))
                     break
-        else:self.getControl(67).setText(self.parse_email(self.emaillist[selected].get_payload()))
+        else:self.getControl(67).setText(self.parse_email(myemail.get_payload()))
 
+    def openemail(self, pos):
+        #open dialog here
+        item = self.emaillist[pos]
+        f = open(self.ibfolder + item.split("|")[1] + ".sss", "r")
+        myfile = f.read().split("|")[1]
+        f.close()
+        f = open(self.ibfolder + item.split("|")[1] + ".sss", "w")
+        f.write("1|" + myfile)
+        f.close()
+        if item.split("|")[2] == "0":icon = "XBemailread.png"
+        else:icon = "XBemailreadattach.png"
+        self.getListItem(pos).setThumbnailImage(icon)
     
     def parse_email(self, email):
         parser = html2txt()
@@ -85,38 +100,41 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(64).setLabel(self.language(65))
 
     def checkfornew(self):
-        try:
-            w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
-            w.checkemail()
-            self.newlist = w.newlist
-            self.servsize = w.serversize
-            if len(self.newlist) != 0:
-                self.serversize = w.serversize
-                self.inboxsize = w.inboxsize
-                self.getControl(81).setLabel(self.getsizelabel(self.serversize))
-                self.getControl(82).setLabel(self.getsizelabel(self.inboxsize))                 
-                self.updatelist()
-            del w
-        except:traceback.print_exc()
-
-    def deletemail(self, pos, setting):
-        try:
-            w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
-            w.deletemail(pos,setting)
+        w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
+        w.checkemail()
+        self.newlist = w.newlist
+        self.servsize = w.serversize
+        self.inboxsize = w.inboxsize
+        if len(self.newlist) != 0:
             self.serversize = w.serversize
             self.inboxsize = w.inboxsize
-            self.getControl(81).setLabel(self.getsizelabel(self.serversize))
-            if self.inboxsize != 0:
-                self.getControl(82).setLabel(self.getsizelabel(self.inboxsize))
-            else:self.setinboxempty()                
-            del w
+            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
+            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))                 
+            self.updatelist()
+        del w
+
+    def deletemail(self, pos, setting):
+        w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
+        w.deletemail(pos,setting)
+        self.serversize = w.serversize
+        self.inboxsize = w.inboxsize
+        if self.serversize != 0:
+            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
+        else:self.getControl(81).setLabel(self.language(257) + self.language(259))
+        if self.inboxsize != 0:
+            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
+        else:
+            self.getControl(82).setLabel(self.language(258) + self.language(259))
+            self.setinboxempty()                
+        del w
+        if setting != 1:
             self.removeItem(pos)
-        except:traceback.print_exc()
+            self.emaillist.pop(pos)
 
 
     def setinboxempty(self):
         self.getControl(82).setLabel("")
-        self.addItem("Inbox Empty")
+        self.addItem(self.language(256))
         self.iboxempty = True
         self.getControl(50).setEnabled(False)
         self.setFocusId(61)
@@ -132,7 +150,6 @@ class GUI( xbmcgui.WindowXML ):
             for line in f.readlines():
                 theline = line.strip("\n")
                 myline = theline.split("|")
-                print "myline = " + str(myline)
                 if myline[1] == "Account Name":
                     accountname = myline[2]
                     popname = myline[3]
@@ -142,16 +159,21 @@ class GUI( xbmcgui.WindowXML ):
                         self.buildemlist()
                         return
                 elif myline[1] == "Server Size":
-                    self.getControl(81).setLabel(self.getsizelabel(int(myline[2])))
+                    if int(myline[2]) != 0:
+                        self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])))
+                    else:self.getControl(81).setLabel(self.language(257) + self.language(259))
                 elif myline[1] == "Inbox Size":
-                    self.getControl(82).setLabel(self.getsizelabel(int(myline[2])))
+                    if int(myline[2]) != 0:
+                        self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2])))
+                    else:
+                        self.setinboxempty()
+                        self.getControl(82).setLabel(self.language(258) + self.language(259))
+                        return
                 else:
                     if myline[0] != "-":
                         self.list.append(theline)
             f.close()
-            if len(self.list) == 0:
-                self.addItem("Inbox Empty")
-                self.getControl(50).setEnabled(False)
+            if len(self.list) == 0:self.setinboxempty()
             else:self.createlist()
 
     def removefiles(self,mydir):
@@ -163,13 +185,10 @@ class GUI( xbmcgui.WindowXML ):
         if size >= 1024:
             size = size/1024.0
             sizeext = "KB"
-            self.xbsizeb = size
             if size >= 1024:
                 size = size/1024.0
                 sizeext = "MB"
-        else:
-            self.xbsizeb = 0
-            sizeext = "bytes"
+        else:sizeext = "bytes"
         return "%.1f %s" % (size,  sizeext)  
    
     def updatelist(self):
@@ -181,11 +200,15 @@ class GUI( xbmcgui.WindowXML ):
         self.dialog.create(self.language(210) + self.inbox, self.language(254))
         for i,item in enumerate(self.newlist):
             self.dialog.update((i*100)/len(self.newlist),self.language(254),"")
-            f = open(self.ibfolder + item + ".sss", "r")
-            myemail = email.message_from_string(f.read())
-            self.emaillist.insert(0,myemail)
+            f = open(self.ibfolder + item.split("|")[0] + ".sss", "r")
+            myfile = f.read()
+            myemail = email.message_from_string(myfile.split("|")[1])
+            self.emaillist.insert(0,myfile.split("|")[1] + "|" + item.split("|")[0] + "|" + item.split("|")[1])
             f.close()
-            self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),"XBnewemailnotread.png","XBnewemailnotread.png"),0)
+            attachstatus = item.split("|")[1]
+            if attachstatus == "0":icon = "XBnewemailnotread.png"
+            else:icon="XBnewattachemailnotread.png"
+            self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),icon,icon),0)
         self.dialog.close()
 
     def createlist(self):
@@ -197,22 +220,32 @@ class GUI( xbmcgui.WindowXML ):
             self.dialog.update((i*100)/len(self.list),self.language(253),"")
             myitem = item.split("|")
             f = open(self.ibfolder + myitem[2] + ".sss", "r")
-            myemail = email.message_from_string(f.read())
-            self.emaillist.insert(0,myemail)
+            myfile = f.read()
+            myemail = email.message_from_string(myfile.split("|")[1])
+            self.emaillist.insert(0,myfile.split("|")[1] + "|" + myitem[2] + "|" + myitem[3])
             f.close()
-            self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),"XBemailnotread.png","XBemailnotread.png"),0)
+            readstatus = myfile.split("|")[0]
+            attachstatus = myitem[3]
+            if readstatus == "0" and attachstatus == "0":icon="XBemailnotread.png"
+            if readstatus == "0" and attachstatus == "1":icon="XBemailnotreadattach.png"
+            if readstatus == "1" and attachstatus == "0":icon="XBemailread.png"
+            if readstatus == "1" and attachstatus == "1":icon="XBemailreadattach.png"
+            self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),icon,icon),0)
         self.dialog.close()
-
+    
     def parsesubject(self, subject):
         if subject == "":
             return self.language(255)
         else:return subject
 
+                
+                
+
 class html2txt(SGMLParser):
     def reset(self):
         SGMLParser.reset(self)
         self.pieces = []
-
+        
     def handle_data(self, text):
         self.pieces.append(text)
 
