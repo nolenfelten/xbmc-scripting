@@ -69,10 +69,9 @@ class GUI( xbmcgui.WindowXML ):
         ##Enable once we figure out why it crashes sometimes#################################
         ##self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
         ######################################################################
-        
-        
         ##self.Timer = None
         self._get_settings()
+        self._get_custom_sql()
         
     def onInit( self ):
         if ( self.startup ):
@@ -99,6 +98,9 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_settings( self ):
         self.settings = Settings().get_settings()
+
+    def _get_custom_sql( self ):
+        self.search_sql = get_custom_sql()
 
     def _set_video_resolution( self, default=False ):
         """
@@ -170,7 +172,10 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == NO_TRAILER_URLS ):
                 sql = self.query[ "no_trailer_urls" ]
                 params = ( "[]", )
-            elif ( category_id == SEARCH_QUERY ):
+            elif ( category_id == WATCHED ):
+                sql = self.query[ "watched" ]
+                params = ( 0, )
+            elif ( category_id == CUSTOM_SEARCH ):
                 sql = self.search_sql
                 params = None
             elif ( list_category == 1 ):
@@ -292,8 +297,10 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 160 )
         elif ( self.category_id == NO_TRAILER_URLS ):
             category = _( 161 )
-        elif ( self.category_id == SEARCH_QUERY ):
+        elif ( self.category_id == CUSTOM_SEARCH ):
             category = _( 162 )
+        elif ( self.category_id == WATCHED ):
+            category = _( 163 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -516,7 +523,7 @@ class GUI( xbmcgui.WindowXML ):
         s.doModal()
         if ( s.query ):
             self.search_sql = s.query
-        self.setCategory( SEARCH_QUERY, 1 )
+            self.setCategory( CUSTOM_SEARCH, 1 )
         del s
 
     def changeSettings( self ):
@@ -547,6 +554,10 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( 100 ).setLabel( _( 160 ) )
         elif ( self.settings[ "shortcut1" ] == NO_TRAILER_URLS ):
             self.getControl( 100 ).setLabel( _( 161 ) )
+        elif ( self.settings[ "shortcut1" ] == CUSTOM_SEARCH ):
+            self.getControl( 100 ).setLabel( _( 162 ) )
+        elif ( self.settings[ "shortcut1" ] == WATCHED ):
+            self.getControl( 100 ).setLabel( _( 163 ) )
         else:
             self.getControl( 100 ).setLabel( str( self.genres[ self.settings[ "shortcut1" ] ].title ) )
         if ( self.settings[ "shortcut2" ] == FAVORITES ):
@@ -556,7 +567,11 @@ class GUI( xbmcgui.WindowXML ):
         elif ( self.settings[ "shortcut2" ] == HD_TRAILERS ):
             self.getControl( 101 ).setLabel( _( 160 ) )
         elif ( self.settings[ "shortcut2" ] == NO_TRAILER_URLS ):
-            self.getControl( 100 ).setLabel( _( 161 ) )
+            self.getControl( 101 ).setLabel( _( 161 ) )
+        elif ( self.settings[ "shortcut2" ] == CUSTOM_SEARCH ):
+            self.getControl( 101 ).setLabel( _( 162 ) )
+        elif ( self.settings[ "shortcut2" ] == WATCHED ):
+            self.getControl( 101 ).setLabel( _( 163 ) )
         else:
             self.getControl( 101 ).setLabel( str( self.genres[ self.settings[ "shortcut2" ] ].title ) )
         if ( self.settings[ "shortcut3" ] == FAVORITES ):
@@ -566,7 +581,11 @@ class GUI( xbmcgui.WindowXML ):
         elif ( self.settings[ "shortcut3" ] == HD_TRAILERS ):
             self.getControl( 102 ).setLabel( _( 160 ) )
         elif ( self.settings[ "shortcut3" ] == NO_TRAILER_URLS ):
-            self.getControl( 100 ).setLabel( _( 161 ) )
+            self.getControl( 102 ).setLabel( _( 161 ) )
+        elif ( self.settings[ "shortcut3" ] == CUSTOM_SEARCH ):
+            self.getControl( 102 ).setLabel( _( 162 ) )
+        elif ( self.settings[ "shortcut3" ] == WATCHED ):
+            self.getControl( 102 ).setLabel( _( 163 ) )
         else:
             self.getControl( 102 ).setLabel( str( self.genres[ self.settings[ "shortcut3" ] ].title ) )
 
