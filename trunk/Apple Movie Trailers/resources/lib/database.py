@@ -386,6 +386,7 @@ class Query( dict ):
 
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
+        self[ "watched" ]						= "SELECT * FROM movies WHERE times_watched>? ORDER BY title;"
 
         self[ "hd_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE ? ORDER BY title;"
         self[ "no_trailer_urls" ]				= "SELECT * FROM movies WHERE (trailer_urls=? OR trailer_urls IS NULL) AND poster IS NOT NULL ORDER BY title;"

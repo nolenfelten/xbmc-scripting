@@ -26,7 +26,8 @@ FAVORITES = -6
 DOWNLOADED = -7
 HD_TRAILERS = -8
 NO_TRAILER_URLS = -9
-SEARCH_QUERY = -99
+WATCHED = -10
+CUSTOM_SEARCH = -99
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
@@ -84,6 +85,25 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
 def LOG( status, format, *args ):
     if ( DEBUG_MODE >= status ):
         xbmc.output( "%s: %s\n" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
+
+def get_custom_sql():
+    try:
+        query = ""
+        file_object = open( os.path.join( BASE_DATA_PATH, "custom.sql" ), "r" )
+        query = file_object.read()
+        file_object.close()
+    except: pass
+    return query
+
+def save_custom_sql( query ):
+    try:
+        file_object = open( os.path.join( BASE_DATA_PATH, "custom.sql" ), "w" )
+        file_object.write( query )
+        file_object.close()
+        return True
+    except:
+        return False
+
 
 class Settings:
     """ Settings class """

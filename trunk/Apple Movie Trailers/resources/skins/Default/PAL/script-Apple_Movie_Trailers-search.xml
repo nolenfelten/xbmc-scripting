@@ -23,7 +23,7 @@
 			<posy>-15</posy>
 			<width>560</width>
 			<height>560</height>
-			<texture>default-background-settings_16x9.png</texture>
+			<texture border="10">default-background-settings_16x9.png</texture>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="20">
@@ -58,7 +58,7 @@
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Genre</label>
+                <label> </label>
             </control>
             <control type="list" id="100">
                 <posx>10</posx>
@@ -169,7 +169,7 @@
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Studio</label>
+                <label> </label>
             </control>
             <control type="list" id="110">
                 <posx>190</posx>
@@ -280,7 +280,7 @@
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Actor</label>
+                <label> </label>
             </control>
             <control type="list" id="120">
                 <posx>370</posx>
@@ -391,7 +391,7 @@
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Rating</label>
+                <label> </label>
             </control>
             <control type="list" id="130">
                 <posx>10</posx>
@@ -502,7 +502,7 @@
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Trailer Quality</label>
+                <label> </label>
             </control>
             <control type="list" id="140">
                 <posx>190</posx>
@@ -606,14 +606,14 @@
             </control>
 
             <control type="label" id="152">
-                <description>Actor Label</description>
+                <description>Extra settings</description>
                 <posx>380</posx>
                 <posy>200</posy>
                 <width>150</width>
                 <align>left</align>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label>Extra settings</label>
+                <label> </label>
             </control>
             <control type="list" id="150">
                 <posx>370</posx>
@@ -784,7 +784,7 @@
 			<description>SQL run Label</description>
 			<posx>0</posx>
 			<posy>120</posy>
-			<width>300</width>
+			<width>400</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
@@ -837,7 +837,7 @@
 				<ondown>257</ondown>
 			</control>
 			<control type="button" id="257">
-				<description>Create Button</description>
+				<description>Save Button</description>
 				<posx>0</posx>
 				<posy>70</posy>
 				<width>90</width>
@@ -856,7 +856,7 @@
 				<ondown>258</ondown>
 			</control>
 			<control type="button" id="258">
-				<description>Save Button</description>
+				<description>Clear/Load Button</description>
 				<posx>0</posx>
 				<posy>105</posy>
 				<width>90</width>

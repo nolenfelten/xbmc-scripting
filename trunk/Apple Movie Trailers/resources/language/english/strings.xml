@@ -59,6 +59,7 @@
     <string id="91">time remaining</string>
     <string id="92">*No rating found</string>
     <string id="93">Number of records returned from search</string>
+    <string id="94">*No search specified</string>
 
     <!-- Buttons -->
     <string id="103">Genre...</string>
@@ -72,6 +73,9 @@
     <string id="113">Genre</string>
     <string id="114">Studio</string>
     <string id="115">Actor</string>
+    <string id="116">Rating</string>
+    <string id="117">Trailer Quality</string>
+    <string id="118">Extra Settings</string>
 
     <string id="150">Newest</string>
     <string id="151">Exclusives</string>
@@ -86,6 +90,7 @@
     <string id="160">HD Trailers</string>
     <string id="161">No Trailer Urls</string>
     <string id="162">Custom Search</string>
+    <string id="163">Watched</string>
 
     <!-- Settings labels -->
     <string id="200">Choose:</string>
@@ -135,12 +140,14 @@
     <string id="256">Later</string>
 
     <!-- Search buttons -->
-    <string id="257">Test SQL</string>
-    <string id="258">Save SQL</string>
+    <string id="257">Save SQL</string>
+    <string id="258">Clear SQL</string>
+    <string id="259">Load SQL</string>
 
     <string id="2150">Search incomplete records</string>
     <string id="2151">Search only favorites</string>
     <string id="2152">Search only saved</string>
+    <string id="2153">Search only watched</string>
 
     <!-- Plot/Cast Error Information -->
     <string id="400">*No plot could be retrieved for this title.</string>
