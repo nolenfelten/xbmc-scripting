@@ -24,20 +24,16 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
-        try:
-            xbmcgui.lock()
-            self.loadsettings()
-            self.setupvars()
-            self.setupcontrols()
-            xbmcgui.unlock()
-            self.buildemlist()
-        except:traceback.print_exc()
+        xbmcgui.lock()
+        self.loadsettings()
+        self.setupvars()
+        self.setupcontrols()
+        xbmcgui.unlock()
+        self.reademid()
         
     def setupvars(self):
-        self.emaillist = []
+        self.guilist = []
         self.control_action = XinBox_Util.setControllerAction()
-        self.iboxempty = True
-        self.readstatus = []
         if self.ibsettings.getSetting("SERV Inbox Size") != "0":
             self.theservsize = int(self.ibsettings.getSetting("SERV Inbox Size"))
         else:self.theservsize = False
@@ -72,7 +68,7 @@ class GUI( xbmcgui.WindowXML ):
             self.printEmail(self.getCurrentListPosition())
 
     def printEmail(self, selected):
-        myemail = email.message_from_string(self.emaillist[selected].split("|")[0])
+        myemail = self.guilist[selected][1]
         if myemail.is_multipart():
             for part in myemail.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
@@ -82,14 +78,14 @@ class GUI( xbmcgui.WindowXML ):
 
     def openemail(self, pos):
         #open dialog here
-        item = self.emaillist[pos]
-        f = open(self.ibfolder + item.split("|")[1] + ".sss", "r")
+        item = self.guilist[pos]
+        f = open(self.ibfolder + item[0] + ".sss", "r")
         myfile = f.read().split("|")[1]
         f.close()
-        f = open(self.ibfolder + item.split("|")[1] + ".sss", "w")
+        f = open(self.ibfolder + item[0] + ".sss", "w")
         f.write("1|" + myfile)
         f.close()
-        if item.split("|")[2] == "0":icon = "XBemailread.png"
+        if item[2] == 0:icon = "XBemailread.png"
         else:icon = "XBemailreadattach.png"
         self.getListItem(pos).setThumbnailImage(icon)
     
@@ -110,113 +106,39 @@ class GUI( xbmcgui.WindowXML ):
     def checkfornew(self):
         w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
         w.checkemail()
-        self.newlist = w.newlist
+        newlist = w.newlist
         self.servsize = w.serversize
         self.inboxsize = w.inboxsize
-        if len(self.newlist) != 0:
-            self.serversize = w.serversize
-            self.inboxsize = w.inboxsize
-            if self.theservsize == False:
-                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
-            else:
-                self.getControl(81).setEnabled(self.checksize(int(self.serversize),self.theservsize))
-                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(self.serversize)) + "/" + str(self.theservsize) +"MB")
-            if self.ibxsize == False:
-                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
-            else:
-                self.getControl(82).setEnabled(self.checksize(int(self.inboxsize),self.ibxsize))
-                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")                
-            self.updatelist()
         del w
+        if len(newlist) != 0:
+            self.updatelist(newlist)
+                
 
     def deletemail(self, pos, setting):
         w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
         w.deletemail(pos,setting)
         self.serversize = w.serversize
-        self.inboxsize = w.inboxsize
-        if self.serversize != 0:
-            if self.theservsize == False:
-                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
-            else:
-                self.getControl(81).setEnabled(self.checksize(int(self.serversize),self.theservsize))
-                self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(self.serversize)) + "/" + str(self.theservsize) +"MB")
-        else:
-            if self.theservsize == False:
-                self.getControl(81).setLabel(self.language(257) + self.language(259))
-            else:self.getControl(81).setLabel(self.language(257) + self.language(259)+ "/" + str(self.theservsize)+"MB")
-        if self.inboxsize != 0:
-            if self.ibxsize == False:
-                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
-            else:
-                self.getControl(82).setEnabled(self.checksize(int(self.inboxsize),self.ibxsize))
-                self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")                
-        else:
-            if self.ibxsize == False:
-                self.getControl(82).setLabel(self.language(258) + self.language(259))
-            else:self.getControl(82).setLabel(self.language(258) + self.language(259) + "/" + str(self.ibxsize) + "MB")
-            self.setinboxempty()                
+        self.inboxsize = w.inboxsize                
         del w
         if setting != 1:
             self.removeItem(pos)
-            self.emaillist.pop(pos)
+            self.guilist.pop(pos)
+            if len(self.guilist) != 0:
+                self.printEmail(self.getCurrentListPosition())
+            else:self.setinboxempty()
+
+    def setinboxnotemtpy(self):
+        self.getControl(50).setEnabled(True)
+        self.clearList()
+        self.setFocusId(50)
 
 
     def setinboxempty(self):
-        self.getControl(82).setLabel("")
         self.addItem(self.language(256))
-        self.iboxempty = True
         self.getControl(50).setEnabled(False)
         self.setFocusId(61)
         self.getControl(67).setText("")
 
-    def buildemlist(self):
-        if not exists(self.ibfolder + "emid.xib"):
-            self.setinboxempty()
-            return
-        else:
-            self.list = []
-            f = open(self.ibfolder + "emid.xib", "r")
-            for line in f.readlines():
-                theline = line.strip("\n")
-                myline = theline.split("|")
-                if myline[1] == "Account Name":
-                    accountname = myline[2]
-                    popname = myline[3]
-                    if accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
-                        f.close()
-                        self.removefiles(self.ibfolder)
-                        self.buildemlist()
-                        return
-                elif myline[1] == "Server Size":
-                    if int(myline[2]) != 0:
-                        if self.theservsize == False:
-                            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])))
-                        else:
-                            self.getControl(81).setEnabled(self.checksize(int(myline[2]),self.theservsize))
-                            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(myline[2])) + "/" + str(self.theservsize) +"MB")
-                    else:
-                        if self.theservsize == False:
-                            self.getControl(81).setLabel(self.language(257) + self.language(259))
-                        else:self.getControl(81).setLabel(self.language(257) + self.language(259)+ "/" + str(self.theservsize)+"MB")
-                elif myline[1] == "Inbox Size":
-                    if int(myline[2]) != 0:
-                        if self.ibxsize == False:
-                            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2])))
-                        else:
-                            self.getControl(82).setEnabled(self.checksize(int(myline[2]),self.ibxsize))
-                            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(myline[2]))+ "/" + str(self.ibxsize) + "MB")
-                    else:
-                        self.setinboxempty()
-                        if self.ibxsize == False:
-                            self.getControl(82).setLabel(self.language(258) + self.language(259))
-                        else:self.getControl(82).setLabel(self.language(258) + self.language(259) + "/" + str(self.ibxsize) + "MB")
-                        return
-                else:
-                    if myline[0] != "-":
-                        self.list.append(theline)
-            f.close()
-            if len(self.list) == 0:self.setinboxempty()
-            else:self.createlist()
 
     def checksize(self,currsize, limit):
         limbytes = float(limit*1048576)
@@ -224,8 +146,6 @@ class GUI( xbmcgui.WindowXML ):
             return False
         else:return True
                                             
-                
-
     def removefiles(self,mydir):
         for root, dirs, files in os.walk(mydir, topdown=False):
             for name in files:
@@ -241,56 +161,79 @@ class GUI( xbmcgui.WindowXML ):
         else:sizeext = "bytes"
         return "%.1f %s" % (size,  sizeext)  
    
-    def updatelist(self):
-        if self.iboxempty:
-            self.iboxempty = False
-            self.getControl(50).setEnabled(True)
-            self.clearList()
-        self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create(self.language(210) + self.inbox, self.language(254))
-        for i,item in enumerate(self.newlist):
-            self.dialog.update((i*100)/len(self.newlist),self.language(254),"")
-            f = open(self.ibfolder + item.split("|")[0] + ".sss", "r")
+    def updatelist(self, newlist):
+        dialog = xbmcgui.DialogProgress()
+        dialog.create(self.language(210) + self.inbox, self.language(254))
+        if len(self.guilist) == 0: self.setinboxnotemtpy()
+        for i,item in enumerate(newlist):
+            dialog.update((i*100)/len(newlist),self.language(254),"")
+            f = open(self.ibfolder + item[0] + ".sss", "r")
             myfile = f.read()
-            myemail = email.message_from_string(myfile.split("|")[1])
-            self.emaillist.insert(0,myfile.split("|")[1] + "|" + item.split("|")[0] + "|" + item.split("|")[1])
             f.close()
-            attachstatus = item.split("|")[1]
-            if attachstatus == "0":icon = "XBnewemailnotread.png"
+            myemail = email.message_from_string(myfile.split("|")[1])
+            readstatus = int(myfile.split("|")[0])
+            self.guilist.insert(0,[item[0],myemail,item[1],readstatus,item[2],item[3]])
+            if item[1] == 0:icon="XBnewemailnotread.png"
             else:icon="XBnewattachemailnotread.png"
-            self.addItem(xbmcgui.ListItem(myemail.get('subject'),myemail.get('From'),icon,icon),0)
-        self.dialog.close()
-
-    def createlist(self):
-        self.iboxempty = False
-        self.getControl(50).setEnabled(True)
-        self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create(self.language(210) + self.inbox, self.language(253))
-        for i,item in enumerate(self.list):
-            self.dialog.update((i*100)/len(self.list),self.language(253),"")
-            myitem = item.split("|")
-            f = open(self.ibfolder + myitem[2] + ".sss", "r")
-            myfile = f.read()
-            myemail = email.message_from_string(myfile.split("|")[1])
-            self.emaillist.insert(0,myfile.split("|")[1] + "|" + myitem[2] + "|" + myitem[3])
-            f.close()
-            readstatus = myfile.split("|")[0]
-            attachstatus = myitem[3]
-            if readstatus == "0" and attachstatus == "0":icon="XBemailnotread.png"
-            if readstatus == "0" and attachstatus == "1":icon="XBemailnotreadattach.png"
-            if readstatus == "1" and attachstatus == "0":icon="XBemailread.png"
-            if readstatus == "1" and attachstatus == "1":icon="XBemailreadattach.png"
             self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),icon,icon),0)
-        self.dialog.close()
-    
+        dialog.close()
+
+    def geticon(self,attstat, readstat):
+        if attstat == 0 and readstat == 0:return "XBemailnotread.png"
+        elif attstat == 0 and readstat == 1:return "XBemailread.png"
+        elif attstat == 1 and readstat == 0:return "XBemailnotreadattach.png"
+        elif attstat == 1 and readstat == 1:return "XBemailreadattach.png"        
+  
     def parsesubject(self, subject):
         if subject == "":
             return self.language(255)
         else:return subject
 
-                
-                
+    def reademid(self):
+        if not exists(self.ibfolder + "emid.xib"):
+            self.setinboxempty()
+            return
+        dialog = xbmcgui.DialogProgress()
+        dialog.create(self.language(210) + self.inbox, self.language(253))
+        f = open(self.ibfolder + "emid.xib", "r")
+        lines = f.readlines()
+        f.close()
+        for i,line in enumerate(lines):
+            dialog.update((i*100)/len(lines),self.language(253),"")
+            theline = line.strip("\n")
+            myline = theline.split("|")
+            if myline[1] == "Account Name":self.accountname = myline[2]
+            elif myline[1] == "Server Size":self.serversize = myline[2]
+            elif myline[1] == "Inbox Size":self.inboxsize = myline[2]
+            else:
+                if myline[0] != "-":
+                    f = open(self.ibfolder + myline[2] + ".sss", "r")
+                    myfile = f.read()
+                    f.close()
+                    myemail = email.message_from_string(myfile.split("|")[1])
+                    readstatus = int(myfile.split("|")[0])
+                    attachstat = int(myline[3])
+                                        #"sssfilenam,  email,   attachstat,   readstat,    time,   date
+                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5]])
+                    icon=self.geticon(attachstat,readstatus)
+                    self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),icon,icon),0)
+        if len(self.guilist) == 0:self.setinboxempty()
+        dialog.close()
 
+    def checkifonserv(self,pos):
+        f = open(self.ibfolder + "emid.xib", "r")
+        for line in f.readlines():
+            theline = line.strip("\n")
+            myline = theline.split("|")
+            if myline[1] != "Account Name" and myline[1] != "Server Size" and myline[1] != "Inbox Size":
+                if int(myline[0]) == pos:
+                    if myline[1] == "-":
+                        f.close()
+                        return False
+                    else:
+                        f.close()
+                        return True
+                 
 class html2txt(SGMLParser):
     def reset(self):
         SGMLParser.reset(self)
