@@ -152,6 +152,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
             self.getControl( 231 ).setSelected( self.settings[ "refresh_newest" ] )
             self.getControl( 232 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 233 ).setSelected( self.settings[ "use_simple_search" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -245,6 +246,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
             self._set_controls_values()
+
+    def _change_setting13( self ):
+        """ changes settings #13 """
+        self.settings[ "use_simple_search" ] = not self.settings[ "use_simple_search" ]
+        self._set_controls_values()
+
 
 ##### End of unique defs ######################################################
     
