@@ -106,9 +106,10 @@
     <string id="210">Shortcut #3</string>
     <string id="211">Refresh newest at startup</string>
     <string id="212">Video player resolution</string>
-    <string id="213">Zip code</string>
-    <string id="214">Check version at startup</string>
-    <string id="215">Showtimes scraper</string>
+    <string id="213">Use simple search</string>
+    <string id="214">Zip code</string>
+    <string id="215">Check version at startup</string>
+    <string id="216">Showtimes scraper</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>

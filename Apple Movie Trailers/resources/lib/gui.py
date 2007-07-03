@@ -517,14 +517,41 @@ class GUI( xbmcgui.WindowXML ):
             LOG( LOG_ERROR, "%s (ver: %s) [%s]", __scriptname__, __version__, "GUI::markAsWatched" )
 
     def perform_search( self ):
-        import search
-        force_fallback = self.skin != "Default"
-        s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
-        s.doModal()
-        if ( s.query ):
-            self.search_sql = s.query
+        self.search_sql = ""
+        if ( self.settings[ "use_simple_search" ] ):
+            keyword = get_keyboard()
+            xbmc.sleep(10)
+            if ( keyword ):
+                self.search_sql = """SELECT DISTINCT movies.*
+                                            FROM movies
+                                            JOIN actor_link_movie
+                                            ON movies.idMovie=actor_link_movie.idMovie
+                                            JOIN actors
+                                            ON actor_link_movie.idActor=actors.idActor
+                                            JOIN studio_link_movie
+                                            ON movies.idMovie=studio_link_movie.idMovie
+                                            JOIN studios
+                                            ON studio_link_movie.idStudio=studios.idStudio
+                                            JOIN genre_link_movie
+                                            ON movies.idMovie=genre_link_movie.idMovie
+                                            JOIN genres
+                                            ON genre_link_movie.idGenre=genres.idGenre
+                                            WHERE upper(title) like '%%%s%%'
+                                            or upper(plot) like '%%%s%%'
+                                            or upper(actor) like '%%%s%%'
+                                            or upper(studio) like '%%%s%%'
+                                            or upper(genre) like '%%%s%%'
+                                            order by title;""" % ( keyword.upper(), keyword.upper(), keyword.upper(), keyword.upper(), keyword.upper(), )
+        else:
+            import search
+            force_fallback = self.skin != "Default"
+            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+            s.doModal()
+            if ( s.query ):
+                self.search_sql = s.query
+            del s
+        if ( self.search_sql ):
             self.setCategory( CUSTOM_SEARCH, 1 )
-        del s
 
     def changeSettings( self ):
         import settings

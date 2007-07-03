@@ -91,7 +91,7 @@
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
 					<onright>2000</onright>
-					<onup>212</onup>
+					<onup>213</onup>
 					<ondown>202</ondown>
 				</control>
 				<control type="button" id="221">
@@ -545,7 +545,7 @@
 					<onleft>2000</onleft>
 					<onright>2000</onright>
 					<onup>211</onup>
-					<ondown>201</ondown>
+					<ondown>213</ondown>
 				</control>
 				<control type="button" id="232">
 					<description>Setting12 Value</description>
@@ -563,6 +563,48 @@
 					<texturenofocus>-</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
+				</control>
+			</control>
+			<control type="group">
+				<height>30</height>
+				<control type="button" id="213">
+					<description>Setting13 Button</description>
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>30</height>
+					<align>left</align>
+					<aligny>center</aligny>
+					<label>-</label>
+					<font>font13</font>
+					<textcolor>ffffffff</textcolor>
+					<textoffsetx>10</textoffsetx>
+					<texturefocus>default-input-focus.png</texturefocus>
+					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<disabledcolor>60d0d0d0</disabledcolor>
+					<shadowcolor>ff000000</shadowcolor>
+					<onleft>2000</onleft>
+					<onright>2000</onright>
+					<onup>212</onup>
+					<ondown>201</ondown>
+				</control>
+				<control type="checkmark" id="233">
+					<description>Setting13 Value</description>
+					<posx>350</posx>
+					<posy>5</posy>
+					<width>50</width>
+					<height>30</height>
+					<align>left</align>
+					<label>-</label>
+					<font>font13</font>
+                    <textcolor>DDced8da</textcolor>
+                    <colordiffuse>DDced8da</colordiffuse>
+					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<markwidth>16</markwidth>
+					<markheight>20</markheight>
+					<disabledcolor>00d0d0d0</disabledcolor>
+					<shadowcolor>00000000</shadowcolor>
 				</control>
 			</control>
 		</control>
