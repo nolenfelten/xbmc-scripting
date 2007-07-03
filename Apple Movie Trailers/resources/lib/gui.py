@@ -522,26 +522,16 @@ class GUI( xbmcgui.WindowXML ):
             keyword = get_keyboard()
             xbmc.sleep(10)
             if ( keyword ):
-                self.search_sql = """SELECT DISTINCT movies.*
-                                            FROM movies
-                                            JOIN actor_link_movie
-                                            ON movies.idMovie=actor_link_movie.idMovie
-                                            JOIN actors
-                                            ON actor_link_movie.idActor=actors.idActor
-                                            JOIN studio_link_movie
-                                            ON movies.idMovie=studio_link_movie.idMovie
-                                            JOIN studios
-                                            ON studio_link_movie.idStudio=studios.idStudio
-                                            JOIN genre_link_movie
-                                            ON movies.idMovie=genre_link_movie.idMovie
-                                            JOIN genres
-                                            ON genre_link_movie.idGenre=genres.idGenre
-                                            WHERE upper(title) like '%%%s%%'
-                                            or upper(plot) like '%%%s%%'
-                                            or upper(actor) like '%%%s%%'
-                                            or upper(studio) like '%%%s%%'
-                                            or upper(genre) like '%%%s%%'
-                                            order by title;""" % ( keyword.upper(), keyword.upper(), keyword.upper(), keyword.upper(), keyword.upper(), )
+                kwords = keyword.split()
+                where = title = plot = actor = studio = genre = ""
+                for word in kwords:
+                    title += "upper(title) like '%%%s%%' OR " % ( word, )
+                    plot += "upper(plot) like '%%%s%%' OR " % ( word, )
+                    actor += "upper(actor) like '%%%s%%' OR " % ( word, )
+                    studio += "upper(studio) like '%%%s%%' OR " % ( word, )
+                    genre += "upper(genre) like '%%%s%%' OR " % ( word, )
+                where = title + plot + actor + studio + genre[ : -4 ]
+                self.search_sql = self.query[ "simple_search" ] % ( where, )
         else:
             import search
             force_fallback = self.skin != "Default"
