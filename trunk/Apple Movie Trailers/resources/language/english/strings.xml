@@ -60,6 +60,7 @@
     <string id="92">*No rating found</string>
     <string id="93">Number of records returned from search</string>
     <string id="94">*No search specified</string>
+    <string id="95">Enter keywords: separate words with and/or</string>
 
     <!-- Buttons -->
     <string id="103">Genre...</string>
@@ -105,11 +106,12 @@
     <string id="209">Shortcut #2</string>
     <string id="210">Shortcut #3</string>
     <string id="211">Refresh newest at startup</string>
-    <string id="212">Video player resolution</string>
-    <string id="213">Use simple search</string>
-    <string id="214">Zip code</string>
-    <string id="215">Check version at startup</string>
-    <string id="216">Showtimes scraper</string>
+    <string id="212">Use simple search</string>
+    <string id="213">Match whole words only</string>
+    <string id="214">Video player resolution</string>
+    <string id="215">Zip code</string>
+    <string id="216">Check version at startup</string>
+    <string id="217">Showtimes scraper</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
