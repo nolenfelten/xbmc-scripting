@@ -365,7 +365,7 @@ class Query( dict ):
 
         self[ "movies_by_genre_name" ]	= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.genre=? ORDER BY movies.title;"
         self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
-        self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND upper(actors.actor) LIKE ? ORDER BY movies.title;"
+        self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND actors.actor LIKE ? ORDER BY movies.title;"
 
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
@@ -404,4 +404,4 @@ class Query( dict ):
                                                         ON movies.idMovie=genre_link_movie.idMovie
                                                         JOIN genres
                                                         ON genre_link_movie.idGenre=genres.idGenre
-                                                        WHERE %s order by title;""" 
+                                                        WHERE %s ORDER BY title;""" 

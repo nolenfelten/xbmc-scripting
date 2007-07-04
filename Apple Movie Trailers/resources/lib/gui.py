@@ -127,6 +127,7 @@ class GUI( xbmcgui.WindowXML ):
         ##self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         self.update_method = 0
         #self.list_control_pos = [ 0, 0, 0, 0 ]
+        self.search_keywords = ""
 
     # dummy() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
     # it calls myPlayerChanged() immediately.
@@ -188,9 +189,9 @@ class GUI( xbmcgui.WindowXML ):
                 sql = self.query[ "movies_by_actor_name" ]
                 names = self.actor.split( " " )[:2]
                 if ( len( names ) == 1 ):
-                    params = ( "%%%s%%" % ( names[0].upper(), ), )
+                    params = ( "%%%s%%" % ( names[0], ), )
                 else:
-                    params = ( "%%%s %s%%" % ( names[0].upper(), names[1].upper(), ), )
+                    params = ( "%%%s %s%%" % ( names[0], names[1], ), )
             self.current_display = [ self.current_display[ 0 ], [ category_id, list_category ] ]
             self.showTrailers( sql, params )
         else:
@@ -320,6 +321,7 @@ class GUI( xbmcgui.WindowXML ):
         return pos
     
     def clearTrailerInfo( self ):
+        #self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
         #self.getControl( CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
         # Plot
@@ -519,18 +521,31 @@ class GUI( xbmcgui.WindowXML ):
     def perform_search( self ):
         self.search_sql = ""
         if ( self.settings[ "use_simple_search" ] ):
-            keyword = get_keyboard()
+            keyword = get_keyboard( default=self.search_keywords, heading= _( 95 ) )
             xbmc.sleep(10)
             if ( keyword ):
-                kwords = keyword.split()
-                where = title = plot = actor = studio = genre = ""
-                for word in kwords:
-                    title += "upper(title) like '%%%s%%' OR " % ( word, )
-                    plot += "upper(plot) like '%%%s%%' OR " % ( word, )
-                    actor += "upper(actor) like '%%%s%%' OR " % ( word, )
-                    studio += "upper(studio) like '%%%s%%' OR " % ( word, )
-                    genre += "upper(genre) like '%%%s%%' OR " % ( word, )
-                where = title + plot + actor + studio + genre[ : -4 ]
+                keywords = keyword.split()
+                self.search_keywords = keyword
+                where = ""
+                compare = False
+                for word in keywords:
+                    if ( word.upper() == "AND" or word.upper() == "OR" ):
+                        where += " %s " % word.upper()
+                        compare = False
+                        continue
+                    elif ( compare ):
+                        where += " AND "
+                        compare = False
+                    if ( self.settings[ "match_whole_words" ] ):
+                        compare = True
+                        where += "(title like '%% %s %%' OR title like '%% %s.%%' OR title like '%% %s,%%' OR title like '%% %s:%%' OR title like '%% %s!%%' OR title like '%% %s-%%' OR title like '%% %s?%%' OR title like '%s %%' OR title like '%s.%%' OR title like '%s,%%' OR title like '%s:%%' OR title like '%s!%%' OR title like '%s-%%' OR title like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
+                        where += "plot like '%% %s %%' OR plot like '%% %s.%%' OR plot like '%% %s,%%' OR plot like '%% %s:%%' OR plot like '%% %s!%%' OR plot like '%% %s-%%' OR plot like '%% %s?%%' OR plot like '%s %%' OR plot like '%s.%%' OR plot like '%s,%%' OR plot like '%s:%%' OR plot like '%s!%%' OR plot like '%s-%%' OR plot like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
+                        where += "actor like '%% %s %%' OR actor like '%% %s.%%' OR actor like '%% %s,%%' OR actor like '%% %s:%%' OR actor like '%% %s!%%' OR actor like '%% %s-%%' OR actor like '%% %s?%%' OR actor like '%s %%' OR actor like '%s.%%' OR actor like '%s,%%' OR actor like '%s:%%' OR actor like '%s!%%' OR actor like '%s-%%' OR actor like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
+                        where += "studio like '%% %s %%' OR studio like '%% %s.%%' OR studio like '%% %s,%%' OR studio like '%% %s:%%' OR studio like '%% %s!%%' OR studio like '%% %s-%%' OR studio like '%% %s?%%' OR studio like '%s %%' OR studio like '%s.%%' OR studio like '%s,%%' OR studio like '%s:%%' OR studio like '%s!%%' OR studio like '%s-%%' OR studio like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
+                        where += "genre like '%% %s %%' OR genre like '%% %s.%%' OR genre like '%% %s,%%' OR genre like '%% %s:%%' OR genre like '%% %s!%%' OR genre like '%% %s-%%' OR genre like '%% %s?%%' OR genre like '%s %%' OR genre like '%s.%%' OR genre like '%s,%%' OR genre like '%s:%%' OR genre like '%s!%%' OR genre like '%s-%%' OR genre like '%s?%%')" % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
+                    else:
+                        compare = True
+                        where += "(title like '%%%s%%' OR plot like '%%%s%%' OR actor like '%%%s%%' OR studio like '%%%s%%' OR genre like '%%%s%%')\n" % ( word, word, word, word, word, )
                 self.search_sql = self.query[ "simple_search" ] % ( where, )
         else:
             import search
