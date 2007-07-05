@@ -60,7 +60,7 @@
     <string id="92">*No rating found</string>
     <string id="93">Number of records returned from search</string>
     <string id="94">*No search specified</string>
-    <string id="95">Enter keywords: separate words with and/or</string>
+    <string id="95">Enter keywords: separate words with and/or/not</string>
 
     <!-- Buttons -->
     <string id="103">Genre...</string>
