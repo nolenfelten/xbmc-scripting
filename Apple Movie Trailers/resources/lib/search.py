@@ -31,7 +31,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
     CONTROL_VERSION_LABEL = 30
     CONTROL_SQL_RESULTS_LABEL = 40
     CONTROL_BUTTONS = ( 250, 251, 257, 258, )
-    
+    CONTROL_LISTS = ( CONTROL_GENRE_LIST, CONTROL_STUDIO_LIST, CONTROL_ACTOR_LIST, CONTROL_RATING_LIST, CONTROL_QUALITY_LIST, CONTROL_EXTRA_LIST, )
+    CONTROL_LISTS_NOT = ( CONTROL_GENRE_LIST + 2, CONTROL_STUDIO_LIST + 2, CONTROL_ACTOR_LIST + 2, CONTROL_RATING_LIST + 2, CONTROL_QUALITY_LIST + 2, CONTROL_EXTRA_LIST + 2, )
+
     def __init__( self, *args, **kwargs ):
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create("Search", "Setting up categories", "Please wait...")
@@ -82,6 +84,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.query_actors = ""
         self.query_ratings = ""
         self.query_qualities = ""
+        self.query_genres_not = False
+        self.query_studios_not = False
+        self.query_actors_not = False
+        self.query_ratings_not = False
+        self.query_qualities_not = False
+        self.query_extras_not = False
         self.query_search_incomplete = ""
         self.query_search_favorites = ""
         self.query_search_saved = ""
@@ -110,46 +118,51 @@ class GUI( xbmcgui.WindowXMLDialog ):
             for count, genre in enumerate( self.genres ):
                 if ( fill ):
                     self.getControl( self.CONTROL_GENRE_LIST ).addItem( genre[ 1 ] )
-                selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query )
+                selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query or "idGenre!=%d\n" % genre[ 0 ] in query or "idGenre!=%d)" % genre[ 0 ] in query )
                 self.getControl( self.CONTROL_GENRE_LIST ).getListItem( count ).select( selected )
+            self.getControl( self.CONTROL_GENRE_LIST + 2 ).setSelected( "idGenre!=" in query )
             for count, studio in enumerate( self.studios ):
                 if ( fill ):
                     self.getControl( self.CONTROL_STUDIO_LIST ).addItem( studio[ 1 ] )
-                selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query )
+                selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query or "idStudio!=%d\n" % studio[ 0 ] in query or "idStudio!=%d)" % studio[ 0 ] in query )
                 self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( count ).select( selected )
+            self.getControl( self.CONTROL_STUDIO_LIST + 2 ).setSelected( "idStudio!=" in query )
             for count, actor in enumerate( self.actors ):
                 if ( fill ):
                     self.getControl( self.CONTROL_ACTOR_LIST ).addItem( actor[ 1 ] )
-                selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query )
+                selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query or "idActor!=%d\n" % actor[ 0 ] in query or "idActor!=%d)" % actor[ 0 ] in query )
                 self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( count ).select( selected )
+            self.getControl( self.CONTROL_ACTOR_LIST + 2 ).setSelected( "idActor!=" in query )
             for count, rating in enumerate( self.ratings ):
                 if ( fill ):
                     self.getControl( self.CONTROL_RATING_LIST ).addItem( rating[ 0 ] )
-                selected =  "rating='%s'" % rating[ 0 ] in query
+                selected = ( "rating='%s'" % rating[ 0 ] in query or "rating!='%s'" % rating[ 0 ] in query )
                 self.getControl( self.CONTROL_RATING_LIST ).getListItem( count ).select( selected )
+            self.getControl( self.CONTROL_RATING_LIST + 2 ).setSelected( "rating!=" in query )
             for count, quality in enumerate( self.quality ):
                 if ( fill ):
                     self.getControl( self.CONTROL_QUALITY_LIST ).addItem( quality )
                 quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ count ]
                 selected = "trailer_urls LIKE '%s'" % quality_text in query
                 self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( count ).select( selected )
-
+            self.getControl( self.CONTROL_QUALITY_LIST + 2 ).setSelected( "NOT (movies.trailer_urls" in query )
             if ( fill ):
                 self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2150 ) )
             selected = ( query != "" and "trailer_urls IS NOT NULL" not in query )
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 0 ).select( selected )
             if ( fill ):
                 self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2151 ) )
-            selected = "favorite=1" in query
+            selected = "movies.favorite" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 1 ).select( selected )
             if ( fill ):
                 self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2152 ) )
-            selected = "saved_location!=''" in query
+            selected = "saved_location" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 2 ).select( selected )
             if ( fill ):
                 self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2153 ) )
-            selected = "times_watched>0" in query
+            selected = "times_watched" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 3 ).select( selected )
+            self.getControl( self.CONTROL_EXTRA_LIST + 2 ).setSelected( "favorite!=" in query or "saved_location=" in query or "times_watched=" in query )
             if ( query ): self._create_sql( force_build=True )
         except: traceback.print_exc()
 
@@ -158,73 +171,79 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _create_sql( self, controlId=-1, force_build=False ):
         # set genre selections
-        if ( controlId == self.CONTROL_GENRE_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_GENRE_LIST, self.CONTROL_GENRE_LIST + 2, ) or force_build ):
             genres = ""
+            self.query_genres_not = self.getControl( self.CONTROL_GENRE_LIST + 2 ).getSelected()
             for pos, genre in enumerate( self.genres ):
                 if ( self.getControl( self.CONTROL_GENRE_LIST ).getListItem( pos ).isSelected() ):
-                    genres += "genre_link_movie.idGenre=%d\n OR " % ( genre[ 0 ], )
+                    genres += "genre_link_movie.idGenre%s=%d\n %s " % ( ( "", "!", )[ self.query_genres_not ], genre[ 0 ], ( "OR", "AND", )[ self.query_genres_not ] )
             if ( genres ):
-                genres = "(genre_link_movie.idMovie=movies.idMovie\n AND (" + genres[ : -5 ] + "))"
+                genres = "(genre_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( genres[ : -5 ], )
             self.query_genres = genres
 
-        if ( controlId == self.CONTROL_STUDIO_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_STUDIO_LIST, self.CONTROL_STUDIO_LIST + 2, ) or force_build ):
             # set studio selections
             studios = ""
+            self.query_studios_not = self.getControl( self.CONTROL_STUDIO_LIST + 2 ).getSelected()
             for pos, studio in enumerate( self.studios ):
                 if ( self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( pos ).isSelected() ):
-                    studios += "studio_link_movie.idStudio=%d\n OR " % ( studio[ 0 ], )
+                    studios += "studio_link_movie.idStudio%s=%d\n %s " % ( ( "", "!", )[ self.query_studios_not ], studio[ 0 ], ( "OR", "AND", )[ self.query_studios_not ] )
             if ( studios ):
-                studios = "(studio_link_movie.idMovie=movies.idMovie\n AND (" + studios[ : -5 ] + "))"
+                studios = "(studio_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( studios[ : -5 ], )
             self.query_studios = studios
 
-        if ( controlId == self.CONTROL_ACTOR_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_ACTOR_LIST, self.CONTROL_ACTOR_LIST + 2, ) or force_build ):
             # set actor selections
             actors = ""
+            self.query_actors_not = self.getControl( self.CONTROL_ACTOR_LIST + 2 ).getSelected()
             for pos, actor in enumerate( self.actors ):
                 if ( self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( pos ).isSelected() ):
-                    actors += "actor_link_movie.idActor=%d\n OR " % ( actor[ 0 ], )
+                    actors += "actor_link_movie.idActor%s=%d\n %s " % ( ( "", "!", )[ self.query_actors_not ], actor[ 0 ], ( "OR", "AND", )[ self.query_actors_not ] )
             if ( actors ):
-                actors = "(actor_link_movie.idMovie=movies.idMovie\n AND (" + actors[ : -5 ] + "))"
+                actors = "(actor_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( actors[ : -5 ], )
             self.query_actors = actors
 
-        if ( controlId == self.CONTROL_RATING_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_RATING_LIST, self.CONTROL_RATING_LIST + 2, ) or force_build ):
             # set rating selections
             ratings = ""
+            self.query_ratings_not = self.getControl( self.CONTROL_RATING_LIST + 2 ).getSelected()
             for pos, rating in enumerate( self.ratings ):
                 if ( self.getControl( self.CONTROL_RATING_LIST ).getListItem( pos ).isSelected() ):
-                    ratings += "movies.rating='%s'\n OR " % ( ( rating[ 0 ], "", )[ rating[ 0 ] == _( 92 ) ], )
+                    ratings += "movies.rating%s='%s'\n %s " % ( ( "", "!", )[ self.query_ratings_not ], ( rating[ 0 ], "", )[ rating[ 0 ] == _( 92 ) ], ( "OR", "AND", )[ self.query_ratings_not ] )
             if ( ratings ):
-                ratings = "(" + ratings[ : -5 ] + ")"
+                ratings = "(%s)" % ( ratings[ : -5 ], )
             self.query_ratings = ratings
 
-        if ( controlId == self.CONTROL_QUALITY_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_QUALITY_LIST, self.CONTROL_QUALITY_LIST + 2, ) or force_build ):
             # set trailer quality selections
             qualities = ""
+            self.query_qualities_not = self.getControl( self.CONTROL_QUALITY_LIST + 2 ).getSelected()
             for pos, quality in enumerate( self.quality ):
                 if ( self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( pos ).isSelected() ):
                     quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ pos ]
-                    qualities += "movies.trailer_urls LIKE '%s'\n OR " % ( quality_text, )
+                    qualities += "movies.trailer_urls LIKE '%s'\n %s " % ( quality_text, ( "OR", "AND", )[ self.query_qualities_not ] )
             if ( qualities ):
-                qualities = "(" + qualities[ : -5 ] + ")"
+                qualities = "%s(%s)" % ( ( "", "NOT ", )[ self.query_qualities_not ], qualities[ : -5 ], )
             self.query_qualities = qualities
 
         search_incomplete = ""
         if ( not self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 0 ).isSelected() ):
             search_incomplete = "\n AND movies.trailer_urls IS NOT NULL"
         self.query_search_incomplete = search_incomplete
-        if ( controlId == self.CONTROL_EXTRA_LIST or force_build ):
+        if ( controlId in ( self.CONTROL_EXTRA_LIST, self.CONTROL_EXTRA_LIST + 2, ) or force_build ):
+            self.query_extras_not = self.getControl( self.CONTROL_EXTRA_LIST + 2 ).getSelected()
             # set extra settings selections
             search_favorites = ""
             if ( self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 1 ).isSelected() ):
-                search_favorites = "\n AND movies.favorite=1"
+                search_favorites = "\n AND movies.favorite%s=1" % ( ( "", "!", )[ self.query_extras_not ], )
             self.query_search_favorites = search_favorites
             search_saved = ""
             if ( self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 2 ).isSelected() ):
-                search_saved = "\n AND movies.saved_location!=''"
+                search_saved = "\n AND movies.saved_location%s=''" % ( ( "!", "", )[ self.query_extras_not ], )
             self.query_search_saved = search_saved
             search_watched = ""
             if ( self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 3 ).isSelected() ):
-                search_watched = "\n AND movies.times_watched>0"
+                search_watched = "\n AND movies.times_watched%s0" % ( ( ">", "=", )[ self.query_extras_not ], )
             self.query_search_watched = search_watched
 
         self.query = ""
@@ -313,8 +332,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def onClick( self, controlId ):
         try:
-            if ( controlId in ( self.CONTROL_GENRE_LIST, self.CONTROL_STUDIO_LIST, self.CONTROL_ACTOR_LIST, self.CONTROL_RATING_LIST, self.CONTROL_QUALITY_LIST, self.CONTROL_EXTRA_LIST, ) ):
+            if ( controlId in self.CONTROL_LISTS ):
                 self.getControl( controlId ).getSelectedItem().select( not self.getControl( controlId ).getSelectedItem().isSelected() )
+                self._create_sql( controlId )
+            elif ( controlId in self.CONTROL_LISTS_NOT ):
                 self._create_sql( controlId )
             elif ( controlId in self.CONTROL_BUTTONS ):
                 self.functions[ controlId ]()

@@ -50,22 +50,41 @@
         
 		<!-- ** Required ** Do not change id or type -->
 		<control type="group" id="3000">
-            <control type="label" id="102">
-                <description>Genre Label</description>
-                <posx>-25</posx>
-                <posy>40</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>-35</posx>
+                <posy>36</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(102)</visible>
+            </control>
+            <control type="checkmark" id="102">
+                <description>Genre</description>
+                <posx>-30</posx>
+                <posy>37</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>2000</onleft>
+                <onright>112</onright>
+                <onup>100</onup>
+                <ondown>100</ondown>
             </control>
             <control type="list" id="100">
                 <posx>-35</posx>
                 <posy>60</posy>
                 <width>180</width>
                 <height>130</height>
-                <onleft>2000</onleft>
+                <onleft>122</onleft>
                 <onright>101</onright>
                 <onup>100</onup>
                 <ondown>100</ondown>
@@ -161,15 +180,34 @@
                 <onclick>PageDown(101)</onclick>
             </control>
 
-            <control type="label" id="112">
-                <description>Studio Label</description>
-                <posx>187</posx>
-                <posy>40</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>177</posx>
+                <posy>36</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(112)</visible>
+            </control>
+            <control type="checkmark" id="112">
+                <description>Studio</description>
+                <posx>182</posx>
+                <posy>37</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>102</onleft>
+                <onright>122</onright>
+                <onup>110</onup>
+                <ondown>110</ondown>
             </control>
             <control type="list" id="110">
                 <posx>177</posx>
@@ -272,15 +310,34 @@
                 <onclick>PageDown(111)</onclick>
             </control>
 
-            <control type="label" id="122">
-                <description>Actor Label</description>
-                <posx>400</posx>
-                <posy>40</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>390</posx>
+                <posy>36</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(122)</visible>
+            </control>
+            <control type="checkmark" id="122">
+                <description>Actor</description>
+                <posx>395</posx>
+                <posy>37</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>112</onleft>
+                <onright>100</onright>
+                <onup>120</onup>
+                <ondown>120</ondown>
             </control>
             <control type="list" id="120">
                 <posx>390</posx>
@@ -368,7 +425,7 @@
                 <textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
                 <textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
                 <onleft>120</onleft>
-                <onright>130</onright>
+                <onright>132</onright>
                 <showonepage>true</showonepage>
                 <orientation>vertical</orientation>
             </control>
@@ -383,22 +440,41 @@
                 <onclick>PageDown(121)</onclick>
             </control>
 
-            <control type="label" id="132">
-                <description>Rating Label</description>
-                <posx>-25</posx>
-                <posy>200</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>-35</posx>
+                <posy>196</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(132)</visible>
+            </control>
+            <control type="checkmark" id="132">
+                <description>Rating</description>
+                <posx>-30</posx>
+                <posy>197</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>121</onleft>
+                <onright>142</onright>
+                <onup>130</onup>
+                <ondown>130</ondown>
             </control>
             <control type="list" id="130">
                 <posx>-35</posx>
                 <posy>220</posy>
                 <width>180</width>
                 <height>130</height>
-                <onleft>121</onleft>
+                <onleft>152</onleft>
                 <onright>131</onright>
                 <onup>130</onup>
                 <ondown>130</ondown>
@@ -494,15 +570,34 @@
                 <onclick>PageDown(131)</onclick>
             </control>
 
-            <control type="label" id="142">
-                <description>Quality Label</description>
-                <posx>187</posx>
-                <posy>200</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>177</posx>
+                <posy>196</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(142)</visible>
+            </control>
+            <control type="checkmark" id="142">
+                <description>Quality</description>
+                <posx>182</posx>
+                <posy>197</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>132</onleft>
+                <onright>152</onright>
+                <onup>140</onup>
+                <ondown>140</ondown>
             </control>
             <control type="list" id="140">
                 <posx>177</posx>
@@ -605,15 +700,34 @@
                 <onclick>PageDown(141)</onclick>
             </control>
 
-            <control type="label" id="152">
-                <description>Extra settings</description>
-                <posx>400</posx>
-                <posy>200</posy>
-                <width>150</width>
-                <align>left</align>
+            <control type="image">
+                <description>background image</description>
+                <posx>390</posx>
+                <posy>196</posy>
+                <width>180</width>
+                <height>22</height>
+                <texture border="5">default-input-focus.png</texture>
+                <visible>Control.HasFocus(152)</visible>
+            </control>
+            <control type="checkmark" id="152">
+                <description>Extra Settings</description>
+                <posx>395</posx>
+                <posy>197</posy>
+                <width>170</width>
+                <height>20</height>
+                <align>right</align>
+                <label> </label>
                 <font>font10</font>
                 <textcolor>DDced8da</textcolor>
-                <label> </label>
+                <colordiffuse>DDced8da</colordiffuse>
+                <texturecheckmark>default-settings-check-box.png</texturecheckmark>
+                <texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+                <markwidth>16</markwidth>
+                <markheight>20</markheight>
+                <onleft>142</onleft>
+                <onright>130</onright>
+                <onup>150</onup>
+                <ondown>150</ondown>
             </control>
             <control type="list" id="150">
                 <posx>390</posx>
@@ -821,7 +935,7 @@
 				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
 				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
                 <onleft>2075</onleft>
-                <onright>100</onright>
+                <onright>102</onright>
 				<onup>258</onup>
 				<ondown>251</ondown>
 			</control>
@@ -840,7 +954,7 @@
 				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
 				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
                 <onleft>2075</onleft>
-                <onright>100</onright>
+                <onright>102</onright>
 				<onup>250</onup>
 				<ondown>257</ondown>
 			</control>
@@ -859,7 +973,7 @@
 				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
 				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
                 <onleft>2075</onleft>
-                <onright>100</onright>
+                <onright>102</onright>
 				<onup>251</onup>
 				<ondown>258</ondown>
 			</control>
@@ -878,7 +992,7 @@
 				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
 				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
                 <onleft>2075</onleft>
-                <onright>100</onright>
+                <onright>102</onright>
 				<onup>257</onup>
 				<ondown>250</ondown>
 			</control>
