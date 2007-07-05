@@ -178,7 +178,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if ( self.getControl( self.CONTROL_GENRE_LIST ).getListItem( pos ).isSelected() ):
                     genres += "genre_link_movie.idGenre%s=%d\n %s " % ( ( "", "!", )[ self.query_genres_not ], genre[ 0 ], ( "OR", "AND", )[ self.query_genres_not ] )
             if ( genres ):
-                genres = "(genre_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( genres[ : -5 ], )
+                genres = "(genre_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( genres[ : -5 ].strip(), )
             self.query_genres = genres
 
         if ( controlId in ( self.CONTROL_STUDIO_LIST, self.CONTROL_STUDIO_LIST + 2, ) or force_build ):
@@ -189,7 +189,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if ( self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( pos ).isSelected() ):
                     studios += "studio_link_movie.idStudio%s=%d\n %s " % ( ( "", "!", )[ self.query_studios_not ], studio[ 0 ], ( "OR", "AND", )[ self.query_studios_not ] )
             if ( studios ):
-                studios = "(studio_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( studios[ : -5 ], )
+                studios = "(studio_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( studios[ : -5 ].strip(), )
             self.query_studios = studios
 
         if ( controlId in ( self.CONTROL_ACTOR_LIST, self.CONTROL_ACTOR_LIST + 2, ) or force_build ):
@@ -200,7 +200,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if ( self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( pos ).isSelected() ):
                     actors += "actor_link_movie.idActor%s=%d\n %s " % ( ( "", "!", )[ self.query_actors_not ], actor[ 0 ], ( "OR", "AND", )[ self.query_actors_not ] )
             if ( actors ):
-                actors = "(actor_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( actors[ : -5 ], )
+                actors = "(actor_link_movie.idMovie=movies.idMovie\n AND (%s))" % ( actors[ : -5 ].strip(), )
             self.query_actors = actors
 
         if ( controlId in ( self.CONTROL_RATING_LIST, self.CONTROL_RATING_LIST + 2, ) or force_build ):
@@ -211,7 +211,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if ( self.getControl( self.CONTROL_RATING_LIST ).getListItem( pos ).isSelected() ):
                     ratings += "movies.rating%s='%s'\n %s " % ( ( "", "!", )[ self.query_ratings_not ], ( rating[ 0 ], "", )[ rating[ 0 ] == _( 92 ) ], ( "OR", "AND", )[ self.query_ratings_not ] )
             if ( ratings ):
-                ratings = "(%s)" % ( ratings[ : -5 ], )
+                ratings = "(%s)" % ( ratings[ : -4 ].strip(), )
             self.query_ratings = ratings
 
         if ( controlId in ( self.CONTROL_QUALITY_LIST, self.CONTROL_QUALITY_LIST + 2, ) or force_build ):
@@ -223,7 +223,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ pos ]
                     qualities += "movies.trailer_urls LIKE '%s'\n %s " % ( quality_text, ( "OR", "AND", )[ self.query_qualities_not ] )
             if ( qualities ):
-                qualities = "%s(%s)" % ( ( "", "NOT ", )[ self.query_qualities_not ], qualities[ : -5 ], )
+                qualities = "%s(%s)" % ( ( "", "NOT ", )[ self.query_qualities_not ], qualities[ : -5 ].strip(), )
             self.query_qualities = qualities
 
         search_incomplete = ""
