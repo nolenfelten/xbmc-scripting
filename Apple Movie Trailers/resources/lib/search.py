@@ -45,7 +45,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._set_functions()
             self._setup_special()
             #self._set_sql()
-            self._enable_load_button()
         except: traceback.print_exc()
         xbmcgui.unlock()
         self.dialog.close()
@@ -77,7 +76,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ self.CONTROL_BUTTONS[ 3 ] ] = self._clear_sql
 
     def _clear_variables( self ):
-        #self.query_running = False
         self.query = ""
         self.query_genres = ""
         self.query_studios = ""
@@ -88,7 +86,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.query_search_favorites = ""
         self.query_search_saved = ""
         self.query_search_watched = ""
-    
+
     def _setup_special( self ):
         """ calls any special defs """
         self._setup_trailer_quality()
@@ -110,7 +108,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _fill_lists( self, fill=True, query="" ):
         try:
             for count, genre in enumerate( self.genres ):
-                #self.selected[ self.CONTROL_GENRE_LIST ] += [ False ]
                 if ( fill ):
                     self.getControl( self.CONTROL_GENRE_LIST ).addItem( genre[ 1 ] )
                 selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query )
@@ -120,26 +117,22 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.getControl( self.CONTROL_STUDIO_LIST ).addItem( studio[ 1 ] )
                 selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query )
                 self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( count ).select( selected )
-                #self.selected[ self.CONTROL_STUDIO_LIST ] += [ False ]
             for count, actor in enumerate( self.actors ):
                 if ( fill ):
                     self.getControl( self.CONTROL_ACTOR_LIST ).addItem( actor[ 1 ] )
                 selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query )
                 self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( count ).select( selected )
-                #self.selected[ self.CONTROL_ACTOR_LIST ] += [ False ]
             for count, rating in enumerate( self.ratings ):
                 if ( fill ):
                     self.getControl( self.CONTROL_RATING_LIST ).addItem( rating[ 0 ] )
                 selected =  "rating='%s'" % rating[ 0 ] in query
                 self.getControl( self.CONTROL_RATING_LIST ).getListItem( count ).select( selected )
-                #self.selected[ self.CONTROL_RATING_LIST ] += [ False ]
             for count, quality in enumerate( self.quality ):
                 if ( fill ):
                     self.getControl( self.CONTROL_QUALITY_LIST ).addItem( quality )
                 quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ count ]
                 selected = "trailer_urls LIKE '%s'" % quality_text in query
                 self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( count ).select( selected )
-                #self.selected[ self.CONTROL_QUALITY_LIST ] += [ False ]
 
             if ( fill ):
                 self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2150 ) )
@@ -271,23 +264,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( self.CONTROL_SQL_TEXTBOX ).setText( self.query )
         self.getControl( self.CONTROL_BUTTONS[ 0 ] ).setEnabled( self.query != "" )
         self.getControl( self.CONTROL_BUTTONS[ 2 ] ).setEnabled( self.query != "" )
+        self._enable_load_button()
 
     def _run_sql( self ):
-        #while self.query_running:
-        #    xbmc.sleep( 200 )
-        #self.query_running = True
         self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s: %s" % ( _( 93 ), _( 85 ),) )
         records = database.Records()
         trailers = records.fetch( self.query, all=True )
         records.close()
         self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s: %d" % ( _( 93 ), len( trailers ),) )
-        #self.query_running = False
 
     def _clear_sql( self ):
         xbmcgui.lock()
         try:
             if ( self.query ):
-                self.query=""
+                self._clear_variables()
                 self._set_sql()
                 self._fill_lists( False, self.query )
                 self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s:" % ( _( 93 ), ) )

@@ -528,24 +528,26 @@ class GUI( xbmcgui.WindowXML ):
                 self.search_keywords = keyword
                 where = ""
                 compare = False
+                # this may be faster than regex, but not as accurate
+                #where += "(LIKE '%% %s %%' OR title LIKE '%% %s.%%' OR title LIKE '%% %s,%%' OR title LIKE '%% %s:%%' OR title LIKE '%% %s!%%' OR title LIKE '%% %s-%%' OR title LIKE '%% %s?%%' OR title LIKE '%s %%' OR title LIKE '%s.%%' OR title LIKE '%s,%%' OR title LIKE '%s:%%' OR title LIKE '%s!%%' OR title LIKE '%s-%%' OR title LIKE '%s?%%' OR title LIKE '%% %s' OR title LIKE '%s' OR title LIKE '%%(%s' OR title LIKE '%% %s)' OR " % ( ( word, ) * 18 )
+                pattern = ( "LIKE '%%%s%%'", "regexp('\\b%s\\b')", )[ self.settings[ "match_whole_words" ] ]
                 for word in keywords:
                     if ( word.upper() == "AND" or word.upper() == "OR" ):
                         where += " %s " % word.upper()
                         compare = False
                         continue
+                    elif ( word.upper() == "NOT" ):
+                        where += "NOT "
+                        continue
                     elif ( compare ):
                         where += " AND "
                         compare = False
-                    if ( self.settings[ "match_whole_words" ] ):
-                        compare = True
-                        where += "(title like '%% %s %%' OR title like '%% %s.%%' OR title like '%% %s,%%' OR title like '%% %s:%%' OR title like '%% %s!%%' OR title like '%% %s-%%' OR title like '%% %s?%%' OR title like '%s %%' OR title like '%s.%%' OR title like '%s,%%' OR title like '%s:%%' OR title like '%s!%%' OR title like '%s-%%' OR title like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
-                        where += "plot like '%% %s %%' OR plot like '%% %s.%%' OR plot like '%% %s,%%' OR plot like '%% %s:%%' OR plot like '%% %s!%%' OR plot like '%% %s-%%' OR plot like '%% %s?%%' OR plot like '%s %%' OR plot like '%s.%%' OR plot like '%s,%%' OR plot like '%s:%%' OR plot like '%s!%%' OR plot like '%s-%%' OR plot like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
-                        where += "actor like '%% %s %%' OR actor like '%% %s.%%' OR actor like '%% %s,%%' OR actor like '%% %s:%%' OR actor like '%% %s!%%' OR actor like '%% %s-%%' OR actor like '%% %s?%%' OR actor like '%s %%' OR actor like '%s.%%' OR actor like '%s,%%' OR actor like '%s:%%' OR actor like '%s!%%' OR actor like '%s-%%' OR actor like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
-                        where += "studio like '%% %s %%' OR studio like '%% %s.%%' OR studio like '%% %s,%%' OR studio like '%% %s:%%' OR studio like '%% %s!%%' OR studio like '%% %s-%%' OR studio like '%% %s?%%' OR studio like '%s %%' OR studio like '%s.%%' OR studio like '%s,%%' OR studio like '%s:%%' OR studio like '%s!%%' OR studio like '%s-%%' OR studio like '%s?%%' OR " % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
-                        where += "genre like '%% %s %%' OR genre like '%% %s.%%' OR genre like '%% %s,%%' OR genre like '%% %s:%%' OR genre like '%% %s!%%' OR genre like '%% %s-%%' OR genre like '%% %s?%%' OR genre like '%s %%' OR genre like '%s.%%' OR genre like '%s,%%' OR genre like '%s:%%' OR genre like '%s!%%' OR genre like '%s-%%' OR genre like '%s?%%')" % ( word, word, word, word, word, word, word, word, word, word, word, word, word, word, )
-                    else:
-                        compare = True
-                        where += "(title like '%%%s%%' OR plot like '%%%s%%' OR actor like '%%%s%%' OR studio like '%%%s%%' OR genre like '%%%s%%')\n" % ( word, word, word, word, word, )
+                    where += "(title %s OR " % ( pattern % ( word, ), )
+                    where += "plot %s OR " % ( pattern % ( word, ), )
+                    where += "actor %s OR " % ( pattern % ( word, ), )
+                    where += "studio %s OR " % ( pattern % ( word, ), )
+                    where += "genre %s)" % ( pattern % ( word, ), )
+                    compare = True
                 self.search_sql = self.query[ "simple_search" ] % ( where, )
         else:
             import search

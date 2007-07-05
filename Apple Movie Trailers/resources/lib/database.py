@@ -10,6 +10,7 @@ import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
 #import traceback
+import re
 
 from utilities import *
 
@@ -276,8 +277,12 @@ class Records:
 
     def connect( self ):
         self.db = sqlite.connect( os.path.join( BASE_DATA_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        self.db.create_function( "regexp", 2, self.regexp )
         self.cursor = self.db.cursor()
     
+    def regexp( self, pattern, item ):
+        return re.search( pattern, item, re.IGNORECASE ) is not None
+
     def commit( self ):
         try:
             self.db.commit()
