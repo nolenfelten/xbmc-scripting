@@ -12,7 +12,7 @@
 			<posy>-300</posy>
 			<width>1300</width>
 			<height>1300</height>
-			<texture>default-black.png</texture>
+			<texture>amt-black.png</texture>
 			<animation effect="fade" time="2000">WindowOpen</animation>
 		</control>
 		<control type="image" id="1">
@@ -21,7 +21,7 @@
 			<posy>-15</posy>
 			<width>440</width>
 			<height>335</height>
-			<texture>default-dialog-panel.png</texture>
+			<texture>amt-dialog-panel.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="500">
@@ -76,7 +76,7 @@
 					<height>30</height>
 					<posx>0</posx>
 					<posy>0</posy>
-					<texture border="5">default-input-nofocus.png</texture>
+					<texture border="5">amt-input-nofocus.png</texture>
 				</control>
 				<control type="label">
 					<posx>5</posx>
@@ -98,7 +98,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>Control.HasFocus(503)</visible>
-					<texture border="5">default-input-focus.png</texture>
+					<texture border="5">amt-input-focus.png</texture>
 				</control>
 				<control type="image">
 					<width>200</width>
@@ -106,7 +106,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>!Control.HasFocus(503)</visible>
-					<texture border="5">default-input-nofocus.png</texture>
+					<texture border="5">amt-input-nofocus.png</texture>
 				</control>
 				<control type="label">
 					<posx>5</posx>
@@ -133,10 +133,10 @@
 			<ondown>503</ondown>
 			<onup>503</onup>
 			<textcolor>ffffffff</textcolor>
-			<textureup>default-scroll-up.png</textureup>
-			<texturedown>default-scroll-down.png</texturedown>
-			<textureupfocus>default-scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
+			<textureup>amt-scroll-up.png</textureup>
+			<texturedown>amt-scroll-down.png</texturedown>
+			<textureupfocus>amt-scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>amt-scroll-down-focus.png</texturedownfocus>
 			<showonepage>false</showonepage>
 			<visible>Control.IsVisible(503)</visible>
 		</control>
@@ -159,7 +159,7 @@
 					<height>30</height>
 					<posx>0</posx>
 					<posy>0</posy>
-					<texture border="5">default-input-nofocus.png</texture>
+					<texture border="5">amt-input-nofocus.png</texture>
 				</control>
 				<control type="label">
 					<posx>5</posx>
@@ -181,7 +181,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>!Control.HasFocus(504)</visible>
-					<texture border="5">default-input-nofocus.png</texture>
+					<texture border="5">amt-input-nofocus.png</texture>
 				</control>
 				<control type="image">
 					<width>400</width>
@@ -189,7 +189,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>Control.HasFocus(504)</visible>
-					<texture border="5">default-input-focus.png</texture>
+					<texture border="5">amt-input-focus.png</texture>
 				</control>
 				<control type="label">
 					<posx>5</posx>
@@ -216,10 +216,10 @@
 			<ondown>504</ondown>
 			<onup>504</onup>
 			<textcolor>ffffffff</textcolor>
-			<textureup>default-scroll-up.png</textureup>
-			<texturedown>default-scroll-down.png</texturedown>
-			<textureupfocus>default-scroll-up-focus.png</textureupfocus>
-			<texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
+			<textureup>amt-scroll-up.png</textureup>
+			<texturedown>amt-scroll-down.png</texturedown>
+			<textureupfocus>amt-scroll-up-focus.png</textureupfocus>
+			<texturedownfocus>amt-scroll-down-focus.png</texturedownfocus>
 			<showonepage>false</showonepage>
 			<visible>Control.IsVisible(504)</visible>
 		</control>

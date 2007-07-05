@@ -216,7 +216,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.params_category = params
                 self.getControl( self.CONTROL_CATEGORY_LIST ).reset()
                 if ( self.trailers.categories ):
-                    thumbnail = "generic-%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], )
+                    thumbnail = "amt-generic-%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], )
                     for category in self.trailers.categories:
                         count = "(%d)" % ( category.count, )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( xbmcgui.ListItem( category.title, count, "%s.tbn" % category.title, thumbnail ) )
@@ -238,10 +238,10 @@ class GUI( xbmcgui.WindowXML ):
                 self.clearList()
                 if ( self.trailers.movies ):
                     for movie in self.trailers.movies: # now fill the list control
-                        poster = ( movie.poster, "blank-poster.tbn", )[ not movie.poster ]
-                        if ( not movie.poster ): thumbnail = poster
+                        poster = ( movie.poster, "amt-blank-poster.tbn", )[ not movie.poster ]
+                        if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ): thumbnail = poster
                         else:
-                            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+                            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
                         #favorite = ( "", "*", )[ movie.favorite ]
                         urls = ( "%s", "(%s)", )[ not movie.trailer_urls ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
@@ -347,15 +347,17 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
-            cast = self.trailers.movies[ trailer ].cast
-            if ( cast ):
-                self.cast_exists = True
-                thumbnail = "generic-actor.tbn"
-                for actor in cast:
+            #cast = self.trailers.movies[ trailer ].cast
+            self.cast_exists = ( self.trailers.movies[ trailer ].cast != [] )
+            thumbnail = "amt-generic-%sactor.tbn" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
+            if ( self.trailers.movies[ trailer ].cast ):
+                #self.cast_exists = True
+                #thumbnail = "amt-generic-actor.tbn"
+                for actor in self.trailers.movies[ trailer ].cast:
                     self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", "%s.tbn" % actor, thumbnail ) )
             else: 
-                self.cast_exists = False
-                thumbnail = "generic-noactor.tbn"
+                #self.cast_exists = False
+                #thumbnail = "amt-generic-noactor.tbn"
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
@@ -417,7 +419,7 @@ class GUI( xbmcgui.WindowXML ):
                                 fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
                                 filename = str( fetcher.urlretrieve( url ) )
                                 if ( filename ):
-                                    poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                                    poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                                     self.saveThumbnail( filename, trailer, poster )
                     elif ( self.trailers.movies[ trailer ].saved_core is not None ):
                         self.core = self.trailers.movies[ trailer ].saved_core
@@ -512,7 +514,7 @@ class GUI( xbmcgui.WindowXML ):
         success = self.trailers.updateRecord( "movies", ( "times_watched", "last_watched", ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
         if ( success ):
             self.trailers.movies[ trailer ].watched = watched
-            thumbnail = ( ( self.trailers.movies[ trailer ].thumbnail, self.trailers.movies[ trailer ].thumbnail_watched )[ self.trailers.movies[ trailer ].watched and self.settings[ "fade_thumb" ] ], "generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+            thumbnail = ( ( self.trailers.movies[ trailer ].thumbnail, self.trailers.movies[ trailer ].thumbnail_watched )[ self.trailers.movies[ trailer ].watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
             self.getListItem( trailer ).setThumbnailImage( thumbnail )
             self.showOverlays( trailer )
         else:
@@ -694,7 +696,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( not os.path.isfile( new_filename ) ):
                 shutil.move( self.flat_cache[ 1 ], new_filename )
                 shutil.move( "%s.conf" % self.flat_cache[ 1 ], "%s.conf" % new_filename )
-                poster = ( self.trailers.movies[ trailer ].poster, "blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                 self.saveThumbnail( new_filename, trailer, poster )
                 self.showOverlays( trailer )
             dialog.close()

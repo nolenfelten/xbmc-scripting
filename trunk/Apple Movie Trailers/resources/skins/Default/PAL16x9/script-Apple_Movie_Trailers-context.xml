@@ -13,7 +13,7 @@
 			<posy>-25</posy>
 			<width>230</width>
 			<height>26</height>
-			<texture>default-dialog-context-top.png</texture>
+			<texture>amt-dialog-context-top.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="998">
@@ -21,7 +21,7 @@
 			<posx>5</posx>
 			<posy>0</posy>
 			<width>230</width>
-			<texture>default-dialog-context-middle.png</texture>
+			<texture>amt-dialog-context-middle.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="image" id="999">
@@ -29,7 +29,7 @@
 			<posx>5</posx>
 			<width>230</width>
 			<height>25</height>
-			<texture>default-dialog-context-bottom.png</texture>
+			<texture>amt-dialog-context-bottom.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="button" id="1001">
@@ -43,8 +43,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1002</ondown>
 			<onup>1008</onup>
 		</control>
@@ -60,8 +60,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1003</ondown>
 			<onup>1001</onup>
 		</control>
@@ -77,8 +77,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1004</ondown>
 			<onup>1002</onup>
 		</control>
@@ -94,8 +94,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1005</ondown>
 			<onup>1003</onup>
 		</control>
@@ -111,8 +111,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1006</ondown>
 			<onup>1004</onup>
 		</control>
@@ -128,8 +128,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1007</ondown>
 			<onup>1005</onup>
 		</control>
@@ -145,8 +145,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1008</ondown>
 			<onup>1006</onup>
 		</control>
@@ -162,8 +162,8 @@
 			<aligny>center</aligny>
 			<textcolor>ffffffff</textcolor>
 			<disabledcolor>60ffffff</disabledcolor>
-			<texturenofocus>default-keyboard-btn-space.png</texturenofocus>
-			<texturefocus>default-keyboard-btn-space-focus2.png</texturefocus>
+			<texturenofocus>amt-keyboard-btn-space.png</texturenofocus>
+			<texturefocus>amt-keyboard-btn-space-focus2.png</texturefocus>
 			<ondown>1001</ondown>
 			<onup>1007</onup>
 		</control>
