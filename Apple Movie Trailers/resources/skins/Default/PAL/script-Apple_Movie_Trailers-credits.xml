@@ -12,7 +12,7 @@
 			<posy>40</posy>
 			<width>360</width>
 			<height>320</height>
-			<texture>default-dialog-panel.png</texture>
+			<texture>amt-dialog-panel.png</texture>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="20">

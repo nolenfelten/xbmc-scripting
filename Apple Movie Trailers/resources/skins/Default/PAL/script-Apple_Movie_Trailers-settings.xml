@@ -14,7 +14,7 @@
 			<posy>-110</posy>
 			<width>720</width>
 			<height>576</height>
-			<texture>default-black.png</texture>
+			<texture>amt-black.png</texture>
 			<animation effect="fade" time="2000">WindowOpen</animation>
 		</control>
 		<control type="image">
@@ -23,7 +23,7 @@
 			<posy>-15</posy>
 			<width>520</width>
 			<height>420</height>
-			<texture>default-background-settings.png</texture>
+			<texture>amt-background-settings.png</texture>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="20">
@@ -85,8 +85,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -126,8 +126,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -167,8 +167,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -208,8 +208,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -249,8 +249,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -290,8 +290,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -310,8 +310,8 @@
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
                     <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
 					<markheight>20</markheight>
 					<disabledcolor>00d0d0d0</disabledcolor>
@@ -332,8 +332,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -373,8 +373,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -414,8 +414,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -455,8 +455,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -496,8 +496,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -516,8 +516,8 @@
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
                     <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
 					<markheight>20</markheight>
 					<disabledcolor>00d0d0d0</disabledcolor>
@@ -538,8 +538,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -558,8 +558,8 @@
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
                     <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
 					<markheight>20</markheight>
 					<disabledcolor>00d0d0d0</disabledcolor>
@@ -580,8 +580,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -600,8 +600,8 @@
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
                     <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
 					<markheight>20</markheight>
 					<disabledcolor>00d0d0d0</disabledcolor>
@@ -622,8 +622,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -664,8 +664,8 @@
 					<font>font13</font>
 					<textcolor>ffffffff</textcolor>
 					<textoffsetx>10</textoffsetx>
-					<texturefocus>default-input-focus.png</texturefocus>
-					<texturenofocus>default-input-nofocus.png</texturenofocus>
+					<texturefocus>amt-input-focus.png</texturefocus>
+					<texturenofocus>amt-input-nofocus.png</texturenofocus>
 					<disabledcolor>60d0d0d0</disabledcolor>
 					<shadowcolor>ff000000</shadowcolor>
 					<onleft>2000</onleft>
@@ -684,8 +684,8 @@
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
                     <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>default-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>default-settings-check-boxNF.png</texturecheckmarknofocus>
+					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
+					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
 					<markwidth>16</markwidth>
 					<markheight>20</markheight>
 					<disabledcolor>00d0d0d0</disabledcolor>
@@ -709,8 +709,8 @@
 				<font>font10</font>
 				<textcolor>ffffffff</textcolor>
 				<textoffsetx>17</textoffsetx>
-				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
-				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
+				<texturenofocus>amt-keyboard-btn-backspace.png</texturenofocus>
+				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
 				<onleft>9000</onleft>
 				<onright>9000</onright>
 				<onup>253</onup>
@@ -728,8 +728,8 @@
 				<font>font10</font>
 				<textcolor>ffffffff</textcolor>
 				<textoffsetx>17</textoffsetx>
-				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
-				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
+				<texturenofocus>amt-keyboard-btn-backspace.png</texturenofocus>
+				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
 				<onleft>9000</onleft>
 				<onright>9000</onright>
 				<onup>250</onup>
@@ -748,8 +748,8 @@
 				<textcolor>ffffffff</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
-				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
-				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
+				<texturenofocus>amt-keyboard-btn-backspace.png</texturenofocus>
+				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
 				<onleft>9000</onleft>
 				<onright>9000</onright>
 				<onup>251</onup>
@@ -769,8 +769,8 @@
 				<textcolor>ffffffff</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
 				<textoffsetx>17</textoffsetx>
-				<texturenofocus>default-keyboard-btn-backspace.png</texturenofocus>
-				<texturefocus>default-keyboard-btn-backspace-focus.png</texturefocus>
+				<texturenofocus>amt-keyboard-btn-backspace.png</texturenofocus>
+				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
 				<onleft>9000</onleft>
 				<onright>9000</onright>
 				<onup>252</onup>

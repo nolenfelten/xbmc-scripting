@@ -8,7 +8,7 @@
 			<posy>0</posy>
 			<width>720</width>
 			<height>88</height>
-			<texture>default-background.png</texture>
+			<texture>amt-background.png</texture>
 		</control>
 		<control type="image">
 			<description>background image</description>
@@ -16,7 +16,7 @@
 			<posy>88</posy>
 			<width>720</width>
 			<height>488</height>
-			<texture>default-background-bottom.png</texture>
+			<texture>amt-background-bottom.png</texture>
 		</control>
 		<control type="label">
 			<description>xbox media center label</description>
@@ -58,7 +58,7 @@
 				<posy>88</posy>
 				<width>64</width>
 				<height>510</height>
-				<texture>default-contentpanel_left.png</texture>
+				<texture>amt-contentpanel_left.png</texture>
 			</control>
 			<control type="image">
 				<description>contentpanel slice</description>
@@ -66,7 +66,7 @@
 				<posy>88</posy>
 				<width>516</width>
 				<height>510</height>
-				<texture>default-contentpanel.png</texture>
+				<texture>amt-contentpanel.png</texture>
 			</control>
 			<control type="image">
 				<description>backdrop image</description>
@@ -75,7 +75,7 @@
 				<width>375</width>
 				<height>373</height>
 				<aspectratio>keep</aspectratio>
-				<texture>default-backdrop.png</texture>
+				<texture>amt-backdrop.png</texture>
 				<visible>!Control.IsVisible(52) + !Control.IsVisible(54)</visible>
                 <animation effect="zoom" end="240,105,230,230" condition="Control.IsVisible(50) + Control.IsVisible(3000)">Conditional</animation>
 			</control>
@@ -96,8 +96,8 @@
 				<width>160</width>
 				<height>33</height>
 				<label>100</label>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -116,8 +116,8 @@
 				<posy>157</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -136,8 +136,8 @@
 				<posy>194</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -156,8 +156,8 @@
 				<posy>231</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -176,8 +176,8 @@
 				<posy>268</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -196,8 +196,8 @@
 				<posy>305</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -216,8 +216,8 @@
 				<posy>342</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -236,8 +236,8 @@
 				<posy>379</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -256,8 +256,8 @@
 				<posy>416</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -276,8 +276,8 @@
 				<posy>453</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -297,8 +297,8 @@
 				<posy>490</posy>
 				<width>160</width>
 				<height>33</height>
-				<texturefocus>default-button-focus.png</texturefocus>
-				<texturenofocus>default-button-nofocus.png</texturenofocus>
+				<texturefocus>amt-button-focus.png</texturefocus>
+				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -339,7 +339,7 @@
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -380,7 +380,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>!Control.HasFocus(50)</visible>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<width>300</width>
@@ -388,7 +388,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>Control.HasFocus(50)</visible>
-						<texture>default-list-focus2.png</texture>
+						<texture>amt-list-focus2.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -469,7 +469,7 @@
 						<height>110</height>
 						<posx>4</posx>
 						<posy>5</posy>
-						<texture>default-folder-focus.png</texture>
+						<texture>amt-folder-focus.png</texture>
 						<animation effect="zoom" end="0,0,96,120" time="100">focus</animation>
 					</control>
 					<control type="image">
@@ -531,7 +531,7 @@
                         <width>100</width>
                         <height>200</height>
                         <info>ListItem.ActualIcon</info>
-                        <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
+                        <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
                         <aspectratio aligny="top">keep</aspectratio>
                     </control>
                     <control type="image">
@@ -558,7 +558,7 @@
                         <width>100</width>
                         <height>200</height>
                         <info>ListItem.ActualIcon</info>
-                        <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
+                        <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
                         <aspectratio aligny="top">keep</aspectratio>
                         <animation effect="zoom" end="-15,280,150,300" time="150">focus</animation>
                     </control>
@@ -624,7 +624,7 @@
                         <height>175</height>
                         <posx>4</posx>
                         <posy>5</posy>
-                        <texture>default-folder-focus.png</texture>
+                        <texture>amt-folder-focus.png</texture>
                         <animation effect="zoom" end="0,0,97,185" time="100">focus</animation>
                     </control>
                 </focusedlayout>
@@ -635,7 +635,7 @@
                 <posy>450</posy>
                 <width>490</width>
                 <height>106</height>
-                <texture>default-dvdview_bottom.png</texture>
+                <texture>amt-dvdview_bottom.png</texture>
                 <visible>Control.IsVisible(54)</visible>
             </control>
 
@@ -662,7 +662,7 @@
                     <posy>100</posy>
                     <width>150</width>
                     <height>232</height>
-                    <texture>default-poster_backdrop.png</texture>
+                    <texture>amt-poster_backdrop.png</texture>
                     <aspectratio>keep</aspectratio>
                 </control-->
                 <control type="image">
@@ -682,7 +682,7 @@
                     <width>175</width>
                     <height>256</height>
                     <info>ListItem.ActualIcon</info>
-                    <texture flipy="true" diffuse="default-diffuse_mirror.png" /> 
+                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
                     <aspectratio aligny="top">keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
@@ -704,7 +704,7 @@
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
-                    <texture>default-overlay-favorite.png</texture>
+                    <texture>amt-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
@@ -715,7 +715,7 @@
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
-                    <texture>default-overlay-watched.png</texture>
+                    <texture>amt-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
@@ -725,7 +725,7 @@
                     <posy>335</posy>
                     <width>16</width>
                     <height>16</height>
-                    <texture>default-overlay-saved.png</texture>
+                    <texture>amt-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
@@ -734,7 +734,7 @@
             <!-- ** Required ** Do not change id or type-->
             <control type="label" id="206">
 				<description>Trailer Title</description>
-				<posx>230</posx>
+				<posx>220</posx>
 				<posy>354</posy>
 				<width>350</width>
 				<height>32</height>
@@ -746,8 +746,8 @@
                 <scroll>true</scroll>
                 <disabledcolor>FFe2ff43</disabledcolor>
 				<visible>Control.IsVisible(50) | Control.IsVisible(52) | Control.IsVisible(54)</visible>
-                <animation effect="slide" time="0" end="35,130" condition="Control.IsVisible(54)">Conditional</animation>
-                <animation effect="slide" time="0" end="40,30" condition="Control.IsVisible(52)">Conditional</animation>
+                <animation effect="slide" time="0" end="45,130" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" time="0" end="50,30" condition="Control.IsVisible(52)">Conditional</animation>
 			</control>
 		</control>
 
@@ -761,11 +761,11 @@
                 <posy>100</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2050)</onclick>
-                <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
-                <animation effect="slide" time="0" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" time="0" end="185,0" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" time="0" end="185,0" condition="Control.IsVisible(54)">Conditional</animation>
             </control>
             <control type="scrollbar" id="2050">
                 <description>Scroll Bar for Trailer List #50</description>
@@ -773,19 +773,19 @@
                 <posy>116</posy>
                 <width>16</width>
                 <height>200</height>
-                <texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
-                <texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
-                <texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
-                <textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
-                <textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
+                <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
+                <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
+                <texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
+                <textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
+                <textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
                 <onleft>50</onleft>
                 <onright>175</onright>
                 <showonepage>true</showonepage>
                 <orientation>vertical</orientation>
-                <animation effect="slide" end="155,0" condition="Control.IsVisible(51)">Conditional</animation>
-                <animation effect="zoom" end="680,116,12,391" condition="Control.IsVisible(51)">Conditional</animation>
-                <animation effect="slide" end="155,0" condition="Control.IsVisible(54)">Conditional</animation>
-                <animation effect="zoom" end="680,116,12,338" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" end="185,0" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="zoom" end="495,116,16,391" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" end="185,0" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="zoom" end="495,116,16,338" condition="Control.IsVisible(54)">Conditional</animation>
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
@@ -793,11 +793,11 @@
                 <posy>316</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
                 <onclick>PageDown(2050)</onclick>
-                <animation effect="slide" time="0" end="155,191" condition="Control.IsVisible(51)">Conditional</animation>
-                <animation effect="slide" time="0" end="155,138" condition="Control.IsVisible(54)">Conditional</animation>
+                <animation effect="slide" time="0" end="185,191" condition="Control.IsVisible(51)">Conditional</animation>
+                <animation effect="slide" time="0" end="185,138" condition="Control.IsVisible(54)">Conditional</animation>
             </control>
         </control>
 
@@ -809,8 +809,8 @@
             <posy>352</posy>
             <width>32</width>
             <height>32</height>
-            <texturefocus>default-plot-button-focus.png</texturefocus>
-            <texturenofocus>default-plot-button-nofocus.png</texturenofocus>
+            <texturefocus>amt-plot-button-focus.png</texturefocus>
+            <texturenofocus>amt-plot-button-nofocus.png</texturenofocus>
             <font>font13</font>
             <textcolor>00FFFFFF</textcolor>
             <shadowcolor>00FFFFFF</shadowcolor>
@@ -835,8 +835,8 @@
             <posy>352</posy>
             <width>32</width>
             <height>32</height>
-            <texturefocus>default-cast-button-focus.png</texturefocus>
-            <texturenofocus>default-cast-button-nofocus.png</texturenofocus>
+            <texturefocus>amt-cast-button-focus.png</texturefocus>
+            <texturenofocus>amt-cast-button-nofocus.png</texturenofocus>
             <font>font13</font>
             <textcolor>00FFFFFF</textcolor>
             <shadowcolor>00FFFFFF</shadowcolor>
@@ -863,7 +863,7 @@
                 <posy>385</posy>
                 <width>470</width>
                 <height>145</height>
-                <texture>default-scrollbar-bg.png</texture>
+                <texture>amt-scrollbar-bg.png</texture>
 				<visible>Control.IsVisible(75)</visible>
             </control>
             <!-- ** Required ** Do not change id or type-->
@@ -880,10 +880,10 @@
 				<onleft>2050</onleft>
 				<onright>2075</onright>
 				<pagecontrol>2075</pagecontrol>
-				<textureup>default-scroll-up.png</textureup>
-				<texturedown>default-scroll-down.png</texturedown>
-				<textureupfocus>default-scroll-up-focus.png</textureupfocus>
-				<texturedownfocus>default-scroll-down-focus.png</texturedownfocus>
+				<textureup>amt-scroll-up.png</textureup>
+				<texturedown>amt-scroll-down.png</texturedown>
+				<textureupfocus>amt-scroll-up-focus.png</textureupfocus>
+				<texturedownfocus>amt-scroll-down-focus.png</texturedownfocus>
 				<visible allowhiddenfocus="false">Control.IsVisible(170)</visible>
 			</control>
             <control type="button">
@@ -892,8 +892,8 @@
                 <posy>385</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
             </control>
@@ -902,11 +902,11 @@
 				<posy>401</posy>
 				<width>16</width>
 				<height>113</height>
-				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
-				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
-				<texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
+				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
+				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
 				<onleft>170</onleft>
 				<onright>70</onright>
 				<showonepage>true</showonepage>
@@ -919,8 +919,8 @@
                 <posy>514</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
                 <onclick>PageDown(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
             </control>
@@ -945,7 +945,7 @@
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -974,7 +974,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>!Control.HasFocus(70)</visible>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<width>472</width>
@@ -982,7 +982,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>Control.HasFocus(70)</visible>
-						<texture>default-list-focus2.png</texture>
+						<texture>amt-list-focus2.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -1011,8 +1011,8 @@
                 <posy>385</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2070)</onclick>
 				<visible>Control.IsVisible(70)</visible>
             </control>
@@ -1021,11 +1021,11 @@
 				<posy>401</posy>
 				<width>16</width>
 				<height>113</height>
-				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
-				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
-				<texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
+				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
+				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
 				<onleft>70</onleft>
 				<onright>60</onright>
 				<showonepage>true</showonepage>
@@ -1038,8 +1038,8 @@
                 <posy>514</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
                 <onclick>PageDown(2070)</onclick>
 				<visible>Control.IsVisible(70)</visible>
             </control>
@@ -1070,7 +1070,7 @@
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -1111,7 +1111,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>!Control.HasFocus(60)</visible>
-						<texture>default-list-nofocus.png</texture>
+						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
 						<width>485</width>
@@ -1119,7 +1119,7 @@
 						<posx>0</posx>
 						<posy>0</posy>
 						<visible>Control.HasFocus(60)</visible>
-						<texture>default-list-focus2.png</texture>
+						<texture>amt-list-focus2.png</texture>
 					</control>
 					<control type="image">
 						<posx>5</posx>
@@ -1172,8 +1172,8 @@
                 <posy>100</posy>
                 <width>16</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-up-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-up-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2060)</onclick>
             </control>
 			<control type="scrollbar" id="2060">
@@ -1181,11 +1181,11 @@
 				<posy>116</posy>
 				<width>16</width>
 				<height>374</height>
-				<texturesliderbackground border="4">default-scrollbar-bg.png</texturesliderbackground>
-				<texturesliderbar border="3">default-scrollbar-bar-nofocus.png</texturesliderbar>
-				<texturesliderbarfocus border="3">default-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>default-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>default-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
+				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
+				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
 				<onleft>60</onleft>
 				<onright>9000</onright>
 				<showonepage>true</showonepage>
@@ -1197,8 +1197,8 @@
                 <posy>490</posy>
                 <width>12</width>
                 <height>16</height>
-                <texturenofocus>default-scrollbar-down-arrow.png</texturenofocus>
-                <texturefocus>default-scrollbar-down-arrow-focus.png</texturefocus>
+                <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
+                <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
                 <onclick>PageDown(2060)</onclick>
             </control>
 			<!-- ** Required ** Do not change <description> -->
