@@ -7,7 +7,8 @@ Nuka1195
 import sys
 import os
 import xbmcgui
-#import xbmc
+import xbmc
+#import traceback
 
 from utilities import *
 
@@ -41,7 +42,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._get_thumb( self.getControl( 503 ).getSelectedItem().getLabel() )
 
     def _setup_list( self ):
-        self.getControl( 501 ).setVisible( self.list_control == 0 )
         self.getControl( 502 ).setVisible( False )
         self.getControl( 503 ).setVisible( self.list_control == 0 )
         self.getControl( 504 ).setVisible( self.list_control == 1 )
@@ -55,8 +55,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.setFocus( self.getControl( 503 + self.list_control ) )
 
     def _get_thumb( self, choice ):
-        thumbnail = os.path.join( self.base_path, choice, "thumbnail.tbn" )
-        self.getControl( 501 ).setImage( thumbnail )
+        xbmc.executebuiltin( "Skin.SetString(AMT-chooser-thumbfolder,%s)" % ( os.path.join( self.base_path, choice, "media", "thumbs" ), ) )
         self.getControl( 502 ).setVisible( os.path.isfile( os.path.join( self.base_path, choice, "warning.txt" ) ) )
 
     def _close_dialog( self, selection=None ):

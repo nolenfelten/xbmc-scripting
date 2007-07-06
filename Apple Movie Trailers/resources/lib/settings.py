@@ -206,7 +206,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #7 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "startup_category_id" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 206 ), ) )
+        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 207 ), ) )
         if ( selection is not None ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -215,7 +215,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut1" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 207 ), ) )
+        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 208 ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -224,7 +224,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut2" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 208 ), ) )
+        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 209 ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -233,7 +233,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #10 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut3" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 209 ), ) )
+        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( 210 ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut3" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -255,7 +255,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting14( self ):
         """ changes settings #14 """
-        selection = self._get_chooser( self.videoplayer_displayresolutions, self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( 211 ), ) )
+        selection = self._get_chooser( self.videoplayer_displayresolutions, self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( 214 ), ) )
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
             self._set_controls_values()
