@@ -252,9 +252,10 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_thumbnail( self, movie ):
         poster = ( movie.poster, "amt-blank-poster.tbn", )[ not movie.poster ]
-        if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ): thumbnail = poster
+        if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ):
+            thumbnail = poster
         else:
-            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.tbn" % ( ( "", "-w", )[ movie.watched ], ), "", )[ self.settings[ "thumbnail_display" ] ]
         return thumbnail, poster
         
 
