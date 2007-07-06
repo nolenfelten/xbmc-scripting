@@ -342,14 +342,14 @@
 						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<posx>5</posx>
+						<posx>2</posx>
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
                         <info>ListItem.Icon</info>
 					</control>
 					<control type="label">
-						<posx>30</posx>
+						<posx>25</posx>
 						<posy>3</posy>
 						<width>290</width>
 						<height>22</height>
@@ -391,14 +391,14 @@
 						<texture>amt-list-focus2.png</texture>
 					</control>
 					<control type="image">
-						<posx>5</posx>
+						<posx>2</posx>
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
 						<info>ListItem.Icon</info>
 					</control>
 					<control type="label">
-						<posx>30</posx>
+						<posx>25</posx>
 						<posy>3</posy>
 						<width>290</width>
 						<height>22</height>
@@ -604,6 +604,14 @@
                 </itemlayout>
                 <focusedlayout height="185" width="97">
                     <control type="image">
+                        <width>89</width>
+                        <height>175</height>
+                        <posx>4</posx>
+                        <posy>5</posy>
+                        <texture border="5">amt-keyboard-btn-space-focus2.png</texture>
+                        <animation effect="zoom" end="0,0,97,185" time="100">focus</animation>
+                    </control>
+                    <control type="image">
                         <posx>8</posx>
                         <posy>10</posy>
                         <width>81</width>
@@ -618,14 +626,6 @@
                         <height>30</height>
                         <info>ListItem.Overlay</info>
                         <animation effect="slide" end="4,5" time="100">focus</animation>
-                    </control>
-                    <control type="image">
-                        <width>89</width>
-                        <height>175</height>
-                        <posx>4</posx>
-                        <posy>5</posy>
-                        <texture>amt-folder-focus.png</texture>
-                        <animation effect="zoom" end="0,0,97,185" time="100">focus</animation>
                     </control>
                 </focusedlayout>
             </control>
@@ -861,6 +861,7 @@
                 <width>330</width>
                 <height>145</height>
                 <texture>amt-scrollbar-bg.png</texture>
+                <colordiffuse>90FFFFFF</colordiffuse>
 				<visible>Control.IsVisible(75)</visible>
             </control>
             <control type="textbox" id="75">
@@ -892,7 +893,6 @@
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
-                <colordiffuse>30FFFFFF</colordiffuse>
             </control>
 			<control type="scrollbar" id="2075">
 				<posx>525</posx>
@@ -945,16 +945,16 @@
 						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<posx>5</posx>
+						<posx>0</posx>
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
 						<info>ListItem.Icon</info>
 					</control>
 					<control type="label">
-						<posx>30</posx>
+						<posx>22</posx>
 						<posy>3</posy>
-						<width>115</width>
+						<width>123</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -982,16 +982,16 @@
 						<texture>amt-list-focus2.png</texture>
 					</control>
 					<control type="image">
-						<posx>5</posx>
+						<posx>0</posx>
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
 						<info>ListItem.Icon</info>
 					</control>
 					<control type="label">
-						<posx>30</posx>
+						<posx>22</posx>
 						<posy>3</posy>
-						<width>115</width>
+						<width>123</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
