@@ -238,11 +238,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.clearList()
                 if ( self.trailers.movies ):
                     for movie in self.trailers.movies: # now fill the list control
-                        poster = ( movie.poster, "amt-blank-poster.tbn", )[ not movie.poster ]
-                        if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ): thumbnail = poster
-                        else:
-                            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
-                        #favorite = ( "", "*", )[ movie.favorite ]
+                        thumbnail, poster = self._get_thumbnail( movie )
                         urls = ( "%s", "(%s)", )[ not movie.trailer_urls ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
                         list_item = xbmcgui.ListItem( urls % ( movie.title, ), rating, poster, thumbnail )
@@ -253,6 +249,14 @@ class GUI( xbmcgui.WindowXML ):
         except:
             traceback.print_exc()
         xbmcgui.unlock()
+
+    def _get_thumbnail( self, movie ):
+        poster = ( movie.poster, "amt-blank-poster.tbn", )[ not movie.poster ]
+        if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ): thumbnail = poster
+        else:
+            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+        return thumbnail, poster
+        
 
     def _set_selection( self, list_control, pos=0 ):
         if ( list_control == self.CONTROL_TRAILER_LIST_START ): 
@@ -363,7 +367,7 @@ class GUI( xbmcgui.WindowXML ):
             self.showOverlays( trailer )
         except: traceback.print_exc()#pass
         xbmcgui.unlock()
-        
+
     def showOverlays( self, trailer=-1 ):
         if ( trailer != -1 ):
             self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( self.trailers.movies[ trailer ].favorite )
@@ -514,7 +518,7 @@ class GUI( xbmcgui.WindowXML ):
         success = self.trailers.updateRecord( "movies", ( "times_watched", "last_watched", ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
         if ( success ):
             self.trailers.movies[ trailer ].watched = watched
-            thumbnail = ( ( self.trailers.movies[ trailer ].thumbnail, self.trailers.movies[ trailer ].thumbnail_watched )[ self.trailers.movies[ trailer ].watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer.tbn", "", )[ self.settings[ "thumbnail_display" ] ]
+            thumbnail, poster = self._get_thumbnail( self.trailers.movies[ trailer ] )
             self.getListItem( trailer ).setThumbnailImage( thumbnail )
             self.showOverlays( trailer )
         else:
