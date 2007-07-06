@@ -182,29 +182,8 @@
 		</control>
 		<!-- ** Optional ** -->
 		<!-- This control is where you add your credits. -->
-		<control type="label">
-			<description>Skin Credits</description>
-			<posx>66</posx>
-			<posy>281</posy>
-			<width>200</width>
-			<height>20</height>
-			<font>font10</font>
-			<aligny>center</aligny>
-			<align>left</align>
-			<label>Graphics &amp; Skinning</label>
-		</control>
-		<control type="label">
-			<posx>338</posx>
-			<posy>281</posy>
-			<width>150</width>
-			<height>20</height>
-			<font>font10</font>
-			<aligny>center</aligny>
-			<align>right</align>
-			<label>Chokemaniac &amp; Jezz_X</label>
-		</control>
-		<!--control type="list">
-			<description>Additional Credits List</description>
+		<control type="list" id="103">
+			<description>Skinning Credits List</description>
 			<posx>63</posx>
 			<posy>281</posy>
 			<width>300</width>
@@ -227,7 +206,7 @@
 				<control type="label">
 					<posx>275</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -249,7 +228,7 @@
 				<control type="label">
 					<posx>275</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -257,6 +236,6 @@
 					<info>ListItem.Label2</info>
 				</control>
 			</focusedlayout>
-		</control-->
+		</control>
 	</controls>
 </window>
