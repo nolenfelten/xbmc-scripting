@@ -1,0 +1,133 @@
+<window>
+	<defaultcontrol>72</defaultcontrol>
+	<controls>
+		<control type="image" id="78">
+			<description>attachpanel</description>
+			<posx>350</posx>
+			<posy>0</posy>
+			<width>395</width>
+			<height>600</height>
+			<texture>XBattach.png</texture>
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+		</control>
+		<control type="image" id="71">
+			<description>fsoverlay</description>
+			<posx>-40</posx>
+			<posy>0</posy>
+			<width>650</width>
+			<height>600</height>
+			<texture>XBemailopen.png</texture>
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+		</control>
+        	<control type="textbox" id="72">
+            		<description>fsmsgbody</description>
+            		<posx>150</posx>
+            		<posy>150</posy>
+            		<width>390</width>
+            		<height>300</height>
+            		<spinposx>232</spinposx>
+            		<spinposy>290</spinposy>
+            		<textureup>XBscroll-up.png</textureup>
+            		<texturedown>XBscroll-down.png</texturedown>
+            		<textureupfocus>XBscroll-up-focus.png</textureupfocus>
+            		<texturedownfocus>XBscroll-down-focus.png</texturedownfocus>
+            		<font>font13</font>
+            		<textcolor>FFFFFFFF</textcolor>
+            		<onup>72</onup> 
+            		<ondown>72</ondown>
+            		<onleft>72</onleft>
+           		<onright>75</onright>
+        	</control>	
+		<control type="list" id="77">
+			<posx>560</posx>
+			<posy>150</posy>
+			<width>140</width>
+			<height>120</height>
+			<onleft>76</onleft>
+			<onright>77</onright>
+			<onup>77</onup>
+			<ondown>77</ondown>
+			<viewtype label="535">list</viewtype>
+			<itemlayout height="27">
+				<control type="image">
+					<width>440</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture>XBlist-nofocus.png</texture>
+				</control>
+				<control type="image">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>430</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="27">
+				<control type="image">
+					<width>150</width>
+					<height>25</height>
+					<posx>-5</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(77)</visible>
+					<texture>XBlist-focus.png</texture>
+				</control>
+				<control type="image">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>430</posx>
+					<posy>2</posy>
+					<width>300</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<textcolor>60ffffff</textcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</focusedlayout>
+		</control>
+    </controls>
+
+</window>

@@ -4,6 +4,7 @@ import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
+import XinBox_Email
 from os.path import join, exists
 from os import mkdir, remove
 SETTINGDIR = "P:\\script_data\\XinBox\\"
@@ -12,6 +13,7 @@ from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
+        self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
         self.account = account
@@ -89,6 +91,9 @@ class GUI( xbmcgui.WindowXML ):
         if item[2] == 0:icon = "XBemailread.png"
         else:icon = "XBemailreadattach.png"
         self.getListItem(pos).setThumbnailImage(icon)
+        w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin")
+        w.doModal()
+        del w
     
     def parse_email(self, email):
         parser = html2txt()
@@ -103,6 +108,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(62).setLabel(self.language(251))
         self.getControl(63).setLabel(self.language(252))
         self.getControl(64).setLabel(self.language(65))
+
 
     def checkfornew(self):
         w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
