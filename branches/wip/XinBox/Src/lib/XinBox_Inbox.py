@@ -49,8 +49,8 @@ class GUI( xbmcgui.WindowXML ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if (50 <= focusid <= 59):
-            self.deletemail(self.getCurrentListPosition(),0)
-           # self.openemail(self.getCurrentListPosition())
+           # self.deletemail(self.getCurrentListPosition(),0)
+            self.openemail(self.getCurrentListPosition())
         if controlID == 64:
             self.close()
         elif controlID == 61:
