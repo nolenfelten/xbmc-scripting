@@ -19,6 +19,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
 
     def onClick(self, controlID):
+        if controlID == 64:
+            self.attachlist = not self.attachlist
+            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")     
         pass
             
     def onAction( self, action ):
@@ -36,9 +39,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
             time.sleep(0.8)
             self.close()
-        elif ( button_key == 'Keyboard Menu Button' ):
-            self.attachlist = not self.attachlist
-            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
                
     def onFocus(self, controlID):
         pass 

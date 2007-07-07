@@ -1,5 +1,5 @@
 <window>
-	<defaultcontrol>72</defaultcontrol>
+	<defaultcontrol>61</defaultcontrol>
 	<controls>
 		<control type="image" id="78">
 			<description>attachpanel</description>
@@ -29,8 +29,8 @@
             		<posy>150</posy>
             		<width>390</width>
             		<height>300</height>
-            		<spinposx>232</spinposx>
-            		<spinposy>290</spinposy>
+            		<spinposx>185</spinposx>
+            		<spinposy>360</spinposy>
             		<textureup>XBscroll-up.png</textureup>
             		<texturedown>XBscroll-down.png</texturedown>
             		<textureupfocus>XBscroll-up-focus.png</textureupfocus>
@@ -40,9 +40,15 @@
             		<onup>72</onup> 
             		<ondown>72</ondown>
             		<onleft>72</onleft>
-           		<onright>75</onright>
+           		<onright>61</onright>
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
         	</control>	
 		<control type="list" id="77">
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
 			<posx>560</posx>
 			<posy>150</posy>
 			<width>140</width>
@@ -127,6 +133,89 @@
 					<info>ListItem.Label2</info>
 				</control>
 			</focusedlayout>
+		</control>
+		<control type="group" id="9000">
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+			<posx>376</posx>
+			<posy>505</posy>
+			<control type="button" id="61">
+				<description>Reply Button</description>
+				<posx>0</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>R</label>
+				<onright>62</onright>
+				<onup>61</onup>
+				<ondown>61</ondown>
+				<onleft>72</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>36</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="62">
+				<description>Forward Button</description>
+				<posx>39</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>F</label>
+				<onup>62</onup>
+				<onleft>61</onleft>
+				<onright>63</onright>
+				<ondown>62</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>36</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="63">
+				<description>Delete Button</description>
+				<posx>78</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>D</label>
+				<onup>63</onup>
+				<onleft>62</onleft>
+				<onright>64</onright>
+				<ondown>63</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>36</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="64">
+				<description>Attach Button</description>
+				<posx>117</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>A</label>
+				<onup>64</onup>
+				<onleft>63</onleft>
+				<onright>64</onright>
+				<ondown>64</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>36</width>
+				<height>35</height>
+			</control>
 		</control>
     </controls>
 
