@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -91,9 +91,11 @@ class GUI( xbmcgui.WindowXML ):
         if item[2] == 0:icon = "XBemailread.png"
         else:icon = "XBemailreadattach.png"
         self.getListItem(pos).setThumbnailImage(icon)
-        w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin")
-        w.doModal()
-        del w
+        try:
+            w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
+            w.doModal()
+            del w
+        except:traceback.print_exc()
     
     def parse_email(self, email):
         parser = html2txt()
