@@ -128,7 +128,7 @@ class Settings:
             "trailer_quality": 2,
             "mode": 0,
             "save_folder": "f:\\",
-            "thumbnail_display": 1,
+            "thumbnail_display": 0,
             "fade_thumb": True,
             "startup_category_id": 10,
             "shortcut1": 10,

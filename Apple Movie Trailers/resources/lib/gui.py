@@ -45,10 +45,13 @@ class GUI( xbmcgui.WindowXML ):
     CONTROL_TRAILER_LIST_END = 59
     CONTROL_TRAILER_LIST_PAGE_START = 2050
     CONTROL_TRAILER_LIST_PAGE_END = 2059
+    CONTROL_TRAILER_LIST_PAGE_GROUP_START = 2550
+    CONTROL_TRAILER_LIST_PAGE_GROUP_END = 2579
     CONTROL_TRAILER_LIST_COUNT = 2150
     CONTROL_CATEGORY_LIST = 60
     CONTROL_CATEGORY_LIST_PAGE = 2060
     CONTROL_CATEGORY_LIST_COUNT = 2160
+    CONTROL_CATEGORY_LIST_PAGE_GROUP = ( 2650, 2660, 2661, )
     CONTROL_CAST_LIST = 70
     CONTROL_CAST_LIST_PAGE = 2070
     CONTROL_CAST_BUTTON = 170
@@ -255,7 +258,7 @@ class GUI( xbmcgui.WindowXML ):
         if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ):
             thumbnail = poster
         else:
-            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.tbn" % ( ( "", "-w", )[ movie.watched ], ), "", )[ self.settings[ "thumbnail_display" ] ]
+            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.tbn" % ( ( "", "-w", )[ movie.watched > 0 ], ), "", )[ self.settings[ "thumbnail_display" ] ]
         return thumbnail, poster
         
 
@@ -808,6 +811,10 @@ class GUI( xbmcgui.WindowXML ):
                 elif ( self.controlId == self.CONTROL_CAST_LIST ):
                     if ( action.getButtonCode() in CONTEXT_MENU ):
                         self.showContextMenu()
+                elif ( ( self.CONTROL_TRAILER_LIST_PAGE_GROUP_START <= self.controlId <= self.CONTROL_TRAILER_LIST_PAGE_GROUP_END ) and action.getButtonCode() in SELECT_ITEM ):
+                    self.showTrailerInfo()
+                elif ( self.controlId in self.CONTROL_CATEGORY_LIST_PAGE_GROUP and action.getButtonCode() in SELECT_ITEM ):
+                    self._set_count_label( self.CONTROL_CATEGORY_LIST )
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getActorChoice()
         except:
