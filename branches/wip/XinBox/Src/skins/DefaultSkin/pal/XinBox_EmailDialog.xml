@@ -23,14 +23,38 @@
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
 		</control>
+        	<control type="fadelabel" id="73">
+			<description>email subject and from</description>
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+			<width>524</width>
+			<posx>20</posx>
+			<posy>50</posy>
+			<align>right</align>
+			<font>special13</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control> 
+		<control type="fadelabel" id="74">
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+			<description>Email Rec</description>
+			<posx>20</posx>
+			<posy>510</posy>
+			<width>277</width>
+			<align>left</align>
+			<font>font18</font>
+			<textcolor>FFB2D4F5</textcolor>
+		</control>
         	<control type="textbox" id="72">
             		<description>fsmsgbody</description>
-            		<posx>150</posx>
-            		<posy>150</posy>
-            		<width>390</width>
-            		<height>300</height>
-            		<spinposx>185</spinposx>
-            		<spinposy>360</spinposy>
+            		<posx>30</posx>
+            		<posy>80</posy>
+            		<width>500</width>
+            		<height>450</height>
+            		<spinposx>305</spinposx>
+            		<spinposy>435</spinposy>
             		<textureup>XBscroll-up.png</textureup>
             		<texturedown>XBscroll-down.png</texturedown>
             		<textureupfocus>XBscroll-up-focus.png</textureupfocus>
@@ -45,11 +69,11 @@
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
         	</control>	
-		<control type="list" id="77">
+		<control type="list" id="81">
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<posx>560</posx>
+			<posx>250</posx>
 			<posy>150</posy>
 			<width>140</width>
 			<height>120</height>
@@ -206,7 +230,7 @@
 				<label>A</label>
 				<onup>64</onup>
 				<onleft>63</onleft>
-				<onright>64</onright>
+				<onright>81</onright>
 				<ondown>64</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
