@@ -7,6 +7,7 @@ import XinBox_InBoxMenu
 import XinBox_InfoDialog
 from os.path import join, exists
 from os import mkdir
+from XinBox_Settings import Settings
 DATADIR = "P:\\script_data\\"
 SETTINGSDIR = "P:\\script_data\\XinBox\\Accounts\\"
 
@@ -28,7 +29,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.accountSettings = self.getaccountsettings(self.account)
         self.accountinboxes = self.buildinboxdict(self.accountSettings)
         self.originalSettings = self.theSettings
-
+        
     def buildinboxdict(self,accountsettings):
         inboxes = []
         for set in self.accountSettings.getSetting("Inboxes")[1]:
@@ -178,6 +179,7 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
                     self.editallaccounts("Default Account","False",self.account)
             self.theSettings.saveXMLfromArray()
+            self.accounts = self.buildaccounts()
             self.savedaccountname = self.account
             self.getControl(81).setLabel(self.account)
             self.builddirs()

@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -30,6 +30,7 @@ class GUI( xbmcgui.WindowXML ):
         self.setupcontrols()
         xbmcgui.unlock()
         self.reademid()
+        self.updatesizelabel()
         
     def setupvars(self):
         self.guilist = []
@@ -48,8 +49,8 @@ class GUI( xbmcgui.WindowXML ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if (50 <= focusid <= 59):
-           # self.deletemail(self.getCurrentListPosition(),0)
-            self.openemail(self.getCurrentListPosition())
+            self.deletemail(self.getCurrentListPosition(),0)
+           # self.openemail(self.getCurrentListPosition())
         if controlID == 64:
             self.close()
         elif controlID == 61:
@@ -107,12 +108,24 @@ class GUI( xbmcgui.WindowXML ):
         w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
         w.checkemail()
         newlist = w.newlist
-        self.servsize = w.serversize
+        self.serversize = w.serversize
         self.inboxsize = w.inboxsize
         del w
+        self.updatesizelabel()
         if len(newlist) != 0:
             self.updatelist(newlist)
-                
+
+    def updatesizelabel(self):
+        if self.theservsize == False:
+            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
+        else:
+            self.getControl(81).setEnabled(self.checksize(int(self.serversize),self.theservsize))
+            self.getControl(81).setLabel(self.language(257) + self.getsizelabel(int(self.serversize)) + "/" + str(self.theservsize) +"MB")
+        if self.ibxsize == False:
+            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(self.inboxsize))
+        else:
+            self.getControl(82).setEnabled(self.checksize(int(self.inboxsize),self.ibxsize))
+            self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")
 
     def deletemail(self, pos, setting):
         w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
@@ -120,6 +133,7 @@ class GUI( xbmcgui.WindowXML ):
         self.serversize = w.serversize
         self.inboxsize = w.inboxsize                
         del w
+        self.updatesizelabel()
         if setting != 1:
             self.removeItem(pos)
             self.guilist.pop(pos)
@@ -134,10 +148,12 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def setinboxempty(self):
+        self.inboxsize = 0
         self.addItem(self.language(256))
         self.getControl(50).setEnabled(False)
         self.setFocusId(61)
         self.getControl(67).setText("")
+        self.updatesizelabel()
 
 
     def checksize(self,currsize, limit):
@@ -152,6 +168,8 @@ class GUI( xbmcgui.WindowXML ):
                 os.remove(os.path.join(root, name))
 
     def getsizelabel (self, size):
+        if size == 0:
+            return self.language(259)
         if size >= 1024:
             size = size/1024.0
             sizeext = "KB"
@@ -175,7 +193,7 @@ class GUI( xbmcgui.WindowXML ):
             self.guilist.insert(0,[item[0],myemail,item[1],readstatus,item[2],item[3]])
             if item[1] == 0:icon="XBnewemailnotread.png"
             else:icon="XBnewattachemailnotread.png"
-            self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),icon,icon),0)
+            self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
         dialog.close()
 
     def geticon(self,attstat, readstat):
@@ -191,6 +209,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def reademid(self):
         if not exists(self.ibfolder + "emid.xib"):
+            self.serversize = 0
             self.setinboxempty()
             return
         dialog = xbmcgui.DialogProgress()
@@ -202,9 +221,15 @@ class GUI( xbmcgui.WindowXML ):
             dialog.update((i*100)/len(lines),self.language(253),"")
             theline = line.strip("\n")
             myline = theline.split("|")
-            if myline[1] == "Account Name":self.accountname = myline[2]
-            elif myline[1] == "Server Size":self.serversize = myline[2]
-            elif myline[1] == "Inbox Size":self.inboxsize = myline[2]
+            if myline[1] == "Account Name":
+                self.accountname = myline[2]
+                popname = myline[3]
+                if self.accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
+                    self.serversize = 0
+                    self.removefiles(self.ibfolder)
+                    break
+            elif myline[1] == "Server Size":self.serversize = int(myline[2])
+            elif myline[1] == "Inbox Size":self.inboxsize = int(myline[2])
             else:
                 if myline[0] != "-":
                     f = open(self.ibfolder + myline[2] + ".sss", "r")
@@ -213,10 +238,10 @@ class GUI( xbmcgui.WindowXML ):
                     myemail = email.message_from_string(myfile.split("|")[1])
                     readstatus = int(myfile.split("|")[0])
                     attachstat = int(myline[3])
-                                        #"sssfilenam,  email,   attachstat,   readstat,    time,   date
+                                        #"sssfilenam, email, attachstat, readstat,  time,     date
                     self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5]])
                     icon=self.geticon(attachstat,readstatus)
-                    self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')),myemail.get('From'),icon,icon),0)
+                    self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
         if len(self.guilist) == 0:self.setinboxempty()
         dialog.close()
 
