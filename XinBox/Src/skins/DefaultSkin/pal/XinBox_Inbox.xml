@@ -123,9 +123,9 @@
 				<height>37</height>
 			</control>
 			<control type="button" id="63">
-				<description>MiniMode Button</description>
+				<description>Clean Button</description>
 				<posx>0</posx>
-				<posy>379</posy>
+				<posy>320</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
@@ -142,16 +142,35 @@
 				<height>37</height>
 			</control>
 			<control type="button" id="64">
-				<description>Exit Button</description>
+				<description>MiniMode Button</description>
 				<posx>0</posx>
-				<posy>436</posy>
+				<posy>379</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
 				<onup>63</onup>
 				<onleft>64</onleft>
 				<onright>50</onright>
-				<ondown>64</ondown>
+				<ondown>65</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>108</width>
+				<height>37</height>
+			</control>
+			<control type="button" id="65">
+				<description>Exit Button</description>
+				<posx>0</posx>
+				<posy>436</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
+				<onup>64</onup>
+				<onleft>65</onleft>
+				<onright>50</onright>
+				<ondown>65</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
