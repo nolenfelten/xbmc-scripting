@@ -12,6 +12,107 @@
 			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(attachlistnotempty)</visible>
 		</control>
+  		<control type="label" id="89">
+        		<description>Attachments Label</description>
+        		<posx>565</posx>
+        		<posy>50</posy>
+        		<width>150</width>
+        		<label>-</label>
+        		<font>special13</font>
+        		<textcolor>FFB2D4F5</textcolor>
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+  		</control>
+  		<control type="label" id="90">
+        		<description>Attachments Size Label</description>
+        		<posx>565</posx>
+        		<posy>500</posy>
+        		<width>150</width>
+        		<label>-</label>
+        		<font>special13</font>
+        		<textcolor>FFB2D4F5</textcolor>
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+  		</control>
+		<control type="image">
+			<description>Attachment Background Image</description>
+			<posx>535</posx>
+			<posy>280</posy>
+			<width>190</width>
+			<height>190</height>
+			<texture>XBattachempty.png</texture>
+			<aspectratio>keep</aspectratio>
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+		</control>
+		<control type="image" id="80">
+			<description>Attachment Image</description>
+			<posx>552</posx>
+			<posy>290</posy>
+			<width>155</width>
+			<height>155</height>
+			<texture>-</texture>
+			<aspectratio>keep</aspectratio>
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+		</control>
+		<control type="list" id="81">
+			<animation effect="slide" start="-200,0" time="800">Visible</animation>
+			<animation effect="slide" end="-200,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(attachlistnotempty)</visible>
+			<posx>557</posx>
+			<posy>80</posy>
+			<width>150</width>
+			<height>170</height>
+			<onleft>64</onleft>
+			<onright>81</onright>
+			<onup>81</onup>
+			<ondown>81</ondown>
+			<viewtype label="535">list</viewtype>
+			<itemlayout height="27">
+				<control type="image">
+					<width>150</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture>XBlist-nofocus.png</texture>
+				</control>
+				<control type="label">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="27">
+				<control type="image">
+					<width>150</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(81)</visible>
+					<texture>XBlist-focus.png</texture>
+				</control>
+				<control type="label">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+			</focusedlayout>
+		</control>
 		<control type="image" id="71">
 			<description>fsoverlay</description>
 			<posx>-40</posx>
@@ -68,96 +169,18 @@
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-        	</control>	
-		<control type="list" id="81">
+        	</control>
+		<control type="image" id="91">
+			<description>Big Attach Image</description>
+			<posx>30</posx>
+			<posy>80</posy>
+			<width>500</width>
+			<height>450</height>
+			<texture>-</texture>
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<posx>250</posx>
-			<posy>150</posy>
-			<width>140</width>
-			<height>120</height>
-			<onleft>76</onleft>
-			<onright>77</onright>
-			<onup>77</onup>
-			<ondown>77</ondown>
-			<viewtype label="535">list</viewtype>
-			<itemlayout height="27">
-				<control type="image">
-					<width>440</width>
-					<height>25</height>
-					<posx>0</posx>
-					<posy>0</posy>
-					<texture>XBlist-nofocus.png</texture>
-				</control>
-				<control type="image">
-					<posx>5</posx>
-					<posy>3</posy>
-					<width>20</width>
-					<height>20</height>
-					<info>ListItem.Icon</info>
-				</control>
-				<control type="label">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>380</width>
-					<height>22</height>
-					<font>font13</font>
-					<selectedcolor>FFe2ff43</selectedcolor>
-					<align>left</align>
-					<info>ListItem.Label</info>
-				</control>
-				<control type="label">
-					<posx>430</posx>
-					<posy>2</posy>
-					<width>300</width>
-					<height>22</height>
-					<font>font13</font>
-					<selectedcolor>FFe2ff43</selectedcolor>
-					<selectedcolor>FFe2ff43</selectedcolor>
-					<align>right</align>
-					<info>ListItem.Label2</info>
-				</control>
-			</itemlayout>
-			<focusedlayout height="27">
-				<control type="image">
-					<width>150</width>
-					<height>25</height>
-					<posx>-5</posx>
-					<posy>0</posy>
-					<visible>Control.HasFocus(77)</visible>
-					<texture>XBlist-focus.png</texture>
-				</control>
-				<control type="image">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>20</width>
-					<height>20</height>
-					<info>ListItem.Icon</info>
-				</control>
-				<control type="label">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>380</width>
-					<height>22</height>
-					<font>font13</font>
-					<selectedcolor>FFe2ff43</selectedcolor>
-					<align>left</align>
-					<info>ListItem.Label</info>
-				</control>
-				<control type="label">
-					<posx>430</posx>
-					<posy>2</posy>
-					<width>300</width>
-					<height>22</height>
-					<font>font13</font>
-					<selectedcolor>FFe2ff43</selectedcolor>
-					<textcolor>60ffffff</textcolor>
-					<align>right</align>
-					<info>ListItem.Label2</info>
-				</control>
-			</focusedlayout>
-		</control>
+		</control>	
 		<control type="group" id="9000">
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
