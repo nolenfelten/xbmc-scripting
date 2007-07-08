@@ -1,7 +1,6 @@
 
 
 import xbmc, xbmcgui, time, sys, os,email, string,shutil
-
 import XinBox_Util
 from sgmllib import SGMLParser  
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
