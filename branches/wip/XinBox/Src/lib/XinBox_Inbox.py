@@ -51,12 +51,21 @@ class GUI( xbmcgui.WindowXML ):
         try:focusid = self.getFocusId()
         except:focusid = 0
         if (50 <= focusid <= 59):
-           # self.deletemail(self.getCurrentListPosition(),0)
             self.openemail(self.getCurrentListPosition())
-        if controlID == 64:
+        elif controlID == 65:
             self.close()
         elif controlID == 61:
             self.checkfornew()
+        elif controlID == 63:
+            self.cleaninbox()
+
+    def cleaninbox(self):
+        dialog = xbmcgui.Dialog()
+        if dialog.ok(self.language(210) + self.inbox, self.language(276)):  
+            self.removefiles(self.ibfolder)
+            self.clearList()
+            self.onInit()
+            return
   
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -80,7 +89,6 @@ class GUI( xbmcgui.WindowXML ):
         else:self.getControl(67).setText(self.parse_email(myemail.get_payload()))
 
     def openemail(self, pos):
-        #open dialog here
         item = self.guilist[pos]
         f = open(self.ibfolder + item[0] + ".sss", "r")
         myfile = f.read().split("|")[1]
@@ -109,8 +117,10 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(80).setLabel(self.inbox)
         self.getControl(61).setLabel(self.language(250))
         self.getControl(62).setLabel(self.language(251))
-        self.getControl(63).setLabel(self.language(252))
-        self.getControl(64).setLabel(self.language(65))
+        self.getControl(63).setLabel(self.language(275))
+        self.getControl(64).setLabel(self.language(252))
+        self.getControl(65).setLabel(self.language(65))
+        
 
 
     def checkfornew(self):

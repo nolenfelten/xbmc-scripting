@@ -174,4 +174,6 @@
 	<string id="272">Inbox Only</string>
 	<string id="273">Server Only</string>
 	<string id="274">Inbox and Server</string>
+	<string id="275">Reset</string>
+	<string id="276">Are you sure you want to reset this inbox?</string>
 </strings>
