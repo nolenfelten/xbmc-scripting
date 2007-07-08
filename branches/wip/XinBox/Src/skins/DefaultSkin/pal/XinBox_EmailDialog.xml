@@ -174,8 +174,8 @@
 			<description>Big Attach Image</description>
 			<posx>30</posx>
 			<posy>80</posy>
-			<width>500</width>
-			<height>450</height>
+			<width>480</width>
+			<height>430</height>
 			<texture>-</texture>
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
