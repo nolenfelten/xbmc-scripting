@@ -158,7 +158,6 @@ class GUI( xbmcgui.WindowXML ):
     def setinboxnotemtpy(self):
         self.getControl(50).setEnabled(True)
         self.clearList()
-        self.setFocusId(50)
 
 
     def setinboxempty(self):

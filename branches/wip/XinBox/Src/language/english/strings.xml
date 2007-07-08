@@ -165,4 +165,13 @@
 	<string id="263">Deleteing email from server</string>
 	<string id="264">Email was not found on server</string>
 	<string id="265">Deleteing email from server and inbox</string>
+	<string id="266">Attachments</string>
+	<string id="267">Size:</string>
+	<string id="268">Save %s to...</string>
+	<string id="269">%s saved to %s</string>
+	<string id="270">%s FAILED to save to %s</string>
+	<string id="271">Delete Email From:</string>
+	<string id="272">Inbox Only</string>
+	<string id="273">Server Only</string>
+	<string id="274">Inbox and Server</string>
 </strings>
