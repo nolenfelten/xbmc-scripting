@@ -38,6 +38,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(73).addLabel(self.emailsettings[1].get('subject').replace("\n","") + "  " + self.language(260) + "   " + self.emailsettings[1].get('from').replace("\n",""))
         self.settextbox()
         self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
+        self.getControl(80).setImage("XBXinBoXLogo.png")
+        self.getControl(90).setLabel("")
+        
 
     def setupcontrols(self):
         self.getControl(80).setImage("XBXinBoXLogo.png")
@@ -93,9 +96,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onClick(self, controlID):
         if not self.exiting:
             if controlID == 64:
+                self.exiting = True
                 self.attachlist = not self.attachlist
-                self.getControl(81).setEnabled(self.attachlist)
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+                time.sleep(0.8)
+                self.click = 0
+                self.resetemail()
+                self.getControl(81).setEnabled(self.attachlist)
+                self.exiting = False
             elif controlID == 81:
                 self.openattach(self.getControl(81).getSelectedPosition())
             elif controlID == 63:
@@ -167,7 +175,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(74).reset()
         self.getControl(91).setImage(TEMPFOLDER + self.attachments[pos][0])
         self.getControl(72).setVisible(False)
-        self.getControl(64).setEnabled(False)
         self.getControl(63).setEnabled(False)
         self.getControl(62).setEnabled(False)
         self.getControl(61).setEnabled(False)
@@ -181,7 +188,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         f = open(TEMPFOLDER + self.attachments[pos][0], "r")
         self.getControl(72).setText(f.read())
         f.close()
-        self.getControl(64).setEnabled(False)
         self.getControl(63).setEnabled(False)
         self.getControl(62).setEnabled(False)
         self.getControl(61).setEnabled(False)
@@ -233,7 +239,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.showing = False
         self.getControl(91).setImage("-")
         self.getControl(72).setVisible(True)
-        self.getControl(64).setEnabled(True)
         self.getControl(63).setEnabled(True)
         self.getControl(62).setEnabled(True)
         self.getControl(61).setEnabled(True)

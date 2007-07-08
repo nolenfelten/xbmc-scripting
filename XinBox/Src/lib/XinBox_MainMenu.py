@@ -121,12 +121,6 @@ class GUI( xbmcgui.WindowXML ):
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
-##    def launchmenu(self, ID):
-##        Menus = {"XinBox_LoginMenu":XinBox_LoginMenu}
-##        w = Menus[ID].GUI(ID + ".xml",SRCPATH,"DefaultSkin")
-##        w.doModal()
-##        del w
-
     def launchinfo(self, focusid, label,heading=False,text=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",SRCPATH,"DefaultSkin",thefocid=focusid,thelabel=label,language=_,theheading=heading,thetext=text)
         dialog.doModal()

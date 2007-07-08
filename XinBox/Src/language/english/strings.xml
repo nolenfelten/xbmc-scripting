@@ -101,7 +101,7 @@
 	<string id="110">Select to Delete a Inbox in this Account.</string>
 	<string id="111">Select to Save all changed settings in this Account.</string>
 	<string id="112">Select to exit this menu. Note: Any unsaved data will be lost.</string>
-	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of the outgoing E-mail. Note: You will not be able to add an inbox to your account without a Display Name.</string>
+	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of any outgoing E-mails. Note: You will not be able to add an inbox to your account without a Display Name.</string>
 	<string id="114">Select to change your E-mail Address. This is the E-mail address other people use to send E-mail messages to you.</string>
 	<string id="115">Select to change your Incoming mail (POP3) Server. Eg. pop.gmail.com. SSL: Press right to change your POP3 SSL Server Port Number. Only some servers require this. Eg. Gmail - Pop3 SSL Port# 995</string>
 	<string id="116">Select to change your Outgoing mail (SMTP) Server. Eg. smtp.gmail.com. SSL: Press right to change your SMTP SSL Server Port Number. Only some servers require this. Eg. Gmail - SMTP SSL Port# 587</string>
