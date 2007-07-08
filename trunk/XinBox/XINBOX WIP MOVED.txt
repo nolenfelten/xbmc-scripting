@@ -1,1 +1,0 @@
-XINBOX WIP SVN MOVED:http://xbmc-scripting.googlecode.com/svn/branches/wip/XinBox

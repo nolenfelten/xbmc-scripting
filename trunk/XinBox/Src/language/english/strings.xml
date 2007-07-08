@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
+<!--English Strings VER: 0.3-->
+<strings>
+	<!-- Main Menu Labels -->
+  	<string id="10">Main Menu</string>
+  	<string id="11">Login</string>
+	<string id="12">Create</string>
+	<string id="13">Change</string>
+	<string id="14">About</string>
+	<string id="15">Exit</string>
+	<string id="16">to a Xinbox account</string>
+	<string id="17">a new Xinbox account</string>
+	<string id="18">the Xinbox settings</string>
+	<string id="19">the Xinbox script</string>
+	<string id="20">Select</string>
+	<string id="21">Help</string>
+	<string id="22">No Accounts have been created. Please Create a new account.</string>
+	
+	<!-- Login Menu Labels -->
+	<string id="30">Login Menu</string>
+	<string id="31">Please enter Account Password</string>
+	<string id="32">In-correct Password Entered</string>
+	<string id="33">Please enter Default Account Password</string>
+
+	<!-- Test Inbox Labels -->
+	<string id="34">Testing Servers</string>
+	<string id="35">No setting entered</string>
+	<string id="36">Server address wrong or wrong SSL</string>
+	<string id="37">Testing Inbox Settings</string>
+	<string id="38">Testing all necessary settings have been entered</string>
+	<string id="39">Checking %s</string>
+	<string id="40">POP3 Server Settings</string>
+	<string id="41">SMTP Server Settings</string>
+	<string id="42">Testing Server Login Settings</string>
+	<string id="43">POP3 Login Settings</string>
+	<string id="44">SMTP Login Settings</string>
+	<string id="45">POP3 Server did not accept User Name or User Password</string>
+	<string id="46">SMTP Server did not accept User Name or User Password</string>
+	<string id="47">Inbox Settings. OK</string>
+
+	<!-- Edit Account Menu Labels -->
+	<string id="48">Account saved. OK</string>
+	<string id="49">Success!</string>
+	<string id="50">Create Account</string>
+	<string id="51">Account Name:</string>
+	<string id="52">Account Password:</string>
+	<string id="53">Default Account</string>
+	<string id="61">Add</string>
+	<string id="62">Edit</string>
+	<string id="63">Delete</string>
+	<string id="64">Save</string>
+	<string id="65">Exit</string>
+	<string id="66">Change %s</string>
+	<string id="67">Display Name</string>
+	<string id="68">POP Server</string>
+	<string id="69">SMTP Server</string>
+	<string id="70">Server Username</string>
+	<string id="71">Server Password</string>
+	<string id="72">Server Size</string>
+	<string id="73">Inbox</string>
+	<string id="74">Edit Account</string>
+	<string id="75">No Inboxes</string>
+	<string id="76">No Password</string>
+	<string id="77">Warning!</string>
+	<string id="78">Are you sure you want to delete this inbox? Press OK to confirm, or press back to decline.</string>
+	<string id="79">Are you sure you want to exit? Any un-saved account settings will be lost.Press OK to confirm, or press back to decline.</string>
+
+	<!-- InBox Menu Labels -->
+	<string id="80">Add Inbox</string>
+	<string id="81">Edit Inbox</string>
+	<string id="82">Display Name:</string>
+	<string id="83">Incoming Mail(Pop3) Server:</string>
+	<string id="84">Outgoing Mail(SMTP) Server:</string>
+	<string id="85">Server User Name:</string>
+	<string id="86">Server User Password:</string>
+	<string id="87">Server Inbox Size (MB):</string>
+	<string id="88">XinBox Inbox Size (MB):</string>
+	<string id="89">Test Inbox</string>
+	<string id="90">SSL</string>
+	<string id="91">POP SSL</string>
+	<string id="92">SMTP SSL</string>
+	<string id="93">Error!</string>
+	<string id="94">You can not have two Inboxes in the same account with the same Display Name.</string>
+	<string id="95">You can not have two Accounts with the same Account Name.</string>
+	<string id="96">E-Mail Address:</string>
+	<string id="97">Keep copies of Emails on server:</string>
+	<string id="98">Disabled</string>
+	
+	<!-- Help Labels -->
+	<string id="99">XinBox Help :   -( %s )-</string>
+	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
+	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
+	<string id="102">Select if you wish to CHANGE the XinBox settings.</string>
+	<string id="103">Select if you wish to find out ABOUT the XinBox script.</string>
+	<string id="104">Select if you wish to EXIT the XinBox script and return to XBMC.</string>
+	<string id="105">Select to set the Account Name for your XinBox Account. Note: You will be unable to save your account without an Account Name.</string>	
+	<string id="106">Select to set the Account Password for your XinBox Account. Leave empty to disable a password for this account.</string>
+	<string id="107">Select to toggle if this Account is the Default Account. A Default Account automatically logs in on script start-up. Note: There can only be a maximum of one Default Account.</string>	
+	<string id="108">Select to Add a new Inbox to this Account.</string>
+	<string id="109">Select to Edit a Inbox in this Account.</string>
+	<string id="110">Select to Delete a Inbox in this Account.</string>
+	<string id="111">Select to Save all changed settings in this Account.</string>
+	<string id="112">Select to exit this menu. Note: Any unsaved data will be lost.</string>
+	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of the outgoing E-mail. Note: You will not be able to add an inbox to your account without a Display Name.</string>
+	<string id="114">Select to change your E-mail Address. This is the E-mail address other people use to send E-mail messages to you.</string>
+	<string id="115">Select to change your Incoming mail (POP3) Server. Eg. pop.gmail.com. SSL: Press right to change your POP3 SSL Server Port Number. Only some servers require this. Eg. Gmail - Pop3 SSL Port# 995</string>
+	<string id="116">Select to change your Outgoing mail (SMTP) Server. Eg. smtp.gmail.com. SSL: Press right to change your SMTP SSL Server Port Number. Only some servers require this. Eg. Gmail - SMTP SSL Port# 587</string>
+	<string id="117">Select to change your Server Account Name. This is usually the name you use to login to Outlook/Web Mail Inboxes.</string>
+	<string id="118">Select to change your Server Account Password. This is usually the password you use to login to Outlook/Web Mail Inboxes.</string>
+	<string id="119">Select to change your Server Inbox Size. Enter the size(capacity) of your e-mail servers inbox in megabytes(MB).Set to 0 to disable the server inbox full warnings.</string>
+	<string id="120">Select to change your XinBox Inbox Size. Enter the size(capacity) you want to allocate on your Xbox to this Inbox in Megabytes(MB).Set to 0 to disable the XinBox inbox full Warnings.</string>
+	<string id="121">Select to change if copies of any new emails from when setting is changed are kept on the server. Defaults to Yes.</string>
+	<string id="122">Select to Test the above inbox settings. "Test" will communicate with the inbox server and confirm all settings are ok.</string>
+	<string id="123">Select to add inbox to your Account and return to the Account Menu. Note: The inbox will not be saved until Save is pressed in the Account Menu.</string>
+	<string id="124">Select to Login to the above account.</string>
+	<string id="125">Select to Login to the above inbox.</string>
+	<string id="126">Select to edit current account.</string>
+	<string id="127">Select to delete current account.</string>
+	<string id="128">Select to exit and return to previous menu.</string>
+	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
+	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until Save is pressed in the Account Menu.</string>
+
+	<!-- Account Menu Labels -->
+	<string id="200">Account Menu</string>
+	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted. Press OK to confirm, or press back to decline.</string>
+	
+
+
+	<!-- Email Labels -->
+	<string id="210">Inbox - </string>
+	<string id="211">Logging In...</string>
+	<string id="212">Login OK</string>
+	<string id="213">Login Failed</string>
+	<string id="214">Please check Inbox Settings.</string>
+	<string id="215">Retrieving server Email Count.</string>
+	<string id="216">Server Email Count OK.</string>
+	<string id="217">Server Inbox Empty.</string>
+	<string id="218">Checking for new Emails....</string>
+	<string id="219">You have %s new emails.</string>
+	<string id="220">You have no new emails.</string>
+	<string id="221">Retrieving Email # %s</string>
+	<string id="222">Updating Email Database...</string>
+	<string id="223">Received %s New Emails OK.</string>
+	<string id="224">Error Retrieving Email.</string>
+
+	<!-- MORE InBox Menu Labels -->
+	<string id="240">"New Email" Notification SFX:</string>
+	<string id="241">Browse for "New Email" Notification SFX:</string>
+	<string id="242">OK</string>
+
+	<!-- InBox Labels -->
+	<string id="250">Check</string>
+	<string id="251">Compose</string>
+	<string id="252">Mini-Mode</string>
+	<string id="253">Building Inbox...</string>
+	<string id="254">Adding new Emails....</string>
+	<string id="255">No Subject</string>
+	<string id="256">Inbox Empty</string>
+	<string id="257">Server Size:</string>
+	<string id="258">Inbox Size:</string>
+	<string id="259">Empty</string>
+	<string id="260">From:</string>
+	<string id="261">Received:</string>
+	<string id="262">Deleteing email from inbox</string>
+	<string id="263">Deleteing email from server</string>
+	<string id="264">Email was not found on server</string>
+	<string id="265">Deleteing email from server and inbox</string>
+	<string id="266">Attachments</string>
+	<string id="267">Size:</string>
+	<string id="268">Save %s to...</string>
+	<string id="269">%s saved to %s</string>
+	<string id="270">%s FAILED to save to %s</string>
+	<string id="271">Delete Email From:</string>
+	<string id="272">Inbox Only</string>
+	<string id="273">Server Only</string>
+	<string id="274">Inbox and Server</string>
+</strings>
