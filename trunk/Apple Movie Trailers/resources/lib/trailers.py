@@ -258,7 +258,8 @@ class Trailers:
                         success = records.commit()
                 records.close()
                 _progress_dialog( -1 )
-                if ( load_all ): self.fullUpdate()
+                if ( load_all ):
+                    updated = self.fullUpdate()
         except:
             records.close()
             _progress_dialog( -1 )
@@ -342,12 +343,14 @@ class Trailers:
             return [], []
 
     def fullUpdate( self ):
-        full = self._get_movie_list( self.query[ "incomplete_movies" ], header="%s   (%s)" % ( _( 70 ), _( 158 ), ), full = True )
+        full, updated = self._get_movie_list( self.query[ "incomplete_movies" ], header="%s   (%s)" % ( _( 70 ), _( 158 ), ), full = True )
         if ( full ): self.complete = self.updateRecord( "version", ( "complete", ), ( True, 1, ), "idVersion" )
+        return updated
 
     def getMovies( self, sql, params=None ):
         self.movies = []
-        full = self._get_movie_list( sql, params, _( 85 ), _( 67 ) )
+        full, updated = self._get_movie_list( sql, params, _( 85 ), _( 67 ) )
+        return updated
 
     def _get_movie_list( self, sql, params=None, header="", line1="", full=False ):
         dialog = xbmcgui.DialogProgress()
@@ -559,7 +562,7 @@ class Trailers:
         except: traceback.print_exc()#pass
         records.close()
         _progress_dialog( -1 )
-        return full
+        return full, info_missing
 
     def getCategories( self, sql, params=None ):
         try:
@@ -572,7 +575,7 @@ class Trailers:
             if ( category_list is not None):
                 self.categories = []
                 for category in category_list:
-                    self.categories += [ Category( id=category[ 0 ], title=category[ 1 ], count=category[ 2 ] ) ]
+                    self.categories += [ Category( id=category[ 0 ], title=category[ 1 ], count=category[ 2 ], completed=category[ 3 ] >= category[ 2 ], ) ]
             else: self.categories = None
         except: traceback.print_exc()
         dialog.close()

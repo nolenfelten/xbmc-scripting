@@ -438,7 +438,7 @@
 				<texturefocus>-</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<align>right</align>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -460,12 +460,13 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
 				<disabledcolor>60ffffff</disabledcolor>
 				<align>right</align>
+				<aligny>center</aligny>
 				<onleft>2650</onleft>
 				<onright>50</onright>
 				<onup>106</onup>
@@ -481,7 +482,7 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -503,7 +504,7 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -525,7 +526,7 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -547,7 +548,7 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -569,7 +570,7 @@
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -591,7 +592,7 @@
 				<height>33</height>
 				<texturefocus>-</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-small</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -767,9 +768,36 @@
 						<font>lcars-medium</font>
 						<aligny>center</aligny>
                         <selectedcolor>FFe2ff43</selectedcolor>
+                        <textcolor>FFFFFFFF</textcolor>
+						<align>left</align>
+						<info>ListItem.Label</info>
+						<visible>Control.HasFocus(50)</visible>
+					</control>
+					<control type="label">
+						<posx>315</posx>
+						<posy>3</posy>
+						<width>200</width>
+						<height>23</height>
+						<font>lcars-medium</font>
+						<aligny>center</aligny>
+                        <selectedcolor>FFe2ff43</selectedcolor>
+                        <textcolor>FFFFFFFF</textcolor>
+						<align>right</align>
+						<info>ListItem.Label2</info>
+						<visible>Control.HasFocus(50)</visible>
+					</control>
+					<control type="label">
+						<posx>20</posx>
+						<posy>3</posy>
+						<width>290</width>
+						<height>23</height>
+						<font>lcars-medium</font>
+						<aligny>center</aligny>
+                        <selectedcolor>FFe2ff43</selectedcolor>
                         <textcolor>FFFF9900</textcolor>
 						<align>left</align>
 						<info>ListItem.Label</info>
+						<visible>!Control.HasFocus(50)</visible>
 					</control>
 					<control type="label">
 						<posx>315</posx>
@@ -782,6 +810,7 @@
 						<textcolor>FFCC99CC</textcolor>
 						<align>right</align>
 						<info>ListItem.Label2</info>
+						<visible>!Control.HasFocus(50)</visible>
 					</control>
 					<control type="image">
 						<posx>315</posx>
@@ -1118,9 +1147,23 @@
 						<font>lcars-medium</font>
 						<aligny>center</aligny>
                         <selectedcolor>FFe2ff43</selectedcolor>
+                        <textcolor>FFFFFFFF</textcolor>
+						<align>left</align>
+						<info>ListItem.Label</info>
+						<visible>Control.HasFocus(70)</visible>
+					</control>
+					<control type="label">
+						<posx>37</posx>
+						<posy>3</posy>
+						<width>155</width>
+						<height>23</height>
+						<font>lcars-medium</font>
+						<aligny>center</aligny>
+                        <selectedcolor>FFe2ff43</selectedcolor>
                         <textcolor>FFFF9900</textcolor>
 						<align>left</align>
 						<info>ListItem.Label</info>
+						<visible>!Control.HasFocus(70)</visible>
 					</control>
 					<control type="image">
 						<posx>197</posx>
@@ -1266,9 +1309,36 @@
 						<font>lcars-medium</font>
 						<aligny>center</aligny>
                         <selectedcolor>FFe2ff43</selectedcolor>
+                        <textcolor>FFFFFFFF</textcolor>
+						<align>left</align>
+						<info>ListItem.Label</info>
+						<visible>Control.HasFocus(60)</visible>
+					</control>
+					<control type="label">
+						<posx>315</posx>
+						<posy>3</posy>
+						<width>200</width>
+						<height>23</height>
+						<font>lcars-medium</font>
+						<aligny>center</aligny>
+                        <selectedcolor>FFe2ff43</selectedcolor>
+                        <textcolor>FFFFFFFF</textcolor>
+						<align>right</align>
+						<info>ListItem.Label2</info>
+						<visible>Control.HasFocus(60)</visible>
+					</control>
+					<control type="label">
+						<posx>20</posx>
+						<posy>3</posy>
+						<width>290</width>
+						<height>23</height>
+						<font>lcars-medium</font>
+						<aligny>center</aligny>
+                        <selectedcolor>FFe2ff43</selectedcolor>
                         <textcolor>FFFF9900</textcolor>
 						<align>left</align>
 						<info>ListItem.Label</info>
+						<visible>!Control.HasFocus(60)</visible>
 					</control>
 					<control type="label">
 						<posx>315</posx>
@@ -1281,8 +1351,9 @@
 						<textcolor>FFCC99CC</textcolor>
 						<align>right</align>
 						<info>ListItem.Label2</info>
+						<visible>!Control.HasFocus(60)</visible>
 					</control>
-					<control type="image">
+                    <control type="image">
 						<posx>315</posx>
 						<posy>2</posy>
 						<width>15</width>
