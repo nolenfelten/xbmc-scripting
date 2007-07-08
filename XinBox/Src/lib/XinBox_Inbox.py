@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Checkemail
@@ -91,11 +91,12 @@ class GUI( xbmcgui.WindowXML ):
         if item[2] == 0:icon = "XBemailread.png"
         else:icon = "XBemailreadattach.png"
         self.getListItem(pos).setThumbnailImage(icon)
-        try:
-            w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
-            w.doModal()
-            del w
-        except:traceback.print_exc()
+        w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
+        w.doModal()
+        returnval = w.returnvalue
+        del w
+        if returnval != "-":
+            self.deletemail(pos, returnval)
     
     def parse_email(self, email):
         parser = html2txt()
@@ -148,6 +149,11 @@ class GUI( xbmcgui.WindowXML ):
             if len(self.guilist) != 0:
                 self.printEmail(self.getCurrentListPosition())
             else:self.setinboxempty()
+        else:
+            orig = self.guilist[pos]
+            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
+            self.guilist.pop(pos)
+            self.guilist.insert(pos, new)
 
     def setinboxnotemtpy(self):
         self.getControl(50).setEnabled(True)
@@ -198,7 +204,7 @@ class GUI( xbmcgui.WindowXML ):
             f.close()
             myemail = email.message_from_string(myfile.split("|")[1])
             readstatus = int(myfile.split("|")[0])
-            self.guilist.insert(0,[item[0],myemail,item[1],readstatus,item[2],item[3]])
+            self.guilist.insert(0,[item[0],myemail,item[1],readstatus,item[2],item[3],item[4]])
             if item[1] == 0:icon="XBnewemailnotread.png"
             else:icon="XBnewattachemailnotread.png"
             self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
@@ -246,8 +252,8 @@ class GUI( xbmcgui.WindowXML ):
                     myemail = email.message_from_string(myfile.split("|")[1])
                     readstatus = int(myfile.split("|")[0])
                     attachstat = int(myline[3])
-                                        #"sssfilenam, email, attachstat, readstat,  time,     date
-                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5]])
+                                        #"sssfilenam, email, attachstat, readstat,  time,     date,    emailid
+                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1]])
                     icon=self.geticon(attachstat,readstatus)
                     self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
         if len(self.guilist) == 0:self.setinboxempty()

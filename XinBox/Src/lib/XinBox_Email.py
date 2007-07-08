@@ -1,16 +1,15 @@
 
 
-import xbmc, xbmcgui, time, sys, os,email, traceback
+import xbmc, xbmcgui, time, sys, os,email
 
 import XinBox_Util
 from sgmllib import SGMLParser  
-TEMPFOLDER = "P:\\script_data\\XinBox\\"
+TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
         self.language = lang
         self.emailsettings = emailsetts
-        print "emsettings = " + str(self.emailsettings)
    
     def onInit(self):
         self.setupvars()
@@ -18,6 +17,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
         
     def setupvars(self):
+        self.deleserv = False
+        self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
@@ -25,40 +26,41 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.SetBool(emaildialog)")
 
     def setupcontrols(self):
+        self.getControl(81).setVisible(False)
         self.getControl(81).setEnabled(False)
         if self.emailsettings[2] == 0:
             self.getControl(64).setEnabled(False)
-        else:self.getControl(64).setEnabled(True)
+        else:
+            self.getattachments()
+            self.getControl(64).setEnabled(True)
         self.getControl(73).addLabel(self.emailsettings[1].get('subject').replace("\n","") + "  " + self.language(260) + "   " + self.emailsettings[1].get('from').replace("\n",""))
         self.settextbox()
         self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
         
     def getattachments(self):
-        try:
-            self.attachments = []
-            if self.emailsettings[1].is_multipart():
-                for part in self.emailsettings[1].walk():
-                    if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
-                        filename = part.get_filename()
-                        if filename:
-                            try:
-                                f=open(TEMPFOLDER + filename, "wb")
-                                f.write(part.get_payload(decode=1))
-                                f.close()
-                                self.attachments.append(filename)
-                            except:pass
-                    else:
-                        filename = part.get_filename()
-                        if filename != None:
-                            try:
-                                f=open(TEMPFOLDER + filename, "wb")
-                                f.write(part.get_payload(decode=1))
-                                f.close()
-                                self.attachments.append(filename)
-                            except:pass
-            for attachment in self.attachments:
-                self.getControl(81).addItem(attachment)        
-        except:traceback.print_exc()
+        self.attachments = []
+        if self.emailsettings[1].is_multipart():
+            for part in self.emailsettings[1].walk():
+                if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
+                    filename = part.get_filename()
+                    if filename:
+                        try:
+                            f=open(TEMPFOLDER + filename, "wb")
+                            f.write(part.get_payload(decode=1))
+                            f.close()
+                            self.attachments.append(filename)
+                        except:pass
+                else:
+                    filename = part.get_filename()
+                    if filename != None:
+                        try:
+                            f=open(TEMPFOLDER + filename, "wb")
+                            f.write(part.get_payload(decode=1))
+                            f.close()
+                            self.attachments.append(filename)
+                        except:pass
+        for attachment in self.attachments:
+            self.getControl(81).addItem(attachment)        
         
     def settextbox(self):
         if self.emailsettings[1].is_multipart():
@@ -78,7 +80,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onClick(self, controlID):
         if controlID == 64:
             self.attachlist = not self.attachlist
-            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")     
+            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        elif controlID == 63:
+            dialog = xbmcgui.Dialog()
+            if self.emailsettings[6] == "-" or self.deleserv:
+                ret = dialog.select( "Delete Email From:", ["Inbox Only"])
+            else:ret = dialog.select( "Delete Email From:", [ "Inbox Only", "Server Only", "Inbox and Server"])
+            if ret == 0:
+                if self.deleserv:
+                    self.returnvalue = 2
+                else:self.returnvalue = 0
+                self.exitme()
+            elif ret == 1:
+                self.deleserv = True
+                self.returnvalue = 1
+            elif ret == 2:
+                self.returnvalue = 2
+                self.exitme()
             
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -88,17 +106,27 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try:control = self.getFocus()
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            if self.attachlist:
-                xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                time.sleep(0.8)
-            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-            xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
-            time.sleep(0.8)
-            self.close()
+            self.exitme()
                
     def onFocus(self, controlID):
-        pass 
+        pass
 
+    def exitme(self):
+        if self.attachlist:
+            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+            time.sleep(0.8)
+        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+        xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
+        time.sleep(0.8)
+        self.removefiles(TEMPFOLDER)
+        self.close()
+
+    def removefiles(self,mydir):
+        for root, dirs, files in os.walk(mydir, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+
+                
 class html2txt(SGMLParser):
     def reset(self):
         SGMLParser.reset(self)
