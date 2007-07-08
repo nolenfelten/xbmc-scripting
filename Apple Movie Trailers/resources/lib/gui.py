@@ -219,10 +219,12 @@ class GUI( xbmcgui.WindowXML ):
                 self.params_category = params
                 self.getControl( self.CONTROL_CATEGORY_LIST ).reset()
                 if ( self.trailers.categories ):
-                    thumbnail = "amt-generic-%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], )
                     for category in self.trailers.categories:
+                        thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         count = "(%d)" % ( category.count, )
-                        self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( xbmcgui.ListItem( category.title, count, "%s.tbn" % category.title, thumbnail ) )
+                        list_item = xbmcgui.ListItem( category.title, count, "%s.tbn" % category.title, thumbnail )
+                        list_item.select( not category.completed )
+                        self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
         except: traceback.print_exc()
         xbmcgui.unlock()
@@ -232,7 +234,9 @@ class GUI( xbmcgui.WindowXML ):
             if ( sql != self.sql or params != self.params or force_update ):
                 #self.list_control_pos[ self.list_category ] = choice
                 if ( force_update != 2 ):
-                    self.trailers.getMovies( sql, params )
+                    updated = self.trailers.getMovies( sql, params )
+                    if ( updated ):
+                        self.sql_category = ""
                 ##else:
                 ##    choice = self.list_control_pos[ self.list_category ]
                 xbmcgui.lock()
@@ -509,10 +513,13 @@ class GUI( xbmcgui.WindowXML ):
         del cm
 
     def force_full_update( self ):
-        self.trailers.fullUpdate()
+        ####################################
+        ######### do something with updated
+        updated = self.trailers.fullUpdate()
         if ( self.list_category > 0 ):
             trailer = self.getCurrentListPosition()
             self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
+            self.sql_category = ""
             ### refresh trailers here ###
         else:
             self.sql = ""
