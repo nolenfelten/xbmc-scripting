@@ -516,8 +516,8 @@ class Trailers:
             _progress_dialog()
             records = database.Records()
             movie_list = records.fetch( sql, params, all=True )
+            commit = info_missing = False
             if ( movie_list ):
-                commit = info_missing = False
                 dialog_ok = True
                 for cnt, movie in enumerate( movie_list ):
                     if ( movie[ 3 ] is None ):
