@@ -187,7 +187,7 @@ class Database:
             return ok
 
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", "pre-0.98.2", ) ):
+        if ( not 1 ):#version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", "pre-0.98.2", ) ):
             try:
                 _progress_dialog()
                 ok = True
@@ -212,7 +212,9 @@ class Database:
             _progress_dialog( -1 )
             if ( ok ): return ( __version__, complete )
         xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
-        raise
+        os.remove( os.path.join( BASE_DATA_PATH, "AMT.db" ) )
+        version, complete = self._create_database()
+        return ( __version__, complete )
 
 
 class Tables( dict ):
@@ -242,7 +244,7 @@ class Tables( dict ):
         self[ "movies" ] = (
             ( "idMovie", "integer PRIMARY KEY", "AUTOINCREMENT", "", "" ), 
             ( "title", "text", "", "", "" ),
-            ( "url", "text",  "", "", "" ),
+            ( "urls", "text",  "", "", "" ),
             ( "trailer_urls", "text", "", "", "" ),
             ( "poster", "text", "", "", "" ),
             ( "plot", "text", "", "", "" ),

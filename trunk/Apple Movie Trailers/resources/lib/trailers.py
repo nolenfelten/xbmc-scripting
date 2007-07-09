@@ -85,7 +85,10 @@ class Trailers:
 
     def refreshTrailerInfo( self, trailer ):
         records = database.Records()
-        self.removeXML( ( self.base_url + self.movies[ trailer ].url, ) )
+        urls = []
+        for url in self.movies[ trailer ].urls:
+            urls += [ self.base_url + url ]
+        self.removeXML( urls )
         ok = records.update( "movies", ( 3, 4, ), ( None, self.movies[ trailer ].idMovie, ), "idMovie", True )
         records.close()
 
@@ -252,7 +255,7 @@ class Trailers:
                             ok = _progress_dialog( cnt + 1, url_cnt + 1 )
                             record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                idMovie = records.add( 'movies', ( url[ 0 ] , url[ 1 ], ) )
+                                idMovie = records.add( 'movies', ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
                             else: idMovie = record[ 0 ]
                             success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                         success = records.commit()
@@ -372,7 +375,7 @@ class Trailers:
             def _set_default_movie_info( movie ):
                 self.idMovie = movie[ 0 ]
                 self.title = movie[ 1 ]
-                self.url = str( movie[ 2 ] )
+                self.urls = eval( movie[ 2 ] )
                 self.trailer_urls = []
                 self.poster = ""
                 self.plot = ""
@@ -390,10 +393,10 @@ class Trailers:
             try:
                 _set_default_movie_info( movie )
                 
-                if ( not self.url.startswith( 'http://' ) ):
-                    url = self.base_url + self.url
+                if ( not self.urls[ 0 ].startswith( 'http://' ) ):
+                    url = self.base_url + str( self.urls[ 0 ] )
                 else:
-                    url = self.url
+                    url = ( self.urls[ 0 ] )
 
                 # xml parsing
                 source = fetcher.urlopen( url )
@@ -469,6 +472,7 @@ class Trailers:
                     urls += [ temp_url ]
                 if len( urls ):
                     temp_url = self.base_url + urls[0]
+                    self.urls = [ self.urls[ 0 ] ] + [ urls[ 0 ] ]
                     source = fetcher.urlopen( temp_url )
                     try: element = ET.fromstring( source )
                     except:
@@ -493,10 +497,10 @@ class Trailers:
                 #traceback.print_exc()
                 print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
             
-            info_list = ( self.idMovie, self.title, self.url, repr( self.trailer_urls ), self.poster, self.plot, self.rating,
+            info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.rating,
                             self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
                             self.saved_core, self.actors, self.studio, )
-            success = records.update( "movies", ( 3, 14, ), ( info_list[ 3 : 14 ] ) + ( self.idMovie, ), "idMovie" )
+            success = records.update( "movies", ( 2, 14, ), ( info_list[ 2 : 14 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
 
         def _get_actor_and_studio( movie ):
@@ -533,7 +537,7 @@ class Trailers:
                             Movie(
                                 idMovie = movie[ 0 ],
                                 title = movie[1],
-                                url = movie[2],
+                                urls = eval( movie[2] ),
                                 trailer_urls = eval( movie[3] ),
                                 poster = poster,
                                 thumbnail = '%s.png' % ( os.path.splitext( poster )[0], ),

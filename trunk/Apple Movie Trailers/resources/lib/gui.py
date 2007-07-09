@@ -218,7 +218,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.sql_category = sql
                 self.params_category = params
                 self.getControl( self.CONTROL_CATEGORY_LIST ).reset()
-                if ( self.trailers.categories ):
+                if ( len( self.trailers.categories ) ):
                     for category in self.trailers.categories:
                         thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         count = "(%d)" % ( category.count, )
@@ -246,7 +246,7 @@ class GUI( xbmcgui.WindowXML ):
                 if ( self.trailers.movies ):
                     for movie in self.trailers.movies: # now fill the list control
                         thumbnail, poster = self._get_thumbnail( movie )
-                        urls = ( "%s", "(%s)", )[ not movie.trailer_urls ]
+                        urls = ( "(%s)", "%s", )[ len( movie.trailer_urls ) > 0 ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
                         list_item = xbmcgui.ListItem( urls % ( ( movie.title, movie.title.upper(), )[ self.settings[ "capitalize_words" ] ], ), rating, poster, thumbnail )
                         list_item.select( movie.favorite )
@@ -362,15 +362,13 @@ class GUI( xbmcgui.WindowXML ):
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
-            self.cast_exists = ( self.trailers.movies[ trailer ].cast != [] )
+            self.cast_exists = ( len( self.trailers.movies[ trailer ].cast ) > 0 )
             thumbnail = "amt-generic-%sactor.tbn" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
-            if ( self.trailers.movies[ trailer ].cast ):
-                #self.cast_exists = True
+            if ( self.cast_exists ):
                 #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
                     self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( ( actor[ 0 ], actor[ 0 ].upper(), )[ self.settings[ "capitalize_words" ] ], "", "%s.tbn" % actor, thumbnail ) )
             else: 
-                #self.cast_exists = False
                 #thumbnail = "amt-generic-noactor.tbn"
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( ( _( 401 ), _( 401 ).upper(), )[ self.settings[ "capitalize_words" ] ], "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
@@ -407,7 +405,7 @@ class GUI( xbmcgui.WindowXML ):
         try:
             trailer = self.getCurrentListPosition()
             trailer_urls = self.trailers.movies[ trailer ].trailer_urls
-            if ( trailer_urls ):
+            if ( len( trailer_urls ) ):
                 choice = ( self.settings[ "trailer_quality" ], len( trailer_urls ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailer_urls ) ]
                 if ( self.settings[ "trailer_quality" ] <= 2 ):
                     while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
@@ -470,7 +468,7 @@ class GUI( xbmcgui.WindowXML ):
         labels = ()
         functions = ()
         if ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
-            if ( self.trailers.movies[ selection ].trailer_urls ):
+            if ( len( self.trailers.movies[ selection ].trailer_urls ) ):
                 labels += ( _( 501 ), )
                 functions += ( self.playTrailer, )
             labels += ( _( 502 + self.trailers.movies[ selection ].favorite ), )
@@ -593,13 +591,15 @@ class GUI( xbmcgui.WindowXML ):
                 self.setShortcutLabels()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
                     self._set_labels()
+                    self.sql_category = ""
                     trailer = self.getCurrentListPosition()
                     self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
                 elif ( settings.refresh ):
                     self._set_labels()
+                    self.sql = ""
                     genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
                     self.showCategories( self.sql_category, self.params_category, choice=genre, force_update=2 )
-                else: self.sql=""
+                #else: self.sql=""
             else: self.exitScript( True )
         del settings
 

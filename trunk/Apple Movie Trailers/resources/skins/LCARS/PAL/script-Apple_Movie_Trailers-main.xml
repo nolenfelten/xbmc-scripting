@@ -46,19 +46,10 @@
                     <height>180</height>
                 <texture>LCARS-starfleet-emblem.png</texture>
                 <aspectratio>keep</aspectratio>
-            </control>
+           </control>
 
             <control type="group">
                 <description>upper panel</description>
-                <control type="image">
-                    <description>upper left corner</description>
-                    <posx>12</posx>
-                    <posy>-13</posy>
-                    <width>143</width>
-                    <height>96</height>
-                    <texture border="64,0,64,0">LCARS-corner.png</texture>
-                    <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
-                </control>
                 <control type="image">
                     <description>upper horizontal</description>
                     <posx>157</posx>
@@ -67,6 +58,7 @@
                     <height>40</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="298,44" delay="150" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <posx>650</posx>
@@ -74,6 +66,17 @@
                     <width>20</width>
                     <height>44</height>
                     <texture flipx="true">amt-generic-trailer.tbn</texture>
+                    <animation effect="zoom" start="100,0" end="100,100" center="660,46" delay="150" time="50">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>upper left corner</description>
+                    <posx>12</posx>
+                    <posy>-13</posy>
+                    <width>143</width>
+                    <height>96</height>
+                    <texture border="64,0,64,0">LCARS-corner.png</texture>
+                    <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,109" delay="150" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper middle vertical</description>
@@ -84,6 +87,7 @@
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2076)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,117" delay="100" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper middle vertical</description>
@@ -93,6 +97,7 @@
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
                     <visible>Control.HasFocus(2076)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,117" delay="100" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower middle vertical</description>
@@ -103,6 +108,7 @@
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2077)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,151" delay="50" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower middle vertical</description>
@@ -112,6 +118,7 @@
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
                     <visible>Control.HasFocus(2077)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,151" delay="50" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower left corner</description>
@@ -121,6 +128,7 @@
                     <height>87</height>
                     <texture flipy="true" border="64,0,64,64">LCARS-corner-thin.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,215" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>left horizontal</description>
@@ -130,6 +138,7 @@
                     <height>12</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse><!--light blue-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="232,215" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right horizontal</description>
@@ -139,6 +148,7 @@
                     <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="589,215" time="50">WindowOpen</animation>
                 </control>
             </control>
             
@@ -152,6 +162,7 @@
                     <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse><!--orange-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="232,218" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>middle horizontal</description>
@@ -161,6 +172,7 @@
                     <height>26</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="410,216" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right horizontal</description>
@@ -170,6 +182,7 @@
                     <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="589,218" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper left corner</description>
@@ -180,6 +193,7 @@
                     <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <visible>!Control.HasFocus(106)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,190" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper left corner</description>
@@ -189,6 +203,7 @@
                     <height>65</height>
                     <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
                     <visible>Control.HasFocus(106)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,190" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
@@ -198,6 +213,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,259" delay="40" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
@@ -207,6 +223,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,295" delay="60" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
@@ -216,6 +233,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,331" delay="80" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower vertical</description>
@@ -225,6 +243,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,367" delay="100" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower vertical</description>
@@ -234,6 +253,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,403" delay="120" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower vertical</description>
@@ -243,6 +263,7 @@
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,439" delay="140" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower left corner</description>
@@ -253,6 +274,7 @@
                     <texture flipy="true" border="64">LCARS-corner.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
                     <visible>!Control.HasFocus(107)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,475" delay="160" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>left corner</description>
@@ -262,6 +284,47 @@
                     <height>64</height>
                     <texture flipy="true" border="64">LCARS-corner.png</texture>
                     <visible>Control.HasFocus(107)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="75,475" delay="180" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>left-left horizontal</description>
+                    <posx>157</posx>
+                    <posy>501</posy>
+                    <width>200</width>
+                    <height>27</height>
+                    <texture>LCARS-pixel.png</texture>
+                    <colordiffuse>FFFF9900</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="170,501" delay="180" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>left-right horizontal</description>
+                    <posx>359</posx>
+                    <posy>501</posy>
+                    <width>89</width>
+                    <height>27</height>
+                    <texture>LCARS-pixel.png</texture>
+                    <colordiffuse>FFFFCC99</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="372,501" delay="180" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>filler horizontal</description>
+                    <posx>450</posx>
+                    <posy>501</posy>
+                    <width>81</width>
+                    <height>27</height>
+                    <texture>LCARS-pixel.png</texture>
+                    <colordiffuse>FFFFCC99</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="372,501" delay="180" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>right horizontal</description>
+                    <posx>533</posx>
+                    <posy>501</posy>
+                    <width>132</width>
+                    <height>27</height>
+                    <texture>LCARS-pixel.png</texture>
+                    <colordiffuse>FFCC99CC</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="599,501" delay="180" time="20">WindowOpen</animation>
                 </control>
             </control>
 
@@ -276,6 +339,7 @@
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2560) + !Control.HasFocus(2660)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,263" delay="280" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
@@ -285,6 +349,7 @@
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
                     <visible>Control.HasFocus(2560) | Control.HasFocus(2660)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,263" delay="280" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>middle vertical</description>
@@ -295,6 +360,7 @@
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2561) + !Control.HasFocus(2661)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,297" delay="260" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>middle vertical</description>
@@ -304,6 +370,7 @@
                     <height>30</height>
                     <texture>LCARS-pixel.png</texture>
                     <visible>Control.HasFocus(2561) | Control.HasFocus(2661)</visible>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,297" delay="260" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>menu vertical</description>
@@ -313,6 +380,7 @@
                     <height>12</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,313" delay="240" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>lower vertical</description>
@@ -322,6 +390,7 @@
                     <height>154</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="220" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right corner</description>
@@ -331,6 +400,7 @@
                     <height>64</height>
                     <texture border="32,0,32,0" flipx="true" flipy="true">LCARS-corner.png</texture>
                     <colordiffuse>FFFFCC99</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="482,538" delay="200" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right corner</description>
@@ -340,42 +410,7 @@
                     <height>64</height>
                     <texture border="32,0,32,0" flipy="true">LCARS-corner.png</texture>
                     <colordiffuse>FFFFCC99</colordiffuse>
-                </control>
-                <control type="image">
-                    <description>left-left horizontal</description>
-                    <posx>157</posx>
-                    <posy>501</posy>
-                    <width>200</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFFF9900</colordiffuse>
-                </control>
-                <control type="image">
-                    <description>left-right horizontal</description>
-                    <posx>359</posx>
-                    <posy>501</posy>
-                    <width>89</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFFFCC99</colordiffuse>
-                </control>
-                <control type="image">
-                    <description>filler horizontal</description>
-                    <posx>464</posx>
-                    <posy>500</posy>
-                    <width>40</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFFFCC99</colordiffuse>
-                </control>
-                <control type="image">
-                    <description>right horizontal</description>
-                    <posx>533</posx>
-                    <posy>501</posy>
-                    <width>132</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="499,538" delay="200" time="20">WindowOpen</animation>
                 </control>
             </control>
             <!-- ** Required ** Do not change id or type-->
