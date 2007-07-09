@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98.3", "0.98.3", "pre-0.98.4", "0.98.4", "pre-0.98.5", "0.98.5", )
-SETTINGS_VERSIONS = ( "pre-0.98.5", "0.98.5", )
+DATABASE_VERSIONS = ( "pre-0.98.3", "0.98.3", "pre-0.98.4", "0.98.4", "pre-0.98.5", "0.98.5", "pre-0.98.6", "0.98.6", )
+SETTINGS_VERSIONS = ( "pre-0.98.6", "0.98.6", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -138,6 +138,7 @@ class Settings:
             "videoplayer_displayresolution": 10,
             "use_simple_search": False,
             "match_whole_words": False,
+            "capitalize_words": False,
             }
         ok = self.save_settings( settings )
         return settings

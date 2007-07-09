@@ -107,7 +107,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "skin", )
-        self.settings_refresh = ( "thumbnail_display", "fade_thumb", )
+        self.settings_refresh = ( "thumbnail_display", "fade_thumb", "capitalize_words", )
 
     def _setup_videoplayer( self ):
         self.videoplayer_displayresolutions = ( "1080i 16x9", "720p 16x9", "480p 4x3", "480p 16x9", "NTSC 4x3", "NTSC 16x9", "PAL 4x3", "PAL 16x9", "PAL60 4x3", "PAL60 16x9", _( 2110 ) )
@@ -156,6 +156,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 233 ).setEnabled( self.settings[ "use_simple_search" ] )
             self.getControl( 213 ).setEnabled( self.settings[ "use_simple_search" ] )
             self.getControl( 234 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 235 ).setSelected( self.settings[ "capitalize_words" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -259,6 +260,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
             self._set_controls_values()
+
+    def _change_setting15( self ):
+        """ changes settings #15 """
+        self.settings[ "capitalize_words" ] = not self.settings[ "capitalize_words" ]
+        self._set_controls_values()
 
 ##### End of unique defs ######################################################
     

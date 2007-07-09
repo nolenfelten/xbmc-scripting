@@ -61,13 +61,14 @@
     <string id="93">Number of records returned from search</string>
     <string id="94">*No search specified</string>
     <string id="95">Enter keywords: separate words with and/or/not</string>
+    <string id="96">of</string>
 
     <!-- Buttons -->
-    <string id="103">Genre...</string>
-    <string id="104">Studio...</string>
-    <string id="105">Actor...</string>
-    <string id="106">Search...</string>
-    <string id="107">Settings...</string>
+    <string id="103">Genre</string>
+    <string id="104">Studio</string>
+    <string id="105">Actor</string>
+    <string id="106">Search</string>
+    <string id="107">Settings</string>
     <string id="108">Show credits</string>
     <string id="109">Update script</string>
 
@@ -109,9 +110,10 @@
     <string id="212">Use simple search</string>
     <string id="213">Match whole words only</string>
     <string id="214">Video player resolution</string>
-    <string id="215">Zip code</string>
-    <string id="216">Check version at startup</string>
-    <string id="217">Showtimes scraper</string>
+    <string id="215">Use all caps for text</string>
+    <string id="216">Zip code</string>
+    <string id="217">Check version at startup</string>
+    <string id="218">Showtimes scraper</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>

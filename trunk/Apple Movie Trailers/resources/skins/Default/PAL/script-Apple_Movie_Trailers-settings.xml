@@ -650,7 +650,6 @@
 				</control>
             </control>
 			<control type="group">
-                <visible>false</visible>
 				<height>30</height>
 				<control type="button" id="215">
 					<description>Setting15 Button</description>
