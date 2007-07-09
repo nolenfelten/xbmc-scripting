@@ -3,9 +3,9 @@
 import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
-from XinBox_EmailEngine import Checkemail
-from XinBox_EmailEngine import SendEmail
+from XinBox_EmailEngine import Email
 import XinBox_Email
+import XinBox_Compose
 from os.path import join, exists, basename
 from os import mkdir, remove
 SETTINGDIR = "P:\\script_data\\XinBox\\"
@@ -110,37 +110,51 @@ class GUI( xbmcgui.WindowXML ):
             self.deletemail(pos, returnval)
 
     def sendemail(self):
-        keyboard = xbmc.Keyboard("","Enter To: Address")
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            toaddr = keyboard.getText()
-        else:return
-        keyboard = xbmc.Keyboard("","Enter Subject:")
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            subject = keyboard.getText()
-        else:return
-        keyboard = xbmc.Keyboard("","Enter Message Body:")
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            body = keyboard.getText()
-        else:return
-        attachlist = []
-        dialog = xbmcgui.Dialog()
-        ret = dialog.browse(1, "Browse for attachment.." , 'files')
-        if ret:
-            attachlist.append([basename(ret),ret])
-        else:pass
         try:
-            w = SendEmail(self.ibsettings,self.inbox,self.account,self.language)
-            w.sendemail(toaddr,subject,body,attachlist)
-            del w
-        except:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(self.language(210) + self.inbox,"Failed to send email./n check settings")
-            return
-        dialog = xbmcgui.Dialog()
-        dialog.ok(self.language(210) + self.inbox,"Email sent OK")
+            w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox)
+            w.doModal()
+            if w.returnvalue != 0:
+                sendme = w.returnvalue
+                del w
+                w = Email(self.ibsettings,self.inbox,self.account,self.language)
+                w.sendemail(sendme[0],sendme[3],sendme[4],sendme[5],sendme[1],sendme[2])
+                del w
+            else:del w
+        except:traceback.print_exc()
+##        keyboard = xbmc.Keyboard("","Enter To: Address(s)")
+##        keyboard.doModal()
+##        if (keyboard.isConfirmed()):
+##            toaddr = keyboard.getText()
+##        else:return
+##        keyboard = xbmc.Keyboard("","Enter CC: Address(s)")
+##        keyboard.doModal()
+##        if (keyboard.isConfirmed()):
+##            cc = keyboard.getText()
+##        else:return
+##        keyboard = xbmc.Keyboard("","Enter Bcc: Address(s)")
+##        keyboard.doModal()
+##        if (keyboard.isConfirmed()):
+##            bcc = keyboard.getText()
+##        else:return        
+##        keyboard = xbmc.Keyboard("","Enter Subject:")
+##        keyboard.doModal()
+##        if (keyboard.isConfirmed()):
+##            subject = keyboard.getText()
+##        else:return
+##        keyboard = xbmc.Keyboard("","Enter Message Body:")
+##        keyboard.doModal()
+##        if (keyboard.isConfirmed()):
+##            body = keyboard.getText()
+##        else:return
+##        attachlist = []
+##        dialog = xbmcgui.Dialog()
+##        ret = dialog.browse(1, "Browse for attachment.." , 'files')
+##        if ret:
+##            attachlist.append([basename(ret),ret])
+##        else:pass
+##        w = Email(self.ibsettings,self.inbox,self.account,self.language)
+##        w.sendemail(toaddr,subject,body,attachlist,cc,bcc)
+##        del w
     
     def parse_email(self, email):
         parser = html2txt()
@@ -160,7 +174,7 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def checkfornew(self):
-        w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,False)
+        w = Email(self.ibsettings,self.inbox,self.account,self.language)
         w.checkemail()
         newlist = w.newlist
         self.serversize = w.serversize
@@ -184,23 +198,25 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")
 
     def deletemail(self, pos, setting):
-        w = Checkemail(self.ibsettings,self.inbox,self.account,self.language,True)
-        w.deletemail(pos,setting)
-        self.serversize = w.serversize
-        self.inboxsize = w.inboxsize                
-        del w
-        self.updatesizelabel()
-        if setting != 1:
-            self.removeItem(pos)
-            self.guilist.pop(pos)
-            if len(self.guilist) != 0:
-                self.printEmail(self.getCurrentListPosition())
-            else:self.setinboxempty()
-        else:
-            orig = self.guilist[pos]
-            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
-            self.guilist.pop(pos)
-            self.guilist.insert(pos, new)
+        try:
+            w = Email(self.ibsettings,self.inbox,self.account,self.language,True)
+            w.deletemail(pos,setting)
+            self.serversize = w.serversize
+            self.inboxsize = w.inboxsize                
+            del w
+            self.updatesizelabel()
+            if setting != 1:
+                self.removeItem(pos)
+                self.guilist.pop(pos)
+                if len(self.guilist) != 0:
+                    self.printEmail(self.getCurrentListPosition())
+                else:self.setinboxempty()
+            else:
+                orig = self.guilist[pos]
+                new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
+                self.guilist.pop(pos)
+                self.guilist.insert(pos, new)
+        except:traceback.print_exc()
 
     def setinboxnotemtpy(self):
         self.getControl(50).setEnabled(True)
