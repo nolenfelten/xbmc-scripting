@@ -53,42 +53,42 @@
                 <control type="image">
                     <description>upper left corner</description>
                     <posx>12</posx>
-                    <posy>0</posy>
+                    <posy>-13</posy>
                     <width>143</width>
-                    <height>64</height>
-                    <texture border="64">LCARS-corner.png</texture>
+                    <height>96</height>
+                    <texture border="64,0,64,0">LCARS-corner.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
                 </control>
                 <control type="image">
-                    <description>upper horisontal</description>
-                    <posx>158</posx>
-                    <posy>11</posy>
-                    <width>300</width>
-                    <height>27</height>
+                    <description>upper horizontal</description>
+                    <posx>157</posx>
+                    <posy>4</posy>
+                    <width>282</width>
+                    <height>40</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
                 </control>
                 <control type="image">
                     <posx>650</posx>
-                    <posy>10</posy>
-                    <width>18</width>
-                    <height>29</height>
+                    <posy>2</posy>
+                    <width>20</width>
+                    <height>44</height>
                     <texture flipx="true">amt-generic-trailer.tbn</texture>
                 </control>
                 <control type="image">
                     <description>upper middle vertical</description>
                     <posx>20</posx>
-                    <posy>69</posy>
+                    <posy>86</posy>
                     <width>110</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFCC6666</colordiffuse><!--red/purple-->
+                    <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2076)</visible>
                 </control>
                 <control type="image">
                     <description>upper middle vertical</description>
                     <posx>20</posx>
-                    <posy>69</posy>
+                    <posy>86</posy>
                     <width>110</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
@@ -97,17 +97,17 @@
                 <control type="image">
                     <description>lower middle vertical</description>
                     <posx>20</posx>
-                    <posy>104</posy>
+                    <posy>120</posy>
                     <width>110</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFCC6666</colordiffuse><!--red/purple-->
+                    <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2077)</visible>
                 </control>
                 <control type="image">
                     <description>lower middle vertical</description>
                     <posx>20</posx>
-                    <posy>104</posy>
+                    <posy>120</posy>
                     <width>110</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
@@ -116,36 +116,27 @@
                 <control type="image">
                     <description>lower left corner</description>
                     <posx>12</posx>
-                    <posy>140</posy>
+                    <posy>154</posy>
                     <width>143</width>
-                    <height>64</height>
-                    <texture flipy="true" border="64">LCARS-corner.png</texture>
+                    <height>87</height>
+                    <texture flipy="true" border="64,0,64,64">LCARS-corner-thin.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
                 </control>
                 <control type="image">
                     <description>left horizontal</description>
-                    <posx>158</posx>
-                    <posy>167</posy>
-                    <width>110</width>
-                    <height>27</height>
+                    <posx>157</posx>
+                    <posy>203</posy>
+                    <width>150</width>
+                    <height>12</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse><!--light blue-->
                 </control>
                 <control type="image">
-                    <description>middle horizontal</description>
-                    <posx>271</posx>
-                    <posy>167</posy>
-                    <width>280</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFCC6699</colordiffuse><!--light blue-->
-                </control>
-                <control type="image">
                     <description>right horizontal</description>
-                    <posx>554</posx>
-                    <posy>167</posy>
-                    <width>110</width>
-                    <height>27</height>
+                    <posx>514</posx>
+                    <posy>203</posy>
+                    <width>150</width>
+                    <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
                 </control>
@@ -155,54 +146,54 @@
                 <description>lower panel</description>
                 <control type="image">
                     <description>left horizontal</description>
-                    <posx>158</posx>
-                    <posy>199</posy>
-                    <width>110</width>
-                    <height>27</height>
+                    <posx>157</posx>
+                    <posy>218</posy>
+                    <width>150</width>
+                    <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse><!--orange-->
                 </control>
                 <control type="image">
                     <description>middle horizontal</description>
-                    <posx>271</posx>
-                    <posy>199</posy>
-                    <width>280</width>
-                    <height>27</height>
+                    <posx>309</posx>
+                    <posy>203</posy>
+                    <width>203</width>
+                    <height>26</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                 </control>
                 <control type="image">
                     <description>right horizontal</description>
-                    <posx>554</posx>
-                    <posy>199</posy>
-                    <width>110</width>
-                    <height>27</height>
+                    <posx>514</posx>
+                    <posy>218</posy>
+                    <width>150</width>
+                    <height>11</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
                 </control>
                 <control type="image">
                     <description>upper left corner</description>
                     <posx>12</posx>
-                    <posy>188</posy>
+                    <posy>190</posy>
                     <width>143</width>
-                    <height>64</height>
-                    <texture border="64">LCARS-corner.png</texture>
+                    <height>65</height>
+                    <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <visible>!Control.HasFocus(106)</visible>
                 </control>
                 <control type="image">
                     <description>upper left corner</description>
                     <posx>12</posx>
-                    <posy>188</posy>
+                    <posy>190</posy>
                     <width>143</width>
-                    <height>64</height>
-                    <texture border="64">LCARS-corner.png</texture>
+                    <height>65</height>
+                    <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
                     <visible>Control.HasFocus(106)</visible>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
                     <posx>20</posx>
-                    <posy>256</posy>
+                    <posy>259</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -211,7 +202,7 @@
                 <control type="image">
                     <description>upper vertical</description>
                     <posx>20</posx>
-                    <posy>292</posy>
+                    <posy>295</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -220,7 +211,7 @@
                 <control type="image">
                     <description>upper vertical</description>
                     <posx>20</posx>
-                    <posy>328</posy>
+                    <posy>331</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -229,7 +220,7 @@
                 <control type="image">
                     <description>lower vertical</description>
                     <posx>20</posx>
-                    <posy>365</posy>
+                    <posy>367</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -238,7 +229,7 @@
                 <control type="image">
                     <description>lower vertical</description>
                     <posx>20</posx>
-                    <posy>402</posy>
+                    <posy>403</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -247,7 +238,7 @@
                 <control type="image">
                     <description>lower vertical</description>
                     <posx>20</posx>
-                    <posy>438</posy>
+                    <posy>439</posy>
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-pixel.png</texture>
@@ -279,7 +270,7 @@
                 <control type="image">
                     <description>upper vertical</description>
                     <posx>475</posx>
-                    <posy>231</posy>
+                    <posy>232</posy>
                     <width>31</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
@@ -289,7 +280,7 @@
                 <control type="image">
                     <description>upper vertical</description>
                     <posx>475</posx>
-                    <posy>231</posy>
+                    <posy>232</posy>
                     <width>31</width>
                     <height>31</height>
                     <texture>LCARS-pixel.png</texture>
@@ -315,11 +306,20 @@
                     <visible>Control.HasFocus(2561) | Control.HasFocus(2661)</visible>
                 </control>
                 <control type="image">
+                    <description>menu vertical</description>
+                    <posx>475</posx>
+                    <posy>301</posy>
+                    <width>31</width>
+                    <height>12</height>
+                    <texture>LCARS-pixel.png</texture>
+                    <colordiffuse>FF9999CC</colordiffuse>
+                </control>
+                <control type="image">
                     <description>lower vertical</description>
                     <posx>475</posx>
-                    <posy>302</posy>
+                    <posy>316</posy>
                     <width>31</width>
-                    <height>167</height>
+                    <height>154</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
                 </control>
@@ -343,18 +343,18 @@
                 </control>
                 <control type="image">
                     <description>left-left horizontal</description>
-                    <posx>158</posx>
+                    <posx>157</posx>
                     <posy>501</posy>
-                    <width>199</width>
+                    <width>200</width>
                     <height>27</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
                 </control>
                 <control type="image">
                     <description>left-right horizontal</description>
-                    <posx>360</posx>
+                    <posx>359</posx>
                     <posy>501</posy>
-                    <width>87</width>
+                    <width>89</width>
                     <height>27</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFFFCC99</colordiffuse>
@@ -370,9 +370,9 @@
                 </control>
                 <control type="image">
                     <description>right horizontal</description>
-                    <posx>534</posx>
+                    <posx>533</posx>
                     <posy>501</posy>
-                    <width>130</width>
+                    <width>132</width>
                     <height>27</height>
                     <texture>LCARS-pixel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse>
@@ -382,7 +382,7 @@
             <control type="label" id="20">
                 <description>Title Label</description>
                 <posx>648</posx>
-                <posy>-5</posy>
+                <posy>-3</posy>
                 <width>300</width>
                 <align>right</align>
                 <font>lcars-large</font>
@@ -391,12 +391,12 @@
             <!-- ** Required ** Do not change id or type-->
             <control type="label" id="30">
                 <description>Category Label</description>
-                    <posx>271</posx>
-                    <posy>197</posy>
-                    <width>280</width>
+                    <posx>309</posx>
+                    <posy>202</posy>
+                    <width>203</width>
                     <height>27</height>
                 <align>center</align>
-                <font>lcars-medium</font>
+                <font>lcars-small</font>
                 <textcolor>FF000000</textcolor>
             </control>
         </control>
@@ -406,7 +406,7 @@
 		<control type="group" id="9000">
 			<posx>20</posx>
 			<posy>10</posy>
-            <visible>Control.IsVisible(3000) | Control.IsVisible(4000)</visible>
+            <!--visible>Control.IsVisible(3000) | Control.IsVisible(4000)</visible-->
 			<control type="button" id="2">
                 <visible>false</visible>
 				<description>View As Icons button</description>
@@ -417,7 +417,7 @@
 				<label>100</label>
 				<texturefocus>-</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-medium</font>
+				<font>lcars-tiny</font>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFFFF00</focusedcolor>
 				<disabledcolor>60ffffff</disabledcolor>
@@ -438,7 +438,7 @@
 				<texturefocus>-</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<align>right</align>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -455,12 +455,12 @@
 			<control type="button" id="100">
 				<description>Shortcut1 Button</description>
                     <posx>20</posx>
-                    <posy>256</posy>
+                    <posy>259</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -477,12 +477,12 @@
 			<control type="button" id="101">
 				<description>Shortcut2 Button</description>
                     <posx>20</posx>
-                    <posy>292</posy>
+                    <posy>295</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -499,12 +499,12 @@
 			<control type="button" id="102">
 				<description>Shortcut3 Button</description>
                     <posx>20</posx>
-                    <posy>328</posy>
+                    <posy>331</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -521,12 +521,12 @@
 			<control type="button" id="103">
 				<description>Genre Button</description>
                     <posx>20</posx>
-                    <posy>365</posy>
+                    <posy>367</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -543,12 +543,12 @@
 			<control type="button" id="104">
 				<description>Studio Button</description>
                     <posx>20</posx>
-                    <posy>402</posy>
+                    <posy>403</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -565,12 +565,12 @@
 			<control type="button" id="105">
 				<description>Actor Button</description>
                     <posx>20</posx>
-                    <posy>438</posy>
+                    <posy>439</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>LCARS-pixel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -592,7 +592,7 @@
 				<height>33</height>
 				<texturefocus>-</texturefocus>
 				<texturenofocus>-</texturenofocus>
-				<font>lcars-small</font>
+				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
@@ -876,7 +876,7 @@
                 </control>
             </control>
 
-            <control type="group">
+            <control type="group">LCARS-poster_backdrop.png
                 <visible>Control.IsVisible(50)</visible>
                 <control type="image">
                     <description>Trailer Poster</description>
@@ -885,8 +885,7 @@
                     <width>160</width>
                     <height>236</height>
                     <info>ListItem.ActualIcon</info>
-                    <texture>-</texture>
-                    <aspectratio aligny="bottom">keep</aspectratio>
+                    <aspectratio>keep</aspectratio>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="202">
@@ -936,12 +935,12 @@
             <!-- ** Required ** Do not change id or type-->
             <control type="label" id="206">
 				<description>Trailer Title</description>
-				<posx>150</posx>
-				<posy>40</posy>
+				<posx>140</posx>
+				<posy>47</posy>
 				<width>300</width>
 				<align>left</align>
 				<info>ListItem.Label</info>
-				<font>lcars-small</font>
+				<font>lcars-medium</font>
 				<textcolor>FFCC99CC</textcolor>
                 <scroll>true</scroll>
                 <disabledcolor>FFe2ff43</disabledcolor>
@@ -950,7 +949,7 @@
             <control type="label" id="2150">
 				<description>Trailer List Count Label</description>
 				<width>100</width>
-				<posx>442</posx>
+				<posx>445</posx>
 				<posy>500</posy>
 				<align>right</align>
 				<label>-</label>
@@ -983,9 +982,9 @@
             <control type="textbox" id="75">
 				<description>Trailer Plot</description>
 				<posx>140</posx>
-				<posy>68</posy>
+				<posy>78</posy>
 				<width>300</width>
-				<height>100</height>
+				<height>130</height>
 				<font>lcars-small</font>
 				<textcolor>FFFF9900</textcolor>
 				<onup>75</onup>
@@ -1001,7 +1000,7 @@
                 <visible>Control.IsVisible(75)</visible>
                 <control type="button" id="2076">
                     <posx>65</posx>
-                    <posy>73</posy>
+                    <posy>90</posy>
                     <width>25</width>
                     <height>20</height>
                     <texturenofocus>LCARS-page-control.png</texturenofocus>
@@ -1024,7 +1023,7 @@
                 </control>
                 <control type="button" id="2077">
                     <posx>65</posx>
-                    <posy>110</posy>
+                    <posy>126</posy>
                     <width>25</width>
                     <height>20</height>
                     <texturenofocus flipy="true">LCARS-page-control.png</texturenofocus>
@@ -1041,9 +1040,9 @@
             <control type="list" id="70">
                 <description>Cast List</description>
 				<posx>455</posx>
-				<posy>65</posy>
+				<posy>78</posy>
 				<width>215</width>
-				<height>90</height>
+				<height>116</height>
 				<onleft>2700</onleft>
 				<onright>2700</onright>
 				<onup>70</onup>
@@ -1418,7 +1417,7 @@
 			<control type="label" id="2160">
 				<description>Category List Count Label</description>
 				<width>100</width>
-				<posx>442</posx>
+				<posx>445</posx>
 				<posy>500</posy>
 				<align>right</align>
 				<label>-</label>
