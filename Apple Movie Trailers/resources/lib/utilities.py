@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98.3", "0.98.3", "pre-0.98.4", "0.98.4", "pre-0.98.5", "0.98.5", "pre-0.98.6", "0.98.6", )
-SETTINGS_VERSIONS = ( "pre-0.98.6", "0.98.6", )
+DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", )
+SETTINGS_VERSIONS = DATABASE_VERSIONS
 # special categories
 GENRES = -1
 STUDIOS = -2
