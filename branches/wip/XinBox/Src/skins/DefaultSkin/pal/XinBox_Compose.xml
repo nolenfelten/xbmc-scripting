@@ -1,6 +1,4 @@
 <window>
-	<defaultcontrol>50</defaultcontrol>
-	<allowoverlay>yes</allowoverlay>
 	<controls>
 		<control type="image" id="78">
 			<description>attachpanel</description>
@@ -69,23 +67,16 @@
 			<posy>80</posy>
 			<width>150</width>
 			<height>170</height>
-			<onleft>64</onleft>
+			<onleft>62</onleft>
 			<onright>81</onright>
 			<onup>81</onup>
 			<ondown>81</ondown>
 			<viewtype label="535">list</viewtype>
 			<itemlayout height="27">
-				<control type="image">
-					<width>150</width>
-					<height>25</height>
-					<posx>0</posx>
-					<posy>0</posy>
-					<texture>XBlist-nofocus.png</texture>
-				</control>
 				<control type="label">
 					<posx>0</posx>
 					<posy>0</posy>
-					<width>380</width>
+					<width>145</width>
 					<height>22</height>
 					<font>font13</font>
 					<selectedcolor>FFe2ff43</selectedcolor>
@@ -105,7 +96,7 @@
 				<control type="label">
 					<posx>0</posx>
 					<posy>0</posy>
-					<width>380</width>
+					<width>145</width>
 					<height>22</height>
 					<font>font13</font>
 					<selectedcolor>FFe2ff43</selectedcolor>
@@ -137,11 +128,12 @@
 			<font>special13</font>
 			<textcolor>FFB2D4F5</textcolor>
 		</control> 
-		<control type="list" id="50">
+		<control type="list" id="82">
             	<posx>124</posx>
             	<posy>77</posy>
             	<width>426</width>
             	<height>400</height>
+		<onup>82</onup>
 		<ondown>9000</ondown>
 		<scrolltime>200</scrolltime>
 		<animation effect="slide" start="-700,0" time="800">Visible</animation>
@@ -165,7 +157,7 @@
 					<posx>0</posx>
 					<posy>0</posy>
 					<texture>XBlist-focus.png</texture>
-					<visible>Control.HasFocus(50)</visible>
+					<visible>Control.HasFocus(82)</visible>
 				</control>
 				<control type="label">
 					<posx>2</posx>
@@ -225,63 +217,63 @@
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<posx>32</posx>
+			<posx>33</posx>
 			<posy>505</posy>
-			<control type="button" id="61">
-				<description>Send Button</description>
+			<control type="button" id="60">
+				<description>Save Button</description>
 				<posx>0</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onright>62</onright>
-				<onup>50</onup>
-				<ondown>61</ondown>
-				<onleft>61</onleft>
+				<onright>61</onright>
+				<onup>82</onup>
+				<ondown>60</ondown>
+				<onleft>60</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>95</width>
+				<width>94</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="61">
+				<description>Send Button</description>
+				<posx>214</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
+				<onright>62</onright>
+				<onup>82</onup>
+				<ondown>61</ondown>
+				<onleft>60</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>94</width>
 				<height>35</height>
 			</control>
 			<control type="button" id="62">
 				<description>Add Attachment Button</description>
-				<posx>422</posx>
+				<posx>414</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>A</label>
-				<onup>50</onup>
+				<label>-</label>
+				<onup>82</onup>
 				<onleft>61</onleft>
-				<onright>63</onright>
+				<onright>81</onright>
 				<ondown>62</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
 				<texturenofocus>XBlist-nofocus.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
-				<width>36</width>
-				<height>35</height>
-			</control>
-			<control type="button" id="63">
-				<description>Delete Attachment Button</description>
-				<posx>461</posx>
-				<posy>0</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>D</label>
-				<onup>50</onup>
-				<onleft>62</onleft>
-				<onright>81</onright>
-				<ondown>63</ondown>
-				<align>center</align>
-				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>36</width>
+				<width>94</width>
 				<height>35</height>
 			</control>			
 		</control>

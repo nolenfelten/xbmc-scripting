@@ -7,10 +7,10 @@ from XinBox_EmailEngine import Email
 import XinBox_Email
 import XinBox_Compose
 from os.path import join, exists, basename
-from os import mkdir, remove
+from os import mkdir, remove, listdir
 SETTINGDIR = "P:\\script_data\\XinBox\\"
 ACCOUNTSDIR = "P:\\script_data\\XinBox\\Accounts\\"
-from sgmllib import SGMLParser    
+from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
@@ -36,6 +36,7 @@ class GUI( xbmcgui.WindowXML ):
         self.updatesizelabel()
         
     def setupvars(self):
+        self.animating = False
         self.guilist = []
         self.control_action = XinBox_Util.setControllerAction()
         if self.ibsettings.getSetting("SERV Inbox Size") != "0":
@@ -49,18 +50,21 @@ class GUI( xbmcgui.WindowXML ):
         pass
     
     def onClick(self, controlID):
-        try:focusid = self.getFocusId()
-        except:focusid = 0
-        if (50 <= focusid <= 59):
-            self.openemail(self.getCurrentListPosition())
-        elif controlID == 65:
-            self.close()
-        elif controlID == 61:
-            self.checkfornew()
-        elif controlID == 62:
-            self.sendemail()
-        elif controlID == 63:
-            self.cleaninbox()
+        if not self.animating:
+            try:focusid = self.getFocusId()
+            except:focusid = 0
+            if (50 <= focusid <= 59):
+                self.openemail(self.getCurrentListPosition())
+            elif controlID == 65:
+                self.close()
+            elif controlID == 61:
+                self.checkfornew()
+            elif controlID == 62:
+                self.sendemail()
+            elif controlID == 63:
+                self.cleaninbox()
+            elif controlID == 66:pass
+             #   self.opendrafts()
 
     def cleaninbox(self):
         dialog = xbmcgui.Dialog()
@@ -71,16 +75,17 @@ class GUI( xbmcgui.WindowXML ):
             return
   
     def onAction( self, action ):
-        button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
-        actionID   =  action.getId()
-        try:focusid = self.getFocusId()
-        except:focusid = 0
-        try:control = self.getFocus()
-        except: control = 0
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-            self.close()
-        elif (50 <= focusid <= 59):
-            self.printEmail(self.getCurrentListPosition())
+        if not self.animating:
+            button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
+            actionID   =  action.getId()
+            try:focusid = self.getFocusId()
+            except:focusid = 0
+            try:control = self.getFocus()
+            except: control = 0
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+                self.close()
+            elif (50 <= focusid <= 59):
+                self.printEmail(self.getCurrentListPosition())
 
     def printEmail(self, selected):
         myemail = self.guilist[selected][1]
@@ -109,52 +114,39 @@ class GUI( xbmcgui.WindowXML ):
         if returnval != "-":
             self.deletemail(pos, returnval)
 
-    def sendemail(self):
+    def sendemail(self, draft=["","","","","",None]):
+        w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
+        w.doModal()
+        returnval = w.returnvalue
+        print "return val = " + str(returnval)
+        print "draft = " + str(draft)
+        del w
+        if returnval != 0:
+            w = Email(self.ibsettings,self.inbox,self.account,self.language)
+            w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
+            del w
+        self.getControl(66).setEnabled(self.checkdrafts())
+
+
+    def opendrafts(self):
+        dialog = XinBox_Drafts("XinBox_Drafts.xml",self.srcpath,"DefaultSkin",ibfolder=self.ibfolder)
+        dialog.doModal()
+        returnval = dialog.returnval
+        del dialog
+        if returnval != 0:
+            self.sendemail(returnval)
+
+
+    def checkdrafts(self):
         try:
-            w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox)
-            w.doModal()
-            if w.returnvalue != 0:
-                sendme = w.returnvalue
-                del w
-                w = Email(self.ibsettings,self.inbox,self.account,self.language)
-                w.sendemail(sendme[0],sendme[3],sendme[4],sendme[5],sendme[1],sendme[2])
-                del w
-            else:del w
-        except:traceback.print_exc()
-##        keyboard = xbmc.Keyboard("","Enter To: Address(s)")
-##        keyboard.doModal()
-##        if (keyboard.isConfirmed()):
-##            toaddr = keyboard.getText()
-##        else:return
-##        keyboard = xbmc.Keyboard("","Enter CC: Address(s)")
-##        keyboard.doModal()
-##        if (keyboard.isConfirmed()):
-##            cc = keyboard.getText()
-##        else:return
-##        keyboard = xbmc.Keyboard("","Enter Bcc: Address(s)")
-##        keyboard.doModal()
-##        if (keyboard.isConfirmed()):
-##            bcc = keyboard.getText()
-##        else:return        
-##        keyboard = xbmc.Keyboard("","Enter Subject:")
-##        keyboard.doModal()
-##        if (keyboard.isConfirmed()):
-##            subject = keyboard.getText()
-##        else:return
-##        keyboard = xbmc.Keyboard("","Enter Message Body:")
-##        keyboard.doModal()
-##        if (keyboard.isConfirmed()):
-##            body = keyboard.getText()
-##        else:return
-##        attachlist = []
-##        dialog = xbmcgui.Dialog()
-##        ret = dialog.browse(1, "Browse for attachment.." , 'files')
-##        if ret:
-##            attachlist.append([basename(ret),ret])
-##        else:pass
-##        w = Email(self.ibsettings,self.inbox,self.account,self.language)
-##        w.sendemail(toaddr,subject,body,attachlist,cc,bcc)
-##        del w
+            f = open(self.ibfolder + "drafts.xib", "r")
+            myfile = f.read()
+            f.close()
+            for draft in myfile.split("<>"):
+                if draft != "":return True
+            return False
+        except:return False
+        
     
     def parse_email(self, email):
         parser = html2txt()
@@ -164,6 +156,8 @@ class GUI( xbmcgui.WindowXML ):
         return parser.output()
     
     def setupcontrols(self):
+        self.getControl(66).setLabel("Drafts")
+        self.getControl(66).setEnabled(self.checkdrafts())
         self.getControl(80).setLabel(self.inbox)
         self.getControl(61).setLabel(self.language(250))
         self.getControl(62).setLabel(self.language(251))
@@ -198,25 +192,23 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl(82).setLabel(self.language(258) + self.getsizelabel(int(self.inboxsize))+ "/" + str(self.ibxsize) + "MB")
 
     def deletemail(self, pos, setting):
-        try:
-            w = Email(self.ibsettings,self.inbox,self.account,self.language,True)
-            w.deletemail(pos,setting)
-            self.serversize = w.serversize
-            self.inboxsize = w.inboxsize                
-            del w
-            self.updatesizelabel()
-            if setting != 1:
-                self.removeItem(pos)
-                self.guilist.pop(pos)
-                if len(self.guilist) != 0:
-                    self.printEmail(self.getCurrentListPosition())
-                else:self.setinboxempty()
-            else:
-                orig = self.guilist[pos]
-                new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
-                self.guilist.pop(pos)
-                self.guilist.insert(pos, new)
-        except:traceback.print_exc()
+        w = Email(self.ibsettings,self.inbox,self.account,self.language,True)
+        w.deletemail(pos,setting)
+        self.serversize = w.serversize
+        self.inboxsize = w.inboxsize                
+        del w
+        self.updatesizelabel()
+        if setting != 1:
+            self.removeItem(pos)
+            self.guilist.pop(pos)
+            if len(self.guilist) != 0:
+                self.printEmail(self.getCurrentListPosition())
+            else:self.setinboxempty()
+        else:
+            orig = self.guilist[pos]
+            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
+            self.guilist.pop(pos)
+            self.guilist.insert(pos, new)
 
     def setinboxnotemtpy(self):
         self.getControl(50).setEnabled(True)
@@ -336,7 +328,67 @@ class GUI( xbmcgui.WindowXML ):
                     else:
                         f.close()
                         return True
-                 
+
+class XinBox_Drafts(xbmcgui.WindowXMLDialog):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,ibfolder=False):
+        self.ibfolder = ibfolder
+        self.control_action = XinBox_Util.setControllerAction()
+        self.animating = False
+        self.returnval = 0
+
+    def onInit(self):
+        self.animating = True
+        xbmc.executebuiltin("Skin.SetBool(draftlist)")
+        time.sleep(0.8)
+        self.animating = False
+        self.getdrafts()
+        self.setFocusId(50)
+
+    def onAction(self, action):
+        if not self.animating:
+            button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
+            actionID   =  action.getId()
+            try:focusid = self.getFocusId()
+            except:focusid = 0
+            try:control = self.getFocus()
+            except: control = 0
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+                self.animating = True
+                xbmc.executebuiltin("Skin.ToggleSetting(draftlist)")
+                time.sleep(0.8)
+                self.animating = False
+                self.close()
+
+    def onClick(self, controlID):
+        if not self.animating:
+            if controlID == 50:
+                self.animating = True
+                self.returnval = self.draftlist[self.getCurrentListPosition()]
+                xbmc.executebuiltin("Skin.ToggleSetting(draftlist)")
+                time.sleep(0.8)
+                self.animating = False
+                self.close()
+
+    def onFocus(self, controlID):
+        pass
+
+    def getdrafts(self):
+       try:
+           self.draftlist = []
+           f = open(self.ibfolder + "drafts.xib", "r")
+           myfile = f.read()
+           f.close()
+           for draft in myfile.split("<>"):
+               if draft != "":
+                   mydraft = draft.split("|")
+                   attachments = mydraft[5].split(",")
+                   myattachments = []
+                   for attach in attachments:
+                       if attach != "":myattachments.append([basename(attach),attach])
+                   self.draftlist.append([mydraft[0],mydraft[1],mydraft[2],mydraft[3],mydraft[4],myattachments])
+                   self.addItem(xbmcgui.ListItem("To: " + mydraft[0],"Subject: " + mydraft[3],"",""))
+       except:traceback.print_exc()
+    
 class html2txt(SGMLParser):
     def reset(self):
         SGMLParser.reset(self)
@@ -350,4 +402,6 @@ class html2txt(SGMLParser):
             self.pieces.append("&")
 
     def output(self):
-        return " ".join(self.pieces)        
+        return " ".join(self.pieces)
+
+
