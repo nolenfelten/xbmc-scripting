@@ -113,6 +113,25 @@
 				<onup>61</onup>
 				<onleft>62</onleft>
 				<onright>50</onright>
+				<ondown>66</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>108</width>
+				<height>37</height>
+			</control>
+			<control type="button" id="66">
+				<description>Drafts Button</description>
+				<posx>0</posx>
+				<posy>119</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
+				<onup>62</onup>
+				<onleft>66</onleft>
+				<onright>50</onright>
 				<ondown>63</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -123,13 +142,13 @@
 				<height>37</height>
 			</control>
 			<control type="button" id="63">
-				<description>Clean Button</description>
+				<description>Reset Button</description>
 				<posx>0</posx>
 				<posy>320</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onup>62</onup>
+				<onup>66</onup>
 				<onleft>63</onleft>
 				<onright>50</onright>
 				<ondown>64</ondown>
@@ -305,7 +324,6 @@
 			<visible>!Skin.HasSetting(UseScrollbars) + !Control.IsVisible(56)</visible>
 			<visible>![Window.IsActive(myvideolibrary) + Control.IsVisible(51)]</visible>
 		</control>
-
     </controls>
 
 </window>

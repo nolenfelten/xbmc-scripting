@@ -24,7 +24,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.click = 0
         self.curpos = 0
         self.showing = False
-        self.exiting = False
+        self.animating = False
         self.deleserv = False
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
@@ -93,16 +93,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
         return parser.output()
         
     def onClick(self, controlID):
-        if not self.exiting:
+        if not self.animating:
             if controlID == 64:
-                self.exiting = True
+                self.animating = True
                 self.attachlist = not self.attachlist
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
                 time.sleep(0.8)
                 self.click = 0
                 self.resetemail()
                 self.getControl(81).setEnabled(self.attachlist)
-                self.exiting = False
+                self.animating = False
             elif controlID == 81:
                 self.openattach(self.getControl(81).getSelectedPosition())
             elif controlID == 63:
@@ -217,7 +217,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
             
     def onAction( self, action ):
-        if not self.exiting:
+        if not self.animating:
             button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
             actionID   =  action.getId()
             try:focusid = self.getFocusId()
@@ -249,7 +249,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def exitme(self):
-        self.exiting = True
+        self.animating = True
         if self.attachlist:
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
             time.sleep(0.8)
