@@ -219,28 +219,9 @@
 			<visible>Skin.HasSetting(emaildialog)</visible>
 			<posx>33</posx>
 			<posy>505</posy>
-			<control type="button" id="60">
-				<description>Save Button</description>
-				<posx>0</posx>
-				<posy>0</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>-</label>
-				<onright>61</onright>
-				<onup>82</onup>
-				<ondown>60</ondown>
-				<onleft>60</onleft>
-				<align>center</align>
-				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>94</width>
-				<height>35</height>
-			</control>
 			<control type="button" id="61">
 				<description>Send Button</description>
-				<posx>214</posx>
+				<posx>0</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -248,7 +229,7 @@
 				<onright>62</onright>
 				<onup>82</onup>
 				<ondown>61</ondown>
-				<onleft>60</onleft>
+				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>

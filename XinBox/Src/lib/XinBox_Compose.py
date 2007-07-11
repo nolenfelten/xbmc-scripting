@@ -35,7 +35,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.attachlist = False
         if self.mydraft[5] == None:self.attachments = []
         else:self.attachments = self.mydraft[5]
-        print "attachments = " + str(self.attachments)
         self.body = self.mydraft[4]
         self.returnvalue = 0
         self.toaddr = self.mydraft[0]
@@ -52,7 +51,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(85).setLabel(self.language(311))
         self.getControl(86).setLabel(self.language(312))
         self.getControl(87).setLabel(self.language(313))
-        self.getControl(60).setLabel(self.language(64))
         self.getControl(61).setLabel(self.language(314))
         self.getControl(62).setLabel(self.language(61))
         self.getControl(82).addItem(self.toaddr)
@@ -67,7 +65,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(81).setEnabled(True)
             self.animating = True
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-            time.sleep(0.8)
+            time.sleep(0.9)
             self.animating = False
         else:self.getControl(81).setEnabled(False)
         
@@ -94,9 +92,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     kb = self.showKeyboard("Enter Subject):",self.getControl(82).getSelectedItem().getLabel())
                     if kb != False:
                         self.subject = kb
-                        self.getControl(82).getSelectedItem().setLabel(kb)
-            elif controlID == 60:pass
-                #self.savedraft()             
+                        self.getControl(82).getSelectedItem().setLabel(kb)           
             elif controlID == 61:
                 self.returnvalue = [self.toaddr,self.ccaddr,self.bccaddr,self.subject,"XinBox Test",self.attachments]
                 self.exitme()
@@ -110,7 +106,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     if len(self.attachments) == 0:
                         self.animating = True
                         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                        time.sleep(0.8)
+                        time.sleep(0.9)
                         self.animating = False
                         self.getControl(80).setImage("XBXinBoXLogo.png")
                         self.getControl(90).setLabel("")
@@ -120,24 +116,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     else:
                         for attach in self.attachments:
                             self.getControl(81).addItem(attach[0])
-                
-    def savedraft(self):
-        myattach = ""
-        for attach in self.attachments:
-            myattach = attach[1] + "," + myattach
-        if exists(self.ibfolder + "\\drafts.xib"):
-            f = open(self.ibfolder + "\\drafts.xib","r")
-            draft = f.read()
-            f.close()
-            draft = draft + self.toaddr + "|" + self.ccaddr + "|" + self.bccaddr + "|" + self.subject + "|" + self.body + "|" + myattach + "<>"
-            f = open(self.ibfolder + "\\drafts.xib","w")
-            f.write(draft)
-            f.close()
-        else:
-            f = open(self.ibfolder + "\\drafts.xib","w")
-            f.write(self.toaddr + "|" + self.ccaddr + "|" + self.bccaddr + "|" + self.subject + "|" + self.body + "|" + myattach + "<>")
-            f.close()
-
+                            
     def addattachment(self):
         try:
             dialog = xbmcgui.Dialog()
@@ -207,10 +186,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.animating = True
         if self.attachlist:
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-            time.sleep(0.8)
+            time.sleep(0.9)
         xbmc.executebuiltin("Skin.SetBool(emaildialog)")
         xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
-        time.sleep(0.8)
+        time.sleep(0.9)
         self.close()
 
     def showKeyboard(self, heading,default=""):

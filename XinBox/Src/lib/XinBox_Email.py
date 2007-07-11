@@ -98,7 +98,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.animating = True
                 self.attachlist = not self.attachlist
                 xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                time.sleep(0.8)
+                time.sleep(0.9)
                 self.click = 0
                 self.resetemail()
                 self.getControl(81).setEnabled(self.attachlist)
@@ -252,10 +252,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.animating = True
         if self.attachlist:
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-            time.sleep(0.8)
+            time.sleep(0.9)
         xbmc.executebuiltin("Skin.SetBool(emaildialog)")
         xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
-        time.sleep(0.8)
+        time.sleep(0.9)
         self.removefiles(TEMPFOLDER)
         self.close()
 
