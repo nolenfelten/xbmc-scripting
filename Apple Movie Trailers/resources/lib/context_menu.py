@@ -32,6 +32,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._setup_menu()
         self.setFocus( self.getControl( 1001 ) )
 
+    def _capitalize_text( self, text ):
+        return ( text, text.upper(), )[ self.caps ]
+
     def _hide_buttons( self ):
         for button in range( 1001, 1009 ):
             self.getControl( button ).setVisible( False )
@@ -70,7 +73,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         # position buttons and set labels
         for button in range( len( self.labels ) ):
             self.getControl( button + 1001 ).setPosition( button_posx, button_posy + ( ( button_height + button_gap ) * button ) )
-            self.getControl( button + 1001 ).setLabel( ( self.labels[ button ], self.labels[ button ].upper(), )[ self.caps ] )
+            self.getControl( button + 1001 ).setLabel( self._capitalize_text( self.labels[ button ] ) )
             self.getControl( button + 1001 ).setVisible( True )
             self.getControl( button + 1001 ).setEnabled( True )
 

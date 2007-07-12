@@ -91,16 +91,19 @@ class GUI( xbmcgui.WindowXML ):
 
     def _set_labels( self ):
         try:
-            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( ( __scriptname__, __scriptname__.upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( self._capitalize_text( __scriptname__ ) )
             self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( "" )
             self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "" )
             for button_id in range( self.CONTROL_BUTTON_GROUP_START, self.CONTROL_BUTTON_GROUP_END + 1 ):
-                self.getControl( button_id ).setLabel( ( _( button_id ), _( button_id ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+                self.getControl( button_id ).setLabel( self._capitalize_text( _( button_id ) ) )
         except:
             pass
 
     def _get_settings( self ):
         self.settings = Settings().get_settings()
+
+    def _capitalize_text( self, text ):
+        return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
 
     def _get_custom_sql( self ):
         self.search_sql = get_custom_sql()
@@ -222,7 +225,7 @@ class GUI( xbmcgui.WindowXML ):
                     for category in self.trailers.categories:
                         thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         count = "(%d)" % ( category.count, )
-                        list_item = xbmcgui.ListItem( ( category.title, category.title.upper(), )[ self.settings[ "capitalize_words" ] ], count, "%s.tbn" % category.title, thumbnail )
+                        list_item = xbmcgui.ListItem( self._capitalize_text( category.title ), count, "%s.tbn" % category.title, thumbnail )
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
@@ -248,7 +251,7 @@ class GUI( xbmcgui.WindowXML ):
                         thumbnail, poster = self._get_thumbnail( movie )
                         urls = ( "(%s)", "%s", )[ len( movie.trailer_urls ) > 0 ]
                         rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
-                        list_item = xbmcgui.ListItem( urls % ( ( movie.title, movie.title.upper(), )[ self.settings[ "capitalize_words" ] ], ), rating, poster, thumbnail )
+                        list_item = xbmcgui.ListItem( urls % ( self._capitalize_text( movie.title ), ), rating, poster, thumbnail )
                         list_item.select( movie.favorite )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
@@ -322,10 +325,10 @@ class GUI( xbmcgui.WindowXML ):
                 category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
                 category = self.genres[ self.category_id ].title
-        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( ( category, category.upper(), )[ self.settings[ "capitalize_words" ] ] )
+        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( self._capitalize_text( category ) )
             
     def _set_count_label( self, list_control ):
-        separator = ( _( 96 ), _( 96 ).upper(), )[ self.settings[ "capitalize_words" ] ]
+        separator = ( self._capitalize_text( _( 96 ) ) )
         if ( list_control == self.CONTROL_TRAILER_LIST_START ):
             pos = self.getCurrentListPosition()
             self.getControl( self.CONTROL_TRAILER_LIST_COUNT ).setLabel( "%d %s %d" % ( pos + 1, separator, len( self.trailers.movies ), ) )
@@ -358,7 +361,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
             # Plot
             self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
-            self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ], ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ].upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( self._capitalize_text( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] ) )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
@@ -367,10 +370,10 @@ class GUI( xbmcgui.WindowXML ):
             if ( self.cast_exists ):
                 #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
-                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( ( actor[ 0 ], actor[ 0 ].upper(), )[ self.settings[ "capitalize_words" ] ], "", "%s.tbn" % actor, thumbnail ) )
+                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( actor[ 0 ] ), "", "%s.tbn" % actor, thumbnail ) )
             else: 
                 #thumbnail = "amt-generic-noactor.tbn"
-                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( ( _( 401 ), _( 401 ).upper(), )[ self.settings[ "capitalize_words" ] ], "", thumbnail, thumbnail ) )
+                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( _( 401 ) ), "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except: traceback.print_exc()#pass
@@ -569,7 +572,7 @@ class GUI( xbmcgui.WindowXML ):
         else:
             import search
             force_fallback = self.skin != "Default"
-            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ] )
             s.doModal()
             if ( s.query ):
                 self.search_sql = s.query
@@ -605,53 +608,53 @@ class GUI( xbmcgui.WindowXML ):
 
     def setShortcutLabels( self ):
         if ( self.settings[ "shortcut1" ] == FAVORITES ):
-            self.getControl( 100 ).setLabel( ( _( 152 ), _( 152 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 152 ) ) )
         elif ( self.settings[ "shortcut1" ] == DOWNLOADED ):
-            self.getControl( 100 ).setLabel( ( _( 153 ), _( 153 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 153 ) ) )
         elif ( self.settings[ "shortcut1" ] == HD_TRAILERS ):
-            self.getControl( 100 ).setLabel( ( _( 160 ), _( 160 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 160 ) ) )
         elif ( self.settings[ "shortcut1" ] == NO_TRAILER_URLS ):
-            self.getControl( 100 ).setLabel( ( _( 161 ), _( 161 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 161 ) ) )
         elif ( self.settings[ "shortcut1" ] == CUSTOM_SEARCH ):
-            self.getControl( 100 ).setLabel( ( _( 162 ), _( 162 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 162 ) ) )
         elif ( self.settings[ "shortcut1" ] == WATCHED ):
-            self.getControl( 100 ).setLabel( ( _( 164 ), _( 163 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 100 ).setLabel( ( str( self.genres[ self.settings[ "shortcut1" ] ].title ), str( self.genres[ self.settings[ "shortcut1" ] ].title ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 100 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut1" ] ].title ) ) )
         if ( self.settings[ "shortcut2" ] == FAVORITES ):
-            self.getControl( 101 ).setLabel( ( _( 152 ), _( 152 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 152 ) ) )
         elif ( self.settings[ "shortcut2" ] == DOWNLOADED ):
-            self.getControl( 101 ).setLabel( ( _( 153 ), _( 153 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 153 ) ) )
         elif ( self.settings[ "shortcut2" ] == HD_TRAILERS ):
-            self.getControl( 101 ).setLabel( ( _( 160 ), _( 160 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 160 ) ) )
         elif ( self.settings[ "shortcut2" ] == NO_TRAILER_URLS ):
-            self.getControl( 101 ).setLabel( ( _( 161 ), _( 161 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 161 ) ) )
         elif ( self.settings[ "shortcut2" ] == CUSTOM_SEARCH ):
-            self.getControl( 101 ).setLabel( ( _( 162 ), _( 162 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 162 ) ) )
         elif ( self.settings[ "shortcut2" ] == WATCHED ):
-            self.getControl( 101 ).setLabel( ( _( 164 ), _( 163 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 101 ).setLabel( ( str( self.genres[ self.settings[ "shortcut2" ] ].title ), str( self.genres[ self.settings[ "shortcut2" ] ].title ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 101 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut2" ] ].title ) ) )
         if ( self.settings[ "shortcut3" ] == FAVORITES ):
-            self.getControl( 102 ).setLabel( ( _( 152 ), _( 152 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 152 ) ) )
         elif ( self.settings[ "shortcut3" ] == DOWNLOADED ):
-            self.getControl( 102 ).setLabel( ( _( 153 ), _( 153 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 153 ) ) )
         elif ( self.settings[ "shortcut3" ] == HD_TRAILERS ):
-            self.getControl( 102 ).setLabel( ( _( 160 ), _( 160 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 160 ) ) )
         elif ( self.settings[ "shortcut3" ] == NO_TRAILER_URLS ):
-            self.getControl( 102 ).setLabel( ( _( 161 ), _( 161 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 161 ) ) )
         elif ( self.settings[ "shortcut3" ] == CUSTOM_SEARCH ):
-            self.getControl( 102 ).setLabel( ( _( 162 ), _( 162 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 162 ) ) )
         elif ( self.settings[ "shortcut3" ] == WATCHED ):
-            self.getControl( 102 ).setLabel( ( _( 164 ), _( 163 ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 102 ).setLabel( ( str( self.genres[ self.settings[ "shortcut3" ] ].title ), str( self.genres[ self.settings[ "shortcut3" ] ].title ).upper(), )[ self.settings[ "capitalize_words" ] ] )
+            self.getControl( 102 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut3" ] ].title ) ) )
 
     def showCredits( self ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ] )
         c.doModal()
         del c
 
