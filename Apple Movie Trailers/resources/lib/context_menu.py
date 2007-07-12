@@ -20,6 +20,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.lock()
         self.area = kwargs[ "area" ]
         self.labels = kwargs[ "labels" ]
+        self.caps = kwargs[ "caps" ]
         self.doModal()
 
     def onInit( self ):
@@ -51,7 +52,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         button_offsetx = button_posx - dialog_top_posx
         button_offsety = button_posy - dialog_top_posy
         button_gap = 2
-        dialog_middle_height = ( len( self.labels ) * ( button_height + button_gap ) ) - button_gap
+        dialog_middle_height = ( ( len( self.labels ) * ( button_height + button_gap ) ) - button_gap ) - 2 * ( dialog_top_height - ( button_posy - dialog_top_posy ) )
         dialog_height = dialog_middle_height + dialog_top_height + dialog_bottom_height
         dialog_posx = int( float( self.area[ 2 ] - dialog_width ) / 2 ) + self.area[ 0 ]
         if ( dialog_posx + dialog_width > 700 ):
@@ -69,7 +70,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         # position buttons and set labels
         for button in range( len( self.labels ) ):
             self.getControl( button + 1001 ).setPosition( button_posx, button_posy + ( ( button_height + button_gap ) * button ) )
-            self.getControl( button + 1001 ).setLabel( self.labels[ button ] )
+            self.getControl( button + 1001 ).setLabel( ( self.labels[ button ], self.labels[ button ].upper(), )[ self.caps ] )
             self.getControl( button + 1001 ).setVisible( True )
             self.getControl( button + 1001 ).setEnabled( True )
 

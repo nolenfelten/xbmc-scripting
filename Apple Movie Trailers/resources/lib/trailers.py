@@ -397,13 +397,14 @@ class Trailers:
                     url = self.base_url + str( self.urls[ 0 ] )
                 else:
                     url = ( self.urls[ 0 ] )
-
+                #print "GETMOVIELIST_START", url
                 # xml parsing
                 source = fetcher.urlopen( url )
                 try: element = ET.fromstring( source )
                 except:
                     source = source.replace( " & ", " &amp; " )
                     element = ET.fromstring( source )
+                #print "GETMOVIELIST_START got source"
                 
                 # -- poster & thumbnails --
                 poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
@@ -414,6 +415,7 @@ class Trailers:
                         # make thumbnails
                         success = pil_util.makeThumbnails( poster )
                         self.poster = os.path.basename( poster )
+                #print "GETMOVIELIST_poster", poster
 
                 # -- plot --
                 plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
@@ -423,6 +425,7 @@ class Trailers:
                     plot = plot.replace( '\r', ' ' )
                     plot = plot.replace( '\n', ' ' )
                     self.plot = plot
+                #print "GETMOVIELIST_plot", url
                 
                 # -- actors --
                 SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
@@ -471,6 +474,7 @@ class Trailers:
                         continue
                     urls += [ temp_url ]
                 if len( urls ):
+                    #print urls
                     temp_url = self.base_url + urls[0]
                     self.urls = [ self.urls[ 0 ] ] + [ urls[ 0 ] ]
                     source = fetcher.urlopen( temp_url )
@@ -495,7 +499,7 @@ class Trailers:
                     self.trailer_urls = trailer_urls
             except:
                 #traceback.print_exc()
-                print 'Trailer XML %s: %s is corrupt' % ( self.idMovie, url, )
+                print 'Trailer XML %s: %s is corrupt or missing' % ( self.idMovie, url, )
             
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.rating,
                             self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,

@@ -377,7 +377,7 @@ class Query( dict ):
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
 
-        self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre), count(movies.trailer_urls) FROM genre_link_movie, genres, movies WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie GROUP BY genres.genre;"
+        self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre), count(movies.favorite) FROM genre_link_movie, genres, movies WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie GROUP BY genres.genre;"
         self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio), count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor), count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
         self[ "rating_category_list" ]		= "SELECT movies.rating, count(movies.rating) FROM movies WHERE movies.rating IS NOT NULL AND movies.rating!='' GROUP BY rating;"
