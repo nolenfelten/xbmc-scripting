@@ -40,12 +40,13 @@
             <control type="image">
                 <visible>!Control.IsVisible(3000) + Control.IsVisible(4000)</visible>
                 <description>background image</description>
-                    <posx>495</posx>
-                    <posy>270</posy>
-                    <width>180</width>
-                    <height>180</height>
+                <posx>495</posx>
+                <posy>270</posy>
+                <width>180</width>
+                <height>180</height>
                 <texture>LCARS-starfleet-emblem.png</texture>
                 <aspectratio>keep</aspectratio>
+				<animation effect="rotatey" center="585" start="0" end="-360" time="5000"  loop="true" condition="Control.IsVisible(4000)">Conditional</animation>
            </control>
 
             <control type="group">
@@ -56,7 +57,7 @@
                     <posy>4</posy>
                     <width>282</width>
                     <height>40</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="298,44" delay="150" time="50">WindowOpen</animation>
                 </control>
@@ -74,9 +75,9 @@
                     <posy>-13</posy>
                     <width>143</width>
                     <height>96</height>
-                    <texture border="64,0,64,0">LCARS-corner.png</texture>
+                    <texture border="64,0,64,0">LCARS-elbow-size1.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
-                    <animation effect="zoom" start="100,0" end="100,100" center="83,109" delay="150" time="50">WindowOpen</animation>
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,83" delay="150" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper middle vertical</description>
@@ -84,7 +85,7 @@
                     <posy>86</posy>
                     <width>110</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2076)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,117" delay="100" time="50">WindowOpen</animation>
@@ -95,7 +96,7 @@
                     <posy>86</posy>
                     <width>110</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <visible>Control.HasFocus(2076)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,117" delay="100" time="50">WindowOpen</animation>
                 </control>
@@ -105,7 +106,7 @@
                     <posy>120</posy>
                     <width>110</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2077)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,151" delay="50" time="50">WindowOpen</animation>
@@ -116,7 +117,7 @@
                     <posy>120</posy>
                     <width>110</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <visible>Control.HasFocus(2077)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,151" delay="50" time="50">WindowOpen</animation>
                 </control>
@@ -126,7 +127,7 @@
                     <posy>154</posy>
                     <width>143</width>
                     <height>87</height>
-                    <texture flipy="true" border="64,0,64,64">LCARS-corner-thin.png</texture>
+                    <texture flipy="true" border="64,0,64,64">LCARS-elbow-size2.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
                     <animation effect="zoom" start="100,0" end="100,100" center="83,215" time="50">WindowOpen</animation>
                 </control>
@@ -136,7 +137,7 @@
                     <posy>203</posy>
                     <width>150</width>
                     <height>12</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse><!--light blue-->
                     <animation effect="zoom" start="100,0" end="100,100" center="232,215" time="50">WindowOpen</animation>
                 </control>
@@ -146,7 +147,7 @@
                     <posy>203</posy>
                     <width>150</width>
                     <height>11</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="589,215" time="50">WindowOpen</animation>
                 </control>
@@ -160,7 +161,7 @@
                     <posy>218</posy>
                     <width>150</width>
                     <height>11</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse><!--orange-->
                     <animation effect="zoom" start="100,0" end="100,100" center="232,218" time="20">WindowOpen</animation>
                 </control>
@@ -170,7 +171,7 @@
                     <posy>203</posy>
                     <width>203</width>
                     <height>26</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <animation effect="zoom" start="100,0" end="100,100" center="410,216" time="20">WindowOpen</animation>
                 </control>
@@ -180,7 +181,7 @@
                     <posy>218</posy>
                     <width>150</width>
                     <height>11</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="589,218" time="20">WindowOpen</animation>
                 </control>
@@ -190,10 +191,10 @@
                     <posy>190</posy>
                     <width>143</width>
                     <height>65</height>
-                    <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
+                    <texture border="64,0,64,0">LCARS-elbow-size2.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <visible>!Control.HasFocus(106)</visible>
-                    <animation effect="zoom" start="100,0" end="100,100" center="83,190" time="20">WindowOpen</animation>
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,218" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper left corner</description>
@@ -201,9 +202,9 @@
                     <posy>190</posy>
                     <width>143</width>
                     <height>65</height>
-                    <texture border="64,0,64,0">LCARS-corner-thin.png</texture>
+                    <texture border="64,0,64,0">LCARS-elbow-size2.png</texture>
                     <visible>Control.HasFocus(106)</visible>
-                    <animation effect="zoom" start="100,0" end="100,100" center="83,190" time="20">WindowOpen</animation>
+                    <animation effect="zoom" start="100,0" end="100,100" center="83,218" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
@@ -211,7 +212,7 @@
                     <posy>259</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,259" delay="40" time="20">WindowOpen</animation>
                 </control>
@@ -221,7 +222,7 @@
                     <posy>295</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,295" delay="60" time="20">WindowOpen</animation>
                 </control>
@@ -231,7 +232,7 @@
                     <posy>331</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,331" delay="80" time="20">WindowOpen</animation>
                 </control>
@@ -241,7 +242,7 @@
                     <posy>367</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,367" delay="100" time="20">WindowOpen</animation>
                 </control>
@@ -251,7 +252,7 @@
                     <posy>403</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,403" delay="120" time="20">WindowOpen</animation>
                 </control>
@@ -261,7 +262,7 @@
                     <posy>439</posy>
                     <width>110</width>
                     <height>33</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
                     <animation effect="zoom" start="100,0" end="100,100" center="75,439" delay="140" time="20">WindowOpen</animation>
                 </control>
@@ -271,18 +272,18 @@
                     <posy>475</posy>
                     <width>143</width>
                     <height>64</height>
-                    <texture flipy="true" border="64">LCARS-corner.png</texture>
+                    <texture flipy="true" border="64">LCARS-elbow-size1.png</texture>
                     <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
                     <visible>!Control.HasFocus(107)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,475" delay="160" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
-                    <description>left corner</description>
+                    <description>lower left corner</description>
                     <posx>12</posx>
                     <posy>475</posy>
                     <width>143</width>
                     <height>64</height>
-                    <texture flipy="true" border="64">LCARS-corner.png</texture>
+                    <texture flipy="true" border="64">LCARS-elbow-size1.png</texture>
                     <visible>Control.HasFocus(107)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,475" delay="180" time="20">WindowOpen</animation>
                 </control>
@@ -292,7 +293,7 @@
                     <posy>501</posy>
                     <width>200</width>
                     <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="170,501" delay="180" time="20">WindowOpen</animation>
                 </control>
@@ -300,29 +301,19 @@
                     <description>left-right horizontal</description>
                     <posx>359</posx>
                     <posy>501</posy>
-                    <width>89</width>
+                    <width>90</width>
                     <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
-                    <colordiffuse>FFFFCC99</colordiffuse>
-                    <animation effect="zoom" start="100,0" end="100,100" center="372,501" delay="180" time="20">WindowOpen</animation>
-                </control>
-                <control type="image">
-                    <description>filler horizontal</description>
-                    <posx>450</posx>
-                    <posy>501</posy>
-                    <width>81</width>
-                    <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFFFCC99</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="372,501" delay="180" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right horizontal</description>
-                    <posx>533</posx>
+                    <posx>529</posx>
                     <posy>501</posy>
-                    <width>132</width>
+                    <width>135</width>
                     <height>27</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="599,501" delay="180" time="20">WindowOpen</animation>
                 </control>
@@ -332,84 +323,124 @@
                 <description>center panel</description>
                 <control type="image">
                     <description>upper vertical</description>
-                    <posx>475</posx>
+                    <posx>476</posx>
                     <posy>232</posy>
-                    <width>31</width>
+                    <width>26</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2560) + !Control.HasFocus(2660)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,263" delay="280" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>upper vertical</description>
-                    <posx>475</posx>
+                    <posx>476</posx>
                     <posy>232</posy>
-                    <width>31</width>
+                    <width>26</width>
                     <height>31</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <visible>Control.HasFocus(2560) | Control.HasFocus(2660)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,263" delay="280" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>middle vertical</description>
-                    <posx>475</posx>
+                    <posx>476</posx>
                     <posy>267</posy>
-                    <width>31</width>
+                    <width>26</width>
                     <height>30</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFCC6666</colordiffuse>
                     <visible>!Control.HasFocus(2561) + !Control.HasFocus(2661)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,297" delay="260" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>middle vertical</description>
-                    <posx>475</posx>
+                    <posx>476</posx>
                     <posy>267</posy>
-                    <width>31</width>
+                    <width>26</width>
                     <height>30</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <visible>Control.HasFocus(2561) | Control.HasFocus(2661)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,297" delay="260" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>menu vertical</description>
-                    <posx>475</posx>
+                    <posx>476</posx>
                     <posy>301</posy>
-                    <width>31</width>
+                    <width>26</width>
                     <height>12</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,313" delay="240" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
-                    <description>lower vertical</description>
-                    <posx>475</posx>
+                    <description>lower left vertical</description>
+                    <posx>476</posx>
                     <posy>316</posy>
-                    <width>31</width>
+                    <width>12</width>
                     <height>154</height>
-                    <texture>LCARS-pixel.png</texture>
+                    <texture>LCARS-panel.png</texture>
                     <colordiffuse>FFFF9900</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="280" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>favorite vertical</description>
+                    <posx>490</posx>
+                    <posy>316</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFCC6666</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="260" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>watched vertical</description>
+                    <posx>490</posx>
+                    <posy>335</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFCC6666</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="240" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>downloaded vertical</description>
+                    <posx>490</posx>
+                    <posy>354</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFCC6666</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="220" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
-                    <description>right corner</description>
-                    <posx>450</posx>
+                    <description>lower right vertical</description>
+                    <posx>490</posx>
+                    <posy>373</posy>
+                    <width>12</width>
+                    <height>97</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFCC6666</colordiffuse>
+                    <animation effect="zoom" start="100,0" end="100,100" center="490,470" delay="220" time="20">WindowOpen</animation>
+                </control>
+                <control type="image">
+                    <description>left corner</description>
+                    <posx>451</posx>
                     <posy>474</posy>
-                    <width>64</width>
+                    <width>128</width>
                     <height>64</height>
-                    <texture border="32,0,32,0" flipx="true" flipy="true">LCARS-corner.png</texture>
+                    <texture flipx="true" flipy="true">LCARS-elbow-size3.png</texture>
                     <colordiffuse>FFFFCC99</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="482,538" delay="200" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
                     <description>right corner</description>
-                    <posx>467</posx>
+                    <posx>399</posx>
                     <posy>474</posy>
-                    <width>64</width>
+                    <width>128</width>
                     <height>64</height>
-                    <texture border="32,0,32,0" flipy="true">LCARS-corner.png</texture>
-                    <colordiffuse>FFFFCC99</colordiffuse>
+                    <texture flipy="true">LCARS-elbow-size3.png</texture>
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="499,538" delay="200" time="20">WindowOpen</animation>
                 </control>
             </control>
@@ -467,7 +498,7 @@
 			<control type="button" id="106">
 				<description>Search Button</description>
 				<posx>20</posx>
-				<posy>218</posy>
+				<posy>223</posy>
                     <width>110</width>
                     <height>33</height>
 				<texturefocus>-</texturefocus>
@@ -475,10 +506,11 @@
 				<align>right</align>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
+                <textoffsety>10</textoffsety>
 				<textcolor>FF000000</textcolor>
                 <focusedcolor>FFFF0000</focusedcolor>
 				<disabledcolor>60ffffff</disabledcolor>
-				<aligny>center</aligny>
+				<aligny>bottom</aligny>
 				<onleft>2650</onleft>
 				<onright>50</onright>
 				<onup>2</onup>
@@ -493,7 +525,7 @@
                     <posy>259</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -515,7 +547,7 @@
                     <posy>295</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -537,7 +569,7 @@
                     <posy>331</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -559,7 +591,7 @@
                     <posy>367</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -581,7 +613,7 @@
                     <posy>403</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -603,7 +635,7 @@
                     <posy>439</posy>
                     <width>110</width>
                     <height>33</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-tiny</font>
                 <textoffsetx>3</textoffsetx>
@@ -622,7 +654,7 @@
 			<control type="button" id="107">
 				<description>Settings Button</description>
                     <posx>20</posx>
-				<posy>477</posy>
+				<posy>475</posy>
 				<width>110</width>
 				<height>33</height>
 				<texturefocus>-</texturefocus>
@@ -633,7 +665,7 @@
                 <focusedcolor>FFFF0000</focusedcolor>
 				<disabledcolor>60ffffff</disabledcolor>
 				<align>right</align>
-				<aligny>center</aligny>
+				<aligny>top</aligny>
 				<onleft>2650</onleft>
 				<onright>50</onright>
 				<onup>105</onup>
@@ -647,7 +679,7 @@
 				<posy>502</posy>
 				<width>130</width>
 				<height>30</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-medium</font>
                 <textoffsetx>3</textoffsetx>
@@ -670,7 +702,7 @@
 				<posy>502</posy>
 				<width>130</width>
 				<height>30</height>
-				<texturefocus>LCARS-pixel.png</texturefocus>
+				<texturefocus>LCARS-panel.png</texturefocus>
 				<texturenofocus>-</texturenofocus>
 				<font>lcars-medium</font>
                 <textoffsetx>3</textoffsetx>
@@ -715,7 +747,7 @@
 						<height>28</height>
 						<posx>15</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FFFFFF</colordiffuse>
 					</control>
 					<control type="image">
@@ -765,7 +797,7 @@
 						<height>28</height>
 						<posx>15</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FF0000</colordiffuse>
 						<visible>!Control.HasFocus(50)</visible>
 					</control>
@@ -775,7 +807,7 @@
 						<posx>15</posx>
 						<posy>0</posy>
 						<visible>Control.HasFocus(50)</visible>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>30FF0000</colordiffuse>
 					</control>
 					<control type="image">
@@ -874,9 +906,9 @@
                 <animation effect="fade" time="1000">VisibileChange</animation>
                 <control type="button" id="2560">
                     <description>Trailer List Scrollbar Up Arrow</description>
-                        <posx>478</posx>
+                        <posx>477</posx>
                         <posy>235</posy>
-                        <width>25</width>
+                        <width>24</width>
                         <height>20</height>
                     <texturenofocus>LCARS-page-control.png</texturenofocus>
                     <texturefocus>LCARS-page-control-focus.png</texturefocus>
@@ -898,9 +930,9 @@
                 </control>
                 <control type="button" id="2561">
                     <description>Trailer List Scrollbar Down Arrow</description>
-                        <posx>478</posx>
+                        <posx>477</posx>
                         <posy>273</posy>
-                        <width>25</width>
+                        <width>24</width>
                         <height>20</height>
                     <texturenofocus flipy="true">LCARS-page-control.png</texturenofocus>
                     <texturefocus flipy="true">LCARS-page-control-focus.png</texturefocus>
@@ -936,33 +968,33 @@
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
                     <description>Trailer Favorite Overlay</description>
-                    <posx>478</posx>
-                    <posy>310</posy>
-                    <width>24</width>
-                    <height>24</height>
-                    <texture>LCARS-overlay-favorite.png</texture>
-                    <aspectratio>keep</aspectratio>
+                    <posx>490</posx>
+                    <posy>316</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFFF0000</colordiffuse>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
                     <description>Trailer Watched Overlay</description>
-                    <posx>478</posx>
-                    <posy>340</posy>
-                    <width>24</width>
-                    <height>24</height>
-                    <texture>LCARS-overlay-watched.png</texture>
-                    <aspectratio>keep</aspectratio>
+                    <posx>490</posx>
+                    <posy>335</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFFF0000</colordiffuse>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
-                    <posx>478</posx>
-                    <posy>370</posy>
-                    <width>24</width>
-                    <height>24</height>
-                    <texture>LCARS-overlay-saved.png</texture>
-                    <aspectratio>keep</aspectratio>
+                    <posx>490</posx>
+                    <posy>354</posy>
+                    <width>12</width>
+                    <height>16</height>
+                    <texture>LCARS-panel.png</texture>
+                    <colordiffuse>FFFF0000</colordiffuse>
                     <visible>Control.IsVisible(50)</visible>
                 </control>
             </control>
@@ -1036,7 +1068,7 @@
                 <control type="button" id="2076">
                     <posx>65</posx>
                     <posy>90</posy>
-                    <width>25</width>
+                    <width>24</width>
                     <height>20</height>
                     <texturenofocus>LCARS-page-control.png</texturenofocus>
                     <texturefocus>LCARS-page-control-focus.png</texturefocus>
@@ -1059,7 +1091,7 @@
                 <control type="button" id="2077">
                     <posx>65</posx>
                     <posy>126</posy>
-                    <width>25</width>
+                    <width>24</width>
                     <height>20</height>
                     <texturenofocus flipy="true">LCARS-page-control.png</texturenofocus>
                     <texturefocus flipy="true">LCARS-page-control-focus.png</texturefocus>
@@ -1092,7 +1124,7 @@
 						<height>28</height>
 						<posx>16</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FFFFFF</colordiffuse>
 					</control>
 					<control type="image">
@@ -1136,7 +1168,7 @@
 						<height>28</height>
 						<posx>16</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FF0000</colordiffuse>
 						<visible>!Control.HasFocus(70)</visible>
 					</control>
@@ -1145,7 +1177,7 @@
 						<height>28</height>
 						<posx>16</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>30FF0000</colordiffuse>
 						<visible>Control.HasFocus(70)</visible>
 					</control>
@@ -1256,7 +1288,7 @@
 						<height>28</height>
 						<posx>15</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FFFFFF</colordiffuse>
 					</control>
 					<control type="image">
@@ -1305,7 +1337,7 @@
 						<height>28</height>
 						<posx>15</posx>
 						<posy>0</posy>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>15FF0000</colordiffuse>
 						<visible>!Control.HasFocus(60)</visible>
 					</control>
@@ -1315,7 +1347,7 @@
 						<posx>15</posx>
 						<posy>0</posy>
 						<visible>Control.HasFocus(60)</visible>
-						<texture>LCARS-pixel.png</texture>
+						<texture>LCARS-panel.png</texture>
                         <colordiffuse>30FF0000</colordiffuse>
 					</control>
 					<control type="image">
@@ -1413,9 +1445,9 @@
                 <onright>9000</onright>
                 <control type="button" id="2660">
                     <description>Up Arrow</description>
-                        <posx>478</posx>
+                        <posx>477</posx>
                         <posy>235</posy>
-                        <width>25</width>
+                        <width>24</width>
                         <height>20</height>
                     <texturenofocus>LCARS-page-control.png</texturenofocus>
                     <texturefocus>LCARS-page-control-focus.png</texturefocus>
@@ -1436,9 +1468,9 @@
                 </control>
                 <control type="button" id="2661">
                     <description>Down Arrow</description>
-                        <posx>478</posx>
+                        <posx>477</posx>
                         <posy>273</posy>
-                        <width>25</width>
+                        <width>24</width>
                         <height>20</height>
                     <texturenofocus flipy="true">LCARS-page-control.png</texturenofocus>
                     <texturefocus flipy="true">LCARS-page-control-focus.png</texturefocus>
