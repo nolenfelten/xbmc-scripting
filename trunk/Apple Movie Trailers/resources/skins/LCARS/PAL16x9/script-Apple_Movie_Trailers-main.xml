@@ -21,7 +21,6 @@
                 <fadetime>2000</fadetime>
                 <visible>Control.IsVisible(3000) | Control.IsVisible(4000)</visible>
                 <randomize>true</randomize>
-                <!--animation effect="fade" time="500">VisibleChange</animation-->
                 <aspectratio>keep</aspectratio>
             </control>
             <control type="multiimage">
@@ -34,7 +33,6 @@
                 <fadetime>2000</fadetime>
                 <visible>!Control.IsVisible(3000) + Control.IsVisible(4000)</visible>
                 <randomize>true</randomize>
-                <!--animation effect="fade" time="500">VisibleChange</animation-->
                 <aspectratio>keep</aspectratio>
             </control>
             <control type="image">
@@ -76,7 +74,7 @@
                     <width>143</width>
                     <height>96</height>
                     <texture border="64,0,64,0">LCARS-elbow-size1.png</texture>
-                    <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
+                    <colordiffuse>FFCC6699</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="83,83" delay="150" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -128,7 +126,7 @@
                     <width>143</width>
                     <height>87</height>
                     <texture flipy="true" border="64,0,64,64">LCARS-elbow-size2.png</texture>
-                    <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
+                    <colordiffuse>FFCC6699</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="83,215" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -138,7 +136,7 @@
                     <width>150</width>
                     <height>12</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFCC6666</colordiffuse><!--light blue-->
+                    <colordiffuse>FFCC6666</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="232,215" time="50">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -162,7 +160,7 @@
                     <width>150</width>
                     <height>11</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFFF9900</colordiffuse><!--orange-->
+                    <colordiffuse>FFFF9900</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="232,218" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -172,7 +170,7 @@
                     <width>203</width>
                     <height>26</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="410,216" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -192,7 +190,7 @@
                     <width>143</width>
                     <height>65</height>
                     <texture border="64,0,64,0">LCARS-elbow-size2.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <visible>!Control.HasFocus(106)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="83,218" time="20">WindowOpen</animation>
                 </control>
@@ -213,7 +211,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,259" delay="40" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -223,7 +221,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,295" delay="60" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -233,7 +231,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FF9999CC</colordiffuse><!--light blue-->
+                    <colordiffuse>FF9999CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,331" delay="80" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -243,7 +241,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,367" delay="100" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -253,7 +251,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,403" delay="120" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -263,7 +261,7 @@
                     <width>110</width>
                     <height>33</height>
                     <texture>LCARS-panel.png</texture>
-                    <colordiffuse>FFCC99CC</colordiffuse><!--light purple-->
+                    <colordiffuse>FFCC99CC</colordiffuse>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,439" delay="140" time="20">WindowOpen</animation>
                 </control>
                 <control type="image">
@@ -273,7 +271,7 @@
                     <width>143</width>
                     <height>64</height>
                     <texture flipy="true" border="64">LCARS-elbow-size1.png</texture>
-                    <colordiffuse>FFCC6699</colordiffuse><!--red/purple-->
+                    <colordiffuse>FFCC6699</colordiffuse>
                     <visible>!Control.HasFocus(107)</visible>
                     <animation effect="zoom" start="100,0" end="100,100" center="75,475" delay="160" time="20">WindowOpen</animation>
                 </control>
@@ -903,7 +901,7 @@
             <control type="group" id="2550">
                 <onleft>50</onleft>
                 <onright>60</onright>
-                <animation effect="fade" time="1000">VisibileChange</animation>
+                <animation effect="fade" time="1000">VisibleChange</animation>
                 <control type="button" id="2560">
                     <description>Trailer List Scrollbar Up Arrow</description>
                         <posx>477</posx>
@@ -1269,7 +1267,7 @@
 			<posy>10</posy>
             <!-- Category list controls -->
 			<!-- ** Required ** Do not change <description> or <type> -->
-            <animation effect="fade" time="1500">VisibileChange</animation>
+            <animation effect="fade" time="1500">VisibleChange</animation>
 			<control type="list" id="60">
                 <description>Category List</description>
 				<posx>136</posx>

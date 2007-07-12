@@ -507,7 +507,7 @@ class GUI( xbmcgui.WindowXML ):
             labels += ( _( 550 ), )
             functions += ( self.force_full_update, )
         force_fallback = self.skin != "Default"
-        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels )
+        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels, caps=self.settings[ "capitalize_words" ] )
         if ( cm.selection is not None ):
             functions[ cm.selection ]()
         del cm

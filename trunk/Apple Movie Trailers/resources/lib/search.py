@@ -36,7 +36,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def __init__( self, *args, **kwargs ):
         self.dialog = xbmcgui.DialogProgress()
-        self.dialog.create("Search", "Setting up categories", "Please wait...")
+        self.dialog.create( _( 106 ), _( 97 ), _( 1005 ) )
         xbmcgui.lock()
 
     def onInit( self ):
@@ -117,7 +117,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try:
             for count, genre in enumerate( self.genres ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_GENRE_LIST ).addItem( genre[ 1 ] )
+                    self.getControl( self.CONTROL_GENRE_LIST ).addItem( genre[ 1 ].replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
                 selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query or "idGenre!=%d\n" % genre[ 0 ] in query or "idGenre!=%d)" % genre[ 0 ] in query )
                 self.getControl( self.CONTROL_GENRE_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_GENRE_LIST + 2 ).setSelected( "idGenre!=" in query )

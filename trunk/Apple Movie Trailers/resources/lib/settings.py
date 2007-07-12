@@ -85,14 +85,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.startup_categories[ CUSTOM_SEARCH ] = _( 162 )
         self.startup_categories[ WATCHED ] = _( 163 )
         for title in self.startup_categories.values():
-            self.startup_titles += [ title ]
+            self.startup_titles += [ title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ]
         self.startup_titles.sort()
 
     def _setup_thumbnail_display( self ):
         self.thumbnail = ( _( 2050 ), _( 2051 ), _( 2052 ), )
         
     def _setup_playback_mode( self ):
-        self.mode = ( _( 2030 ), _( 2031 ), "%s (videos)" % _( 2032 ), "%s (files)" % _( 2032 ), )
+        self.mode = ( _( 2030 ), _( 2031 ), "%s (%s)" % ( _( 2032 ), ( 84 ), ), "%s (%s)" % ( _( 2032 ), _( 86 ), ), )
     
     def _setup_trailer_quality( self ):
         self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), "480p", "720p", "1080p" )
