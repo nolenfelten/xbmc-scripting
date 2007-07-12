@@ -272,7 +272,7 @@ class GUI( xbmcgui.WindowXML ):
             self.showTrailerInfo()
         elif ( list_control == self.CONTROL_CATEGORY_LIST ):
             self.getControl( self.CONTROL_CATEGORY_LIST ).selectItem( pos )
-            #choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
+            choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
 
     def showControls( self, category ):
         xbmcgui.lock()
@@ -464,7 +464,7 @@ class GUI( xbmcgui.WindowXML ):
             controlId = self.CONTROL_TRAILER_LIST_START
         x, y = self.getControl( controlId ).getPosition()
         w = self.getControl( controlId ).getWidth()
-        h = self.getControl( controlId ).getHeight() - self.getControl( controlId ).getItemHeight()
+        h = self.getControl( controlId ).getHeight()# - self.getControl( controlId ).getItemHeight()
         labels = ()
         functions = ()
         if ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
