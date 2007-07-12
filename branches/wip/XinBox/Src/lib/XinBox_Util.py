@@ -29,3 +29,10 @@ def setControllerAction():
                     272 : 'DPad Left',
                     273 : 'DPad Right'
                 }
+
+def getfiletypes(image=False,audio=False,video=False,text=False):
+    if image: return ["jpg","jpeg","gif","png","bmp"]
+    if audio: return ["wav","mp3","mpa","mp2","ac3","dts"]
+    if video: return ["avi","wmv","mpg"]
+    if text: return ["txt", "doc", "rtf", "xml", "bat"]
+    

@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Email
@@ -10,6 +10,7 @@ from os.path import join, exists, basename
 from os import mkdir, remove, listdir
 SETTINGDIR = "P:\\script_data\\XinBox\\"
 ACCOUNTSDIR = "P:\\script_data\\XinBox\\Accounts\\"
+TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
 from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXML ):
@@ -65,12 +66,11 @@ class GUI( xbmcgui.WindowXML ):
             elif controlID == 63:
                 self.cleaninbox()
     def exitme(self):
-        try:
-            self.animating = True
-            self.updateicons()
-            self.animating = False
-            self.close()
-        except:traceback.print_exc()
+        self.animating = True
+        self.updateicons()
+        self.removefiles(TEMPFOLDER)
+        self.animating = False
+        self.close()
 
     def cleaninbox(self):
         dialog = xbmcgui.Dialog()
@@ -115,7 +115,10 @@ class GUI( xbmcgui.WindowXML ):
         w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
         w.doModal()
         returnval = w.returnvalue
+        replyvalue = w.replyvalue
         del w
+        if replyvalue != 0:
+            self.sendemail(replyvalue)
         if returnval != "-":
             self.deletemail(pos, returnval)
 
@@ -137,7 +140,7 @@ class GUI( xbmcgui.WindowXML ):
             f.writelines(writelist)
             f.close()
             dialog.close()
-
+                            #To,Cc,Bcc,Subject,body,attachments
     def sendemail(self, draft=["","","","","",None]):
         w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
         w.doModal()
@@ -273,43 +276,41 @@ class GUI( xbmcgui.WindowXML ):
         else:return subject
 
     def reademid(self):
-        try:
-            if not exists(self.ibfolder + "emid.xib"):
-                self.serversize = 0
-                self.setinboxempty()
-                return
-            dialog = xbmcgui.DialogProgress()
-            dialog.create(self.language(210) + self.inbox, self.language(253))
-            f = open(self.ibfolder + "emid.xib", "r")
-            lines = f.readlines()
-            f.close()
-            for i,line in enumerate(lines):
-                dialog.update((i*100)/len(lines),self.language(253),"")
-                theline = line.strip("\n")
-                myline = theline.split("|")
-                if myline[1] == "Account Name":
-                    self.accountname = myline[2]
-                    popname = myline[3]
-                    if self.accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
-                        self.serversize = 0
-                        self.removefiles(self.ibfolder)
-                        break
-                elif myline[1] == "Server Size":self.serversize = int(myline[2])
-                elif myline[1] == "Inbox Size":self.inboxsize = int(myline[2])
-                else:
-                    if myline[0] != "-":
-                        f = open(self.ibfolder + myline[2] + ".sss", "r")
-                        myemail = email.message_from_string(f.read())
-                        f.close()
-                        readstatus = int(myline[6])
-                        attachstat = int(myline[3])
-                                            #"sssfilenam, email, attachstat, readstat,  time,     date,    emailid
-                        self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1]])
-                        icon=self.geticon(attachstat,readstatus)
-                        self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
-            if len(self.guilist) == 0:self.setinboxempty()
-            dialog.close()
-        except:traceback.print_exc()
+        if not exists(self.ibfolder + "emid.xib"):
+            self.serversize = 0
+            self.setinboxempty()
+            return
+        dialog = xbmcgui.DialogProgress()
+        dialog.create(self.language(210) + self.inbox, self.language(253))
+        f = open(self.ibfolder + "emid.xib", "r")
+        lines = f.readlines()
+        f.close()
+        for i,line in enumerate(lines):
+            dialog.update((i*100)/len(lines),self.language(253),"")
+            theline = line.strip("\n")
+            myline = theline.split("|")
+            if myline[1] == "Account Name":
+                self.accountname = myline[2]
+                popname = myline[3]
+                if self.accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
+                    self.serversize = 0
+                    self.removefiles(self.ibfolder)
+                    break
+            elif myline[1] == "Server Size":self.serversize = int(myline[2])
+            elif myline[1] == "Inbox Size":self.inboxsize = int(myline[2])
+            else:
+                if myline[0] != "-":
+                    f = open(self.ibfolder + myline[2] + ".sss", "r")
+                    myemail = email.message_from_string(f.read())
+                    f.close()
+                    readstatus = int(myline[6])
+                    attachstat = int(myline[3])
+                                        #"sssfilenam, email, attachstat, readstat,  time,     date,    emailid
+                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1]])
+                    icon=self.geticon(attachstat,readstatus)
+                    self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
+        if len(self.guilist) == 0:self.setinboxempty()
+        dialog.close()
 
     def checkifonserv(self,pos):
         f = open(self.ibfolder + "emid.xib", "r")

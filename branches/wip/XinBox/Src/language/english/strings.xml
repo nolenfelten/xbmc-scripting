@@ -194,4 +194,21 @@
 	<string id="313">Subject:</string>
 	<string id="314">Send</string>
 	<string id="315">Compose Email From:</string>
+	<string id="316">----- Original Message -----</string>
+	<string id="317">Sent:</string>
+	<string id="318">Re:</string>
+	<string id="319">Fw:</string>
+	<string id="320">Attachment:</string>
+	<string id="321">Edit Line:</string>
+	<string id="322">Edit To: Address(s):</string>
+	<string id="323">Edit Cc: Address(s):</string>
+	<string id="324">Edit Bcc: Address(s):</string>
+	<string id="325">Edit Subject:</string>
+	<string id="326">Remove this attachment?</string>
+	<string id="327">Browse for attachment:</string>
+	<string id="328">Close Compose Dialog?</string>
+	<string id="329">Building SMTP Email File..</string>
+	<string id="330">Add new Line:</string>
+	<string id="331">Remove this line?</string>
+	<string id="332">Send this email?</string>
 </strings>
