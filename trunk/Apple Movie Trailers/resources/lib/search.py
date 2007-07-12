@@ -36,38 +36,36 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def __init__( self, *args, **kwargs ):
         self.dialog = xbmcgui.DialogProgress()
+        self.caps = kwargs[ "caps" ]
         self.dialog.create( _( 106 ), _( 97 ), _( 1005 ) )
         xbmcgui.lock()
 
     def onInit( self ):
         try:
-            self._get_settings()
             self._set_labels()
             self._clear_variables()
             self._set_functions()
             self._setup_special()
-            #self._set_sql()
         except: traceback.print_exc()
         xbmcgui.unlock()
         self.dialog.close()
 
-    def _get_settings( self ):
-        """ reads settings """
-        self.settings = Settings().get_settings()
+    def _capitalize_text( self, text ):
+        return ( text, text.upper(), )[ self.caps ]
 
     def _set_labels( self ):
         try:
-            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( __scriptname__ )
-            self.getControl( self.CONTROL_VERSION_LABEL ).setLabel( "%s: %s" % ( _( 1006 ), __version__, ) )
-            self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s:" % ( _( 93 ), ) )
-            self.getControl( 102 ).setLabel( _( 113 ) )
-            self.getControl( 112 ).setLabel( _( 114 ) )
-            self.getControl( 122 ).setLabel( _( 115 ) )
-            self.getControl( 132 ).setLabel( _( 116 ) )
-            self.getControl( 142 ).setLabel( _( 117 ) )
-            self.getControl( 152 ).setLabel( _( 118 ) )
+            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( self._capitalize_text( __scriptname__ ) )
+            self.getControl( self.CONTROL_VERSION_LABEL ).setLabel( self._capitalize_text( "%s: %s" % ( _( 1006 ), __version__, ) ) )
+            self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( self._capitalize_text( "%s:" % ( _( 93 ), ) ) )
+            self.getControl( 102 ).setLabel( self._capitalize_text( _( 113 ) ) )
+            self.getControl( 112 ).setLabel( self._capitalize_text( _( 114 ) ) )
+            self.getControl( 122 ).setLabel( self._capitalize_text( _( 115 ) ) )
+            self.getControl( 132 ).setLabel( self._capitalize_text( _( 116 ) ) )
+            self.getControl( 142 ).setLabel( self._capitalize_text( _( 117 ) ) )
+            self.getControl( 152 ).setLabel( self._capitalize_text( _( 118 ) ) )
             for button in self.CONTROL_BUTTONS:
-                self.getControl( button ).setLabel( _( button ) )
+                self.getControl( button ).setLabel( self._capitalize_text( _( button ) ) )
         except: pass
 
     def _set_functions( self ):
@@ -117,49 +115,49 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try:
             for count, genre in enumerate( self.genres ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_GENRE_LIST ).addItem( genre[ 1 ].replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
+                    self.getControl( self.CONTROL_GENRE_LIST ).addItem( self._capitalize_text( genre[ 1 ].replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
                 selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query or "idGenre!=%d\n" % genre[ 0 ] in query or "idGenre!=%d)" % genre[ 0 ] in query )
                 self.getControl( self.CONTROL_GENRE_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_GENRE_LIST + 2 ).setSelected( "idGenre!=" in query )
             for count, studio in enumerate( self.studios ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_STUDIO_LIST ).addItem( studio[ 1 ] )
+                    self.getControl( self.CONTROL_STUDIO_LIST ).addItem( self._capitalize_text( studio[ 1 ] ) )
                 selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query or "idStudio!=%d\n" % studio[ 0 ] in query or "idStudio!=%d)" % studio[ 0 ] in query )
                 self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_STUDIO_LIST + 2 ).setSelected( "idStudio!=" in query )
             for count, actor in enumerate( self.actors ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_ACTOR_LIST ).addItem( actor[ 1 ] )
+                    self.getControl( self.CONTROL_ACTOR_LIST ).addItem( self._capitalize_text( actor[ 1 ] ) )
                 selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query or "idActor!=%d\n" % actor[ 0 ] in query or "idActor!=%d)" % actor[ 0 ] in query )
                 self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_ACTOR_LIST + 2 ).setSelected( "idActor!=" in query )
             for count, rating in enumerate( self.ratings ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_RATING_LIST ).addItem( rating[ 0 ] )
+                    self.getControl( self.CONTROL_RATING_LIST ).addItem( self._capitalize_text( rating[ 0 ] ) )
                 selected = ( "rating='%s'" % rating[ 0 ] in query or "rating!='%s'" % rating[ 0 ] in query )
                 self.getControl( self.CONTROL_RATING_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_RATING_LIST + 2 ).setSelected( "rating!=" in query )
             for count, quality in enumerate( self.quality ):
                 if ( fill ):
-                    self.getControl( self.CONTROL_QUALITY_LIST ).addItem( quality )
+                    self.getControl( self.CONTROL_QUALITY_LIST ).addItem( self._capitalize_text( quality ) )
                 quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ count ]
                 selected = "trailer_urls LIKE '%s'" % quality_text in query
                 self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( count ).select( selected )
             self.getControl( self.CONTROL_QUALITY_LIST + 2 ).setSelected( "NOT (movies.trailer_urls" in query )
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2150 ) )
+                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2150 ) ) )
             selected = ( query != "" and "trailer_urls IS NOT NULL" not in query )
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 0 ).select( selected )
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2151 ) )
+                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2151 ) ) )
             selected = "movies.favorite" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 1 ).select( selected )
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2152 ) )
+                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2152 ) ) )
             selected = "saved_location" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 2 ).select( selected )
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( _( 2153 ) )
+                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2153 ) ) )
             selected = "times_watched" in query
             self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 3 ).select( selected )
             self.getControl( self.CONTROL_EXTRA_LIST + 2 ).setSelected( "favorite!=" in query or "saved_location=" in query or "times_watched=" in query )
@@ -278,19 +276,19 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _set_sql( self ):
         self.getControl( self.CONTROL_SQL_TEXTBOX ).reset()
         if ( not self.query ):
-            self.getControl( self.CONTROL_SQL_TEXTBOX ).setText( _( 94 ) )
+            self.getControl( self.CONTROL_SQL_TEXTBOX ).setText( self._capitalize_text( _( 94 ) ) )
         else:
-            self.getControl( self.CONTROL_SQL_TEXTBOX ).setText( self.query )
+            self.getControl( self.CONTROL_SQL_TEXTBOX ).setText( self._capitalize_text( self.query ) )
         self.getControl( self.CONTROL_BUTTONS[ 0 ] ).setEnabled( self.query != "" )
         self.getControl( self.CONTROL_BUTTONS[ 2 ] ).setEnabled( self.query != "" )
         self._enable_load_button()
 
     def _run_sql( self ):
-        self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s: %s" % ( _( 93 ), _( 85 ),) )
+        self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( self._capitalize_text( "%s: %s" % ( _( 93 ), _( 85 ),) ) )
         records = database.Records()
         trailers = records.fetch( self.query, all=True )
         records.close()
-        self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( "%s: %d" % ( _( 93 ), len( trailers ),) )
+        self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( self._capitalize_text( "%s: %d" % ( _( 93 ), len( trailers ),) ) )
 
     def _clear_sql( self ):
         xbmcgui.lock()
@@ -320,7 +318,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _enable_load_button( self ):
         label = ( os.path.isfile( os.path.join( BASE_DATA_PATH, "custom.sql" ) ) and self.query == "" )
-        self.getControl( self.CONTROL_BUTTONS[ 3 ] ).setLabel( _( 258 + label ) )
+        self.getControl( self.CONTROL_BUTTONS[ 3 ] ).setLabel( self._capitalize_text( _( 258 + label ) ) )
 
     def _perform_search( self ):
         self._close_dialog( self.query )

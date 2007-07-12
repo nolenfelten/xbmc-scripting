@@ -28,6 +28,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.selection = kwargs[ "selection" ]
         self.list_control = kwargs[ "list_control" ]
         self.title = kwargs[ "title" ]
+        self.caps = kwargs[ "caps" ]
         self.doModal()
 
     def onInit( self ):
@@ -35,11 +36,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.unlock()
 
     def show_chooser( self ):
-        self.getControl( 500 ).setLabel( self.title )
-        self.getControl( 502 ).setLabel( _( 231 ) )
+        self.getControl( 500 ).setLabel( self._capitalize_text( self.title ) )
+        self.getControl( 502 ).setLabel( self._capitalize_text( _( 231 ) ) )
         self._setup_list()
         if ( self.list_control == 0 ):
             self._get_thumb( self.getControl( 503 ).getSelectedItem().getLabel() )
+
+    def _capitalize_text( self, text ):
+        return ( text, text.upper(), )[ self.caps ]
 
     def _setup_list( self ):
         self.getControl( 502 ).setVisible( False )
@@ -47,7 +51,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 504 ).setVisible( self.list_control == 1 )
         self.getControl( 503 + self.list_control ).reset()
         for count, choice in enumerate( self.choices ):
-            self.getControl( 503 + self.list_control ).addItem( choice )
+            self.getControl( 503 + self.list_control ).addItem( self._capitalize_text( choice ) )
             if ( count == self.original ):
                 self.getControl( 503 + self.list_control ).selectItem( count )
                 self.getControl( 503 + self.list_control ).getSelectedItem().select( True )
@@ -76,4 +80,4 @@ class GUI( xbmcgui.WindowXMLDialog ):
         #elif ( self.controlId in ( 503, 504, ) and action.getButtonCode() in SELECT_ITEM ):
         #    self._close_dialog( self.getControl( self.controlId ).getSelectedPosition() )
         elif ( self.controlId == 503 ):
-            self._get_thumb( self.getControl( 503 ).getSelectedItem().getLabel() )
+            self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )

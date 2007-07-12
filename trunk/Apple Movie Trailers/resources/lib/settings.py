@@ -8,7 +8,7 @@ import sys
 import os
 import xbmc
 import xbmcgui
-#import traceback
+import traceback
 
 from utilities import *
 import chooser
@@ -36,21 +36,28 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _get_settings( self ):
         """ reads settings """
-        self.settings = Settings().get_settings()
+        try:
+            self.settings = Settings().get_settings()
+            self.caps = self.settings[ "capitalize_words" ]
+        except:
+            traceback.print_exc()
+
+    def _capitalize_text( self, text ):
+        return ( text, text.upper(), )[ self.caps ]
 
     def _set_labels( self ):
         try:
-            self.getControl( 20 ).setLabel( __scriptname__ )
-            self.getControl( 30 ).setLabel( "%s: %s" % ( _( 1006 ), __version__, ) )
-            self.getControl( 250 ).setLabel( _( 250 ) )
-            self.getControl( 251 ).setLabel( _( 251 ) )
-            self.getControl( 252 ).setLabel( _( 252 ) )
-            self.getControl( 253 ).setLabel( _( 253 ) )
+            self.getControl( 20 ).setLabel( self._capitalize_text( __scriptname__ ) )
+            self.getControl( 30 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 1006 ) ), self._capitalize_text( __version__, ) ) )
+            self.getControl( 250 ).setLabel( self._capitalize_text( _( 250 ) ) )
+            self.getControl( 251 ).setLabel( self._capitalize_text( _( 251 ) ) )
+            self.getControl( 252 ).setLabel( self._capitalize_text( _( 252 ) ) )
+            self.getControl( 253 ).setLabel( self._capitalize_text( _( 253 ) ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
             for x in range( 1, len( self.settings ) ):
-                self.getControl( 200 + x ).setLabel( _( 200 + x ) )
+                self.getControl( 200 + x ).setLabel( self._capitalize_text( _( 200 + x ) ) )
         except: pass
 
     def _set_functions( self ):
@@ -115,7 +122,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 ###### End of Special defs #####################################################
     def _get_chooser( self, choices, original, selection, list_control, title ):
         force_fallback = self.skin != "Default"
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title, caps=self.caps )
         selection = ch.selection
         del ch
         return selection
@@ -136,26 +143,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.getControl( 221 ).setLabel( self.settings[ "skin" ] )
-            self.getControl( 222 ).setLabel( self.quality[ self.settings[ "trailer_quality" ] ] )
-            self.getControl( 223 ).setLabel( self.mode[ self.settings[ "mode" ] ] )
-            self.getControl( 224 ).setLabel( self.settings[ "save_folder" ] )
+            self.getControl( 221 ).setLabel( self._capitalize_text( self.settings[ "skin" ] ) )
+            self.getControl( 222 ).setLabel( self._capitalize_text( self.quality[ self.settings[ "trailer_quality" ] ] ) )
+            self.getControl( 223 ).setLabel( self._capitalize_text( self.mode[ self.settings[ "mode" ] ] ) )
+            self.getControl( 224 ).setLabel( self._capitalize_text( self.settings[ "save_folder" ] ) )
             self.getControl( 224 ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.getControl( 204 ).setEnabled( self.settings[ "mode" ] >= 1 )
-            self.getControl( 225 ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
+            self.getControl( 225 ).setLabel( self._capitalize_text( self.thumbnail[ self.settings[ "thumbnail_display" ] ] ) )
             self.getControl( 226 ).setSelected( self.settings[ "fade_thumb" ] )
             self.getControl( 226 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
             self.getControl( 206 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
-            self.getControl( 227 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
-            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
-            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
-            self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
+            self.getControl( 227 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "startup_category_id" ] ] ) )
+            self.getControl( 228 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut1" ] ] ) )
+            self.getControl( 229 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut2" ] ] ) )
+            self.getControl( 230 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut3" ] ] ) )
             self.getControl( 231 ).setSelected( self.settings[ "refresh_newest" ] )
             self.getControl( 232 ).setSelected( self.settings[ "use_simple_search" ] )
             self.getControl( 233 ).setSelected( self.settings[ "match_whole_words" ] )
             self.getControl( 233 ).setEnabled( self.settings[ "use_simple_search" ] )
             self.getControl( 213 ).setEnabled( self.settings[ "use_simple_search" ] )
-            self.getControl( 234 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 234 ).setLabel( self._capitalize_text( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] ) )
             self.getControl( 235 ).setSelected( self.settings[ "capitalize_words" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
@@ -300,7 +307,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.caps )
         c.doModal()
         del c
 
