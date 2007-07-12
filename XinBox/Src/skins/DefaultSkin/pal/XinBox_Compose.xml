@@ -134,7 +134,9 @@
             	<width>426</width>
             	<height>400</height>
 		<onup>82</onup>
-		<ondown>9000</ondown>
+		<ondown>50</ondown>
+		<onleft>82</onleft>
+		<onright>81</onright>
 		<scrolltime>200</scrolltime>
 		<animation effect="slide" start="-700,0" time="800">Visible</animation>
 		<animation effect="slide" end="-700,0" time="800">Hidden</animation>
@@ -212,7 +214,70 @@
         			<width>100</width>
         			<font>special13</font>
   			</control>
-		</control> 	
+		</control> 
+		<control type="list" id="50">
+			<animation effect="slide" start="-700,0" time="800">Visible</animation>
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+			<posx>40</posx>
+			<posy>220</posy>
+			<width>510</width>
+			<height>270</height>
+			<onleft>69</onleft>
+			<onright>82</onright>
+			<onup>82</onup>
+			<ondown>9000</ondown>
+			<viewtype label="535">list</viewtype>
+			<pagecontrol>69</pagecontrol>
+			<scrolltime>200</scrolltime>
+			<itemlayout height="20">
+				<control type="label">
+					<posx>5</posx>
+					<posy>0</posy>
+					<width>510</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<info>ListItem.Label</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="20">
+				<control type="image">
+					<width>510</width>
+					<height>20</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(50)</visible>
+					<texture>XBlist-focus.png</texture>
+				</control>
+				<control type="label">
+					<posx>5</posx>
+					<posy>0</posy>
+					<width>510</width>
+					<height>22</height>
+					<font>font13</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<info>ListItem.Label</info>
+				</control>
+			</focusedlayout>
+		</control>
+		<control type="scrollbar" id="69">
+			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
+			<visible>Skin.HasSetting(emaildialog)</visible>
+			<posx>20</posx>
+			<posy>220</posy>
+			<width>16</width>
+			<height>282</height>
+			<texturesliderbackground border="4">XBscrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="3">XBscrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="3">XBscrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>XBscrollbar_nib.png</textureslidernib>
+			<textureslidernibfocus>XBscrollbar_nib_focus.png</textureslidernibfocus>
+			<onleft>9000</onleft>
+			<onright>50</onright>
+			<showonepage>false</showonepage>
+			<orientation>vertical</orientation>
+		</control>	
 		<control type="group" id="9000">
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
@@ -227,7 +292,7 @@
       				<textoffsety></textoffsety>
 				<label>-</label>
 				<onright>62</onright>
-				<onup>82</onup>
+				<onup>50</onup>
 				<ondown>61</ondown>
 				<onleft>61</onleft>
 				<align>center</align>
@@ -245,7 +310,7 @@
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onup>82</onup>
+				<onup>50</onup>
 				<onleft>61</onleft>
 				<onright>81</onright>
 				<ondown>62</ondown>

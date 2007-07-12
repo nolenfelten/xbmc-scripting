@@ -1,13 +1,9 @@
 
 
-import xbmc, xbmcgui, time, sys, os,email, string,shutil
+import xbmc, xbmcgui, time, sys, os,email, string,shutil,re
 import XinBox_Util
-from sgmllib import SGMLParser  
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
-IMAGEFILETYPES = ["jpg","jpeg","gif","png","bmp"]
-AUDIOFILETYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
-VIDEOFILETYPES = ["avi","wmv"]
-TEXTFILETYPES = ["txt", "doc", "rtf", "xml"]
+from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
@@ -19,8 +15,22 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.setupcontrols()
         self.setupemail()
 
-        
+      
     def setupvars(self):
+        self.subject = self.emailsettings[1].get('subject').replace("\n","")
+        self.emfrom = self.emailsettings[1].get('from').replace("\n","")
+        self.to = self.emailsettings[1].get('to').replace("\n","")
+        self.cc = self.emailsettings[1].get('Cc')
+        if self.cc == None:
+            self.cc = ""
+        else:self.cc = self.cc.replace("\n","")
+        date = self.emailsettings[1].get('date')
+        if date == None:
+            mytime = time.strptime(xbmc.getInfoLabel("System.Date") + xbmc.getInfoLabel("System.Time"),'%A , %B %d, %Y %I:%M %p')
+            self.sent = time.strftime('%a, %d %b %Y %X +0000',mytime).replace("\n","")
+        else:self.sent = str(date).replace("\n","")
+        self.attachments = []
+        self.replyvalue = 0
         self.click = 0
         self.curpos = 0
         self.showing = False
@@ -34,7 +44,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.SetBool(emaildialog)")
 
     def setupemail(self):
-        self.getControl(73).addLabel(self.emailsettings[1].get('subject').replace("\n","") + "  " + self.language(260) + "   " + self.emailsettings[1].get('from').replace("\n",""))
+        self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
         self.settextbox()
         self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
         self.getControl(80).setImage("XBXinBoXLogo.png")
@@ -52,7 +62,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(64).setEnabled(True)
         
     def getattachments(self):
-        self.attachments = []
         if self.emailsettings[1].is_multipart():
             for part in self.emailsettings[1].walk():
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
@@ -62,7 +71,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             f=open(TEMPFOLDER + filename, "wb")
                             f.write(part.get_payload(decode=1))
                             f.close()
-                            self.attachments.append([filename,os.path.getsize(TEMPFOLDER + filename)])
+                            self.attachments.append([filename,TEMPFOLDER + filename,os.path.getsize(TEMPFOLDER + filename)])
                         except:pass
                 else:
                     filename = part.get_filename()
@@ -71,7 +80,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             f=open(TEMPFOLDER + filename, "wb")
                             f.write(part.get_payload(decode=1))
                             f.close()
-                            self.attachments.append([filename,os.path.getsize(TEMPFOLDER + filename)])
+                            self.attachments.append([filename,TEMPFOLDER + filename,os.path.getsize(TEMPFOLDER + filename)])
                         except:pass
         for attachment in self.attachments:
             self.getControl(81).addItem(attachment[0])
@@ -81,9 +90,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.emailsettings[1].is_multipart():
             for part in self.emailsettings[1].walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
-                    self.getControl(72).setText(self.parse_email(part.get_payload()))
+                    self.body = self.parse_email(part.get_payload())
+                    self.getControl(72).setText(self.body)
                     break
-        else:self.getControl(72).setText(self.parse_email(self.emailsettings[1].get_payload()))
+        else:
+            self.body = self.parse_email(self.emailsettings[1].get_payload())
+            self.getControl(72).setText(self.body)
 
     def parse_email(self, email):
         parser = html2txt()
@@ -91,6 +103,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         parser.feed(email)
         parser.close()
         return parser.output()
+
+    def getem(self, myfrom):
+        myre = re.search('<([^>]*)>',myfrom).group(1)
+        if myre == None:
+            return myfrom
+        else:return myre
         
     def onClick(self, controlID):
         if not self.animating:
@@ -103,6 +121,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.resetemail()
                 self.getControl(81).setEnabled(self.attachlist)
                 self.animating = False
+            elif controlID == 61:
+                self.replyvalue = [self.getem(self.emfrom),"","",self.language(318) + " " + self.subject,self.getreply(self.body),self.attachments]
+                self.exitme()
+            elif controlID == 62:
+                self.replyvalue = ["","","",self.language(319) + " " + self.subject,self.getreply(self.body),self.attachments]
+                self.exitme()
             elif controlID == 81:
                 self.openattach(self.getControl(81).getSelectedPosition())
             elif controlID == 63:
@@ -121,6 +145,18 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 elif ret == 2:
                     self.returnvalue = 2
                     self.exitme()
+
+    def getreply (self, body):
+        newbody = self.language(316) + "\n"
+        newbody = newbody + self.language(260) + " " + self.emfrom + "\n"
+        newbody = newbody + self.language(310) + " " + self.to + "\n"
+        if self.cc != "":newbody = newbody + self.language(311) + " " + self.cc + "\n"
+        newbody = newbody + self.language(317) + " " + self.sent + "\n"
+        newbody = newbody + self.language(313) + " " + self.subject + "\n\n"
+        for line in body.split("\n"):
+            newbody = newbody + "> " + line + "\n"
+        return newbody
+        
 
     def getsizelabel (self, size):
         if size >= 1024:
@@ -170,7 +206,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def showimage(self, pos):
         self.getControl(73).reset()
-        self.getControl(73).addLabel("Attachment: " + self.attachments[pos][0])
+        self.getControl(73).addLabel(self.language(320) + " " + self.attachments[pos][0])
         self.getControl(74).reset()
         self.getControl(91).setImage(TEMPFOLDER + self.attachments[pos][0])
         self.getControl(72).setVisible(False)
@@ -182,7 +218,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def showtext(self, pos):
         self.getControl(73).reset()
-        self.getControl(73).addLabel("Attachment: " + self.attachments[pos][0])
+        self.getControl(73).addLabel(self.language(320) + " " + self.attachments[pos][0])
         self.getControl(74).reset()
         f = open(TEMPFOLDER + self.attachments[pos][0], "r")
         self.getControl(72).setText(f.read())
@@ -195,7 +231,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def showattach(self, pos):
         filetype = string.lower(string.split(self.attachments[pos][0], '.').pop())
         self.filebel = self.getbel(filetype)
-        self.getControl(90).setLabel(self.language(267) + self.getsizelabel(self.attachments[pos][1]))
+        self.getControl(90).setLabel(self.language(267) + self.getsizelabel(self.attachments[pos][2]))
         if self.filebel == "Unknown":
             self.getControl(80).setImage("XBattachfile.png")
         elif self.filebel == "Text":
@@ -209,10 +245,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
             
             
     def getbel(self,filetype):
-        if filetype in IMAGEFILETYPES:return "Image"
-        elif filetype in AUDIOFILETYPES:return "Audio"
-        elif filetype in VIDEOFILETYPES:return "Video"
-        elif filetype in TEXTFILETYPES:return "Text"
+        if filetype in XinBox_Util.getfiletypes(image=True):return "Image"
+        elif filetype in XinBox_Util.getfiletypes(audio=True):return "Audio"
+        elif filetype in XinBox_Util.getfiletypes(video=True):return "Video"
+        elif filetype in XinBox_Util.getfiletypes(text=True):return "Text"
         else:return "Unknown"
         
             
@@ -256,15 +292,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.SetBool(emaildialog)")
         xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
         time.sleep(0.9)
-        self.removefiles(TEMPFOLDER)
         self.close()
 
     def removefiles(self,mydir):
         for root, dirs, files in os.walk(mydir, topdown=False):
             for name in files:
-                os.remove(os.path.join(root, name))
+                os.remove(os.path.join(root, name)) 
 
-                
 class html2txt(SGMLParser):
     def reset(self):
         SGMLParser.reset(self)
@@ -278,4 +312,4 @@ class html2txt(SGMLParser):
             self.pieces.append("&")
 
     def output(self):
-        return " ".join(self.pieces)       
+        return " ".join(self.pieces)
