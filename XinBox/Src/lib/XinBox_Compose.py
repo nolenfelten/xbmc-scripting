@@ -137,11 +137,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.getControl(81).setEnabled(True)
             self.attachlist = True
 
-    def getbel(self,filetype):
-        if filetype in XinBox_Util.getfiletypes(image=True):return "Image"
-        elif filetype in XinBox_Util.getfiletypes(audio=True):return "Audio"
-        elif filetype in XinBox_Util.getfiletypes(video=True):return "Video"
-        elif filetype in XinBox_Util.getfiletypes(text=True):return "Text"
+    def getbel(self,filetype, control):
+        if filetype in XinBox_Util.getfiletypes("image"):return "Image"
+        elif filetype in XinBox_Util.getfiletypes("audio"):return "Audio"
+        elif filetype in XinBox_Util.getfiletypes("video"):return "Video"
+        elif filetype in XinBox_Util.getfiletypes("text"):return "Text"
         else:return "Unknown"
 
     def getsizelabel (self, size):
