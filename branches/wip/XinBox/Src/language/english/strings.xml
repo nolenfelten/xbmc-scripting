@@ -62,8 +62,8 @@
 	<string id="75">No Inboxes</string>
 	<string id="76">No Password</string>
 	<string id="77">Warning!</string>
-	<string id="78">Are you sure you want to delete this inbox? Press OK to confirm, or press back to decline.</string>
-	<string id="79">Are you sure you want to exit? Any un-saved account settings will be lost.Press OK to confirm, or press back to decline.</string>
+	<string id="78">Delete this inbox?</string>
+	<string id="79">Any un-saved account settings will be lost.</string>
 
 	<!-- InBox Menu Labels -->
 	<string id="80">Add Inbox</string>
@@ -122,9 +122,9 @@
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
-	<string id="201">Are you sure you want to delete this Account? All inboxes in this account will also be deleted. Press OK to confirm, or press back to decline.</string>
+	<string id="201">Delete this Account?</string>
+	<string id="202">All inboxes in this account will also be deleted.</string>
 	
-
 
 	<!-- Email Labels -->
 	<string id="210">Inbox - </string>
@@ -175,7 +175,9 @@
 	<string id="273">Server Only</string>
 	<string id="274">Inbox and Server</string>
 	<string id="275">Reset</string>
-	<string id="276">Are you sure you want to reset this inbox?</string>
+	<string id="276">Reset this inbox?</string>
+	<string id="277">All emails in inbox will be deleted.</string>
+	<string id="278">Inbox reset complete</string>
 
 	<!-- Compose Labels -->
 	<string id="300">Sending Email..</string>

@@ -44,7 +44,8 @@ class GUI( xbmcgui.WindowXML ):
         elif ( controlID == 61):
             self.launchaccountmenu(self.account)
         elif ( controlID == 62):
-            if self.launchinfo(201,"",self.language(77)):
+            dialog = xbmcgui.Dialog()
+            if dialog.yesno(self.language(77), self.language(201), self.language(202)):
                 self.deleteaccount()
         elif ( controlID == 63):
             self.close()

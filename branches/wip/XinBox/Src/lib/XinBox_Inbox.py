@@ -65,6 +65,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.sendemail()
             elif controlID == 63:
                 self.cleaninbox()
+
     def exitme(self):
         self.animating = True
         self.updateicons()
@@ -74,10 +75,11 @@ class GUI( xbmcgui.WindowXML ):
 
     def cleaninbox(self):
         dialog = xbmcgui.Dialog()
-        if dialog.ok(self.language(210) + self.inbox, self.language(276)):  
+        if dialog.yesno(self.language(210) + self.inbox, self.language(276),self.language(277)):  
             self.removefiles(self.ibfolder)
             self.clearList()
             self.onInit()
+            dialog.ok(self.language(49),self.language(278))
             return
   
     def onAction( self, action ):
@@ -140,7 +142,7 @@ class GUI( xbmcgui.WindowXML ):
             f.writelines(writelist)
             f.close()
             dialog.close()
-                            #To,Cc,Bcc,Subject,body,attachments
+
     def sendemail(self, draft=["","","","","",None]):
         w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
         w.doModal()
@@ -305,7 +307,6 @@ class GUI( xbmcgui.WindowXML ):
                     f.close()
                     readstatus = int(myline[6])
                     attachstat = int(myline[3])
-                                        #"sssfilenam, email, attachstat, readstat,  time,     date,    emailid
                     self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1]])
                     icon=self.geticon(attachstat,readstatus)
                     self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
