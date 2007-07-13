@@ -1,5 +1,4 @@
 <window>
-	<defaultcontrol>61</defaultcontrol>
 	<controls>
 		<control type="image" id="78">
 			<description>attachpanel</description>
