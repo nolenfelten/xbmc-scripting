@@ -1,10 +1,9 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util
 import XinBox_InfoDialog
 from XinBox_EmailEngine import TestInbox
-
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,accountsetts=False,theinbox=False,lang=False,inboxlist=False):
@@ -30,6 +29,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def setupvars(self):
         self.renameme = []
+        self.servers = XinBox_Util.getpresetservers()
         self.control_action = XinBox_Util.setControllerAction()
         self.settnames = {}
         self.settnames[1] = "Email Address"
@@ -104,6 +104,14 @@ class GUI( xbmcgui.WindowXML ):
         
     def onFocus(self, controlID):
         pass
+
+    def updatesizes(self, value, curPos, curName2=None):
+        if value == "0":
+            self.getListItem(curPos).setLabel2(self.language(98))
+            self.settings.setSetting(self.settnames[curPos],"0")
+        elif value != curName2:
+            self.getListItem(curPos).setLabel2(value)
+            self.settings.setSetting(self.settnames[curPos],value)        
     
     def onClick(self, controlID):
         if ( controlID == 51):
@@ -123,12 +131,7 @@ class GUI( xbmcgui.WindowXML ):
             elif curPos == 6 or curPos == 7:
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0, self.language(66) % curName, curName2)
-                if value == "0":
-                    curItem.setLabel2(self.language(98))
-                    self.settings.setSetting(self.settnames[curPos],"0")
-                elif value != curName2:
-                    curItem.setLabel2(value)
-                    self.settings.setSetting(self.settnames[curPos],value)
+                self.updatesizes(value,curPos,curName2)
             elif curPos == 8:
                 self.keepemails = not self.keepemails
                 self.getControl(106).setSelected(self.keepemails)
@@ -152,6 +155,21 @@ class GUI( xbmcgui.WindowXML ):
                                 self.inbox = value
                                 self.getControl(62).setEnabled(True)
                                 curItem.setLabel2(value)
+                        elif curPos == 1:
+                            self.settings.setSetting(self.settnames[curPos],value)
+                            curItem.setLabel2(value)
+                            server = value.split("@")[1]
+                            name = value.split("@")[0]
+                            self.settings.setSetting("Account Name",name)
+                            self.getListItem(4).setLabel2(name)
+                            if self.servers.has_key(server):
+                                self.settings.setSetting("POP Server",self.servers[server][0])
+                                self.getListItem(2).setLabel2(self.servers[server][0])
+                                self.settings.setSetting("SMTP Server",self.servers[server][1])
+                                self.getListItem(3).setLabel2(self.servers[server][1])
+                                self.updatessl(91,"",self.servers[server][2])
+                                self.updatessl(92,"",self.servers[server][3])
+                                self.updatesizes(self.servers[server][4],6)
                         else:
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)
@@ -164,12 +182,9 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def closeme(self,ID):
-        if ID == 0:
-            self.returnID = 0
-            self.close()
-        else:
-            self.returnID = 1
-            self.close()
+        if ID == 0:self.returnID = 0
+        else:self.returnID = 1
+        self.close()
         
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -198,9 +213,12 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(123,self.language(61))
                 else:self.launchinfo(130,self.language(242))
                     
-    def updatessl(self,ID,currValue):
-        dialog = xbmcgui.Dialog()
-        value = dialog.numeric(0, self.language(ID),currValue)
+    def updatessl(self,ID,currValue, myvalue=False):
+        if myvalue == False:dialog = xbmcgui.Dialog()
+        if myvalue == False:value = dialog.numeric(0, self.language(ID),currValue)
+        else:
+            value=myvalue
+            currValue = None
         if value != currValue:
             if ID == 91:
                 self.popssl = value

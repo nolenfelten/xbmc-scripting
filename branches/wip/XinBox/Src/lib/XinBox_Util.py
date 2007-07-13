@@ -30,6 +30,17 @@ def setControllerAction():
                     273 : 'DPad Right'
                 }
 
+def getpresetservers():
+    return {
+            "gmail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0"],
+            "ihug.co.nz" : ["pop.ihug.co.nz","smtp.ihug.co.nz","0","0","5"],
+            "xtra.co.nz" : ["pop3.xtra.co.nz","smtp.xtra.co.nz","0","0","100"],
+            "sky.com" : ["pop.sky.com","smtp.sky.com","0","0","200"],
+            "aol.com" : ["pop.aol.com","smtp.aol.com","0","587","5000"],
+            "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000"],
+            "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100"],
+            }
+
 def getfiletypes(image=False,audio=False,video=False,text=False):
     if image: return ["jpg","jpeg","gif","png","bmp"]
     if audio: return ["wav","mp3","mpa","mp2","ac3","dts"]
