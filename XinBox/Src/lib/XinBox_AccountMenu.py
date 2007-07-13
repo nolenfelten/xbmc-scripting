@@ -112,7 +112,10 @@ class AccountSettings(xbmcgui.WindowXML):
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
             if focusid == 88:
                 self.setFocusId(9000)
-            else:self.close()
+            else:
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
+                    self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
@@ -166,7 +169,8 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( controlID == 88):
             inboxname = self.inboxlist.getSelectedItem().getLabel()
             if self.deleteing:
-                if self.launchinfo(78,"",self.language(77)):
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno(self.language(77), self.language(78)): 
                     self.accountSettings.removeinbox("Inboxes",inboxname)
                     self.accountinboxes.remove(inboxname)
                     self.removehash(inboxname)
@@ -186,7 +190,8 @@ class AccountSettings(xbmcgui.WindowXML):
             self.newaccount = False
             self.launchinfo(48,"",self.language(49))
         elif ( controlID == 65):
-            if self.launchinfo(79,"",self.language(77)):
+            dialog = xbmcgui.Dialog()
+            if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
                 self.close()
 
     def builddirs(self):
