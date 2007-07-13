@@ -223,9 +223,13 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl( self.CONTROL_CATEGORY_LIST ).reset()
                 if ( len( self.trailers.categories ) ):
                     for category in self.trailers.categories:
+                        if ( self.main_category == GENRES ):
+                            title = category.title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
+                        else:
+                            title = category.title
                         thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         count = "(%d)" % ( category.count, )
-                        list_item = xbmcgui.ListItem( self._capitalize_text( category.title ), count, "%s.tbn" % category.title, thumbnail )
+                        list_item = xbmcgui.ListItem( self._capitalize_text( title ), count, "%s.tbn" % category.title, thumbnail )
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
@@ -324,7 +328,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( self.list_category == 2 ):
                 category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
-                category = self.genres[ self.category_id ].title
+                category = self.genres[ self.category_id ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
         self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( self._capitalize_text( category ) )
             
     def _set_count_label( self, list_control ):
@@ -516,16 +520,16 @@ class GUI( xbmcgui.WindowXML ):
         del cm
 
     def force_full_update( self ):
-        ####################################
-        ######### do something with updated
         updated = self.trailers.fullUpdate()
         if ( self.list_category > 0 ):
+            self.sql_category = ""
             trailer = self.getCurrentListPosition()
             self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
-            self.sql_category = ""
-            ### refresh trailers here ###
         else:
             self.sql = ""
+            if ( self.main_category == GENRES ):
+                genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
+                self.showCategories( self.sql_category, choice=genre, force_update=True )
 
     def markAsWatched( self, watched, trailer ):
         date = ( datetime.date.today(), "", )[ not watched ]
@@ -620,7 +624,7 @@ class GUI( xbmcgui.WindowXML ):
         elif ( self.settings[ "shortcut1" ] == WATCHED ):
             self.getControl( 100 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 100 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut1" ] ].title ) ) )
+            self.getControl( 100 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut1" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
         if ( self.settings[ "shortcut2" ] == FAVORITES ):
             self.getControl( 101 ).setLabel( self._capitalize_text( _( 152 ) ) )
         elif ( self.settings[ "shortcut2" ] == DOWNLOADED ):
@@ -634,7 +638,7 @@ class GUI( xbmcgui.WindowXML ):
         elif ( self.settings[ "shortcut2" ] == WATCHED ):
             self.getControl( 101 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 101 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut2" ] ].title ) ) )
+            self.getControl( 101 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut2" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
         if ( self.settings[ "shortcut3" ] == FAVORITES ):
             self.getControl( 102 ).setLabel( self._capitalize_text( _( 152 ) ) )
         elif ( self.settings[ "shortcut3" ] == DOWNLOADED ):
@@ -648,7 +652,7 @@ class GUI( xbmcgui.WindowXML ):
         elif ( self.settings[ "shortcut3" ] == WATCHED ):
             self.getControl( 102 ).setLabel( self._capitalize_text( _( 163 ) ) )
         else:
-            self.getControl( 102 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut3" ] ].title ) ) )
+            self.getControl( 102 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut3" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
 
     def showCredits( self ):
         """ shows a credit window """

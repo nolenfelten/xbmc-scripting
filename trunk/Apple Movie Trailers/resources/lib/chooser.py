@@ -40,7 +40,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 502 ).setLabel( self._capitalize_text( _( 231 ) ) )
         self._setup_list()
         if ( self.list_control == 0 ):
-            self._get_thumb( self.getControl( 503 ).getSelectedItem().getLabel() )
+            self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.caps ]
