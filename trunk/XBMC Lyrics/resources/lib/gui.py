@@ -199,8 +199,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.exit_script()
         elif ( action.getButtonCode() in SETTINGS_MENU ):
             self.change_settings()
-        elif ( action.getButtonCode() in SHOW_CREDITS ):
-            self._show_credits()
+        #elif ( action.getButtonCode() in SHOW_CREDITS ):
+        #    self._show_credits()
         elif ( self.allow_exception and ( action.getButtonCode() in GET_EXCEPTION ) ):
             self.get_exception()
         elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
