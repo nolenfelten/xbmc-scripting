@@ -12,8 +12,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
    
     def onInit(self):
         self.setupvars()
-        self.setupcontrols()
         self.setupemail()
+        self.setupcontrols()
 
       
     def setupvars(self):
@@ -34,14 +34,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.click = 0
         self.curpos = 0
         self.showing = False
-        self.animating = False
         self.deleserv = False
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
+        xbmcgui.lock()
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+        xbmcgui.unlock()
 
     def setupemail(self):
         self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
@@ -55,11 +55,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(80).setImage("XBXinBoXLogo.png")
         self.getControl(81).setEnabled(False)
         self.getControl(89).setLabel(self.language(266))
+        self.animating = True
+        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+        time.sleep(0.9)
+        self.animating = False
         if self.emailsettings[2] == 0:
             self.getControl(64).setEnabled(False)
         else:
             self.getattachments()
             self.getControl(64).setEnabled(True)
+        self.setFocusId(61)
         
     def getattachments(self):
         if self.emailsettings[1].is_multipart():
@@ -82,9 +87,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             f.close()
                             self.attachments.append([filename,TEMPFOLDER + filename,os.path.getsize(TEMPFOLDER + filename)])
                         except:pass
-        for attachment in self.attachments:
-            self.getControl(81).addItem(attachment[0])
-
+        if len(self.attachments) != 0:
+            for attachment in self.attachments:
+                self.getControl(81).addItem(attachment[0])
+            self.goattachlist()
                    
     def settextbox(self):
         if self.emailsettings[1].is_multipart():
@@ -109,18 +115,21 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if myre == None:
             return myfrom
         else:return myre
+
+    def goattachlist(self):
+        self.animating = True
+        self.attachlist = not self.attachlist
+        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        time.sleep(0.9)
+        self.click = 0
+        self.resetemail()
+        self.getControl(81).setEnabled(self.attachlist)
+        self.animating = False        
         
     def onClick(self, controlID):
         if not self.animating:
             if controlID == 64:
-                self.animating = True
-                self.attachlist = not self.attachlist
-                xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                time.sleep(0.9)
-                self.click = 0
-                self.resetemail()
-                self.getControl(81).setEnabled(self.attachlist)
-                self.animating = False
+                self.goattachlist()
             elif controlID == 61:
                 self.replyvalue = [self.getem(self.emfrom),"","",self.language(318) + " " + self.subject,self.getreply(self.body),self.attachments]
                 self.exitme()

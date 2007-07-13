@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os, string, traceback
+import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
 from os.path import join, exists, basename,getsize
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
@@ -21,11 +21,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
         xbmcgui.unlock()
-        self.animating = True
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-        time.sleep(0.9)
-        self.animating = False
-        self.setFocusId(82)
         self.attachlist = False
         if self.mydraft[5] == None:self.attachments = []
         else:self.attachments = self.mydraft[5]
@@ -57,6 +52,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(82).addItem(self.bccaddr)
         self.getControl(82).addItem(self.subject)
         self.getControl(73).addLabel(self.language(315) + " " + self.inbox + " <" + self.ibsettings.getSetting("Email Address") + ">")
+        self.animating = True
+        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+        time.sleep(0.9)
+        self.animating = False
+        self.setFocusId(82)
         if len(self.attachments) != 0:
             self.attachlist = True
             for attach in self.attachments:
@@ -74,6 +74,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 kb = self.showKeyboard(self.language(321) + " " +str(self.getCurrentListPosition()+1),self.getListItem(self.getCurrentListPosition()).getLabel())
                 if kb != False:
                     self.getListItem(self.getCurrentListPosition()).setLabel(kb)
+                    self.addItem("",self.getCurrentListPosition()+1)
+                    self.setCurrentListPosition(self.getCurrentListPosition()+1)
             elif controlID == 82:
                 pos = self.getControl(82).getSelectedPosition()
                 if pos == 0:
@@ -184,15 +186,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
                     self.setCurrentListPosition(self.getCurrentListPosition()+1)
-                    kb = self.showKeyboard(self.language(330) + " " + str(self.getCurrentListPosition()+1),self.getListItem(self.getCurrentListPosition()).getLabel())
-                    if kb != False:
-                        self.getListItem(self.getCurrentListPosition()).setLabel(kb)
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'Black Button'):
                 if focusid == 50:
-                    dialog = xbmcgui.Dialog()
-                    if dialog.yesno(self.language(77), self.language(331)):
-                        if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
-                        else:self.removeItem(self.getCurrentListPosition())             
+                    if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
+                    else:
+                        self.removeItem(self.getCurrentListPosition()-1)
+                        self.setCurrentListPosition(self.getCurrentListPosition()-1)
             elif focusid == 81:
                 self.showattach(self.getControl(81).getSelectedPosition())
                
