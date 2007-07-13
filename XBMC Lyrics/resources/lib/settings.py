@@ -133,7 +133,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "lyrics_path" ] = get_browse_dialog( self.settings[ "lyrics_path" ], _( 203 ), 3 )
+        self.settings[ "lyrics_path" ] = get_browse_dialog( self.settings[ "lyrics_path" ], _( self.controlId ), 3 )
         self._set_controls_values()
 
     def _change_setting4( self ):
@@ -160,7 +160,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting8( self ):
         """ changes settings #8 """
-        self.settings[ "music_path" ] = get_browse_dialog( self.settings[ "music_path" ], _( 208 ), 0 )
+        self.settings[ "music_path" ] = get_browse_dialog( self.settings[ "music_path" ], _( self.controlId ), 0 )
         self._set_controls_values()
 
     def _change_setting9( self ):
@@ -225,7 +225,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ controlId ]()
 
     def onFocus( self, controlId ):
-        pass
+        self.controlId = controlId
 
     def onAction( self, action ):
         if ( action.getButtonCode() in CANCEL_DIALOG ):
