@@ -59,7 +59,9 @@ class AccountSettings(xbmcgui.WindowXML):
         self.savedaccountname = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
-        self.defaultaccount = self.accountSettings.getSetting("Default Account")
+        if self.theSettings.getSetting("Default Account") == self.account:
+            self.defaultaccount = "True"
+        else:self.defaultaccount = "False"
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
         self.newaccounthash = self.origaccounthash
@@ -121,11 +123,11 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
-    def editallaccounts(self,settingname,value,accountname=""):
-        for item in self.theSettings.getSetting("Accounts")[1]:
-            if item[0] != accountname:
-                account = self.theSettings.getSettingInListbyname("Accounts",item[0])
-                account.setSetting(settingname,value)
+##    def editallaccounts(self,settingname,value,accountname=""):
+##        for item in self.theSettings.getSetting("Accounts")[1]:
+##            if item[0] != accountname:
+##                account = self.theSettings.getSettingInListbyname("Accounts",item[0])
+##                account.setSetting(settingname,value)
 
     def onClick(self, controlID):
         if ( controlID == 51):
@@ -157,7 +159,6 @@ class AccountSettings(xbmcgui.WindowXML):
             elif curPos == 2:
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
-                self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
@@ -170,7 +171,9 @@ class AccountSettings(xbmcgui.WindowXML):
             inboxname = self.inboxlist.getSelectedItem().getLabel()
             if self.deleteing:
                 dialog = xbmcgui.Dialog()
-                if dialog.yesno(self.language(77), self.language(78)): 
+                if dialog.yesno(self.language(77), self.language(78)):
+                    if self.accountSettings.getSetting("Default Inbox") == inboxname:
+                       self.accountSettings.setSetting("Default Inbox", "-")
                     self.accountSettings.removeinbox("Inboxes",inboxname)
                     self.accountinboxes.remove(inboxname)
                     self.removehash(inboxname)
@@ -180,8 +183,10 @@ class AccountSettings(xbmcgui.WindowXML):
             self.setFocusId(9000)
         elif ( controlID == 64):
             if self.defaultaccount:
-                    self.accountSettings.setSetting("Default Account",str(self.defaultaccount))
-                    self.editallaccounts("Default Account","False",self.account)
+                self.theSettings.setSetting("Default Account", self.account)
+            else:
+                if self.theSettings.getSetting("Default Account") == self.account:
+                    self.theSettings.setSetting("Default Account", "-")
             self.theSettings.saveXMLfromArray()
             self.accounts = self.buildaccounts()
             self.savedaccountname = self.account

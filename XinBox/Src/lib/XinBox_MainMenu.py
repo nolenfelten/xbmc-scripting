@@ -20,15 +20,23 @@ lang = Language(TITLE)
 lang.load(SRCPATH + "//language")
 _ = lang.string
 
-defSettings = {"Accounts": [['Account',[]],"list"]}
+defSettings = {"Default Account": ["-","text"],"Accounts": [['Account',[]],"list"]}
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
         self.init = 0
-        print "Welcome to XinBox"
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",TITLE,defSettings)     
+
+    def buildaccounts(self):
+        accounts = []
+        for set in self.settings.getSetting("Accounts")[1]:
+            accounts.append(set[0])
+        if len(accounts) == 0:
+            self.noaccounts = True
+        else:self.noaccounts = False
+        return accounts
 
     def onInit(self):
         xbmcgui.lock()
@@ -42,34 +50,23 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
 
     def checkdefault(self):
-        for account in self.accounts:
+        if self.settings.getSetting("Default Account") != "-":
+            account = self.settings.getSetting("Default Account")
             self.accountsettings = self.getaccountsettings(account)
-            if self.accountsettings.getSetting("Default Account") == "True":
-                xbmcgui.unlock()
-                accountpass = self.accountsettings.getSetting("Account Password")
-                if accountpass != "-":
-                    value = self.showKeyboard(_(33),"",1)
-                    if value != "":
-                        if value == accountpass.decode("hex"):
-                            self.defaultlogin(account)
-                        else:self.launchinfo("","",_(93),_(32))
-                else:self.defaultlogin(account)
-                break
+            accountpass = self.accountsettings.getSetting("Account Password")
+            if accountpass != "-":
+                value = self.showKeyboard(_(33),"",1)
+                if value != "":
+                    if value == accountpass.decode("hex"):
+                        self.defaultlogin(account)
+                    else:self.launchinfo("","",_(93),_(32))
+            else:self.defaultlogin(account)
 
     def defaultlogin(self, account):
         w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",SRCPATH,"DefaultSkin",lang=_,theaccount=account,title=TITLE)
         w.doModal()
         del w
         
-    def buildaccounts(self):
-        accounts = []
-        for set in self.settings.getSetting("Accounts")[1]:
-            accounts.append(set[0])
-        if len(accounts) == 0:
-            self.noaccounts = True
-        else:self.noaccounts = False
-        return accounts
-
     def getaccountsettings(self,account):
         return self.settings.getSettingInListbyname("Accounts",account)
     

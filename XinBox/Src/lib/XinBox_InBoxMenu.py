@@ -41,6 +41,11 @@ class GUI( xbmcgui.WindowXML ):
         self.settnames[7] = "XinBox Inbox Size"
         self.settnames[8] = "Keep Copy Emails"
         self.settnames[9] = "Email Notification"
+        self.settnames[10] = "Default Inbox"
+        if self.accountSettings.getSetting("Default Inbox") == self.inbox:
+            self.defaultinbox = True
+        else:self.defaultinbox = False
+        self.getControl(107).setSelected(self.defaultinbox)
         self.keepemails = self.settings.getSetting("Keep Copy Emails")
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
@@ -93,6 +98,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(88), self.settings.getSetting("XinBox Inbox Size")))
         self.addItem(self.SettingListItem(self.language(97),""))
         self.addItem(self.SettingListItem(self.language(240),self.settings.getSetting("Email Notification")))
+        self.addItem(self.SettingListItem(self.language(243),""))
         
     def SettingListItem(self, label1,label2):
         if label2 == "-":
@@ -136,6 +142,9 @@ class GUI( xbmcgui.WindowXML ):
                 self.keepemails = not self.keepemails
                 self.getControl(106).setSelected(self.keepemails)
                 self.settings.setSetting(self.settnames[curPos],str(self.keepemails))
+            elif curPos == 10:
+                self.defaultinbox = not self.defaultinbox
+                self.getControl(107).setSelected(self.defaultinbox)
             elif curPos == 9:
                 dialog = xbmcgui.Dialog()
                 value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))
@@ -178,6 +187,11 @@ class GUI( xbmcgui.WindowXML ):
             w.testinput()
             del w
         elif ( controlID == 62):
+            if self.defaultinbox:
+                self.accountSettings.setSetting("Default Inbox", self.inbox)
+            else:
+                if self.accountSettings.getSetting("Default Inbox") == self.inbox:
+                    self.accountSettings.setSetting("Default Inbox", "-")
             self.closeme(1)
 
 

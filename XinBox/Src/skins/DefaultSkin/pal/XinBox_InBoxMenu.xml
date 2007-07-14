@@ -112,7 +112,7 @@
                 <control type="checkmark" id="104">
                     	<description>POP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>210</posy>
+                    	<posy>198</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -130,7 +130,7 @@
                 <control type="checkmark" id="105">
                     	<description>SMTP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>240</posy>
+                    	<posy>225</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -148,7 +148,25 @@
                 <control type="checkmark" id="106">
                     	<description>Keep Copy Emails Status</description>
                     	<posx>515</posx>
-                    	<posy>372</posy>
+                    	<posy>360</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
+                <control type="checkmark" id="107">
+                    	<description>Default Inbox Status</description>
+                    	<posx>515</posx>
+                    	<posy>415</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -209,9 +227,9 @@
 		</control>
 		<control type="list" id="51">
 			<posx>175</posx>
-			<posy>155</posy>
+			<posy>145</posy>
 			<width>400</width>
-			<height>275</height>
+			<height>300</height>
 			<ondown>9000</ondown>
 			<scrolltime>200</scrolltime>
 			<animation effect="fade" time="1000">WindowOpen</animation>
