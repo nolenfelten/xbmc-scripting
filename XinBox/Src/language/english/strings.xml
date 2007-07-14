@@ -168,8 +168,8 @@
 	<string id="266">Attachments</string>
 	<string id="267">Size:</string>
 	<string id="268">Save %s to...</string>
-	<string id="269">%s saved to %s</string>
-	<string id="270">%s FAILED to save to %s</string>
+	<string id="269">saved to:</string>
+	<string id="270">failed to save to:</string>
 	<string id="271">Delete Email From:</string>
 	<string id="272">Inbox Only</string>
 	<string id="273">Server Only</string>
@@ -178,6 +178,7 @@
 	<string id="276">Reset this inbox?</string>
 	<string id="277">All emails in inbox will be deleted.</string>
 	<string id="278">Inbox reset complete</string>
+	<string id="279">Zip Archive Empty</string>
 
 	<!-- Compose Labels -->
 	<string id="300">Sending Email..</string>
@@ -213,4 +214,6 @@
 	<string id="330">Add new Line:</string>
 	<string id="331">Remove this line?</string>
 	<string id="332">Send this email?</string>
+	<string id="333">Clear</string>
+	<string id="334">Clear Email Body?</string>
 </strings>

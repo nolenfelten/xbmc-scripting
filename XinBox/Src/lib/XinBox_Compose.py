@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os, string
+import xbmc, xbmcgui, time, sys, os, string, traceback
 import XinBox_Util
 from os.path import join, exists, basename,getsize
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
@@ -47,6 +47,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(87).setLabel(self.language(313))
         self.getControl(61).setLabel(self.language(314))
         self.getControl(62).setLabel(self.language(61))
+        self.getControl(63).setLabel(self.language(333))
         self.getControl(82).addItem(self.toaddr)
         self.getControl(82).addItem(self.ccaddr)
         self.getControl(82).addItem(self.bccaddr)
@@ -106,6 +107,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.exitme()
             elif controlID == 62:
                 self.addattachment()
+            elif controlID == 63:
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno(self.language(77), self.language(334)):                
+                    self.clearList()
+                    self.addItem("")
             elif controlID == 81:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(326)):
@@ -137,12 +143,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.getControl(81).setEnabled(True)
             self.attachlist = True
 
-    def getbel(self,filetype, control):
-        if filetype in XinBox_Util.getfiletypes("image"):return "Image"
-        elif filetype in XinBox_Util.getfiletypes("audio"):return "Audio"
-        elif filetype in XinBox_Util.getfiletypes("video"):return "Video"
-        elif filetype in XinBox_Util.getfiletypes("text"):return "Text"
-        else:return "Unknown"
 
     def getsizelabel (self, size):
         if size >= 1024:
@@ -156,19 +156,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def showattach(self, pos):
         filetype = string.lower(string.split(self.attachments[pos][0], '.').pop())
-        self.filebel = self.getbel(filetype)
+        self.filebel = XinBox_Util.getfiletypes(filetype)
         self.getControl(90).setLabel(self.language(267) + self.getsizelabel(self.attachments[pos][2]))
-        if self.filebel == "Unknown":
-            self.getControl(80).setImage("XBattachfile.png")
-        elif self.filebel == "Text":
-            self.getControl(80).setImage("XBattachtext.png")
-        elif self.filebel == "Audio":
-            self.getControl(80).setImage("XBattachaudio.png")
-        elif self.filebel == "Video":
-            self.getControl(80).setImage("XBattachvideo.png")
-        elif self.filebel == "Image":
-            self.getControl(80).setImage("XBattachimage.png")            
-        
+        if self.filebel == "Unknown":self.getControl(80).setImage("XBattachfile.png")
+        elif self.filebel == "Text":self.getControl(80).setImage("XBattachtext.png")
+        elif self.filebel == "Audio":self.getControl(80).setImage("XBattachaudio.png")
+        elif self.filebel == "Video":self.getControl(80).setImage("XBattachvideo.png")
+        elif self.filebel == "Image":self.getControl(80).setImage("XBattachimage.png")            
+        elif self.filebel == "Archive":self.getControl(80).setImage("XBattacharchive.png")
+
     def onAction( self, action ):
         if not self.animating:
             button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -190,7 +186,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
                     else:
-                        self.removeItem(self.getCurrentListPosition()-1)
+                        self.removeItem(self.getCurrentListPosition())
                         self.setCurrentListPosition(self.getCurrentListPosition()-1)
             elif focusid == 81:
                 self.showattach(self.getControl(81).getSelectedPosition())

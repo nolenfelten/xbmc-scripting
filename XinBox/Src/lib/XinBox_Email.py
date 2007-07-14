@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os,email, string,shutil,re
+import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile
 import XinBox_Util
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
 from sgmllib import SGMLParser
@@ -17,6 +17,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
       
     def setupvars(self):
+        self.ziplist = []
         self.subject = self.emailsettings[1].get('subject').replace("\n","")
         self.emfrom = self.emailsettings[1].get('from').replace("\n","")
         self.to = self.emailsettings[1].get('to').replace("\n","")
@@ -52,6 +53,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
 
     def setupcontrols(self):
+        self.getControl(50).setEnabled(False)
         self.getControl(80).setImage("XBXinBoXLogo.png")
         self.getControl(81).setEnabled(False)
         self.getControl(89).setLabel(self.language(266))
@@ -128,6 +130,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def onClick(self, controlID):
         if not self.animating:
+            if controlID == 50:
+                self.savezip(self.getCurrentListPosition())
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
@@ -202,16 +206,57 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.click = 1
                 self.showimage(pos)
             else:self.saveattachment(pos)
+        elif self.filebel == "Archive":
+            self.showing = True
+            if self.click == 0:
+                self.click = 1
+                self.showzip(pos)
+            else:self.saveattachment(pos)
+
+    def showzip(self,pos):
+        self.getControl(73).reset()
+        self.getControl(73).addLabel(self.language(320) + " " + self.attachments[pos][0])
+        self.getControl(74).reset()
+        self.getControl(72).setVisible(False)
+        self.getControl(63).setEnabled(False)
+        self.getControl(62).setEnabled(False)
+        self.getControl(61).setEnabled(False)
+        self.zippath = TEMPFOLDER + self.attachments[pos][0]
+        self.unzip("",True,False)
+        if len(self.ziplist) == 0:self.addItem(self.language(279))
+        else:
+            self.getControl(50).setEnabled(True)
+            self.setFocusId(50)
 
     def saveattachment(self,pos):
         dialog = xbmcgui.Dialog()
-        ret = dialog.browse(0, self.language(268) % self.attachments[pos][0] , 'files')
+        ret = dialog.browse(0, self.language(268) % self.attachments[pos][0], 'files')
         if ret:
             try:
                 shutil.copy(TEMPFOLDER + self.attachments[pos][0], ret)
-                di = dialog.ok(self.language(49), self.language(269) % (self.attachments[pos][0], ret))
-            except:
-                di = dialog.ok(self.language(93), self.language(270) % (self.attachments[pos][0], ret))
+                di = dialog.ok(self.language(49), self.attachments[pos][0],self.language(269), ret)
+            except:di = dialog.ok(self.language(93),self.attachments[pos][0],self.language(270), ret)
+
+    def savezip(self, pos):
+        dialog = xbmcgui.Dialog()
+        ret = dialog.browse(0, self.language(268) % self.ziplist[pos], 'files')
+        if ret:
+            try:
+                self.unzip(ret,False,self.ziplist[pos])
+                di = dialog.ok(self.language(49), self.ziplist[pos],self.language(269), ret)
+            except:di = dialog.ok(self.language(93),self.ziplist[pos],self.language(270), ret)
+        
+    def unzip(self, path, listing, myzipfile):
+        zip = zipfile.ZipFile(self.zippath, 'r')
+        namelist = zip.namelist()
+        for item in namelist:
+            if listing:
+                self.ziplist.append(str(item))
+                self.addItem(str(item))
+            else:
+                if str(item) == myzipfile:
+                    file(path + str(item),'wb').write(zip.read(item))
+        zip.close()
 
     def showimage(self, pos):
         self.getControl(73).reset()
@@ -235,31 +280,19 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(63).setEnabled(False)
         self.getControl(62).setEnabled(False)
         self.getControl(61).setEnabled(False)
+        self.setFocusId(72)
 
 
     def showattach(self, pos):
         filetype = string.lower(string.split(self.attachments[pos][0], '.').pop())
-        self.filebel = self.getbel(filetype)
+        self.filebel = XinBox_Util.getfiletypes(filetype)
         self.getControl(90).setLabel(self.language(267) + self.getsizelabel(self.attachments[pos][2]))
-        if self.filebel == "Unknown":
-            self.getControl(80).setImage("XBattachfile.png")
-        elif self.filebel == "Text":
-            self.getControl(80).setImage("XBattachtext.png")
-        elif self.filebel == "Audio":
-            self.getControl(80).setImage("XBattachaudio.png")
-        elif self.filebel == "Video":
-            self.getControl(80).setImage("XBattachvideo.png")
-        elif self.filebel == "Image":
-            self.getControl(80).setImage("XBattachimage.png")
-            
-            
-    def getbel(self,filetype):
-        if filetype in XinBox_Util.getfiletypes(image=True):return "Image"
-        elif filetype in XinBox_Util.getfiletypes(audio=True):return "Audio"
-        elif filetype in XinBox_Util.getfiletypes(video=True):return "Video"
-        elif filetype in XinBox_Util.getfiletypes(text=True):return "Text"
-        else:return "Unknown"
-        
+        if self.filebel == "Unknown":self.getControl(80).setImage("XBattachfile.png")
+        elif self.filebel == "Text":self.getControl(80).setImage("XBattachtext.png")
+        elif self.filebel == "Audio":self.getControl(80).setImage("XBattachaudio.png")
+        elif self.filebel == "Video":self.getControl(80).setImage("XBattachvideo.png")
+        elif self.filebel == "Image":self.getControl(80).setImage("XBattachimage.png")
+        elif self.filebel == "Archive":self.getControl(80).setImage("XBattacharchive.png")
             
     def onAction( self, action ):
         if not self.animating:
@@ -280,7 +313,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.showattach(self.getControl(81).getSelectedPosition())
 
     def resetemail(self):
+        self.ziplist = []
+        self.getControl(50).setEnabled(False)
         self.showing = False
+        self.clearList()
         self.getControl(91).setImage("-")
         self.getControl(72).setVisible(True)
         self.getControl(63).setEnabled(True)

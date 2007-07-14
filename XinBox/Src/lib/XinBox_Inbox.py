@@ -78,7 +78,7 @@ class GUI( xbmcgui.WindowXML ):
         if dialog.yesno(self.language(210) + self.inbox, self.language(276),self.language(277)):  
             self.removefiles(self.ibfolder)
             self.clearList()
-            self.onInit()
+            self.setinboxempty()
             dialog.ok(self.language(49),self.language(278))
             return
   
@@ -220,6 +220,7 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def setinboxempty(self):
+        self.guilist = []
         self.inboxsize = 0
         self.addItem(self.language(256))
         self.getControl(50).setEnabled(False)
