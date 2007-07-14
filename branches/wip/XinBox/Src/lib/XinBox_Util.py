@@ -1,6 +1,12 @@
 
 import os, sys
 
+IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
+AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
+VIDEOTYPES = ["avi","wmv","mpg"]
+TEXTTYPES = ["txt", "doc", "rtf", "xml", "bat"]
+ARCHIVETYPES = ["zip"]
+
 def setControllerAction():
     return {
                 61478 : 'Keyboard Up Arrow',
@@ -41,9 +47,11 @@ def getpresetservers():
             "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100"],
             }
 
-def getfiletypes(image=False,audio=False,video=False,text=False):
-    if image: return ["jpg","jpeg","gif","png","bmp"]
-    if audio: return ["wav","mp3","mpa","mp2","ac3","dts"]
-    if video: return ["avi","wmv","mpg"]
-    if text: return ["txt", "doc", "rtf", "xml", "bat"]
+def getfiletypes(filetype):
+    if filetype in IMAGETYPES: return "Image"
+    elif filetype in AUDI0TYPES: return "Audio"
+    elif filetype in VIDEOTYPES: return "Video"
+    elif filetype in TEXTTYPES: return "Text"
+    elif filetype in ARCHIVETYPES: return "Archive"
+    else: return "Unknown"
     

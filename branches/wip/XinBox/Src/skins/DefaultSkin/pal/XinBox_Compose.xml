@@ -133,7 +133,7 @@
             	<posy>77</posy>
             	<width>426</width>
             	<height>400</height>
-		<onup>82</onup>
+		<onup>9000</onup>
 		<ondown>50</ondown>
 		<onleft>82</onleft>
 		<onright>81</onright>
@@ -292,9 +292,28 @@
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
+				<onright>63</onright>
+				<onup>50</onup>
+				<ondown>82</ondown>
+				<onleft>61</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBlist-focus.png</texturefocus>
+				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>94</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="63">
+				<description>Send Button</description>
+				<posx>205</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
 				<onright>62</onright>
 				<onup>50</onup>
-				<ondown>61</ondown>
+				<ondown>82</ondown>
 				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -312,9 +331,9 @@
       				<textoffsety></textoffsety>
 				<label>-</label>
 				<onup>50</onup>
-				<onleft>61</onleft>
+				<onleft>63</onleft>
 				<onright>81</onright>
-				<ondown>62</ondown>
+				<ondown>82</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
