@@ -28,10 +28,9 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
-        xbmcgui.unlock()
-        xbmcgui.lock()
         self.loadsettings()
         self.setupvars()
+        xbmcgui.lock()
         self.setupcontrols()
         xbmcgui.unlock()
         self.reademid()
