@@ -28,6 +28,7 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
+        xbmcgui.unlock()
         xbmcgui.lock()
         self.loadsettings()
         self.setupvars()
@@ -155,6 +156,7 @@ class GUI( xbmcgui.WindowXML ):
 
     
     def parse_email(self, email):
+        email = email.replace("\t","")
         parser = html2txt()
         parser.reset()
         parser.feed(email)

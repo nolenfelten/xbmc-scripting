@@ -73,7 +73,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             for part in self.emailsettings[1].walk():
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
                     filename = part.get_filename()
-                    if filename:
+                    if filename != None:
                         try:
                             f=open(TEMPFOLDER + filename, "wb")
                             f.write(part.get_payload(decode=1))
@@ -84,7 +84,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     filename = part.get_filename()
                     if filename != None:
                         try:
-                            f=open(TEMPFOLDER + filename, "wb")
+                            if part.get_content_type() == "text/plain":f=open(TEMPFOLDER + filename, "w")
+                            else:f=open(TEMPFOLDER + filename, "wb")
                             f.write(part.get_payload(decode=1))
                             f.close()
                             self.attachments.append([filename,TEMPFOLDER + filename,os.path.getsize(TEMPFOLDER + filename)])
@@ -106,6 +107,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(72).setText(self.body)
 
     def parse_email(self, email):
+        email = email.replace("\t","          ")
         parser = html2txt()
         parser.reset()
         parser.feed(email)
@@ -275,7 +277,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(73).addLabel(self.language(320) + " " + self.attachments[pos][0])
         self.getControl(74).reset()
         f = open(TEMPFOLDER + self.attachments[pos][0], "r")
-        self.getControl(72).setText(f.read())
+        self.getControl(72).setText(f.read().replace("\t",""))
         f.close()
         self.getControl(63).setEnabled(False)
         self.getControl(62).setEnabled(False)

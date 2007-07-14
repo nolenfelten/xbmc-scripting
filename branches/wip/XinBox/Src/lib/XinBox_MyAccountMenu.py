@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util
 import XinBox_InfoDialog
 from XinBox_Settings import Settings
@@ -22,14 +22,19 @@ class GUI( xbmcgui.WindowXML ):
         self.settings = Settings("XinBox_Settings.xml",self.title,"")
         
     def onInit(self):
-        xbmcgui.lock()
+        self.loadsettings()
+        self.setupvars()
         if self.init == 0:
-            self.loadsettings()
-            self.setupvars()
-            self.setupcontrols()
             self.init = 1
+            self.checkdefault()
+        xbmcgui.lock()
+        self.setupcontrols()
         xbmcgui.unlock()
 
+    def checkdefault(self):
+        if self.accountsettings.getSetting("Default Inbox") != "-":
+            self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
+        
     def setupvars(self):
         self.control_action = XinBox_Util.setControllerAction()
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
@@ -52,6 +57,8 @@ class GUI( xbmcgui.WindowXML ):
 
     def deleteaccount(self):
         self.settings.removeinbox("Accounts",self.account)
+        if self.theSettings.getSetting("Default Account") == self.account:
+            self.theSettings.setSetting("Default Account", "-")
         self.settings.saveXMLfromArray()
         self.removedir(ACCOUNTSDIR + str(hash(self.account)))
         self.close()
