@@ -1,7 +1,7 @@
 
 
 
-import xbmcgui, xbmc, os, random
+import xbmcgui, xbmc, os, random, traceback
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
@@ -32,7 +32,7 @@ class AccountSettings(xbmcgui.WindowXML):
         
     def buildinboxdict(self,accountsettings):
         inboxes = []
-        for set in self.accountSettings.getSetting("Inboxes")[1]:
+        for set in accountsettings.getSetting("Inboxes")[1]:
             inboxes.append(set[0])
         return inboxes
 
@@ -53,9 +53,12 @@ class AccountSettings(xbmcgui.WindowXML):
             self.buildsettingsList()
             self.buildinboxlist()
             self.myinit = 0
+            self.unsaveddef = self.defaultaccount
         xbmcgui.unlock()
 
     def setupvars(self):
+        self.saved = True
+        self.setupcompsetts()
         self.savedaccountname = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
@@ -65,6 +68,23 @@ class AccountSettings(xbmcgui.WindowXML):
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
         self.newaccounthash = self.origaccounthash
+
+
+    def setupcompsetts(self):
+        self.checksettings = str(self.accountSettings.settings)
+
+    def checkforchanges(self):
+        if self.account != "":
+            if str(self.accountSettings.settings) != self.checksettings:
+                self.getControl(64).setEnabled(True)
+                self.saved = False
+            else:
+                if self.defaultaccount != self.unsaveddef:
+                    self.getControl(64).setEnabled(True)
+                    self.saved = False
+                else:
+                    self.getControl(64).setEnabled(False)
+                    self.saved = True
 
     def buildhashlist(self):
         hashlist = {}
@@ -77,9 +97,9 @@ class AccountSettings(xbmcgui.WindowXML):
         self.getControl(83).setLabel(self.language(21))
         self.buttonids = [61,62,63,64,65]
         for ID in self.buttonids:
-            self.getControl(ID).setLabel(self.language(ID))        
+            self.getControl(ID).setLabel(self.language(ID))
+        self.getControl(64).setEnabled(False)
         if self.newaccount:
-            self.getControl(64).setEnabled(False)
             self.getControl(80).setLabel(self.language(50))
         else:
             self.getControl(80).setLabel(self.language(74))
@@ -115,9 +135,11 @@ class AccountSettings(xbmcgui.WindowXML):
             if focusid == 88:
                 self.setFocusId(9000)
             else:
-                dialog = xbmcgui.Dialog()
-                if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
-                    self.close()
+                if not self.saved:
+                    dialog = xbmcgui.Dialog()
+                    if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
+                        self.close()
+                else:self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
@@ -142,11 +164,12 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.launchinfo(95,"",self.language(93))
                     else:
                         curItem.setLabel2(value)
-                        self.getControl(64).setEnabled(True)
                         self.theSettings.setSettingnameInList("Accounts",curName2,value)
                         self.newaccounthash  = str(hash(value))
                         self.accountSettings.setSetting("Account Hash",self.newaccounthash)
+                        self.accounts = self.buildaccounts()
                         self.account = value
+                        self.checkforchanges()
             elif curPos == 1:
                 value = self.showKeyboard(self.language(66) % curName,"",1)
                 if value != False:
@@ -156,9 +179,11 @@ class AccountSettings(xbmcgui.WindowXML):
                     else:
                         self.accountSettings.setSetting("Account Password",value.encode("hex"))
                         curItem.setLabel2('*' * len(value))
+                    self.checkforchanges()
             elif curPos == 2:
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
+                self.checkforchanges()
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
@@ -179,6 +204,7 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.removehash(inboxname)
                     self.buildinboxlist()
                     self.deleteing = False
+                    self.checkforchanges()
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
@@ -188,16 +214,23 @@ class AccountSettings(xbmcgui.WindowXML):
                 if self.theSettings.getSetting("Default Account") == self.account:
                     self.theSettings.setSetting("Default Account", "-")
             self.theSettings.saveXMLfromArray()
+            self.getControl(64).setEnabled(False)
+            self.setupcompsetts()
+            self.saved = True
+            self.unsaveddef = self.defaultaccount
             self.accounts = self.buildaccounts()
             self.savedaccountname = self.account
             self.getControl(81).setLabel(self.account)
             self.builddirs()
             self.newaccount = False
             self.launchinfo(48,"",self.language(49))
+            self.setFocusId(65)
         elif ( controlID == 65):
-            dialog = xbmcgui.Dialog()
-            if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
-                self.close()
+            if not self.saved:
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
+                    self.close()
+            else:self.close()
 
     def builddirs(self):
         accountOrigdir = join(SETTINGSDIR,self.origaccounthash)
@@ -244,11 +277,13 @@ class AccountSettings(xbmcgui.WindowXML):
 
     def launchinboxmenu(self, inbox):
         if inbox == "":self.Addinbox("Inboxes",inbox)
-        inboxes = self.buildinboxdict(self.accountSettings)
-        w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",accountsetts=self.accountSettings,theinbox=inbox,lang=self.language,inboxlist=inboxes)
+        w = XinBox_InBoxMenu.GUI("XinBox_InBoxMenu.xml",self.scriptPath,"DefaultSkin",accountsetts=self.accountSettings,theinbox=inbox,lang=self.language)
         w.doModal()
         ID = w.returnID
         Inboxname = w.inbox
+        change = w.settchanged
+        if change == "True":
+            self.getControl(64).setEnabled(True)
         if ID != 0:
             self.gohash(inbox, Inboxname)
             if inbox == "":
