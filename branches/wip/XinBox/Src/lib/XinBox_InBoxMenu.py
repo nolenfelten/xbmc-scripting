@@ -6,16 +6,22 @@ import XinBox_InfoDialog
 from XinBox_EmailEngine import TestInbox
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,accountsetts=False,theinbox=False,lang=False,inboxlist=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,accountsetts=False,theinbox=False,lang=False):
         self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
-        self.inboxlist = inboxlist
         self.accountSettings = accountsetts
         if self.inbox == "":
             self.newinbox = True
         else:self.newinbox = False
         self.settings = self.getinboxsettings(self.inbox)
+        self.inboxlist = self.buildinboxdict(self.accountSettings)
+
+    def buildinboxdict(self,accountsettings):
+        inboxes = []
+        for set in accountsettings.getSetting("Inboxes")[1]:
+            inboxes.append(set[0])
+        return inboxes
 
     def getinboxsettings(self,inbox):
         return self.accountSettings.getSettingInListbyname("Inboxes",inbox)
@@ -25,9 +31,22 @@ class GUI( xbmcgui.WindowXML ):
         self.setupvars()
         self.setupcontrols()
         self.builsettingsList()
+        self.unsaveddef = self.defaultinbox
+        self.setupcompsetts()
         xbmcgui.unlock()
 
+    def setupcompsetts(self):
+        self.checksettings = str(self.settings.settings)
+        self.defibox = self.defaultinbox
+
+    def checkforchanges(self):
+        if str(self.settings.settings)!= self.checksettings:
+            self.settchanged = "True"
+        elif self.defibox != self.defaultinbox:
+            self.settchanged = "True"
+
     def setupvars(self):
+        self.settchanged = "False"
         self.renameme = []
         self.servers = XinBox_Util.getpresetservers()
         self.control_action = XinBox_Util.setControllerAction()
@@ -82,6 +101,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl(104).setLabel(self.language(90))
             self.getControl(105).setLabel(self.language(90))
         else:
+            self.getControl(62).setEnabled(True)
             self.getControl(80).setLabel(self.language(81))
             self.getControl(81).setLabel(self.inbox)
 
@@ -160,25 +180,27 @@ class GUI( xbmcgui.WindowXML ):
                             else:
                                 self.renameme = [curName2,value]
                                 self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
-                                self.settings.setSetting("Inbox Hash",str(hash(value)))  
+                                self.settings.setSetting("Inbox Hash",str(hash(value)))
+                                self.inboxlist = self.buildinboxdict(self.accountSettings)
                                 self.inbox = value
                                 self.getControl(62).setEnabled(True)
                                 curItem.setLabel2(value)
                         elif curPos == 1:
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)
-                            server = value.split("@")[1]
-                            name = value.split("@")[0]
-                            self.settings.setSetting("Account Name",name)
-                            self.getListItem(4).setLabel2(name)
-                            if self.servers.has_key(server):
-                                self.settings.setSetting("POP Server",self.servers[server][0])
-                                self.getListItem(2).setLabel2(self.servers[server][0])
-                                self.settings.setSetting("SMTP Server",self.servers[server][1])
-                                self.getListItem(3).setLabel2(self.servers[server][1])
-                                self.updatessl(91,"",self.servers[server][2])
-                                self.updatessl(92,"",self.servers[server][3])
-                                self.updatesizes(self.servers[server][4],6)
+                            if "@" in value:
+                                server = value.split("@")[1]
+                                name = value.split("@")[0]
+                                self.settings.setSetting("Account Name",name)
+                                self.getListItem(4).setLabel2(name)
+                                if self.servers.has_key(server):
+                                    self.settings.setSetting("POP Server",self.servers[server][0])
+                                    self.getListItem(2).setLabel2(self.servers[server][0])
+                                    self.settings.setSetting("SMTP Server",self.servers[server][1])
+                                    self.getListItem(3).setLabel2(self.servers[server][1])
+                                    self.updatessl(91,"",self.servers[server][2])
+                                    self.updatessl(92,"",self.servers[server][3])
+                                    self.updatesizes(self.servers[server][4],6)
                         else:
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)
@@ -187,6 +209,7 @@ class GUI( xbmcgui.WindowXML ):
             w.testinput()
             del w
         elif ( controlID == 62):
+            self.checkforchanges()
             if self.defaultinbox:
                 self.accountSettings.setSetting("Default Inbox", self.inbox)
             else:
@@ -208,6 +231,7 @@ class GUI( xbmcgui.WindowXML ):
         try:control = self.getFocus()
         except: control = 0
         if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+            self.settchanged = "False"
             self.closeme(0)
         elif ( button_key == 'Keyboard Right Arrow' or button_key == 'DPad Right' or button_key == 'Remote Right' ):
             if focusid == 51:

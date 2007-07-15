@@ -153,7 +153,7 @@
             		<posy>80</posy>
             		<width>500</width>
             		<height>450</height>
-            		<spinposx>305</spinposx>
+            		<spinposx>315</spinposx>
             		<spinposy>435</spinposy>
             		<textureup>XBscroll-up.png</textureup>
             		<texturedown>XBscroll-down.png</texturedown>
@@ -230,11 +230,11 @@
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<posx>376</posx>
+			<posx>389</posx>
 			<posy>505</posy>
 			<control type="button" id="61">
 				<description>Reply Button</description>
-				<posx>0</posx>
+				<posx>1</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -253,7 +253,7 @@
 			</control>
 			<control type="button" id="62">
 				<description>Forward Button</description>
-				<posx>39</posx>
+				<posx>40</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
