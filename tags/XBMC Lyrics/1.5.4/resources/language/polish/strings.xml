@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Language file translated with Team XBMC Translator-->
+<!--Translator: smuto-->
+<!--Email: smuto@xbox-scene.pl-->
+<!--Date of translation: 04/03/2007-->
+<strings>
+  <string id="0">XBMC Lyrics</string>
+  <string id="100">Wyjątki dla</string>
+  <string id="201">Scraper</string>
+  <string id="202">Zapisuj teksty na dysk</string>
+  <string id="203">Zapisz do ..</string>
+  <string id="204">Płynne przewijanie tekstu</string>
+  <string id="205">Pokazuj wizualizację w tle</string>
+  <string id="230">Błąd podczas zapisywania ustawień.!</string>
+  <string id="240">Zmiana zostanie wprowadzona przy następnym uruchomieniu skryptu.</string>
+  <string id="241">Chcesz uruchomić %s od nowa?</string>
+  <string id="250">Ok</string>
+  <string id="251">Anuluj</string>
+  <string id="252">Aktualizuj</string>
+  <string id="253">Credits</string>
+  <string id="254">Strona</string>
+  <string id="255">Restart</string>
+  <string id="256">Później</string>
+  <string id="589">Tryb Przyjêcia</string>
+  <string id="630">Niespodziewana sytuacja, wygląda na to że coś zmieniło się w układzie strony, nie potrafię odczytać zawartości!</string>
+  <string id="631">Nie znalazłem artysty, zawsze możesz wgrać teksty tego artysty na dysk lub uzupełnić ten brak w Internecie!</string>
+  <string id="632">Nie znalazłem tekstu, zawsze możesz wgrać teksty tego artysty na dysk lub uzupełnić ten brak w Internecie!</string>
+  <string id="633">Ale jaja, niby tekst tego utworu znajduje się na stronie, ale niestety nie ma tam ani jednego słowa!</string>
+  <string id="638">Dlaczego i po co uruchomiłeś ten skrypt?</string>
+  <string id="639">Przecież - w tej chwili niczego nie słuchasz!</string>
+  <string id="1000">Używasz najnowszej wersji ..</string>
+  <string id="1001">Sprawdzam używaną wersję...</string>
+  <string id="1002">jest dostępna nowsza</string>
+  <string id="1003">Chcesz zaktualizować?</string>
+  <string id="1004">Sciąganie potrzebnych plików...</string>
+  <string id="1005">Proszę czekać...</string>
+  <string id="1006">Wersja</string>
+  <string id="1007">Wczytywanie i porównywanie:</string>
+  <string id="1008">Ścieżka:</string>
+  <string id="1009">Plik:</string>
+  <string id="1010">Nowa wersja zapisana w:</string>
+  <string id="1030">Nie znalazłem żadnej wersji!</string>
+  <string id="1031">Wystąpił błąd podczas aktualizacji.!</string>
+</strings>
