@@ -20,7 +20,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.lock()
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-        xbmcgui.unlock()
         self.attachlist = False
         if self.mydraft[5] == None:self.attachments = []
         else:self.attachments = self.mydraft[5]
@@ -53,21 +52,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(82).addItem(self.bccaddr)
         self.getControl(82).addItem(self.subject)
         self.getControl(73).addLabel(self.language(315) + " " + self.inbox + " <" + self.ibsettings.getSetting("Email Address") + ">")
-        self.animating = True
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-        time.sleep(0.9)
-        self.animating = False
-        self.setFocusId(82)
         if len(self.attachments) != 0:
             self.attachlist = True
             for attach in self.attachments:
                 self.getControl(81).addItem(attach[0])
             self.getControl(81).setEnabled(True)
             self.animating = True
+            xbmcgui.unlock()
+            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            time.sleep(1.2)
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-            time.sleep(0.9)
+            time.sleep(0.8)
             self.animating = False
-        else:self.getControl(81).setEnabled(False)
+        else:
+            self.animating = True
+            xbmcgui.unlock()
+            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            time.sleep(0.8)
+            self.animating = False            
+            self.getControl(81).setEnabled(False)
+        self.setFocusId(82)
         
     def onClick(self, controlID):
         if not self.animating:

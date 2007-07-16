@@ -119,6 +119,20 @@
 	<string id="128">Select to exit and return to previous menu.</string>
 	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
 	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until Save is pressed in the Account Menu.</string>
+	<string id="131">Select to toggle if this Inbox is the Default Inbox.A Default Inbox automatically logs in on when the account is logged in to. Note: There can only be a maximum of one Default Inbox per Account.</string>
+	<string id="132">Select to check for new emails.</string>
+	<string id="133">Select to compose a new email.</string>
+	<string id="134">Select to reset current inbox. Note: Reseting an inbox will delete all emails in the inbox not the server.</string>
+	<string id="135">Select to activate Mini-Mode. This will close the script and continue to check for emails whilst you eg. watch a move. It will notify you of new emails when recieved.</string>
+	<string id="136">Select to open the current highlighted email. Once opened, you can Reply, Forward, manage attachments, and Delete.</string>
+	<string id="137">Select to show/save current highlighted attachment. Note: With .zip attachments, the archive can be opened and files can be saved individually.</string>
+	<string id="138">Select to Reply to this email. Replying will close this window and open the new Reply Window.</string>
+	<string id="139">Select to Forward this email. Forwarding will close this window and open the new Forward Window.</string>
+	<string id="140">Select to Delete this email from either Inbox/Server/Both. If Server/Both are not shown, this is due to the email not being present on the server.</string>
+	<string id="141">Select to open/close the attachment panel.</string>
+	<string id="142">Select to PageUp/PageDown through the email body/attached text files.</string>
+	<string id="143">Select to save the current highlighted file in the .zip archive. Note: Click the .zip file in the attachment panel again to save the entire .zip archive.</string>
+	
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -142,6 +156,7 @@
 	<string id="222">Updating Email Database...</string>
 	<string id="223">Received %s New Emails OK.</string>
 	<string id="224">Error Retrieving Email.</string>
+	<string id="225">Email List</string>
 
 	<!-- MORE InBox Menu Labels -->
 	<string id="240">"New Email" Notification SFX:</string>
@@ -180,6 +195,8 @@
 	<string id="277">All emails in inbox will be deleted.</string>
 	<string id="278">Inbox reset complete</string>
 	<string id="279">Zip Archive Empty</string>
+	<string id="280">Zip Archive List</string>
+	<string id="281">PageUp/PageDown</string>
 
 	<!-- Compose Labels -->
 	<string id="300">Sending Email..</string>

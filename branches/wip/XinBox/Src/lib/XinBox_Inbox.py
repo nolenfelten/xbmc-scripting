@@ -6,6 +6,7 @@ from XinBox_Settings import Settings
 from XinBox_EmailEngine import Email
 import XinBox_Email
 import XinBox_Compose
+import XinBox_InfoDialog
 from os.path import join, exists, basename
 from os import mkdir, remove, listdir
 SETTINGDIR = "P:\\script_data\\XinBox\\"
@@ -93,8 +94,29 @@ class GUI( xbmcgui.WindowXML ):
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitme()
             elif (50 <= focusid <= 59):
-                self.printEmail(self.getCurrentListPosition())
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                    self.launchinfo(136,self.language(225))
+                else:self.printEmail(self.getCurrentListPosition())
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if focusid == 61:
+                    self.launchinfo(132,self.language(250))
+                elif focusid == 62:
+                    self.launchinfo(133,self.language(251))
+                elif focusid == 63:
+                    self.launchinfo(134,self.language(275))
+                elif focusid == 64:
+                    self.launchinfo(135,self.language(252))
+                elif focusid == 65:
+                    self.launchinfo(128,self.language(65))
+                    
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog.doModal()
+        value = dialog.value
+        del dialog
+        return value
 
+                    
     def printEmail(self, selected):
         myemail = self.guilist[selected][1]
         if myemail.is_multipart():
@@ -103,7 +125,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.getControl(67).setText(self.parse_email(part.get_payload()))
                     break
         else:self.getControl(67).setText(self.parse_email(myemail.get_payload()))
-
+        
 
     def openemail(self, pos):
         item = self.guilist[pos]
