@@ -2,11 +2,13 @@
 
 import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile
 import XinBox_Util
+import XinBox_InfoDialog
 TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
 from sgmllib import SGMLParser
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
+        self.srcpath = strFallbackPath
         self.language = lang
         self.emailsettings = emailsetts
    
@@ -17,6 +19,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
       
     def setupvars(self):
+        xbmcgui.lock()
         self.ziplist = []
         self.subject = self.emailsettings[1].get('subject').replace("\n","")
         self.emfrom = self.emailsettings[1].get('from').replace("\n","")
@@ -39,17 +42,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
-        xbmcgui.lock()
         xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
         xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-        xbmcgui.unlock()
 
     def setupemail(self):
         self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
         self.settextbox()
         self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
-        self.getControl(80).setImage("XBXinBoXLogo.png")
-        self.getControl(90).setLabel("")
         
 
     def setupcontrols(self):
@@ -57,12 +56,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(80).setImage("XBXinBoXLogo.png")
         self.getControl(81).setEnabled(False)
         self.getControl(89).setLabel(self.language(266))
-        self.animating = True
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-        time.sleep(0.9)
-        self.animating = False
         if self.emailsettings[2] == 0:
             self.getControl(64).setEnabled(False)
+            xbmcgui.unlock()
+            self.animating = True
+            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            time.sleep(0.8)
+            self.animating = False
         else:
             self.getattachments()
             self.getControl(64).setEnabled(True)
@@ -93,7 +93,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if len(self.attachments) != 0:
             for attachment in self.attachments:
                 self.getControl(81).addItem(attachment[0])
-            self.goattachlist()
+            self.animating = True
+            xbmcgui.unlock()
+            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            time.sleep(1.2)
+            self.attachlist = not self.attachlist
+            self.getControl(81).setEnabled(self.attachlist)
+            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+            time.sleep(0.8)
+            self.animating = False
                    
     def settextbox(self):
         if self.emailsettings[1].is_multipart():
@@ -123,12 +131,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def goattachlist(self):
         self.animating = True
         self.attachlist = not self.attachlist
-        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-        time.sleep(0.9)
         self.click = 0
-        self.resetemail()
         self.getControl(81).setEnabled(self.attachlist)
-        self.animating = False        
+        self.animating = False
+        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        time.sleep(1)
+        self.resetemail()
         
     def onClick(self, controlID):
         if not self.animating:
@@ -187,8 +195,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.filebel == "Unknown":
             self.saveattachment(pos)
         elif self.filebel == "Text":
-            self.showing = True
             if self.click == 0:
+                self.showing = True
                 self.click = 1
                 self.showtext(pos)
             else:self.saveattachment(pos)
@@ -203,14 +211,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 xbmc.Player().play(TEMPFOLDER + self.attachments[pos][0])
             else:self.saveattachment(pos)
         elif self.filebel == "Image":
-            self.showing = True
             if self.click == 0:
+                self.showing = True
                 self.click = 1
                 self.showimage(pos)
             else:self.saveattachment(pos)
         elif self.filebel == "Archive":
-            self.showing = True
             if self.click == 0:
+                self.showing = True
                 self.click = 1
                 self.showzip(pos)
             else:self.saveattachment(pos)
@@ -307,26 +315,53 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitme()
             elif focusid == 81:
-                if self.curpos != self.getControl(81).getSelectedPosition():
-                    self.click = 0
-                    if self.showing:
-                        self.resetemail()
-                self.curpos = self.getControl(81).getSelectedPosition()
-                self.showattach(self.getControl(81).getSelectedPosition())
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                    self.launchinfo(137,self.language(266))
+                else:
+                    if self.curpos != self.getControl(81).getSelectedPosition():
+                        self.click = 0
+                        if self.showing:
+                            self.resetemail()
+                    self.curpos = self.getControl(81).getSelectedPosition()
+                    self.showattach(self.getControl(81).getSelectedPosition())
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if focusid == 61:
+                    self.launchinfo(138,"R")
+                elif focusid == 62:
+                    self.launchinfo(139,"F")
+                elif focusid == 63:
+                    self.launchinfo(140,"D")
+                elif focusid == 64:
+                    self.launchinfo(141,"A")
+                elif focusid == 72:
+                    self.launchinfo(142,self.language(281))
+                elif focusid == 50:
+                    self.launchinfo(143,self.language(280))
+
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog.doModal()
+        value = dialog.value
+        del dialog
+        return value
+
 
     def resetemail(self):
         self.ziplist = []
         self.getControl(50).setEnabled(False)
-        self.showing = False
         self.clearList()
+        self.getControl(80).setImage("XBXinBoXLogo.png")
+        self.getControl(90).setLabel("")
         self.getControl(91).setImage("-")
         self.getControl(72).setVisible(True)
         self.getControl(63).setEnabled(True)
         self.getControl(62).setEnabled(True)
         self.getControl(61).setEnabled(True)
-        self.getControl(73).reset()
-        self.getControl(74).reset()
-        self.setupemail()
+        if self.showing:
+            self.getControl(73).reset()
+            self.getControl(74).reset()
+            self.setupemail()
+            self.showing = False
                
     def onFocus(self, controlID):
         pass

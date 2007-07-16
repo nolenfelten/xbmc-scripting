@@ -241,9 +241,12 @@ class GUI( xbmcgui.WindowXML ):
                     self.updatessl(92,self.smtpssl)
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
-                if self.getCurrentListPosition() != 9:
+                if self.getCurrentListPosition() != 9 and self.getCurrentListPosition() != 10:
                     self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
-                else:self.launchinfo(129,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 10:
+                    self.launchinfo(131,self.getListItem(self.getCurrentListPosition()).getLabel())
+                else:
+                    self.launchinfo(129,self.getListItem(self.getCurrentListPosition()).getLabel())
             elif focusid == 61:
                 self.launchinfo(122,self.language(89))
             elif focusid == 62:
