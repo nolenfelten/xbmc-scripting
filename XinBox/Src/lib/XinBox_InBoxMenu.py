@@ -61,13 +61,14 @@ class GUI( xbmcgui.WindowXML ):
         self.settnames[8] = "Keep Copy Emails"
         self.settnames[9] = "Email Notification"
         self.settnames[10] = "Default Inbox"
+        self.settnames[11] = "Mini Mode Enabled"
         if self.accountSettings.getSetting("Default Inbox") == self.inbox:
             self.defaultinbox = True
         else:self.defaultinbox = False
-        self.getControl(107).setSelected(self.defaultinbox)
         self.keepemails = self.settings.getSetting("Keep Copy Emails")
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
+        self.mmenabled = self.settings.getSetting("Mini Mode Enabled")
         if self.popssl == "0":
             self.popdefault = False
             self.getControl(104).setSelected(self.popdefault)
@@ -75,23 +76,28 @@ class GUI( xbmcgui.WindowXML ):
         else:
             self.popdefault = True
             self.getControl(104).setLabel(self.popssl)
-        self.getControl(104).setSelected(self.popdefault)
         if self.smtpssl == "0":
             self.smtpdefault = False
             self.getControl(105).setLabel(self.language(90))
         else:
             self.smtpdefault = True
             self.getControl(105).setLabel(self.smtpssl)
-        self.getControl(105).setSelected(self.smtpdefault)
         if self.keepemails == "True":
             self.keepemails = True
         else:self.keepemails = False
-        self.getControl(106).setSelected(self.keepemails)
+        if self.mmenabled == "True":
+            self.mmenabled = True
+        else:self.mmenabled = False
 
     def setupcontrols(self):
         self.getControl(82).setLabel(self.language(20))
         self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(89))
+        self.getControl(108).setSelected(self.mmenabled)
+        self.getControl(106).setSelected(self.keepemails)
+        self.getControl(105).setSelected(self.smtpdefault)
+        self.getControl(104).setSelected(self.popdefault)
+        self.getControl(107).setSelected(self.defaultinbox)
         if self.newinbox:
             self.getControl(62).setLabel(self.language(61))
         else:self.getControl(62).setLabel(self.language(242))
@@ -119,6 +125,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(97),""))
         self.addItem(self.SettingListItem(self.language(240),self.settings.getSetting("Email Notification")))
         self.addItem(self.SettingListItem(self.language(243),""))
+        self.addItem(self.SettingListItem("Mini-Mode Enabled",""))
         
     def SettingListItem(self, label1,label2):
         if label2 == "-":
@@ -165,6 +172,10 @@ class GUI( xbmcgui.WindowXML ):
             elif curPos == 10:
                 self.defaultinbox = not self.defaultinbox
                 self.getControl(107).setSelected(self.defaultinbox)
+            elif curPos == 11:
+                self.mmenabled = not self.mmenabled
+                self.getControl(108).setSelected(self.mmenabled)
+                self.settings.setSetting(self.settnames[curPos],str(self.mmenabled))
             elif curPos == 9:
                 dialog = xbmcgui.Dialog()
                 value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))

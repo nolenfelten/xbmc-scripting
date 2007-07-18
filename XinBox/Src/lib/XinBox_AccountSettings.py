@@ -17,7 +17,7 @@ class Account_Settings (AccountSettings):
             "Account Password": ["-","text"],
             "Default Inbox": ["-","text"],
             "Account Hash": ["-","text"],
-            "Inboxes": [['Inbox',[]],"list"]}
+            "Inboxes": [['Inbox',[]],"list"],}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")
 
@@ -34,6 +34,7 @@ class Account_Settings (AccountSettings):
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"],
             "Inbox Hash": ["-","text"],
-            "Email Notification": [self.srcpath+"\\SFX\\Email Notification\\You Have Mail.wav","text"]}
+            "Email Notification": [self.srcpath+"\\SFX\\Email Notification\\You Have Mail.wav","text"],
+            "Mini Mode Enabled": ["False","boolean"],}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addinbox(settingname,newName,newSettings,"settings")
