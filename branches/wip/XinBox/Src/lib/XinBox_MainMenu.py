@@ -20,7 +20,7 @@ lang = Language(TITLE)
 lang.load(SRCPATH + "//language")
 _ = lang.string
 
-defSettings = {"Default Account": ["-","text"],"Accounts": [['Account',[]],"list"]}
+defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"],"Accounts": [['Account',[]],"list"]}
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):

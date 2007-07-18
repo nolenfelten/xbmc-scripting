@@ -54,6 +54,7 @@ class AccountSettings(xbmcgui.WindowXML):
             self.buildinboxlist()
             self.myinit = 0
             self.unsaveddef = self.defaultaccount
+            self.unsavemm = self.mmaccount
         xbmcgui.unlock()
 
     def setupvars(self):
@@ -63,8 +64,11 @@ class AccountSettings(xbmcgui.WindowXML):
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
         if self.theSettings.getSetting("Default Account") == self.account:
-            self.defaultaccount = "True"
-        else:self.defaultaccount = "False"
+            self.defaultaccount = True
+        else:self.defaultaccount = False
+        if self.theSettings.getSetting("Mini Mode Account") == self.account:
+            self.mmaccount = True
+        else:self.mmaccount = False
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
         self.newaccounthash = self.origaccounthash
@@ -82,6 +86,9 @@ class AccountSettings(xbmcgui.WindowXML):
                 if self.defaultaccount != self.unsaveddef:
                     self.getControl(64).setEnabled(True)
                     self.saved = False
+                elif self.mmaccount != self.unsavemm:
+                    self.getControl(64).setEnabled(True)
+                    self.saved = False                    
                 else:
                     self.getControl(64).setEnabled(False)
                     self.saved = True
@@ -99,6 +106,8 @@ class AccountSettings(xbmcgui.WindowXML):
         for ID in self.buttonids:
             self.getControl(ID).setLabel(self.language(ID))
         self.getControl(64).setEnabled(False)
+        self.getControl(105).setSelected(self.mmaccount)
+        self.getControl(104).setSelected(self.defaultaccount)
         if self.newaccount:
             self.getControl(80).setLabel(self.language(50))
         else:
@@ -112,7 +121,8 @@ class AccountSettings(xbmcgui.WindowXML):
             self.addItem(self.SettingListItem(self.language(52), self.language(76)))
         else:
             self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password").decode("hex"))))
-        self.addItem(self.SettingListItem(self.language(53), self.defaultaccount))
+        self.addItem(self.language(53))
+        self.addItem("Startup Mini-Mode")
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -184,6 +194,10 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.defaultaccount = not self.defaultaccount
                 self.getControl(104).setSelected(self.defaultaccount)
                 self.checkforchanges()
+            elif curPos == 3:
+                self.mmaccount = not self.mmaccount
+                self.getControl(105).setSelected(self.mmaccount)
+                self.checkforchanges()
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
@@ -208,23 +222,33 @@ class AccountSettings(xbmcgui.WindowXML):
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
-            if self.defaultaccount:
-                self.theSettings.setSetting("Default Account", self.account)
-            else:
-                if self.theSettings.getSetting("Default Account") == self.account:
-                    self.theSettings.setSetting("Default Account", "-")
-            self.theSettings.saveXMLfromArray()
-            self.getControl(64).setEnabled(False)
-            self.setupcompsetts()
-            self.saved = True
-            self.unsaveddef = self.defaultaccount
-            self.accounts = self.buildaccounts()
-            self.savedaccountname = self.account
-            self.getControl(81).setLabel(self.account)
-            self.builddirs()
-            self.newaccount = False
-            self.launchinfo(48,"",self.language(49))
-            self.setFocusId(65)
+            try:
+                if self.defaultaccount:
+                    self.theSettings.setSetting("Default Account", self.account)
+                else:
+                    if self.theSettings.getSetting("Default Account") == self.account:
+                        self.theSettings.setSetting("Default Account", "-")
+                if self.mmaccount:
+                    self.theSettings.setSetting("Mini Mode Account", self.account)
+                    XinBox_Util.addauto(self.scriptPath, self.account)
+                else:
+                    if self.theSettings.getSetting("Mini Mode Account") == self.account:
+                        self.theSettings.setSetting("Mini Mode Account", "-")
+                        XinBox_Util.removeauto(self.scriptPath, self.account)
+                self.theSettings.saveXMLfromArray()
+                self.getControl(64).setEnabled(False)
+                self.setupcompsetts()
+                self.saved = True
+                self.unsavemm = self.mmaccount
+                self.unsaveddef = self.defaultaccount
+                self.accounts = self.buildaccounts()
+                self.savedaccountname = self.account
+                self.getControl(81).setLabel(self.account)
+                self.builddirs()
+                self.newaccount = False
+                self.launchinfo(48,"",self.language(49))
+                self.setFocusId(65)
+            except:traceback.print_exc()
         elif ( controlID == 65):
             if not self.saved:
                 dialog = xbmcgui.Dialog()
@@ -313,14 +337,6 @@ class AccountSettings(xbmcgui.WindowXML):
        
     def SettingListItem(self, label1,label2):
         if label2 == "-":
-            return xbmcgui.ListItem(label1,"","","")
-        elif label2 == "True":
-            self.defaultaccount = True
-            self.getControl(104).setSelected(self.defaultaccount)
-            return xbmcgui.ListItem(label1,"","","")
-        elif label2 == "False":
-            self.defaultaccount = False
-            self.getControl(104).setSelected(self.defaultaccount)
             return xbmcgui.ListItem(label1,"","","")
         else:
             return xbmcgui.ListItem(label1,label2,"","")

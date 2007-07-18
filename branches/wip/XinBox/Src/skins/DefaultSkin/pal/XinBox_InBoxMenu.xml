@@ -181,11 +181,29 @@
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
                 </control>
+                <control type="checkmark" id="108">
+                    	<description>Mini Mode Status</description>
+                    	<posx>515</posx>
+                    	<posy>442</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
 		<control type="group" id="9000">
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
 			<posx>183</posx>
-			<posy>462</posy>
+			<posy>485</posy>
 			<control type="button" id="61">
 				<description>Test Button</description>
 				<posx>0</posx>
@@ -207,7 +225,7 @@
 			</control>
 			<control type="button" id="62">
 				<description>OK Button</description>
-				<posx>258</posx>
+				<posx>259</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -229,7 +247,7 @@
 			<posx>175</posx>
 			<posy>145</posy>
 			<width>400</width>
-			<height>300</height>
+			<height>330</height>
 			<ondown>9000</ondown>
 			<scrolltime>200</scrolltime>
 			<animation effect="fade" time="1000">WindowOpen</animation>

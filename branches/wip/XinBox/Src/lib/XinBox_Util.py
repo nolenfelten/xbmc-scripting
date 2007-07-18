@@ -1,5 +1,6 @@
 
 import os, sys
+from os.path import join, exists
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
 AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
@@ -55,3 +56,45 @@ def getfiletypes(filetype):
     elif filetype in ARCHIVETYPES: return "Archive"
     else: return "Unknown"
     
+
+def addauto(scriptpath, accountname):
+        changing = False
+        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + ')")'
+        script2 = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py"
+        autoexecfile = "Q:\\scripts\\autoexec.py"                      
+        if os.path.exists(autoexecfile):
+                fh = open(autoexecfile)
+                lines = []
+                for line in fh.readlines():
+                     theLine = line.strip()
+                     if script2 in theLine:
+                         changing = True
+                         lines.append(Script+"\n")
+                     else:lines.append(line)
+                if not changing:lines.append(Script+"\n")
+                fh.close()
+                if not "import xbmc\n" in lines:lines.append("import xbmc\n")
+                f = open(autoexecfile, "w")
+                f.writelines(lines)
+                f.close()
+                return
+        else:
+                f = open(autoexecfile, "w")
+                f.write("import xbmc\n")
+                f.write(Script)
+                f.close()
+                return
+
+
+def removeauto(scriptpath, accountname):
+        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + ')")'
+        autoexecfile = "Q:\\scripts\\autoexec.py"
+        if os.path.exists(autoexecfile):
+                fh = open(autoexecfile)
+                lines = [ line for line in fh if not line.strip().startswith(Script) ]
+                fh.close()
+                f = open(autoexecfile, "w")
+                f.writelines(lines)
+                f.close()
+                return
+        return
