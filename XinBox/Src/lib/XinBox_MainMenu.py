@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os
+import xbmc, xbmcgui, time, sys, os, traceback
 
 import default
 import XinBox_InfoDialog
@@ -24,6 +24,7 @@ defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"]
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0):
+        print "welcome to XinBox"
         self.init = 0
 
     def loadsettings(self):

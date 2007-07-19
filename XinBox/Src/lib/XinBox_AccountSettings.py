@@ -17,7 +17,8 @@ class Account_Settings (AccountSettings):
             "Account Password": ["-","text"],
             "Default Inbox": ["-","text"],
             "Account Hash": ["-","text"],
-            "Inboxes": [['Inbox',[]],"list"],}
+            "Inboxes": [['Inbox',[]],"list"],
+            "MiniMode Time": ["60","text"],}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")
 
