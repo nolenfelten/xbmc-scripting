@@ -42,8 +42,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
-        xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.Reset(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.Reset(emaildialog)")
 
     def setupemail(self):
         self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
@@ -60,7 +60,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(64).setEnabled(False)
             xbmcgui.unlock()
             self.animating = True
-            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
             time.sleep(0.8)
             self.animating = False
         else:
@@ -95,7 +95,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.getControl(81).addItem(attachment[0])
             self.animating = True
             xbmcgui.unlock()
-            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
             time.sleep(1.2)
             self.attachlist = not self.attachlist
             self.getControl(81).setEnabled(self.attachlist)
@@ -371,8 +371,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.attachlist:
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
             time.sleep(0.9)
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-        xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
+        xbmc.executebuiltin("Skin.Reset(emaildialog)")
         time.sleep(0.9)
         self.close()
 

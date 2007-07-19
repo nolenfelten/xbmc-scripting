@@ -123,6 +123,7 @@ class AccountSettings(xbmcgui.WindowXML):
             self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password").decode("hex"))))
         self.addItem(self.language(53))
         self.addItem("Startup Mini-Mode")
+        self.addItem(self.SettingListItem("Mini-Mode Delay (s)", self.accountSettings.getSetting("MiniMode Time")))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -198,6 +199,11 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.mmaccount = not self.mmaccount
                 self.getControl(105).setSelected(self.mmaccount)
                 self.checkforchanges()
+            elif curPos == 4:
+                dialog = xbmcgui.Dialog()
+                value = dialog.numeric(0, "Mini-Mode Delay (s)", curName2)
+                curItem.setLabel2(value)
+                self.accountSettings.setSetting("MiniMode Time",value)
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
@@ -230,11 +236,11 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.theSettings.setSetting("Default Account", "-")
                 if self.mmaccount:
                     self.theSettings.setSetting("Mini Mode Account", self.account)
-                    XinBox_Util.addauto(self.scriptPath, self.account)
+                    XinBox_Util.addauto(self.scriptPath, self.account, self.scriptPath)
                 else:
                     if self.theSettings.getSetting("Mini Mode Account") == self.account:
                         self.theSettings.setSetting("Mini Mode Account", "-")
-                        XinBox_Util.removeauto(self.scriptPath, self.account)
+                        XinBox_Util.removeauto(self.scriptPath, self.account, self.scriptPath)
                 self.theSettings.saveXMLfromArray()
                 self.getControl(64).setEnabled(False)
                 self.setupcompsetts()

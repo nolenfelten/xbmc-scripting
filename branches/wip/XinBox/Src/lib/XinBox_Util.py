@@ -2,6 +2,14 @@
 import os, sys
 from os.path import join, exists
 
+__scriptsettings__ = "P:\\script_data\\"
+__scriptpath__ = os.getcwd().replace(";","")+"\\"
+__scriptname__ = 'XinBox'
+__author__ = 'Stanley87'
+__url__ = 'http://xbmc-scripting.googlecode.com/svn/branches/wip/XinBox/'
+__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
+__version__ = 'V.1.0'
+
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
 AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
 VIDEOTYPES = ["avi","wmv","mpg"]
@@ -57,9 +65,9 @@ def getfiletypes(filetype):
     else: return "Unknown"
     
 
-def addauto(scriptpath, accountname):
+def addauto(scriptpath, accountname, srcpath):
         changing = False
-        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + ')")'
+        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + "," + srcpath.replace("\\","\\\\") + ')")'
         script2 = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py"
         autoexecfile = "Q:\\scripts\\autoexec.py"                      
         if os.path.exists(autoexecfile):
@@ -86,8 +94,8 @@ def addauto(scriptpath, accountname):
                 return
 
 
-def removeauto(scriptpath, accountname):
-        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + ')")'
+def removeauto(scriptpath, accountname, srcpath):
+        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + "," + srcpath.replace("\\","\\\\") + ')")'
         autoexecfile = "Q:\\scripts\\autoexec.py"
         if os.path.exists(autoexecfile):
                 fh = open(autoexecfile)

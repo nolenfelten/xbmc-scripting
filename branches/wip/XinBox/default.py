@@ -9,7 +9,7 @@
 #A pop3 + SMTP email client for XBMC #
 #                                    #
 ######################################
-import sys, os, xbmc
+import sys, os, xbmc, time
 
 scriptpath = sys.path[0]
 sys.path.append( os.path.join( sys.path[0], 'src', 'lib' ) )
@@ -37,6 +37,10 @@ __acredits_l3__ = 'Language Routine'
 __acredits_r3__ = 'Rockstar & Donno'
 
 if __name__ == '__main__':
+        if not xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+                xbmc.executebuiltin("Skin.ToggleSetting(mmrunning)")
+                while not xbmc.getCondVisibility('Skin.HasSetting(mmfinished)'):time.sleep(0.1)
         w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",__scriptpath__ + "src","DefaultSkin")
         w.doModal()
         del w
+

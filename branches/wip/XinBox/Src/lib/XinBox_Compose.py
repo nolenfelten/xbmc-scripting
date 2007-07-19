@@ -18,8 +18,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def setupvars(self):
         xbmcgui.lock()
-        xbmc.executebuiltin("Skin.SetBool(attachlistnotempty)")
-        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.Reset(attachlistnotempty)")
+        xbmc.executebuiltin("Skin.Reset(emaildialog)")
         self.attachlist = False
         if self.mydraft[5] == None:self.attachments = []
         else:self.attachments = self.mydraft[5]
@@ -59,7 +59,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(81).setEnabled(True)
             self.animating = True
             xbmcgui.unlock()
-            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
             time.sleep(1.2)
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
             time.sleep(0.8)
@@ -67,7 +67,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             self.animating = True
             xbmcgui.unlock()
-            xbmc.executebuiltin("Skin.SetBool(emaildialog)")
+            xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
             time.sleep(0.8)
             self.animating = False            
             self.getControl(81).setEnabled(False)
@@ -216,8 +216,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.attachlist:
             xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
             time.sleep(0.9)
-        xbmc.executebuiltin("Skin.SetBool(emaildialog)")
-        xbmc.executebuiltin("Skin.ToggleSetting(emaildialog)")
+        xbmc.executebuiltin("Skin.Reset(emaildialog)")
         time.sleep(0.9)
         if self.returnvalue == 0:
             if len(self.attachments) != 0:self.removefiles(TEMPFOLDER)
