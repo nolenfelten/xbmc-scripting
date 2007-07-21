@@ -26,7 +26,9 @@ if __name__ == '__main__':
                 while not xbmc.getCondVisibility('Skin.HasSetting(mmfinished)')and not xbmc.getCondVisibility('Skin.HasSetting(timerunning)'):time.sleep(0.1)
                 dialog.update(100,"Shutting down Mini-Mode")
                 dialog.close()
-                w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath+ "src","DefaultSkin",bforeFallback=False,minimode=sys.argv[1:][0])
+                try:
+                        w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath+ "src","DefaultSkin",bforeFallback=False,minimode=sys.argv[1:][0])
+                except:w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath + "src","DefaultSkin")
         else:w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath + "src","DefaultSkin")
         w.doModal()
         del w
