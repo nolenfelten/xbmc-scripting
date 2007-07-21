@@ -9,11 +9,11 @@ __tempdir__ = "P:\\script_data\\XinBox\\Temp\\"
 __autoexecdir__ = "Q:\\scripts\\"
 
 
-__scriptname__ = 'XinBoxffs'
+__scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/branches/wip/XinBox/'
-__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
 __version__ = 'V.1.1'
+
 
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]

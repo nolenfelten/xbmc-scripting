@@ -9,9 +9,11 @@ from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 from XinBox_Language import Language
 import XinBox_MyAccountMenu
+import XinBox_About
 
 TITLE = XinBox_Util.__scriptname__
 VERSION =  XinBox_Util.__version__
+URL = XinBox_Util.__url__
 
 defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"],"Accounts": [['Account',[]],"list"]}
 
@@ -87,7 +89,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(83).setLabel(self._(21))
         MenuItems = [xbmcgui.ListItem(self._(11),self._(16),"XBlogin.png","XBlogin.png"),
                      xbmcgui.ListItem(self._(12),self._(17),"XBcreatenew.png","XBcreatenew.png"),
-                     xbmcgui.ListItem(self._(13),self._(18),"XBchangesettings.png","XBchangesettings.png"),
+                     xbmcgui.ListItem(self._(13),self._(19),"XBchangesettings.png","XBchangesettings.png"),
                      xbmcgui.ListItem(self._(14),self._(19),"XBabouticon.png","XBabouticon.png"),
                      xbmcgui.ListItem(self._(15),self._(19),"XBquiticon.png","XBquiticon.png")]
         for item in MenuItems:
@@ -111,9 +113,14 @@ class GUI( xbmcgui.WindowXML ):
             elif self.getCurrentListPosition() == 2:
                 pass
             elif self.getCurrentListPosition() == 3:
-                pass
+                self.launchabout()
             elif self.getCurrentListPosition() == 4:
                 self.close()
+
+    def launchabout(self):
+        w = XinBox_About.GUI("XinBox_About.xml",self.srcpath,"DefaultSkin",lang=self._)
+        w.doModal()
+        del w
                     
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
