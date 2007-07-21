@@ -1,15 +1,16 @@
 
 
 
-import xbmcgui, xbmc, os, random, traceback
+import xbmcgui, xbmc, os, random
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
 from os.path import join, exists
 from os import mkdir
 from XinBox_Settings import Settings
-DATADIR = "P:\\script_data\\"
-SETTINGSDIR = "P:\\script_data\\XinBox\\Accounts\\"
+
+DATADIR = XinBox_Util.__datadir__
+SETTINGSDIR = XinBox_Util.__accountsdir__
 
 class AccountSettings(xbmcgui.WindowXML):
     def __init__(self, xmlName, thescriptPath,defaultName,forceFallback, scriptSettings,language, title, account):
@@ -88,7 +89,7 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.saved = False
                 elif self.mmaccount != self.unsavemm:
                     self.getControl(64).setEnabled(True)
-                    self.saved = False                    
+                    self.saved = False                   
                 else:
                     self.getControl(64).setEnabled(False)
                     self.saved = True
@@ -204,6 +205,7 @@ class AccountSettings(xbmcgui.WindowXML):
                 value = dialog.numeric(0, "Mini-Mode Delay (s)", curName2)
                 curItem.setLabel2(value)
                 self.accountSettings.setSetting("MiniMode Time",value)
+                self.checkforchanges()
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):
@@ -228,33 +230,31 @@ class AccountSettings(xbmcgui.WindowXML):
             else:self.launchinboxmenu(inboxname)
             self.setFocusId(9000)
         elif ( controlID == 64):
-            try:
-                if self.defaultaccount:
-                    self.theSettings.setSetting("Default Account", self.account)
-                else:
-                    if self.theSettings.getSetting("Default Account") == self.account:
-                        self.theSettings.setSetting("Default Account", "-")
-                if self.mmaccount:
-                    self.theSettings.setSetting("Mini Mode Account", self.account)
-                    XinBox_Util.addauto(self.scriptPath, self.account, self.scriptPath)
-                else:
-                    if self.theSettings.getSetting("Mini Mode Account") == self.account:
-                        self.theSettings.setSetting("Mini Mode Account", "-")
-                        XinBox_Util.removeauto(self.scriptPath, self.account, self.scriptPath)
-                self.theSettings.saveXMLfromArray()
-                self.getControl(64).setEnabled(False)
-                self.setupcompsetts()
-                self.saved = True
-                self.unsavemm = self.mmaccount
-                self.unsaveddef = self.defaultaccount
-                self.accounts = self.buildaccounts()
-                self.savedaccountname = self.account
-                self.getControl(81).setLabel(self.account)
-                self.builddirs()
-                self.newaccount = False
-                self.launchinfo(48,"",self.language(49))
-                self.setFocusId(65)
-            except:traceback.print_exc()
+            if self.defaultaccount:
+                self.theSettings.setSetting("Default Account", self.account)
+            else:
+                if self.theSettings.getSetting("Default Account") == self.account:
+                    self.theSettings.setSetting("Default Account", "-")
+            if self.mmaccount:
+                self.theSettings.setSetting("Mini Mode Account", self.account)
+                XinBox_Util.addauto(self.scriptPath, self.account, self.scriptPath)
+            else:
+                if self.theSettings.getSetting("Mini Mode Account") == self.account:
+                    self.theSettings.setSetting("Mini Mode Account", "-")
+                    XinBox_Util.removeauto(self.scriptPath, self.account, self.scriptPath)
+            self.theSettings.saveXMLfromArray()
+            self.getControl(64).setEnabled(False)
+            self.setupcompsetts()
+            self.saved = True
+            self.unsavemm = self.mmaccount
+            self.unsaveddef = self.defaultaccount
+            self.accounts = self.buildaccounts()
+            self.savedaccountname = self.account
+            self.getControl(81).setLabel(self.account)
+            self.builddirs()
+            self.newaccount = False
+            self.launchinfo(48,"",self.language(49))
+            self.setFocusId(65)
         elif ( controlID == 65):
             if not self.saved:
                 dialog = xbmcgui.Dialog()

@@ -3,8 +3,9 @@
 import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile
 import XinBox_Util
 import XinBox_InfoDialog
-TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
 from sgmllib import SGMLParser
+
+TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
@@ -145,7 +146,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
-                self.replyvalue = [self.getem(self.emfrom),"","",self.language(318) + " " + self.subject,self.getreply(self.body),self.attachments]
+                self.replyvalue = [self.getem(self.emfrom),"","",self.language(318) + " " + self.subject,self.getreply(self.body),[]]
                 self.exitme()
             elif controlID == 62:
                 self.replyvalue = ["","","",self.language(319) + " " + self.subject,self.getreply(self.body),self.attachments]
@@ -240,7 +241,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def saveattachment(self,pos):
         dialog = xbmcgui.Dialog()
-        ret = dialog.browse(0, self.language(268) % self.attachments[pos][0], 'files')
+        ret = dialog.browse(3, self.language(268) % self.attachments[pos][0], 'files')
         if ret:
             try:
                 shutil.copy(TEMPFOLDER + self.attachments[pos][0], ret)

@@ -7,11 +7,13 @@ from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 from os.path import join, exists
 from os import mkdir
-ACCOUNTSDIR = "P:\\script_data\\XinBox\\Accounts\\"
 import XinBox_Inbox
 
+ACCOUNTSDIR = XinBox_Util.__accountsdir__
+
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theaccount = False, title = False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theaccount = False, title = False, minibox=False):
+        self.minibox = minibox
         self.init = 0
         self.srcpath = strFallbackPath
         self.language = lang
@@ -33,10 +35,12 @@ class GUI( xbmcgui.WindowXML ):
             xbmcgui.unlock()
 
     def checkdefault(self):
-        if self.accountsettings.getSetting("Default Inbox") != "-":
-            self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
+        if self.accountsettings.getSetting("Default Inbox") != "-" or self.minibox != False:
+            if self.minibox != False:self.launchinbox(self.minibox)
+            else:self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
         
     def setupvars(self):
+        self.mmenabled = 0
         self.control_action = XinBox_Util.setControllerAction()
         
     def onFocus(self, controlID):
@@ -53,7 +57,11 @@ class GUI( xbmcgui.WindowXML ):
             if dialog.yesno(self.language(77), self.language(201), self.language(202)):
                 self.deleteaccount()
         elif ( controlID == 63):
-            self.close()
+            self.launchmm()
+
+    def launchmm(self):
+        self.mmenabled = self.account
+        self.close()
 
     def deleteaccount(self):
         self.settings.removeinbox("Accounts",self.account)
@@ -89,7 +97,7 @@ class GUI( xbmcgui.WindowXML ):
             elif focusid == 62:
                 self.launchinfo(127,self.language(63))
             elif focusid == 63:
-                self.launchinfo(128,self.language(65))
+                self.launchinfo(135,self.language(252))
 
 
     def setupcontrols(self):
@@ -100,7 +108,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(62))
         self.getControl(62).setLabel(self.language(63))
-        self.getControl(63).setLabel(self.language(65))
+        self.getControl(63).setLabel(self.language(252))
         self.buildinboxes()
 
     def buildinboxes(self):

@@ -48,6 +48,7 @@ class GUI( xbmcgui.WindowXML ):
         else:self.close()
 
     def setupvars(self):
+        self.mmenabled = 0
         self.control_action = XinBox_Util.setControllerAction()
         
     def onFocus(self, controlID):
@@ -81,7 +82,9 @@ class GUI( xbmcgui.WindowXML ):
     def launchaccountmenu(self, account):
         w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",self.scriptPath,"DefaultSkin",lang=self.language,theaccount=account,title=self.title)
         w.doModal()
+        self.mmenabled = w.mmenabled
         del w
+        if self.mmenabled != 0:self.close()
 
     def launchinfo(self, focusid, label,heading=False,text=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading,thetext=text)
