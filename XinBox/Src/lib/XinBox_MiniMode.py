@@ -1,37 +1,58 @@
-import time, sys, xbmc, xbmcgui, traceback
+import time, sys, xbmc, xbmcgui
 from XinBox_Settings import Settings
 import XinBox_Util
 from XinBox_EmailEngine import Email
 from XinBox_Language import Language
 import threading
+import XinBox_MainMenu
+from XinBox_Language import Language
 
-
-TITLE = "XinBox"
+TITLE = XinBox_Util.__scriptname__
 
 
 class Minimode:
     def init(self):
-        print "minimode starting"
+        print "XinBox Mini-Mode: Started"
         self.exit = False
-        xbmc.executebuiltin("Skin.Reset(mmfinished)")
-        xbmc.executebuiltin("Skin.Reset(mmrunning)")
-        time.sleep(1)
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
+        lang = Language(TITLE)
+        lang.load(self.srcpath + "//language")
+        self.language = lang.string
+        xbmc.executebuiltin("Skin.SetBool(mmfinished)")
+        xbmc.executebuiltin("Skin.ToggleSetting(mmfinished)")
+        xbmc.executebuiltin("Skin.SetBool(mmrunning)")
+        xbmc.executebuiltin("Skin.SetBool(timerunning)")
+        xbmc.executebuiltin("Skin.ToggleSetting(timerunning)")
+        time.sleep(2)
         self.loadsettings()
         self.inboxes = self.buildinboxdict()
         if not len(self.inboxes) == 0:self.startmm()
-        print "minimode finished"
+        print "XinBox Mini-Mode: Closed"
         xbmc.executebuiltin("Skin.ToggleSetting(mmfinished)")
+        xbmc.executebuiltin("Skin.Reset(mmrunning)")
+        if self.exit:
+            w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox)
+            w.doModal()
+            del w
+        
 
     def startmm(self):
-        while not xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
-            print "hmmm"
+        while xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+            print "XinBox Mini-Mode: Checking of Inboxes Started"
             for inbox in self.inboxes:
-                self.currinbox = inbox
-                inboxsettings = self.accountsettings.getSettingInListbyname("Inboxes",inbox)
-                self.checkfornew(inboxsettings,inbox)
-            time.sleep(int(self.accountsettings.getSetting("MiniMode Time")))
+                if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+                    print "XinBox Mini-Mode: Checking Inbox: " + str(inbox)
+                    inboxsettings = self.accountsettings.getSettingInListbyname("Inboxes",inbox)
+                    self.checkfornew(inboxsettings,inbox)
+                    if self.exit:return
+                else:return
+            if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+                print "XinBox Mini-Mode: Starting Delay (" + self.accountsettings.getSetting("MiniMode Time") + "s)"
+                xbmc.executebuiltin("Skin.SetBool(timerunning)")
+                time.sleep(int(self.accountsettings.getSetting("MiniMode Time")))
+                xbmc.executebuiltin("Skin.ToggleSetting(timerunning)")
+                print "XinBox Mini-Mode: Delay Finished"
         return
         
     def buildinboxdict(self):
@@ -50,13 +71,23 @@ class Minimode:
         w.checkemail()
         newlist = w.newlist
         del w
-        if len(newlist) != 0:self.popup(newlist)
+        if len(newlist) != 0:
+            print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : " + str(len(newlist)) + " New Emails"
+            self.popup(newlist, inbox, ibsettings)
+        else:print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : No New Emails"
 
-    def popup(self, newlist):
-        mymessage = "Inbox: " + str(self.currinbox) + "\n" + str(len(newlist)) + " # new emails recieved"
-        w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message = mymessage)
-        w.doModal()
-        del w
+    def popup(self, newlist, inbox, ibsettings):
+        if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+            xbmc.playSFX(ibsettings.getSetting("Email Notification"))
+            mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
+            print "mymessage = " + str(mymessage)
+            w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message = mymessage)
+            w.doModal()
+            self.returnval = w.returnval
+            del w
+            if self.returnval == 1:
+                self.inbox = inbox
+                self.exit = True
 
 
 class Popup( xbmcgui.WindowXMLDialog ):
@@ -65,10 +96,10 @@ class Popup( xbmcgui.WindowXMLDialog ):
         self.control_action = XinBox_Util.setControllerAction()
 
     def onInit(self):
-        xbmc.executebuiltin("Skin.Reset(showpopup)")
+        self.returnval = 0
         self.getControl(21).setText(self.message)
         self.animating = True
-        xbmc.executebuiltin("Skin.ToggleSetting(showpopup)")
+        xbmc.executebuiltin("Skin.SetBool(showpopup)")
         time.sleep(0.5)
         self.animating = False
         self.showing = True
@@ -79,7 +110,7 @@ class Popup( xbmcgui.WindowXMLDialog ):
         time.sleep(8)
         if self.showing:
             self.animating = True
-            xbmc.executebuiltin("Skin.Reset(showpopup)")
+            xbmc.executebuiltin("Skin.ToggleSetting(showpopup)")
             time.sleep(0.5)
             self.animating = False
             self.close()
@@ -96,13 +127,19 @@ class Popup( xbmcgui.WindowXMLDialog ):
             try:control = self.getFocus()
             except: control = 0
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
-                self.animating = True
-                xbmc.executebuiltin("Skin.Reset(showpopup)")
-                time.sleep(0.5)
-                self.animating = False
-                self.returnval = 0
-                self.showing = False
+                self.exitme()
+            elif ( button_key == 'Keyboard Right Arrow' or button_key == 'A Button' or button_key == 'Remote Title' ):
+                self.returnval = 1
                 self.close()
+
+    def exitme(self):
+        self.animating = True
+        xbmc.executebuiltin("Skin.ToggleSetting(showpopup)")
+        time.sleep(0.5)
+        self.animating = False
+        self.returnval = 0
+        self.showing = False
+        self.close()        
 
     def onFocus(self, controlID):
         pass    

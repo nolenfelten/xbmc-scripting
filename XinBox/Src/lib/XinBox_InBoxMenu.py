@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util
 import XinBox_InfoDialog
 from XinBox_EmailEngine import TestInbox

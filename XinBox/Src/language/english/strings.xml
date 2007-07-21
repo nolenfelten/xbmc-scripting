@@ -20,7 +20,6 @@
 	<string id="30">Login Menu</string>
 	<string id="31">Please enter Account Password</string>
 	<string id="32">In-correct Password Entered</string>
-	<string id="33">Please enter Default Account Password</string>
 
 	<!-- Test Inbox Labels -->
 	<string id="34">Testing Servers</string>
@@ -234,4 +233,7 @@
 	<string id="332">Send this email?</string>
 	<string id="333">Clear</string>
 	<string id="334">Clear Email Body?</string>
+
+	<!-- Mini-Mode Labels -->
+	<string id="350">Clear Email Body?</string>
 </strings>

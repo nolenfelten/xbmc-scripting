@@ -1,9 +1,12 @@
 
 
-import xbmc, xbmcgui, time, sys, os, string, traceback
+import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
 from os.path import join, exists, basename,getsize
-TEMPFOLDER = "P:\\script_data\\XinBox\\Temp\\"
+
+TEMPFOLDER = XinBox_Util.__tempdir__
+
+
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False):
         self.mydraft = mydraft

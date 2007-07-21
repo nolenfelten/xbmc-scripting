@@ -9,38 +9,26 @@
 #A pop3 + SMTP email client for XBMC #
 #                                    #
 ######################################
-import sys, os, xbmc, time
+import sys, os, xbmc, time, xbmcgui
 
-scriptpath = sys.path[0]
 sys.path.append( os.path.join( sys.path[0], 'src', 'lib' ) )
 
 import XinBox_MainMenu
 
-__scriptsettings__ = "P:\\script_data\\"
-__scriptpath__ = os.getcwd().replace(";","")+"\\"
-__scriptname__ = 'XinBox'
-__author__ = 'Stanley87'
-__url__ = 'http://xbmc-scripting.googlecode.com/svn/branches/wip/XinBox/'
-__credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
-__version__ = 'V.1.0'
-
-__credits_l1__ = 'Head Developer & Coder'
-__credits_r1__ = 'Stanley87'
-__credits_l2__ = ''
-__credits_r2__ = ''
-__credits_l3__ = ''
-__credits_r3__ = ''
-
-__acredits_l1__ = 'Xbox Media Center'
-__acredits_r1__ = 'Team XBMC'
-__acredits_l3__ = 'Language Routine'
-__acredits_r3__ = 'Rockstar & Donno'
+scriptpath = os.getcwd().replace(";","")+"\\"
 
 if __name__ == '__main__':
-        if not xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+        print "XinBox: Started"
+        if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+                dialog = xbmcgui.DialogProgress()
+                dialog.create("Please Wait", "Shutting down Mini-Mode")
                 xbmc.executebuiltin("Skin.ToggleSetting(mmrunning)")
-                while not xbmc.getCondVisibility('Skin.HasSetting(mmfinished)'):time.sleep(0.1)
-        w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",__scriptpath__ + "src","DefaultSkin")
+                while not xbmc.getCondVisibility('Skin.HasSetting(mmfinished)')and not xbmc.getCondVisibility('Skin.HasSetting(timerunning)'):time.sleep(0.1)
+                dialog.update(100,"Shutting down Mini-Mode")
+                dialog.close()
+                w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath+ "src","DefaultSkin",bforeFallback=False,minimode=sys.argv[1:][0])
+        else:w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath + "src","DefaultSkin")
         w.doModal()
         del w
+        print "XinBox: Closed"
 

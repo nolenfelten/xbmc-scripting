@@ -3,11 +3,12 @@ from xml.dom import minidom
 from os.path import join, exists
 from os import mkdir
 import re
+import XinBox_Util
 
-DATADIR = "P:\\script_data\\"
-SETTINGSDIR = "P:\\script_data\\XinBox\\"
-ACCOUNTDIR = "P:\\script_data\\XinBox\\Accounts\\"
-TEMPDIR = "P:\\script_data\\XinBox\\Temp\\"
+DATADIR = XinBox_Util.__datadir__
+SETTINGSDIR = XinBox_Util.__settingdir__
+ACCOUNTDIR = XinBox_Util.__accountsdir__
+TEMPDIR = XinBox_Util.__tempdir__
 
 class Settings:
     """

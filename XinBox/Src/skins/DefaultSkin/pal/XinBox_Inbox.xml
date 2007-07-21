@@ -1,6 +1,6 @@
 <window>
 	<defaultcontrol>61</defaultcontrol>
-	<allowoverlay>yes</allowoverlay>
+	<allowoverlay>no</allowoverlay>
 	<controls>
 		<control type="image">
 			<description>Menu Open</description>
@@ -125,7 +125,7 @@
 			<control type="button" id="63">
 				<description>Reset Button</description>
 				<posx>0</posx>
-				<posy>320</posy>
+				<posy>379</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
@@ -142,32 +142,13 @@
 				<height>37</height>
 			</control>
 			<control type="button" id="64">
-				<description>MiniMode Button</description>
-				<posx>0</posx>
-				<posy>379</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>-</label>
-				<onup>63</onup>
-				<onleft>64</onleft>
-				<onright>50</onright>
-				<ondown>65</ondown>
-				<align>center</align>
-				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>108</width>
-				<height>37</height>
-			</control>
-			<control type="button" id="65">
 				<description>Exit Button</description>
 				<posx>0</posx>
 				<posy>436</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onup>64</onup>
+				<onup>63</onup>
 				<onleft>65</onleft>
 				<onright>50</onright>
 				<ondown>65</ondown>
