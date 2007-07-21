@@ -12,10 +12,10 @@ import urllib2
 import md5
 #import traceback
 import time
-import socket
+#import socket
 from utilities import *
 
-socket.setdefaulttimeout( 20 )
+#socket.setdefaulttimeout( 20 )
 
 __module_name__ = 'cacheurl'
 __module_version__ = '0.1'

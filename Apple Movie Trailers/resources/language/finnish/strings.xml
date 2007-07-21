@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- pre-0.98.7          13.7.2007 Finnish -->
+  <!-- pre-0.98.7          14.7.2007 Finnish -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -90,15 +90,15 @@
   <string id="157">Pääosissa</string>
   <string id="158">Täysi</string>
   <string id="159">Minimi</string>
-  <string id="160">HD esittelyt</string>
+  <string id="160">HD-esittelyt</string>
   <string id="161">Ei esittelyn osoitetta</string>
   <string id="162">Määriteltyhaku</string>
   <string id="163">Katsotut</string>
       
   <!-- Settings labels -->
   <string id="200">Valitse:</string>
-  <string id="201">Skini</string>
-  <string id="202">Esittelyn laatu</string>
+  <string id="201">Ulkoasu</string>
+  <string id="202">Kuvanlaatu</string>
   <string id="203">Toimintatapa</string>
   <string id="204">Tallennuskansio</string>
   <string id="205">Kuvakenäkymä</string>
@@ -110,8 +110,8 @@
   <string id="211">Päivitä käynnistyessä uusimmat</string>
   <string id="212">Yksinkertainen haku käytössä</string>
   <string id="213">Sopivat sanat ainoastaan</string>
-  <string id="214">Videosoittimen resoluutio</string>
-  <string id="215">Kaikki kirjainkoot käytössä</string>
+  <string id="214">Videon toistoresoluutio</string>
+  <string id="215">Suuret kirjaimet käytössä</string>
   <string id="216">Zip koodi</string>
   <string id="217">Tarkista päivitykset käynnistyessä</string>
   <string id="218">Esitystenhaku</string>
