@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Email
@@ -69,11 +69,13 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitme()
 
     def exitme(self):
-        self.animating = True
-        self.updateicons()
-        self.removefiles(TEMPFOLDER)
-        self.animating = False
-        self.close()
+        try:
+            self.animating = True
+            self.updateicons()
+            self.removefiles(TEMPFOLDER)
+            self.animating = False
+            self.close()
+        except:traceback.print_exc()
 
     def cleaninbox(self):
         dialog = xbmcgui.Dialog()
@@ -146,24 +148,25 @@ class GUI( xbmcgui.WindowXML ):
             self.deletemail(pos, returnval)
 
     def updateicons(self):
-        dialog = xbmcgui.DialogProgress()
-        dialog.create(self.language(210) + self.inbox, "updating inbox id file...")
-        writelist = []
-        f = open(self.ibfolder + "emid.xib", "r")
-        for line in f.readlines():
-            myarray = False
-            theline = line.strip("\n")
-            myline = theline.split("|")
-            if myline[0] != "-":
-                if myline[0] in self.chicon:
-                    writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|1|0\n")
-                else:writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|" + myline[6]+ "|0\n")
-            else:writelist.append(line)
-        f.close()
-        f = open(self.ibfolder + "emid.xib", "w")
-        f.writelines(writelist)
-        f.close()
-        dialog.close()
+        if exists(self.ibfolder + "emid.xib"):
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(self.language(210) + self.inbox, "updating inbox id file...")
+            writelist = []
+            f = open(self.ibfolder + "emid.xib", "r")
+            for line in f.readlines():
+                myarray = False
+                theline = line.strip("\n")
+                myline = theline.split("|")
+                if myline[0] != "-":
+                    if myline[0] in self.chicon:
+                        writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|1|0\n")
+                    else:writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|" + myline[6]+ "|0\n")
+                else:writelist.append(line)
+            f.close()
+            f = open(self.ibfolder + "emid.xib", "w")
+            f.writelines(writelist)
+            f.close()
+            dialog.close()
 
     def sendemail(self, draft=["","","","","",None]):
         w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
