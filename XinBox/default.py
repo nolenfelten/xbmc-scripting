@@ -20,7 +20,7 @@ import XinBox_Util
 scriptpath = os.getcwd().replace(";","")+"\\"
 
 lang = Language(XinBox_Util.__scriptname__)
-lang.load(scriptpath + "//src//language")
+lang.load(scriptpath + "\\src\\language")
 _ = lang.string
 
 if __name__ == '__main__':
