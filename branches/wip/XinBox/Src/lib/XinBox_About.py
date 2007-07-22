@@ -7,13 +7,13 @@ import XinBox_Util
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName, lang=False):
-        f = open(strFallbackPath + "//credits//about.txt")
+        f = open(strFallbackPath + "\\credits\\about.txt")
         self.aboutcr = f.read()
         f.close()
-        f = open(strFallbackPath + "//credits//language.txt")
+        f = open(strFallbackPath + "\\credits\\language.txt")
         self.languagecr = f.read()
         f.close()
-        f = open(strFallbackPath + "//credits//skinning.txt")
+        f = open(strFallbackPath + "\\credits\\skinning.txt")
         self.skinningcr = f.read()
         f.close()
         self.lang = lang
