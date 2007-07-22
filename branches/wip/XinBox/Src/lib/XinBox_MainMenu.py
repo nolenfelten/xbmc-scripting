@@ -69,7 +69,7 @@ class GUI( xbmcgui.WindowXML ):
         self.mmenabled = w.mmenabled
         del w
         if self.mmenabled != 0:
-            xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath.replace("\\","\\\\") + ')')
+            xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath+ "\\lib\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath + ')')
             self.close()
         
     def getaccountsettings(self,account):
@@ -149,7 +149,7 @@ class GUI( xbmcgui.WindowXML ):
         self.mmenabled = w.mmenabled
         del w
         if self.mmenabled != 0:
-            xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath.replace("\\","\\\\") + ')')
+            xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath + "\\lib\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath + ')')
             self.close()
             
     def showKeyboard(self, heading,default="",hidden=0):
