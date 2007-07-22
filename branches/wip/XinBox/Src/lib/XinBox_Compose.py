@@ -3,12 +3,13 @@
 import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
 from os.path import join, exists, basename,getsize
-
+import XinBox_InfoDialog
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False):
+        self.srcpath = strFallbackPath
         self.mydraft = mydraft
         self.ibfolder = ibfolder
         self.inbox = inboxname
@@ -184,8 +185,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
-                    #need to change below to propper controls for B button
-            elif ( button_key == 'Keyboard Menu Button' or button_key == 'B Button'):
+            elif ( button_key == 'Keyboard Shift Button' or button_key == 'B Button'):
                 if focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
                     self.setCurrentListPosition(self.getCurrentListPosition()+1)
@@ -195,6 +195,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     else:
                         self.removeItem(self.getCurrentListPosition())
                         self.setCurrentListPosition(self.getCurrentListPosition()-1)
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if focusid == 82:
+                    if self.getControl(82).getSelectedPosition() == 0:
+                        self.launchinfo(147,self.language(310))
+                    elif self.getControl(82).getSelectedPosition() == 1:
+                        self.launchinfo(148,self.language(311))
+                    elif self.getControl(82).getSelectedPosition() == 2:
+                        self.launchinfo(149,self.language(312))
+                    elif self.getControl(82).getSelectedPosition() == 3:
+                        self.launchinfo(150,self.language(313))
+                elif focusid == 50:
+                    self.launchinfo(151,self.language(335))
+                elif focusid == 61:
+                    self.launchinfo(152,self.language(314))
+                elif focusid == 62:
+                    self.launchinfo(154,self.language(61))
+                elif focusid == 63:
+                    self.launchinfo(153,self.language(333))
+                elif focusid == 81:
+                    self.launchinfo(155,self.language(266))
             elif focusid == 81:
                 self.showattach(self.getControl(81).getSelectedPosition())
                
@@ -232,3 +252,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             return keyboard.getText()
         else:
             return False
+
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog.doModal()
+        del dialog

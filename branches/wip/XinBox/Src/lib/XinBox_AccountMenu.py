@@ -155,7 +155,11 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
-                self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
+                if self.getCurrentListPosition() == 3:
+                    self.launchinfo(144,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 4:
+                    self.launchinfo(145,self.getListItem(self.getCurrentListPosition()).getLabel())
+                else:self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
 ##    def editallaccounts(self,settingname,value,accountname=""):

@@ -30,6 +30,7 @@ def setControllerAction():
                 61448 : 'Keyboard Backspace Button',
                 61533 : 'Keyboard Menu Button',
                 61467 : 'Keyboard ESC Button',
+                61601 : 'Keyboard Shift Button',
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',
