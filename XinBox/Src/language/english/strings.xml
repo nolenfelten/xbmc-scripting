@@ -117,11 +117,11 @@
 	<string id="128">Select to exit and return to previous menu.</string>
 	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
 	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until Save is pressed in the Account Menu.</string>
-	<string id="131">Select to toggle if this Inbox is the Default Inbox.A Default Inbox automatically logs in on when the account is logged in to. Note: There can only be a maximum of one Default Inbox per Account.</string>
+	<string id="131">Select to toggle if this Inbox is the Default Inbox. A Default Inbox automatically logs in on when the account is logged in to. Note: There can only be a maximum of one Default Inbox per Account.</string>
 	<string id="132">Select to check for new emails.</string>
 	<string id="133">Select to compose a new email.</string>
-	<string id="134">Select to reset current inbox. Note: Reseting an inbox will delete all emails in the inbox not the server.</string>
-	<string id="135">Select to activate Mini-Mode. This will close the script and continue to check for emails whilst you eg. watch a move. It will notify you of new emails when recieved.</string>
+	<string id="134">Select to reset current inbox. Note: Resetting an inbox will delete all emails in the inbox not the server.</string>
+	<string id="135">Select to activate Mini-Mode. This will close the script and continue to check for emails whilst you eg. watch a move. It will notify you of new emails when received.</string>
 	<string id="136">Select to open the current highlighted email. Once opened, you can Reply, Forward, manage attachments, and Delete.</string>
 	<string id="137">Select to show/save current highlighted attachment. Note: With .zip attachments, the archive can be opened and files can be saved individually.</string>
 	<string id="138">Select to Reply to this email. Replying will close this window and open the new Reply Window.</string>
@@ -130,7 +130,18 @@
 	<string id="141">Select to open/close the attachment panel.</string>
 	<string id="142">Select to PageUp/PageDown through the email body/attached text files.</string>
 	<string id="143">Select to save the current highlighted file in the .zip archive. Note: Click the .zip file in the attachment panel again to save the entire .zip archive.</string>
-	
+	<string id="144">Select to toggle if XinBox Mini-Mode runs on start-up of XBMC.</string>
+	<string id="145">Select to change the delay (in seconds) between checking for new emails while Mini-Mode is running.</string>
+	<string id="146">Select to toggle if this Inbox is to be checked when Mini-Mode is running.</string>
+	<string id="147">Select to Edit the To field. Multiple To: addresses can be split using ;</string>
+	<string id="148">Select to Edit the Cc field. Multiple Cc: addresses can be split using ;</string>
+	<string id="149">Select to Edit the Bcc field. Multiple Bcc: addresses can be split using ;</string>
+	<string id="150">Select to Edit the Subject field.</string>
+	<string id="151">Select to Edit this line in the Email Body. Press the black button on this line to remove it. Press B on this line to add a new line under it.</string>
+	<string id="152">Select to Send this Email.</string>
+	<string id="153">Select to Clear the email body.</string>
+	<string id="154">Select to Add a new attachment to this email.</string>
+	<string id="155">Select to Remove this attachment from the email.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -175,10 +186,10 @@
 	<string id="259">Empty</string>
 	<string id="260">From:</string>
 	<string id="261">Received:</string>
-	<string id="262">Deleteing email from inbox</string>
-	<string id="263">Deleteing email from server</string>
+	<string id="262">Deleting email from inbox</string>
+	<string id="263">Deleting email from server</string>
 	<string id="264">Email was not found on server</string>
-	<string id="265">Deleteing email from server and inbox</string>
+	<string id="265">Deleting email from server and inbox</string>
 	<string id="266">Attachments</string>
 	<string id="267">Size:</string>
 	<string id="268">Save %s to...</string>
@@ -233,6 +244,7 @@
 	<string id="332">Send this email?</string>
 	<string id="333">Clear</string>
 	<string id="334">Clear Email Body?</string>
+	<string id="335">Email Body</string>
 
 	<!-- Mini-Mode Labels -->
 	<string id="350">Mini-Mode Enabled</string>
