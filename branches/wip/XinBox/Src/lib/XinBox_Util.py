@@ -19,7 +19,7 @@ __version__ = 'V.1.1'
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
 AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
 VIDEOTYPES = ["avi","wmv","mpg"]
-TEXTTYPES = ["txt", "doc", "rtf", "xml", "bat"]
+TEXTTYPES = ["txt", "doc", "rtf", "xml", "bat", "log"]
 ARCHIVETYPES = ["zip"]
 
 def setControllerAction():
