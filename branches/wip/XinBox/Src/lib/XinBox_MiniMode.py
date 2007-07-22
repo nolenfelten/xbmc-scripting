@@ -32,7 +32,7 @@ class Minimode:
         xbmc.executebuiltin("Skin.ToggleSetting(mmfinished)")
         xbmc.executebuiltin("Skin.Reset(mmrunning)")
         if self.exit:
-            w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox)
+            w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox, lang=self.language)
             w.doModal()
             del w
         

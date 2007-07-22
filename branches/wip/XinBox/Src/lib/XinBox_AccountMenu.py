@@ -149,9 +149,10 @@ class AccountSettings(xbmcgui.WindowXML):
             else:
                 if not self.saved:
                     dialog = xbmcgui.Dialog()
-                    if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
+                    if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)):
                         self.close()
-                else:self.close()
+                else:
+                    self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
             if focusid == 51:
                 self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
@@ -258,7 +259,7 @@ class AccountSettings(xbmcgui.WindowXML):
         elif ( controlID == 65):
             if not self.saved:
                 dialog = xbmcgui.Dialog()
-                if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)): 
+                if dialog.yesno(self.language(77), self.language(65) + "?",self.language(79)):
                     self.close()
             else:self.close()
 
