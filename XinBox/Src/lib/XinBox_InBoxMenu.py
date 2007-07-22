@@ -50,18 +50,19 @@ class GUI( xbmcgui.WindowXML ):
         self.renameme = []
         self.servers = XinBox_Util.getpresetservers()
         self.control_action = XinBox_Util.setControllerAction()
-        self.settnames = {}
-        self.settnames[1] = "Email Address"
-        self.settnames[2] = "POP Server"
-        self.settnames[3] = "SMTP Server"
-        self.settnames[4] = "Account Name"
-        self.settnames[5] = "Account Password"
-        self.settnames[6] = "SERV Inbox Size"
-        self.settnames[7] = "XinBox Inbox Size"
-        self.settnames[8] = "Keep Copy Emails"
-        self.settnames[9] = "Email Notification"
-        self.settnames[10] = "Default Inbox"
-        self.settnames[11] = "Mini Mode Enabled"
+        self.settnames ={
+        1 : "Email Address",
+        2 : "POP Server",
+        3 : "SMTP Server",
+        4 : "Account Name",
+        5 : "Account Password",
+        6 : "SERV Inbox Size",
+        7 : "XinBox Inbox Size",
+        8 : "Keep Copy Emails",
+        9 : "Email Notification",
+        10 : "Default Inbox",
+        11 : "Mini Mode Enabled"
+        }
         if self.accountSettings.getSetting("Default Inbox") == self.inbox:
             self.defaultinbox = True
         else:self.defaultinbox = False
@@ -125,7 +126,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(97),""))
         self.addItem(self.SettingListItem(self.language(240),self.settings.getSetting("Email Notification")))
         self.addItem(self.SettingListItem(self.language(243),""))
-        self.addItem(self.SettingListItem("Mini-Mode Enabled",""))
+        self.addItem(self.SettingListItem(self.language(350),""))
         
     def SettingListItem(self, label1,label2):
         if label2 == "-":

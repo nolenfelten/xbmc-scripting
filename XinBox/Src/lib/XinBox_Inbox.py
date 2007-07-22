@@ -1,6 +1,6 @@
 
 
-import xbmc,xbmcgui, time, sys, os, traceback
+import xbmc,xbmcgui, time, sys, os
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Email
@@ -58,6 +58,7 @@ class GUI( xbmcgui.WindowXML ):
             try:focusid = self.getFocusId()
             except:focusid = 0
             if (50 <= focusid <= 59):
+                self.change = True
                 self.openemail(self.getCurrentListPosition())
             elif controlID == 61:
                 self.checkfornew()
@@ -69,13 +70,11 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitme()
 
     def exitme(self):
-        try:
-            self.animating = True
-            self.updateicons()
-            self.removefiles(TEMPFOLDER)
-            self.animating = False
-            self.close()
-        except:traceback.print_exc()
+        self.animating = True
+        self.updateicons()
+        self.removefiles(TEMPFOLDER)
+        self.animating = False
+        self.close()
 
     def cleaninbox(self):
         dialog = xbmcgui.Dialog()
@@ -150,7 +149,7 @@ class GUI( xbmcgui.WindowXML ):
     def updateicons(self):
         if exists(self.ibfolder + "emid.xib"):
             dialog = xbmcgui.DialogProgress()
-            dialog.create(self.language(210) + self.inbox, "updating inbox id file...")
+            dialog.create(self.language(210) + self.inbox, self.language(282))
             writelist = []
             f = open(self.ibfolder + "emid.xib", "r")
             for line in f.readlines():
