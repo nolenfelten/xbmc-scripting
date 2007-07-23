@@ -121,7 +121,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def getcon(self, myfrom, contactemail):
         myre = myfrom.replace("<" + contactemail + ">","").replace('"','')
-        if myre == myfrom:return self.editcontactname(myre)          
+        if myre == myfrom or myre == "":return self.editcontactname(contactemail)
         else:
             if myre in self.contacts:
                 dialog = xbmcgui.Dialog()
