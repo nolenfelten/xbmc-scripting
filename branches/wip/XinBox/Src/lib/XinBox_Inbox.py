@@ -119,16 +119,15 @@ class GUI( xbmcgui.WindowXML ):
             return myfrom
         else:return myre.group(1)
 
-    def getcon(self, myfrom):
-        myre = re.search('"([^"]*)"',myfrom)
-        if myre == None:
-            return self.editcontactname("")          
+    def getcon(self, myfrom, contactemail):
+        myre = myfrom.replace("<" + contactemail + ">","").replace('"','')
+        if myre == myfrom:return self.editcontactname(myre)          
         else:
-            if myre.group(1) in self.contacts:
+            if myre in self.contacts:
                 dialog = xbmcgui.Dialog()
                 dialog.ok("Error", "Contact allready exsists.")
-                return self.editcontactname(myre.group(1))  
-            else:return myre.group(1)
+                return self.editcontactname(myre)
+            else:return myre
 
     def editcontactname(self, default):
         value = self.showKeyboard("Edit Contact Name:",default)
@@ -137,8 +136,7 @@ class GUI( xbmcgui.WindowXML ):
                 dialog = xbmcgui.Dialog()
                 dialog.ok("Error", "You can not have two contacts with same name")
                 return False
-            else:
-                return value
+            else:return value
         else:return False
 
     def buildcontactlist(self):
@@ -150,7 +148,7 @@ class GUI( xbmcgui.WindowXML ):
         self.buildcontactlist()
         contact = self.getListItem(pos).getLabel2()
         contactemail = self.getem(contact)
-        contname = self.getcon(contact)
+        contname = self.getcon(contact,contactemail)
         if contname != False:
             self.accountsettings.addSettingInList("Contacts",contname,"","text")
             self.accountsettings.setSettingInList("Contacts",contname,contactemail)
