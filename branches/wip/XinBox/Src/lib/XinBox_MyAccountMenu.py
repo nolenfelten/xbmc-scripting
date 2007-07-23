@@ -104,8 +104,6 @@ class GUI( xbmcgui.WindowXML ):
         self.clearList()
         self.getControl(80).setLabel(self.language(200))
         self.getControl(81).setLabel(self.account)
-        self.getControl(82).setLabel(self.language(20))
-        self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(62))
         self.getControl(62).setLabel(self.language(63))
         self.getControl(63).setLabel(self.language(252))

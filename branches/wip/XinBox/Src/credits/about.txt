@@ -28,7 +28,8 @@ Forums: http://www.xboxmediacenter.com/forum : Username:Stanley87
 Stanley87 wishes to thank: 
 
 Team XBMC for obvious reasons.
-Donno for helping along the way with my MANY python problems.
+Donno for helping along the way with my MANY python problems
+and also the use of his fantastic settings .py
 Team AMT for my inspiration on some of my code layout.
 www.xbmcscripts.com for hosting my scripts.
 Partner Chloe for not getting too mad at my late nights scripting.

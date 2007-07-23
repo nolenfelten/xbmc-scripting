@@ -40,8 +40,6 @@ class GUI( xbmcgui.WindowXML ):
         self.clearList()
         MenuLabel = self.getControl(80)
         MenuLabel.setLabel(self.language(30))
-        self.getControl(82).setLabel(self.language(20))
-        self.getControl(83).setLabel(self.language(21))
         if len(self.buildaccounts()) != 0:
             for account in self.buildaccounts():
                 self.addItem(account)
