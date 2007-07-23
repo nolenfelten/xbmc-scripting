@@ -250,6 +250,8 @@
 	<string id="350">Mini-Mode Enabled</string>
 	<string id="351">Please Wait</string>
 	<string id="352">Shutting down Mini-Mode</string>
+	<string id="353">Startup Mini-Mode</string>
+	<string id="354">Mini-Mode Delay (s)</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>
