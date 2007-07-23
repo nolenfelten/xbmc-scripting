@@ -123,8 +123,8 @@ class AccountSettings(xbmcgui.WindowXML):
         else:
             self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password").decode("hex"))))
         self.addItem(self.language(53))
-        self.addItem("Startup Mini-Mode")
-        self.addItem(self.SettingListItem("Mini-Mode Delay (s)", self.accountSettings.getSetting("MiniMode Time")))
+        self.addItem(self.language(353))
+        self.addItem(self.SettingListItem(self.language(354), self.accountSettings.getSetting("MiniMode Time")))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
