@@ -82,8 +82,6 @@ class GUI( xbmcgui.WindowXML ):
         self.clearList()
         self.getControl(80).setLabel(self.lang(10))
         self.getControl(81).setLabel(VERSION)
-        self.getControl(82).setLabel(self.lang(20))
-        self.getControl(83).setLabel(self.lang(21))
         MenuItems = [xbmcgui.ListItem(self.lang(11),self.lang(16),"XBlogin.png","XBlogin.png"),
                      xbmcgui.ListItem(self.lang(12),self.lang(17),"XBcreatenew.png","XBcreatenew.png"),
                      xbmcgui.ListItem(self.lang(13),self.lang(19),"XBchangesettings.png","XBchangesettings.png"),

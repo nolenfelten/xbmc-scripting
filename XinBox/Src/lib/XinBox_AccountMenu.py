@@ -101,8 +101,6 @@ class AccountSettings(xbmcgui.WindowXML):
         return hashlist
         
     def setupcontrols(self):
-        self.getControl(82).setLabel(self.language(20))
-        self.getControl(83).setLabel(self.language(21))
         self.buttonids = [61,62,63,64,65]
         for ID in self.buttonids:
             self.getControl(ID).setLabel(self.language(ID))

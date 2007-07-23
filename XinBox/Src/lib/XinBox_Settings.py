@@ -86,14 +86,13 @@ class Settings:
         else:
             return "none"
 
-    def setSettingInList(self, settingName, oldName, newName, newValue):
+    def setSettingInList(self, settingName, Name, newValue):
         """
             changes a setting in a list, in the settings array.
         """
         for item in self.settings[settingName][0][1]:
-            if (item[0] == oldName):
-                item[0] = newName
-                item[1] = newValue
+            if (item[0] == Name):
+                item[1] = newValue     
 
     def setSettingnameInList(self, settingName, oldName, newName):
         for item in self.settings[settingName][0][1]:

@@ -91,8 +91,6 @@ class GUI( xbmcgui.WindowXML ):
         else:self.mmenabled = False
 
     def setupcontrols(self):
-        self.getControl(82).setLabel(self.language(20))
-        self.getControl(83).setLabel(self.language(21))
         self.getControl(61).setLabel(self.language(89))
         self.getControl(108).setSelected(self.mmenabled)
         self.getControl(106).setSelected(self.keepemails)

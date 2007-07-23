@@ -146,7 +146,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
-                self.replyvalue = [self.getem(self.emfrom),"","",self.language(318) + " " + self.subject,self.getreply(self.body),[]]
+                self.replyvalue = [self.emfrom,"","",self.language(318) + " " + self.subject,self.getreply(self.body),[]]
                 self.exitme()
             elif controlID == 62:
                 self.replyvalue = ["","","",self.language(319) + " " + self.subject,self.getreply(self.body),self.attachments]

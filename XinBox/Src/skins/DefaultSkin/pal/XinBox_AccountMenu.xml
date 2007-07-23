@@ -69,46 +69,6 @@
 			<height>450</height>
 			<texture>XBacmenu.png</texture>
 		</control>
-		<control type="image">
-			<description>A Button image</description>
-			<posx>50</posx>
-			<posy>450</posy>
-			<width>30</width>
-			<height>30</height>
-			<texture>XBbutton-A.png</texture>
-			<animation effect="fade" time="1000">WindowOpen</animation>
-			<animation effect="fade" time="1000">WindowClose</animation>
-		</control>
-  		<control type="label" id="82">
-        		<description>A Button Label</description>
-        		<posx>46</posx>
-        		<posy>480</posy>
-			<label>-</label>
-        		<width>100</width>
-        		<font>font13</font>
-			<animation effect="fade" time="1000">WindowOpen</animation>
-			<animation effect="fade" time="1000">WindowClose</animation>
-  		</control>
-		<control type="image">
-			<description>Y Button image</description>
-			<posx>650</posx>
-			<posy>450</posy>
-			<width>30</width>
-			<height>30</height>
-			<texture>XBbutton-Y.png</texture>
-			<animation effect="fade" time="1000">WindowOpen</animation>
-			<animation effect="fade" time="1000">WindowClose</animation>
-		</control>
-  		<control type="label" id="83">
-        		<description>Y Button Label</description>
-        		<posx>650</posx>
-        		<posy>480</posy>
-			<label>-</label>
-        		<width>100</width>
-        		<font>font13</font>
-			<animation effect="fade" time="1000">WindowOpen</animation>
-			<animation effect="fade" time="1000">WindowClose</animation>
-  		</control>
 		<control type="group" id="9000">
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>

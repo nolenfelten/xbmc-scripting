@@ -1,12 +1,13 @@
 
 
-import xbmc,xbmcgui, time, sys, os
+import xbmc,xbmcgui, time, sys, os, traceback
 import XinBox_Util, email, re
 from XinBox_Settings import Settings
 from XinBox_EmailEngine import Email
 import XinBox_Email
 import XinBox_Compose
 import XinBox_InfoDialog
+import XinBox_Contacts
 from os.path import join, exists, basename
 from os import mkdir, remove, listdir
 from sgmllib import SGMLParser
@@ -68,6 +69,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.cleaninbox()
             elif controlID == 64:
                 self.exitme()
+            elif controlID == 65:
+                self.launchmycontacts()
 
     def exitme(self):
         self.animating = True
@@ -98,6 +101,8 @@ class GUI( xbmcgui.WindowXML ):
             elif (50 <= focusid <= 59):
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                     self.launchinfo(136,self.language(225))
+                elif ( button_key == 'Keyboard Shift Button' or button_key == 'B Button'):
+                    self.addcontact(self.getCurrentListPosition())
                 else:self.printEmail(self.getCurrentListPosition())
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                 if focusid == 61:
@@ -108,6 +113,50 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(134,self.language(275))
                 elif focusid == 64:
                     self.launchinfo(128,self.language(65))
+    def getem(self, myfrom):
+        myre = re.search('<([^>]*)>',myfrom)
+        if myre == None:
+            return myfrom
+        else:return myre.group(1)
+
+    def getcon(self, myfrom):
+        myre = re.search('"([^"]*)"',myfrom)
+        if myre == None:
+            return self.editcontactname("")          
+        else:
+            if myre.group(1) in self.contacts:
+                dialog = xbmcgui.Dialog()
+                dialog.ok("Error", "Contact allready exsists.")
+                return self.editcontactname(myre.group(1))  
+            else:return myre.group(1)
+
+    def editcontactname(self, default):
+        value = self.showKeyboard("Edit Contact Name:",default)
+        if value != False and value != "":
+            if value in self.contacts:
+                dialog = xbmcgui.Dialog()
+                dialog.ok("Error", "You can not have two contacts with same name")
+                return False
+            else:
+                return value
+        else:return False
+
+    def buildcontactlist(self):
+        self.contacts  = []
+        for set in self.accountsettings.getSetting("Contacts")[1]:
+            self.contacts.append(set[0])
+
+    def addcontact(self, pos):
+        self.buildcontactlist()
+        contact = self.getListItem(pos).getLabel2()
+        contactemail = self.getem(contact)
+        contname = self.getcon(contact)
+        if contname != False:
+            self.accountsettings.addSettingInList("Contacts",contname,"","text")
+            self.accountsettings.setSettingInList("Contacts",contname,contactemail)
+            self.settings.saveXMLfromArray()
+            dialog = xbmcgui.Dialog()
+            dialog.ok("YAH!", "Contact Added!")            
                     
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
@@ -177,6 +226,13 @@ class GUI( xbmcgui.WindowXML ):
             w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
             del w
 
+
+    def launchmycontacts(self):
+        try:
+            w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts = self.settings)
+            w.doModal()
+            del w
+        except:traceback.print_exc()
     
     def parse_email(self, email):
         email = email.replace("\t","")
@@ -356,6 +412,14 @@ class GUI( xbmcgui.WindowXML ):
                     else:
                         f.close()
                         return True
+
+    def showKeyboard(self, heading,default=""):
+        keyboard = xbmc.Keyboard(default,heading)
+        keyboard.doModal()
+        if (keyboard.isConfirmed()):
+            return keyboard.getText()
+        else:
+            return False
     
 class html2txt(SGMLParser):
     def reset(self):
