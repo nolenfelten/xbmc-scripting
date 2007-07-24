@@ -55,26 +55,27 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onClick(self, controlID):
         if not self.animating:
             if ( controlID == 50):
-                curPos  = self.getCurrentListPosition()
-                curItem = self.getListItem(curPos)
-                curName = curItem.getLabel()
-                curName2 = curItem.getLabel2()
-                value = self.showKeyboard(self.language(372),curName)
-                if value != False and value != "":
-                    if value != curName:
-                        if value in self.contacts:
+                try:
+                    curPos  = self.getCurrentListPosition()
+                    curItem = self.getListItem(curPos)
+                    curName = curItem.getLabel()
+                    curName2 = curItem.getLabel2()
+                    value = self.showKeyboard(self.language(372),curName)
+                    if value != False and value != "":
+                        if (value != curName) and (value in self.contacts):
                             dialog = xbmcgui.Dialog()
                             dialog.ok(self.language(93), self.language(373))
-                    else:
-                        contname = value
-                        self.accountsettings.setSettingnameInList("Contacts",curName,contname)
-                        curItem.setLabel(contname)
-                        self.buildcontactlist()
-                        value = self.showKeyboard(self.language(374),curName2)
-                        if value != False and value != "":
-                            self.accountsettings.setSettingInList("Contacts",contname,value)
-                            curItem.setLabel2(value)
-                        self.settings.saveXMLfromArray()
+                        else:
+                            contname = value
+                            self.accountsettings.setSettingnameInList("Contacts",curName,contname)
+                            curItem.setLabel(contname)
+                            self.buildcontactlist()
+                            value = self.showKeyboard(self.language(374),curName2)
+                            if value != False and value != "":
+                                self.accountsettings.setSettingInList("Contacts",contname,value)
+                                curItem.setLabel2(value)
+                            self.settings.saveXMLfromArray()
+                except:traceback.print_exc()
             elif ( controlID == 61):
                 value = self.showKeyboard(self.language(372),"")
                 if value != False and value != "":
