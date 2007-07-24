@@ -115,7 +115,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         self.settings.saveXMLfromArray()
                         self.removeItem(curPos)
                         self.buildcontactlist()
-            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button'):
+            elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
                 curPos  = self.getCurrentListPosition()
                 curItem = self.getListItem(curPos)
                 contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
