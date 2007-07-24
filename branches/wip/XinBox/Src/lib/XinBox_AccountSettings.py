@@ -36,7 +36,7 @@ class Account_Settings (AccountSettings):
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"],
             "Inbox Hash": ["-","text"],
-            "Email Notification": [self.srcpath.replace("\\","\\\\")+"\\\\SFX\\\\Email Notification\\\\You Have Mail.wav","text"],
+            "Email Notification": [self.srcpath+"\\SFX\\Email Notification\\You Have Mail.wav","text"],
             "Mini Mode Enabled": ["True","boolean"],}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addinbox(settingname,newName,newSettings,"settings")
