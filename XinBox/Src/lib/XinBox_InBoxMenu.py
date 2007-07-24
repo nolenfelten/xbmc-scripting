@@ -180,7 +180,7 @@ class GUI( xbmcgui.WindowXML ):
                 value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))
                 if value != self.settings.getSetting("Email Notification"):
                     curItem.setLabel2(value)
-                    self.settings.setSetting(self.settnames[curPos],value.replace("\\","\\\\"))
+                    self.settings.setSetting(self.settnames[curPos],value)
             else:
                 value = self.showKeyboard(self.language(66) % curName,curName2)
                 if value != False and value != "" and value !=curName2:
