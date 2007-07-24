@@ -101,7 +101,7 @@ class GUI( xbmcgui.WindowXML ):
             elif (50 <= focusid <= 59):
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                     self.launchinfo(136,self.language(225))
-                elif ( button_key == 'Keyboard Shift Button' or button_key == 'B Button'):
+                elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'B Button'):
                     self.addcontact(self.getCurrentListPosition())
                 else:self.printEmail(self.getCurrentListPosition())
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
@@ -120,8 +120,8 @@ class GUI( xbmcgui.WindowXML ):
         else:return myre.group(1)
 
     def getcon(self, myfrom, contactemail):
-        myre = myfrom.replace("<" + contactemail + ">","").replace('"','')
-        if myre == myfrom or myre == "":return self.editcontactname(contactemail)
+        myre = myfrom.replace("<" + contactemail + ">","").replace('"','').strip()
+        if myre == myfrom or myre == "":return self.editcontactname(contactemail.split("@")[0])
         else:
             if myre in self.contacts:
                 dialog = xbmcgui.Dialog()
@@ -213,7 +213,7 @@ class GUI( xbmcgui.WindowXML ):
             f.writelines(writelist)
             f.close()
             dialog.close()
-
+#self.replyvalue = [self.emfrom,"","",self.language(318) + " " + self.subject,self.getreply(self.body),[]]
     def sendemail(self, draft=["","","","","",None]):
         w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
         w.doModal()
@@ -226,11 +226,12 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def launchmycontacts(self):
-        try:
-            w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts = self.settings)
-            w.doModal()
-            del w
-        except:traceback.print_exc()
+        w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts = self.settings)
+        w.doModal()
+        returnval = w.returnval
+        del w
+        if returnval != 0:
+            self.sendemail([returnval,"","","","",[]])
     
     def parse_email(self, email):
         email = email.replace("\t","")

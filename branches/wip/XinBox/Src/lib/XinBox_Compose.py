@@ -110,9 +110,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif controlID == 61:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(332)):
-                    self.buildemail()
-                    self.returnvalue = [self.toaddr,self.ccaddr,self.bccaddr,self.subject,self.body,self.attachments]
-                    self.exitme()
+                    try:
+                        self.buildemail()
+                        self.returnvalue = [self.toaddr,self.ccaddr,self.bccaddr,self.subject,self.body,self.attachments]
+                        self.exitme()
+                    except:traceback.print_exc()
             elif controlID == 62:
                 self.addattachment()
             elif controlID == 63:
@@ -185,11 +187,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
-            elif ( button_key == 'Keyboard Shift Button' or button_key == 'B Button'):
+            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button'):
                 if focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
                     self.setCurrentListPosition(self.getCurrentListPosition()+1)
-            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'Black Button'):
+            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
                     else:
