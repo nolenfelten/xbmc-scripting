@@ -187,11 +187,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
-            elif (button_key == 'Keyboard Ctrl Button' or button_key == 'White Button') and focusid == 82 and self.getControl(82).getSelectedPosition() != 3:
-                value = self.launchcontacts(self.getControl(82).getSelectedItem().getLabel())
-            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button') and focusid == 50:
-                self.addItem("",self.getCurrentListPosition()+1)
-                self.setCurrentListPosition(self.getCurrentListPosition()+1)
+            elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                if focusid == 82 and self.getControl(82).getSelectedPosition() != 3:
+                    value = self.launchcontacts(self.getControl(82).getSelectedItem().getLabel())
+                elif focusid == 50:
+                    self.addItem("",self.getCurrentListPosition()+1)
+                    self.setCurrentListPosition(self.getCurrentListPosition()+1)                    
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  

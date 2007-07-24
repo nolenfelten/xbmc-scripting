@@ -31,7 +31,9 @@ def setControllerAction():
                 61533 : 'Keyboard Menu Button',
                 61467 : 'Keyboard ESC Button',
                 61601 : 'Keyboard Shift Button',
-                61603 : 'Keyboard Ctrl Button', #used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
+                61603 : 'Keyboard Right Ctrl Button',
+                61602 : 'Keyboard Left Ctrl Button',
+                61449 : 'Keyboard TAB Button',#used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',
