@@ -80,8 +80,7 @@ class Minimode:
         if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
             xbmc.playSFX(ibsettings.getSetting("Email Notification"))
             mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
-            print "mymessage = " + str(mymessage)
-            w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message = mymessage)
+            w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message=mymessage, lang=self.language)
             w.doModal()
             self.returnval = w.returnval
             del w
@@ -91,13 +90,15 @@ class Minimode:
 
 
 class Popup( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,message=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,message=False,lang=False):
+        self.lang = lang
         self.message = message
         self.control_action = XinBox_Util.setControllerAction()
 
     def onInit(self):
         self.returnval = 0
         self.getControl(21).setText(self.message)
+        self.getControl(80).setLabel(self.lang(355))
         self.animating = True
         xbmc.executebuiltin("Skin.SetBool(showpopup)")
         time.sleep(0.5)
@@ -116,7 +117,7 @@ class Popup( xbmcgui.WindowXMLDialog ):
             self.close()
 
     def onClick(self, controlID):
-        pass
+        passs
 
     def onAction( self, action ):
         if not self.animating:
@@ -128,7 +129,7 @@ class Popup( xbmcgui.WindowXMLDialog ):
             except: control = 0
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitme()
-            elif ( button_key == 'Keyboard Right Arrow' or button_key == 'A Button' or button_key == 'Remote Title' ):
+            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button' or button_key == 'Remote Title' ):
                 self.returnval = 1
                 self.close()
 
