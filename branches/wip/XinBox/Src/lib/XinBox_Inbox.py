@@ -113,6 +113,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(134,self.language(275))
                 elif focusid == 64:
                     self.launchinfo(128,self.language(65))
+                    
     def getem(self, myfrom):
         myre = re.search('<([^>]*)>',myfrom)
         if myre == None:
@@ -214,14 +215,17 @@ class GUI( xbmcgui.WindowXML ):
             dialog.close()
 
     def sendemail(self, draft=["","","","","",None]):
-        w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
-        w.doModal()
-        returnval = w.returnvalue
-        del w
-        if returnval != 0:
-            w = Email(self.ibsettings,self.inbox,self.account,self.language)
-            w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
+        try:
+            w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder,account=self.account,setts=self.settings)
+            w.doModal()
+            returnval = w.returnvalue
             del w
+            if returnval != 0:
+                print "hey oh"
+                w = Email(self.ibsettings,self.inbox,self.account,self.language)
+                w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
+                del w
+        except:traceback.print_exc()
 
 
     def launchmycontacts(self):

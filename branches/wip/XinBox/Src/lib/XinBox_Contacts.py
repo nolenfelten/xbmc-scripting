@@ -5,7 +5,8 @@ import XinBox_Util
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False,lang=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False,lang=False,thelabel=False):
+        self.label = thelabel
         self.language = lang
         self.account = accountname
         self.settings = setts
@@ -75,7 +76,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             curItem.setLabel2(value)
                         self.settings.saveXMLfromArray()
             elif ( controlID == 61):
-                value = self.showKeyboard(self.language(374),"")
+                value = self.showKeyboard(self.language(372),"")
                 if value != False and value != "":
                     if value in self.contacts:
                         dialog = xbmcgui.Dialog()
@@ -118,11 +119,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button'):
                 curPos  = self.getCurrentListPosition()
                 curItem = self.getListItem(curPos)
-                dialog = xbmcgui.Dialog()
-                if dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(377)):
-                    contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
-                    self.returnval = contact
-                    self.exitme()
+                contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
+                if self.label == False:
+                    dialog = xbmcgui.Dialog()
+                    if not dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(377)):return
+                else:
+                    if contact in self.label:
+                        dialog = xbmcgui.Dialog()
+                        dialog.ok(self.language(376)+ curItem.getLabel(), self.language(379))
+                        return
+                self.returnval = contact
+                self.exitme()
 
     def exitme(self):
         self.animating = True

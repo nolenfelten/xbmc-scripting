@@ -1,19 +1,22 @@
 
 
-import xbmc, xbmcgui, time, sys, os, string
+import xbmc, xbmcgui, time, sys, os, string, traceback
 import XinBox_Util
+import XinBox_Contacts
 from os.path import join, exists, basename,getsize
 import XinBox_InfoDialog
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False,account=False,setts=False):
         self.srcpath = strFallbackPath
         self.mydraft = mydraft
         self.ibfolder = ibfolder
+        self.account = account
         self.inbox = inboxname
         self.language = lang
+        self.settings = setts
         self.ibsettings = inboxsetts
    
     def onInit(self):
@@ -34,10 +37,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.addItem(line)
             if self.getListSize() == 0:self.addItem("")
         self.returnvalue = 0
-        self.toaddr = self.mydraft[0]
-        self.ccaddr = self.mydraft[1]
-        self.bccaddr = self.mydraft[2]
-        self.subject = self.mydraft[3]
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
         
@@ -51,10 +50,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(61).setLabel(self.language(314))
         self.getControl(62).setLabel(self.language(61))
         self.getControl(63).setLabel(self.language(333))
-        self.getControl(82).addItem(self.toaddr)
-        self.getControl(82).addItem(self.ccaddr)
-        self.getControl(82).addItem(self.bccaddr)
-        self.getControl(82).addItem(self.subject)
+        self.getControl(82).addItem(self.mydraft[0])
+        self.getControl(82).addItem(self.mydraft[1])
+        self.getControl(82).addItem(self.mydraft[2])
+        self.getControl(82).addItem(self.mydraft[3])
         self.getControl(73).addLabel(self.language(315) + " " + self.inbox + " <" + self.ibsettings.getSetting("Email Address") + ">")
         if len(self.attachments) != 0:
             self.attachlist = True
@@ -89,30 +88,21 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 pos = self.getControl(82).getSelectedPosition()
                 if pos == 0:
                     kb = self.showKeyboard(self.language(322),self.getControl(82).getSelectedItem().getLabel())
-                    if kb != False:
-                        self.toaddr = kb
-                        self.getControl(82).getSelectedItem().setLabel(kb)
+                    if kb != False:self.getControl(82).getSelectedItem().setLabel(kb)
                 elif pos == 1:
                     kb = self.showKeyboard(self.language(323),self.getControl(82).getSelectedItem().getLabel())
-                    if kb != False:
-                        self.ccaddr = kb
-                        self.getControl(82).getSelectedItem().setLabel(kb)
+                    if kb != False:self.getControl(82).getSelectedItem().setLabel(kb)
                 elif pos == 2:
                     kb = self.showKeyboard(self.language(324),self.getControl(82).getSelectedItem().getLabel())
-                    if kb != False:
-                        self.bccaddr = kb
-                        self.getControl(82).getSelectedItem().setLabel(kb)
+                    if kb != False:self.getControl(82).getSelectedItem().setLabel(kb)
                 elif pos == 3:
                     kb = self.showKeyboard(self.language(325),self.getControl(82).getSelectedItem().getLabel())
-                    if kb != False:
-                        self.subject = kb
-                        self.getControl(82).getSelectedItem().setLabel(kb)           
+                    if kb != False:self.getControl(82).getSelectedItem().setLabel(kb)           
             elif controlID == 61:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(332)):
                     try:
-                        self.buildemail()
-                        self.returnvalue = [self.toaddr,self.ccaddr,self.bccaddr,self.subject,self.body,self.attachments]
+                        self.returnvalue = self.buildemail()
                         self.exitme()
                     except:traceback.print_exc()
             elif controlID == 62:
@@ -175,6 +165,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
         elif self.filebel == "Image":self.getControl(80).setImage("XBattachimage.png")            
         elif self.filebel == "Archive":self.getControl(80).setImage("XBattacharchive.png")
 
+    def launchcontacts(self, label):
+        w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts=self.settings,lang=self.language,thelabel=label)
+        w.doModal()
+        returnval = w.returnval
+        del w
+        if returnval != 0:
+            if label != "":
+                self.getControl(82).getSelectedItem().setLabel(label + "; " + returnval)
+            else:self.getControl(82).getSelectedItem().setLabel(returnval)
+
     def onAction( self, action ):
         if not self.animating:
             button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -187,16 +187,19 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
-            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button'):
-                if focusid == 50:
-                    self.addItem("",self.getCurrentListPosition()+1)
-                    self.setCurrentListPosition(self.getCurrentListPosition()+1)
+            elif (button_key == 'Keyboard Ctrl Button' or button_key == 'White Button') and focusid == 82 and self.getControl(82).getSelectedPosition() != 3:
+                value = self.launchcontacts(self.getControl(82).getSelectedItem().getLabel())
+            elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button') and focusid == 50:
+                self.addItem("",self.getCurrentListPosition()+1)
+                self.setCurrentListPosition(self.getCurrentListPosition()+1)
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
                     else:
                         self.removeItem(self.getCurrentListPosition())
                         self.setCurrentListPosition(self.getCurrentListPosition()-1)
+                elif focusid == 82:
+                    self.getControl(82).getSelectedItem().setLabel("")
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                 if focusid == 82:
                     if self.getControl(82).getSelectedPosition() == 0:
@@ -226,10 +229,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def buildemail(self):
         dialog = xbmcgui.DialogProgress()
         dialog.create(self.language(210) + self.inbox, self.language(329))
-        self.body = ""
+        toadd = self.getControl(82).getListItem(0).getLabel()
+        ccadd = self.getControl(82).getListItem(1).getLabel()
+        bccadd = self.getControl(82).getListItem(2).getLabel()
+        subject = self.getControl(82).getListItem(3).getLabel()
+        body = ""
         for i in range(0,self.getListSize()):
-            self.body = self.body + self.getListItem(i).getLabel() + "\n"
+            body = body + self.getListItem(i).getLabel() + "\n"
         dialog.close()
+        print "buildemail = " + str([toadd,ccadd,bccadd,subject,body,self.attachments])
+        return [toadd,ccadd,bccadd,subject,body,self.attachments]
 
     def removefiles(self,mydir):
         for root, dirs, files in os.walk(mydir, topdown=False):

@@ -269,4 +269,5 @@
 	<string id="376">Contact: </string>
 	<string id="377">Compose Email to contact?</string>
 	<string id="378">Contact Added</string>
+	<string id="379">Contact Already Exists in Address Field</string>
 </strings>
