@@ -125,16 +125,16 @@ class GUI( xbmcgui.WindowXML ):
         else:
             if myre in self.contacts:
                 dialog = xbmcgui.Dialog()
-                dialog.ok("Error", "Contact allready exsists.")
+                dialog.ok(self.language(93), self.language(373))
                 return self.editcontactname(myre)
             else:return myre
 
     def editcontactname(self, default):
-        value = self.showKeyboard("Edit Contact Name:",default)
+        value = self.showKeyboard(self.language(372),default)
         if value != False and value != "":
             if value in self.contacts:
                 dialog = xbmcgui.Dialog()
-                dialog.ok("Error", "You can not have two contacts with same name")
+                dialog.ok(self.language(93), self.language(373))
                 return False
             else:return value
         else:return False
@@ -150,11 +150,10 @@ class GUI( xbmcgui.WindowXML ):
         contactemail = self.getem(contact)
         contname = self.getcon(contact,contactemail)
         if contname != False:
-            self.accountsettings.addSettingInList("Contacts",contname,"","text")
-            self.accountsettings.setSettingInList("Contacts",contname,contactemail)
+            self.accountsettings.addSettingInList("Contacts",contname,contactemail,"text")
             self.settings.saveXMLfromArray()
             dialog = xbmcgui.Dialog()
-            dialog.ok("YAH!", "Contact Added!")            
+            dialog.ok(self.language(49), self.language(378))            
                     
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
@@ -213,7 +212,7 @@ class GUI( xbmcgui.WindowXML ):
             f.writelines(writelist)
             f.close()
             dialog.close()
-#self.replyvalue = [self.emfrom,"","",self.language(318) + " " + self.subject,self.getreply(self.body),[]]
+
     def sendemail(self, draft=["","","","","",None]):
         w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder)
         w.doModal()
@@ -226,7 +225,7 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def launchmycontacts(self):
-        w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts = self.settings)
+        w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts=self.settings,lang=self.language)
         w.doModal()
         returnval = w.returnval
         del w
@@ -247,6 +246,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(62).setLabel(self.language(251))
         self.getControl(63).setLabel(self.language(275))
         self.getControl(64).setLabel(self.language(65))
+        self.getControl(65).setLabel(self.language(370))
         
 
 

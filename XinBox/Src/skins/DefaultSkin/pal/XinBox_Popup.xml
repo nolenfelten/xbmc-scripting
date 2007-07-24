@@ -38,7 +38,7 @@
         		<posx>467</posx>
         		<posy>535</posy>
         		<width>200</width>
-        		<label>Open Inbox</label>
+        		<label>-</label>
         		<font>font13</font>
 			<animation effect="slide" start="0,150" time="500">Visible</animation>
 			<animation effect="slide" end="0,150" time="500">Hidden</animation>

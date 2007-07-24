@@ -5,7 +5,8 @@ import XinBox_Util
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False,lang=False):
+        self.language = lang
         self.account = accountname
         self.settings = setts
    
@@ -22,7 +23,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def setupvars(self):
         self.returnval = 0
-        self.getControl(73).addLabel(self.account + "'s Contacts:")
+        self.getControl(73).addLabel(self.account + " " + self.language(370))
+        self.getControl(61).setLabel(self.language(61))
         self.listEnabled = True
         self.control_action = XinBox_Util.setControllerAction()
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
@@ -41,7 +43,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.listEnabled = False
         self.getControl(50).setEnabled(False)
         self.clearList()
-        self.addItem("No Contacts")
+        self.addItem(self.language(371))
         self.setFocusId(61)
 
     def enablelist(self):
@@ -56,33 +58,33 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 curItem = self.getListItem(curPos)
                 curName = curItem.getLabel()
                 curName2 = curItem.getLabel2()
-                value = self.showKeyboard("Edit Contact Name:",curName)
+                value = self.showKeyboard(self.language(372),curName)
                 if value != False and value != "":
                     if value != curName:
                         if value in self.contacts:
                             dialog = xbmcgui.Dialog()
-                            dialog.ok("Error", "You can not have two contacts with same name")
+                            dialog.ok(self.language(93), self.language(373))
                     else:
                         contname = value
                         self.accountsettings.setSettingnameInList("Contacts",curName,contname)
                         curItem.setLabel(contname)
                         self.buildcontactlist()
-                        value = self.showKeyboard("Edit Contact Email:",curName2)
+                        value = self.showKeyboard(self.language(374),curName2)
                         if value != False and value != "":
                             self.accountsettings.setSettingInList("Contacts",contname,value)
                             curItem.setLabel2(value)
                         self.settings.saveXMLfromArray()
             elif ( controlID == 61):
-                value = self.showKeyboard("Add Contact Name:","")
+                value = self.showKeyboard(self.language(374),"")
                 if value != False and value != "":
                     if value in self.contacts:
                         dialog = xbmcgui.Dialog()
-                        dialog.ok("Error", "You can not have two contacts with same name")
+                        dialog.ok(self.language(93), self.language(373))
                     else:
                         contname = value
                         self.accountsettings.addSettingInList("Contacts",contname,"","text")
                         self.buildcontactlist()
-                        value = self.showKeyboard("Add Contact Email:","")
+                        value = self.showKeyboard(self.language(374),"")
                         if value != False and value != "":
                             self.accountsettings.setSettingInList("Contacts",contname,value)
                             self.addcontact(xbmcgui.ListItem(contname,value,"",""))
@@ -104,19 +106,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
                 self.exitme()
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
+                curPos  = self.getCurrentListPosition()
+                curItem = self.getListItem(curPos)
                 if focusid == 50:
                     dialog = xbmcgui.Dialog()
-                    if dialog.yesno("Warning", "Delete this Contact?"):
-                        self.accountsettings.removeinbox("Contacts",self.getListItem(self.getCurrentListPosition()).getLabel())
+                    if dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(375)):
+                        self.accountsettings.removeinbox("Contacts",curItem.getLabel())
                         self.settings.saveXMLfromArray()
-                        self.removeItem(self.getCurrentListPosition())
+                        self.removeItem(curPos)
                         self.buildcontactlist()
             elif ( button_key == 'Keyboard Ctrl Button' or button_key == 'White Button'):
                 curPos  = self.getCurrentListPosition()
                 curItem = self.getListItem(curPos)
-                contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
-                self.returnval = contact
-                self.exitme()
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(377)):
+                    contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
+                    self.returnval = contact
+                    self.exitme()
 
     def exitme(self):
         self.animating = True

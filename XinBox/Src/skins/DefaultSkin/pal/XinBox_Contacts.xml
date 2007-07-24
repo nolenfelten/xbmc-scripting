@@ -121,7 +121,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>Add</label>
+				<label>-</label>
 				<onright>61</onright>
 				<onup>50</onup>
 				<ondown>61</ondown>

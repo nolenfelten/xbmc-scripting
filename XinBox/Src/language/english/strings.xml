@@ -252,9 +252,21 @@
 	<string id="352">Shutting down Mini-Mode</string>
 	<string id="353">Startup Mini-Mode</string>
 	<string id="354">Mini-Mode Delay (s)</string>
+	<string id="355">Open Inbox</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>
 	<string id="361">Lang Credits</string>
 	<string id="362">Skin Credits</string>
+
+	<!-- Contact LAbels -->
+	<string id="370">Contacts</string>
+	<string id="371">No Contacts</string>
+	<string id="372">Edit Contact Name</string>
+	<string id="373">Contact Name Already Exists</string>
+	<string id="374">Edit Contact Email Address</string>
+	<string id="375">Delete Contact?</string>
+	<string id="376">Contact: </string>
+	<string id="377">Compose Email to contact?</string>
+	<string id="378">Contact Added</string>
 </strings>
