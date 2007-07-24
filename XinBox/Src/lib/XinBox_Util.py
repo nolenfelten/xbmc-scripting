@@ -27,10 +27,11 @@ def setControllerAction():
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',
                 61479 : 'Keyboard Right Arrow',
-                61448 : 'Keyboard Backspace Button',
+                61448 : 'Keyboard Backspace Button',#usef for quick delete emails,remove compose line and delete contact
                 61533 : 'Keyboard Menu Button',
                 61467 : 'Keyboard ESC Button',
                 61601 : 'Keyboard Shift Button',
+                61603 : 'Keyboard Ctrl Button', #used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
                     216 : 'Remote Back Button',
                     247 : 'Remote Menu Button',
                     229 : 'Remote Title',
@@ -39,11 +40,11 @@ def setControllerAction():
                     167 : 'Remote Down',
                     168 : 'Remote Right',
                     256 : 'A Button',
-                    257 : 'B Button',
+                    257 : 'B Button',#usef for quick delete emails,remove compose line and delete contact
                     258 : 'X Button',
                     259 : 'Y Button',
                     260 : 'Black Button',
-                    261 : 'White Button',
+                    261 : 'White Button',#used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
                     274 : 'Start Button',
                     275 : 'Back Button',
                     270 : 'DPad Up',
