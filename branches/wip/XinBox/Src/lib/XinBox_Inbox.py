@@ -8,6 +8,7 @@ import XinBox_Email
 import XinBox_Compose
 import XinBox_InfoDialog
 import XinBox_Contacts
+import XinBox_Drafts
 from os.path import join, exists, basename
 from os import mkdir, remove, listdir
 from sgmllib import SGMLParser
@@ -71,6 +72,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitme()
             elif controlID == 65:
                 self.launchmycontacts()
+            elif controlID == 66:
+                self.launchmydrafts()
 
     def exitme(self):
         self.animating = True
@@ -216,6 +219,8 @@ class GUI( xbmcgui.WindowXML ):
             f.close()
             dialog.close()
 
+
+                        #toaddr, cc, bcc, subject, body, attachments in form [attachment name, path, size]
     def sendemail(self, draft=["","","","","",None]):
         try:
             w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder,account=self.account,setts=self.settings)
@@ -223,7 +228,6 @@ class GUI( xbmcgui.WindowXML ):
             returnval = w.returnvalue
             del w
             if returnval != 0:
-                print "hey oh"
                 w = Email(self.ibsettings,self.inbox,self.account,self.language)
                 w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
                 del w
@@ -237,7 +241,15 @@ class GUI( xbmcgui.WindowXML ):
         del w
         if returnval != 0:
             self.sendemail([returnval,"","","","",[]])
-    
+
+    def launchmydrafts(self):
+        w = XinBox_Drafts.GUI("XinBox_Drafts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts=self.settings,lang=self.language)
+        w.doModal()
+        returnval = w.returnval
+        del w
+        if returnval != 0:
+            self.sendemail(returnval)
+
     def parse_email(self, email):
         email = email.replace("\t","")
         parser = html2txt()

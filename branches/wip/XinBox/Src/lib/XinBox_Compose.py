@@ -5,8 +5,10 @@ import XinBox_Util
 import XinBox_Contacts
 from os.path import join, exists, basename,getsize
 import XinBox_InfoDialog
-TEMPFOLDER = XinBox_Util.__tempdir__
+from XinBox_Settings import Settings
 
+TEMPFOLDER = XinBox_Util.__tempdir__
+ACCOUNTSDIR = XinBox_Util.__accountsdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False,account=False,setts=False):
@@ -18,10 +20,19 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.language = lang
         self.settings = setts
         self.ibsettings = inboxsetts
+        self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
+        self.accountfolder = join(ACCOUNTSDIR,str(hash(self.account))) + "//"
    
     def onInit(self):
         self.setupvars()
+        self.builddraftlist()
         self.setupcontrols()
+
+    def builddraftlist(self):
+        self.drafts  = []
+        for set in self.accountsettings.getSetting("Drafts")[1]:
+            self.drafts.append(set[0])
+
 
     def setupvars(self):
         xbmcgui.lock()
@@ -31,11 +42,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.mydraft[5] == None:self.attachments = []
         else:self.attachments = self.mydraft[5]
         self.body = self.mydraft[4]
-        self.addItem("")
         if self.body != "":
             for line in self.body.split("\n"):
                 self.addItem(line)
-            if self.getListSize() == 0:self.addItem("")
+        if self.getListSize() == 0:self.addItem("")
+        else:
+            if self.getListItem(0).getLabel() != "":self.addItem("",0)
         self.returnvalue = 0
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
@@ -101,10 +113,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif controlID == 61:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(332)):
-                    try:
-                        self.returnvalue = self.buildemail()
-                        self.exitme()
-                    except:traceback.print_exc()
+                    self.buildemail()
             elif controlID == 62:
                 self.addattachment()
             elif controlID == 63:
@@ -112,6 +121,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if dialog.yesno(self.language(77), self.language(334)):                
                     self.clearList()
                     self.addItem("")
+            elif controlID == 64:
+                value = self.showKeyboard(self.language(390),"")
+                if value != False and value != "":
+                    if (value in self.drafts):
+                        dialog = xbmcgui.Dialog()
+                        dialog.ok(self.language(93),self.language(391))
+                    else:self.buildemail(True, value)
             elif controlID == 81:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(326)):
@@ -131,6 +147,28 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         for attach in self.attachments:
                             self.getControl(81).addItem(attach[0])
                         self.showattach(self.getControl(81).getSelectedPosition())
+                        
+    def savedraft(self, settings, value):
+        draftfile = self.accountfolder + str(hash(value)) + ".draft"
+        f = open(draftfile, "w")
+        f.write(settings[4])
+        f.close()
+        attachments = []
+        for setting in settings[5]:
+            attachments.append(setting[1])
+        DraftSettings = {
+                            "To Addr": [settings[0],"text"],
+                            "Cc Addr": [settings[1],"text"],
+                            "Bcc Addr": [settings[2],"text"],
+                            "Subject": [settings[3],"text"],
+                            "Attachments": [attachments ,'simplelist'],
+                            "Emailbodyhash": [str(hash(value)),"text"],}
+        self.accountsettings.addSettingInList("Drafts",value,Settings("","XinBox",DraftSettings,2),"settings")
+        self.settings.saveXMLfromArray()
+        self.builddraftlist()
+        dialog = xbmcgui.Dialog()
+        dialog.ok(self.language(49),self.language(392))
+        
                         
     def addattachment(self):
         dialog = xbmcgui.Dialog()
@@ -227,7 +265,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onFocus(self, controlID):
         pass
 
-    def buildemail(self):
+    def buildemail(self, draft=False, name=False):
         dialog = xbmcgui.DialogProgress()
         dialog.create(self.language(210) + self.inbox, self.language(329))
         toadd = self.getControl(82).getListItem(0).getLabel()
@@ -238,8 +276,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         for i in range(0,self.getListSize()):
             body = body + self.getListItem(i).getLabel() + "\n"
         dialog.close()
-        print "buildemail = " + str([toadd,ccadd,bccadd,subject,body,self.attachments])
-        return [toadd,ccadd,bccadd,subject,body,self.attachments]
+        if not draft:
+            self.returnvalue = [toadd,ccadd,bccadd,subject,body,self.attachments]
+            self.exitme()
+        else:self.savedraft([toadd,ccadd,bccadd,subject,body,self.attachments], name)
 
     def removefiles(self,mydir):
         for root, dirs, files in os.walk(mydir, topdown=False):

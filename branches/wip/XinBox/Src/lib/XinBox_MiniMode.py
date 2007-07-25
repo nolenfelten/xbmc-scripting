@@ -78,7 +78,7 @@ class Minimode:
 
     def popup(self, newlist, inbox, ibsettings):
         if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
-            xbmc.playSFX(ibsettings.getSetting("Email Notification"))
+            xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
             mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
             w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message=mymessage, lang=self.language)
             w.doModal()

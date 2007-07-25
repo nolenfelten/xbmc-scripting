@@ -233,7 +233,6 @@ class Settings:
         self.settings = self.defaultSettings
 
     def createfromtheDict(self,xmldoc, settingElem):
-
         # Interate over each setting
         for key in self.settings:
             type = self.settings[key][1]
