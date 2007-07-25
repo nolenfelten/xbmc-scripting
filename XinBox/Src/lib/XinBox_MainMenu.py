@@ -118,7 +118,6 @@ class GUI( xbmcgui.WindowXML ):
         del w
                     
     def onAction( self, action ):
-        print "action = " + str(action.getButtonCode())
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
         try:focusid = self.getFocusId()

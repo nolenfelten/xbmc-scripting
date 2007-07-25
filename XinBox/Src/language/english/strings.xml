@@ -259,7 +259,7 @@
 	<string id="361">Lang Credits</string>
 	<string id="362">Skin Credits</string>
 
-	<!-- Contact LAbels -->
+	<!-- Contact Labels -->
 	<string id="370">Contacts</string>
 	<string id="371">No Contacts</string>
 	<string id="372">Edit Contact Name</string>
@@ -270,4 +270,13 @@
 	<string id="377">Compose Email to contact?</string>
 	<string id="378">Contact Added</string>
 	<string id="379">Contact Already Exists in Address Field</string>
+
+	<!-- Draft Labels -->
+	<string id="390">Enter Draft Name:</string>
+	<string id="391">Draft Name Already Exists</string>
+	<string id="392">Draft Saved</string>
+	<string id="393">Draft: </string>
+	<string id="394">Delete Draft?</string>
+	<string id="395">Not Found. Skipping..</string>
+	<string id="396">No Drafts</string>
 </strings>
