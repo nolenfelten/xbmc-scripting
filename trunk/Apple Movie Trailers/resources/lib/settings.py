@@ -8,7 +8,7 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import traceback
+#import traceback
 
 from utilities import *
 import chooser
@@ -36,11 +36,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _get_settings( self ):
         """ reads settings """
-        try:
-            self.settings = Settings().get_settings()
-            self.caps = self.settings[ "capitalize_words" ]
-        except:
-            traceback.print_exc()
+        self.settings = Settings().get_settings()
+        self.caps = self.settings[ "capitalize_words" ]
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.caps ]
@@ -79,7 +76,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._setup_trailer_quality()
         self._setup_skins()
         self._setup_videoplayer()
-        
+        self._setup_showtimes_scrapers()
+
     def _setup_startup_categories( self ):
         self.startup_categories = {}
         self.startup_titles = []
@@ -110,14 +108,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try: self.current_skin = self.skins.index( self.settings[ "skin" ] )
         except: self.current_skin = 0
 
-    def _set_restart_required( self ):
-        """ copies self.settings and adds any settings that require a restart on change """
-        self.settings_original = self.settings.copy()
-        self.settings_restart = ( "skin", )
-        self.settings_refresh = ( "thumbnail_display", "fade_thumb", "capitalize_words", )
+    def _setup_showtimes_scrapers( self ):
+        """ special def for setting up scraper choices """
+        self.showtimes_scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "showtimes_scrapers" ) )
+        try: self.current_showtimes_scraper = self.showtimes_scrapers.index( self.settings[ "showtimes_scraper" ] )
+        except: self.current_showtimes_scraper = 0
 
     def _setup_videoplayer( self ):
         self.videoplayer_displayresolutions = ( "1080i 16x9", "720p 16x9", "480p 4x3", "480p 16x9", "NTSC 4x3", "NTSC 16x9", "PAL 4x3", "PAL 16x9", "PAL60 4x3", "PAL60 16x9", _( 2110 ) )
+
+    def _set_restart_required( self ):
+        """ copies self.settings and adds any settings that require a restart on change """
+        self.settings_original = self.settings.copy()
+        self.settings_restart = ( "skin", "showtimes_scraper" )
+        self.settings_refresh = ( "thumbnail_display", "fade_thumb", "capitalize_words", )
 
 ###### End of Special defs #####################################################
     def _get_chooser( self, choices, original, selection, list_control, title ):
@@ -164,6 +168,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 213 ).setEnabled( self.settings[ "use_simple_search" ] )
             self.getControl( 234 ).setLabel( self._capitalize_text( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] ) )
             self.getControl( 235 ).setSelected( self.settings[ "capitalize_words" ] )
+            self.getControl( 236 ).setLabel( self._capitalize_text( self.settings[ "showtimes_local" ] ) )
+            self.getControl( 237 ).setLabel( self._capitalize_text( self.settings[ "showtimes_scraper" ] ) )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -272,6 +278,21 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #15 """
         self.settings[ "capitalize_words" ] = not self.settings[ "capitalize_words" ]
         self._set_controls_values()
+
+    def _change_setting16( self ):
+        """ changes settings #16 """
+        self.settings[ "showtimes_local" ] = get_keyboard( self.settings[ "showtimes_local" ], _( self.controlId ) )
+        self._set_controls_values()
+
+    def _change_setting17( self ):
+        """ changes settings #17 """
+        try: original_selection = self.showtimes_scrapers.index( self.settings_original[ "showtimes_scraper" ] )
+        except: original_selection = 0
+        selection = self._get_chooser( self.showtimes_scrapers, original_selection, self.current_showtimes_scraper, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        if ( selection is not None ):
+            self.current_showtimes_scraper = selection
+            self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
+            self._set_controls_values()
 
 ##### End of unique defs ######################################################
     

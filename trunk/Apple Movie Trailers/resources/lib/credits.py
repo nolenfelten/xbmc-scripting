@@ -1,5 +1,5 @@
 """
-Credits modules
+Credits module
 
 Nuka1195
 """

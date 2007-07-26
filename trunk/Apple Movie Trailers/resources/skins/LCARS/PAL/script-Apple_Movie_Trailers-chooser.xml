@@ -36,25 +36,12 @@
 		</control>
  		<!-- skin selection controls -->
 		<!-- ** Required ** Do not change <description> or <type> -->
-		<!--control type="image" id="501">
-			<description>Chooser Thumb</description>
-			<posx>200</posx>
-			<posy>40</posy>
-			<width>241</width>
-			<height>135</height>
-			<texture>-</texture>
-			<aspectratio>keep</aspectratio>
-		</control-->
         <control type="multiimage">
             <posx>200</posx>
             <posy>40</posy>
             <width>241</width>
             <height>135</height>
-            <!--imagepath>Default</imagepath-->
             <info>Skin.String(AMT-chooser-thumbfolder)</info>
-            <!--imagepath>$INFO[Skin.String(AMT-chooser-thumbfolder)]</imagepath>
-            <imagepath>Skin.String(AMT-chooser-thumbfolder)</imagepath-->
-            <!--imagepath>q:\scripts\apple movie trailers\resources\skins\default\media\thumbs</imagepath-->
             <timeperimage>2000</timeperimage>
             <fadetime>500</fadetime>
             <visible>!Control.IsVisible(504)</visible>
