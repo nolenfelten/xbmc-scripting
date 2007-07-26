@@ -29,8 +29,9 @@ class _OpeningDateParser( SGMLParser ):
                 self.url = value
                 s = value.find( "date=" )
                 date  = value[ s + 5 : ].split( "-" )
-                i = [ "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", ].index( date[ 1 ] ) + 1
-                self.showtimes_date = "%s-%d-%s" % ( date[ 2 ], i, date[ 0 ], )
+                if ( len( date ) == 3 ):
+                    i = [ "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", ].index( date[ 1 ] ) + 1
+                    self.showtimes_date = "%s-%d-%s" % ( date[ 2 ], i, date[ 0 ], )
 
 
 class _ShowtimesParser( SGMLParser ):
@@ -150,9 +151,9 @@ debugWrite = False
 
 if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
-    movie = [ "Rush Hour 3", "Transformers", "I Now Pronounce You Chuck & Larry" ]
-    location = [ "M4B 1B3", "T1A 3T9", "M4B 1B3" ]
-    for cnt in range( 3 ):
+    movie = [ "Rush Hour 3", "whos your caddy", "Transformers", "I Now Pronounce You Chuck & Larry" ]
+    location = [ "M4B 1B3", "M4B 1B3", "T1A 3T9", "M4B 1B3" ]
+    for cnt in range( 4 ):
         date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
         # print the results
         print "Showtimes for %s Movie: %s - Location: %s" % ( date, movie[ cnt ], location[ cnt ], )
