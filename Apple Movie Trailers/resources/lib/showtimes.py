@@ -34,23 +34,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _show_dialog( self ):
         self.getControl( 20 ).setLabel( self._capitalize_text( self.title ) )
-        self.getControl( 30 ).setLabel( "%s:" % ( _( 602 ), ) )
-        self.getControl( 40 ).setLabel( "%s: %s" % ( _( 603 ), self._capitalize_text( self.location ), ) )
+        self.getControl( 30 ).setLabel( "%s:" % self._capitalize_text( _( 602 ) ) )
+        self.getControl( 40 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 603 ) ), self._capitalize_text( self.location ), ) )
         self.getControl( 100 ).reset()
-        self.getControl( 100 ).addItem( _( 601 ) )
+        self.getControl( 100 ).addItem( self._capitalize_text( _( 601 ) ) )
 
     def _get_showtimes( self ):
         date, movie_showtimes = ShowtimesFetcher.get_showtimes( self.title, self.location )
-        self.getControl( 30 ).setLabel( "%s: %s" % ( _( 602 ), self._capitalize_text( date ), ) )
+        self.getControl( 30 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 602 ) ), self._capitalize_text( date ), ) )
         self.getControl( 100 ).reset()
         if ( movie_showtimes ):
             theaters = movie_showtimes.keys()
             theaters.sort()
             for theater in theaters:
-                list_item = xbmcgui.ListItem( self._capitalize_text( theater ), self._capitalize_text( movie_showtimes[ theater ] ) )
+                list_item = xbmcgui.ListItem( self._capitalize_text( theater ), movie_showtimes[ theater ] )
                 self.getControl( 100 ).addItem( list_item )
         else:
-            self.getControl( 100 ).addItem( _( 600 ) )
+            self.getControl( 100 ).addItem( self._capitalize_text( _( 600 ) ) )
 
     def _close_dialog( self ):
         self.close()
