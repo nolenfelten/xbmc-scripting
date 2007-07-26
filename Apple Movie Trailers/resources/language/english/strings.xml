@@ -113,9 +113,9 @@
     <string id="213">Match whole words only</string>
     <string id="214">Video player resolution</string>
     <string id="215">Use all caps for text</string>
-    <string id="216">Zip code</string>
-    <string id="217">Check version at startup</string>
-    <string id="218">Showtimes scraper</string>
+    <string id="216">Showtimes location</string>
+    <string id="217">Showtimes scraper</string>
+    <string id="218">Check version at startup</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
@@ -176,6 +176,10 @@
     <string id="521">View Studio</string>
     <string id="531">View Actor</string>
     <string id="550">Complete a Full Install</string>
+    
+    <!-- Showtimes -->
+    <string id="600">No showtimes found!</string>
+    <string id="601">Location</string>
     
     <!-- Credits -->
     <string id="900">Version</string>

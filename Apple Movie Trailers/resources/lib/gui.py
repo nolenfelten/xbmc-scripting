@@ -74,6 +74,7 @@ class GUI( xbmcgui.WindowXML ):
         ######################################################################
         ##self.Timer = None
         self._get_settings()
+        self._get_showtimes_scraper()
         self._get_custom_sql()
         
     def onInit( self ):
@@ -101,6 +102,11 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_settings( self ):
         self.settings = Settings().get_settings()
+
+    def _get_showtimes_scraper( self ):
+        sys.path.append( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers", self.settings[ "showtimes_scraper" ] ) )
+        import showtimesScraper
+        self.ShowtimesFetcher = showtimesScraper.ShowtimesFetcher()
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
@@ -495,6 +501,8 @@ class GUI( xbmcgui.WindowXML ):
             elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
                 labels += ( _( 507 ), )
                 functions += ( self.saveCachedMovie, )
+            labels += ( _( 509 ), )
+            functions += ( self.get_showtimes, )
         elif ( controlId == self.CONTROL_CATEGORY_LIST ):
             functions += ( self.getTrailerGenre, )
             if ( self.category_id == GENRES ):
@@ -755,6 +763,21 @@ class GUI( xbmcgui.WindowXML ):
                     self.removeItem( trailer )
                 if ( not len( self.trailers.movies ) ): self.clearTrailerInfo()
                 else: self.showTrailerInfo()
+
+    def get_showtimes( self ):
+        try:
+            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+            date, movie_showtimes = self.ShowtimesFetcher.get_showtimes( self.trailers.movies[ trailer ].title, self.settings[ "showtimes_local" ] )
+            if ( movie_showtimes ):
+                import showtimes
+                force_fallback = self.skin != "Default"
+                s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ], title=self.trailers.movies[ trailer ].title, date=date, location=self.settings[ "showtimes_local" ], showtimes=movie_showtimes )
+                s.doModal()
+                del s
+            else:
+                ok = xbmcgui.Dialog().ok( _( 509 ), _( 600 ) )
+        except:
+            traceback.print_exc()
 
     def exitScript( self, restart=False ):
         ##if ( self.Timer is not None ): self.Timer.cancel()

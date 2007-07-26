@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", )
-SETTINGS_VERSIONS = DATABASE_VERSIONS
+DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", "pre-0.98.8", "0.98.8", )
+SETTINGS_VERSIONS =  ( "pre-0.98.8", "0.98.8", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -139,6 +139,8 @@ class Settings:
             "use_simple_search": False,
             "match_whole_words": False,
             "capitalize_words": False,
+            "showtimes_local": "33102",
+            "showtimes_scraper": "Google USA",
             }
         ok = self.save_settings( settings )
         return settings
