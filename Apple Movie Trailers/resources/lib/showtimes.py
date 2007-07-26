@@ -6,8 +6,9 @@ Nuka1195
 
 import sys
 import xbmcgui
-import traceback
 
+import showtimesScraper
+ShowtimesFetcher = showtimesScraper.ShowtimesFetcher()
 from utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
@@ -21,27 +22,35 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.lock()
         self.caps = kwargs[ "caps" ]
         self.title = kwargs[ "title" ]
-        self.date = kwargs[ "date" ]
         self.location = kwargs[ "location" ]
-        self.movie_showtimes = kwargs[ "showtimes" ]
 
     def onInit( self ):
         self._show_dialog()
         xbmcgui.unlock()
+        self._get_showtimes()
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.caps ]
 
     def _show_dialog( self ):
         self.getControl( 20 ).setLabel( self._capitalize_text( self.title ) )
-        self.getControl( 30 ).setLabel( self._capitalize_text( self.date ) )
-        self.getControl( 40 ).setLabel( "%s: %s" % ( _( 601 ), self._capitalize_text( self.location ), ) )
+        self.getControl( 30 ).setLabel( "%s:" % ( _( 602 ), ) )
+        self.getControl( 40 ).setLabel( "%s: %s" % ( _( 603 ), self._capitalize_text( self.location ), ) )
         self.getControl( 100 ).reset()
-        theaters = self.movie_showtimes.keys()
-        theaters.sort()
-        for theater in theaters:
-            list_item = xbmcgui.ListItem( self._capitalize_text( theater ), self._capitalize_text( self.movie_showtimes[ theater ] ) )
-            self.getControl( 100 ).addItem( list_item )
+        self.getControl( 100 ).addItem( _( 601 ) )
+
+    def _get_showtimes( self ):
+        date, movie_showtimes = ShowtimesFetcher.get_showtimes( self.title, self.location )
+        self.getControl( 30 ).setLabel( "%s: %s" % ( _( 602 ), self._capitalize_text( date ), ) )
+        self.getControl( 100 ).reset()
+        if ( movie_showtimes ):
+            theaters = movie_showtimes.keys()
+            theaters.sort()
+            for theater in theaters:
+                list_item = xbmcgui.ListItem( self._capitalize_text( theater ), self._capitalize_text( movie_showtimes[ theater ] ) )
+                self.getControl( 100 ).addItem( list_item )
+        else:
+            self.getControl( 100 ).addItem( _( 600 ) )
 
     def _close_dialog( self ):
         self.close()

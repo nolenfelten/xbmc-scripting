@@ -179,7 +179,9 @@
     
     <!-- Showtimes -->
     <string id="600">No showtimes found!</string>
-    <string id="601">Location</string>
+    <string id="601">Finding showtimes, please wait...</string>
+    <string id="602">Date</string>
+    <string id="603">Location</string>
     
     <!-- Credits -->
     <string id="900">Version</string>
