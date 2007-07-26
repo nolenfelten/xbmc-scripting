@@ -105,8 +105,8 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_showtimes_scraper( self ):
         sys.path.append( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers", self.settings[ "showtimes_scraper" ] ) )
-        import showtimesScraper
-        self.ShowtimesFetcher = showtimesScraper.ShowtimesFetcher()
+        #import showtimesScraper
+        #self.ShowtimesFetcher = showtimesScraper.ShowtimesFetcher()
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
@@ -765,19 +765,12 @@ class GUI( xbmcgui.WindowXML ):
                 else: self.showTrailerInfo()
 
     def get_showtimes( self ):
-        try:
-            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-            date, movie_showtimes = self.ShowtimesFetcher.get_showtimes( self.trailers.movies[ trailer ].title, self.settings[ "showtimes_local" ] )
-            if ( movie_showtimes ):
-                import showtimes
-                force_fallback = self.skin != "Default"
-                s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ], title=self.trailers.movies[ trailer ].title, date=date, location=self.settings[ "showtimes_local" ], showtimes=movie_showtimes )
-                s.doModal()
-                del s
-            else:
-                ok = xbmcgui.Dialog().ok( _( 509 ), _( 600 ) )
-        except:
-            traceback.print_exc()
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+        import showtimes
+        force_fallback = self.skin != "Default"
+        s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ], title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
+        s.doModal()
+        del s
 
     def exitScript( self, restart=False ):
         ##if ( self.Timer is not None ): self.Timer.cancel()
