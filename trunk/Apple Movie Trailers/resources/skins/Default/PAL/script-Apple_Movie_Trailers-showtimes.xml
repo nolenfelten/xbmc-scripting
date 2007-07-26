@@ -9,8 +9,8 @@
 		<!-- ** Optional ** -->
 		<control type="image">
 			<description>Background Image</description>
-			<posx>0</posx>
-			<posy>20</posy>
+			<posx>1</posx>
+			<posy>18</posy>
 			<width>400</width>
 			<height>370</height>
 			<texture>amt-dialog-panel.png</texture>
@@ -30,7 +30,7 @@
 			<description>Showtimes Date Label</description>
 			<posx>20</posx>
 			<posy>50</posy>
-			<width>200</width>
+			<width>250</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
@@ -49,13 +49,20 @@
 		<control type="list" id="100">
 			<description>Team Credits List</description>
 			<posx>20</posx>
-			<posy>80</posy>
+			<posy>82</posy>
 			<width>370</width>
 			<height>270</height>
 			<scrolltime>200</scrolltime>
             <onup>100</onup>
             <ondown>100</ondown>
 			<itemlayout height="45">
+				<control type="image">
+					<width>370</width>
+					<height>42</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture border="5">amt-input-nofocus.png</texture>
+				</control>
 				<control type="label">
 					<posx>5</posx>
 					<posy>1</posy>

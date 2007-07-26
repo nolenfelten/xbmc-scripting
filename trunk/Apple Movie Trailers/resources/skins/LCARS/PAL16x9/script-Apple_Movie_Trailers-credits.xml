@@ -1,5 +1,4 @@
 ﻿<window>
-	<!--defaultcontrol>101</defaultcontrol-->
 	<coordinates>
 		<system>1</system>
 		<posx>161</posx>
@@ -183,26 +182,60 @@
 		</control>
 		<!-- ** Optional ** -->
 		<!-- This control is where you add your credits. -->
-		<control type="label">
-			<description>Skin Credits</description>
-			<posx>66</posx>
+		<control type="list" id="103">
+			<description>Skinning Credits List</description>
+			<posx>63</posx>
 			<posy>281</posy>
-			<width>200</width>
-			<height>20</height>
-			<font>font10</font>
-			<aligny>center</aligny>
-			<align>left</align>
-			<label>Graphics &amp; Skinning</label>
-		</control>
-		<control type="label">
-			<posx>338</posx>
-			<posy>281</posy>
-			<width>150</width>
-			<height>20</height>
-			<font>font10</font>
-			<aligny>center</aligny>
-			<align>right</align>
-			<label>Chokemaniac &amp; Jezz_X</label>
+			<width>300</width>
+			<height>60</height>
+			<scrolltime>200</scrolltime>
+            <content>
+                <item label="Graphics &amp; Skinning" label2="Chokemaniac &amp; Jezz_X">-</item>
+            </content>
+			<itemlayout height="20">
+				<control type="label">
+					<posx>3</posx>
+					<posy>1</posy>
+					<width>200</width>
+					<height>18</height>
+					<font>font10</font>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>275</posx>
+					<posy>1</posy>
+					<width>150</width>
+					<height>18</height>
+					<font>font10</font>
+					<aligny>center</aligny>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="20">
+				<control type="label">
+					<posx>3</posx>
+					<posy>1</posy>
+					<width>200</width>
+					<height>18</height>
+					<font>font10</font>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>275</posx>
+					<posy>1</posy>
+					<width>150</width>
+					<height>18</height>
+					<font>font10</font>
+					<aligny>center</aligny>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</focusedlayout>
 		</control>
 	</controls>
 </window>

@@ -105,8 +105,6 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_showtimes_scraper( self ):
         sys.path.append( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers", self.settings[ "showtimes_scraper" ] ) )
-        #import showtimesScraper
-        #self.ShowtimesFetcher = showtimesScraper.ShowtimesFetcher()
 
     def _capitalize_text( self, text ):
         return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
