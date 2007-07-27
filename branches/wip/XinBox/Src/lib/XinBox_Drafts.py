@@ -28,7 +28,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def setupvars(self):
         self.returnval = 0
-        self.getControl(73).addLabel(self.account + " " + "Drafts")
+        self.getControl(73).addLabel(self.account + " " + self.language(397))
         self.listEnabled = True
         self.control_action = XinBox_Util.setControllerAction()
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)

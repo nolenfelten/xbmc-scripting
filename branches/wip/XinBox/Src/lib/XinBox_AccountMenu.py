@@ -205,7 +205,7 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.checkforchanges()
             elif curPos == 4:
                 dialog = xbmcgui.Dialog()
-                value = dialog.numeric(0, "Mini-Mode Delay (s)", curName2)
+                value = dialog.numeric(0,self.language(354), curName2)
                 curItem.setLabel2(value)
                 self.accountSettings.setSetting("MiniMode Time",value)
                 self.checkforchanges()
