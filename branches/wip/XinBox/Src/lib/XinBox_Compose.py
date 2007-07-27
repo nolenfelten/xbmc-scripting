@@ -128,25 +128,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         dialog = xbmcgui.Dialog()
                         dialog.ok(self.language(93),self.language(391))
                     else:self.buildemail(True, value)
-            elif controlID == 81:
-                dialog = xbmcgui.Dialog()
-                if dialog.yesno(self.language(77), self.language(326)):
-                    self.attachments.pop(self.getControl(81).getSelectedPosition())
-                    self.getControl(81).reset()
-                    if len(self.attachments) == 0:
-                        self.animating = True
-                        xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
-                        time.sleep(0.9)
-                        self.animating = False
-                        self.getControl(80).setImage("XBXinBoXLogo.png")
-                        self.getControl(90).setLabel("")
-                        self.attachlist = False
-                        self.getControl(81).setEnabled(False)
-                        self.setFocusId(62)
-                    else:
-                        for attach in self.attachments:
-                            self.getControl(81).addItem(attach[0])
-                        self.showattach(self.getControl(81).getSelectedPosition())
                         
     def savedraft(self, settings, value):
         draftfile = self.accountfolder + str(hash(value)) + ".draft"
@@ -230,7 +211,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     value = self.launchcontacts(self.getControl(82).getSelectedItem().getLabel())
                 elif focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
-                    self.setCurrentListPosition(self.getCurrentListPosition()+1)                    
+                    self.setCurrentListPosition(self.getCurrentListPosition()+1)
             elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
@@ -239,6 +220,25 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         self.setCurrentListPosition(self.getCurrentListPosition()-1)
                 elif focusid == 82:
                     self.getControl(82).getSelectedItem().setLabel("")
+                elif focusid == 81:
+                    dialog = xbmcgui.Dialog()
+                    if dialog.yesno(self.language(77), self.language(326)):
+                        self.attachments.pop(self.getControl(81).getSelectedPosition())
+                        self.getControl(81).reset()
+                        if len(self.attachments) == 0:
+                            self.animating = True
+                            xbmc.executebuiltin("Skin.ToggleSetting(attachlistnotempty)")
+                            time.sleep(0.9)
+                            self.animating = False
+                            self.getControl(80).setImage("XBXinBoXLogo.png")
+                            self.getControl(90).setLabel("")
+                            self.attachlist = False
+                            self.getControl(81).setEnabled(False)
+                            self.setFocusId(62)
+                        else:
+                            for attach in self.attachments:
+                                self.getControl(81).addItem(attach[0])
+                            self.showattach(self.getControl(81).getSelectedPosition())
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                 if focusid == 82:
                     if self.getControl(82).getSelectedPosition() == 0:
@@ -281,11 +281,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.exitme()
         else:self.savedraft([toadd,ccadd,bccadd,subject,body,self.attachments], name)
 
-    def removefiles(self,mydir):
-        for root, dirs, files in os.walk(mydir, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-
     def exitme(self):
         self.animating = True
         if self.attachlist:
@@ -293,8 +288,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             time.sleep(0.9)
         xbmc.executebuiltin("Skin.Reset(emaildialog)")
         time.sleep(0.9)
-        if self.returnvalue == 0:
-            if len(self.attachments) != 0:self.removefiles(TEMPFOLDER)
         self.close()
 
     def showKeyboard(self, heading,default=""):

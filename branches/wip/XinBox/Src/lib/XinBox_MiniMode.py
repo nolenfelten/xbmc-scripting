@@ -98,7 +98,6 @@ class Popup( xbmcgui.WindowXMLDialog ):
     def onInit(self):
         self.returnval = 0
         self.getControl(21).setText(self.message)
-        self.getControl(80).setLabel(self.lang(355))
         self.animating = True
         xbmc.executebuiltin("Skin.SetBool(showpopup)")
         time.sleep(0.5)

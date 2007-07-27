@@ -219,20 +219,15 @@ class GUI( xbmcgui.WindowXML ):
             f.close()
             dialog.close()
 
-
-                        #toaddr, cc, bcc, subject, body, attachments in form [attachment name, path, size]
     def sendemail(self, draft=["","","","","",None]):
-        try:
-            w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder,account=self.account,setts=self.settings)
-            w.doModal()
-            returnval = w.returnvalue
+        w = XinBox_Compose.GUI("XinBox_Compose.xml",self.srcpath,"DefaultSkin",0,inboxsetts=self.ibsettings,lang=self.language,inboxname=self.inbox,mydraft=draft,ibfolder=self.ibfolder,account=self.account,setts=self.settings)
+        w.doModal()
+        returnval = w.returnvalue
+        del w
+        if returnval != 0:
+            w = Email(self.ibsettings,self.inbox,self.account,self.language)
+            w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
             del w
-            if returnval != 0:
-                w = Email(self.ibsettings,self.inbox,self.account,self.language)
-                w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
-                del w
-        except:traceback.print_exc()
-
 
     def launchmycontacts(self):
         w = XinBox_Contacts.GUI("XinBox_Contacts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts=self.settings,lang=self.language)
@@ -266,8 +261,6 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(64).setLabel(self.language(65))
         self.getControl(65).setLabel(self.language(370))
         
-
-
     def checkfornew(self):
         w = Email(self.ibsettings,self.inbox,self.account,self.language)
         w.checkemail()
@@ -279,7 +272,6 @@ class GUI( xbmcgui.WindowXML ):
         if len(newlist) != 0:
             self.updatelist(newlist)
         
-
     def updatesizelabel(self):
         if self.theservsize == False:
             self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
@@ -307,7 +299,7 @@ class GUI( xbmcgui.WindowXML ):
             else:self.setinboxempty()
         else:
             orig = self.guilist[pos]
-            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-",]
+            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
             self.guilist.pop(pos)
             self.guilist.insert(pos, new)
 
