@@ -22,27 +22,5 @@
 			<animation effect="slide" end="0,150" time="500">Hidden</animation>
 			<visible>Skin.HasSetting(showpopup)</visible>
         	</control>
-		<control type="image">
-			<description>A Button image</description>
-			<posx>440</posx>
-			<posy>535</posy>
-			<width>20</width>
-			<height>20</height>
-			<texture>XBbutton-A.png</texture>
-			<animation effect="slide" start="0,150" time="500">Visible</animation>
-			<animation effect="slide" end="0,150" time="500">Hidden</animation>
-			<visible>Skin.HasSetting(showpopup)</visible>
-		</control>
-  		<control type="label" id="80">
-        		<description>A button Label</description>
-        		<posx>467</posx>
-        		<posy>535</posy>
-        		<width>200</width>
-        		<label>-</label>
-        		<font>font13</font>
-			<animation effect="slide" start="0,150" time="500">Visible</animation>
-			<animation effect="slide" end="0,150" time="500">Hidden</animation>
-			<visible>Skin.HasSetting(showpopup)</visible>
-  		</control>
 	</controls>
 </window>

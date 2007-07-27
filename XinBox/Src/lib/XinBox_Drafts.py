@@ -103,7 +103,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         for attachment in mydraft.getSetting("Attachments"):
             if not exists(attachment):
                 dialog = xbmcgui.Dialog()
-                dialog.ok(self.language(93), self.language(320) + " " + basename(attachment),self.language(395))
+                if not dialog.ok(self.language(93), self.language(320) + " " + basename(attachment),self.language(395)):
+                    return
             else:attachments.append([basename(attachment),attachment,getsize(str(attachment))])
         self.returnval = [toaddr,ccaddr,bccaddr,subject,body,attachments]
         self.exitme()

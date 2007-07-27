@@ -36,7 +36,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:self.sent = str(date).replace("\n","")
         self.attachments = []
         self.replyvalue = 0
-        self.click = 0
         self.curpos = 0
         self.showing = False
         self.deleserv = False
@@ -196,33 +195,21 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if self.filebel == "Unknown":
             self.saveattachment(pos)
         elif self.filebel == "Text":
-            if self.click == 0:
+            if not self.showing:
                 self.showing = True
-                self.click = 1
                 self.showtext(pos)
-            else:self.saveattachment(pos)
         elif self.filebel == "Audio":
-            if self.click == 0:
-                xbmc.playSFX(TEMPFOLDER + self.attachments[pos][0])
-                self.click = 1
-            else:self.saveattachment(pos)
+            xbmc.playSFX(TEMPFOLDER + self.attachments[pos][0])
         elif self.filebel == "Video":
-            if self.click == 0:
-                self.click = 1
-                xbmc.Player().play(TEMPFOLDER + self.attachments[pos][0])
-            else:self.saveattachment(pos)
+            xbmc.Player().play(TEMPFOLDER + self.attachments[pos][0])
         elif self.filebel == "Image":
-            if self.click == 0:
+            if not self.showing:
                 self.showing = True
-                self.click = 1
                 self.showimage(pos)
-            else:self.saveattachment(pos)
         elif self.filebel == "Archive":
-            if self.click == 0:
+            if not self.showing:
                 self.showing = True
-                self.click = 1
                 self.showzip(pos)
-            else:self.saveattachment(pos)
 
     def showzip(self,pos):
         self.getControl(73).reset()
@@ -280,7 +267,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(61).setEnabled(False)
         
         
-
     def showtext(self, pos):
         self.getControl(73).reset()
         self.getControl(73).addLabel(self.language(320) + " " + self.attachments[pos][0])
@@ -318,11 +304,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif focusid == 81:
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                     self.launchinfo(137,self.language(266))
+                elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                    self.saveattachment(self.getControl(81).getSelectedPosition())
                 else:
                     if self.curpos != self.getControl(81).getSelectedPosition():
-                        self.click = 0
-                        if self.showing:
-                            self.resetemail()
+                        if self.showing:self.resetemail()
                     self.curpos = self.getControl(81).getSelectedPosition()
                     self.showattach(self.getControl(81).getSelectedPosition())
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
