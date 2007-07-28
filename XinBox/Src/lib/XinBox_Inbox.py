@@ -90,7 +90,15 @@ class GUI( xbmcgui.WindowXML ):
             self.setinboxempty()
             dialog.ok(self.language(49),self.language(278))
             return
-  
+    def setupcontrols(self):
+        self.getControl(80).setLabel(self.inbox)
+        self.getControl(61).setLabel(self.language(250))
+        self.getControl(62).setLabel(self.language(251))
+        self.getControl(63).setLabel(self.language(275))
+        self.getControl(64).setLabel(self.language(65))
+        self.getControl(65).setLabel(self.language(370))
+        self.getControl(66).setLabel(self.language(397))
+        
     def onAction( self, action ):
         if not self.animating:
             button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
@@ -118,6 +126,10 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(134,self.language(275))
                 elif focusid == 64:
                     self.launchinfo(128,self.language(65))
+                elif focusid == 65:
+                    self.launchinfo(156,self.language(370))
+                elif focusid == 66:
+                    self.launchinfo(157,self.language(397))
                     
     def getem(self, myfrom):
         myre = re.search('<([^>]*)>',myfrom)
@@ -252,15 +264,6 @@ class GUI( xbmcgui.WindowXML ):
         parser.feed(email)
         parser.close()
         return parser.output()
-    
-    def setupcontrols(self):
-        self.getControl(80).setLabel(self.inbox)
-        self.getControl(61).setLabel(self.language(250))
-        self.getControl(62).setLabel(self.language(251))
-        self.getControl(63).setLabel(self.language(275))
-        self.getControl(64).setLabel(self.language(65))
-        self.getControl(65).setLabel(self.language(370))
-        self.getControl(66).setLabel(self.language(397))
         
     def checkfornew(self):
         w = Email(self.ibsettings,self.inbox,self.account,self.language)

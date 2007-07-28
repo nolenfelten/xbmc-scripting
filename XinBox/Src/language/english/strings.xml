@@ -142,6 +142,13 @@
 	<string id="153">Select to Clear the email body.</string>
 	<string id="154">Select to Add a new attachment to this email.</string>
 	<string id="155">Select to Remove this attachment from the email.</string>
+	<string id="156">Select to open the Contacts menu.</string>
+	<string id="157">Select to open the Drafts menu.</string>
+	<string id="158">Select to save this composed email to Drafts.</string>
+	<string id="159">Select to edit Contact.</string>
+	<string id="160">Select to add a new Contact.</string>
+	<string id="161">Select to open Draft.</string>
+	<string id="162">You have no drafts. Click Save in Compose menu to add a new draft.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -270,6 +277,7 @@
 	<string id="377">Compose Email to contact?</string>
 	<string id="378">Contact Added</string>
 	<string id="379">Contact Already Exists in Address Field</string>
+	<string id="380">Contact List</string>
 
 	<!-- Draft Labels -->
 	<string id="390">Enter Draft Name:</string>
@@ -280,4 +288,5 @@
 	<string id="395">Not Found. Skipping..</string>
 	<string id="396">No Drafts</string>
 	<string id="397">Drafts</string>
+	<string id="398">Drafts List</string>
 </strings>

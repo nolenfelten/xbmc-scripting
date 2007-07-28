@@ -2,10 +2,11 @@
 
 import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
-
+import XinBox_InfoDialog
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False,lang=False,thelabel=False):
+        self.srcpath = strFallbackPath
         self.label = thelabel
         self.language = lang
         self.account = accountname
@@ -129,6 +130,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         return
                 self.returnval = contact
                 self.exitme()
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if focusid == 50:
+                    self.launchinfo(159,self.language(380))
+                elif focusid == 61:
+                    self.launchinfo(160,self.language(61))
 
     def exitme(self):
         self.animating = True
@@ -146,3 +152,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if keyboard.isConfirmed():
             return keyboard.getText()
         else:return False
+
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog.doModal()
+        del dialog

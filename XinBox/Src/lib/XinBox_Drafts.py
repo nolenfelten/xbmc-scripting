@@ -4,11 +4,13 @@ import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
 from XinBox_Settings import Settings
 from os.path import join, exists, basename,getsize
+import XinBox_InfoDialog
 
 ACCOUNTSDIR = XinBox_Util.__accountsdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,accountname=False,setts=False,lang=False,thelabel=False):
+        self.srcpath = strFallbackPath
         self.label = thelabel
         self.language = lang
         self.account = accountname
@@ -88,7 +90,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         self.accountsettings.removeinbox("Drafts",curItem.getLabel())
                         self.settings.saveXMLfromArray()
                         self.removeItem(curPos)
-                        self.builddraftlist()       
+                        self.builddraftlist()
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if self.listEnabled:
+                    self.launchinfo(161,self.language(398))
+                else:self.launchinfo(162,self.language(398))
 
     def builddraft(self, name):
         mydraft = self.accountsettings.getSettingInListbyname("Drafts",name)
@@ -125,3 +131,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if keyboard.isConfirmed():
             return keyboard.getText()
         else:return False
+
+    def launchinfo(self, focusid, label,heading=False):
+        dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)
+        dialog.doModal()
+        del dialog
