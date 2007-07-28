@@ -86,7 +86,6 @@ class ShowtimesFetcher:
         """ *REQUIRED: Returns showtimes for each theater in your local """
         movie = self._format_param( movie )
         location = self._format_param( location )
-        print self.base_url + "/movies?q=%s&near=%s" % ( movie, location, )
         date, showtimes = self._fetch_showtimes( self.base_url + "/movies?q=%s&near=%s" % ( movie, location, ) )
         date = datetime.date( int( date.split( "-" )[ 0 ] ), int( date.split( "-" )[ 1 ] ), int( date.split( "-" )[ 2 ] ) ).strftime( "%A, %B %d, %Y" )
         return date, showtimes
@@ -152,9 +151,9 @@ debugWrite = False
 
 if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
-    movie = [ "The Simpsons Movie", "whos your caddy", "Transformers", "I Now Pronounce You Chuck & Larry" ]
-    location = [ "london", "33102", "33102", "33102" ]
-    for cnt in range( 1 ):
+    movie = [ "The Simpsons Movie", "Transformers", "Evan Almighty" ]
+    location = [ "London", "W2 4YL", "W11" ]
+    for cnt in range( 2,3 ):
         date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
         # print the results
         print "Showtimes for %s Movie: %s - Location: %s" % ( date, movie[ cnt ], location[ cnt ], )
