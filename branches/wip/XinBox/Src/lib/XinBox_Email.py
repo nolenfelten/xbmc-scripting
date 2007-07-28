@@ -21,6 +21,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
       
     def setupvars(self):
         xbmcgui.lock()
+        self.click = 0
         self.ziplist = []
         self.subject = self.emailsettings[1].get('subject').replace("\n","")
         self.emfrom = self.emailsettings[1].get('from').replace("\n","")
@@ -140,8 +141,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def onClick(self, controlID):
         if not self.animating:
-            if controlID == 50:
-                self.savezip(self.getCurrentListPosition())
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
@@ -192,12 +191,15 @@ class GUI( xbmcgui.WindowXMLDialog ):
         return "%.1f %s" % (size,  sizeext)
 
     def openattach(self, pos):
-        if self.filebel == "Unknown":
-            self.saveattachment(pos)
-        elif self.filebel == "Text":
+        if self.filebel == "Text":
             if not self.showing:
                 self.showing = True
                 self.showtext(pos)
+            else:
+                self.showing = False
+                self.resetemail()
+                self.curpos = self.getControl(81).getSelectedPosition()
+                self.showattach(self.getControl(81).getSelectedPosition())
         elif self.filebel == "Audio":
             xbmc.playSFX(TEMPFOLDER + self.attachments[pos][0])
         elif self.filebel == "Video":
@@ -206,10 +208,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if not self.showing:
                 self.showing = True
                 self.showimage(pos)
+            else:
+                self.showing = False
+                self.resetemail()
+                self.curpos = self.getControl(81).getSelectedPosition()
+                self.showattach(self.getControl(81).getSelectedPosition())
         elif self.filebel == "Archive":
             if not self.showing:
                 self.showing = True
                 self.showzip(pos)
+            else:
+                self.showing = False
+                self.resetemail()
+                self.curpos = self.getControl(81).getSelectedPosition()
+                self.showattach(self.getControl(81).getSelectedPosition())
 
     def showzip(self,pos):
         self.getControl(73).reset()
@@ -311,6 +323,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         if self.showing:self.resetemail()
                     self.curpos = self.getControl(81).getSelectedPosition()
                     self.showattach(self.getControl(81).getSelectedPosition())
+            elif focusid == 50:
+                if ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                    self.savezip(self.getCurrentListPosition())
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                 if focusid == 61:
                     self.launchinfo(138,"R")
