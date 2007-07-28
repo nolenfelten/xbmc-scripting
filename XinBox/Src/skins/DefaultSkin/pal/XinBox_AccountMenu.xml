@@ -113,7 +113,7 @@
 				<height>42</height>
 			</control>
 			<control type="button" id="63">
-				<description>Exit Button</description>
+				<description>Mini-Mode Button</description>
 				<posx>258</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>

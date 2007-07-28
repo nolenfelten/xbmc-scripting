@@ -310,7 +310,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>Save</label>
+				<label>-</label>
 				<onright>63</onright>
 				<onup>50</onup>
 				<ondown>82</ondown>
