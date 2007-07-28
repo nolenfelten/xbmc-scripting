@@ -260,6 +260,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.launchinfo(153,self.language(333))
                 elif focusid == 81:
                     self.launchinfo(155,self.language(266))
+                elif focusid == 64:
+                    self.launchinfo(158,self.language(64))
             elif focusid == 81:
                 self.showattach(self.getControl(81).getSelectedPosition())
                
