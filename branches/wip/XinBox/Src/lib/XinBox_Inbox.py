@@ -260,6 +260,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(63).setLabel(self.language(275))
         self.getControl(64).setLabel(self.language(65))
         self.getControl(65).setLabel(self.language(370))
+        self.getControl(66).setLabel(self.language(397))
         
     def checkfornew(self):
         w = Email(self.ibsettings,self.inbox,self.account,self.language)

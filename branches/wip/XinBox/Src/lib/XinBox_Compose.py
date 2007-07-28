@@ -62,6 +62,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(61).setLabel(self.language(314))
         self.getControl(62).setLabel(self.language(61))
         self.getControl(63).setLabel(self.language(333))
+        self.getControl(64).setLabel(self.language(64))
         self.getControl(82).addItem(self.mydraft[0])
         self.getControl(82).addItem(self.mydraft[1])
         self.getControl(82).addItem(self.mydraft[2])
