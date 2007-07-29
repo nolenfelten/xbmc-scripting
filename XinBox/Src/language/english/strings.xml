@@ -290,4 +290,5 @@
     	<string id="400">Your new version was saved to:</string>
     	<string id="401">No tagged versions were found!</string>
     	<string id="402">There was an error updating script!</string>
+	<string id="403">Delete old version, rename and run new version?</string>
 </strings>

@@ -8,11 +8,11 @@ import sys, os, xbmcgui, urllib, socket, traceback
 from sgmllib import SGMLParser
 import XinBox_Util
 
-socket.setdefaulttimeout( 10 )
+socket.setdefaulttimeout( 20 )
 
 __scriptname__ = XinBox_Util.__scriptname__
 __version__ = XinBox_Util.__version__
-
+__udata__ = XinBox_Util.__settingdir__
 
 
 class Parser( SGMLParser ):
@@ -44,16 +44,17 @@ class Parser( SGMLParser ):
 class Update:
     """ Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
     def __init__( self ,  lang=False):
+        self.returnval = 0
         self.language = lang
         self.base_url = XinBox_Util.__BaseURL__
         self.dialog = xbmcgui.DialogProgress()
         new = self._check_for_new_version()
         if ( new ): self._update_script()
-        else: xbmcgui.Dialog().ok( __scriptname__, self.language(390))
+        else: xbmcgui.Dialog().ok( __scriptname__ + " V." + __version__, self.language(390))
             
     def _check_for_new_version( self ):
         """ checks for a newer version """
-        self.dialog.create( __scriptname__, self.language(391) )
+        self.dialog.create( __scriptname__ + " V." + __version__, self.language(391) )
         # get version tags
         new = None
         htmlsource = self._get_html_source( "%s/tags/%s" % ( self.base_url, __scriptname__.replace( " ", "%20" ), ) )
@@ -68,8 +69,8 @@ class Update:
     def _update_script( self ):
         """ main update function """
         try:
-            if ( xbmcgui.Dialog().yesno( __scriptname__, "%s %s %s." % ( self.language(396), self.versions[ -1 ][ : -1 ], self.language(392)))):
-                self.dialog.create( __scriptname__, self.language(394), self.language(395))
+            if ( xbmcgui.Dialog().yesno( __scriptname__ + " V." + __version__, "%s %s %s." % ( self.language(396), self.versions[ -1 ][ : -1 ], self.language(392)),self.language(393))):
+                self.dialog.create( __scriptname__ + " V." + __version__, self.language(394), self.language(395))
                 script_files = []
                 folders = ["%s/%s" % ( self.url, self.versions[-1], )]
                 while folders:
@@ -91,7 +92,7 @@ class Update:
                 self._get_files( script_files, self.versions[ -1 ][ : -1 ] )
         except:
             self.dialog.close()
-            xbmcgui.Dialog().ok( __scriptname__, self.language(402))
+            xbmcgui.Dialog().ok( __scriptname__ + "V." + __version__, self.language(402))
         
     def _get_files( self, script_files, version ):
         """ fetch the files """
@@ -109,7 +110,21 @@ class Update:
             raise
         else:
             self.dialog.close()
-            xbmcgui.Dialog().ok( __scriptname__, self.language(400), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, version, ) )
+            if xbmcgui.Dialog().yesno( __scriptname__ + " V." + __version__, self.language(400), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, version, ),self.language(403)):
+                self.createpy(version)
+
+    def createpy(self, version):
+        mylines = []
+        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate.txt", "r")
+        for line in f.readlines():
+            if "origpath =" in line:mylines.append("origpath = " + '"' + sys.path[0].replace("\\","\\\\") + '"' + "\n")
+            elif "newpath =" in line:mylines.append("newpath = " + '"' + "Q:\\\\scripts\\\\%s_v%s" % ( __scriptname__, version, ) + '"' + "\n")
+            else:mylines.append(line)
+        f.close
+        f = open(__udata__ + "XinBox_Update.py", "w")
+        f.writelines(mylines)
+        f.close()
+        self.returnval = 1
             
     def _get_html_source( self, url ):
         """ fetch the SVN html source """
