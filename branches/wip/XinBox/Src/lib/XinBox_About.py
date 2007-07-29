@@ -28,7 +28,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(63).setLabel(self.lang(362))
         self.getControl(64).addLabel(XinBox_Util.__url__)
         self.getControl(80).setLabel(self.lang(14))
-        self.getControl(81).setLabel(XinBox_Util.__version__)
+        self.getControl(81).setLabel("V." + XinBox_Util.__version__)
         self.getControl(72).setText(self.aboutcr)
         
     def onClick( self, controlId ):
