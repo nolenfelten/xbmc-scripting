@@ -201,9 +201,13 @@ class GUI( xbmcgui.WindowXML ):
                             if "@" in value:
                                 server = value.split("@")[1]
                                 name = value.split("@")[0]
-                                self.settings.setSetting("Account Name",name)
-                                self.getListItem(4).setLabel2(name)
                                 if self.servers.has_key(server):
+                                    if self.servers[server][5] == "":
+                                        self.getListItem(4).setLabel2(name)
+                                        self.settings.setSetting("Account Name",name)
+                                    else:
+                                        self.getListItem(4).setLabel2(self.servers[server][5])
+                                        self.settings.setSetting("Account Name",self.servers[server][5])
                                     self.settings.setSetting("POP Server",self.servers[server][0])
                                     self.getListItem(2).setLabel2(self.servers[server][0])
                                     self.settings.setSetting("SMTP Server",self.servers[server][1])
@@ -211,6 +215,9 @@ class GUI( xbmcgui.WindowXML ):
                                     self.updatessl(91,"",self.servers[server][2])
                                     self.updatessl(92,"",self.servers[server][3])
                                     self.updatesizes(self.servers[server][4],6)
+                                else:
+                                    self.getListItem(4).setLabel2(name)
+                                    self.settings.setSetting("Account Name",name)
                         else:
                             self.settings.setSetting(self.settnames[curPos],value)
                             curItem.setLabel2(value)

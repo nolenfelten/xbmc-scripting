@@ -57,14 +57,19 @@ def setControllerAction():
 
 def getpresetservers():
     return {
-            "gmail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0"],
-            "ihug.co.nz" : ["pop.ihug.co.nz","smtp.ihug.co.nz","0","0","5"],
-            "xtra.co.nz" : ["pop3.xtra.co.nz","smtp.xtra.co.nz","0","0","100"],
-            "sky.com" : ["pop.sky.com","smtp.sky.com","0","0","200"],
-            "aol.com" : ["pop.aol.com","smtp.aol.com","0","587","5000"],
-            "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000"],
-            "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100"],
-            }
+            "gmail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0",""],
+            "ihug.co.nz" : ["pop.ihug.co.nz","smtp.ihug.co.nz","0","0","5",""],
+            "xtra.co.nz" : ["pop3.xtra.co.nz","smtp.xtra.co.nz","0","0","100",""],
+            "sky.com" : ["pop.sky.com","smtp.sky.com","0","0","200",""],
+            "aol.com" : ["pop.aol.com","smtp.aol.com","0","587","5000",""],
+            "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000",""],
+            "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100",""],
+            "googlemail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0",""],
+            "yahoo.de" : ["pop.mail.yahoo.de","smtp.mail.yahoo.de","995","465","0",""],
+            "yahoo.com" : ["pop.mail.yahoo.com","smtp.mail.yahoo.com","995","465","0",""],
+            "gmx.net" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer"],
+            "web.de" : ["pop3.web.de","smtp.web.de","0","0","0",""],
+            "freenet.de" : ["pop3.freenet.de","mx.freenet.de","0","0","0",""]}
 
 def getfiletypes(filetype):
     if filetype in IMAGETYPES: return "Image"

@@ -143,12 +143,8 @@
 	<string id="154">Auswählen um einen neuen Anhang zu dieser Email hinzuzufügen.</string>
 	<string id="155">Auswählen um diesen Anhang aus der Email zu löschen.</string>
 	<string id="156">Auswählen um das Kontaktmenü zu öffnen.</string>
-	<string id="157">Auswählen um das Entwurfmenü zu öffnen.</string>
-	<string id="158">Auswählen um die verfasste Email in den Entwürfen zu speichern.</string>
 	<string id="159">Auswählen um die Kontakte zu bearbeiten.</string>
 	<string id="160">Auswählen um einen neuen Kontakt hinzuzufügen.</string>
-	<string id="161">Auswählen um den Entwurf zu öffnen.</string>
-	<string id="162">Keine Entwürfe vorhanden. Benutze Speichern im Verfassen Menü um einen Entwurf hinzuzufügen.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Konto Menü</string>
@@ -278,15 +274,4 @@
 	<string id="378">Kontakt hinzugefügt</string>
 	<string id="379">Kontakt ist bereits im Adressfeld vorhanden</string>
 	<string id="380">Kontaktliste</string>
-
-	<!-- Draft Labels -->
-	<string id="390">Entwurfname eingeben:</string>
-	<string id="391">Entwurfname bereits vorhanden</string>
-	<string id="392">Entwurf gespeichert</string>
-	<string id="393">Entwurf: </string>
-	<string id="394">Entwurf löschen?</string>
-	<string id="395">Nicht gefunden. Überspringe..</string>
-	<string id="396">Keine Entwürfe</string>
-	<string id="397">Entwürfe</string>
-	<string id="398">Entwürfeliste</string>
 </strings>

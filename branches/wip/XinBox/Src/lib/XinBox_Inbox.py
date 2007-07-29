@@ -72,8 +72,6 @@ class GUI( xbmcgui.WindowXML ):
                 self.exitme()
             elif controlID == 65:
                 self.launchmycontacts()
-            elif controlID == 66:
-                self.launchmydrafts()
 
     def exitme(self):
         self.animating = True
@@ -97,7 +95,6 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(63).setLabel(self.language(275))
         self.getControl(64).setLabel(self.language(65))
         self.getControl(65).setLabel(self.language(370))
-        self.getControl(66).setLabel(self.language(397))
         
     def onAction( self, action ):
         if not self.animating:
@@ -128,8 +125,6 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(128,self.language(65))
                 elif focusid == 65:
                     self.launchinfo(156,self.language(370))
-                elif focusid == 66:
-                    self.launchinfo(157,self.language(397))
                     
     def getem(self, myfrom):
         myre = re.search('<([^>]*)>',myfrom)
@@ -248,14 +243,6 @@ class GUI( xbmcgui.WindowXML ):
         del w
         if returnval != 0:
             self.sendemail([returnval,"","","","",[]])
-
-    def launchmydrafts(self):
-        w = XinBox_Drafts.GUI("XinBox_Drafts.xml",self.srcpath,"DefaultSkin",0,accountname=self.account,setts=self.settings,lang=self.language)
-        w.doModal()
-        returnval = w.returnval
-        del w
-        if returnval != 0:
-            self.sendemail(returnval)
 
     def parse_email(self, email):
         email = email.replace("\t","")
