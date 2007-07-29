@@ -424,7 +424,7 @@ class GUI( xbmcgui.WindowXML ):
                     url = trailer_urls[ choice ]
                     LOG( LOG_DEBUG, "%s (ver: %s) [choice=%d url=%s]", __scriptname__, __version__, choice, url )
                     filename = str( self.trailers.movies[ trailer ].saved )
-                    if ( "p.mov" in url ):
+                    if ( url.endswith( "p.mov" ) ):
                         self.core = xbmc.PLAYER_CORE_DVDPLAYER
                     else:
                         self.core = xbmc.PLAYER_CORE_MPLAYER
@@ -617,48 +617,21 @@ class GUI( xbmcgui.WindowXML ):
         del settings
 
     def setShortcutLabels( self ):
-        if ( self.settings[ "shortcut1" ] == FAVORITES ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 152 ) ) )
-        elif ( self.settings[ "shortcut1" ] == DOWNLOADED ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 153 ) ) )
-        elif ( self.settings[ "shortcut1" ] == HD_TRAILERS ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 160 ) ) )
-        elif ( self.settings[ "shortcut1" ] == NO_TRAILER_URLS ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 161 ) ) )
-        elif ( self.settings[ "shortcut1" ] == CUSTOM_SEARCH ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 162 ) ) )
-        elif ( self.settings[ "shortcut1" ] == WATCHED ):
-            self.getControl( 100 ).setLabel( self._capitalize_text( _( 163 ) ) )
-        else:
-            self.getControl( 100 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut1" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
-        if ( self.settings[ "shortcut2" ] == FAVORITES ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 152 ) ) )
-        elif ( self.settings[ "shortcut2" ] == DOWNLOADED ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 153 ) ) )
-        elif ( self.settings[ "shortcut2" ] == HD_TRAILERS ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 160 ) ) )
-        elif ( self.settings[ "shortcut2" ] == NO_TRAILER_URLS ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 161 ) ) )
-        elif ( self.settings[ "shortcut2" ] == CUSTOM_SEARCH ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 162 ) ) )
-        elif ( self.settings[ "shortcut2" ] == WATCHED ):
-            self.getControl( 101 ).setLabel( self._capitalize_text( _( 163 ) ) )
-        else:
-            self.getControl( 101 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut2" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
-        if ( self.settings[ "shortcut3" ] == FAVORITES ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 152 ) ) )
-        elif ( self.settings[ "shortcut3" ] == DOWNLOADED ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 153 ) ) )
-        elif ( self.settings[ "shortcut3" ] == HD_TRAILERS ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 160 ) ) )
-        elif ( self.settings[ "shortcut3" ] == NO_TRAILER_URLS ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 161 ) ) )
-        elif ( self.settings[ "shortcut3" ] == CUSTOM_SEARCH ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 162 ) ) )
-        elif ( self.settings[ "shortcut3" ] == WATCHED ):
-            self.getControl( 102 ).setLabel( self._capitalize_text( _( 163 ) ) )
-        else:
-            self.getControl( 102 ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut3" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
+        for s in range( 3 ):
+            if ( self.settings[ "shortcut%d" % ( s + 1, ) ] == FAVORITES ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 152 ) ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == DOWNLOADED ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 153 ) ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == HD_TRAILERS ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 160 ) ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == NO_TRAILER_URLS ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 161 ) ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == CUSTOM_SEARCH ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 162 ) ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == WATCHED ):
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 163 ) ) )
+            else:
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
 
     def showCredits( self ):
         """ shows a credit window """

@@ -8,7 +8,6 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import traceback
 
 from utilities import *
 import database
@@ -41,12 +40,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.lock()
 
     def onInit( self ):
-        try:
-            self._set_labels()
-            self._clear_variables()
-            self._set_functions()
-            self._setup_special()
-        except: traceback.print_exc()
+        self._set_labels()
+        self._clear_variables()
+        self._set_functions()
+        self._setup_special()
         xbmcgui.unlock()
         self.dialog.close()
 
@@ -99,70 +96,66 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._setup_categories()
 
     def _setup_categories( self ):
-        try:
-            query = database.Query()
-            records = database.Records()
-            self.genres = records.fetch( query[ "genre_category_list" ], all=True )
-            self.studios = records.fetch( query[ "studio_category_list" ], all=True )
-            self.actors = records.fetch( query[ "actor_category_list" ], all=True )
-            self.ratings = [ ( _( 92 ), ) ]
-            self.ratings += records.fetch( query[ "rating_category_list" ], all=True )
-            records.close()
-            self._get_custom_sql( True )
-        except: traceback.print_exc()
+        query = database.Query()
+        records = database.Records()
+        self.genres = records.fetch( query[ "genre_category_list" ], all=True )
+        self.studios = records.fetch( query[ "studio_category_list" ], all=True )
+        self.actors = records.fetch( query[ "actor_category_list" ], all=True )
+        self.ratings = [ ( _( 92 ), ) ]
+        self.ratings += records.fetch( query[ "rating_category_list" ], all=True )
+        records.close()
+        self._get_custom_sql( True )
 
     def _fill_lists( self, fill=True, query="" ):
-        try:
-            for count, genre in enumerate( self.genres ):
-                if ( fill ):
-                    self.getControl( self.CONTROL_GENRE_LIST ).addItem( self._capitalize_text( genre[ 1 ].replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
-                selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query or "idGenre!=%d\n" % genre[ 0 ] in query or "idGenre!=%d)" % genre[ 0 ] in query )
-                self.getControl( self.CONTROL_GENRE_LIST ).getListItem( count ).select( selected )
-            self.getControl( self.CONTROL_GENRE_LIST + 2 ).setSelected( "idGenre!=" in query )
-            for count, studio in enumerate( self.studios ):
-                if ( fill ):
-                    self.getControl( self.CONTROL_STUDIO_LIST ).addItem( self._capitalize_text( studio[ 1 ] ) )
-                selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query or "idStudio!=%d\n" % studio[ 0 ] in query or "idStudio!=%d)" % studio[ 0 ] in query )
-                self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( count ).select( selected )
-            self.getControl( self.CONTROL_STUDIO_LIST + 2 ).setSelected( "idStudio!=" in query )
-            for count, actor in enumerate( self.actors ):
-                if ( fill ):
-                    self.getControl( self.CONTROL_ACTOR_LIST ).addItem( self._capitalize_text( actor[ 1 ] ) )
-                selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query or "idActor!=%d\n" % actor[ 0 ] in query or "idActor!=%d)" % actor[ 0 ] in query )
-                self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( count ).select( selected )
-            self.getControl( self.CONTROL_ACTOR_LIST + 2 ).setSelected( "idActor!=" in query )
-            for count, rating in enumerate( self.ratings ):
-                if ( fill ):
-                    self.getControl( self.CONTROL_RATING_LIST ).addItem( self._capitalize_text( rating[ 0 ] ) )
-                selected = ( "rating='%s'" % rating[ 0 ] in query or "rating!='%s'" % rating[ 0 ] in query )
-                self.getControl( self.CONTROL_RATING_LIST ).getListItem( count ).select( selected )
-            self.getControl( self.CONTROL_RATING_LIST + 2 ).setSelected( "rating!=" in query )
-            for count, quality in enumerate( self.quality ):
-                if ( fill ):
-                    self.getControl( self.CONTROL_QUALITY_LIST ).addItem( self._capitalize_text( quality ) )
-                quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ count ]
-                selected = "trailer_urls LIKE '%s'" % quality_text in query
-                self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( count ).select( selected )
-            self.getControl( self.CONTROL_QUALITY_LIST + 2 ).setSelected( "NOT (movies.trailer_urls" in query )
+        for count, genre in enumerate( self.genres ):
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2150 ) ) )
-            selected = ( query != "" and "trailer_urls IS NOT NULL" not in query )
-            self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 0 ).select( selected )
+                self.getControl( self.CONTROL_GENRE_LIST ).addItem( self._capitalize_text( genre[ 1 ].replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
+            selected = ( "idGenre=%d\n" % genre[ 0 ] in query or "idGenre=%d)" % genre[ 0 ] in query or "idGenre!=%d\n" % genre[ 0 ] in query or "idGenre!=%d)" % genre[ 0 ] in query )
+            self.getControl( self.CONTROL_GENRE_LIST ).getListItem( count ).select( selected )
+        self.getControl( self.CONTROL_GENRE_LIST + 2 ).setSelected( "idGenre!=" in query )
+        for count, studio in enumerate( self.studios ):
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2151 ) ) )
-            selected = "movies.favorite" in query
-            self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 1 ).select( selected )
+                self.getControl( self.CONTROL_STUDIO_LIST ).addItem( self._capitalize_text( studio[ 1 ] ) )
+            selected = ( "idStudio=%d\n" % studio[ 0 ] in query or "idStudio=%d)" % studio[ 0 ] in query or "idStudio!=%d\n" % studio[ 0 ] in query or "idStudio!=%d)" % studio[ 0 ] in query )
+            self.getControl( self.CONTROL_STUDIO_LIST ).getListItem( count ).select( selected )
+        self.getControl( self.CONTROL_STUDIO_LIST + 2 ).setSelected( "idStudio!=" in query )
+        for count, actor in enumerate( self.actors ):
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2152 ) ) )
-            selected = "saved_location" in query
-            self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 2 ).select( selected )
+                self.getControl( self.CONTROL_ACTOR_LIST ).addItem( self._capitalize_text( actor[ 1 ] ) )
+            selected = ( "idActor=%d\n" % actor[ 0 ] in query or "idActor=%d)" % actor[ 0 ] in query or "idActor!=%d\n" % actor[ 0 ] in query or "idActor!=%d)" % actor[ 0 ] in query )
+            self.getControl( self.CONTROL_ACTOR_LIST ).getListItem( count ).select( selected )
+        self.getControl( self.CONTROL_ACTOR_LIST + 2 ).setSelected( "idActor!=" in query )
+        for count, rating in enumerate( self.ratings ):
             if ( fill ):
-                self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2153 ) ) )
-            selected = "times_watched" in query
-            self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 3 ).select( selected )
-            self.getControl( self.CONTROL_EXTRA_LIST + 2 ).setSelected( "favorite!=" in query or "saved_location=" in query or "times_watched=" in query )
-            if ( query ): self._create_sql( force_build=True )
-        except: traceback.print_exc()
+                self.getControl( self.CONTROL_RATING_LIST ).addItem( self._capitalize_text( rating[ 0 ] ) )
+            selected = ( "rating='%s'" % rating[ 0 ] in query or "rating!='%s'" % rating[ 0 ] in query )
+            self.getControl( self.CONTROL_RATING_LIST ).getListItem( count ).select( selected )
+        self.getControl( self.CONTROL_RATING_LIST + 2 ).setSelected( "rating!=" in query )
+        for count, quality in enumerate( self.quality ):
+            if ( fill ):
+                self.getControl( self.CONTROL_QUALITY_LIST ).addItem( self._capitalize_text( quality ) )
+            quality_text = ( "%320.mov%", "%480.mov%", "%640%.mov%", "%480p.mov%", "%720p.mov%", "%1080p.mov%", )[ count ]
+            selected = "trailer_urls LIKE '%s'" % quality_text in query
+            self.getControl( self.CONTROL_QUALITY_LIST ).getListItem( count ).select( selected )
+        self.getControl( self.CONTROL_QUALITY_LIST + 2 ).setSelected( "NOT (movies.trailer_urls" in query )
+        if ( fill ):
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2150 ) ) )
+        selected = ( query != "" and "trailer_urls IS NOT NULL" not in query )
+        self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 0 ).select( selected )
+        if ( fill ):
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2151 ) ) )
+        selected = "movies.favorite" in query
+        self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 1 ).select( selected )
+        if ( fill ):
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2152 ) ) )
+        selected = "saved_location" in query
+        self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 2 ).select( selected )
+        if ( fill ):
+            self.getControl( self.CONTROL_EXTRA_LIST ).addItem( self._capitalize_text( _( 2153 ) ) )
+        selected = "times_watched" in query
+        self.getControl( self.CONTROL_EXTRA_LIST ).getListItem( 3 ).select( selected )
+        self.getControl( self.CONTROL_EXTRA_LIST + 2 ).setSelected( "favorite!=" in query or "saved_location=" in query or "times_watched=" in query )
+        if ( query ): self._create_sql( force_build=True )
 
     def _setup_trailer_quality( self ):
         self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), "480p", "720p", "1080p", )
@@ -329,15 +322,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.close()
 
     def onClick( self, controlId ):
-        try:
-            if ( controlId in self.CONTROL_LISTS ):
-                self.getControl( controlId ).getSelectedItem().select( not self.getControl( controlId ).getSelectedItem().isSelected() )
-                self._create_sql( controlId )
-            elif ( controlId in self.CONTROL_LISTS_NOT ):
-                self._create_sql( controlId )
-            elif ( controlId in self.CONTROL_BUTTONS ):
-                self.functions[ controlId ]()
-        except: traceback.print_exc()
+        if ( controlId in self.CONTROL_LISTS ):
+            self.getControl( controlId ).getSelectedItem().select( not self.getControl( controlId ).getSelectedItem().isSelected() )
+            self._create_sql( controlId )
+        elif ( controlId in self.CONTROL_LISTS_NOT ):
+            self._create_sql( controlId )
+        elif ( controlId in self.CONTROL_BUTTONS ):
+            self.functions[ controlId ]()
 
     def onFocus( self, controlId ):
         pass

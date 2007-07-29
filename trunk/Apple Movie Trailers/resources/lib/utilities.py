@@ -16,8 +16,8 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", "pre-0.98.8", "0.98.8", )
-SETTINGS_VERSIONS =  ( "pre-0.98.8", "0.98.8", )
+DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", "pre-0.98.8", "0.98.8", "pre-0.98.9", "0.98.9", )
+SETTINGS_VERSIONS =  ( "pre-0.98.9", "0.98.9", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -30,7 +30,8 @@ WATCHED = -10
 CUSTOM_SEARCH = -99
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
-BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
+BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__ ) )
+BASE_DATABASE_PATH = BASE_SETTINGS_PATH
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -140,7 +141,7 @@ class Settings:
             "match_whole_words": False,
             "capitalize_words": False,
             "showtimes_local": "33102",
-            "showtimes_scraper": "Google USA",
+            "showtimes_scraper": "Google",
             }
         ok = self.save_settings( settings )
         return settings

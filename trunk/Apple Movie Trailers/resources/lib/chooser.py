@@ -8,7 +8,6 @@ import sys
 import os
 import xbmcgui
 import xbmc
-#import traceback
 
 from utilities import *
 
