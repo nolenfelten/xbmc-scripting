@@ -44,7 +44,7 @@
         		<description>Menu Label</description>
         		<posx>440</posx>
         		<posy>95</posy>
-        		<width>100</width>
+        		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
@@ -57,7 +57,7 @@
 			<posy>120</posy>
 			<width>430</width>
 			<height>450</height>
-			<texture>XBloginmenu.png</texture>
+			<texture>XBmainmenu.png</texture>
 		</control>
 		<control type="list" id="50">
             	<posx>165</posx>
