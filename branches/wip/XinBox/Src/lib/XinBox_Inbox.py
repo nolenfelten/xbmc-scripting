@@ -103,17 +103,17 @@ class GUI( xbmcgui.WindowXML ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
                 self.exitme()
             elif (50 <= focusid <= 59):
-                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                     self.launchinfo(136,self.language(225))
-                elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
                     self.addcontact(self.getCurrentListPosition())
-                elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
+                elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Title'):
                     self.deletemail(self.getCurrentListPosition(), 0)
                 else:self.printEmail(self.getCurrentListPosition())
-            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                 if focusid == 61:
                     self.launchinfo(132,self.language(250))
                 elif focusid == 62:

@@ -101,8 +101,8 @@
 	<string id="112">Select to exit this menu. Note: Any unsaved data will be lost.</string>
 	<string id="113">Select to change your Display Name. This is the name of the Inbox and also the name that will appear in the From field of any outgoing E-mails. Note: You will not be able to add an inbox to your account without a Display Name.</string>
 	<string id="114">Select to change your E-mail Address. This is the E-mail address other people use to send E-mail messages to you.</string>
-	<string id="115">Select to change your Incoming mail (POP3) Server. Eg. pop.gmail.com. SSL: Press right to change your POP3 SSL Server Port Number. Only some servers require this. Eg. Gmail - Pop3 SSL Port# 995</string>
-	<string id="116">Select to change your Outgoing mail (SMTP) Server. Eg. smtp.gmail.com. SSL: Press right to change your SMTP SSL Server Port Number. Only some servers require this. Eg. Gmail - SMTP SSL Port# 587</string>
+	<string id="115">A: Change your Incoming mail (POP3) Server. Eg. pop.gmail.com    White Button: Change your POP3 SSL Server Port Number. Only some servers require this. Eg. Gmail - Pop3 SSL Port# 995</string>
+	<string id="116">A: Change your Outgoing mail (SMTP) Server. Eg. smtp.gmail.com   White Button: Change your SMTP SSL Server Port Number. Only some servers require this. Eg. Gmail - SMTP SSL Port# 587</string>
 	<string id="117">Select to change your Server Account Name. This is usually the name you use to login to Outlook/Web Mail Inboxes.</string>
 	<string id="118">Select to change your Server Account Password. This is usually the password you use to login to Outlook/Web Mail Inboxes.</string>
 	<string id="119">Select to change your Server Inbox Size. Enter the size(capacity) of your e-mail servers inbox in megabytes(MB).Set to 0 to disable the server inbox full warnings.</string>

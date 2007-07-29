@@ -175,17 +175,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
-            elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+            elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
                 if focusid == 82 and self.getControl(82).getSelectedPosition() != 3:
                     value = self.launchcontacts(self.getControl(82).getSelectedItem().getLabel())
                 elif focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
                     self.setCurrentListPosition(self.getCurrentListPosition()+1)
-            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button'):
+            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
                     else:
@@ -212,7 +212,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             for attach in self.attachments:
                                 self.getControl(81).addItem(attach[0])
                             self.showattach(self.getControl(81).getSelectedPosition())
-            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                 if focusid == 82:
                     if self.getControl(82).getSelectedPosition() == 0:
                         self.launchinfo(147,self.language(310))

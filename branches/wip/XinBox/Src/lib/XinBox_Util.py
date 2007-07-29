@@ -27,28 +27,30 @@ def setControllerAction():
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',
                 61479 : 'Keyboard Right Arrow',
-                61448 : 'Keyboard Backspace Button',#usef for quick delete emails,remove compose line and delete contact
-                61533 : 'Keyboard Menu Button',
-                61467 : 'Keyboard ESC Button',
+                61448 : 'Keyboard Backspace Button', #B button
+                61533 : 'Keyboard Menu Button', #Y button
+                61467 : 'Keyboard ESC Button', #back button
                 61601 : 'Keyboard Shift Button',
                 61603 : 'Keyboard Right Ctrl Button',
                 61602 : 'Keyboard Left Ctrl Button',
-                61449 : 'Keyboard TAB Button',#used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
-                    216 : 'Remote Back Button',
-                    247 : 'Remote Menu Button',
-                    229 : 'Remote Title',
+                61449 : 'Keyboard TAB Button', #White button
+                    213 : 'Remote Display' #white button
+                    216 : 'Remote Back', #back button
+                    247 : 'Remote Menu', 
+                    229 : 'Remote Title',#B button
+                    195 : 'Remote Info'#Y button
                     207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
                     168 : 'Remote Right',
                     256 : 'A Button',
-                    257 : 'B Button',#usef for quick delete emails,remove compose line and delete contact
+                    257 : 'B Button',#used for quick delete emails,remove compose line and delete contact
                     258 : 'X Button',
-                    259 : 'Y Button',
+                    259 : 'Y Button',#used for help
                     260 : 'Black Button',
                     261 : 'White Button',#used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
                     274 : 'Start Button',
-                    275 : 'Back Button',
+                    275 : 'Back Button', #back
                     270 : 'DPad Up',
                     271 : 'DPad Down',
                     272 : 'DPad Left',
