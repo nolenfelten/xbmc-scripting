@@ -7,8 +7,6 @@ from os.path import join, exists, basename,getsize
 import XinBox_InfoDialog
 from XinBox_Settings import Settings
 
-TEMPFOLDER = XinBox_Util.__tempdir__
-ACCOUNTSDIR = XinBox_Util.__accountsdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,inboxsetts=False,lang=False,emailfromfile=False,inboxname=False,mydraft=False,ibfolder=False,account=False,setts=False):
@@ -21,18 +19,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.settings = setts
         self.ibsettings = inboxsetts
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
-        self.accountfolder = join(ACCOUNTSDIR,str(hash(self.account))) + "//"
    
     def onInit(self):
         self.setupvars()
-        self.builddraftlist()
         self.setupcontrols()
-
-    def builddraftlist(self):
-        self.drafts  = []
-        for set in self.accountsettings.getSetting("Drafts")[1]:
-            self.drafts.append(set[0])
-
 
     def setupvars(self):
         xbmcgui.lock()
