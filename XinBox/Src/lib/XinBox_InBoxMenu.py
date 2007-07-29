@@ -247,16 +247,16 @@ class GUI( xbmcgui.WindowXML ):
         except:focusid = 0
         try:control = self.getFocus()
         except: control = 0
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
             self.settchanged = "False"
             self.closeme(0)
-        elif ( button_key == 'Keyboard Right Arrow' or button_key == 'DPad Right' or button_key == 'Remote Right' ):
+        elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display' ):
             if focusid == 51:
                 if self.getCurrentListPosition() == 2:
                     self.updatessl(91,self.popssl)
                 elif self.getCurrentListPosition() == 3:
                     self.updatessl(92,self.smtpssl)
-        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
             if focusid == 51:
                 if self.getCurrentListPosition() == 9:
                     self.launchinfo(129,self.getListItem(self.getCurrentListPosition()).getLabel())

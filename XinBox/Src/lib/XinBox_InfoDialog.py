@@ -33,7 +33,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onAction( self, action ):
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
             self.value = False
             self.close()
 

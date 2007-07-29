@@ -122,9 +122,9 @@ class GUI( xbmcgui.WindowXML ):
         actionID   =  action.getId()
         try:focusid = self.getFocusId()
         except:focusid = 0
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
             self.close()
-        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
             self.launchinfo(100 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
 
     def launchinfo(self, focusid, label,heading=False,text=False):

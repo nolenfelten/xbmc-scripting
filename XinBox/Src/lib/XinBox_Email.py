@@ -308,12 +308,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
                 self.exitme()
             elif focusid == 81:
-                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+                if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                     self.launchinfo(137,self.language(266))
-                elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
                     self.saveattachment(self.getControl(81).getSelectedPosition())
                 else:
                     if self.curpos != self.getControl(81).getSelectedPosition():
@@ -321,9 +321,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.curpos = self.getControl(81).getSelectedPosition()
                     self.showattach(self.getControl(81).getSelectedPosition())
             elif focusid == 50:
-                if ( button_key == 'Keyboard TAB Button' or button_key == 'White Button'):
+                if ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
                     self.savezip(self.getCurrentListPosition())
-            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+            elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                 if focusid == 61:
                     self.launchinfo(138,"R")
                 elif focusid == 62:

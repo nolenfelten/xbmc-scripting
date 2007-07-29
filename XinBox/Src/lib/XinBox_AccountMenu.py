@@ -144,7 +144,7 @@ class AccountSettings(xbmcgui.WindowXML):
         actionID   =  action.getId()
         try:focusid = self.getFocusId()
         except:focusid = 0
-        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu Button' ):
+        if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
             if focusid == 88:
                 self.setFocusId(9000)
             else:
@@ -154,7 +154,7 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.close()
                 else:
                     self.close()
-        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
+        elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
             if focusid == 51:
                 if self.getCurrentListPosition() == 3:
                     self.launchinfo(144,self.getListItem(self.getCurrentListPosition()).getLabel())
