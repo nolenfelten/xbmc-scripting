@@ -34,11 +34,11 @@ def setControllerAction():
                 61603 : 'Keyboard Right Ctrl Button',
                 61602 : 'Keyboard Left Ctrl Button',
                 61449 : 'Keyboard TAB Button', #White button
-                    213 : 'Remote Display' #white button
+                    213 : 'Remote Display', #white button
                     216 : 'Remote Back', #back button
                     247 : 'Remote Menu', 
                     229 : 'Remote Title',#B button
-                    195 : 'Remote Info'#Y button
+                    195 : 'Remote Info',#Y button
                     207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
