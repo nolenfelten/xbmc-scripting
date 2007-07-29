@@ -128,8 +128,8 @@
 				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>94</width>
 				<height>35</height>

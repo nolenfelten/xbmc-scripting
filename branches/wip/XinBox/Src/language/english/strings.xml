@@ -259,8 +259,8 @@
 
 	<!-- About Labels -->
 	<string id="360">About</string>
-	<string id="361">Lang Credits</string>
-	<string id="362">Skin Credits</string>
+	<string id="361">Language</string>
+	<string id="362">Skinning</string>
 
 	<!-- Contact Labels -->
 	<string id="370">Contacts</string>

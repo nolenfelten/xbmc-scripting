@@ -196,7 +196,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.showing = True
                 self.showtext(pos)
             else:
-                self.showing = False
                 self.resetemail()
                 self.curpos = self.getControl(81).getSelectedPosition()
                 self.showattach(self.getControl(81).getSelectedPosition())
@@ -209,7 +208,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.showing = True
                 self.showimage(pos)
             else:
-                self.showing = False
                 self.resetemail()
                 self.curpos = self.getControl(81).getSelectedPosition()
                 self.showattach(self.getControl(81).getSelectedPosition())
@@ -218,7 +216,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.showing = True
                 self.showzip(pos)
             else:
-                self.showing = False
                 self.resetemail()
                 self.curpos = self.getControl(81).getSelectedPosition()
                 self.showattach(self.getControl(81).getSelectedPosition())

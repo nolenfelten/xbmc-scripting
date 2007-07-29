@@ -44,7 +44,7 @@
         		<description>Menu Label</description>
         		<posx>430</posx>
         		<posy>95</posy>
-        		<width>150</width>
+        		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
@@ -56,7 +56,7 @@
         		<posx>440</posx>
         		<posy>60</posy>
 			<label>-</label>
-        		<width>100</width>
+        		<width>200</width>
         		<font>font13</font>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
@@ -87,8 +87,8 @@
 				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>97</width>
 				<height>42</height>
@@ -106,8 +106,8 @@
 				<onleft>61 </onleft>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>97</width>
 				<height>42</height>
@@ -125,8 +125,8 @@
 				<ondown>63</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>97</width>
 				<height>42</height>

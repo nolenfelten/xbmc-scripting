@@ -45,7 +45,7 @@
   		</control>
   		<control type="button" id="81">
         		<description>Serv Size Label</description>
-        		<posx>480</posx>
+        		<posx>420</posx>
         		<posy>20</posy>
         		<width>300</width>
         		<label>-</label>
@@ -59,8 +59,8 @@
   		</control>
   		<control type="button" id="82">
         		<description>Ibox Size Label</description>
-        		<posx>480</posx>
-        		<posy>50</posy>
+        		<posx>420</posx>
+        		<posy>45</posy>
         		<width>250</width>
         		<label>-</label>
 			<disabledcolor>FFFF0000</disabledcolor>
@@ -97,8 +97,8 @@
 				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>108</width>
 				<height>37</height>
@@ -116,8 +116,8 @@
 				<ondown>65</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>108</width>
 				<height>37</height>
@@ -135,8 +135,8 @@
 				<ondown>63</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>108</width>
 				<height>37</height>
@@ -154,8 +154,8 @@
 				<ondown>64</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>108</width>
 				<height>37</height>
@@ -173,8 +173,8 @@
 				<ondown>64</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
 				<disabledcolor>60ffffff</disabledcolor>
 				<width>108</width>
 				<height>37</height>

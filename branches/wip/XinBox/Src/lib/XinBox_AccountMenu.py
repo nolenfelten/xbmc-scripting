@@ -93,6 +93,9 @@ class AccountSettings(xbmcgui.WindowXML):
                 else:
                     self.getControl(64).setEnabled(False)
                     self.saved = True
+        else:
+            self.getControl(64).setEnabled(False)
+            self.saved = True
 
     def buildhashlist(self):
         hashlist = {}
@@ -317,6 +320,7 @@ class AccountSettings(xbmcgui.WindowXML):
         change = w.settchanged
         if change == "True":
             self.getControl(64).setEnabled(True)
+        self.checkforchanges()
         if ID != 0:
             self.gohash(inbox, Inboxname)
             if inbox == "":
