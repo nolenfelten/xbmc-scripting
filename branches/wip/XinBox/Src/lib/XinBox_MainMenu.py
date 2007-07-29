@@ -14,6 +14,7 @@ import XinBox_Update
 TITLE = XinBox_Util.__scriptname__
 VERSION =  XinBox_Util.__version__
 URL = XinBox_Util.__url__
+__udata__ = XinBox_Util.__settingdir__
 
 defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"],"Accounts": [['Account',[]],"list"]}
 
@@ -107,11 +108,19 @@ class GUI( xbmcgui.WindowXML ):
             elif self.getCurrentListPosition() == 1:
                 self.launchcreatemenu()
             elif self.getCurrentListPosition() == 2:
-                XinBox_Update.Update(self.lang)
+                self.update()
             elif self.getCurrentListPosition() == 3:
                 self.launchabout()
             elif self.getCurrentListPosition() == 4:
                 self.close()
+
+    def update(self):
+        w = XinBox_Update.Update(self.lang)
+        returnval = w.returnval
+        del w
+        if returnval == 1:
+            xbmc.executescript(__udata__ + "XinBox_Update.py")
+            self.close()
 
     def launchabout(self):
         w = XinBox_About.GUI("XinBox_About.xml",self.srcpath,"DefaultSkin",lang=self.lang)
