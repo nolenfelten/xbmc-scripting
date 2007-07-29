@@ -103,7 +103,7 @@ class GUI( xbmcgui.WindowXML ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu' ):
                 self.exitme()
             elif (50 <= focusid <= 59):
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):

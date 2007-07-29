@@ -175,7 +175,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back' ):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu' ):
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(328)):
                     self.exitme()
@@ -185,7 +185,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 elif focusid == 50:
                     self.addItem("",self.getCurrentListPosition()+1)
                     self.setCurrentListPosition(self.getCurrentListPosition()+1)
-            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Back'):
+            elif ( button_key == 'Keyboard Backspace Button' or button_key == 'B Button' or button_key == 'Remote Title'):
                 if focusid == 50:
                     if self.getListSize() == 1:self.getListItem(self.getCurrentListPosition()).setLabel("")  
                     else:
