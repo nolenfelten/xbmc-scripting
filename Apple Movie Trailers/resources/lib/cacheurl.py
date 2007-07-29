@@ -13,6 +13,7 @@ import md5
 #import traceback
 import time
 #import socket
+
 from utilities import *
 
 #socket.setdefaulttimeout( 20 )
@@ -63,6 +64,22 @@ def byte_measurement( bytes, detailed = False ):
             result = '%ib' % B
     return result
 
+def calc_download_info( current_time_elapsed, size_read_so_far, filesize ):
+    """
+        calculates download rate and time remaining
+    """
+    total_time = int( current_time_elapsed / ( float( size_read_so_far ) / filesize ) - current_time_elapsed )
+    minutes = int( float( total_time ) / 60 )
+    seconds = total_time - ( minutes * 60 )
+    download_rate = '%d %s' % ( int( float( size_read_so_far ) / 1024 / current_time_elapsed ), _( 80 ) )
+    download_time_remaining = "%s: %02d:%02d" % ( _( 91 ), minutes, seconds, )
+    return download_rate, download_time_remaining#minutes, seconds
+
+def set_status_symbol( status_symbol, total_symbols ):
+    status_symbol += 1
+    if status_symbol >= total_symbols:
+        status_symbol = 0
+    return status_symbol
 
 class HTTP:
     def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
@@ -249,9 +266,8 @@ class HTTPProgress( HTTP ):
         HTTP.__init__( self, cache, title, actual_filename, flat_cache )
         self.dialog = xbmcgui.DialogProgress()
         self.status_symbols = ( '-', '\\', '|', '/', )
-        self.status_symbol = len( self.status_symbols )
+        self.status_symbol = 0
         self.download_start_time = time.time()
-        self.download_current_time_elapsed = -1
 
     def urlretrieve( self, url ):
         # Downloading...
@@ -260,30 +276,19 @@ class HTTPProgress( HTTP ):
         return HTTP.urlretrieve( self, url )
 
     def on_data( self, url, filepath, filesize, size_read_so_far ):
+        current_time_elapsed = time.time() - self.download_start_time
         so_far = byte_measurement( size_read_so_far )
         fsize = byte_measurement( filesize )
         percentage = percent_from_ratio( size_read_so_far, filesize )
-        self.status_symbol += 1
-        if self.status_symbol >= len( self.status_symbols ):
-            self.status_symbol = 0
-        
-        current_time_elapsed = time.time() - self.download_start_time
-        if int( current_time_elapsed ) > self.download_current_time_elapsed:
-            self.download_current_time_elapsed = int( current_time_elapsed )
-            total_time = int( current_time_elapsed / ( float( size_read_so_far ) / filesize ) - current_time_elapsed )
-            minutes = int( total_time / 60 )
-            seconds = total_time - ( minutes * 60 )
-            self.download_rate = '%d %s' % ( size_read_so_far / 1024 / current_time_elapsed, _(80) )
-            self.download_time_remaining = "%s: %02d:%02d" % ( _(91), minutes, seconds, )
-        
-        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s' % ( percentage, so_far, fsize, self.download_rate, self.status_symbols[self.status_symbol] ), self.download_time_remaining )
+        self.status_symbol = set_status_symbol( self.status_symbol, len( self.status_symbols ) )
+        download_rate, download_time_remaining = calc_download_info( current_time_elapsed, size_read_so_far, filesize )
+        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s' % ( percentage, so_far, fsize, download_rate, self.status_symbols[self.status_symbol] ), download_time_remaining )
         if self.dialog.iscanceled():
             return False
         return True
 
     def on_finished( self, url, filepath, filesize, is_completed ):
         self.dialog.close()
-        #self.status_symbol = 0
 
 class HTTPProgressSave( HTTPProgress ):
     def __init__( self, save_location = None, save_title = '' ):

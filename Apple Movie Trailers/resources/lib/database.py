@@ -9,7 +9,6 @@ import os
 import xbmc
 import xbmcgui
 from pysqlite2 import dbapi2 as sqlite
-#import traceback
 import re
 
 from utilities import *
@@ -95,6 +94,7 @@ class Database:
         return version, False
 
     def _convert_database( self, version, complete ):
+        """
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0, total_count=None, movie=None ):
             __line1__ = _( 63 )
@@ -185,8 +185,9 @@ class Database:
             ok = records.update( "version", ( "version", ), ( __version__, 1, ), "idVersion", True )
             records.close()
             return ok
-
+        """
         msg = ( _( 53 ), _( 54 ), )
+        """
         if ( not 1 ):#version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", "pre-0.98.2", ) ):
             try:
                 _progress_dialog()
@@ -211,8 +212,9 @@ class Database:
                 msg = ( _( 59 ), _( 46 ), )
             _progress_dialog( -1 )
             if ( ok ): return ( __version__, complete )
+        """
         xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
-        os.remove( os.path.join( BASE_DATA_PATH, "AMT.db" ) )
+        os.remove( os.path.join( BASE_DATABASE_PATH, "AMT.db" ) )
         version, complete = self._create_database()
         return ( __version__, complete )
 
@@ -278,7 +280,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( BASE_DATA_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        self.db = sqlite.connect( os.path.join( BASE_DATABASE_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
         self.db.create_function( "regexp", 2, self.regexp )
         self.cursor = self.db.cursor()
     

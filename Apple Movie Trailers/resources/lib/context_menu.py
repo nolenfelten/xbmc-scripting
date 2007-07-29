@@ -6,7 +6,6 @@ Nuka1195
 
 import sys
 import xbmcgui
-import traceback
 
 from utilities import *
 
@@ -38,7 +37,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _hide_buttons( self ):
         for button in range( 1001, 1009 ):
             self.getControl( button ).setVisible( False )
-            self.getControl( button ).setEnabled( False )
 
     def _setup_menu( self ):
         """ centers the context_menu within an area """

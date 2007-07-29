@@ -8,7 +8,6 @@ import sys
 import os
 import xbmc
 import xbmcgui
-#import traceback
 
 from utilities import *
 import chooser

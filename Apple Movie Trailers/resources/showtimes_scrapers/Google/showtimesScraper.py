@@ -10,7 +10,7 @@ from sgmllib import SGMLParser
 import urllib
 import datetime
 
-__title__ = "Google USA"
+__title__ = "Google"
 __credit__ = "Nuka1195"
 
 
@@ -69,7 +69,7 @@ class _ShowtimesParser( SGMLParser ):
                 if ( self.theaters[ self.current_theater ] ):
                     self.theaters[ self.current_theater ] += ", "
                 self.theaters[ self.current_theater ] += text.strip()
-        elif ( text == "Show more movies" ):
+        elif ( text == "Show more movies" or text == "Show more films" ):
             self.start_theaters = True
             self.theater_found = False
 
@@ -151,9 +151,9 @@ debugWrite = False
 
 if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
-    movie = [ "Rush Hour 3", "whos your caddy", "Transformers", "I Now Pronounce You Chuck & Larry" ]
-    location = [ "33102", "33102", "33102", "33102" ]
-    for cnt in range( 1,2 ):
+    movie = [ "el cantante", "Rush Hour 3", "The Simpsons Movie", "Transformers", "I Now Pronounce You Chuck & Larry", "Transformers", "I Now Pronounce You Chuck & Larry" ]
+    location = [ "detroit", "new york", "London", "Toronto", "33102", "W2 4YL", "T1A 3T9" ]
+    for cnt in range( 7 ):
         date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
         # print the results
         print "Showtimes for %s Movie: %s - Location: %s" % ( date, movie[ cnt ], location[ cnt ], )
