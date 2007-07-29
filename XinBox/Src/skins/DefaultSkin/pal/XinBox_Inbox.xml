@@ -132,25 +132,6 @@
 				<onup>62</onup>
 				<onleft>65</onleft>
 				<onright>50</onright>
-				<ondown>66</ondown>
-				<align>center</align>
-				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>108</width>
-				<height>37</height>
-			</control>
-			<control type="button" id="66">
-				<description>Drafts Button</description>
-				<posx>0</posx>
-				<posy>171</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>Drafts</label>
-				<onup>65</onup>
-				<onleft>66</onleft>
-				<onright>50</onright>
 				<ondown>63</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -167,7 +148,7 @@
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onup>66</onup>
+				<onup>65</onup>
 				<onleft>63</onleft>
 				<onright>50</onright>
 				<ondown>64</ondown>

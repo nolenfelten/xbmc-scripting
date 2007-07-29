@@ -62,7 +62,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(61).setLabel(self.language(314))
         self.getControl(62).setLabel(self.language(61))
         self.getControl(63).setLabel(self.language(333))
-        self.getControl(64).setLabel(self.language(64))
         self.getControl(82).addItem(self.mydraft[0])
         self.getControl(82).addItem(self.mydraft[1])
         self.getControl(82).addItem(self.mydraft[2])
@@ -114,7 +113,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif controlID == 61:
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(self.language(77), self.language(332)):
-                    self.buildemail()
+                    self.returnvalue = self.buildemail()
+                    self.exitme()
             elif controlID == 62:
                 self.addattachment()
             elif controlID == 63:
@@ -122,36 +122,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if dialog.yesno(self.language(77), self.language(334)):                
                     self.clearList()
                     self.addItem("")
-            elif controlID == 64:
-                value = self.showKeyboard(self.language(390),"")
-                if value != False and value != "":
-                    if (value in self.drafts):
-                        dialog = xbmcgui.Dialog()
-                        dialog.ok(self.language(93),self.language(391))
-                    else:self.buildemail(True, value)
                         
-    def savedraft(self, settings, value):
-        draftfile = self.accountfolder + str(hash(value)) + ".draft"
-        f = open(draftfile, "w")
-        f.write(settings[4])
-        f.close()
-        attachments = []
-        for setting in settings[5]:
-            attachments.append(setting[1])
-        DraftSettings = {
-                            "To Addr": [settings[0],"text"],
-                            "Cc Addr": [settings[1],"text"],
-                            "Bcc Addr": [settings[2],"text"],
-                            "Subject": [settings[3],"text"],
-                            "Attachments": [attachments ,'simplelist'],
-                            "Emailbodyhash": [str(hash(value)),"text"],}
-        self.accountsettings.addSettingInList("Drafts",value,Settings("","XinBox",DraftSettings,2),"settings")
-        self.settings.saveXMLfromArray()
-        self.builddraftlist()
-        dialog = xbmcgui.Dialog()
-        dialog.ok(self.language(49),self.language(392))
-        
-                        
+                            
     def addattachment(self):
         dialog = xbmcgui.Dialog()
         ret = dialog.browse(1, self.language(327) , 'files')
@@ -268,7 +240,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onFocus(self, controlID):
         pass
 
-    def buildemail(self, draft=False, name=False):
+    def buildemail(self):
         dialog = xbmcgui.DialogProgress()
         dialog.create(self.language(210) + self.inbox, self.language(329))
         toadd = self.getControl(82).getListItem(0).getLabel()
@@ -279,10 +251,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         for i in range(0,self.getListSize()):
             body = body + self.getListItem(i).getLabel() + "\n"
         dialog.close()
-        if not draft:
-            self.returnvalue = [toadd,ccadd,bccadd,subject,body,self.attachments]
-            self.exitme()
-        else:self.savedraft([toadd,ccadd,bccadd,subject,body,self.attachments], name)
+        return [toadd,ccadd,bccadd,subject,body,self.attachments]
 
     def exitme(self):
         self.animating = True
@@ -293,13 +262,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         time.sleep(0.9)
         self.close()
 
-    def showKeyboard(self, heading,default=""):
-        keyboard = xbmc.Keyboard(default,heading)
+    def showKeyboard(self, heading, default=""):
+        keyboard = xbmc.Keyboard(default, heading)
         keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            return keyboard.getText()
-        else:
-            return False
+        if (keyboard.isConfirmed()):return keyboard.getText()
+        else:return False
 
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)

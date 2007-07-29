@@ -292,25 +292,6 @@
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onright>64</onright>
-				<onup>50</onup>
-				<ondown>82</ondown>
-				<onleft>61</onleft>
-				<align>center</align>
-				<aligny>center</aligny>
-      				<texturefocus>XBlist-focus.png</texturefocus>
-				<texturenofocus>XBlist-nofocus.png</texturenofocus>
-				<disabledcolor>60ffffff</disabledcolor>
-				<width>94</width>
-				<height>35</height>
-			</control>
-			<control type="button" id="64">
-				<description>Save Button</description>
-				<posx>143</posx>
-				<posy>0</posy>
-      				<textoffsetx>2</textoffsetx>
-      				<textoffsety></textoffsety>
-				<label>-</label>
 				<onright>63</onright>
 				<onup>50</onup>
 				<ondown>82</ondown>
@@ -325,7 +306,7 @@
 			</control>
 			<control type="button" id="63">
 				<description>Clear Button</description>
-				<posx>276</posx>
+				<posx>207</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
@@ -333,7 +314,7 @@
 				<onright>62</onright>
 				<onup>50</onup>
 				<ondown>82</ondown>
-				<onleft>64</onleft>
+				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBlist-focus.png</texturefocus>
