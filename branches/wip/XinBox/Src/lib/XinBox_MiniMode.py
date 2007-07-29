@@ -126,7 +126,7 @@ class Popup( xbmcgui.WindowXMLDialog ):
             except:focusid = 0
             try:control = self.getFocus()
             except: control = 0
-            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Back'):
+            if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu'):
                 self.exitme()
             elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
                 self.returnval = 1

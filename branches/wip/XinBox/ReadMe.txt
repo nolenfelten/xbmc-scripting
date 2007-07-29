@@ -9,7 +9,7 @@ Some things to know before using:
 
 2) XinBox also supports Keyboard and Remote Use:
    
-   Back Button = Keyboard: Esc Button  Remote: Back Button
+   Back Button = Keyboard: Esc Button  Remote: Menu Button
    A Button = Keyboard: Enter Button   Remote: Select Button
    Y Button = Keyboard: Menu Button    Remote: Info Button
    B Button = Keyboard: Backspace Button  Remote: Title Button
