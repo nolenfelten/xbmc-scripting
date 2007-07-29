@@ -8,7 +8,6 @@ import XinBox_Email
 import XinBox_Compose
 import XinBox_InfoDialog
 import XinBox_Contacts
-import XinBox_Drafts
 from os.path import join, exists, basename
 from os import mkdir, remove, listdir
 from sgmllib import SGMLParser
