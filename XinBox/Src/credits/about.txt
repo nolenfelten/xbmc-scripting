@@ -8,8 +8,8 @@ Solarbaby
 bootsy
 
 
-
-
+settings.py by Donno
+update.py by Nuka1195
 
 History:
 

@@ -275,4 +275,19 @@
 	<string id="378">Contact Added</string>
 	<string id="379">Contact Already Exists in Address Field</string>
 	<string id="380">Contact List</string>
+
+	<!-- Update Labels -->
+	<string id="390">Your version is up to date.</string>
+	<string id="391">Fetching current tagged versions...</string>
+    	<string id="392">is newer</string>
+    	<string id="393">Would you like to update?</string>
+    	<string id="394">Fetching file list...</string>
+    	<string id="395">Please wait...</string>
+    	<string id="396">Version</string>
+    	<string id="397">Fetching:</string>
+    	<string id="398">Path:</string>
+    	<string id="399">File:</string>
+    	<string id="400">Your new version was saved to:</string>
+    	<string id="401">No tagged versions were found!</string>
+    	<string id="402">There was an error updating script!</string>
 </strings>

@@ -9,6 +9,7 @@ from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
 import XinBox_MyAccountMenu
 import XinBox_About
+import XinBox_Update
 
 TITLE = XinBox_Util.__scriptname__
 VERSION =  XinBox_Util.__version__
@@ -81,7 +82,7 @@ class GUI( xbmcgui.WindowXML ):
     def setupcontrols(self):
         self.clearList()
         self.getControl(80).setLabel(self.lang(10))
-        self.getControl(81).setLabel(VERSION)
+        self.getControl(81).setLabel("V." + VERSION)
         MenuItems = [xbmcgui.ListItem(self.lang(11),self.lang(16),"XBlogin.png","XBlogin.png"),
                      xbmcgui.ListItem(self.lang(12),self.lang(17),"XBcreatenew.png","XBcreatenew.png"),
                      xbmcgui.ListItem(self.lang(13),self.lang(19),"XBchangesettings.png","XBchangesettings.png"),
@@ -106,7 +107,7 @@ class GUI( xbmcgui.WindowXML ):
             elif self.getCurrentListPosition() == 1:
                 self.launchcreatemenu()
             elif self.getCurrentListPosition() == 2:
-                pass
+                XinBox_Update.Update(self.lang)
             elif self.getCurrentListPosition() == 3:
                 self.launchabout()
             elif self.getCurrentListPosition() == 4:
