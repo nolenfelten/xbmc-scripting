@@ -22,6 +22,11 @@ After a few more releases, the script came to its final name that it is today.
 XinBox also had a few version updates and the latest version 0.3 was released Jan '07.
 Stanley87 then took a break from scripting. Moved apartments and began again on this new release of XinBox.
 
+
+
+
+
+
 About Stanley87:
 
 Location: Christchurch, New Zealand.
@@ -30,20 +35,20 @@ Job: Car Audio Service/Import outfit.
 Music: Pendulum, Rage, Tool, Reel Big Fish, Sublime, Placebo
 Movies/TV: American History X, Snatch, Matrix, Family Guy, Big Love
 Contact: Email: Stanley87.matt@gmail.com
-Forums: http://www.xboxmediacenter.com/forum : Username:Stanley87
-        http://forums.xbox-scene.com/ : username:Stanley87
-
+Forums   UserName = Stanley87: 
+http://www.xboxmediacenter.com/forum
+http://forums.xbox-scene.com/
 Stanley87 wishes to thank: 
 
 Team XBMC for obvious reasons.
-Donno for helping along the way with my MANY python problems
-and also the use of his fantastic settings .py
-Team AMT for my inspiration on some of my code layout.
+Donno for settings.py/ Help & Support
+Team AMT for my inspiration & some of my code layout.
 www.xbmcscripts.com for hosting my scripts.
 Partner Chloe for not getting too mad at my late nights scripting.
-Crystal and Nuvola icon packs for some of my icons.
 Google for making Google Code.
 And, YOU for using my script!
+
+
 
 Officail XinBox Feedback/Bug Report Forums:
 

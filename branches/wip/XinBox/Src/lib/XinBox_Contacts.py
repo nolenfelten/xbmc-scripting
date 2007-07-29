@@ -132,7 +132,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.exitme()
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Title' ):
                 if focusid == 50:
-                    self.launchinfo(159,self.language(380))
+                    if self.label == False:
+                        self.launchinfo(159,self.language(380))
+                    else:self.launchinfo(161,self.language(380))
                 elif focusid == 61:
                     self.launchinfo(160,self.language(61))
 
