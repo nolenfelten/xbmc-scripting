@@ -40,6 +40,8 @@ class GUI( xbmcgui.WindowXML ):
         self.updatesizelabel()
         
     def setupvars(self):
+        self.emnotread = 0
+        self.nwmail = 0
         self.chicon = []
         self.animating = False
         self.guilist = []
@@ -188,12 +190,16 @@ class GUI( xbmcgui.WindowXML ):
     def openemail(self, pos):
         item = self.guilist[pos]
         self.guilist.pop(pos)
-        self.guilist.insert(pos, [item[0],item[1],item[2],1,item[4],item[5],item[6]])
+        self.guilist.insert(pos, [item[0],item[1],item[2],1,item[4],item[5],item[6],item[7]])
         if item[3] != 1:
             self.chicon.append(str(self.getListSize() - 1 - pos))
             if item[2] == 0:icon = "XBemailread.png"
             else:icon = "XBemailreadattach.png"
             self.getListItem(pos).setThumbnailImage(icon)
+            if item[7] == 1:
+                self.nwmail -= 1
+            else:self.emnotread -= 1
+            self.updatesizelabel()
         w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
         w.doModal()
         returnval = w.returnvalue
@@ -263,6 +269,8 @@ class GUI( xbmcgui.WindowXML ):
             self.updatelist(newlist)
         
     def updatesizelabel(self):
+        if len(self.guilist) != 0:
+            self.getControl(83).setLabel(self.language(283) + str(self.nwmail) + " " + self.language(284) + str(self.emnotread) + " " + self.language(285) + " " + str(self.getListSize()))
         if self.theservsize == False:
             self.getControl(81).setLabel(self.language(257) + self.getsizelabel(self.serversize))
         else:
@@ -280,18 +288,23 @@ class GUI( xbmcgui.WindowXML ):
         self.serversize = w.serversize
         self.inboxsize = w.inboxsize                
         del w
-        self.updatesizelabel()
         if setting != 1:
             self.removeItem(pos)
+            if self.guilist[pos][3] == 0:
+                if self.guilist[pos][7] == 0:
+                    self.emnotread -= 1
+                else:self.nwmail -= 1
             self.guilist.pop(pos)
             if len(self.guilist) != 0:
+                self.updatesizelabel()
                 self.printEmail(self.getCurrentListPosition())
             else:self.setinboxempty()
         else:
             orig = self.guilist[pos]
-            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-"]
+            new = [orig[0],orig[1],orig[2],orig[3],orig[4],orig[5],"-",orig[7]]
             self.guilist.pop(pos)
             self.guilist.insert(pos, new)
+            self.updatesizelabel()
 
     def setinboxnotemtpy(self):
         self.getControl(50).setEnabled(True)
@@ -299,6 +312,7 @@ class GUI( xbmcgui.WindowXML ):
 
 
     def setinboxempty(self):
+        self.getControl(83).setLabel(self.language(283) + "0 " + self.language(284) + "0 " + self.language(285) + "0")
         self.guilist = []
         self.inboxsize = 0
         self.addItem(self.language(256))
@@ -340,22 +354,29 @@ class GUI( xbmcgui.WindowXML ):
             f = open(self.ibfolder + item[0] + ".sss", "r")
             myemail = email.message_from_string(f.read())
             f.close()
-            self.guilist.insert(0,[item[0],myemail,item[1],0,item[2],item[3],item[4]])
-            if item[1] == 0:icon="XBnewemail.png"
-            else:icon="XBnewattachemail.png"
+            self.guilist.insert(0,[item[0],myemail,item[1],0,item[2],item[3],item[4],1])
+            icon = self.geticon(item[1],0,1)
             self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
         dialog.close()
 
     def geticon(self,attstat, readstat, newstatus):
         if newstatus == 0:
-            if attstat == 0 and readstat == 0:return "XBemailnotread.png"
+            if attstat == 0 and readstat == 0:
+                self.emnotread += 1
+                return "XBemailnotread.png"
             elif attstat == 0 and readstat == 1:return "XBemailread.png"
-            elif attstat == 1 and readstat == 0:return "XBemailnotreadattach.png"
+            elif attstat == 1 and readstat == 0:
+                self.emnotread += 1
+                return "XBemailnotreadattach.png"
             elif attstat == 1 and readstat == 1:return "XBemailreadattach.png"
         else:
-            if attstat == 0:return "XBnewemail.png"
-            else:return "XBnewattachemail.png"
-  
+            if attstat == 0:
+                self.nwmail += 1
+                return "XBnewemail.png"
+            else:
+                self.nwmail += 1
+                return "XBnewattachemail.png"
+            
     def parsesubject(self, subject):
         if subject == "":
             return self.language(255)
@@ -392,7 +413,7 @@ class GUI( xbmcgui.WindowXML ):
                     readstatus = int(myline[6])
                     newstatus = int(myline[7])
                     attachstat = int(myline[3])
-                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1]])
+                    self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1],newstatus])
                     icon=self.geticon(attachstat,readstatus, newstatus)
                     self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
         if len(self.guilist) == 0:self.setinboxempty()
