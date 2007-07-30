@@ -211,6 +211,9 @@
 	<string id="280">Zip Archive List</string>
 	<string id="281">PageUp/PageDown</string>
 	<string id="282">Updating Inbox ID file..</string>
+	<string id="283">New: </string>
+	<string id="284">Unread: </string>
+	<string id="285">Total: </string>
 
 	<!-- Compose Labels -->
 	<string id="300">Sending Email..</string>

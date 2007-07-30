@@ -12,7 +12,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.2'
+__version__ = '0.3'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 
