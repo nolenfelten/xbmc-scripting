@@ -87,6 +87,8 @@ class GUI( xbmcgui.WindowXML ):
             self.removefiles(self.ibfolder)
             self.clearList()
             self.setinboxempty()
+            self.emnotread = 0
+            self.nwmail = 0
             dialog.ok(self.language(49),self.language(278))
             return
     def setupcontrols(self):
