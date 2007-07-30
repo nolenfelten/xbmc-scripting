@@ -167,7 +167,7 @@
 	<string id="220">Du hast keine neuen Emails.</string>
 	<string id="221">Downloade Email # %s</string>
 	<string id="222">Aktualisiere Email Datenbank...</string>
-	<string id="223">%s neue Emails.</string>
+	<string id="223">%s neue Emails runtergeladen.</string>
 	<string id="224">Fehler beim downloaden der Emails.</string>
 	<string id="225">Emailliste</string>
 
@@ -186,7 +186,7 @@
 	<string id="255">Kein Betreff</string>
 	<string id="256">Posteingang leer</string>
 	<string id="257">Server Größe: </string>
-	<string id="258">Posteing. Größe: </string>
+	<string id="258">Posteingang Größe: </string>
 	<string id="259">Leer</string>
 	<string id="260">Von:</string>
 	<string id="261">Erhalten:</string>
@@ -211,6 +211,9 @@
 	<string id="280">Zip-Archivliste</string>
 	<string id="281">BildAuf/BildAb</string>
 	<string id="282">Aktualisiere Posteingang ID Datei..</string>
+	<string id="283">Neu: </string>
+	<string id="284">Ungeles.: </string>
+	<string id="285">Total: </string>
 
 	<!-- Compose Labels -->
 	<string id="300">Sende Email..</string>
