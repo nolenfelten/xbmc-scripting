@@ -165,10 +165,10 @@
 	<string id="218">Checking for new Emails....</string>
 	<string id="219">You have %s new emails.</string>
 	<string id="220">You have no new emails.</string>
-	<string id="221">Retrieving Email # %s</string>
+	<string id="221">Fetching Email # %s</string>
 	<string id="222">Updating Email Database...</string>
-	<string id="223">Received %s New Emails OK.</string>
-	<string id="224">Error Retrieving Email.</string>
+	<string id="223">Fetched %s New Emails OK.</string>
+	<string id="224">Error Fetching Email(s).</string>
 	<string id="225">Email List</string>
 
 	<!-- MORE InBox Menu Labels -->
