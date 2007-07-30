@@ -4,11 +4,9 @@ Update module
 Nuka1195
 """
 
-import sys, os, xbmcgui, urllib, socket, traceback
+import sys, os, xbmcgui, urllib
 from sgmllib import SGMLParser
 import XinBox_Util
-
-socket.setdefaulttimeout( 20 )
 
 __scriptname__ = XinBox_Util.__scriptname__
 __version__ = XinBox_Util.__version__
