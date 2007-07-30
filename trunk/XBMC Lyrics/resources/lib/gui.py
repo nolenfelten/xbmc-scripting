@@ -17,7 +17,6 @@ import os
 import xbmc
 import xbmcgui
 import threading
-#import traceback
 
 from utilities import *
 
@@ -102,21 +101,33 @@ class GUI( xbmcgui.WindowXMLDialog ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
         self.show_lyrics( lyrics, True )
 
+    def make_fatx_compatible( self, name, extension=False ):
+        if ( len( name ) > 42 ):
+            if ( extension ): name = "%s_%s" % ( name[ : 37 ], name[ -4 : ], )
+            else: name = name[ : 42 ]
+        name = name.replace( ",", "_" ).replace( "*", "_" ).replace( "=", "_" ).replace( "\\", "_" ).replace( "|", "_" )
+        name = name.replace( "<", "_" ).replace( ">", "_" ).replace( "?", "_" ).replace( ";", "_" ).replace( ":", "_" )
+        name = name.replace( '"', "_" ).replace( "+", "_" ).replace( "/", "_" )
+        if ( os.path.supports_unicode_filenames ):
+            name = unicode( name, "utf-8", "ignore" )
+        return name
+
     def get_lyrics_from_file( self, artist, song ):
         try:
-            self.song_path = xbmc.makeLegalFilename( os.path.join( self.settings[ "lyrics_path" ], artist, song + ".txt" ) )
+            self.song_path = os.path.join( self.settings[ "lyrics_path" ], self.make_fatx_compatible( artist ), self.make_fatx_compatible( song + ".txt", True ) )
             lyrics_file = open( self.song_path, "r" )
-            lyrics = lyrics_file.read()#unicode( lyrics_file.read(), "utf-8", "ignore" )
+            lyrics = unicode( lyrics_file.read(), "utf-8", "ignore" )
             lyrics_file.close()
             return lyrics
-        except: return None
+        except:
+            return None
 
     def save_lyrics_to_file( self, lyrics ):
         try:
             if ( not os.path.isdir( os.path.split( self.song_path )[ 0 ] ) ):
                 os.makedirs( os.path.split( self.song_path )[ 0 ] )
             lyrics_file = open( self.song_path, "w" )
-            lyrics_file.write( lyrics )#lyrics.encode( "utf-8", "ignore" ) )
+            lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
             return True
         except:
@@ -177,7 +188,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ user modified exceptions """
         if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
             artist = self.LyricsScraper._format_param( self.artist, False )
-            alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), self.artist, ) )#unicode( self.artist, "utf-8", "ignore" ), ) )
+            alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
                 exception = ( artist, alt_artist, )
                 self.LyricsScraper._set_exceptions( exception )
