@@ -264,9 +264,9 @@ class GUI( xbmcgui.WindowXML ):
         self.serversize = w.serversize
         self.inboxsize = w.inboxsize
         del w
-        self.updatesizelabel()
         if len(newlist) != 0:
             self.updatelist(newlist)
+        self.updatesizelabel()
         
     def updatesizelabel(self):
         if len(self.guilist) != 0:
