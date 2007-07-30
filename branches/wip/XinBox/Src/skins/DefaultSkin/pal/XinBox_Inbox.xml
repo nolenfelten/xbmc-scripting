@@ -32,7 +32,7 @@
 		</control>
 		<control type="image">
 			<description>XinBox Logo image</description>
-			<posx>50</posx>
+			<posx>25</posx>
 			<posy>-20</posy>
 			<width>150</width>
 			<height>150</height>
@@ -41,9 +41,9 @@
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
 		</control>
   		<control type="label" id="80">
-        		<description>Menu Label</description>
-        		<posx>440</posx>
-        		<posy>0</posy>
+        		<description>Inbox Name Label</description>
+        		<posx>170</posx>
+        		<posy>50</posy>
         		<width>200</width>
         		<label>-</label>
         		<font>special13</font>
@@ -54,7 +54,7 @@
   		<control type="button" id="81">
         		<description>Serv Size Label</description>
         		<posx>420</posx>
-        		<posy>20</posy>
+        		<posy>0</posy>
         		<width>300</width>
         		<label>-</label>
       			<texturefocus>XBFAKE.png</texturefocus>
@@ -68,7 +68,21 @@
   		<control type="button" id="82">
         		<description>Ibox Size Label</description>
         		<posx>420</posx>
-        		<posy>45</posy>
+        		<posy>25</posy>
+        		<width>250</width>
+        		<label>-</label>
+			<disabledcolor>FFFF0000</disabledcolor>
+      			<texturefocus>XBFAKE.png</texturefocus>
+			<texturenofocus>XBFAKE.png</texturenofocus>
+        		<font>special13</font>
+        		<textcolor>FFB2D4F5</textcolor>
+			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
+			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
+  		</control>
+  		<control type="button" id="83">
+        		<description>New/Unread Label</description>
+        		<posx>420</posx>
+        		<posy>50</posy>
         		<width>250</width>
         		<label>-</label>
 			<disabledcolor>FFFF0000</disabledcolor>
