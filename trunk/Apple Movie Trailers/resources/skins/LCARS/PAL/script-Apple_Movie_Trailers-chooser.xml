@@ -8,10 +8,10 @@
 	</coordinates>
 	<controls>
 		<control type="image">
-			<posx>-155</posx>
-			<posy>-150</posy>
-			<width>720</width>
-			<height>576</height>
+			<posx>-300</posx>
+			<posy>-300</posy>
+			<width>1300</width>
+			<height>1300</height>
 			<texture>amt-black.png</texture>
 		</control>
 		<control type="image">
@@ -36,10 +36,10 @@
  		<!-- skin selection controls -->
 		<!-- ** Required ** Do not change <description> or <type> -->
         <control type="multiimage" id="501">
-            <posx>215</posx>
+            <posx>205</posx>
             <posy>40</posy>
-            <width>200</width>
-            <height>160</height>
+            <width>217</width>
+            <height>122</height>
             <imagepath>thumbs</imagepath>
             <info>Skin.String(AMT-chooser-thumbfolder)</info>
             <timeperimage>2000</timeperimage>
@@ -51,9 +51,9 @@
 		<!-- ** Required ** Do not change <description> -->
 		<control type="label" id="502">
 			<description>Chooser Warning Label</description>
-			<posx>215</posx>
-			<posy>205</posy>
-			<width>200</width>
+			<posx>205</posx>
+			<posy>170</posy>
+			<width>217</width>
 			<height>20</height>
 			<align>center</align>
 			<font>font10</font>

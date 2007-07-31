@@ -19,16 +19,16 @@
 		</control>
 		<control type="image">
 			<description>background image</description>
-			<posx>-12</posx>
+			<posx>-58</posx>
 			<posy>-15</posy>
-			<width>560</width>
+			<width>660</width>
 			<height>560</height>
 			<texture border="10">amt-background-search.png</texture>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="20">
 			<description>heading label</description>
-			<posx>10</posx>
+			<posx>-35</posx>
 			<posy>-2</posy>
 			<width>420</width>
 			<align>left</align>
@@ -39,7 +39,7 @@
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="30">
 			<description>Version Label</description>
-			<posx>535</posx>
+			<posx>588</posx>
 			<posy>-2</posy>
 			<width>200</width>
 			<align>right</align>
@@ -52,18 +52,18 @@
 		<control type="group" id="3000">
             <control type="image">
                 <description>background image</description>
-                <posx>10</posx>
+                <posx>-35</posx>
                 <posy>36</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(102)</visible>
             </control>
             <control type="checkmark" id="102">
                 <description>Genre</description>
-                <posx>15</posx>
+                <posx>-30</posx>
                 <posy>37</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -80,9 +80,9 @@
                 <ondown>100</ondown>
             </control>
             <control type="list" id="100">
-                <posx>10</posx>
+                <posx>-35</posx>
                 <posy>60</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>122</onleft>
                 <onright>101</onright>
@@ -93,7 +93,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -102,7 +102,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -114,7 +114,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -122,7 +122,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -132,7 +132,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -145,9 +145,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>60</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -155,9 +155,9 @@
             </control>
             <control type="scrollbar" id="101">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>76</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -171,9 +171,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>174</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -182,18 +182,18 @@
 
             <control type="image">
                 <description>background image</description>
-                <posx>190</posx>
+                <posx>177</posx>
                 <posy>36</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(112)</visible>
             </control>
             <control type="checkmark" id="112">
                 <description>Studio</description>
-                <posx>195</posx>
+                <posx>182</posx>
                 <posy>37</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -210,9 +210,9 @@
                 <ondown>110</ondown>
             </control>
             <control type="list" id="110">
-                <posx>190</posx>
+                <posx>177</posx>
                 <posy>60</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>101</onleft>
                 <onright>111</onright>
@@ -223,7 +223,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -232,7 +232,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -244,7 +244,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -252,7 +252,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -262,7 +262,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -275,9 +275,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>60</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -285,9 +285,9 @@
             </control>
             <control type="scrollbar" id="111">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>76</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -301,9 +301,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>174</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -312,18 +312,18 @@
 
             <control type="image">
                 <description>background image</description>
-                <posx>370</posx>
+                <posx>390</posx>
                 <posy>36</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(122)</visible>
             </control>
             <control type="checkmark" id="122">
                 <description>Actor</description>
-                <posx>375</posx>
+                <posx>395</posx>
                 <posy>37</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -340,9 +340,9 @@
                 <ondown>120</ondown>
             </control>
             <control type="list" id="120">
-                <posx>370</posx>
+                <posx>390</posx>
                 <posy>60</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>111</onleft>
                 <onright>121</onright>
@@ -353,7 +353,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -362,7 +362,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -374,7 +374,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -382,7 +382,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -392,7 +392,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -405,9 +405,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>60</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -415,9 +415,9 @@
             </control>
             <control type="scrollbar" id="121">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>76</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -431,9 +431,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>174</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -442,18 +442,18 @@
 
             <control type="image">
                 <description>background image</description>
-                <posx>10</posx>
+                <posx>-35</posx>
                 <posy>196</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(132)</visible>
             </control>
             <control type="checkmark" id="132">
                 <description>Rating</description>
-                <posx>15</posx>
+                <posx>-30</posx>
                 <posy>197</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -470,9 +470,9 @@
                 <ondown>130</ondown>
             </control>
             <control type="list" id="130">
-                <posx>10</posx>
+                <posx>-35</posx>
                 <posy>220</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>152</onleft>
                 <onright>131</onright>
@@ -483,7 +483,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -492,7 +492,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -504,7 +504,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -512,7 +512,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -522,7 +522,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -535,9 +535,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>220</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -545,9 +545,9 @@
             </control>
             <control type="scrollbar" id="131">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>236</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -561,9 +561,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>163</posx>
+                <posx>148</posx>
                 <posy>334</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -572,18 +572,18 @@
 
             <control type="image">
                 <description>background image</description>
-                <posx>190</posx>
+                <posx>177</posx>
                 <posy>196</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(142)</visible>
             </control>
             <control type="checkmark" id="142">
                 <description>Quality</description>
-                <posx>195</posx>
+                <posx>182</posx>
                 <posy>197</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -600,9 +600,9 @@
                 <ondown>140</ondown>
             </control>
             <control type="list" id="140">
-                <posx>190</posx>
+                <posx>177</posx>
                 <posy>220</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>131</onleft>
                 <onright>141</onright>
@@ -613,7 +613,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -622,7 +622,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -634,7 +634,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -642,7 +642,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -652,7 +652,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -665,9 +665,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>220</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -675,9 +675,9 @@
             </control>
             <control type="scrollbar" id="141">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>236</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -691,9 +691,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>343</posx>
+                <posx>360</posx>
                 <posy>334</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -702,18 +702,18 @@
 
             <control type="image">
                 <description>background image</description>
-                <posx>370</posx>
+                <posx>390</posx>
                 <posy>196</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>22</height>
                 <texture border="5">amt-input-focus.png</texture>
                 <visible>Control.HasFocus(152)</visible>
             </control>
             <control type="checkmark" id="152">
                 <description>Extra Settings</description>
-                <posx>375</posx>
+                <posx>395</posx>
                 <posy>197</posy>
-                <width>140</width>
+                <width>170</width>
                 <height>20</height>
                 <align>right</align>
                 <label> </label>
@@ -730,9 +730,9 @@
                 <ondown>150</ondown>
             </control>
             <control type="list" id="150">
-                <posx>370</posx>
+                <posx>390</posx>
                 <posy>220</posy>
-                <width>150</width>
+                <width>180</width>
                 <height>130</height>
                 <onleft>141</onleft>
                 <onright>151</onright>
@@ -743,7 +743,7 @@
                 <scrolltime>200</scrolltime>              
                 <itemlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -752,7 +752,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -764,7 +764,7 @@
                 </itemlayout>
                 <focusedlayout height="26">
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -772,7 +772,7 @@
                         <texture border="5">amt-input-focus.png</texture>
                     </control>
                     <control type="image">
-                        <width>150</width>
+                        <width>180</width>
                         <height>24</height>
                         <posx>0</posx>
                         <posy>1</posy>
@@ -782,7 +782,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>1</posy>
-                        <width>140</width>
+                        <width>170</width>
                         <height>24</height>
                         <font>font10</font>
                         <aligny>center</aligny>
@@ -795,9 +795,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>220</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
@@ -805,9 +805,9 @@
             </control>
             <control type="scrollbar" id="151">
                 <description>Scroll Bar for Trailer List #50</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>236</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>98</height>
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -821,9 +821,9 @@
             </control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>523</posx>
+                <posx>573</posx>
                 <posy>334</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -836,13 +836,13 @@
 
         <!-- ** Required ** Do not change id's or type's -->
         <control type="group">
-            <posx>10</posx>
+            <posx>-35</posx>
             <posy>362</posy>
             <control type="image">
                 <description>background image</description>
                 <posx>0</posx>
                 <posy>0</posy>
-                <width>400</width>
+                <width>480</width>
                 <height>120</height>
                 <texture border="5">amt-input-nofocus.png</texture>
             </control>
@@ -851,7 +851,7 @@
 				<description>SQL statement</description>
 				<posx>5</posx>
 				<posy>2</posy>
-				<width>390</width>
+				<width>470</width>
 				<height>116</height>
 				<font>font10</font>
 				<textcolor>FFe2ff43</textcolor>
@@ -867,18 +867,18 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>403</posx>
+                <posx>483</posx>
                 <posy>0</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-up-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-up-arrow-focus.png</texturefocus>
                 <onclick>PageUp(2075)</onclick>
             </control>
 			<control type="scrollbar" id="2075">
-				<posx>403</posx>
+				<posx>483</posx>
 				<posy>16</posy>
-				<width>12</width>
+				<width>16</width>
 				<height>88</height>
 				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
@@ -892,9 +892,9 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>403</posx>
+                <posx>483</posx>
                 <posy>104</posy>
-                <width>12</width>
+                <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
@@ -918,13 +918,13 @@
 
 		<!-- ** Required ** Do not change id's or type's -->
 		<control type="group" id="2000">
-			<posx>440</posx>
+			<posx>475</posx>
 			<posy>362</posy>
 			<control type="button" id="250">
 				<description>Ok Button</description>
 				<posx>0</posx>
 				<posy>0</posy>
-				<width>90</width>
+				<width>110</width>
 				<height>32</height>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -943,7 +943,7 @@
 				<description>Cancel Button</description>
 				<posx>0</posx>
 				<posy>35</posy>
-				<width>90</width>
+				<width>110</width>
 				<height>32</height>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -962,7 +962,7 @@
 				<description>Save Button</description>
 				<posx>0</posx>
 				<posy>70</posy>
-				<width>90</width>
+				<width>110</width>
 				<height>32</height>
 				<align>center</align>
 				<aligny>center</aligny>
@@ -981,7 +981,7 @@
 				<description>Clear/Load Button</description>
 				<posx>0</posx>
 				<posy>105</posy>
-				<width>90</width>
+				<width>110</width>
 				<height>32</height>
 				<align>center</align>
 				<aligny>center</aligny>
