@@ -23,7 +23,7 @@ __credits_r3__ = "Pike"
 __add_credits_l1__ = __language__( 1 )#"Xbox Media Center"
 __add_credits_r1__ = "Team XBMC"
 __add_credits_l2__ = __language__( 913 )#"Usability"
-__add_credits_r2__ = "Spiff"
+__add_credits_r2__ = "Spiff & JMarshall"
 __add_credits_l3__ = __language__( 914 )#"Language File"
 __add_credits_r3__ = __language__( 2 )#"Translators name"
 
