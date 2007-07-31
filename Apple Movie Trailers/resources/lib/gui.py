@@ -21,7 +21,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 
 try:
     _progress_dialog( None )
-    modules = ( "os", "xbmc", "traceback", "utilities", "context_menu", "cacheurl", "shutil", "datetime", )
+    modules = ( "os", "xbmc", "utilities", "context_menu", "cacheurl", "shutil", "datetime", )
     for count, module in enumerate( modules ):
         _progress_dialog( count + 1, "%s %s" % ( _( 52 ), module, ) )
         if ( module == "utilities" ):
@@ -29,7 +29,7 @@ try:
         else:
             exec "import %s" % module
 except:
-    traceback.print_exc()
+    print sys.exc_info()[ 1 ]
     _progress_dialog( -1 )
     xbmcgui.Dialog().ok( __scriptname__, _( 81 ) )
     raise
@@ -82,8 +82,6 @@ class GUI( xbmcgui.WindowXML ):
             self.startup = False
             self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
-            ## remove when search is done ##
-            #self.getControl( 106 ).setEnabled( False )
             self._set_labels()
             xbmcgui.unlock()
             self._setup_variables()
@@ -237,7 +235,8 @@ class GUI( xbmcgui.WindowXML ):
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
-        except: traceback.print_exc()
+        except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::showCategories [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def showTrailers( self, sql, params=None, choice=0, force_update=False ):
@@ -265,7 +264,7 @@ class GUI( xbmcgui.WindowXML ):
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
         except:
-            traceback.print_exc()
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::showTrailers [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def _get_thumbnail( self, movie ):
@@ -384,7 +383,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( _( 401 ) ), "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
-        except: traceback.print_exc()#pass
+        except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::showTrailerInfo [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def showOverlays( self, trailer=-1 ):
@@ -452,7 +452,9 @@ class GUI( xbmcgui.WindowXML ):
                     self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                     self._set_video_resolution()
                     xbmc.Player( self.core ).play( filename )
-        except: traceback.print_exc()
+        except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::playTrailer [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+
 
     def saveThumbnail( self, filename, trailer, poster ):
         try: 
@@ -464,8 +466,9 @@ class GUI( xbmcgui.WindowXML ):
                 if ( success ):
                     self.trailers.movies[ trailer ].saved = filename
                     ##self.showOverlays( trailer )
-        except: traceback.print_exc()
-    
+        except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::saveThumbnail [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+
     def showContextMenu( self ):
         if ( self.controlId == self.CONTROL_CATEGORY_LIST or self.controlId == self.CONTROL_CAST_LIST ):
             selection = self.getControl( self.controlId ).getSelectedPosition()
@@ -712,9 +715,9 @@ class GUI( xbmcgui.WindowXML ):
                 self.showOverlays( trailer )
             dialog.close()
         except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::saveCachedMovie [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
             dialog.close()
             xbmcgui.Dialog().ok( _( 56 ), _( 90 ) )
-            traceback.print_exc()
                 
     def deleteSavedTrailer( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
@@ -779,7 +782,9 @@ class GUI( xbmcgui.WindowXML ):
                 self.getTrailerGenre()
             elif ( controlId == self.CONTROL_CAST_LIST and self.cast_exists ):
                 self.getActorChoice()
-        except: traceback.print_exc()
+        except:
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::onClick [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+
 
     def onFocus( self, controlId ):
         #xbmc.sleep( 10 )
@@ -829,7 +834,7 @@ class GUI( xbmcgui.WindowXML ):
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getActorChoice()
         except:
-            traceback.print_exc()
+            LOG( LOG_ERROR, "%s (ver: %s) GUI::onAction [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
 
 def main():
     _progress_dialog( len( modules ) + 1, _( 55 ) )

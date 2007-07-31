@@ -23,7 +23,7 @@
 			<posy>-15</posy>
 			<width>520</width>
 			<height>420</height>
-			<texture>amt-background-settings_16x9.png</texture>
+			<texture>amt-background-settings.png</texture>
 		</control>
 		<!-- ** Required ** Do not change id or type -->
 		<control type="label" id="20">

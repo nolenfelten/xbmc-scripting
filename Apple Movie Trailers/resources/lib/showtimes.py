@@ -34,20 +34,34 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _show_dialog( self ):
         self.getControl( 20 ).setLabel( self._capitalize_text( self.title ) )
-        self.getControl( 30 ).setLabel( "%s:" % self._capitalize_text( _( 602 ) ) )
-        self.getControl( 40 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 603 ) ), self._capitalize_text( self.location ), ) )
+        self.getControl( 30 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 603 ) ), self._capitalize_text( self.location ), ) )
+        self.getControl( 40 ).setLabel( "%s:" % self._capitalize_text( _( 602 ) ) )
+        self.getControl( 50 ).setLabel( "" )
         self.getControl( 100 ).reset()
         self.getControl( 100 ).addItem( self._capitalize_text( _( 601 ) ) )
 
     def _get_showtimes( self ):
-        date, movie_showtimes = ShowtimesFetcher.get_showtimes( self.title, self.location )
-        self.getControl( 30 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 602 ) ), self._capitalize_text( date ), ) )
+        date, self.movie_showtimes = ShowtimesFetcher.get_showtimes( self.title, self.location )
+        if ( date is None ): date = _( 600 )
+        self.getControl( 40 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 602 ) ), self._capitalize_text( date ), ) )
+        self._fill_list()
+
+    def _get_selection( self, choice ):
+        self.getControl( 20 ).setLabel( self._capitalize_text( choice ) )
+        self.getControl( 30 ).setLabel( self._capitalize_text( self.movie_showtimes[ choice ][ 0 ] ) )
+        self.getControl( 40 ).setLabel( "%s:" % self._capitalize_text( _( 602 ) ) )
+        self.getControl( 50 ).setLabel( self._capitalize_text( self.movie_showtimes[ choice ][ 2 ] ) )
+        date, self.movie_showtimes = ShowtimesFetcher.get_selection( self.movie_showtimes[ choice ][ 3 ] )
+        self.getControl( 40 ).setLabel( "%s: %s" % ( self._capitalize_text( _( 602 ) ), self._capitalize_text( date ), ) )
+        self._fill_list()
+
+    def _fill_list( self ):
         self.getControl( 100 ).reset()
-        if ( movie_showtimes ):
-            theaters = movie_showtimes.keys()
+        if ( self.movie_showtimes ):
+            theaters = self.movie_showtimes.keys()
             theaters.sort()
             for theater in theaters:
-                list_item = xbmcgui.ListItem( self._capitalize_text( theater ), movie_showtimes[ theater ] )
+                list_item = xbmcgui.ListItem( self._capitalize_text( theater ), self.movie_showtimes[ theater ][ 1 ], self.movie_showtimes[ theater ][ 0 ], self.movie_showtimes[ theater ][ 2 ] )
                 self.getControl( 100 ).addItem( list_item )
         else:
             self.getControl( 100 ).addItem( self._capitalize_text( _( 600 ) ) )
@@ -56,7 +70,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.close()
 
     def onClick( self, controlId ):
-        pass
+        self._get_selection( self.getControl( controlId ).getSelectedItem().getLabel() )
 
     def onFocus( self, controlId ):
         pass

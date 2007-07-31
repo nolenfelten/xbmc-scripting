@@ -10,13 +10,12 @@ import xbmc
 import xbmcgui
 import urllib2
 import md5
-#import traceback
 import time
 #import socket
+#socket.setdefaulttimeout( 20 )
 
 from utilities import *
 
-#socket.setdefaulttimeout( 20 )
 
 __module_name__ = 'cacheurl'
 __module_version__ = '0.1'
