@@ -1,10 +1,10 @@
 
 
-import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile
+import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile, traceback
 import XinBox_Util
 import XinBox_InfoDialog
 from sgmllib import SGMLParser
-
+from email import Charset
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
@@ -116,7 +116,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl(72).setText(self.body)
 
     def parse_email(self, email):
-        email = email.replace("\t","          ")
+        email = email.decode("quopri_codec")
         parser = html2txt()
         parser.reset()
         parser.feed(email)

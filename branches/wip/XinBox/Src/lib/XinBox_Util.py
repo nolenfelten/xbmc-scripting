@@ -22,7 +22,7 @@ AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
 VIDEOTYPES = ["avi","wmv","mpg"]
 TEXTTYPES = ["txt", "doc", "rtf", "xml", "bat", "log"]
 ARCHIVETYPES = ["zip"]
-
+       
 def setControllerAction():
     return {
                 61478 : 'Keyboard Up Arrow',
@@ -68,9 +68,10 @@ def getpresetservers():
             "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000",""],
             "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100",""],
             "googlemail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0",""],
-            "yahoo.de" : ["pop.mail.yahoo.de","smtp.mail.yahoo.de","995","465","0",""],
+            "yahoo.de" : ["pop.mail.yahoo.de","smtp.mail.yahoo.de","0","0","0",""],
             "yahoo.com" : ["pop.mail.yahoo.com","smtp.mail.yahoo.com","995","465","0",""],
             "gmx.net" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer"],
+            "gmx.de" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer"],
             "web.de" : ["pop3.web.de","smtp.web.de","0","0","0",""],
             "freenet.de" : ["pop3.freenet.de","mx.freenet.de","0","0","0",""]}
 
@@ -124,3 +125,5 @@ def removeauto(scriptpath, accountname, srcpath):
                 f.close()
                 return
         return
+    
+    
