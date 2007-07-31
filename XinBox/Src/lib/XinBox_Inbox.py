@@ -252,7 +252,7 @@ class GUI( xbmcgui.WindowXML ):
             self.sendemail([returnval,"","","","",[]])
 
     def parse_email(self, email):
-        email = email.replace("\t","")
+        email = email.decode("quopri_codec")
         parser = html2txt()
         parser.reset()
         parser.feed(email)
