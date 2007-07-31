@@ -134,7 +134,7 @@ class ShowtimesFetcher:
         movie = self._format_param( movie )
         location = self._format_param( location )
         date, showtimes = self._fetch_showtimes( self.base_url + "/movies?q=%s&near=%s" % ( movie, location, ) )
-        if ( showtimes is None ):
+        if ( showtimes is None or not showtimes ):
             theaters = self._get_theater_list( self.base_url + "/movies?near=%s" % ( location, ) )
             return None, theaters
         else:
@@ -255,8 +255,8 @@ debugWrite = False
 
 if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
-    movie = [ "Not Real Title", "el cantante", "Rush Hour 3", "The Simpsons Movie", "Transformers", "I Now Pronounce You Chuck & Larry", "Transformers", "I Now Pronounce You Chuck & Larry" ]
-    location = [ "Houston", "detroit", "new york", "London", "Toronto", "33102", "W2 4YL", "T1A 3T9" ]
+    movie = [ "The Seeker: the Dark is Rising", "el cantante", "Rush Hour 3", "The Simpsons Movie", "Transformers", "I Now Pronounce You Chuck & Larry", "Transformers", "I Now Pronounce You Chuck & Larry" ]
+    location = [ "detroit", "Houston", "detroit", "new york", "London", "Toronto", "33102", "W2 4YL", "T1A 3T9" ]
     url = [ "http://www.google.com/movies?near=Monroe,+MI&tid=f91ac86eb99bc459" ]
     for cnt in range( 0,1 ):
         date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
