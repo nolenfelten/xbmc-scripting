@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os, string, traceback
+import xbmc, xbmcgui, time, sys, os, string
 import XinBox_Util
 import XinBox_Contacts
 from os.path import join, exists, basename,getsize
