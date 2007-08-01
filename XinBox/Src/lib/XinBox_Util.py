@@ -8,19 +8,16 @@ __accountsdir__ = "P:\\script_data\\XinBox\\Accounts\\"
 __tempdir__ = "P:\\script_data\\XinBox\\Temp\\"
 __autoexecdir__ = "Q:\\scripts\\"
 
-
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.1'
+__version__ = '0.9'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
-
-
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
 AUDI0TYPES = ["wav","mp3","mpa","mp2","ac3","dts"]
 VIDEOTYPES = ["avi","wmv","mpg"]
-TEXTTYPES = ["txt", "doc", "rtf", "xml", "bat", "log"]
+TEXTTYPES = ["txt", "rtf", "xml", "bat", "log"]
 ARCHIVETYPES = ["zip"]
        
 def setControllerAction():
@@ -28,30 +25,30 @@ def setControllerAction():
                 61478 : 'Keyboard Up Arrow',
                 61480 : 'Keyboard Down Arrow',
                 61479 : 'Keyboard Right Arrow',
-                61448 : 'Keyboard Backspace Button', #B button
-                61533 : 'Keyboard Menu Button', #Y button
-                61467 : 'Keyboard ESC Button', #back button
+                61448 : 'Keyboard Backspace Button',
+                61533 : 'Keyboard Menu Button',
+                61467 : 'Keyboard ESC Button',
                 61601 : 'Keyboard Shift Button',
                 61603 : 'Keyboard Right Ctrl Button',
                 61602 : 'Keyboard Left Ctrl Button',
-                61449 : 'Keyboard TAB Button', #White button
-                    213 : 'Remote Display', #white button
+                61449 : 'Keyboard TAB Button',
+                    213 : 'Remote Display',
                     216 : 'Remote Back', 
-                    247 : 'Remote Menu', #back button
-                    229 : 'Remote Title',#B button
-                    195 : 'Remote Info',#Y button
+                    247 : 'Remote Menu',
+                    229 : 'Remote Title',
+                    195 : 'Remote Info',
                     207 : 'Remote 0',
                     166 : 'Remote Up',
                     167 : 'Remote Down',
                     168 : 'Remote Right',
                     256 : 'A Button',
-                    257 : 'B Button',#used for quick delete emails,remove compose line and delete contact
+                    257 : 'B Button',
                     258 : 'X Button',
-                    259 : 'Y Button',#used for help
+                    259 : 'Y Button',
                     260 : 'Black Button',
-                    261 : 'White Button',#used for Extra Features (add contact, launch compose from contacts, launch contact list from compos)
+                    261 : 'White Button',
                     274 : 'Start Button',
-                    275 : 'Back Button', #back
+                    275 : 'Back Button',
                     270 : 'DPad Up',
                     271 : 'DPad Down',
                     272 : 'DPad Left',

@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile, traceback
+import xbmc, xbmcgui, time, sys, os,email, string,shutil,re,zipfile
 import XinBox_Util
 import XinBox_InfoDialog
 from sgmllib import SGMLParser
