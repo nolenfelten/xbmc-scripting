@@ -84,23 +84,24 @@ def show_credits():
     c.doModal()
     del c
 
-def make_legal_filename( path, compatible=False, extension=True ):
-    environment = os.environ.get( "OS", "unknown" )
+def make_legal_filepath( path, compatible=False, extension=True ):
+    environment = os.environ.get( "OS", "xbox" )
     path = path.replace( "\\", "/" )
-    legalChars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!#$%&'()-@[]^_`{}~.ßÅåÄäÖöÜüøéèçàùêÂñáïëìíâãæîðòôóõ÷ú "
     parts = path.split( "/" )
-    for part_count, part in enumerate( parts ):
-        if ( part_count == 0 and part.endswith( ":" ) ): continue
-        tmp_name = ""
-        for count, char in enumerate( part ):
-            if ( char not in legalChars ): char = ""
-            tmp_name += char
-        if ( environment == "xbox" or compatible ):
-            if ( len( tmp_name ) > 42 ):
-                if ( part_count == len( parts ) - 1 and extension == True ):
-                    tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
-                else:
-                    tmp_name = tmp_name[ : 42 ]
+    if ( environment == "xbox" or environment == "win32" or compatible ):
+        illegal_characters = """,*=|<>?;:"+"""
+        for part_count, part in enumerate( parts ):
+            if ( part_count == 0 and part.endswith( ":" ) and len( part ) == 2 ): continue
+            tmp_name = ""
+            for count, char in enumerate( part ):
+                if ( char in illegal_characters ): char = ""
+                tmp_name += char
+            if ( environment == "xbox" or compatible ):
+                if ( len( tmp_name ) > 42 ):
+                    if ( part_count == len( parts ) - 1 and extension == True ):
+                        tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
+                    else:
+                        tmp_name = tmp_name[ : 42 ]
         parts[ part_count ] = tmp_name
     return "/".join( parts )
 
