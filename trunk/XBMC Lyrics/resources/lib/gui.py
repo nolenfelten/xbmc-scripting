@@ -114,8 +114,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def save_lyrics_to_file( self, lyrics ):
         try:
-            if ( not os.path.isdir( os.path.split( self.song_path )[ 0 ] ) ):
-                os.makedirs( os.path.split( self.song_path )[ 0 ] )
+            if ( not os.path.isdir( os.path.dirname( self.song_path ) ) ):
+                os.makedirs( os.path.dirname( self.song_path ) )
             lyrics_file = open( self.song_path, "w" )
             lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
