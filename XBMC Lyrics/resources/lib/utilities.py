@@ -99,7 +99,8 @@ def make_legal_filepath( path, compatible=False, extension=True ):
             if ( environment == "xbox" or compatible ):
                 if ( len( tmp_name ) > 42 ):
                     if ( part_count == len( parts ) - 1 and extension == True ):
-                        tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
+                        ext = os.path.splitext( tmp_name )[ 1 ]
+                        tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ], ext, )
                     else:
                         tmp_name = tmp_name[ : 42 ]
             parts[ part_count ] = tmp_name
