@@ -211,9 +211,9 @@
 			<control type="image">
 				<description>cover image</description>
 				<posx>-20</posx>
-				<posy>256</posy>
-				<width>180</width>
-				<height>180</height>
+				<posy>240</posy>
+				<width>196</width>
+				<height>196</height>
 				<info>MusicPlayer.Cover</info>
                 <colordiffuse>BBFFFFFF</colordiffuse>
 				<aspectratio>keep</aspectratio>
@@ -272,7 +272,7 @@
 				<description>Song Rating Image</description>
 				<height>20</height>
 				<width>120</width>
-				<posx>485</posx>
+				<posx>500</posx>
 				<posy>55</posy>
 				<info>musicplayer.rating</info>
                 <aspectratio>keep</aspectratio>
