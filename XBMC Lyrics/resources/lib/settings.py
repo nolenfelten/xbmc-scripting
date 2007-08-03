@@ -114,6 +114,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 227 ).setLabel( self.filename_format[ self.settings[ "filename_format" ] ] )
             self.getControl( 228 ).setLabel( self.settings[ "music_path" ] )
             self.getControl( 229 ).setSelected( self.settings[ "shuffle" ] )
+            self.getControl( 230 ).setSelected( self.settings[ "compatible" ] )
+            self.getControl( 231 ).setSelected( self.settings[ "use_extension" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
             self.getControl( 254 ).setEnabled( not xbmc.Player().isPlayingAudio() )
         except: pass
@@ -166,6 +168,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _change_setting9( self ):
         """ changes settings #9 """
         self.settings[ "shuffle" ] = not self.settings[ "shuffle" ]
+        self._set_controls_values()
+
+    def _change_setting10( self ):
+        """ changes settings #10 """
+        self.settings[ "compatible" ] = not self.settings[ "compatible" ]
+        self._set_controls_values()
+
+    def _change_setting11( self ):
+        """ changes settings #11 """
+        self.settings[ "use_extension" ] = not self.settings[ "use_extension" ]
         self._set_controls_values()
 
 ##### End of unique defs ######################################################

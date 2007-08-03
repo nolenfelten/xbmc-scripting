@@ -8,7 +8,7 @@ __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Lyrics"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.5.4"
+__version__ = "1.5.5"
 
 BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )

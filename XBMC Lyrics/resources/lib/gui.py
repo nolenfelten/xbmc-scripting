@@ -101,22 +101,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         lyrics = self.LyricsScraper.get_lyrics_from_list( self.menu_items[ item ] )
         self.show_lyrics( lyrics, True )
 
-    def make_fatx_compatible( self, name, extension=False ):
-        if ( len( name ) > 42 ):
-            if ( extension ): name = "%s_%s" % ( name[ : 37 ], name[ -4 : ], )
-            else: name = name[ : 42 ]
-        name = name.replace( ",", "_" ).replace( "*", "_" ).replace( "=", "_" ).replace( "\\", "_" ).replace( "|", "_" )
-        name = name.replace( "<", "_" ).replace( ">", "_" ).replace( "?", "_" ).replace( ";", "_" ).replace( ":", "_" )
-        name = name.replace( '"', "_" ).replace( "+", "_" ).replace( "/", "_" )
-        if ( os.path.supports_unicode_filenames ):
-            name = unicode( name, "utf-8", "ignore" )
-        return name
-
     def get_lyrics_from_file( self, artist, song ):
         try:
-            self.song_path = os.path.join( self.settings[ "lyrics_path" ], self.make_fatx_compatible( artist ), self.make_fatx_compatible( song + ".txt", True ) )
+            self.song_path = make_legal_filename( unicode( os.path.join( self.settings[ "lyrics_path" ], artist, song + ( "", ".txt", )[ self.settings[ "use_extension" ] ] ), "utf-8" ), self.settings[ "compatible" ], self.settings[ "use_extension" ] )
+            #self.song_path = xbmc.makeLegalFilename( os.path.join( self.settings[ "lyrics_path" ], artist, song + ".txt".encode( "utf-8" ) ) )
             lyrics_file = open( self.song_path, "r" )
-            lyrics = unicode( lyrics_file.read(), "utf-8", "ignore" )
+            lyrics = lyrics_file.read()#unicode( , "utf-8", "ignore" )
             lyrics_file.close()
             return lyrics
         except:
@@ -251,7 +241,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.myPlayerChanged( 2 )
 
     def myPlayerChanged( self, event, force_update=False ):
-        LOG( LOG_DEBUG, "%s (ver: %s) GUI::myPlayerChanged [%s]", __scriptname__, __version__, ["stopped","ended","started"][event] )
+        LOG( LOG_DEBUG, "%s (ver: %s) GUI::myPlayerChanged [%s]", __scriptname__, __version__, [ "stopped","ended","started" ][ event ] )
         if ( event < 2 ): 
             self.exit_script()
         else:
