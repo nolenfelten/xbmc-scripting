@@ -86,14 +86,11 @@ def show_credits():
 
 def make_legal_filename( path, compatible=False, extension=True ):
     environment = os.environ.get( "OS", "unknown" )
+    path = path.replace( "\\", "/" )
     legalChars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!#$%&'()-@[]^_`{}~.ßÅåÄäÖöÜüøéèçàùêÂñáïëìíâãæîðòôóõ÷ú "
-    if ( environment in ( "linux", "osx", ) ):
-        split_char = "/"
-    else:
-        split_char = path[ path.find( ":" ) + 1 ]
-    parts = path.split( split_char )
+    parts = path.split( "/" )
     for part_count, part in enumerate( parts ):
-        if ( part_count == 0 and environment not in ( "linux", "osx", ) ): continue
+        if ( part_count == 0 and part.endswith( ":" ) ): continue
         tmp_name = ""
         for count, char in enumerate( part ):
             if ( char not in legalChars ): char = ""
@@ -104,8 +101,8 @@ def make_legal_filename( path, compatible=False, extension=True ):
                     tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
                 else:
                     tmp_name = tmp_name[ : 42 ]
-            parts[ part_count ] = tmp_name
-    return split_char.join( parts )
+        parts[ part_count ] = tmp_name
+    return "/".join( parts )
 
 
 class Settings:
