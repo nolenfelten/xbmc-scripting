@@ -1,3 +1,5 @@
+﻿# -*- coding: utf-8 -*-
+
 """
 Catchall module for shared functions and constants
 
@@ -16,7 +18,7 @@ __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.4", )
+SETTINGS_VERSIONS = ( "1.5.5", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
@@ -82,6 +84,29 @@ def show_credits():
     c.doModal()
     del c
 
+def make_legal_filename( path, compatible=False, extension=True ):
+    environment = os.environ.get( "OS", "unknown" )
+    legalChars = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!#$%&'()-@[]^_`{}~.ßÅåÄäÖöÜüøéèçàùêÂñáïëìíâãæîðòôóõ÷ú "
+    if ( environment in ( "linux", "osx", ) ):
+        split_char = "/"
+    else:
+        split_char = path[ path.find( ":" ) + 1 ]
+    parts = path.split( split_char )
+    for part_count, part in enumerate( parts ):
+        if ( part_count == 0 and environment not in ( "linux", "osx", ) ): continue
+        tmp_name = ""
+        for count, char in enumerate( part ):
+            if ( char not in legalChars ): char = ""
+            tmp_name += char
+        if ( environment == "xbox" or compatible ):
+            if ( len( tmp_name ) > 42 ):
+                if ( part_count == len( parts ) - 1 and extension == True ):
+                    tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
+                else:
+                    tmp_name = tmp_name[ : 42 ]
+            parts[ part_count ] = tmp_name
+    return split_char.join( parts )
+
 
 class Settings:
     """ Settings class """
@@ -111,6 +136,8 @@ class Settings:
             "filename_format": 0,
             "music_path": "f:\\music",
             "shuffle": True,
+            "compatible": False,
+            "use_extension": True,
             }
         ok = self.save_settings( settings )
         return settings
