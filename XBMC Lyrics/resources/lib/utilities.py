@@ -87,11 +87,11 @@ def show_credits():
 def make_legal_filepath( path, compatible=False, extension=True ):
     environment = os.environ.get( "OS", "xbox" )
     path = path.replace( "\\", "/" )
-    parts = path.split( "/" )
+    drive = os.path.splitdrive( path )[ 0 ]
+    parts = os.path.splitdrive( path )[ 1 ].split( "/" )
     if ( environment == "xbox" or environment == "win32" or compatible ):
         illegal_characters = """,*=|<>?;:"+"""
         for part_count, part in enumerate( parts ):
-            if ( part_count == 0 and part.endswith( ":" ) and len( part ) == 2 ): continue
             tmp_name = ""
             for count, char in enumerate( part ):
                 if ( char in illegal_characters ): char = ""
@@ -102,8 +102,8 @@ def make_legal_filepath( path, compatible=False, extension=True ):
                         tmp_name = "%s_%s" % ( tmp_name[ : 37 ], tmp_name[ -4 : ], )
                     else:
                         tmp_name = tmp_name[ : 42 ]
-        parts[ part_count ] = tmp_name
-    return "/".join( parts )
+            parts[ part_count ] = tmp_name
+    return drive + "/".join( parts )
 
 
 class Settings:
