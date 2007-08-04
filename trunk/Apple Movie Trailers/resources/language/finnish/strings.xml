@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- pre-0.98.7          14.7.2007 Finnish -->
+  <!-- pre-0.98.9          2.8.2007 Finnish -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -11,19 +11,19 @@
   <string id="43">Puretaan tallenteita tietokannasta...</string>
   <string id="44">Tietokannan luonti...</string>
   <string id="45">Poistetaan vanhojen lajityyppien xml tiedostoja...</string>
-  <string id="46">Tietokannan muunnos epäonnistui...</string>
+  <string id="46">Tietokannan päivitys epäonnistui...</string>
   <string id="47">Nykyinen taulukko</string>
   <string id="48">Noudetaan tallenteita...</string>
   <string id="49">*Voit lopettaa tietokannan luomisen milloin vain.</string>
   <string id="50">Käynnistetään skriptiä:</string>
   <string id="51">Ladataan osia &amp; asennetaan...</string>
   <string id="52">Osa:</string>
-  <string id="53">Tietokanta versio on yhteensopimaton</string>
+  <string id="53">Tietokantaversio on yhteensopimaton</string>
   <string id="54">Sinun täytyy päivittää kaikki lajityyppi ja elokuvatiedot.</string>
   <string id="55">Ladataan skini ja luodaan käyttöliittymä.</string>
   <string id="56">Siirretään elokuvaa tallennuskansioon.</string>
-  <string id="57">Sinun käyttöliittymän asetuksissa on virhe.</string>
-  <string id="58">Tarkista skini tiedosto:</string>
+  <string id="57">Käyttöliittymän asetuksissasi on virhe.</string>
+  <string id="58">Tarkista skini-tiedosto:</string>
   <string id="59">Tietokanta täytyy päivittää...</string>
   <string id="60">Tietokantasi on sopimaton tämän ohjelmaversion kanssa.\nSe täytyy muodostaa uudelleen.</string>
   <string id="61">Päivitetään kaikki lajityyppi ja elokuva tiedot...</string>
@@ -63,7 +63,8 @@
   <string id="95">Anna hakusanat: Erilliset sanat ja ehdot and/or/not</string>
   <string id="96">/</string>
   <string id="97">Muodostetaan hakutaulukkoa.</string>
-
+  
+  
   <!-- Buttons -->
   <string id="103">Lajityypit</string>
   <string id="104">Studiot</string>
@@ -112,9 +113,9 @@
   <string id="213">Sopivat sanat ainoastaan</string>
   <string id="214">Videon toistoresoluutio</string>
   <string id="215">Suuret kirjaimet käytössä</string>
-  <string id="216">Zip koodi</string>
-  <string id="217">Tarkista päivitykset käynnistyessä</string>
-  <string id="218">Esitystenhaku</string>
+  <string id="216">Teatteriesitysten sijainti</string>
+  <string id="217">Teatteriesitysten hakupaikka</string>
+  <string id="218">Tarkista päivitykset käynnistyessä</string>
 
   <!-- Settings choices -->
   <string id="2020">Matala</string>
@@ -167,15 +168,21 @@
   <string id="505">Poista merkintä</string>
   <string id="506">Päivitä elokuvan tiedot</string>
   <string id="507">Siirrä tallennuskansioon</string>
-  <string id="508">Poista tallennut esittelyt</string>
-  <string id="509">Teatterin esityskerrat</string>
+  <string id="508">Poista tallennetut esittelyt</string>
+  <string id="509">Teatterin esitysajat</string>
   <string id="511">Näytä lajityyppi</string>
   <string id="512">Päivitä lajityyppi</string>
   <string id="513">Päivitä kaikki lajityypit</string>
   <string id="521">Näytä studio</string>
   <string id="531">Näytä näyttelijät</string>
   <string id="550">Viimeistele täysiasennus</string>
-    
+  
+   <!-- Showtimes -->
+  <string id="600">Esityksiä ei löytynyt!</string>
+  <string id="601">Etsitään esityksiä, odota hetki...</string>
+  <string id="602">Päivä</string>
+  <string id="603">Sijainti</string> 
+  
   <!-- Credits -->
   <string id="900">Versio</string>
   <string id="901">Tekijät:</string>
@@ -203,6 +210,6 @@
   <string id="1010">Ohjelma tallennettiin kansioon:</string>
 
   <!-- Update error messages -->
-  <string id="1030">Haluttua versiota ei löydetty!</string>
+  <string id="1030">Haettua versiota ei löydetty!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
 </strings>

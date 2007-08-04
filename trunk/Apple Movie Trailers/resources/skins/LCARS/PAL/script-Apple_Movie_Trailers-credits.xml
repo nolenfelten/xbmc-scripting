@@ -76,7 +76,7 @@
 				<control type="label">
 					<posx>335</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -98,7 +98,7 @@
 				<control type="label">
 					<posx>335</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -139,7 +139,7 @@
 				<control type="label">
 					<posx>335</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>
@@ -161,7 +161,7 @@
 				<control type="label">
 					<posx>335</posx>
 					<posy>1</posy>
-					<width>100</width>
+					<width>150</width>
 					<height>18</height>
 					<font>font10</font>
 					<aligny>center</aligny>

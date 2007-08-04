@@ -42,7 +42,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _get_showtimes( self ):
         date, self.movie_showtimes = ShowtimesFetcher.get_showtimes( self.title, self.location )
-        if ( date is None ): date = _( 600 )
+        if ( date is None ): date = self._capitalize_text( _( 600 ) )
         else: date = "%s: %s" % ( self._capitalize_text( _( 602 ) ), self._capitalize_text( date ), )
         self.getControl( 40 ).setLabel( date )
         self._fill_list()
