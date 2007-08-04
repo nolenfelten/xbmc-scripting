@@ -1,5 +1,3 @@
-﻿# -*- coding: utf-8 -*-
-
 """
 Catchall module for shared functions and constants
 
@@ -89,6 +87,9 @@ def make_legal_filepath( path, compatible=False, extension=True ):
     path = path.replace( "\\", "/" )
     drive = os.path.splitdrive( path )[ 0 ]
     parts = os.path.splitdrive( path )[ 1 ].split( "/" )
+    if ( not drive and parts[ 0 ].endswith( ":" ) and len( parts[ 0 ] ) == 2 and compatible ):
+        drive = parts[ 0 ]
+        parts[ 0 ] = ""
     if ( environment == "xbox" or environment == "win32" or compatible ):
         illegal_characters = """,*=|<>?;:"+"""
         for part_count, part in enumerate( parts ):
@@ -104,7 +105,11 @@ def make_legal_filepath( path, compatible=False, extension=True ):
                     else:
                         tmp_name = tmp_name[ : 42 ]
             parts[ part_count ] = tmp_name
-    return drive + "/".join( parts )
+    filepath = drive + "/".join( parts )
+    if ( environment == "win32" ):
+        return filepath.encode( "utf-8" )
+    else:
+        return filepath
 
 
 class Settings:
