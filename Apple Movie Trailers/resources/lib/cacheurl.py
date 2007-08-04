@@ -132,7 +132,7 @@ class HTTP:
             filename = os.path.join( filename[0], filename )
 
         # ..and the filepath
-        filepath = xbmc.makeLegalFilename( os.path.join( self.cache_dir, filename ) )
+        filepath = make_legal_filepath( os.path.join( self.cache_dir, filename ) )
         if ( len( os.path.split( filepath )[ 1 ] ) > 37 and self.actual_filename ):
             filepath = os.path.join( os.path.split( filepath )[ 0 ], os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ : -( len( os.path.split( filepath )[ 1 ] ) - 37 ) ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 1 ] )
         return filepath

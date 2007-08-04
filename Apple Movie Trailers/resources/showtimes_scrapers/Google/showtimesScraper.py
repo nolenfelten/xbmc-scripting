@@ -41,10 +41,10 @@ class _TheaterListParser( SGMLParser ):
         if ( self.theater_id is not None ):
             self.current_theater += text
         elif ( text == "Map" ):
-            self.theater_name_found = False
             phone = self.theater_list[ self.current_theater ][ 0 ].find( " - " )
             self.theater_list[ self.current_theater ][ 2 ] = self.theater_list[ self.current_theater ][ 0 ][ phone + 3 : -2 ].strip()
             self.theater_list[ self.current_theater ][ 0 ] = self.theater_list[ self.current_theater ][ 0 ][ : phone ]
+            self.theater_name_found = False
         elif ( self.theater_name_found ):
             self.theater_list[ self.current_theater ][ 0 ] += "%s " % text.strip()
 
@@ -56,17 +56,11 @@ class _OpeningDateParser( SGMLParser ):
     def reset( self ):
         SGMLParser.reset( self )
         self.url = None
-        self.showtimes_date = None
 
     def start_a( self, attrs ):
         for key, value in attrs:
             if ( key == "href" and value.startswith( "/movies?near=" ) and self.url is None ):
                 self.url = value
-                #s = value.find( "date=" )
-                #date = value[ s + 5 : ].split( "-" )
-                #if ( len( date ) == 3 ):
-                #    i = [ "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", ].index( date[ 1 ] ) + 1
-                #    self.showtimes_date = "%s-%d-%s" % ( date[ 2 ], i, date[ 0 ], )
 
 
 class _ShowtimesParser( SGMLParser ):
@@ -222,32 +216,6 @@ class ShowtimesFetcher:
         except:
             return None
 
-    def _fetch_theater( self, url ):
-        try:
-            showtimes_date = None
-            # Open url or local file (if debug)
-            if ( not debug ):
-                usock = urllib.urlopen( url )
-            else:
-                usock = open( os.path.join( os.getcwd().replace( ";", "" ), "showtimes_source.txt" ), "r" )
-            htmlSource = usock.read()
-            usock.close()
-            # Save htmlSource to a file for testing scraper (if debugWrite)
-            if ( debugWrite ):
-                file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "showtimes_source.txt" ), "w" )
-                file_object.write( htmlSource )
-                file_object.close()
-            # Parse htmlSource for showtimes
-            parser = _ShowtimesParser()
-            parser.feed( htmlSource )
-            parser.close()
-            date = ( showtimes_date, parser.showtimes_date, )[ showtimes_date is None ]
-            return date, parser.theaters
-        except:
-            return None, None
-
-
-
 
 # used for testing only
 debug = False
@@ -258,10 +226,9 @@ if ( __name__ == "__main__" ):
     movie = [ "The Seeker: the Dark is Rising", "el cantante", "Rush Hour 3", "The Simpsons Movie", "Transformers", "I Now Pronounce You Chuck & Larry", "Transformers", "I Now Pronounce You Chuck & Larry" ]
     location = [ "detroit", "Houston", "detroit", "new york", "London", "Toronto", "33102", "W2 4YL", "T1A 3T9" ]
     url = [ "http://www.google.com/movies?near=Monroe,+MI&tid=f91ac86eb99bc459" ]
-    for cnt in range( 0,1 ):
+    for cnt in range( 1 ):
         date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
         #date, theaters = ShowtimesFetcher().get_selection( url[ cnt ] )
-    
 
         # print the results
         print "====================================================="

@@ -17,37 +17,37 @@
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="20">
-			<description>Showtimes Movie Label</description>
+			<description>Showtimes Label1</description>
 			<posx>20</posx>
 			<posy>28</posy>
-			<width>350</width>
+			<width>370</width>
 			<align>left</align>
 			<font>font12</font>
             <textcolor>FFFFFFFF</textcolor>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="30">
-			<description>Showtimes Date Label</description>
+			<description>Showtimes Label2</description>
 			<posx>20</posx>
 			<posy>50</posy>
-			<width>250</width>
+			<width>370</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="40">
-			<description>Showtimes Date Label</description>
+			<description>Showtimes Label3</description>
 			<posx>20</posx>
 			<posy>72</posy>
-			<width>250</width>
+			<width>370</width>
 			<align>left</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
 		</control>
 		<!-- ** Required ** Do not change <description> or <type> -->
 		<control type="label" id="50">
-			<description>Showtimes Location Label</description>
+			<description>Showtimes Label4</description>
 			<posx>390</posx>
 			<posy>28</posy>
 			<width>150</width>

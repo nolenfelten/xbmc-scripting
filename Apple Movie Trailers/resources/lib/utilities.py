@@ -105,6 +105,35 @@ def save_custom_sql( query ):
     except:
         return False
 
+def make_legal_filepath( path, compatible=False, extension=True ):
+    environment = os.environ.get( "OS", "xbox" )
+    path = path.replace( "\\", "/" )
+    drive = os.path.splitdrive( path )[ 0 ]
+    parts = os.path.splitdrive( path )[ 1 ].split( "/" )
+    if ( not drive and parts[ 0 ].endswith( ":" ) and len( parts[ 0 ] ) == 2 and compatible ):
+        drive = parts[ 0 ]
+        parts[ 0 ] = ""
+    if ( environment == "xbox" or environment == "win32" or compatible ):
+        illegal_characters = """,*=|<>?;:"+"""
+        for part_count, part in enumerate( parts ):
+            tmp_name = ""
+            for count, char in enumerate( part ):
+                if ( char in illegal_characters ): char = ""
+                tmp_name += char
+            if ( environment == "xbox" or compatible ):
+                if ( len( tmp_name ) > 42 ):
+                    if ( part_count == len( parts ) - 1 and extension == True ):
+                        ext = os.path.splitext( tmp_name )[ 1 ]
+                        tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ], ext, )
+                    else:
+                        tmp_name = tmp_name[ : 42 ]
+            parts[ part_count ] = tmp_name
+    filepath = drive + "/".join( parts )
+    if ( environment == "win32" ):
+        return filepath.encode( "utf-8" )
+    else:
+        return filepath
+
 
 class Settings:
     """ Settings class """
