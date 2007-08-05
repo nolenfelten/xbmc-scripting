@@ -101,9 +101,9 @@ def make_legal_filepath( path, compatible=False, extension=True ):
                 if ( len( tmp_name ) > 42 ):
                     if ( count == len( parts ) - 1 and extension == True ):
                         ext = os.path.splitext( tmp_name )[ 1 ]
-                        tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ], ext, )
+                        tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ].strip(), ext, )
                     else:
-                        tmp_name = tmp_name[ : 42 ]
+                        tmp_name = tmp_name[ : 42 ].strip()
             parts[ count ] = tmp_name
     filepath = drive + "/".join( parts )
     if ( environment == "win32" ):
