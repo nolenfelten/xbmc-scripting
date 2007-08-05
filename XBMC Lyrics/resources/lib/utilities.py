@@ -92,19 +92,19 @@ def make_legal_filepath( path, compatible=False, extension=True ):
         parts[ 0 ] = ""
     if ( environment == "xbox" or environment == "win32" or compatible ):
         illegal_characters = """,*=|<>?;:"+"""
-        for part_count, part in enumerate( parts ):
+        for count, part in enumerate( parts ):
             tmp_name = ""
-            for count, char in enumerate( part ):
+            for char in part:
                 if ( char in illegal_characters ): char = ""
                 tmp_name += char
             if ( environment == "xbox" or compatible ):
                 if ( len( tmp_name ) > 42 ):
-                    if ( part_count == len( parts ) - 1 and extension == True ):
+                    if ( count == len( parts ) - 1 and extension == True ):
                         ext = os.path.splitext( tmp_name )[ 1 ]
                         tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ], ext, )
                     else:
                         tmp_name = tmp_name[ : 42 ]
-            parts[ part_count ] = tmp_name
+            parts[ count ] = tmp_name
     filepath = drive + "/".join( parts )
     if ( environment == "win32" ):
         return filepath.encode( "utf-8" )
