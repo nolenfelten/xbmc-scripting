@@ -3,30 +3,27 @@
     <string id="0">XBMC Lyrics</string>
 	<string id="1">Xbox Media Center</string>
     <string id="2">Mikko70</string>
-	<!-- v.30.6.2007 Finnish -->
-   <!-- User Messages -->
+	<!-- 1.5.5          5.8.2007 Finnish -->
+    <!-- User Messages -->
     <string id="100">Poikkeus</string>
 
     <!-- Settings labels -->
     <string id="201">Hakupaikka</string>
-    <string id="202">Tallenna sanat</string>
+    <string id="202">Tallenna sanoitukset</string>
     <string id="203">Kansioon:</string>
-    <string id="204">Sanojen pehmeä vieritys</string>
+    <string id="204">Sanoitusten tasainen vieritys</string>
     <string id="205">Visualisointi käytössä</string>
     <string id="206">Haetaan vain tiedostonimeä</string>
     <string id="207">Tiedostonimen muoto</string>
     <string id="208">Soittolistakansio</string>
     <string id="209">Sekoita soittolista</string>
-    
-    <!-- Settings choices -->
-    <!--string id="2070">Esittäjä - Kappale.pääte</string>
-    <string id="2071">Esittäjä\Albumi\Kappale.pääte</string>
-    <string id="2072">Esittäjä\Albumi\Raitanro Kappale.pääte</string-->
-    <!-- Settings choices -->
+    <string id="210">Säilytä sanoitusten Xbox yhteensopivuus</string>
+    <string id="211">Tallenna sanoitukset lopputunnisteen kanssa</string>
+
+  <!-- Settings choices -->
     <string id="2070">%A - %T</string>
     <string id="2071">%A\%B\%T</string>
     <string id="2072">%A\%B\%N %T</string>
-
 
     <!-- Settings error messages -->
     <string id="230">Asetusten tallennuksessa tapahtui virhe!</string>
@@ -70,7 +67,7 @@
 
     <!-- Update messages -->
     <string id="1000">Ohjelmasi on jo ajantasalla.</string>
-    <string id="1001">Noudetaan uusinta versiota...</string>
+    <string id="1001">Tarkistetaan uusinta versiota...</string>
     <string id="1002">on uudempi</string>
     <string id="1003">Haluatko päivittää ohjelman?</string>
     <string id="1004">Noudetaan tiedostoluetteloa...</string>
