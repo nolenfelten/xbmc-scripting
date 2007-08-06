@@ -423,7 +423,7 @@ class GUI( xbmcgui.WindowXML ):
                 if ( choice >= 0 ):
                     url = trailer_urls[ choice ]
                     LOG( LOG_DEBUG, "%s (ver: %s) [choice=%d url=%s]", __scriptname__, __version__, choice, url )
-                    filename = str( self.trailers.movies[ trailer ].saved )
+                    filename = self.trailers.movies[ trailer ].saved
                     if ( url.endswith( "p.mov" ) ):
                         self.core = xbmc.PLAYER_CORE_DVDPLAYER
                     else:
@@ -436,11 +436,11 @@ class GUI( xbmcgui.WindowXML ):
                             title = "%s%s" % (self.trailers.movies[trailer].title, ext, )
                             if ( self.settings[ "mode" ] == 1):
                                 fetcher = cacheurl.HTTPProgressSave( save_title=title )
-                                filename = str( fetcher.urlretrieve( url ) )
+                                filename = fetcher.urlretrieve( url )
                                 self.flat_cache = ( self.trailers.movies[trailer].title, filename, )
                             elif ( self.settings[ "mode" ] >= 2):
                                 fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
-                                filename = str( fetcher.urlretrieve( url ) )
+                                filename = fetcher.urlretrieve( url )
                                 if ( filename ):
                                     poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                                     self.saveThumbnail( filename, trailer, poster )
@@ -451,7 +451,7 @@ class GUI( xbmcgui.WindowXML ):
                 if ( filename and filename != "None" ):
                     self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                     self._set_video_resolution()
-                    xbmc.Player( self.core ).play( filename )
+                    xbmc.Player( self.core ).play( filename.encode( "utf-8" ) )
         except:
             LOG( LOG_ERROR, "%s (ver: %s) GUI::playTrailer [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
 
@@ -460,7 +460,7 @@ class GUI( xbmcgui.WindowXML ):
         try: 
             new_filename = "%s.tbn" % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
-                shutil.copyfile( poster, new_filename )
+                shutil.copy( poster, new_filename )
             if ( self.trailers.movies[ trailer ].saved == "" ):
                 success = self.trailers.updateRecord( "movies", ( "saved_location", "saved_core", ), ( filename, self.core, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
                 if ( success ):
@@ -634,7 +634,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == WATCHED ):
                 self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 163 ) ) )
             else:
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( str( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) ) )
+                self.getControl( 100 + s ).setLabel( self._capitalize_text( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
 
     def showCredits( self ):
         """ shows a credit window """

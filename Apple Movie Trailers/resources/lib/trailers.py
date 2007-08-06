@@ -1,10 +1,12 @@
 import sys
 import os
-import xbmc
+#import xbmc
 import xbmcgui
 import traceback
 import datetime
 import elementtree.ElementTree as ET
+import filecmp
+import shutil
 
 import cacheurl
 import pil_util
@@ -71,8 +73,8 @@ class Trailers:
         self.query = database.Query()
         newest_genre, last_updated = self.loadGenres()
         if ( newest_genre ):
-            import utilities
-            settings = utilities.Settings().get_settings()
+            from utilities import Settings
+            settings = Settings().get_settings()
             if ( settings[ "refresh_newest" ] ):
                 self.refreshGenre( ( newest_genre, ), last_updated )
 
@@ -102,7 +104,9 @@ class Trailers:
                 dialog.create( _( 42 ) )
             else:
                 __line1__ =  "%s: %s - (%d of %d)" % ( _( 87 ), title, g_count + 1, len( genres ) )
-                if ( not count ):
+                if ( count == -1 ):
+                    dialog.update( -1, __line1__, _( 62 ), _( 67 ) )
+                elif ( not count ):
                     dialog.update( -1, __line1__, _( 65 ), _( 67 ) )
                 elif ( count > 0 ):
                     percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
@@ -119,48 +123,61 @@ class Trailers:
         _progress_dialog( None )
         records = database.Records()
         try:
+            local_fetcher = cacheurl.HTTP( os.path.join( BASE_CACHE_PATH, "backups" ) )
             for g_count, genre in enumerate( genres ):
                 title = self.categories[ genre ].title
-                _progress_dialog()
+                _progress_dialog( -1 )
                 idGenre = self.categories[ genre ].id
                 record = records.fetch( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
                 #print urls
-                self.removeXML( urls )
-                trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
-                if ( trailer_urls ):
-                    idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
-                    for cnt, url in enumerate( trailer_urls ):
-                        if ( not _progress_dialog( cnt + 1 ) ): raise
-                        #print cnt, url[ 0 ]
-                        record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
-                        if ( record is None ):
-                            #print "ADDED", url
-                            idMovie = records.add( 'movies', ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
-                            success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
-                        else:
-                            try:
-                                idMovie_list.remove( record )
-                                #print "EXIST", url
-                            except:
-                                #print "ADDED TO G_L_M table", record[ 0 ]
-                                success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
-                    for record in idMovie_list:
-                        #print "DELETED", record
-                        success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
-                    success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                    #self.categories[ genre ] = Category( id=idGenre, title=title, count=len( trailer_urls ) ) 
-                    success = records.commit()
+                
+                new_trailers = False
+                for url in urls:
+                    original_filename = fetcher.make_cache_filename( url )
+                    filename = local_fetcher.urlretrieve( url )
+                    if ( not filecmp.cmp( filename, original_filename ) ):
+                        shutil.copy( filename, original_filename )
+                        new_trailers = True
+                    os.remove( filename )
+                
+                if ( new_trailers ):
+                    _progress_dialog()
+                    #self.removeXML( urls )
+                    trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
+                    if ( trailer_urls ):
+                        idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
+                        for cnt, url in enumerate( trailer_urls ):
+                            if ( not _progress_dialog( cnt + 1 ) ): raise
+                            #print cnt, url[ 0 ]
+                            record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                            if ( record is None ):
+                                #print "ADDED", url
+                                idMovie = records.add( 'movies', ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
+                                success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                            else:
+                                try:
+                                    idMovie_list.remove( record )
+                                    #print "EXIST", url
+                                except:
+                                    #print "ADDED TO G_L_M table", record[ 0 ]
+                                    success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
+                        for record in idMovie_list:
+                            #print "DELETED", record
+                            success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
+                        success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
+                        #self.categories[ genre ] = Category( id=idGenre, title=title, count=len( trailer_urls ) ) 
+                        success = records.commit()
         except: pass
         success = records.commit()
         records.close()
-        _progress_dialog( -1 )
+        _progress_dialog( -99 )
             
     def removeXML( self, urls ):
         for url in urls:
             try:
                 filename = fetcher.make_cache_filename( url )
-                filename = str( os.path.join( BASE_CACHE_PATH, filename ) )
+                filename = os.path.join( BASE_CACHE_PATH, filename )
                 #print filename
                 if os.path.isfile( filename ):
                     #print "REMOVED", filename
@@ -260,12 +277,12 @@ class Trailers:
                             success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
                         success = records.commit()
                 records.close()
-                _progress_dialog( -1 )
+                _progress_dialog( -99 )
                 if ( load_all ):
                     updated = self.fullUpdate()
         except:
             records.close()
-            _progress_dialog( -1 )
+            _progress_dialog( -99 )
             traceback.print_exc()
         return False, False
         
@@ -569,7 +586,7 @@ class Trailers:
             elif ( not full ): self.movies = None
         except: traceback.print_exc()#pass
         records.close()
-        _progress_dialog( -1 )
+        _progress_dialog( -99 )
         return full, info_missing
 
     def getCategories( self, sql, params=None ):
