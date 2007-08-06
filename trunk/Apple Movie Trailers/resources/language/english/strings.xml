@@ -27,7 +27,7 @@
     <string id="59">Database needs updating...</string>
     <string id="60">Your database is incompatible with this version of AMT.\nIt will be updated.</string>
     <string id="61">Updating all genre and movie information...</string>
-    <!--string id="62">Are you sure you want to do this?</string-->
+    <string id="62">Fetching new xml files.</string>
     <string id="63">Updating can take anywhere from 1 - 5 minutes.</string>
     <string id="64">Error</string>
     <string id="65">Parsing xml files for all trailer urls.</string>
