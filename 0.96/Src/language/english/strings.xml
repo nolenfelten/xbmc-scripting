@@ -260,6 +260,7 @@
 	<string id="353">Start-up Mini-Mode</string>
 	<string id="354">Mini-Mode Delay (s)</string>
 	<string id="355">Open Inbox</string>
+        <string id="356">Started</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>
