@@ -14,13 +14,13 @@ class Minimode:
     def init(self):
         print "XinBox Mini-Mode: Started"
         time.sleep(2)
-        xbmc.executebuiltin('XBMC.Notification(XinBox MiniMode,Started)')
         self.exit = False
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
         lang = Language(TITLE)
         lang.load(self.srcpath + "\\language")
         self.language = lang.string
+        xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
         f = open("Q:\\mmrunning.xib", "w")
         f.close()
         f = open("Q:\\mmcomu.xib", "w")

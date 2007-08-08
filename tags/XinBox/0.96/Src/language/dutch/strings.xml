@@ -260,6 +260,7 @@
 	<string id="353">Opstarten Mini-Mode</string>
 	<string id="354">Mini-Mode vertraging (s)</string>
 	<string id="355">Open postvak</string>
+        <string id="356">Started</string>
 
 	<!-- About Labels -->
 	<string id="360">Over</string>
