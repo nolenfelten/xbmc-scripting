@@ -35,9 +35,9 @@ class GUI( xbmcgui.WindowXML ):
         self.setupvars()
         xbmcgui.lock()
         self.setupcontrols()
-        xbmcgui.unlock()
         self.reademid()
         self.updatesizelabel()
+        xbmcgui.unlock()
         
     def setupvars(self):
         self.emnotread = 0

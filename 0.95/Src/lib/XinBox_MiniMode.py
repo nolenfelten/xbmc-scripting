@@ -1,4 +1,4 @@
-import time, sys, xbmc, xbmcgui
+import time, sys, xbmc, xbmcgui, traceback
 from XinBox_Settings import Settings
 import XinBox_Util
 from XinBox_EmailEngine import Email
@@ -6,9 +6,9 @@ from XinBox_Language import Language
 import threading
 import XinBox_MainMenu
 from XinBox_Language import Language
+from os.path import join, exists
 
 TITLE = XinBox_Util.__scriptname__
-
 
 class Minimode:
     def init(self):
@@ -17,20 +17,20 @@ class Minimode:
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
         lang = Language(TITLE)
-        lang.load(self.srcpath + "//language")
+        lang.load(self.srcpath + "\\language")
         self.language = lang.string
-        xbmc.executebuiltin("Skin.SetBool(mmfinished)")
-        xbmc.executebuiltin("Skin.ToggleSetting(mmfinished)")
-        xbmc.executebuiltin("Skin.SetBool(mmrunning)")
-        xbmc.executebuiltin("Skin.SetBool(timerunning)")
-        xbmc.executebuiltin("Skin.ToggleSetting(timerunning)")
-        time.sleep(2)
+        f = open("Q:\\mmrunning.xib", "w")
+        f.close()
+        f = open("Q:\\mmcomu.xib", "w")
+        f.close()
         self.loadsettings()
         self.inboxes = self.buildinboxdict()
         if not len(self.inboxes) == 0:self.startmm()
         print "XinBox Mini-Mode: Closed"
-        xbmc.executebuiltin("Skin.ToggleSetting(mmfinished)")
-        xbmc.executebuiltin("Skin.Reset(mmrunning)")
+        if exists("Q:\\mmrunning.xib"):
+            os.remove("Q:\\mmrunning.xib")
+        if exists("Q:\\mmcomu.xib"):
+            os.remove("Q:\\mmcomu.xib")
         if self.exit:
             w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox, lang=self.language)
             w.doModal()
@@ -38,21 +38,21 @@ class Minimode:
         
 
     def startmm(self):
-        while xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+        while exists("Q:\\mmcomu.xib"):
             print "XinBox Mini-Mode: Checking of Inboxes Started"
             for inbox in self.inboxes:
-                if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+                if exists("Q:\\mmcomu.xib"):
                     print "XinBox Mini-Mode: Checking Inbox: " + str(inbox)
                     inboxsettings = self.accountsettings.getSettingInListbyname("Inboxes",inbox)
                     self.checkfornew(inboxsettings,inbox)
                     if self.exit:return
                 else:return
-            if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
-                print "XinBox Mini-Mode: Starting Delay (" + self.accountsettings.getSetting("MiniMode Time") + "s)"
-                xbmc.executebuiltin("Skin.SetBool(timerunning)")
-                time.sleep(int(self.accountsettings.getSetting("MiniMode Time")))
-                xbmc.executebuiltin("Skin.ToggleSetting(timerunning)")
-                print "XinBox Mini-Mode: Delay Finished"
+            print "XinBox Mini-Mode: Starting Delay (" + self.accountsettings.getSetting("MiniMode Time") + "s)"
+            for i in xrange(0,int(self.accountsettings.getSetting("MiniMode Time"))):
+                if exists("Q:\\mmcomu.xib"):
+                    time.sleep(1)
+                else:break
+            print "XinBox Mini-Mode: Delay Finished"
         return
         
     def buildinboxdict(self):
@@ -77,16 +77,18 @@ class Minimode:
         else:print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : No New Emails"
 
     def popup(self, newlist, inbox, ibsettings):
-        if xbmc.getCondVisibility('Skin.HasSetting(mmrunning)'):
+        if exists("Q:\\mmcomu.xib"):
             xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
             mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
             w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message=mymessage, lang=self.language)
             w.doModal()
             self.returnval = w.returnval
             del w
-            if self.returnval == 1:
-                self.inbox = inbox
-                self.exit = True
+            if exists("Q:\\mmcomu.xib"):
+                if self.returnval == 1:
+                    self.inbox = inbox
+                    self.exit = True
+            
 
 
 class Popup( xbmcgui.WindowXMLDialog ):

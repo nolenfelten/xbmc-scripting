@@ -39,6 +39,7 @@ class GUI( xbmcgui.WindowXML ):
         return accounts
 
     def onInit(self):
+        XinBox_Util.addindelete()
         self.loadsettings()
         self.accounts = self.buildaccounts()
         self.setupvars()
