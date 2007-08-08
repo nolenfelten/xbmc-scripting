@@ -13,6 +13,8 @@ TITLE = XinBox_Util.__scriptname__
 class Minimode:
     def init(self):
         print "XinBox Mini-Mode: Started"
+        time.sleep(2)
+        xbmc.executebuiltin('XBMC.Notification(XinBox MiniMode,Started)')
         self.exit = False
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
