@@ -1,12 +1,12 @@
 import sys
 import os
-#import xbmc
+import xbmc
 import xbmcgui
 import traceback
 import datetime
 import elementtree.ElementTree as ET
 import filecmp
-import shutil
+import re
 
 import cacheurl
 import pil_util
@@ -21,7 +21,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 
 
 class Movie:
-    '''
+    """
         Exposes the following:
         - idMovie (integer - movies id#)
         - title (string)
@@ -41,7 +41,7 @@ class Movie:
         - saved_core (integer - xbmc.PLAYER_CORE_DVDPLAYER or xbmc.PLAYER_CORE_MPLAYER)
         - cast (list - list of actors)
         - studio (string - movies studio)
-    '''
+    """
     def __init__( self, *args, **kwargs ):
         self.__dict__.update( kwargs )
 
@@ -59,15 +59,15 @@ class Category:
 
 
 class Trailers:
-    '''
+    """
         Exposes the following:
         - categories (sorted list of Category() object instances)
         - trailers (sorted list of Movie() object instances)
-    '''
+    """
     def __init__( self ):
         self.categories = []
-        self.base_url = 'http://www.apple.com'
-        self.base_xml = self.base_url + '/moviesxml/h/index.xml'
+        self.base_url = "http://www.apple.com"
+        self.base_xml = self.base_url + "/moviesxml/h/index.xml"
         db = database.Database( language=_ )
         self.complete = db.complete
         self.query = database.Query()
@@ -79,11 +79,11 @@ class Trailers:
                 self.refreshGenre( ( newest_genre, ), last_updated )
 
     def ns( self, text ):
-        base_ns = '{http://www.apple.com/itms/}'
+        base_ns = "{http://www.apple.com/itms/}"
         result = list()
-        for each in text.split( '/' ):
+        for each in text.split( "/" ):
             result += [ base_ns + each ]
-        return '/'.join( result )
+        return "/".join( result )
 
     def refreshTrailerInfo( self, trailer ):
         records = database.Records()
@@ -128,17 +128,20 @@ class Trailers:
                 title = self.categories[ genre ].title
                 _progress_dialog( -1 )
                 idGenre = self.categories[ genre ].id
-                record = records.fetch( self.query[ 'genre_urls_by_genre_id' ], ( idGenre, ) )
+                record = records.fetch( self.query[ "genre_urls_by_genre_id" ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
-                #print urls
-                
-                new_trailers = False
+
+                # fetch genre xml file and compare it to the current xml file
+                #new_trailers = False
                 for url in urls:
                     original_filename = fetcher.make_cache_filename( url )
                     filename = local_fetcher.urlretrieve( url )
-                    if ( not filecmp.cmp( filename, original_filename ) ):
-                        shutil.copy( filename, original_filename )
-                        new_trailers = True
+
+                    # if the files are different flag it
+                    new_trailers = not filecmp.cmp( filename, original_filename )
+                    if ( new_trailers ):
+                        xbmc.executehttpapi("FileCopy(%s,%s)" % ( filename, original_filename, ) )
+                        #shutil.copy( filename, original_filename )
                     os.remove( filename )
                 
                 if ( new_trailers ):
@@ -149,25 +152,21 @@ class Trailers:
                         idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
                         for cnt, url in enumerate( trailer_urls ):
                             if ( not _progress_dialog( cnt + 1 ) ): raise
-                            #print cnt, url[ 0 ]
-                            record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                #print "ADDED", url
-                                idMovie = records.add( 'movies', ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
-                                success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                                idMovie = records.add( "movies", ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
+                                success = records.add( "genre_link_movie", ( idGenre, idMovie, ) )
                             else:
                                 try:
                                     idMovie_list.remove( record )
-                                    #print "EXIST", url
                                 except:
-                                    #print "ADDED TO G_L_M table", record[ 0 ]
-                                    success = records.add( 'genre_link_movie', ( idGenre, record[ 0 ], ) )
+                                    success = records.add( "genre_link_movie", ( idGenre, record[ 0 ], ) )
                         for record in idMovie_list:
-                            #print "DELETED", record
                             success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
-                        success = records.update( 'genres', ( 'urls', 'trailer_urls', "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), 'idGenre' )
-                        #self.categories[ genre ] = Category( id=idGenre, title=title, count=len( trailer_urls ) ) 
-                        success = records.commit()
+                        success = records.update( "genres", ( "urls", "trailer_urls", "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), "idGenre" )
+                else:
+                    success = records.update( "genres", ( "updated", ), ( updated_date, idGenre, ), "idGenre" )
+                success = records.commit()
         except: pass
         success = records.commit()
         records.close()
@@ -178,9 +177,7 @@ class Trailers:
             try:
                 filename = fetcher.make_cache_filename( url )
                 filename = os.path.join( BASE_CACHE_PATH, filename )
-                #print filename
                 if os.path.isfile( filename ):
-                    #print "REMOVED", filename
                     os.remove( filename )
             except:
                 traceback.print_exc()
@@ -210,7 +207,7 @@ class Trailers:
 
         try:
             records = database.Records()
-            genre_list = records.fetch( self.query[ 'genre_table_list' ], all=True )
+            genre_list = records.fetch( self.query[ "genre_table_list" ], all=True )
             self.categories = []
             if ( genre_list ):
                 for cnt, genre in enumerate( genre_list ):
@@ -221,44 +218,48 @@ class Trailers:
                 records.close()
                 return newest_id, last_updated
             else:
-                load_all = xbmcgui.Dialog().yesno( _( 44 ), '%s: %s' % ( _( 158 ), _( 40 ), ), '%s: %s' % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
+                load_all = xbmcgui.Dialog().yesno( _( 44 ), "%s: %s" % ( _( 158 ), _( 40 ), ), "%s: %s" % ( _( 159 ), _( 41 ), ), _( 49 ), _( 159 ), _( 158 ) )
 
                 _progress_dialog()
                 updated_date = datetime.date.today()
-                base_xml = fetcher.urlopen( self.base_xml )
-                base_xml = ET.fromstring( base_xml )
+                source = fetcher.urlopen( self.base_xml )
+                try:
+                    base_xml = ET.fromstring( source )
+                except:
+                    source = self.cleanXML( source )
+                    base_xml = ET.fromstring( source )
 
                 view_matrix = {
-                    'view1': 'Exclusives',
-                    'view2': 'Newest',
+                    "view1": "Exclusives",
+                    "view2": "Newest",
                     }
-                elements = base_xml.getiterator( self.ns('Include') )
+                elements = base_xml.getiterator( self.ns( "Include" ) )
                 genre_id = 0
                 genre_dict = dict()
                 for each in elements:
-                    url = each.get( 'url' )
+                    url = each.get( "url" )
                     for view in view_matrix:
                         if view in url:
-                            url = '/moviesxml/h/' + url
-                            genre_dict.update( { view_matrix[view]: url } )
-                elements = base_xml.getiterator( self.ns('GotoURL') )
+                            url = "/moviesxml/h/" + url
+                            genre_dict.update( { view_matrix[ view ]: url } )
+                elements = base_xml.getiterator( self.ns( "GotoURL" ) )
                 for each in elements:
-                    url = each.get( 'url' )
-                    name = ' '.join( url.split( '/' )[-1].split( '_' )[:-1] )
+                    url = each.get( "url" )
+                    name = " ".join( url.split( "/" )[ -1 ].split( "_" )[ : -1 ] )
                     genre_caps = list()
                     # smart capitalization of the genre name
                     for word in name.split():
                         # only prevent capitalization of these words if they aren't the leading word in the genre name
-                        # ie, 'the top rated' becomes 'The Top Rated', but 'action and adventure' becomes 'Action and Adventure'
+                        # ie, "the top rated" becomes "The Top Rated", but "action and adventure" becomes "Action and Adventure"
                         cap = True
-                        if word != name[0] and ( word == 'and' or word == 'of' or word == 'a' ):
+                        if word != name[0] and ( word == "and" or word == "of" or word == "a" ):
                             cap = False
                         if cap:
                             genre_caps += [ word.capitalize() ]
                         else:
                             genre_caps += [ word ]
-                    name = ' '.join( genre_caps )
-                    if '/moviesxml/g' in url:
+                    name = " ".join( genre_caps )
+                    if "/moviesxml/g" in url:
                         genre_dict.update( { name: url } )
                 genres = genre_dict.keys()
                 genres.sort()
@@ -266,15 +267,15 @@ class Trailers:
                     ok = _progress_dialog( cnt + 1, 0 )
                     trailer_urls, genre_urls = self.loadGenreInfo( genre, genre_dict[genre] )
                     if ( trailer_urls ):
-                        idGenre = records.add( 'genres', ( genre, repr( genre_urls ), repr( trailer_urls), updated_date, ) )
+                        idGenre = records.add( "genres", ( genre, repr( genre_urls ), repr( trailer_urls), updated_date, ) )
                         self.categories += [ Category( id=idGenre, title=genre ) ]
                         for url_cnt, url in enumerate( trailer_urls ):
                             ok = _progress_dialog( cnt + 1, url_cnt + 1 )
-                            record = records.fetch( self.query[ 'movie_exists' ], ( url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                idMovie = records.add( 'movies', ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
+                                idMovie = records.add( "movies", ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
                             else: idMovie = record[ 0 ]
-                            success = records.add( 'genre_link_movie', ( idGenre, idMovie, ) )
+                            success = records.add( "genre_link_movie", ( idGenre, idMovie, ) )
                         success = records.commit()
                 records.close()
                 _progress_dialog( -99 )
@@ -294,52 +295,57 @@ class Trailers:
             pages of genre)
         """
         try:
-            if url[:7] != 'http://':
+            if url[ : 7 ] != "http://":
                 url = self.base_url + url
-            is_special = genre in [ 'Exclusives', 'Newest' ]
+            is_special = genre in [ "Exclusives", "Newest" ]
             next_url = url
             first_url = True
             trailer_dict = dict()
             genre_urls = list()
             while next_url:
                 try:
-                    element = fetcher.urlopen( next_url )
-                    if '<Document' not in element:
-                        element = '<Document>' + element + '</Document>'
-                    element = ET.fromstring( element )
-                    lookup = 'GotoURL'
+                    source = fetcher.urlopen( next_url )
+                    if "<Document" not in source:
+                        source = "<Document>" + source + "</Document>"
+                    try:
+                        element = ET.fromstring( source )
+                    except:
+                        source = self.cleanXML( source )
+                        element = ET.fromstring( source )
+                        
+                    lookup = "GotoURL"
                     if not is_special:
                         lookup = self.ns( lookup )
                     elements = element.getiterator( lookup )
                     # add next_url to the genre_urls list
                     genre_urls.append( next_url )
                     if first_url:
-                        next_url = elements[0].get( 'url' )
+                        next_url = elements[0].get( "url" )
                         first_url = False
                     else:
-                        next_url = elements[2].get( 'url' )
-                    if next_url[0] != '/':
-                        next_url = '/'.join( url.split( '/' )[:-1] + [ next_url ] )
+                        next_url = elements[2].get( "url" )
+                    if next_url[0] != "/":
+                        next_url = "/".join( url.split( "/" )[ : -1 ] + [ next_url ] )
                     else:
                         next_url = None
                     for element in elements:
-                        url2 = element.get( 'url' )
+                        url2 = element.get( "url" )
                         title = None
                         if is_special:
-                            title = element.getiterator( 'b' )[0].text.encode( 'ascii', 'ignore' )
-                        if 'index_1' in url2:
+                            title = element.getiterator( "b" )[ 0 ].text.encode( "ascii", "ignore" )
+                        if "index_1" in url2:
                             continue
-                        if '/moviesxml/g' in url2:
+                        if "/moviesxml/g" in url2:
                             continue
-                        if url2[0] != '/':
+                        if url2[ 0 ] != "/":
                             continue
                         if url2 in trailer_dict.keys():
-                            lookup = 'b'
+                            lookup = "b"
                             if not is_special:
-                                lookup = 'B'
+                                lookup = "B"
                                 lookup = self.ns( lookup )
-                            title = element.getiterator( lookup )[0].text.encode( 'ascii', 'ignore' )
-                            trailer_dict[url2] =  title.strip()
+                            title = element.getiterator( lookup )[ 0 ].text.encode( "ascii", "ignore" )
+                            trailer_dict[ url2 ] =  title.strip()
                             continue
                         trailer_dict.update( { url2: title } )
                 except:
@@ -410,21 +416,20 @@ class Trailers:
             try:
                 _set_default_movie_info( movie )
                 
-                if ( not self.urls[ 0 ].startswith( 'http://' ) ):
+                if ( not self.urls[ 0 ].startswith( "http://" ) ):
                     url = self.base_url + str( self.urls[ 0 ] )
                 else:
                     url = ( self.urls[ 0 ] )
-                #print "GETMOVIELIST_START", url
+
                 # xml parsing
                 source = fetcher.urlopen( url )
                 try: element = ET.fromstring( source )
                 except:
-                    source = source.replace( " & ", " &amp; " )
+                    source = self.cleanXML( source )
                     element = ET.fromstring( source )
-                #print "GETMOVIELIST_START got source"
                 
                 # -- poster & thumbnails --
-                poster = element.getiterator( self.ns('PictureView') )[1].get( 'url' )
+                poster = element.getiterator( self.ns( "PictureView" ) )[ 1 ].get( "url" )
                 if poster:
                     # download the actual poster to the local filesystem (or get the cached filename)
                     poster = fetcher.urlretrieve( poster )
@@ -432,91 +437,86 @@ class Trailers:
                         # make thumbnails
                         success = pil_util.makeThumbnails( poster )
                         self.poster = os.path.basename( poster )
-                #print "GETMOVIELIST_poster", poster
 
                 # -- plot --
-                plot = element.getiterator( self.ns('SetFontStyle') )[2].text.encode( 'ascii', 'ignore' ).strip()
+                plot = element.getiterator( self.ns( "SetFontStyle" ) )[ 2 ].text.encode( "ascii", "ignore" ).strip()
                 if plot:
                     # remove any linefeeds so we can wrap properly to the text control this is displayed in
-                    plot = plot.replace( '\r\n', ' ' )
-                    plot = plot.replace( '\r', ' ' )
-                    plot = plot.replace( '\n', ' ' )
+                    plot = plot.replace( "\r\n", " " )
+                    plot = plot.replace( "\r", " " )
+                    plot = plot.replace( "\n", " " )
                     self.plot = plot
-                #print "GETMOVIELIST_plot", url
                 
                 # -- actors --
-                SetFontStyles = element.getiterator( self.ns('SetFontStyle') )
+                SetFontStyles = element.getiterator( self.ns( "SetFontStyle" ) )
                 actors = list()
                 for i in range( 5, 10 ):
-                    actor = SetFontStyles[i].text.encode( 'ascii', 'ignore' ).replace( '(The voice of)', '' ).title().strip()
-                    if ( len( actor ) and not actor.startswith( '.' ) and actor != '1:46') :
+                    actor = SetFontStyles[ i ].text.encode( "ascii", "ignore" ).replace( "(The voice of)", "" ).title().strip()
+                    if ( len( actor ) and not actor.startswith( "." ) and actor != "1:46" ) :
                         actors += [ ( actor, ) ]
-                        actor_id = records.fetch( self.query[ 'actor_exists' ], ( actor.upper(), ) )
-                        if ( actor_id is None ): idActor = records.add( 'actors', ( actor, ) )
+                        actor_id = records.fetch( self.query[ "actor_exists" ], ( actor.upper(), ) )
+                        if ( actor_id is None ): idActor = records.add( "actors", ( actor, ) )
                         else: idActor = actor_id[ 0 ]
-                        #print idActor, actor
-                        records.add( 'actor_link_movie', ( idActor, self.idMovie, ) )
+                        records.add( "actor_link_movie", ( idActor, self.idMovie, ) )
                 self.actors = actors
                 self.actors.sort()
                 
                 # -- studio --
-                studio = element.getiterator( self.ns('PathElement') )[1].get( 'displayName' ).strip()
+                studio = element.getiterator( self.ns( "PathElement" ) )[ 1 ].get( "displayName" ).strip()
                 if studio:
-                    studio_id = records.fetch( self.query[ 'studio_exists' ], ( studio.upper(), ) )
-                    if ( studio_id is None ): idStudio = records.add( 'studios', ( studio, ) )
+                    studio_id = records.fetch( self.query[ "studio_exists" ], ( studio.upper(), ) )
+                    if ( studio_id is None ): idStudio = records.add( "studios", ( studio, ) )
                     else: idStudio = studio_id[ 0 ]
-                    records.add( 'studio_link_movie', ( idStudio, self.idMovie, ) )
+                    records.add( "studio_link_movie", ( idStudio, self.idMovie, ) )
                     self.studio = studio
                 
                 # -- rating --
-                temp_url = element.getiterator( self.ns('PictureView') )[2].get( 'url' )
+                temp_url = element.getiterator( self.ns( "PictureView" ) )[ 2 ].get( "url" )
                 if temp_url:
-                    if '/mpaa' in temp_url:
+                    if "/mpaa" in temp_url:
                         rating_url = fetcher.urlretrieve( temp_url )
                         if rating_url:
                             self.rating_url = os.path.basename( rating_url )
-                            self.rating = os.path.split( temp_url )[1][:-4].replace( 'mpaa_', '' )
+                            self.rating = os.path.split( temp_url )[ 1 ][ : -4 ].replace( "mpaa_", "" )
                 
                 # -- trailer urls --
                 urls = list()
-                for each in element.getiterator( self.ns('GotoURL') ):
-                    temp_url = each.get( 'url' )
-                    if 'index_1' in temp_url:
+                for each in element.getiterator( self.ns( "GotoURL" ) ):
+                    temp_url = each.get( "url" )
+                    if "index_1" in temp_url:
                         continue
-                    if '/moviesxml/g' in temp_url:
+                    if "/moviesxml/g" in temp_url:
                         continue
-                    if not temp_url.startswith( '/' ):
+                    if not temp_url.startswith( "/" ):
                         continue
                     if temp_url in urls:
                         continue
                     urls += [ temp_url ]
                 if len( urls ):
-                    #print urls
                     temp_url = self.base_url + urls[0]
                     self.urls = [ self.urls[ 0 ] ] + [ urls[ 0 ] ]
                     source = fetcher.urlopen( temp_url )
                     try: element = ET.fromstring( source )
                     except:
-                        source = source.replace( " & ", " &amp; " )
+                        source = self.cleanXML( source )
                         element = ET.fromstring( source )
                     trailer_urls = list()
-                    for each in element.getiterator( self.ns('string') ):
+                    for each in element.getiterator( self.ns( "string" ) ):
                         text = each.text
                         if text == None:
                             continue
-                        if 'http' not in text:
+                        if "http" not in text:
                             continue
-                        if 'movies.apple.com' not in text:
+                        if "movies.apple.com" not in text:
                             continue
-                        if text.endswith( '.m4v' ):
+                        if text.endswith( ".m4v" ):
                             continue
-                        if text.replace( '//', '/' ).replace( '/', '//', 1 ) in trailer_urls:
+                        if text.replace( "//", "/" ).replace( "/", "//", 1 ) in trailer_urls:
                             continue
-                        trailer_urls += [ text.replace( '//', '/' ).replace( '/', '//', 1 ) ]
+                        trailer_urls += [ text.replace( "//", "/" ).replace( "/", "//", 1 ) ]
                     self.trailer_urls = trailer_urls
             except:
-                #traceback.print_exc()
-                print 'Trailer XML %s: %s is corrupt or missing' % ( self.idMovie, url, )
+                print "Trailer XML %s: %s is %s" % ( self.idMovie, url, ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
             
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.rating,
                             self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
@@ -561,8 +561,8 @@ class Trailers:
                                 urls = eval( movie[2] ),
                                 trailer_urls = eval( movie[3] ),
                                 poster = poster,
-                                thumbnail = '%s.png' % ( os.path.splitext( poster )[0], ),
-                                thumbnail_watched = '%s-w.png' % ( os.path.splitext( poster )[0], ),
+                                thumbnail = "%s.png" % ( os.path.splitext( poster )[0], ),
+                                thumbnail_watched = "%s-w.png" % ( os.path.splitext( poster )[0], ),
                                 plot = movie[5],
                                 rating = movie[6],
                                 rating_url = rating_url,
@@ -584,7 +584,7 @@ class Trailers:
                             full = False
                             break
             elif ( not full ): self.movies = None
-        except: traceback.print_exc()#pass
+        except: pass
         records.close()
         _progress_dialog( -99 )
         return full, info_missing
@@ -614,4 +614,15 @@ class Trailers:
             traceback.print_exc()
             success = False
         return success
-
+    def cleanXML( self, xml_source ):
+        xml_source = xml_source.replace( " & ", " &amp; " )
+        items = re.findall( '="[^>]*>', xml_source )
+        if ( items ):
+            for item in items:
+                items2 = re.findall( '=[^=]*', item )
+                for it in items2:
+                    first = it.find( '"' )
+                    second = it.rfind( '"' )
+                    it2 = it[ : first + 1 ] + it[ first + 1 : second - 1 ].replace( '"', "'" ) + it[ second - 1 : ]
+                    if ( it != it2 ): xml_source = xml_source.replace( it, it2, 1 )
+        return xml_source

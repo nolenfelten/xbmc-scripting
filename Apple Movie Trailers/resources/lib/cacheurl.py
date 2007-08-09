@@ -17,10 +17,10 @@ import time
 from utilities import *
 
 
-__module_name__ = 'cacheurl'
-__module_version__ = '0.1'
-__useragent__ = 'iTunes/4.7'
-#__useragent__ = '%s/%s' % ( __module_name__, __module_version__ )
+__module_name__ = "cacheurl"
+__module_version__ = "0.1"
+__useragent__ = "iTunes/4.7"
+#__useragent__ = "%s/%s" % ( __module_name__, __module_version__ )
 
 _ = sys.modules[ "__main__" ].__language__
 
@@ -41,26 +41,26 @@ def byte_measurement( bytes, detailed = False ):
         if MB:
             result += str( MB )
             if kB or B:
-                result += '.'
+                result += "."
             if kB:
                 result += str( percent_from_ratio( kB, 1024 ) )
             if B:
                 result += str( percent_from_ratio( B, 1024 ) )
-            result += 'MB'
+            result += "MB"
         elif kB:
             result += str( kB )
             if B:
-                result += '.%i' % percent_from_ratio( B, 1024 )
-            result += 'kB'
+                result += ".%i" % percent_from_ratio( B, 1024 )
+            result += "kB"
         elif B:
-            result += '%ib' % B
+            result += "%ib" % B
     else:
         if MB:
-            result = '%iMB' % MB
+            result = "%iMB" % MB
         elif kB:
-            result = '%ikB' % kB
+            result = "%ikB" % kB
         else:
-            result = '%ib' % B
+            result = "%ib" % B
     return result
 
 def calc_download_info( current_time_elapsed, size_read_so_far, filesize ):
@@ -70,21 +70,21 @@ def calc_download_info( current_time_elapsed, size_read_so_far, filesize ):
     total_time = int( current_time_elapsed / ( float( size_read_so_far ) / filesize ) - current_time_elapsed )
     minutes = int( float( total_time ) / 60 )
     seconds = total_time - ( minutes * 60 )
-    download_rate = '%d %s' % ( int( float( size_read_so_far ) / 1024 / current_time_elapsed ), _( 80 ) )
+    download_rate = "%d %s" % ( int( float( size_read_so_far ) / 1024 / current_time_elapsed ), _( 80 ) )
     download_time_remaining = "%s: %02d:%02d" % ( _( 91 ), minutes, seconds, )
-    return download_rate, download_time_remaining#minutes, seconds
+    return download_rate, download_time_remaining
 
-def set_status_symbol( status_symbol, total_symbols ):
-    status_symbol += 1
-    if status_symbol >= total_symbols:
-        status_symbol = 0
-    return status_symbol
+def set_status_symbol( status_symbol ):
+    status_symbol_index = [ "-", "\\", "|", "/" ].index( status_symbol ) + 1
+    if ( status_symbol_index >= 4 ):
+        status_symbol_index = 0
+    return [ "-", "\\", "|", "/" ][ status_symbol_index ]
 
 class HTTP:
-    def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
+    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False ):
         # set the cache directory; default to a .cache directory in BASE_DATA_PATH
         self.cache_dir = cache
-        if self.cache_dir.startswith( '.' ):
+        if self.cache_dir.startswith( "." ):
             self.cache_dir = os.path.join( BASE_DATA_PATH, self.cache_dir )
 
         # title is the real name of the trailer, used for saving
@@ -115,9 +115,9 @@ class HTTP:
         # retrieve the file so it is cached
         filepath = self.urlretrieve( url )
         # read the data out of the file
-        data = ''
+        data = ""
         if filepath:
-            filehandle = open( filepath, 'rb' )
+            filehandle = open( filepath, "rb" )
             data = filehandle.read()
         return data
 
@@ -126,10 +126,10 @@ class HTTP:
         if self.actual_filename:
             filename = self.title
             if self.flat_cache:
-                filename = os.path.join( 'flat_cache', filename )
+                filename = os.path.join( "flat_cache", filename )
         else:
-            filename = md5.new( url ).hexdigest() + os.path.splitext( url )[1]
-            filename = os.path.join( filename[0], filename )
+            filename = md5.new( url ).hexdigest() + os.path.splitext( url )[ 1 ]
+            filename = os.path.join( filename[ 0 ], filename )
 
         # ..and the filepath
         filepath = make_legal_filepath( os.path.join( self.cache_dir, filename ) )
@@ -138,6 +138,7 @@ class HTTP:
         return filepath
 
     def urlretrieve( self, url ):
+        self.info = {}
         # get the filename
         filepath = self.make_cache_filename( url )
 
@@ -153,27 +154,27 @@ class HTTP:
 
         try:
             request = urllib2.Request( url )
-            request.add_header( 'User-Agent', __useragent__ )
+            request.add_header( "User-Agent", __useragent__ )
             # hacky, I know, but the chances that the url will fail twice are slimmer than only trying once
-            try:
-                opened = urllib2.urlopen( request )
-            except:
-                opened = urllib2.urlopen( request )
+            #try:
+            #    opened = urllib2.urlopen( request )
+            #except:
+            opened = urllib2.urlopen( request )
         except:
             LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
-            return ""
+            return None
 
         # this is the actual url that we got (redirection, etc)
         actual_url = opened.geturl()
         # info dict about the file (headers and such)
-        info = opened.info()
+        self.info = opened.info()
 
         # get the filename
         filepath = self.make_cache_filename( actual_url )
 
         # save the total expected size of the file, based on the Content-Length header
-        totalsize = int( info['Content-Length'] )
+        totalsize = int( self.info[ "Content-Length" ] )
         try:
             is_completed = os.path.getsize( filepath ) == totalsize
         except:
@@ -187,8 +188,8 @@ class HTTP:
 
         # check if enough disk space exists to store the file
         try:
-            drive = os.path.splitdrive( self.cache_dir )[0].split(':')[0]
-            free_space = xbmc.getInfoLabel( 'System.Freespace(%s)' % drive )
+            drive = os.path.splitdrive( self.cache_dir )[ 0 ].split( ":" )[ 0 ]
+            free_space = xbmc.getInfoLabel( "System.Freespace(%s)" % drive )
             if len( free_space.split() ) > 2:
                 free_space_mb = int( free_space.split()[1] )
                 free_space_b = free_space_mb * 1024 * 1024
@@ -198,23 +199,23 @@ class HTTP:
                     line2_drive = _(76) # Drive
                     line2_free = _(77) # Free
                     line2_space_required = _(78) # Space Required
-                    xbmcgui.Dialog().ok( header, line1, line2_drive + ': %s %iMB ' + line2_free % ( drive, free_space_mb ), line2_space_required + ': ' + byte_measurement( totalsize ) )
+                    xbmcgui.Dialog().ok( header, line1, line2_drive + ": %s %iMB " + line2_free % ( drive, free_space_mb ), line2_space_required + ": " + byte_measurement( totalsize ) )
                     # notify handler of being finished
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
-                    return ''
+                    return None
         except:
             LOG( LOG_ERROR, "%s (ver: %s) HTTP::freespace [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
-            return ""
+            return None
             
         # create the cache dir if it doesn't exist
-        if not os.path.isdir( os.path.split( filepath )[0] ):#self.cache_dir ):
-            os.makedirs( os.path.split( filepath )[0] )#self.cache_dir )
+        if not os.path.isdir( os.path.split( filepath )[ 0 ] ):#self.cache_dir ):
+            os.makedirs( os.path.split( filepath )[ 0 ] )#self.cache_dir )
 
         # write the data to the cache
         try:
-            filehandle = open( filepath, 'wb' )
-            filedata = '...'
+            filehandle = open( filepath, "wb" )
+            filedata = "..."
             size_read_so_far = 0
             do_continue = True
             while len( filedata ):
@@ -230,7 +231,7 @@ class HTTP:
                         break
                 except ( OSError, IOError ), ( errno, strerror ):
                     # Error
-                    xbmcgui.Dialog().ok( _(64), '[%i] %s' % ( errno, strerror ) )
+                    xbmcgui.Dialog().ok( _(64), "[%i] %s" % ( errno, strerror ) )
                     break
                 except:
                     LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
@@ -261,16 +262,15 @@ class HTTP:
 
 
 class HTTPProgress( HTTP ):
-    def __init__( self, cache = '.cache', title = '', actual_filename = False, flat_cache = False ):
+    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False ):
         HTTP.__init__( self, cache, title, actual_filename, flat_cache )
         self.dialog = xbmcgui.DialogProgress()
-        self.status_symbols = ( '-', '\\', '|', '/', )
-        self.status_symbol = 0
+        self.status_symbol = "-"
         self.download_start_time = time.time()
 
     def urlretrieve( self, url ):
         # Downloading...
-        self.dialog.create( _(79), url.split( '/' )[-1] )
+        self.dialog.create( _( 79 ), url.split( "/" )[ -1 ] )
         self.dialog.update( 0 )
         return HTTP.urlretrieve( self, url )
 
@@ -279,9 +279,9 @@ class HTTPProgress( HTTP ):
         so_far = byte_measurement( size_read_so_far )
         fsize = byte_measurement( filesize )
         percentage = percent_from_ratio( size_read_so_far, filesize )
-        self.status_symbol = set_status_symbol( self.status_symbol, len( self.status_symbols ) )
+        self.status_symbol = set_status_symbol( self.status_symbol )
         download_rate, download_time_remaining = calc_download_info( current_time_elapsed, size_read_so_far, filesize )
-        self.dialog.update( percentage, url.split( '/' )[-1], '%i%% (%s/%s) %s %s' % ( percentage, so_far, fsize, download_rate, self.status_symbols[self.status_symbol] ), download_time_remaining )
+        self.dialog.update( percentage, url.split( "/" )[ -1 ], "%i%% (%s/%s) %s %s" % ( percentage, so_far, fsize, download_rate, self.status_symbol ), download_time_remaining )
         if self.dialog.iscanceled():
             return False
         return True
@@ -290,19 +290,37 @@ class HTTPProgress( HTTP ):
         self.dialog.close()
 
 class HTTPProgressSave( HTTPProgress ):
-    def __init__( self, save_location = None, save_title = '' ):
-        if save_location is not None:
-            HTTPProgress.__init__( self, save_location, save_title, actual_filename = True )
+    def __init__( self, save_location = ".cache", save_title = "" ):
+        # if filepath is a samba share, save to the flat_cache directory, then copy it to the samba share
+        self.save_location = save_location
+        if ( save_location.startswith( "smb://" ) or save_location == ".cache" ):
+            flat_cache = True
+            save_location = ".cache"
         else:
-            HTTPProgress.__init__( self, title = save_title, actual_filename = True, flat_cache = True )
+            flat_cache = False
+        HTTPProgress.__init__( self, save_location, save_title, True, flat_cache )
+
+    def urlretrieve( self, url ):
+        filepath = HTTPProgress.urlretrieve( self, url )
+        if filepath is not None:
+            filepath = self.filepath
+        return filepath
 
     def on_finished( self, url, filepath, filesize, is_completed ):
-        if is_completed and os.path.splitext( filepath )[1] in [ '.mov', '.avi' ]:
+        self.filepath = filepath
+        if is_completed and os.path.splitext( filepath )[ 1 ] in [ ".mov", ".avi" ]:
             try:
-                if ( not os.path.isfile( filepath + '.conf' ) ):
-                    f = open( filepath + '.conf' , 'w' )
-                    f.write( 'nocache=1' )
+                # create conf file for better quicktime playback
+                if ( not os.path.isfile( filepath + ".conf" ) ):
+                    f = open( filepath + ".conf" , "w" )
+                    f.write( "nocache=1" )
                     f.close()
+                # if save location is a samba share, copy the file
+                if ( self.save_location.startswith( "smb://" ) ):
+                    self.dialog.update( -1, _( 56 ), _( 67 ), "" )
+                    self.filepath = os.path.join( self.save_location, os.path.basename( filepath ) )
+                    xbmc.executehttpapi("FileCopy(%s,%s)" % ( filepath, self.filepath, ) )
+                    #xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filepath, os.path.join( self.save_location, os.path.basename( filepath ) ), ) )
             except:
                 LOG( LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
-        return HTTPProgress.on_finished( self, url, filepath, filesize, is_completed )
+        HTTPProgress.on_finished( self, url, self.filepath, filesize, is_completed )
