@@ -21,7 +21,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 
 try:
     _progress_dialog( None )
-    modules = ( "os", "xbmc", "utilities", "context_menu", "cacheurl", "shutil", "datetime", )
+    modules = ( "os", "xbmc", "trailers", "database", "utilities", "context_menu", "cacheurl", "datetime", )
     for count, module in enumerate( modules ):
         _progress_dialog( count + 1, "%s %s" % ( _( 52 ), module, ) )
         if ( module == "utilities" ):
@@ -122,8 +122,6 @@ class GUI( xbmcgui.WindowXML ):
         pass
 
     def _setup_variables( self ):
-        import trailers
-        import database
         self.trailers = trailers.Trailers()
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
@@ -441,14 +439,14 @@ class GUI( xbmcgui.WindowXML ):
                             elif ( self.settings[ "mode" ] >= 2):
                                 fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
                                 filename = fetcher.urlretrieve( url )
-                                if ( filename ):
+                                if ( filename is not None ):
                                     poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                                     self.saveThumbnail( filename, trailer, poster )
                     elif ( self.trailers.movies[ trailer ].saved_core is not None ):
                         self.core = self.trailers.movies[ trailer ].saved_core
-                else: filename = ""
+                else: filename = None
                 LOG( LOG_DEBUG, "%s (ver: %s) [%s -> %s]", __scriptname__, __version__, "GUI::playTrailer", filename )
-                if ( filename and filename != "None" ):
+                if ( filename is not None ):
                     self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                     self._set_video_resolution()
                     xbmc.Player( self.core ).play( filename.encode( "utf-8" ) )
@@ -460,8 +458,8 @@ class GUI( xbmcgui.WindowXML ):
         try: 
             new_filename = "%s.tbn" % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
-                shutil.copy( poster, new_filename )
-            if ( self.trailers.movies[ trailer ].saved == "" ):
+                xbmc.executehttpapi("FileCopy(%s,%s)" % ( poster, new_filename, ) )
+            if ( self.trailers.movies[ trailer ].saved != filename or self.trailers.movies[ trailer ].saved_core != self.core ):
                 success = self.trailers.updateRecord( "movies", ( "saved_location", "saved_core", ), ( filename, self.core, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
                 if ( success ):
                     self.trailers.movies[ trailer ].saved = filename
@@ -704,12 +702,13 @@ class GUI( xbmcgui.WindowXML ):
     def saveCachedMovie( self ):
         try:
             trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-            new_filename = os.path.join( self.settings[ "save_folder" ], os.path.split( self.flat_cache[ 1 ] )[ 1 ] )
+            new_filename = os.path.join( self.settings[ "save_folder" ], os.path.basename( self.flat_cache[ 1 ] ) )
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 56 ), "%s %s" % ( _( 1008 ), new_filename, ) )
             if ( not os.path.isfile( new_filename ) ):
-                shutil.move( self.flat_cache[ 1 ], new_filename )
-                shutil.move( "%s.conf" % self.flat_cache[ 1 ], "%s.conf" % new_filename )
+                xbmc.executehttpapi("FileCopy(%s,%s)" % ( self.flat_cache[ 1 ], new_filename, ) )
+                if ( not new_filename.startswith( "smb://" ) ):
+                    xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( self.flat_cache[ 1 ], new_filename, ) )
                 poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
                 self.saveThumbnail( new_filename, trailer, poster )
                 self.showOverlays( trailer )
