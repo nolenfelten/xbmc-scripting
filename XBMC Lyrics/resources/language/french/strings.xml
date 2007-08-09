@@ -17,6 +17,8 @@
     <string id="207">Format de nom du fichier</string>
     <string id="208">Dossier de la playliste</string>
     <string id="209">M?langer la playliste</string>
+    <string id="210">Guarder les fichiers lyrics xbox compatible</string>
+    <string id="211">Sauvegarder les fichiers lyrics avec extension</string>
 
     <!-- Settings choices -->
     <string id="2070">Artiste - Chanson.ext</string>
