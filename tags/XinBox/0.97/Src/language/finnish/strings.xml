@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
+<!--English Strings VER: 0.3-->
+<!--Finnish v.4.8.2007  Beta-->
+<strings>
+	<!-- Main Menu Labels -->
+  	<string id="10">Päävalikko</string>
+  	<string id="11">Kirjaudu sisään</string>
+	<string id="12">Luo</string>
+	<string id="13">Vaihda</string>
+	<string id="14">Tietoja ohjelmasta</string>
+	<string id="15">Lopeta</string>
+	<string id="16">Siirry Xinbox tiliin</string>
+	<string id="17">Uusi Xinbox tili</string>
+	<string id="18">Xinbox asetukset</string>
+	<string id="19">Xinbox skripti</string>
+	<string id="20">Valitse</string>
+	<string id="21">Ohje</string>
+	<string id="22">Tiliä ei ole luotu. Luo aluksi uusi tili.</string>
+	
+	<!-- Login Menu Labels -->
+	<string id="30">Kirjaudu sisään</string>
+	<string id="31">Anna tilin salasana</string>
+	<string id="32">Annettu salasana on väärä</string>
+	<string id="33">Anna oletustilin salasana</string>
+
+	<!-- Test Inbox Labels -->
+	<string id="34">Testataan palvelimia</string>
+	<string id="35">Asetuksia ei ole annettu</string>
+	<string id="36">Palvelimen osoite on väärä tai väärä SSL</string>
+	<string id="37">Testataan saapuvan postin asetuksia</string>
+	<string id="38">Testataan että kaikki tarvittavat tiedot on syötetty</string>
+	<string id="39">Tarkistetaan %s</string>
+	<string id="40">POP3 palvelimen asetukset</string>
+	<string id="41">SMTP palvelimen asetukset</string>
+	<string id="42">Palvelimelle kirjautumisen testaus</string>
+	<string id="43">POP3 kirjautumisen asetukset</string>
+	<string id="44">SMTP kirjautumisen asetukset</string>
+	<string id="45">POP3 palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
+	<string id="46">SMTP palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
+	<string id="47">Saapuvan postin kansion asetukset. OK</string>
+
+	<!-- Edit Account Menu Labels -->
+	<string id="48">Tili tallennettu.</string>
+	<string id="49">Onnistui!</string>
+	<string id="50">Luo uusi tili</string>
+	<string id="51">Tilin nimi:</string>
+	<string id="52">Tilin salasana:</string>
+	<string id="53">Oletukseksi</string>
+	<string id="61">Lisää</string>
+	<string id="62">Muokkaa</string>
+	<string id="63">Poista</string>
+	<string id="64">Tallenna</string>
+	<string id="65">Lopeta</string>
+	<string id="66">Vaihda %s</string>
+	<string id="67">Näkyvä nimi</string>
+	<string id="68">POP palvelin</string>
+	<string id="69">SMTP palvelin</string>
+	<string id="70">Palvelimen käyttäjänimi</string>
+	<string id="71">Palvelimen salasana</string>
+	<string id="72">Palvelimen koko</string>
+	<string id="73">Saapuvan postin kansio</string>
+	<string id="74">Muokkaa tiliä</string>
+	<string id="75">Ei ole saapuvan postin kansioita</string>
+	<string id="76">Ei ole salasanaa</string>
+	<string id="77">Varoitus!</string>
+	<string id="78">Haluatko poistaa saapuvan postin kansion? Paina OK jatkaaksesi tai takaisin peruaksesi.</string>
+	<string id="79">Haluatko poistua? Kaikki tallentamattomat asetukset menetetään. Paina OK jatkaaksesi tai takaisin peruaksesi.</string>
+
+	<!-- InBox Menu Labels -->
+	<string id="80">Lisää saapuvan postin kansio</string>
+	<string id="81">Muokkaa saapuvan postin kansiota</string>
+	<string id="82">Näkyvä nimi:</string>
+	<string id="83">Saapuvan postin palvelin(Pop3):</string>
+	<string id="84">Lähtevän postin palvelin(SMTP):</string>
+	<string id="85">Palvelimen käyttäjänimi:</string>
+	<string id="86">Palvelimen salasana:</string>
+	<string id="87">Palvelimen saapuvan postin kansion koko(MB):</string>
+	<string id="88">XinBoxin saapuvan postin kansion koko(MB):</string>
+	<string id="89">Testaa saapuvan postin kansio</string>
+	<string id="90">SSL</string>
+	<string id="91">POP SSL</string>
+	<string id="92">SMTP SSL</string>
+	<string id="93">Virhe!</string>
+	<string id="94">Sinulla ei voi olla kahta saapuvan postin kansiota samalla nimellä.</string>
+	<string id="95">Sinulla ei voi olla kahta tiliä samalla tilin nimellä.</string>
+	<string id="96">Sähköpostiosoite:</string>
+	<string id="97">Säilytä sähköpostit myös palvelimella:</string>
+	<string id="98">Ei käytössä</string>
+	
+	<!-- Help Labels -->
+	<string id="99">XinBox ohje :   -( %s )-</string>
+	<string id="100">Valitse mikäli haluat kirjautua sisään XinBox tiliin. Mikäli tiliä ei ole luotu, täytyy ensimmäiseksi luoda XinBox tili.</string>
+	<string id="101">Valitse mikäli haluat luoda uuden XinBox tilin. A XinBox tili vaaditaan kirjautuaksesi.</string>
+	<string id="102">Valitse mikäli haluat vaihtaa XinBox asetuksia.</string>
+	<string id="103">Valitse mikäli haluat tietoja XinBox skriptistä.</string>
+	<string id="104">Valitse mikäli haluat poistua XinBox skriptistä ja palata XBMC:iin.</string>
+	<string id="105">Valitse mikäli haluat asettaa XinBox tilin nimen. Huom: Et voi tallentaa tiliä ilman nimeä.</string>	
+	<string id="106">Valitse mikäli haluat asettaa XinBox tilin slasanan. Aseta salasana tai jätä tyhjäksi.</string>
+	<string id="107">Valitse mikäli haluat asettaa oletus tilin. Oletus tili avataan automaattisesti skriptin käynnistyessä. Huom: Vain yksi tili voi olla oletuksena.</string>	
+	<string id="108">Valitse mikäli haluat lisätä saapuvan postin kansion.</string>
+	<string id="109">Valitse mikäli haluat muokata saapuvan postin kansiota.</string>
+	<string id="110">Valitse mikäli haluat poistaa saapuvan postin kansion.</string>
+	<string id="111">Valitse mikäli haluat tallentaa kaikki muuttamasi asetukset.</string>
+	<string id="112">Valitse mikäli haluat poistua valikosta. Huom: Kaikki tallentamattomat asetukset menetetään.</string>
+	<string id="113">Valitse mikäli haluat vaihtaa näkyvää nimeä. Tämä on saapuvan ja lähtevän postin kansion kansion nimi. Huom: kansiot on pakko nimetä ennen käyttöä.</string>
+	<string id="114">Valitse mikäli haluat vaihtaa sähköpostiosoitetta. Tätä osoitetta käytetään viestien lähettämiseen.</string>
+	<string id="115">Valitse mikäli haluat vaihtaa (POP3) palvelimen. Esim. pop.gmail.com. SSL: paina oikeaa vaihtaaksesi POP3 SSL palvelimen portin numeron. Vain jotkin palvelimet vaativat tämän. Esim. Gmail - Pop3 SSL Portti# 995</string>
+	<string id="116">Valitse mikäli haluat vaihtaa (SMTP) palvelimen. Esim. smtp.gmail.com. SSL: paina oikeaa vaihtaaksesi SMTP SSL palvelimen portin numeron. Vain jotkin palvelimet vaativat tämän. Esim. Gmail - SMTP SSL Portti# 587</string>
+	<string id="117">Valitse mikäli haluat vaihtaa palvelimen tilin nimen. Tämä on tavallisesti nimi jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
+	<string id="118">Valitse mikäli haluat vaihtaa palvelimen tilin salasanan. Tämä on tavallisesti salasana jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
+	<string id="119">Valitse mikäli haluat vaihtaa palvelimen saapuvan postin kansion kokoa. Anna saapuvan postin kansion koko joka on palvelimella(MB). Aseta 0 mikäli et halua varoituksia tilan täyttymisestä.</string>
+	<string id="120">Valitse mikäli haluat vaihtaa XinBox saapuvan postin kansion kokoa. Anna saapuvan postin kansion koko joka on xboksissa (MB).Aseta 0 mikäli et halua varoituksia tilan täyttymisestä.</string>
+	<string id="121">Valitse mikäli haluat että kopiot viesteistä säilytetään palvelimelle kun vaihdat saapuvan postin asetuksia. Oletus on Kyllä.</string>
+	<string id="122">Valitse testataksesi saapuvan postin kansion asetuksia. "Testaa" kommunikoi palvelimen kanssa ja tarkistaa että asetukset on kunnossa.</string>
+	<string id="123">Valitse mikäli haluat lisätä saapuvan postin kansion ja palata tili valikkoon. Huom: kansiota ei tallenneta ennenkuin painat tallenna painiketta tili valikossa.</string>
+	<string id="124">Valitse mikäli haluat kirjautua tiliin.</string>
+	<string id="125">Valitse mikäli haluat kirjautua saapuvan posin kansioon.</string>
+	<string id="126">Valitse mikäli haluat muokata nykyistä tiliä.</string>
+	<string id="127">Valitse mikäli haluat poistaa nykyisen tilin.</string>
+	<string id="128">Valitse mikäli haluat poistua ja siirtyä aiempaan valikkoon.</string>
+	<string id="129">Valitse mikäli haluat muokata "Uusi viesti" ilmoitusääntä. Tämä kuuluu kun sähköposti saapuu kansioon. Valitse silent.wav jos et halua tehosteääniä.</string>
+	<string id="130">Valitse mikäli haluat tallettaa muutokset ja palata tili valikkoon. Huom: Muutoksia ei tallenneta ennen kuin painat tallenna painiketta.</string>
+    <string id="131">Valitse mikäli haluat vaihtaa tämän postilaatikon oletukseksi. Oletus postilaatikko avautuu automaattisesti kirjautuessasi tiliin. Huomaa: Ainostaan yksi postilaatikko tiliä kohti voi olla oletuksena.</string>
+	<string id="132">Valitse mikäli haluat tarkastaa uudet viestit.</string>
+	<string id="133">Valitse mikäli haluat noutaa uudet viestit.</string>
+	<string id="134">Valitse mikäli haluat tyhjentää postilaatikon. Huomaa: Postilaatikon nollaus postaa kaikki viestit postilaatikosta, ei palvelimelta.</string>
+	<string id="135">Valitse mikäli haluat käyttää pienoistilaa. Tämä sulkee skriptin ja jatkaa viestien noutamista ja voit esim. katsoa elokuvaa samalla. Saat huomutuksen kun uudet viestit on noudettu.</string>
+	<string id="136">A: Avaa tämä viesti   B: Poista viesti postilaatikosta   Valkea nappi: Lisää lähettäjä yhteystietoihin</string>
+	<string id="137">A: Näytä/Piilota yhteensopivat liitteet(Kuvat, Zipit, Tekstit, Video/Audio)    Valkea nappi: Tallenna liittet</string>
+	<string id="138">Valitse mikäli haluat vastata viestiin. Vastaaminen sulkee tämän ikkunan ja avaa uuden vastausikkunan.</string>
+	<string id="139">Valitse mikäli haluat välittää viestin jollekkin. Välitys sulkee tämän ikkunan ja avaa uuden välitysikkunan.</string>
+	<string id="140">Valitse mikäli haluat poistaa tämän viestin joko postilaatikosta, palvelimelta tai molemmista. Jos palvelin tai molemmat ei ole näkyvissä, viestiä ei ole palvelimella.</string>
+	<string id="141">Valitse mikäli haluat avata/sulkea liitteiden käsittelyikkunan.</string>
+	<string id="142">Valitse mikäli haluat PageUp/PageDown through the email body/attached text files.</string>
+	<string id="143">A: Tallentaa valitun tiedoston zip tiedostoon</string>
+	<string id="144">Valitse mikäli haluat toggle if XinBox Mini-Mode runs on start-up of XBMC.</string>
+	<string id="145">Valitse mikäli haluat change the delay (in seconds) between checking for new emails while Mini-Mode is running.</string>
+	<string id="146">Valitse mikäli haluat toggle if this Inbox is to be checked when Mini-Mode is running.</string>
+	<string id="147">A: Edit the To: field. Multiple To: addresses can be split using ; only   B: Clear the To: field   Valkea nappi: Open Contacts Panel</string>
+	<string id="148">A: Edit the Cc: field. Multiple Cc: addresses can be split using ; only   B: Clear the Cc: field   Valkea nappi: Open Contacts Panel</string>
+	<string id="149">A: Edit the Bcc: field. Multiple Bcc: addresses can be split using ; only   B: Clear the Bcc: field   Valkea nappi: Open Contacts Panel</string>
+	<string id="150">A: Edit the Subject field    B: Clear the Subject Field</string>
+	<string id="151">A: Edit highlighted line    B: Delete current highlighted line    Valkea nappi: Add new line below current highlighted line</string>
+	<string id="152">Valitse mikäli haluat Send this Email.</string>
+	<string id="153">Valitse mikäli haluat Clear the email body.</string>
+	<string id="154">Valitse mikäli haluat Add a new attachment to this email.</string>
+	<string id="155">B: Remove this attachment from email.</string>
+	<string id="156">Valitse mikäli haluat open the Contacts menu.</string>
+	<string id="159">A: Edit Contact Name/Email address    B: Delete contact    Valkea nappi: Compose Email to Contact</string>
+	<string id="160">Valitse mikäli haluat add a new Contact.</string>
+	<string id="161">A: Edit Contact Name/Email address    B: Delete contact    Valkea nappi: Add Contact to Address Field</string>
+
+	<!-- Account Menu Labels -->
+	<string id="200">Tili</string>
+	<string id="201">Haluatko poistaa tilin? Kaikki saapuvan postin kansiot poistetaan myös. Paina OK jatkaaksesi tai takaisin peruaksesi.</string>
+    <string id="202">Kaikki saapuvan postin kansiot tässä tilissä poistetaan.</string> 
+	
+
+
+	<!-- Email Labels -->
+	<string id="210">Saapuneet - </string>
+	<string id="211">Kirjaudutaan...</string>
+	<string id="212">Kirjautuminen onnistui</string>
+	<string id="213">Kirjautuminen epäonnistui</string>
+	<string id="214">Tarkista saapuneet kansion asetukset.</string>
+	<string id="215">Noudetaan palvelimelta viestien määrää.</string>
+	<string id="216">Viestien määrä ok.</string>
+	<string id="217">Palvelimella ei ole saapuneita viestejä.</string>
+	<string id="218">Tarkistetaan uudet viestit ....</string>
+	<string id="219">Sinulle on %s uutta viestiä.</string>
+	<string id="220">Ei uusia viestejä.</string>
+	<string id="221">Noudetaan viestiä # %s</string>
+	<string id="222">Päivitetään tietokantaa ...</string>
+	<string id="223">%s uutta viestiä vastaanotettu.</string>
+	<string id="224">Viestin vastaanotto epäonnistui.</string>
+	<string id="225">Viestit</string>
+
+	<!-- MORE InBox Menu Labels -->
+	<string id="240">Uusi sähköposti äänimerkki:</string>
+	<string id="241">Selaa Uusia sähköposteja äänimerkki:</string>
+	<string id="242">OK</string>
+    <string id="243">Oletus saapuvan postin kansio</string>
+
+	<!-- InBox Labels -->
+	<string id="250">Tarkista</string>
+	<string id="251">Kokoa</string>
+	<string id="252">Pienoistila</string>
+	<string id="253">Muodostetaan saapuvan postin kansiota..</string>
+	<string id="254">Lisätään uusia viestejä....</string>
+	<string id="255">Ei otsikkoa</string>
+    <string id="256">Postilaatikko tyhjä</string>
+	<string id="257">Palvelimen koko:</string>
+	<string id="258">Postilaatikon koko:</string>
+	<string id="259">Tyhjä</string>
+	<string id="260">Saapunut:</string>
+	<string id="261">Lähetetty:</string>
+	<string id="262">Poista viesti postilaatikosta</string>
+	<string id="263">Poista viesti palvelimelta</string>
+	<string id="264">Viestiä ei löytynyt palvelimelta</string>
+	<string id="265">Poistetaan viesti palvelimelta ja postilaatikosta</string>
+	<string id="266">Liitteet</string>
+	<string id="267">Koko:</string>
+	<string id="268">Talleta %s ...</string>
+	<string id="269">tallennettu:</string>
+	<string id="270">Tallennu epäonnistui:</string>
+	<string id="271">Poista viesti:</string>
+	<string id="272">Vain postilaatikosta</string>
+	<string id="273">Vain palvelimelta</string>
+	<string id="274">Postilaatikosta ja palvelimelta</string>
+	<string id="275">Nollaa</string>
+	<string id="276">Tyhjennä postilaatikko?</string>
+	<string id="277">Kaikki viestit poistetaan.</string>
+	<string id="278">Postilaatikko tyhjennetty</string>
+	<string id="279">Zip tiedosto tyhjä</string>
+	<string id="280">Zip tiedostoluettelot</string>
+	<string id="281">PageUp/PageDown</string>
+	<string id="282">Päivitetään postilaatikon ID tiedostoa..</string>
+	<string id="283">Uusi: </string>
+	<string id="284">Lukematon: </string>
+	<string id="285">Kaikki: </string>
+
+	<!-- Compose Labels -->
+	<string id="300">Lähetetään viesti..</string>
+	<string id="301">Viesti lähetetty.</string>
+	<string id="302">Viestin lähetys epäonnistui.</string>
+	<string id="303">Valmistellaan viestiä..</string>
+	<string id="304">Kirjoitetaan viestin otsikkoa..</string>
+	<string id="305">Kirjoitetaan viestiä..</string>
+	<string id="306">Lisätään liitteet..</string>
+	<string id="307">Viestin muodostus epäonnistui.</string>
+	<string id="308">Kirjaudutaan SMTP-palvelimelle..</string>
+	<string id="309">SMTP-palvelimelle kirjautuminen epäonnistui.</string>
+	<string id="310">Vastaanottaja:</string>
+	<string id="311">Kopio:</string>
+	<string id="312">Piilokopio:</string>
+	<string id="313">Aihe:</string>
+	<string id="314">Lähetä</string>
+	<string id="315">Muodostettu viesti saapunut:</string>
+	<string id="316">----- Alkuperäinen viesti -----</string>
+	<string id="317">Lähettäjä:</string>
+	<string id="318">Vastaa:</string>
+	<string id="319">Välitä:</string>
+	<string id="320">Liitteet:</string>
+	<string id="321">Muokkaa riviä:</string>
+	<string id="322">Muokkaa vastaanottajan: osoitetta:</string>
+	<string id="323">Muokkaa kopiota: osoitetta:</string>
+	<string id="324">Muokkaa piilokopiota: osoitetta:</string>
+	<string id="325">Muokaa aihetta:</string>
+	<string id="326">Poista liite?</string>
+	<string id="327">Valitse liite:</string>
+	<string id="328">Sulje lähtysikkuna?</string>
+	<string id="329">Muodosta SMTP viestitiedostoa..</string>
+	<string id="330">Lisää rivi:</string>
+	<string id="331">Poista rivi?</string>
+	<string id="332">Lähetä viesti?</string>
+	<string id="333">Tyhjennä</string>
+	<string id="334">Tyhjennä viestin sisältö?</string>
+	<string id="335">Viestin sisältö</string>
+
+	<!-- Mini-Mode Labels -->
+	<string id="350">Pienoistila käytössä</string>
+	<string id="351">Odota hetki</string>
+	<string id="352">Suljetaan pienoistila</string>
+	<string id="353">Siirrytään pienoistilaan</string>
+	<string id="354">Pienoistilan viive(s)</string>
+	<string id="355">Avaa postilaatikko</string>
+	<string id="356">Started</string>
+
+	<!-- About Labels -->
+	<string id="360">Tietoja</string>
+	<string id="361">Kieli</string>
+	<string id="362">Ulkoasu</string>
+
+	<!-- Contact Labels -->
+	<string id="370">Yhteystiedot</string>
+	<string id="371">Yhteystietoja ei ole</string>
+	<string id="372">Muokaa yhteyden nimeä</string>
+	<string id="373">Nimi on jo olemassa</string>
+	<string id="374">Muokaa yhteystiedon sähköpostiosoitetta</string>
+	<string id="375">Poista yhteystiedot?</string>
+	<string id="376">Yhteystieto: </string>
+	<string id="377">Lähetä viesti ositteeseen?</string>
+	<string id="378">Yhteystieto lisätty</string>
+	<string id="379">Yhteystieto on jo olemassa</string>
+	<string id="380">Yhteys luettelo</string>
+
+	<!-- Update Labels -->
+	<string id="390">Ohjelmasi on jo ajantasalla</string>
+	<string id="391">Noudetaan uusinta versiota...</string>
+    	<string id="392">on uudempi</string>
+    	<string id="393">Haluatko päivittää ohjelman?</string>
+    	<string id="394">Noudetaan tiedostoluetteloa...</string>
+    	<string id="395">Odota...</string>
+    	<string id="396">Versio</string>
+    	<string id="397">Haetaan:</string>
+    	<string id="398">Polku:</string>
+    	<string id="399">Tiedosto:</string>
+    	<string id="400">Ohjelma tallennettiin kansioon:</string>
+    	<string id="401">Uusinta versiota ei löytynyt!</string>
+    	<string id="402">Päivitys ei onnistunut!</string>
+	<string id="403">Poistataan vanha versio, nimetään uudelleen ja käynnistetään ohjelma?</string>
+</strings>
