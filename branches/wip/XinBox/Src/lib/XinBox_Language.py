@@ -37,6 +37,6 @@ class Language:
 
     def string(self,number):
         if int(number) in self.strings:
-            return self.strings[int(number)]
+            return self.strings[int(number)].decode("utf-8")
         else:
             return "unknown string id"
