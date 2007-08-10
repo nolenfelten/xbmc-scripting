@@ -28,6 +28,7 @@ class Minimode:
         self.loadsettings()
         self.inboxes = self.buildinboxdict()
         if not len(self.inboxes) == 0:self.startmm()
+        else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         print "XinBox Mini-Mode: Closed"
         if exists("Q:\\mmrunning.xib"):
             os.remove("Q:\\mmrunning.xib")
