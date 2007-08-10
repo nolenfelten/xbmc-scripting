@@ -75,6 +75,12 @@ class AccountSettings(xbmcgui.WindowXML):
         elif self.accountSettings.getSetting("Mini Mode SFX",None) == "True":
             self.mmenablesfx = True
         else:self.mmenablesfx = False
+        if self.accountSettings.getSetting("XinBox Promote",None) == None:
+            self.accountSettings.addSetting("XinBox Promote","True","text")
+            self.promote = True
+        elif self.accountSettings.getSetting("XinBox Promote",None) == "True":
+            self.promote  = True
+        else:self.promote  = False
         self.setupcompsetts()
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
@@ -115,6 +121,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.getControl(105).setSelected(self.mmaccount)
         self.getControl(104).setSelected(self.defaultaccount)
         self.getControl(106).setSelected(self.mmenablesfx)
+        self.getControl(107).setSelected(self.promote)
         if self.newaccount:
             self.getControl(80).setLabel(self.language(50))
         else:
@@ -132,6 +139,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.addItem(self.SettingListItem(self.language(354), self.accountSettings.getSetting("MiniMode Time")))
         self.addItem(self.language(357))
         self.addItem(self.language(353))
+        self.addItem(self.language(336))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -168,6 +176,8 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.launchinfo(162,self.getListItem(self.getCurrentListPosition()).getLabel())
                 elif self.getCurrentListPosition() == 3:
                     self.launchinfo(145,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 6:
+                    self.launchinfo(163,self.getListItem(self.getCurrentListPosition()).getLabel())
                 else:self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
@@ -224,6 +234,11 @@ class AccountSettings(xbmcgui.WindowXML):
             elif curPos == 5:
                 self.mmaccount = not self.mmaccount
                 self.getControl(105).setSelected(self.mmaccount)
+                self.checkforchanges()
+            elif curPos == 6:
+                self.promote = not self.promote
+                self.getControl(107).setSelected(self.promote)
+                self.accountSettings.setSetting("XinBox Promote", str(self.promote))
                 self.checkforchanges()
         elif ( controlID == 61):
             self.launchinboxmenu("")
