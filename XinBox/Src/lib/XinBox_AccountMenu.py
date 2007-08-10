@@ -318,9 +318,8 @@ class AccountSettings(xbmcgui.WindowXML):
         ID = w.returnID
         Inboxname = w.inbox
         change = w.settchanged
-        if change == "True":
+        if change == "True" and self.account != "":
             self.getControl(64).setEnabled(True)
-        self.checkforchanges()
         if ID != 0:
             self.gohash(inbox, Inboxname)
             if inbox == "":
