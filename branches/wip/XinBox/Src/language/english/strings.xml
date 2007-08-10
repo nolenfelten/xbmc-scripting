@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.3-->
+<!--English Strings VER: 0.4-->
+	<!--New strings since Ver: 0.3-->
+		<!--ID's 162, 357-->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
@@ -146,6 +148,7 @@
 	<string id="159">A: Edit Contact Name/Email address    B: Delete contact    White Button: Compose Email to Contact</string>
 	<string id="160">Select to add a new Contact.</string>
 	<string id="161">A: Edit Contact Name/Email address    B: Delete contact    White Button: Add Contact to Address Field</string>
+	<string id="162">Select to toggle if Mini-Mode will play your selected inbox "New Email" notification SFX.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -261,6 +264,7 @@
 	<string id="354">Mini-Mode Delay (s)</string>
 	<string id="355">Open Inbox</string>
         <string id="356">Started</string>
+	<string id="357">Mini-Mode SFX</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>
