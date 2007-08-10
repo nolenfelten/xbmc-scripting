@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
 <!--English Strings VER: 0.4-->
-	<!--New strings since Ver: 0.3-->
-		<!--ID's 162, 357-->
+	<!--Changes since Ver: 0.3-->
+		<!--NEW: 162, 357, 358 -->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
@@ -265,6 +265,7 @@
 	<string id="355">Open Inbox</string>
         <string id="356">Started</string>
 	<string id="357">Mini-Mode SFX</string>
+	<string id="358">Closed</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>

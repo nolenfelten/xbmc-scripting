@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--Dutch Strings VER: 0.3-->
+<!--Dutch Strings VER: 0.4-->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Hoofdmenu</string>
@@ -146,6 +146,7 @@
 	<string id="159">A: Wijzig Naam/ Mail adres    B: Verwijder contactpersoon    Witte Knop: Schrijf contactpersoon een mail</string>
 	<string id="160">Selecteer om een nieuwe contactpersoon toe te voegen.</string>
 	<string id="161">A: Wijzig Naam/ Mail adres    B: Verwijder contactpersoon    Witte Knop: Contactpersoon toevoegen aan adresveld</string>
+	<string id="162">Selecteer om de Mini-Mode het "nieuwe e-mail" geluid af te laten spelen bij het ontvangen van nieuwe mail.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -261,6 +262,7 @@
 	<string id="354">Mini-Mode vertraging (s)</string>
 	<string id="355">Open postvak</string>
         <string id="356">Gestart</string>
+	<string id="357">Mini-Mode geluid</string>
 
 	<!-- About Labels -->
 	<string id="360">Over</string>
