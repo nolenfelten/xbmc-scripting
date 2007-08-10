@@ -46,6 +46,9 @@ class GUI( xbmcgui.WindowXML ):
         self.animating = False
         self.guilist = []
         self.control_action = XinBox_Util.setControllerAction()
+        if self.accountsettings.getSetting("XinBox Promote",None) == None or self.accountsettings.getSetting("XinBox Promote",None) == "True":
+            self.promote = True
+        else:self.promote = False
         if self.ibsettings.getSetting("SERV Inbox Size") != "0":
             self.theservsize = int(self.ibsettings.getSetting("SERV Inbox Size"))
         else:self.theservsize = False
@@ -240,7 +243,7 @@ class GUI( xbmcgui.WindowXML ):
         del w
         if returnval != 0:
             w = Email(self.ibsettings,self.inbox,self.account,self.language)
-            w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2])
+            w.sendemail(returnval[0],returnval[3],returnval[4],returnval[5],returnval[1],returnval[2],self.promote)
             del w
 
     def launchmycontacts(self):
