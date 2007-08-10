@@ -614,8 +614,10 @@ class Trailers:
             traceback.print_exc()
             success = False
         return success
+
     def cleanXML( self, xml_source ):
         xml_source = xml_source.replace( " & ", " &amp; " )
+        xml_source = xml_source.replace( "&nbsp;", " " )
         items = re.findall( '="[^>]*>', xml_source )
         if ( items ):
             for item in items:
