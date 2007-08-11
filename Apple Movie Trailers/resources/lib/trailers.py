@@ -85,14 +85,41 @@ class Trailers:
             result += [ base_ns + each ]
         return "/".join( result )
 
-    def refreshTrailerInfo( self, trailer ):
-        records = database.Records()
-        urls = []
-        for url in self.movies[ trailer ].urls:
-            urls += [ self.base_url + url ]
-        self.removeXML( urls )
-        ok = records.update( "movies", ( 3, 4, ), ( None, self.movies[ trailer ].idMovie, ), "idMovie", True )
-        records.close()
+    def refreshTrailerInfo( self, trailers ):
+        dialog = xbmcgui.DialogProgress()
+        def _progress_dialog( count=0 ):
+            if ( count is None ):
+                dialog.create( _( 68 ) )
+            else:
+                __line1__ =  _( 98 )
+                if ( not count ):
+                    dialog.update( -1, _( 98 ) )
+                elif ( count > 0 ):
+                    percent = int( count * ( float( 100 ) / len( self.movies ) ) )
+                    __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, len( self.movies ), )
+                    __line3__ = title
+                    dialog.update( percent, __line1__, __line2__, __line3__ )
+                    if ( dialog.iscanceled() ): return False
+                    else: return True
+                else:
+                    dialog.close()
+        try:
+            if ( len( trailers ) > 1 ):
+                _progress_dialog( None )
+            records = database.Records()
+            for trailer in trailers:
+                title = self.movies[ trailer ].title
+                urls = []
+                if ( len( trailers ) > 1 ):
+                    _progress_dialog( trailer + 1 )
+                for url in self.movies[ trailer ].urls:
+                    urls += [ self.base_url + url ]
+                self.removeXML( urls )
+                ok = records.update( "movies", ( 3, 4, ), ( None, self.movies[ trailer ].idMovie, ), "idMovie", True )
+            records.close()
+            if ( len( trailers ) > 1 ):
+                _progress_dialog( -99 )
+        except: traceback.print_exc()
 
     def refreshGenre( self, genres, last_updated=False ):
         """
@@ -132,7 +159,6 @@ class Trailers:
                 urls = eval( record[ 0 ] )
 
                 # fetch genre xml file and compare it to the current xml file
-                #new_trailers = False
                 for url in urls:
                     original_filename = fetcher.make_cache_filename( url )
                     filename = local_fetcher.urlretrieve( url )
@@ -146,7 +172,6 @@ class Trailers:
                 
                 if ( new_trailers ):
                     _progress_dialog()
-                    #self.removeXML( urls )
                     trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
                     if ( trailer_urls ):
                         idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
@@ -223,11 +248,11 @@ class Trailers:
                 _progress_dialog()
                 updated_date = datetime.date.today()
                 source = fetcher.urlopen( self.base_xml )
-                try:
-                    base_xml = ET.fromstring( source )
-                except:
-                    source = self.cleanXML( source )
-                    base_xml = ET.fromstring( source )
+                #try:
+                base_xml = ET.fromstring( source )
+                #except:
+                #    source = self.cleanXML( source )
+                #    base_xml = ET.fromstring( source )
 
                 view_matrix = {
                     "view1": "Exclusives",
@@ -307,11 +332,11 @@ class Trailers:
                     source = fetcher.urlopen( next_url )
                     if "<Document" not in source:
                         source = "<Document>" + source + "</Document>"
-                    try:
-                        element = ET.fromstring( source )
-                    except:
-                        source = self.cleanXML( source )
-                        element = ET.fromstring( source )
+                    #try:
+                    element = ET.fromstring( source )
+                    #except:
+                    #    source = self.cleanXML( source )
+                    #    element = ET.fromstring( source )
                         
                     lookup = "GotoURL"
                     if not is_special:
@@ -332,7 +357,7 @@ class Trailers:
                         url2 = element.get( "url" )
                         title = None
                         if is_special:
-                            title = element.getiterator( "b" )[ 0 ].text.encode( "ascii", "ignore" )
+                            title = element.getiterator( "b" )[ 0 ].text.strip()#.encode( "ascii", "ignore" )
                         if "index_1" in url2:
                             continue
                         if "/moviesxml/g" in url2:
@@ -344,7 +369,7 @@ class Trailers:
                             if not is_special:
                                 lookup = "B"
                                 lookup = self.ns( lookup )
-                            title = element.getiterator( lookup )[ 0 ].text.encode( "ascii", "ignore" )
+                            title = element.getiterator( lookup )[ 0 ].text.strip()#encode( "ascii", "ignore" )
                             trailer_dict[ url2 ] =  title.strip()
                             continue
                         trailer_dict.update( { url2: title } )
@@ -423,9 +448,10 @@ class Trailers:
 
                 # xml parsing
                 source = fetcher.urlopen( url )
-                try: element = ET.fromstring( source )
+                try:
+                    element = ET.fromstring( source )
                 except:
-                    source = self.cleanXML( source )
+                    source = self.cleanXML( source.decode( "utf-8", "replace" ).encode( "utf-8", "ignore" ) )
                     element = ET.fromstring( source )
                 
                 # -- poster & thumbnails --
@@ -439,7 +465,7 @@ class Trailers:
                         self.poster = os.path.basename( poster )
 
                 # -- plot --
-                plot = element.getiterator( self.ns( "SetFontStyle" ) )[ 2 ].text.encode( "ascii", "ignore" ).strip()
+                plot = element.getiterator( self.ns( "SetFontStyle" ) )[ 2 ].text.strip()#encode( "ascii", "ignore" ).strip()
                 if plot:
                     # remove any linefeeds so we can wrap properly to the text control this is displayed in
                     plot = plot.replace( "\r\n", " " )
@@ -451,7 +477,7 @@ class Trailers:
                 SetFontStyles = element.getiterator( self.ns( "SetFontStyle" ) )
                 actors = list()
                 for i in range( 5, 10 ):
-                    actor = SetFontStyles[ i ].text.encode( "ascii", "ignore" ).replace( "(The voice of)", "" ).title().strip()
+                    actor = SetFontStyles[ i ].text.replace( "(The voice of)", "" ).title().strip()#encode( "ascii", "ignore" ).
                     if ( len( actor ) and not actor.startswith( "." ) and actor != "1:46" ) :
                         actors += [ ( actor, ) ]
                         actor_id = records.fetch( self.query[ "actor_exists" ], ( actor.upper(), ) )
@@ -496,9 +522,10 @@ class Trailers:
                     temp_url = self.base_url + urls[0]
                     self.urls = [ self.urls[ 0 ] ] + [ urls[ 0 ] ]
                     source = fetcher.urlopen( temp_url )
-                    try: element = ET.fromstring( source )
+                    try:
+                        element = ET.fromstring( source )
                     except:
-                        source = self.cleanXML( source )
+                        source = self.cleanXML( source.decode( "utf-8", "replace" ).encode( "utf-8", "ignore" ) )
                         element = ET.fromstring( source )
                     trailer_urls = list()
                     for each in element.getiterator( self.ns( "string" ) ):
@@ -516,6 +543,7 @@ class Trailers:
                         trailer_urls += [ text.replace( "//", "/" ).replace( "/", "//", 1 ) ]
                     self.trailer_urls = trailer_urls
             except:
+                #traceback.print_exc()
                 print "Trailer XML %s: %s is %s" % ( self.idMovie, url, ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
             
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.rating,
@@ -618,6 +646,8 @@ class Trailers:
     def cleanXML( self, xml_source ):
         xml_source = xml_source.replace( " & ", " &amp; " )
         xml_source = xml_source.replace( "&nbsp;", " " )
+        xml_source = xml_source.replace( "&iacute;", "I" )
+        xml_source = re.sub( "(&)[^#]..[^;]", "&amp;", xml_source )
         items = re.findall( '="[^>]*>', xml_source )
         if ( items ):
             for item in items:

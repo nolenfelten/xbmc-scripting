@@ -491,16 +491,19 @@ class GUI( xbmcgui.WindowXML ):
             functions += ( self.toggleAsWatched, )
             labels += ( _( 506 ), )
             functions += ( self.refreshTrailerInfo, )
+            if ( self.category_id == NO_TRAILER_URLS ):
+                labels += ( _( 507 ), )
+                functions += ( self.refreshAllTrailersInfo, )
             if ( self.category_id >= 0 and self.list_category == 1 ):
                 labels += ( _( 512 ), )
                 functions += ( self.refreshCurrentGenre, )
             if ( self.trailers.movies[ selection ].saved ):
-                labels += ( _( 508 ), )
+                labels += ( _( 509 ), )
                 functions += ( self.deleteSavedTrailer, )
             elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
-                labels += ( _( 507 ), )
+                labels += ( _( 508 ), )
                 functions += ( self.saveCachedMovie, )
-            labels += ( _( 509 ), )
+            labels += ( _( 510 ), )
             functions += ( self.get_showtimes, )
         elif ( controlId == self.CONTROL_CATEGORY_LIST ):
             functions += ( self.getTrailerGenre, )
@@ -696,7 +699,15 @@ class GUI( xbmcgui.WindowXML ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         #self.getControl( self.CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
-        self.trailers.refreshTrailerInfo( trailer )
+        self.trailers.refreshTrailerInfo( ( trailer, ) )
+        self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
+
+    def refreshAllTrailersInfo( self ):
+        ##### add a progress dialog
+        trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+        self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
+        trailers = range( len( self.trailers.movies ) )
+        self.trailers.refreshTrailerInfo( trailers )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
     def saveCachedMovie( self ):

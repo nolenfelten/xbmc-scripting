@@ -33,7 +33,7 @@
     <string id="65">Parsing xml files for all trailer urls.</string>
     <string id="66">Fetching genre information...</string>
     <string id="67">Please wait a moment...</string>
-    <!--string id="68">Fetching:</string-->
+    <string id="68">Refreshing trailer information...</string>
     <string id="69">Error retrieving information for one or more genres.</string>
     <string id="70">Fetching movie information...</string>
     <string id="71">Genre:</string>
@@ -63,6 +63,7 @@
     <string id="95">Enter keywords: separate words with and/or/not</string>
     <string id="96">of</string>
     <string id="97">Setting up search dialog.</string>
+    <string id="98">Removing old trailer xml files...</string>
     
 
     <!-- Buttons -->
@@ -167,9 +168,10 @@
     <string id="504">Mark as Watched</string>
     <string id="505">Mark as Unwatched</string>
     <string id="506">Refresh Trailer Info</string>
-    <string id="507">Move to Save Folder</string>
-    <string id="508">Delete Saved Trailer</string>
-    <string id="509">Theater Showtimes</string>
+    <string id="507">Refresh All Trailers Info</string>
+    <string id="508">Move to Save Folder</string>
+    <string id="509">Delete Saved Trailer</string>
+    <string id="510">Theater Showtimes</string>
     <string id="511">View Genre</string>
     <string id="512">Refresh Genre</string>
     <string id="513">Refresh All Genres</string>
