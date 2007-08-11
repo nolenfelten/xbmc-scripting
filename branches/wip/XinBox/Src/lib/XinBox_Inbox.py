@@ -18,6 +18,7 @@ TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
+        self.init = 0
         self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
@@ -31,12 +32,14 @@ class GUI( xbmcgui.WindowXML ):
         self.ibsettings = self.accountsettings.getSettingInListbyname("Inboxes",self.inbox)
  
     def onInit(self):
-        self.loadsettings()
-        self.setupvars()
         xbmcgui.lock()
-        self.setupcontrols()
-        self.reademid()
-        self.updatesizelabel()
+        if self.init == 0:
+            self.init = 1
+            self.loadsettings()
+            self.setupvars()
+            self.setupcontrols()
+            self.reademid()
+            self.updatesizelabel()
         xbmcgui.unlock()
         
     def setupvars(self):
