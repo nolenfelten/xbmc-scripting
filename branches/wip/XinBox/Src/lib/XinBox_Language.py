@@ -37,7 +37,7 @@ class Language:
 
     def string(self,number):
         if int(number) in self.strings:
-            if self.language == "finish":
+            if self.language == "finnish":
                 return self.strings[int(number)].decode("utf-8")
             else:return self.strings[int(number)]
         else:
