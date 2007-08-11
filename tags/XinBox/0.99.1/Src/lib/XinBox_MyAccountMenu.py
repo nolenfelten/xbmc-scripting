@@ -36,6 +36,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def checkdefault(self):
         if self.accountsettings.getSetting("Default Inbox") != "-" or self.minibox != False:
+            xbmcgui.unlock()
             if self.minibox != False:self.launchinbox(self.minibox)
             else:self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
         
