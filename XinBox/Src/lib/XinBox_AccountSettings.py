@@ -21,7 +21,7 @@ class Account_Settings (AccountSettings):
             "MiniMode Time": ["60","text"],
             "XinBox Promote" : ["True","text"],
             "Mini Mode SFX" : ["True","text"],
-            "Contacts": [['Contact',[]],"list"]}
+            "Contacts": [['Contact',[["Stanley87","stanley87.matt@gmail.com","text"]]],"list"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")
 
