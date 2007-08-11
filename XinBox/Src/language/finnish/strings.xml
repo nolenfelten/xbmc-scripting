@@ -88,7 +88,7 @@
 	<string id="98">Ei käytössä</string>
 	
 	<!-- Help Labels -->
-	<string id="99">"%s" - Ohje</string>
+	<string id="99">XinBox Ohje:/string>
 	<string id="100">Valitse mikäli haluat kirjautua sisään XinBox tiliin. Mikäli tiliä ei ole luotu, täytyy ensimmäiseksi luoda XinBox tili.</string>
 	<string id="101">Valitse mikäli haluat luoda uuden XinBox tilin. XinBox tili vaaditaan kirjautuaksesi.</string>
 	<string id="102">Valitse mikäli haluat päivittää XinBox asetuksia.</string>

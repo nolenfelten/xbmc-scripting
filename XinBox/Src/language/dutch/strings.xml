@@ -85,7 +85,7 @@
 	<string id="98">Uitgeschakeld</string>
 	
 	<!-- Help Labels -->
-	<string id="99">Help voor XinBox:   -( %s )-</string>
+	<string id="99">Help voor XinBox:</string>
 	<string id="100">Selecteer wanneer je wilt inloggen in een XinBox Account. Waneer er geen account aangemaakt zijn dien je een account te maken alvorens in te loggen.</string>
 	<string id="101">Selecteer wanneer je een nieuw XinBox account aan wilt maken. Een XinBox account is vereist om in te loggen.</string>
 	<string id="102">Selecteer wanneer je het XinBox script wilt updaten.</string>
