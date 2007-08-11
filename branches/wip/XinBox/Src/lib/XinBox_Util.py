@@ -80,24 +80,6 @@ def getfiletypes(filetype):
     elif filetype in ARCHIVETYPES: return "Archive"
     else: return "Unknown"
 
-
-def addindelete():
-    autoexecfile = __autoexecdir__ + "autoexec.py"
-    if os.path.exists(autoexecfile):
-        fh = open(autoexecfile)
-        text = fh.read()
-        fh.close()
-        if not 'if os.path.exists("Q:\\\\mmrunning.xib")' in text:
-            text = 'import os, time\nif os.path.exists("Q:\\\\mmrunning.xib"):os.remove("Q:\\\\mmrunning.xib")\n' + text
-            f = open(autoexecfile, "w")
-            f.write(text)
-            f.close()
-    else:
-        f = open(autoexecfile, "w")
-        f.write('import os, time\nif os.path.exists("Q:\\\\mmrunning.xib"):os.remove("Q:\\\\mmrunning.xib")\n')
-        f.close()
-        
-
 def addauto(scriptpath, accountname, srcpath):
         changing = False
         Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + "," + srcpath.replace("\\","\\\\") + ')")'
