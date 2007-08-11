@@ -117,19 +117,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         self.removeItem(curPos)
                         self.buildcontactlist()
             elif ( button_key == 'Keyboard TAB Button' or button_key == 'White Button' or button_key == 'Remote Display'):
-                curPos  = self.getCurrentListPosition()
-                curItem = self.getListItem(curPos)
-                contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
-                if self.label == False:
-                    dialog = xbmcgui.Dialog()
-                    if not dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(377)):return
-                else:
-                    if contact in self.label:
+                if focusid == 50:
+                    curPos  = self.getCurrentListPosition()
+                    curItem = self.getListItem(curPos)
+                    contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
+                    if self.label == False:
                         dialog = xbmcgui.Dialog()
-                        dialog.ok(self.language(376)+ curItem.getLabel(), self.language(379))
-                        return
-                self.returnval = contact
-                self.exitme()
+                        if not dialog.yesno(self.language(376)+ curItem.getLabel(), self.language(377)):return
+                    else:
+                        if contact in self.label:
+                            dialog = xbmcgui.Dialog()
+                            dialog.ok(self.language(376)+ curItem.getLabel(), self.language(379))
+                            return
+                    self.returnval = contact
+                    self.exitme()
             elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
                 if focusid == 50:
                     if self.label == False:

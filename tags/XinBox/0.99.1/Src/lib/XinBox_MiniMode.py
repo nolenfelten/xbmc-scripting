@@ -25,6 +25,7 @@ class Minimode:
         lang.load(self.srcpath + "\\language")
         self.language = lang.string
         xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
+        time.sleep(5)
         try:
             self.exit = False
             self.loadsettings()
