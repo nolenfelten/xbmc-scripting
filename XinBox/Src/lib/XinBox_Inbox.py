@@ -354,6 +354,7 @@ class GUI( xbmcgui.WindowXML ):
         dialog = xbmcgui.DialogProgress()
         dialog.create(self.language(210) + self.inbox, self.language(254))
         if len(self.guilist) == 0: self.setinboxnotemtpy()
+        xbmcgui.lock()
         for i,item in enumerate(newlist):
             dialog.update((i*100)/len(newlist),self.language(254),"")
             f = open(self.ibfolder + item[0] + ".sss", "r")
@@ -362,6 +363,7 @@ class GUI( xbmcgui.WindowXML ):
             self.guilist.insert(0,[item[0],myemail,item[1],0,item[2],item[3],item[4],1])
             icon = self.geticon(item[1],0,1)
             self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
+        xbmcgui.unlock()
         dialog.close()
 
     def geticon(self,attstat, readstat, newstatus):
