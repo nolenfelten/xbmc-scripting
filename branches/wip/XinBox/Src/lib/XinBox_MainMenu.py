@@ -51,6 +51,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def checkdefault(self):
         if self.settings.getSetting("Default Account") != "-" or self.minimode != False:
+            xbmcgui.unlock()
             if self.minimode != False:
                 account = self.minimode
             else:account = self.settings.getSetting("Default Account")
