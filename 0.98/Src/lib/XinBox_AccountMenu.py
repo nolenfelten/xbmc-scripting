@@ -1,7 +1,7 @@
 
 
 
-import xbmcgui, xbmc, os, random
+import xbmcgui, xbmc, os, random, traceback
 import XinBox_Util
 import XinBox_InBoxMenu
 import XinBox_InfoDialog
@@ -60,7 +60,6 @@ class AccountSettings(xbmcgui.WindowXML):
 
     def setupvars(self):
         self.saved = True
-        self.setupcompsetts()
         self.savedaccountname = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.inboxlist = self.getControl(88)
@@ -70,10 +69,22 @@ class AccountSettings(xbmcgui.WindowXML):
         if self.theSettings.getSetting("Mini Mode Account") == self.account:
             self.mmaccount = True
         else:self.mmaccount = False
+        if self.accountSettings.getSetting("Mini Mode SFX",None) == None:
+            self.accountSettings.addSetting("Mini Mode SFX","True","text")
+            self.mmenablesfx = True
+        elif self.accountSettings.getSetting("Mini Mode SFX",None) == "True":
+            self.mmenablesfx = True
+        else:self.mmenablesfx = False
+        if self.accountSettings.getSetting("XinBox Promote",None) == None:
+            self.accountSettings.addSetting("XinBox Promote","True","text")
+            self.promote = True
+        elif self.accountSettings.getSetting("XinBox Promote",None) == "True":
+            self.promote  = True
+        else:self.promote  = False
+        self.setupcompsetts()
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
         self.newaccounthash = self.origaccounthash
-
 
     def setupcompsetts(self):
         self.checksettings = str(self.accountSettings.settings)
@@ -104,12 +115,13 @@ class AccountSettings(xbmcgui.WindowXML):
         return hashlist
         
     def setupcontrols(self):
-        self.buttonids = [61,62,63,64,65]
-        for ID in self.buttonids:
+        for ID in [61,62,63,64,65]:
             self.getControl(ID).setLabel(self.language(ID))
         self.getControl(64).setEnabled(False)
         self.getControl(105).setSelected(self.mmaccount)
         self.getControl(104).setSelected(self.defaultaccount)
+        self.getControl(106).setSelected(self.mmenablesfx)
+        self.getControl(107).setSelected(self.promote)
         if self.newaccount:
             self.getControl(80).setLabel(self.language(50))
         else:
@@ -124,8 +136,10 @@ class AccountSettings(xbmcgui.WindowXML):
         else:
             self.addItem(self.SettingListItem(self.language(52), '*' * len(self.accountSettings.getSetting("Account Password").decode("hex"))))
         self.addItem(self.language(53))
-        self.addItem(self.language(353))
         self.addItem(self.SettingListItem(self.language(354), self.accountSettings.getSetting("MiniMode Time")))
+        self.addItem(self.language(357))
+        self.addItem(self.language(353))
+        self.addItem(self.language(336))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -156,10 +170,14 @@ class AccountSettings(xbmcgui.WindowXML):
                     self.close()
         elif ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
             if focusid == 51:
-                if self.getCurrentListPosition() == 3:
+                if self.getCurrentListPosition() == 5:
                     self.launchinfo(144,self.getListItem(self.getCurrentListPosition()).getLabel())
                 elif self.getCurrentListPosition() == 4:
+                    self.launchinfo(162,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 3:
                     self.launchinfo(145,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 6:
+                    self.launchinfo(163,self.getListItem(self.getCurrentListPosition()).getLabel())
                 else:self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
@@ -203,14 +221,24 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.getControl(104).setSelected(self.defaultaccount)
                 self.checkforchanges()
             elif curPos == 3:
-                self.mmaccount = not self.mmaccount
-                self.getControl(105).setSelected(self.mmaccount)
-                self.checkforchanges()
-            elif curPos == 4:
                 dialog = xbmcgui.Dialog()
                 value = dialog.numeric(0,self.language(354), curName2)
                 curItem.setLabel2(value)
                 self.accountSettings.setSetting("MiniMode Time",value)
+                self.checkforchanges()
+            elif curPos == 4:
+                self.mmenablesfx = not self.mmenablesfx
+                self.getControl(106).setSelected(self.mmenablesfx)
+                self.accountSettings.setSetting("Mini Mode SFX", str(self.mmenablesfx))
+                self.checkforchanges()
+            elif curPos == 5:
+                self.mmaccount = not self.mmaccount
+                self.getControl(105).setSelected(self.mmaccount)
+                self.checkforchanges()
+            elif curPos == 6:
+                self.promote = not self.promote
+                self.getControl(107).setSelected(self.promote)
+                self.accountSettings.setSetting("XinBox Promote", str(self.promote))
                 self.checkforchanges()
         elif ( controlID == 61):
             self.launchinboxmenu("")
@@ -318,9 +346,8 @@ class AccountSettings(xbmcgui.WindowXML):
         ID = w.returnID
         Inboxname = w.inbox
         change = w.settchanged
-        if change == "True":
+        if change == "True" and self.account != "":
             self.getControl(64).setEnabled(True)
-        self.checkforchanges()
         if ID != 0:
             self.gohash(inbox, Inboxname)
             if inbox == "":

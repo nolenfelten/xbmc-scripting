@@ -37,6 +37,8 @@ class Language:
 
     def string(self,number):
         if int(number) in self.strings:
-            return self.strings[int(number)].decode("utf-8")
+            if self.language == "finish":
+                return self.strings[int(number)].decode("utf-8")
+            else:return self.strings[int(number)]
         else:
             return "unknown string id"

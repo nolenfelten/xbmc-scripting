@@ -118,6 +118,9 @@ class Settings:
             add a new item in a list, in the settings array.
         """
         self.settings[settingName][0][1].append([ newName , newValue, type])
+
+    def addSetting(self, newName, newValue, type):
+        self.settings[newName] = [newValue, type]
         
     def removeSettingInList(self, settingName, itemPosition):
         """

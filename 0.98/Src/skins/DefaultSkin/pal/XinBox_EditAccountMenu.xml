@@ -88,10 +88,46 @@
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
                 </control>
-                <control type="checkmark" id="105">
-                    	<description>Minimode Setting Status</description>
+                <control type="checkmark" id="106">
+                    	<description>Minimode SFX Status</description>
                     	<posx>410</posx>
-                    	<posy>222</posy>
+                    	<posy>247</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
+                <control type="checkmark" id="105">
+                    	<description>Minimode Startup Status</description>
+                    	<posx>410</posx>
+                    	<posy>275</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
+                <control type="checkmark" id="107">
+                    	<description>Promote Status</description>
+                    	<posx>410</posx>
+                    	<posy>302</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
