@@ -42,7 +42,7 @@
 		</control>
   		<control type="label" id="80">
         		<description>Menu Label</description>
-        		<posx>430</posx>
+        		<posx>410</posx>
         		<posy>95</posy>
         		<width>200</width>
         		<label>-</label>
@@ -54,7 +54,7 @@
   		<control type="label" id="81">
         		<description>Account Label</description>
         		<posx>440</posx>
-        		<posy>60</posy>
+        		<posy>70</posy>
 			<label>-</label>
         		<width>200</width>
         		<font>font13</font>
