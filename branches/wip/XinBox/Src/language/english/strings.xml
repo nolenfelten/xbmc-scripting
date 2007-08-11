@@ -87,7 +87,7 @@
 	<string id="98">Disabled</string>
 	
 	<!-- Help Labels -->
-	<string id="99">XinBox Help :   -( %s )-</string>
+	<string id="99">XinBox Help:</string>
 	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
 	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
 	<string id="102">Select if you wish to UPDATE the XinBox script.</string>

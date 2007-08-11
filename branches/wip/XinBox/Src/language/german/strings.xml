@@ -85,7 +85,7 @@
 	<string id="98">Deaktiviert</string>
 
 	<!-- Help Labels -->
-	<string id="99">XinBox Hilfe : -( %s )-</string>
+	<string id="99">XinBox Hilfe:</string>
 	<string id="100">Auswählen um dich bei einem XinBox Konto anzumelden. Wenn kein Konto besteht, mußt du erst ein XinBox Konto erstellen.</string>
 	<string id="101">Auswählen um ein neues XinBox Konto zu erstellen. Ein XinBox Konto wird benötigt um sich anzumelden.</string>
 	<string id="102">Auswählen zum aktualisieren des XinBox Scripts.</string>
