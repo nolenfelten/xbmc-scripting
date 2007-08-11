@@ -25,14 +25,14 @@ class GUI( xbmcgui.WindowXML ):
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
         
     def onInit(self):
+        xbmcgui.lock()
         if self.init == 0:
             self.init = 1
             self.loadsettings()
             self.setupvars()
             self.checkdefault()
-            xbmcgui.lock()
             self.setupcontrols()
-            xbmcgui.unlock()
+        xbmcgui.unlock()
 
     def checkdefault(self):
         if self.accountsettings.getSetting("Default Inbox") != "-" or self.minibox != False:

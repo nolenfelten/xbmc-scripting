@@ -26,12 +26,12 @@ _ = lang.string
 
 
 if __name__ == '__main__':
-        if exists("Q:\\mmrunning.xib"):
+        if exists("X:\\mmrunning.xib"):
                 dialog = xbmcgui.DialogProgress()
                 dialog.create(_(351), _(352))
-                if exists("Q:\\mmcomu.xib"):
-                        os.remove("Q:\\mmcomu.xib")
-                while exists("Q:\\mmrunning.xib"):time.sleep(0.1)
+                if exists("X:\\mmcomu.xib"):
+                        os.remove("X:\\mmcomu.xib")
+                while exists("X:\\mmrunning.xib"):time.sleep(0.1)
                 dialog.update(100,_(352))
                 dialog.close()
                 try:

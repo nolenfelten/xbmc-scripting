@@ -10,6 +10,7 @@ bootsy
 
 settings.py by Donno
 update.py by Nuka1195
+Some GFX & Icons by X3lectric
 
 History:
 
