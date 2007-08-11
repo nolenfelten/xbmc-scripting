@@ -1,7 +1,3 @@
-"""
-$Revision:$
-"""
-
 import sys
 import os
 
