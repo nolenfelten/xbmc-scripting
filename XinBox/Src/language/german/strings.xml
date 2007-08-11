@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--German Strings VER: 0.3-->
+<!--German Strings VER: 0.4-->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Hauptmenü</string>
@@ -36,7 +36,7 @@
 	<string id="46">SMTP Server akzeptiert Benutzername oder Passwort nicht</string>
 	<string id="47">Posteingang Eingaben sind OK</string>
 
-	<!-- Create Account Menu Labels -->
+	<!-- Edit Account Menu Labels -->
 	<string id="48">Konto gespeichert. OK</string>
 	<string id="49">Erfolgreich!</string>
 	<string id="50">Konto erstellen</string>
@@ -146,6 +146,8 @@
 	<string id="159">A: Bearbeite Kontaktname/Email Adresse   B: Kontakt löschen   Weiss: Verfasse Email an den Kontakt</string>
 	<string id="160">Auswählen um einen neuen Kontakt hinzuzufügen.</string>
 	<string id="161">A: Bearbeite Kontaktname/Email Adresse   B: Kontakt löschen   Weiss: Kontakt zum Adressfeld hinzufügen</string>
+	<string id="162">Auswählen um zu entscheiden, ob die "Neue Email" Benachrichtigung bei einer neuen Email abgespielt wird oder nicht.</string>
+	<string id="163">Auswählen um zu entscheiden, ob zwei XinBox + XBMC Promoting Zeilen unten an versendete Emails angefügt werden sollen.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Konto Menü</string>
@@ -252,6 +254,7 @@
 	<string id="333">Leeren</string>
 	<string id="334">Email Body leeren?</string>
 	<string id="335">Email Body</string>
+	<string id="336">Promote</string>
 
 	<!-- Mini-Mode Labels -->
 	<string id="350">Mini-Mode aktivieren</string>
@@ -261,13 +264,15 @@
 	<string id="354">Mini-Mode Verzögerung (sek.)</string>
 	<string id="355">Posteingang öffnen</string>
         <string id="356">Gestartet</string>
+	<string id="357">Mini-Mode SFX</string>
+	<string id="358">Geschlossen</string>
 
 	<!-- About Labels -->
 	<string id="360">Über</string>
 	<string id="361">Sprache</string>
 	<string id="362">Skinning</string>
 
-	<!-- Contact LAbels -->
+	<!-- Contact Labels -->
 	<string id="370">Kontakte</string>
 	<string id="371">Keine Kontakte</string>
 	<string id="372">Kontaktnamen bearbeiten</string>
