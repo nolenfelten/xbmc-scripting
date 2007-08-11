@@ -194,7 +194,7 @@ class AccountSettings(xbmcgui.WindowXML):
             curName = curItem.getLabel()
             curName2 = curItem.getLabel2()
             if curPos == 0:
-                value = self.showKeyboard(self.language(66) % curName,curName2)
+                value = self.showKeyboard(self.language(66) % self.language(51),curName2)
                 if value != False and value != "" and value != curName2:
                     if value in self.accounts:
                         self.launchinfo(95,"",self.language(93))
@@ -207,7 +207,7 @@ class AccountSettings(xbmcgui.WindowXML):
                         self.account = value
                         self.checkforchanges()
             elif curPos == 1:
-                value = self.showKeyboard(self.language(66) % curName,"",1)
+                value = self.showKeyboard(self.language(66) % self.language(52),"",1)
                 if value != False:
                     if value == "":
                         self.accountSettings.setSetting("Account Password","-")

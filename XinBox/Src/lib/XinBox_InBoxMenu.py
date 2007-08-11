@@ -151,8 +151,61 @@ class GUI( xbmcgui.WindowXML ):
             curItem = self.getListItem(curPos)
             curName = curItem.getLabel()
             curName2 = curItem.getLabel2()
-            if curPos == 5:
-                value = self.showKeyboard(self.language(66) % curName,"",1)
+            if curPos == 0:
+                value = self.showKeyboard(self.language(66) % self.language(82),curName2)
+                if value != False and value != "" and value !=curName2:
+                    if value in self.inboxlist:
+                        self.launchinfo(94,"",self.language(93))
+                    else:
+                        self.renameme = [curName2,value]
+                        self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
+                        self.settings.setSetting("Inbox Hash",str(hash(value)))
+                        self.inboxlist = self.buildinboxdict(self.accountSettings)
+                        self.inbox = value
+                        self.getControl(62).setEnabled(True)
+                        curItem.setLabel2(value)                    
+            elif curPos == 1:
+                value = self.showKeyboard(self.language(66) % self.language(96),curName2)
+                if value != False and value != "" and value !=curName2:
+                    self.settings.setSetting(self.settnames[curPos],value)
+                    curItem.setLabel2(value)
+                    if "@" in value:
+                        server = value.split("@")[1]
+                        name = value.split("@")[0]
+                        if self.servers.has_key(server):
+                            if self.servers[server][5] == "":
+                                self.getListItem(4).setLabel2(name)
+                                self.settings.setSetting("Account Name",name)
+                            else:
+                                self.getListItem(4).setLabel2(self.servers[server][5])
+                                self.settings.setSetting("Account Name",self.servers[server][5])
+                            self.settings.setSetting("POP Server",self.servers[server][0])
+                            self.getListItem(2).setLabel2(self.servers[server][0])
+                            self.settings.setSetting("SMTP Server",self.servers[server][1])
+                            self.getListItem(3).setLabel2(self.servers[server][1])
+                            self.updatessl(91,"",self.servers[server][2])
+                            self.updatessl(92,"",self.servers[server][3])
+                            self.updatesizes(self.servers[server][4],6)
+                        else:
+                            self.getListItem(4).setLabel2(name)
+                            self.settings.setSetting("Account Name",name)                    
+            elif curPos == 2:
+                value = self.showKeyboard(self.language(66) % self.language(83),curName2)
+                if value != False and value != "" and value !=curName2:
+                    self.settings.setSetting(self.settnames[curPos],value)
+                    curItem.setLabel2(value)             
+            elif curPos == 3:
+                value = self.showKeyboard(self.language(66) % self.language(84),curName2)
+                if value != False and value != "" and value !=curName2:
+                    self.settings.setSetting(self.settnames[curPos],value)
+                    curItem.setLabel2(value)              
+            elif curPos == 4:
+                value = self.showKeyboard(self.language(66) % self.language(85),curName2)
+                if value != False and value != "" and value !=curName2:
+                    self.settings.setSetting(self.settnames[curPos],value)
+                    curItem.setLabel2(value)                    
+            elif curPos == 5:
+                value = self.showKeyboard(self.language(66) % self.language(86),"",1)
                 if value != False:
                     if value == "":
                         curItem.setLabel2("")
@@ -160,14 +213,24 @@ class GUI( xbmcgui.WindowXML ):
                     else:
                         curItem.setLabel2('*' * len(value))
                         self.settings.setSetting(self.settnames[curPos],value.encode("hex"))
-            elif curPos == 6 or curPos == 7:
+            elif curPos == 6:
                 dialog = xbmcgui.Dialog()
-                value = dialog.numeric(0, self.language(66) % curName, curName2)
+                value = dialog.numeric(0, self.language(66) % self.language(87), curName2)
                 self.updatesizes(value,curPos,curName2)
+            elif curPos == 7:
+                dialog = xbmcgui.Dialog()
+                value = dialog.numeric(0, self.language(66) % self.language(88), curName2)
+                self.updatesizes(value,curPos,curName2)            
             elif curPos == 8:
                 self.keepemails = not self.keepemails
                 self.getControl(106).setSelected(self.keepemails)
                 self.settings.setSetting(self.settnames[curPos],str(self.keepemails))
+            elif curPos == 9:
+                dialog = xbmcgui.Dialog()
+                value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))
+                if value != self.settings.getSetting("Email Notification"):
+                    curItem.setLabel2(value)
+                    self.settings.setSetting(self.settnames[curPos],value)
             elif curPos == 10:
                 self.defaultinbox = not self.defaultinbox
                 self.getControl(107).setSelected(self.defaultinbox)
@@ -175,52 +238,6 @@ class GUI( xbmcgui.WindowXML ):
                 self.mmenabled = not self.mmenabled
                 self.getControl(108).setSelected(self.mmenabled)
                 self.settings.setSetting(self.settnames[curPos],str(self.mmenabled))
-            elif curPos == 9:
-                dialog = xbmcgui.Dialog()
-                value = dialog.browse(1, self.language(241), "files","",False,False,self.settings.getSetting("Email Notification"))
-                if value != self.settings.getSetting("Email Notification"):
-                    curItem.setLabel2(value)
-                    self.settings.setSetting(self.settnames[curPos],value)
-            else:
-                value = self.showKeyboard(self.language(66) % curName,curName2)
-                if value != False and value != "" and value !=curName2:
-                        if curPos == 0:
-                            if value in self.inboxlist:
-                                self.launchinfo(94,"",self.language(93))
-                            else:
-                                self.renameme = [curName2,value]
-                                self.accountSettings.setSettingnameInList("Inboxes",curName2,value)
-                                self.settings.setSetting("Inbox Hash",str(hash(value)))
-                                self.inboxlist = self.buildinboxdict(self.accountSettings)
-                                self.inbox = value
-                                self.getControl(62).setEnabled(True)
-                                curItem.setLabel2(value)
-                        elif curPos == 1:
-                            self.settings.setSetting(self.settnames[curPos],value)
-                            curItem.setLabel2(value)
-                            if "@" in value:
-                                server = value.split("@")[1]
-                                name = value.split("@")[0]
-                                if self.servers.has_key(server):
-                                    if self.servers[server][5] == "":
-                                        self.getListItem(4).setLabel2(name)
-                                        self.settings.setSetting("Account Name",name)
-                                    else:
-                                        self.getListItem(4).setLabel2(self.servers[server][5])
-                                        self.settings.setSetting("Account Name",self.servers[server][5])
-                                    self.settings.setSetting("POP Server",self.servers[server][0])
-                                    self.getListItem(2).setLabel2(self.servers[server][0])
-                                    self.settings.setSetting("SMTP Server",self.servers[server][1])
-                                    self.getListItem(3).setLabel2(self.servers[server][1])
-                                    self.updatessl(91,"",self.servers[server][2])
-                                    self.updatessl(92,"",self.servers[server][3])
-                                    self.updatesizes(self.servers[server][4],6)
-                                else:
-                                    self.getListItem(4).setLabel2(name)
-                                    self.settings.setSetting("Account Name",name)
-                        else:
-                            self.settings.setSetting(self.settnames[curPos],value)
-                            curItem.setLabel2(value)
         elif ( controlID == 61):
             w = TestInbox(self.settings,self.language,self.srcpath)
             w.testinput()
