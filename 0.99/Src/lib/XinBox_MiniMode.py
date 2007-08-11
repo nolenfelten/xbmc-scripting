@@ -6,6 +6,7 @@ from XinBox_Language import Language
 import threading
 import XinBox_MainMenu
 from XinBox_Language import Language
+import os
 from os.path import join, exists
 
 TITLE = XinBox_Util.__scriptname__
@@ -13,27 +14,29 @@ TITLE = XinBox_Util.__scriptname__
 class Minimode:
     def init(self):
         print "XinBox Mini-Mode: Started"
-        f = open("Q:\\mmrunning.xib", "w")
-        f.close()
-        f = open("Q:\\mmcomu.xib", "w")
-        f.close()
-        time.sleep(2)
-        self.exit = False
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
+        f = open("X:\\mmrunning.xib", "w")
+        f.close()
+        f = open("X:\\mmcomu.xib", "w")
+        f.close()
+        time.sleep(2)
         lang = Language(TITLE)
         lang.load(self.srcpath + "\\language")
         self.language = lang.string
         xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
-        self.loadsettings()
-        self.inboxes = self.buildinboxdict()
-        if not len(self.inboxes) == 0:self.startmm()
-        else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+        try:
+            self.exit = False
+            self.loadsettings()
+            self.inboxes = self.buildinboxdict()
+            if not len(self.inboxes) == 0:self.startmm()
+            else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+        except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         print "XinBox Mini-Mode: Closed"
-        if exists("Q:\\mmrunning.xib"):
-            os.remove("Q:\\mmrunning.xib")
-        if exists("Q:\\mmcomu.xib"):
-            os.remove("Q:\\mmcomu.xib")
+        if exists("X:\\mmrunning.xib"):
+            os.remove("X:\\mmrunning.xib")
+        if exists("X:\\mmcomu.xib"):
+            os.remove("X:\\mmcomu.xib")
         if self.exit:
             w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox, lang=self.language)
             w.doModal()
@@ -41,10 +44,10 @@ class Minimode:
         
 
     def startmm(self):
-        while exists("Q:\\mmcomu.xib"):
+        while exists("X:\\mmcomu.xib"):
             print "XinBox Mini-Mode: Checking of Inboxes Started"
             for inbox in self.inboxes:
-                if exists("Q:\\mmcomu.xib"):
+                if exists("X:\\mmcomu.xib"):
                     print "XinBox Mini-Mode: Checking Inbox: " + str(inbox)
                     inboxsettings = self.accountsettings.getSettingInListbyname("Inboxes",inbox)
                     self.checkfornew(inboxsettings,inbox)
@@ -52,7 +55,7 @@ class Minimode:
                 else:return
             print "XinBox Mini-Mode: Starting Delay (" + self.accountsettings.getSetting("MiniMode Time") + "s)"
             for i in xrange(0,int(self.accountsettings.getSetting("MiniMode Time"))):
-                if exists("Q:\\mmcomu.xib"):
+                if exists("X:\\mmcomu.xib"):
                     time.sleep(1)
                 else:break
             print "XinBox Mini-Mode: Delay Finished"
@@ -80,7 +83,7 @@ class Minimode:
         else:print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : No New Emails"
 
     def popup(self, newlist, inbox, ibsettings):
-        if exists("Q:\\mmcomu.xib"):
+        if exists("X:\\mmcomu.xib"):
             if self.accountsettings.getSetting("Mini Mode SFX",None) == None or self.accountsettings.getSetting("Mini Mode SFX",None) == "True":
                 xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
             mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
@@ -88,7 +91,7 @@ class Minimode:
             w.doModal()
             self.returnval = w.returnval
             del w
-            if exists("Q:\\mmcomu.xib"):
+            if exists("X:\\mmcomu.xib"):
                 if self.returnval == 1:
                     self.inbox = inbox
                     self.exit = True

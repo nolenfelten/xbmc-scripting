@@ -39,14 +39,13 @@ class GUI( xbmcgui.WindowXML ):
         return accounts
 
     def onInit(self):
-        XinBox_Util.addindelete()
+        xbmcgui.lock()
         self.loadsettings()
         self.accounts = self.buildaccounts()
         self.setupvars()
         if self.init == 0:
             self.init = 1
             self.checkdefault()
-        xbmcgui.lock()
         self.setupcontrols()
         xbmcgui.unlock()
 

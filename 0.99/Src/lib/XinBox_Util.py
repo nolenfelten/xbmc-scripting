@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.98'
+__version__ = '0.99'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
@@ -79,24 +79,6 @@ def getfiletypes(filetype):
     elif filetype in TEXTTYPES: return "Text"
     elif filetype in ARCHIVETYPES: return "Archive"
     else: return "Unknown"
-
-
-def addindelete():
-    autoexecfile = __autoexecdir__ + "autoexec.py"
-    if os.path.exists(autoexecfile):
-        fh = open(autoexecfile)
-        text = fh.read()
-        fh.close()
-        if not 'if os.path.exists("Q:\\\\mmrunning.xib")' in text:
-            text = 'import os, time\nif os.path.exists("Q:\\\\mmrunning.xib"):os.remove("Q:\\\\mmrunning.xib")\n' + text
-            f = open(autoexecfile, "w")
-            f.write(text)
-            f.close()
-    else:
-        f = open(autoexecfile, "w")
-        f.write('import os, time\nif os.path.exists("Q:\\\\mmrunning.xib"):os.remove("Q:\\\\mmrunning.xib")\n')
-        f.close()
-        
 
 def addauto(scriptpath, accountname, srcpath):
         changing = False
