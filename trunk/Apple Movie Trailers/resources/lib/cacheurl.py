@@ -63,7 +63,7 @@ def byte_measurement( bytes, detailed = False ):
             result = "%ib" % B
     return result
 
-def calc_download_info( current_time_elapsed, size_read_so_far, filesize ):
+def rate_remaining( current_time_elapsed, size_read_so_far, filesize ):
     """
         calculates download rate and time remaining
     """
@@ -98,7 +98,7 @@ class HTTP:
         self.actual_filename = actual_filename
 
         # set default blocksize (this may require tweaking; cachedhttp1.3 had it set at 8192)
-        self.blocksize = 8192
+        self.blocksize = 4096#16384#8192
 
     def clear_cache( self, cache_dir=None ):
         try:
@@ -280,7 +280,7 @@ class HTTPProgress( HTTP ):
         fsize = byte_measurement( filesize )
         percentage = percent_from_ratio( size_read_so_far, filesize )
         self.status_symbol = set_status_symbol( self.status_symbol )
-        download_rate, download_time_remaining = calc_download_info( current_time_elapsed, size_read_so_far, filesize )
+        download_rate, download_time_remaining = rate_remaining( current_time_elapsed, size_read_so_far, filesize )
         self.dialog.update( percentage, url.split( "/" )[ -1 ], "%i%% (%s/%s) %s %s" % ( percentage, so_far, fsize, download_rate, self.status_symbol ), download_time_remaining )
         if self.dialog.iscanceled():
             return False
@@ -310,7 +310,7 @@ class HTTPProgressSave( HTTPProgress ):
         self.filepath = filepath
         if is_completed and os.path.splitext( filepath )[ 1 ] in [ ".mov", ".avi" ]:
             try:
-                # create conf file for better quicktime playback
+                # create conf file for better MPlayer playback
                 if ( not os.path.isfile( filepath + ".conf" ) ):
                     f = open( filepath + ".conf" , "w" )
                     f.write( "nocache=1" )
@@ -320,7 +320,7 @@ class HTTPProgressSave( HTTPProgress ):
                     self.dialog.update( -1, _( 56 ), _( 67 ), "" )
                     self.filepath = os.path.join( self.save_location, os.path.basename( filepath ) )
                     xbmc.executehttpapi("FileCopy(%s,%s)" % ( filepath, self.filepath, ) )
-                    #xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filepath, os.path.join( self.save_location, os.path.basename( filepath ) ), ) )
+                    #xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filepath, self.filepath, ) )
             except:
                 LOG( LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
         HTTPProgress.on_finished( self, url, self.filepath, filesize, is_completed )

@@ -118,7 +118,8 @@ def make_legal_filepath( path, compatible=False, extension=True ):
         for count, part in enumerate( parts ):
             tmp_name = ""
             for char in part:
-                if ( char in illegal_characters ): char = ""
+                # if char's oed() value is > 127 or an illegal character remove it
+                if ( char in illegal_characters or ord( char ) > 127 ): char = ""
                 tmp_name += char
             if ( environment == "xbox" or compatible ):
                 if ( len( tmp_name ) > 42 ):
