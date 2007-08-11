@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.3-->
+<!--English Strings VER: 0.4-->
+	<!--Changes since Ver: 0.3-->
+		<!--NEW: 162, 357, 358, 336, 163 -->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Main Menu</string>
@@ -85,7 +87,7 @@
 	<string id="98">Disabled</string>
 	
 	<!-- Help Labels -->
-	<string id="99">XinBox Help :   -( %s )-</string>
+	<string id="99">XinBox Help:</string>
 	<string id="100">Select if you wish to LOGIN to a XinBox Account. If no accounts have been created, then you must CREATE an XinBox Account before logging in.</string>
 	<string id="101">Select if you wish to CREATE a new XinBox Account. A XinBox account is required to LOGIN.</string>
 	<string id="102">Select if you wish to UPDATE the XinBox script.</string>
@@ -146,6 +148,8 @@
 	<string id="159">A: Edit Contact Name/Email address    B: Delete contact    White Button: Compose Email to Contact</string>
 	<string id="160">Select to add a new Contact.</string>
 	<string id="161">A: Edit Contact Name/Email address    B: Delete contact    White Button: Add Contact to Address Field</string>
+	<string id="162">Select to toggle if Mini-Mode will play your selected inbox "New Email" notification SFX.</string>
+	<string id="163">Select to toggle if two XinBox + XBMC promoting lines are added to bottom of emails sent with XinBox.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -252,6 +256,7 @@
 	<string id="333">Clear</string>
 	<string id="334">Clear Email Body?</string>
 	<string id="335">Email Body</string>
+	<string id="336">Promote</string>
 
 	<!-- Mini-Mode Labels -->
 	<string id="350">Mini-Mode Enabled</string>
@@ -261,6 +266,8 @@
 	<string id="354">Mini-Mode Delay (s)</string>
 	<string id="355">Open Inbox</string>
         <string id="356">Started</string>
+	<string id="357">Mini-Mode SFX</string>
+	<string id="358">Closed</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>

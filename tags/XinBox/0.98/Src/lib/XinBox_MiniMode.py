@@ -28,6 +28,7 @@ class Minimode:
         self.loadsettings()
         self.inboxes = self.buildinboxdict()
         if not len(self.inboxes) == 0:self.startmm()
+        else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         print "XinBox Mini-Mode: Closed"
         if exists("Q:\\mmrunning.xib"):
             os.remove("Q:\\mmrunning.xib")
@@ -80,7 +81,8 @@ class Minimode:
 
     def popup(self, newlist, inbox, ibsettings):
         if exists("Q:\\mmcomu.xib"):
-            xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
+            if self.accountsettings.getSetting("Mini Mode SFX",None) == None or self.accountsettings.getSetting("Mini Mode SFX",None) == "True":
+                xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
             mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
             w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message=mymessage, lang=self.language)
             w.doModal()

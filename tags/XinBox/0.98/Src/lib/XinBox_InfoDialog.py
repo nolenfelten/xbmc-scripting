@@ -1,6 +1,6 @@
 
 
-import xbmc, xbmcgui
+import xbmc, xbmcgui, traceback
 import sys, os, time
 
 import XinBox_Util
@@ -15,12 +15,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.thetext = thetext
         
     def onInit(self):
-        if not self.heading:
-            self.getControl(20).setLabel(self.lang(99) % self.label)
-        else:self.getControl(20).setLabel(self.heading)
-        if not self.thetext:
-            self.getControl(21).setText(self.lang(self.focusid))
-        else:self.getControl(21).setText(self.thetext)
+        try:
+            if not self.heading:
+                self.getControl(20).setLabel(self.lang(99))
+            else:self.getControl(20).setLabel(self.heading)
+            if not self.thetext:
+                self.getControl(21).setText(self.lang(self.focusid))
+            else:self.getControl(21).setText(self.thetext)
+        except:traceback.print_exc()
         
     def onFocus(self, controlID):
         pass
