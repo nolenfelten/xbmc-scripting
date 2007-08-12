@@ -153,7 +153,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         """ setup default values if none obtained """
-        LOG( LOG_NOTICE, "%s (rev: %s) used default settings", __scriptname__, __svn_revision__ )
+        LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
         settings = {  
             "version": __version__,
             "skin": "Default",
