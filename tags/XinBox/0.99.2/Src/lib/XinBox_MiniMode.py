@@ -13,7 +13,6 @@ TITLE = XinBox_Util.__scriptname__
 
 class Minimode:
     def init(self):
-        print "XinBox Mini-Mode: Started"
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
         f = open("X:\\mmrunning.xib", "w")
@@ -33,7 +32,6 @@ class Minimode:
             if not len(self.inboxes) == 0:self.startmm()
             else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
-        print "XinBox Mini-Mode: Closed"
         if exists("X:\\mmrunning.xib"):
             os.remove("X:\\mmrunning.xib")
         if exists("X:\\mmcomu.xib"):
@@ -46,20 +44,16 @@ class Minimode:
 
     def startmm(self):
         while exists("X:\\mmcomu.xib"):
-            print "XinBox Mini-Mode: Checking of Inboxes Started"
             for inbox in self.inboxes:
                 if exists("X:\\mmcomu.xib"):
-                    print "XinBox Mini-Mode: Checking Inbox: " + str(inbox)
                     inboxsettings = self.accountsettings.getSettingInListbyname("Inboxes",inbox)
                     self.checkfornew(inboxsettings,inbox)
                     if self.exit:return
                 else:return
-            print "XinBox Mini-Mode: Starting Delay (" + self.accountsettings.getSetting("MiniMode Time") + "s)"
             for i in xrange(0,int(self.accountsettings.getSetting("MiniMode Time"))):
                 if exists("X:\\mmcomu.xib"):
                     time.sleep(1)
                 else:break
-            print "XinBox Mini-Mode: Delay Finished"
         return
         
     def buildinboxdict(self):
@@ -79,9 +73,7 @@ class Minimode:
         newlist = w.newlist
         del w
         if len(newlist) != 0:
-            print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : " + str(len(newlist)) + " New Emails"
             self.popup(newlist, inbox, ibsettings)
-        else:print "XinBox Mini-Mode: Inbox: " + str(inbox) + " : No New Emails"
 
     def popup(self, newlist, inbox, ibsettings):
         if exists("X:\\mmcomu.xib"):
@@ -97,8 +89,6 @@ class Minimode:
                     self.inbox = inbox
                     self.exit = True
             
-
-
 class Popup( xbmcgui.WindowXMLDialog ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,message=False,lang=False):
         self.lang = lang
