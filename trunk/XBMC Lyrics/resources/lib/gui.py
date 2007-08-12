@@ -27,6 +27,7 @@ current_win_id = xbmcgui.getCurrentWindowId()
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
@@ -121,7 +122,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             lyrics_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
             return False
 
     def show_lyrics( self, lyrics, save=False ):
@@ -227,7 +228,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     song = os.path.splitext( basename )[ 0 ].split( " ", 1 )[ 1 ]
         except:
             # invalid format selected
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::get_artist_from_filename [Invalid file format]", __scriptname__, __version__, )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::get_artist_from_filename [Invalid file format]", __scriptname__, __svn_revision__, )
         return artist, song
 
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 
@@ -241,7 +242,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.myPlayerChanged( 2 )
 
     def myPlayerChanged( self, event, force_update=False ):
-        LOG( LOG_DEBUG, "%s (ver: %s) GUI::myPlayerChanged [%s]", __scriptname__, __version__, [ "stopped","ended","started" ][ event ] )
+        LOG( LOG_DEBUG, "%s (rev: %s) GUI::myPlayerChanged [%s]", __scriptname__, __svn_revision__, [ "stopped","ended","started" ][ event ] )
         if ( event < 2 ): 
             self.exit_script()
         else:
