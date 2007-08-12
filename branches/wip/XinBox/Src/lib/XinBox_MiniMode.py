@@ -20,9 +20,8 @@ class Minimode:
         f = open("X:\\mmcomu.xib", "w")
         f.close()
         time.sleep(2)
-        lang = Language(TITLE)
-        lang.load(self.srcpath + "\\language")
-        self.language = lang.string
+        lang = Language(self.srcpath + "\\language")
+        self.language = lang.localized
         xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
         time.sleep(5)
         try:
