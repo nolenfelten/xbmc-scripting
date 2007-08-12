@@ -38,7 +38,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.lock()
         try:
             self.getControl( 20 ).setLabel( __scriptname__ )
-            self.getControl( 30 ).setLabel( "%s: %s (r%s)" % ( _( 1006 ), __version__, __svn_revision__, ) )
+            self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
             self.getControl( 250 ).setLabel( _( 250 ) )
             self.getControl( 251 ).setLabel( _( 251 ) )
             self.getControl( 252 ).setLabel( _( 252 ) )

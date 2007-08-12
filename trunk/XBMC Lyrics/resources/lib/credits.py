@@ -28,7 +28,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         try:
             #team credits
             self.getControl( 20 ).setLabel( __scriptname__ )
-            self.getControl( 30 ).setLabel( "%s: %s (r%s)" % ( _( 1006 ), __version__, __svn_revision__, ) )
+            self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
             self.getControl( 40 ).addLabel( __svn_url__ )
             self.getControl( 901 ).setLabel( _( 901 ) )
             self.getControl( 101 ).reset()
