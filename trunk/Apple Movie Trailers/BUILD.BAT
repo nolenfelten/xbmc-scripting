@@ -1,55 +1,59 @@
-@Echo off
-Cls
+@ECHO off
+CLS
+COLOR 1B
 
-Set ScriptName=Apple Movie Trailers
+SET ScriptName=Apple Movie Trailers
+
+TITLE %ScriptName% Build Script!
 
 :: Create Build folder
-Echo ------------------------------
-Echo Creating %ScriptName% Build Folder . . .
-rmdir BUILD /S /Q
-md BUILD
-Echo.
+ECHO ------------------------------
+ECHO Creating %ScriptName% Build Folder . . .
+RMDIR BUILD /S /Q
+MD BUILD
+ECHO.
 
-:: Extract Revision # and set %Revision% variable
-Echo ------------------------------
-Echo Extracting revision number . . .
-Echo.
-For /F "Tokens=2 Delims=]" %%r In ('Type ".svn\entries" ^| FIND /v /n "&_&_&_&" ^| FIND "[11]"') Do Set Revision=%%r
+:: Extract Revision # and SET %Revision% variable
+ECHO ------------------------------
+ECHO Extracting revision number . . .
+ECHO.
+FOR /F "Tokens=2* Delims=]" %%r IN ('FIND /v /n "&_&_&_&" ".svn\entries" ^| FIND "[11]"') DO SET Revision=%%r
 
 :: Create exclude file
-Echo ------------------------------
-Echo Creating exclude.txt file . . .
-Echo.
-Echo .svn>"BUILD\exclude.txt"
-Echo Thumbs.db>>"BUILD\exclude.txt"
-Echo Desktop.ini>>"BUILD\exclude.txt"
+ECHO ------------------------------
+ECHO Creating exclude.txt file . . .
+ECHO.
+ECHO .svn>"BUILD\exclude.txt"
+ECHO Thumbs.db>>"BUILD\exclude.txt"
+ECHO Desktop.ini>>"BUILD\exclude.txt"
 
 :: Create release version..
-Echo ------------------------------
-Echo Copying required files to \Build\%ScriptName%\ folder . . .
-XCopy resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-Copy default.tbn "BUILD\%ScriptName%\"
+ECHO ------------------------------
+ECHO Copying required files to \Build\%ScriptName%\ folder . . .
+XCOPY resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+COPY default.tbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
-Echo # Built with build.bat version 1.0 - Script Revision: %Revision%> "BUILD\%ScriptName%\default.py"
-For /F "Delims=" %%L In (default.py) Do (
-    If /I "%%L"=="__svn_revision__ = 0" (
-        Echo __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
-    ) Else If "%%L"=="#" (
-        Echo. >> "BUILD\%ScriptName%\default.py"
-    ) Else (
-        Echo %%L >> "BUILD\%ScriptName%\default.py"
+ECHO # Built with build.bat version 1.0 - Script Revision: %Revision%> "BUILD\%ScriptName%\default.py"
+FOR /F "Tokens=1,2* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
+    IF /I "%%M"=="__svn_revision__ = 0" (
+        ECHO __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
+    ) ELSE IF "%%M"=="" (
+        ECHO. >> "BUILD\%ScriptName%\default.py"
+    ) ELSE (
+        ECHO %%M >> "BUILD\%ScriptName%\default.py"
         )
     )
 )
-Echo.
+ECHO.
+ECHO.
 
-Del "BUILD\exclude.txt"
+DEL "BUILD\exclude.txt"
 
 :: Notify user of completion
-Echo ------------------------------
-Echo Build Complete - Scroll Up to check for errors.
-Echo Final build is located in the BUILD folder.
-Echo copy: \%ScriptName%\ folder in the \BUILD\ folder.
-Echo to: /XBMC/scripts/ folder.
-pause
+ECHO ------------------------------
+ECHO Build Complete - Scroll Up to check FOR errors.
+ECHO Final build is located IN the BUILD folder.
+ECHO COPY: \%ScriptName%\ folder IN the \BUILD\ folder.
+ECHO to: /XBMC/scripts/ folder.
+PAUSE
