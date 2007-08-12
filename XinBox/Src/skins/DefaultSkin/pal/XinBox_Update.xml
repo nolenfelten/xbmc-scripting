@@ -125,7 +125,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>Change Log</label>
+				<label>-</label>
 				<onup>50</onup>
 				<onright>72</onright>
 				<ondown>61</ondown>
@@ -144,7 +144,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>Update</label>
+				<label>-</label>
 				<onup>50</onup>
 				<onright>63</onright>
 				<ondown>62</ondown>

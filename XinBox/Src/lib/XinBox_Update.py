@@ -53,6 +53,8 @@ class Update( xbmcgui.WindowXML):
         self.returnval = 0
         self.getControl(80).setLabel(self.language(410))
         self.getControl(81).setLabel("V." + __version__)
+        self.getControl(61).setLabel(self.language(393))
+        self.getControl(62).setLabel(self.language(13))
         self.base_url = XinBox_Util.__BaseURL__
         self.dialog = xbmcgui.DialogProgress()
         self._check_for_new_version()

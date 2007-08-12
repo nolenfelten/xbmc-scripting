@@ -20,9 +20,8 @@ import threading
 
 scriptpath = os.getcwd().replace(";","")+"\\"
 
-lang = Language(XinBox_Util.__scriptname__)
-lang.load(scriptpath + "\\src\\language")
-_ = lang.string
+lang = Language(scriptpath + "\\src\\language")
+_ = lang.localized
 
 
 if __name__ == '__main__':
