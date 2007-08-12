@@ -1,4 +1,5 @@
 @Echo off
+Cls
 
 Set ScriptName=Apple Movie Trailers
 
@@ -14,7 +15,6 @@ Echo ------------------------------
 Echo Extracting revision number . . .
 Echo.
 For /F "Tokens=2 Delims=]" %%r In ('Type ".svn\entries" ^| FIND /v /n "&_&_&_&" ^| FIND "[11]"') Do Set Revision=%%r
-Echo.
 
 :: Create exclude file
 Echo ------------------------------
@@ -23,7 +23,6 @@ Echo.
 Echo .svn>"BUILD\exclude.txt"
 Echo Thumbs.db>>"BUILD\exclude.txt"
 Echo Desktop.ini>>"BUILD\exclude.txt"
-Echo.
 
 :: Create release version..
 Echo ------------------------------
@@ -32,10 +31,12 @@ XCopy resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclud
 Copy default.tbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
-Echo # Built with build.bat version 1.0 > "BUILD\%ScriptName%\default.py"
+Echo # Built with build.bat version 1.0 - Script Revision: %Revision%> "BUILD\%ScriptName%\default.py"
 For /F "Delims=" %%L In (default.py) Do (
     If /I "%%L"=="__svn_revision__ = 0" (
         Echo __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
+    ) Else If "%%L"=="#" (
+        Echo. >> "BUILD\%ScriptName%\default.py"
     ) Else (
         Echo %%L >> "BUILD\%ScriptName%\default.py"
         )
@@ -46,6 +47,7 @@ Echo.
 Del "BUILD\exclude.txt"
 
 :: Notify user of completion
+Echo ------------------------------
 Echo Build Complete - Scroll Up to check for errors.
 Echo Final build is located in the BUILD folder.
 Echo copy: \%ScriptName%\ folder in the \BUILD\ folder.
