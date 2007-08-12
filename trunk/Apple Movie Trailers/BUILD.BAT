@@ -1,6 +1,6 @@
 @Echo off
 
-SET ScriptName=Apple Movie Trailers
+Set ScriptName=Apple Movie Trailers
 
 :: Create Build folder
 Echo ------------------------------
@@ -13,7 +13,7 @@ Echo.
 Echo ------------------------------
 Echo Extracting revision number . . .
 Echo.
-FOR /F "Tokens=2 Delims=]" %%r IN ('TYPE ".svn\entries" ^| FIND /v /n "&_&_&_&" ^| FIND "[4]"') DO SET Revision=%%r
+For /F "Tokens=2 Delims=]" %%r In ('Type ".svn\entries" ^| FIND /v /n "&_&_&_&" ^| FIND "[11]"') Do Set Revision=%%r
 Echo.
 
 :: Create exclude file
@@ -41,8 +41,9 @@ For /F "Delims=" %%L In (default.py) Do (
         )
     )
 )
-::copy default.py "BUILD\%ScriptName%\"
 Echo.
+
+Del "BUILD\exclude.txt"
 
 :: Notify user of completion
 Echo Build Complete - Scroll Up to check for errors.
