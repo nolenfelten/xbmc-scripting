@@ -87,7 +87,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(81).setLabel("V." + VERSION)
         MenuItems = [xbmcgui.ListItem(self.lang(11),self.lang(16),"XBlogin.png","XBlogin.png"),
                      xbmcgui.ListItem(self.lang(12),self.lang(17),"XBcreatenew.png","XBcreatenew.png"),
-                     xbmcgui.ListItem(self.lang(13),self.lang(19),"XBchangesettings.png","XBchangesettings.png"),
+                     xbmcgui.ListItem(self.lang(13),self.lang(19),"XBupdate.png","XBupdate.png"),
                      xbmcgui.ListItem(self.lang(14),self.lang(19),"XBabouticon.png","XBabouticon.png"),
                      xbmcgui.ListItem(self.lang(15),self.lang(19),"XBquiticon.png","XBquiticon.png")]
         for item in MenuItems:
@@ -116,11 +116,12 @@ class GUI( xbmcgui.WindowXML ):
                 self.close()
 
     def update(self):
-        w = XinBox_Update.Update(self.lang)
+        w = XinBox_Update.Update("XinBox_Update.xml",self.srcpath,"DefaultSkin",lang=self.lang)
+        w.doModal()
         returnval = w.returnval
         del w
         if returnval == 1:
-            xbmc.executescript(__udata__ + "XinBox_Update.py")
+            xbmc.executescript("X:\\XinBox_Update.py")
             self.close()
 
     def launchabout(self):
