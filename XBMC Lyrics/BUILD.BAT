@@ -2,14 +2,18 @@
 CLS
 COLOR 1B
 
-SET ScriptName=XBMC Lyrics
+:: Set script name based on current directory
+FOR /F "Delims=" %%D IN ('ECHO %CD%') DO SET ScriptName=%%~nD
 
+:: Set window title
 TITLE %ScriptName% Build Script!
 
 :: Create Build folder
 ECHO ------------------------------
-ECHO Creating %ScriptName% Build Folder . . .
-RMDIR BUILD /S /Q
+ECHO Creating \BUILD\%ScriptName%\ folder . . .
+IF EXIST BUILD (
+    RD BUILD /S /Q
+)
 MD BUILD
 ECHO.
 
@@ -17,7 +21,7 @@ ECHO.
 ECHO ------------------------------
 ECHO Extracting revision number . . .
 ECHO.
-FOR /F "Tokens=2* Delims=]" %%r IN ('FIND /v /n "&_&_&_&" ".svn\entries" ^| FIND "[11]"') DO SET Revision=%%r
+FOR /F "Tokens=2* Delims=]" %%R IN ('FIND /v /n "&_&_&_&" ".svn\entries" ^| FIND "[11]"') DO SET Revision=%%R
 
 :: Create exclude file
 ECHO ------------------------------
@@ -48,12 +52,17 @@ FOR /F "Tokens=1,2* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
 ECHO.
 ECHO.
 
+:: Delete exclude.txt file
 DEL "BUILD\exclude.txt"
 
+:Finish
 :: Notify user of completion
 ECHO ------------------------------
-ECHO Build Complete - Scroll Up to check FOR errors.
-ECHO Final build is located IN the BUILD folder.
-ECHO COPY: \%ScriptName%\ folder IN the \BUILD\ folder.
+ECHO Build Complete - Scroll up to check for errors.
+ECHO.
+ECHO Final build is located in the the \BUILD\ folder.
+ECHO.
+ECHO copy: \%ScriptName%\ folder from the \BUILD\ folder.
 ECHO to: /XBMC/scripts/ folder.
+ECHO.
 PAUSE
