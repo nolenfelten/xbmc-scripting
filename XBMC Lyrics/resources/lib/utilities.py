@@ -14,6 +14,7 @@ DEBUG_MODE = 0
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
 SETTINGS_VERSIONS = ( "1.5.5", )
@@ -154,5 +155,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Settings::save_settings [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (ver: %s) Settings::save_settings [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
             return False
