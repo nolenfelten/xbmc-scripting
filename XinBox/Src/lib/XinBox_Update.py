@@ -202,7 +202,7 @@ class Update( xbmcgui.WindowXML):
                 self.dialog.update( pct, "%s %s" % ( self.language(397), url, ), "%s %s" % ( self.language(398), path, ), "%s %s" % ( self.language(399), file, ) )
                 if ( self.dialog.iscanceled() ): raise
                 if ( not os.path.isdir( path ) ): os.makedirs( path )
-          ##      urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), "%s\\%s" % ( path, file, ) )
+                urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), "%s\\%s" % ( path, file, ) )
         except:
             self.removedir("Q:\\\\scripts\\\\%s_v%s" % ( __scriptname__, version, ))
             raise
