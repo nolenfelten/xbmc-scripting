@@ -14,6 +14,7 @@ DEBUG_MODE = 0
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
 DATABASE_VERSIONS = ( "pre-0.98.7", "0.98.7", "pre-0.98.8", "0.98.8", "pre-0.98.9", "0.98.9", )
@@ -152,7 +153,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         """ setup default values if none obtained """
-        LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
+        LOG( LOG_NOTICE, "%s (rev: %s) used default settings", __scriptname__, __svn_revision__ )
         settings = {  
             "version": __version__,
             "skin": "Default",
@@ -184,5 +185,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Settings::save_settings [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) Settings::save_settings [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
             return False

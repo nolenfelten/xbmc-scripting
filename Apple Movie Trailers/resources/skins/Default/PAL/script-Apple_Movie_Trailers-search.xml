@@ -41,7 +41,7 @@
 			<description>Version Label</description>
 			<posx>588</posx>
 			<posy>-2</posy>
-			<width>200</width>
+			<width>250</width>
 			<align>right</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>

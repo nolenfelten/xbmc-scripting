@@ -16,6 +16,7 @@ socket.setdefaulttimeout( 10 )
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 
 class Parser( SGMLParser ):

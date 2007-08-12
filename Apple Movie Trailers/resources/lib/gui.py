@@ -18,6 +18,7 @@ def _progress_dialog( count=0, msg="" ):
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 try:
     _progress_dialog( None )
@@ -234,7 +235,7 @@ class GUI( xbmcgui.WindowXML ):
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::showCategories [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::showCategories [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def showTrailers( self, sql, params=None, choice=0, force_update=False ):
@@ -262,7 +263,7 @@ class GUI( xbmcgui.WindowXML ):
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::showTrailers [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::showTrailers [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def _get_thumbnail( self, movie ):
@@ -382,7 +383,7 @@ class GUI( xbmcgui.WindowXML ):
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::showTrailerInfo [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::showTrailerInfo [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
         xbmcgui.unlock()
 
     def showOverlays( self, trailer=-1 ):
@@ -420,7 +421,7 @@ class GUI( xbmcgui.WindowXML ):
                     while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
                 if ( choice >= 0 ):
                     url = trailer_urls[ choice ]
-                    LOG( LOG_DEBUG, "%s (ver: %s) [choice=%d url=%s]", __scriptname__, __version__, choice, url )
+                    LOG( LOG_DEBUG, "%s (rev: %s) [choice=%d url=%s]", __scriptname__, __svn_revision__, choice, url )
                     filename = self.trailers.movies[ trailer ].saved
                     if ( url.endswith( "p.mov" ) ):
                         self.core = xbmc.PLAYER_CORE_DVDPLAYER
@@ -445,13 +446,13 @@ class GUI( xbmcgui.WindowXML ):
                     elif ( self.trailers.movies[ trailer ].saved_core is not None ):
                         self.core = self.trailers.movies[ trailer ].saved_core
                 else: filename = None
-                LOG( LOG_DEBUG, "%s (ver: %s) [%s -> %s]", __scriptname__, __version__, "GUI::playTrailer", filename )
+                LOG( LOG_DEBUG, "%s (rev: %s) [%s -> %s]", __scriptname__, __svn_revision__, "GUI::playTrailer", filename )
                 if ( filename is not None ):
                     self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                     self._set_video_resolution()
                     xbmc.Player( self.core ).play( filename.encode( "utf-8" ) )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::playTrailer [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::playTrailer [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
 
     def saveThumbnail( self, filename, trailer, poster ):
@@ -465,7 +466,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.trailers.movies[ trailer ].saved = filename
                     ##self.showOverlays( trailer )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::saveThumbnail [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::saveThumbnail [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
     def showContextMenu( self ):
         if ( self.controlId == self.CONTROL_CATEGORY_LIST or self.controlId == self.CONTROL_CAST_LIST ):
@@ -550,7 +551,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getListItem( trailer ).setThumbnailImage( thumbnail )
             self.showOverlays( trailer )
         else:
-            LOG( LOG_ERROR, "%s (ver: %s) [%s]", __scriptname__, __version__, "GUI::markAsWatched" )
+            LOG( LOG_ERROR, "%s (rev: %s) [%s]", __scriptname__, __svn_revision__, "GUI::markAsWatched" )
 
     def perform_search( self ):
         self.search_sql = ""
@@ -725,7 +726,7 @@ class GUI( xbmcgui.WindowXML ):
                 self.showOverlays( trailer )
             dialog.close()
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::saveCachedMovie [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::saveCachedMovie [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
             dialog.close()
             xbmcgui.Dialog().ok( _( 56 ), _( 90 ) )
                 
@@ -793,7 +794,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( controlId == self.CONTROL_CAST_LIST and self.cast_exists ):
                 self.getActorChoice()
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::onClick [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::onClick [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
 
     def onFocus( self, controlId ):
@@ -844,7 +845,7 @@ class GUI( xbmcgui.WindowXML ):
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getActorChoice()
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) GUI::onAction [%s]", __scriptname__, __version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) GUI::onAction [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
 def main():
     _progress_dialog( len( modules ) + 1, _( 55 ) )

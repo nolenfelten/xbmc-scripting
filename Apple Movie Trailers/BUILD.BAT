@@ -9,6 +9,13 @@ rmdir BUILD /S /Q
 md BUILD
 Echo.
 
+:: Extract Revision # and set %Revision% variable
+Echo ------------------------------
+Echo Extracting revision number . . .
+Echo.
+FOR /F "Tokens=2 Delims=]" %%r IN ('TYPE ".svn\entries" ^| FIND /v /n "&_&_&_&" ^| FIND "[4]"') DO SET Revision=%%r
+Echo.
+
 :: Create exclude file
 Echo ------------------------------
 Echo Creating exclude.txt file . . .
@@ -21,9 +28,20 @@ Echo.
 :: Create release version..
 Echo ------------------------------
 Echo Copying required files to \Build\%ScriptName%\ folder . . .
-xcopy resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-copy default.tbn "BUILD\%ScriptName%\"
-copy default.py "BUILD\%ScriptName%\"
+XCopy resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+Copy default.tbn "BUILD\%ScriptName%\"
+
+:: Create new default.py with __svn_revision__ embedded
+Echo # Built with build.bat version 1.0 > "BUILD\%ScriptName%\default.py"
+For /F "Delims=$" %%L In (default.py) Do (
+    If /I "%%L"=="__svn_revision__ = 0" (
+        Echo __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
+    ) Else (
+        Echo %%L >> "BUILD\%ScriptName%\default.py"
+        )
+    )
+)
+::copy default.py "BUILD\%ScriptName%\"
 Echo.
 
 :: Notify user of completion
