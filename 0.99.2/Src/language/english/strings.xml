@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.4-->
+<!--English Strings VER: 0.5-->
+	<!--Changes since Ver: 0.4-->
+		<!--NEW: 404, 405-411, 164-166, -->
+		<!--Changed: 393, 392, 403, 400, 401 -->
 	<!--Changes since Ver: 0.3-->
 		<!--NEW: 162, 357, 358, 336, 163 -->
 <strings>
@@ -150,6 +153,9 @@
 	<string id="161">A: Edit Contact Name/Email address    B: Delete contact    White Button: Add Contact to Address Field</string>
 	<string id="162">Select to toggle if Mini-Mode will play your selected inbox "New Email" notification SFX.</string>
 	<string id="163">Select to toggle if two XinBox + XBMC promoting lines are added to bottom of emails sent with XinBox.</string>
+	<string id="164">Select to either Update to this Version or read this Version's Change Log.</string>
+	<string id="165">Select to Fetch and read the Change Log for this Version.</string>
+	<string id="166">Select to Update XinBox to this Version.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -290,16 +296,25 @@
 	<!-- Update Labels -->
 	<string id="390">Your version is up to date.</string>
 	<string id="391">Fetching current tagged versions...</string>
-    	<string id="392">is newer</string>
-    	<string id="393">Would you like to update?</string>
+    	<string id="392">Update XinBox to Version %s</string>
+    	<string id="393">Change Log</string>
     	<string id="394">Fetching file list...</string>
     	<string id="395">Please wait...</string>
     	<string id="396">Version</string>
     	<string id="397">Fetching:</string>
     	<string id="398">Path:</string>
     	<string id="399">File:</string>
-    	<string id="400">Your new version was saved to:</string>
-    	<string id="401">No tagged versions were found!</string>
+    	<string id="400">Fetching Change Log...</string>
+    	<string id="401">Error Fetching tagged versions!</string>
     	<string id="402">There was an error updating script!</string>
-	<string id="403">Delete old version, rename and run new version?</string>
+	<string id="403">Keep copy of old %s version?</string>
+	<string id="404">New Update(s) Available!</string>
+	<string id="405">Newest</string>
+	<string id="406">Newer</string>
+	<string id="407">Current</string>
+	<string id="408">Older</string>
+	<string id="409">Incompatible</string>
+	<string id="410">Update Menu</string>
+	<string id="411">No Change Log Available for this Version.</string>
 </strings>
+

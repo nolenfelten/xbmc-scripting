@@ -55,7 +55,7 @@
   		<control type="label" id="81">
         		<description>Account Label</description>
         		<posx>440</posx>
-        		<posy>60</posy>
+        		<posy>70</posy>
 			<label>-</label>
         		<width>200</width>
         		<font>font13</font>

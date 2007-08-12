@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--Finnish Strings VER: 0.3-->
+<!-- English Strings v.0.4 -->
+<!--     Xinbox v.0.99     -->
+<!--  Finnish v.11.8.2007  -->
 
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Päävalikko</string>
-  	<string id="11">Kirjaudu sisään</string>
-	<string id="12">Luo</string>
-	<string id="13">Päivitä</string>
+  	<string id="11">Kirjaudu</string>
+	<string id="12">Luo tili</string>
+	<string id="13">Ohjelmapäivitys</string>
 	<string id="14">Tietoja ohjelmasta</string>
 	<string id="15">Lopeta</string>
 	<string id="16">Xinbox tiliin</string>
 	<string id="17">Uusi Xinbox tili</string>
-	<string id="18">Xinbox asetukset</string>
 	<string id="19">Xinbox skripti</string>
 	<string id="20">Valitse</string>
 	<string id="21">Ohje</string>
@@ -21,7 +22,6 @@
 	<string id="30">Kirjaudu sisään</string>
 	<string id="31">Anna tilin salasana</string>
 	<string id="32">Annettu salasana on väärä</string>
-	<string id="33">Anna oletustilin salasana</string>
 
 	<!-- Test Inbox Labels -->
 	<string id="34">Testataan palvelimia</string>
@@ -88,10 +88,10 @@
 	<string id="98">Ei käytössä</string>
 	
 	<!-- Help Labels -->
-	<string id="99">XinBox Ohje:/string>
-	<string id="100">Valitse mikäli haluat kirjautua sisään XinBox tiliin. Mikäli tiliä ei ole luotu, täytyy ensimmäiseksi luoda XinBox tili.</string>
+	<string id="99">XinBox Ohje:</string>
+	<string id="100">Valitse mikäli haluat kirjautua sisään XinBox tiliin. Ensimmäiseksi täytyy luoda XinBox tili.</string>
 	<string id="101">Valitse mikäli haluat luoda uuden XinBox tilin. XinBox tili vaaditaan kirjautuaksesi.</string>
-	<string id="102">Valitse mikäli haluat päivittää XinBox asetuksia.</string>
+	<string id="102">Valitse mikäli haluat päivittää XinBox.</string>
 	<string id="103">Valitse mikäli haluat tietoja XinBox skriptistä.</string>
 	<string id="104">Valitse mikäli haluat poistua XinBox skriptistä ja palata XBMC:iin.</string>
 	<string id="105">Valitse mikäli haluat asettaa XinBox tilin nimen. Huom: Et voi tallentaa tiliä ilman nimeä.</string>	
@@ -118,9 +118,9 @@
 	<string id="126">Valitse mikäli haluat muokata nykyistä tiliä.</string>
 	<string id="127">Valitse mikäli haluat poistaa nykyisen tilin.</string>
 	<string id="128">Valitse mikäli haluat poistua ja siirtyä aiempaan valikkoon.</string>
-	<string id="129">Valitse mikäli haluat muokata "Uusi viesti" merkkiääntä. Tämä ääni kuuluu kun sähköposti saapuu kansioon. Valitse silent.wav jos et halua kuulla tehosteääntä.</string>
+	<string id="129">Valitse mikäli haluat vaihtaa "Uusi viesti" merkkiääntä. Tämä ääni kuuluu kun sähköposti saapuu kansioon. Valitse silent.wav jos et halua kuulla ääntä.</string>
 	<string id="130">Valitse mikäli haluat tallentaa muutokset ja palata tili-valikkoon. Huom: Muutoksia ei talleteta ennenkuin tallennat tilin.</string>
-    <string id="131">Valitse mikäli haluat vaihtaa tämän postilaatikon oletukseksi. Oletus postilaatikko avautuu automaattisesti kirjautuessasi tiliin. Huomaa: Ainostaan yksi postilaatikko tiliä kohti voi olla oletuksena.</string>
+    	<string id="131">Valitse mikäli haluat vaihtaa tämän postilaatikon oletukseksi. Oletus postilaatikko avautuu automaattisesti kirjautuessasi tiliin. Huomaa: Ainostaan yksi postilaatikko tiliä kohti voi olla oletuksena.</string>
 	<string id="132">Valitse mikäli haluat tarkistaa uudet viestit.</string>
 	<string id="133">Valitse mikäli haluat lähettää uuden viestin.</string>
 	<string id="134">Valitse mikäli haluat tyhjentää postilaatikon. Huomaa: Postilaatikon tyhjennys poistaa kaikki viestit postilaatikosta, ei palvelimelta.</string>
@@ -149,11 +149,13 @@
 	<string id="159">A: Muokkaa yhteystiedon tietoja         B: Poista yhteystieto          Valkea nappi: Lähetä viesti yhteystiedolle</string>
 	<string id="160">Valitse mikäli haluat lisätä uuden yhteystiedon.</string>
 	<string id="161">A: Muokkaa yhteystiedon tietoja         B: Poista yhteystieto          Valkea nappi: Lisää yhteystieto vastaanottajaksi</string>
+	<string id="162">Valitse mikäli haluat asettaa pienoistila antamaan "Uusi viesti" äänimerkin.</string>
+	<string id="163">Valitse mikäli haluat asettaa viestin loppuun näkymään kaksi XinBox ja XBMC ohjelmaa mainostavaa riviä.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Tili</string>
 	<string id="201">Haluatko poistaa tilin?</string>
-    <string id="202">Kaikki postilaatikot tässä tilissä poistetaan.</string> 
+        <string id="202">Kaikki postilaatikot tässä tilissä poistetaan.</string> 
 	
 
 	<!-- Email Labels -->
@@ -178,7 +180,7 @@
 	<string id="240">Uuden viestin merkkiääni:</string>
 	<string id="241">Valitse "Uusi viesti" merkkiääni:</string>
 	<string id="242">OK</string>
-    <string id="243">Oletus postilaatikko</string>
+        <string id="243">Oletus postilaatikko</string>
 
 	<!-- InBox Labels -->
 	<string id="250">Nouda</string>
@@ -187,7 +189,7 @@
 	<string id="253">Muodostetaan postilaatikkoa...</string>
 	<string id="254">Lisätään uusia viestejä...</string>
 	<string id="255">Ei aihetta</string>
-    <string id="256">Postilaatikko tyhjä</string>
+        <string id="256">Postilaatikko tyhjä</string>
 	<string id="257">Palvelimen koko:</string>
 	<string id="258">Postilaatikon koko:</string>
 	<string id="259">Tyhjä</string>
@@ -222,10 +224,10 @@
 	<string id="300">Lähetetään viestiä...</string>
 	<string id="301">Viesti lähetetty.</string>
 	<string id="302">Viestin lähetys epäonnistui.</string>
-	<string id="303">Valmistellaan viestiä..</string>
+	<string id="303">Valmistellaan viestiä...</string>
 	<string id="304">Kirjoitetaan viestin otsikkoa..</string>
 	<string id="305">Kirjoitetaan viestiä..</string>
-	<string id="306">Lisätään liitteet..</string>
+	<string id="306">Lisätään liitteet...</string>
 	<string id="307">Viestin muodostus epäonnistui.</string>
 	<string id="308">Kirjaudutaan SMTP-palvelimelle..</string>
 	<string id="309">SMTP-palvelimelle kirjautuminen epäonnistui.</string>
@@ -255,6 +257,7 @@
 	<string id="333">Tyhjennä</string>
 	<string id="334">Tyhjennä viestin sisältö?</string>
 	<string id="335">Viestin sisältö</string>
+	<string id="336">Mainosta skriptiä</string>
 
 	<!-- Mini-Mode Labels -->
 	<string id="350">Pienoistila käytössä</string>
@@ -263,7 +266,9 @@
 	<string id="353">Käynnistyy pienoistilaan</string>
 	<string id="354">Pienoistilan viive(s)</string>
 	<string id="355">Avaa postilaatikko</string>
-    <string id="356">Käynnistetty</string>
+        <string id="356">Käynnistetty</string>
+	<string id="357">Pienoistilan merkkiääni</string>
+	<string id="358">Suljettu</string>
 
 	<!-- About Labels -->
 	<string id="360">Tietoja</string>
@@ -286,16 +291,16 @@
 	<!-- Update Labels -->
 	<string id="390">Ohjelmasi on jo ajantasalla</string>
 	<string id="391">Tarkistetaan uusinta versiota...</string>
-    	<string id="392">on uudempi</string>
-    	<string id="393">Haluatko päivittää ohjelman?</string>
-    	<string id="394">Noudetaan tiedostoluetteloa...</string>
-    	<string id="395">Odota...</string>
-    	<string id="396">Versio</string>
-    	<string id="397">Haetaan:</string>
-    	<string id="398">Polku:</string>
-    	<string id="399">Tiedosto:</string>
-    	<string id="400">Ohjelma tallennettiin kansioon:</string>
-    	<string id="401">Uusinta versiota ei löytynyt!</string>
-    	<string id="402">Päivitys ei onnistunut!</string>
-	<string id="403">Poistataan vanha versio, nimetään uudelleen ja käynnistetään uusi versio?</string>
+        <string id="392">on uudempi</string>
+        <string id="393">Haluatko päivittää ohjelman?</string>
+        <string id="394">Noudetaan tiedostoluetteloa...</string>
+        <string id="395">Odota...</string>
+        <string id="396">Versio</string>
+   	<string id="397">Ladataan:</string>
+   	<string id="398">Polku:</string>
+   	<string id="399">Tiedosto:</string>
+   	<string id="400">Ohjelma tallennettiin kansioon:</string>
+   	<string id="401">Uutta versiota ei löytynyt!</string>
+   	<string id="402">Päivitys ei onnistunut!</string>
+	<string id="403">Poistetaan vanha ja korvataan uudemmalla versiolla?</string>
 </strings>
