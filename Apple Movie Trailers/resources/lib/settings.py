@@ -45,7 +45,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _set_labels( self ):
         try:
             self.getControl( 20 ).setLabel( self._capitalize_text( __scriptname__ ) )
-            self.getControl( 30 ).setLabel( self._capitalize_text( "%s: %s (r%s)" % ( _( 1006 ), __version__, __svn_revision__, ) ) )
+            self.getControl( 30 ).setLabel( self._capitalize_text( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) ) )
             self.getControl( 250 ).setLabel( self._capitalize_text( _( 250 ) ) )
             self.getControl( 251 ).setLabel( self._capitalize_text( _( 251 ) ) )
             self.getControl( 252 ).setLabel( self._capitalize_text( _( 252 ) ) )
