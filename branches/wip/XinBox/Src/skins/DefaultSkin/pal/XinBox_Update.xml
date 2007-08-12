@@ -75,7 +75,7 @@
         		<posx>320</posx>
         		<posy>430</posy>
 			<label>-</label>
-        		<width>100</width>
+        		<width>300</width>
         		<font>font13</font>
 			<textcolor>FFB2D4F5</textcolor>
 			<visible>!Control.HasFocus(50)</visible>
