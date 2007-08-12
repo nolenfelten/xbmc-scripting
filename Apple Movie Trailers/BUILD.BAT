@@ -33,7 +33,7 @@ Copy default.tbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
 Echo # Built with build.bat version 1.0 > "BUILD\%ScriptName%\default.py"
-For /F "Delims=$" %%L In (default.py) Do (
+For /F "Delims=" %%L In (default.py) Do (
     If /I "%%L"=="__svn_revision__ = 0" (
         Echo __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
     ) Else (
