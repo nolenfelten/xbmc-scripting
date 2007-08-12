@@ -16,6 +16,7 @@ from utilities import *
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 
 class Database:
@@ -311,7 +312,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return self.cursor.lastrowid
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Records::add [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) Records::add [sql=%s %s]", __scriptname__, __svn_revision__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def delete( self, table, columns, params, commit=False ):
@@ -324,7 +325,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Records::delete [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) Records::delete [sql=%s %s]", __scriptname__, __svn_revision__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def update( self, table, columns, params, key, commit=False ):
@@ -346,7 +347,7 @@ class Records:
             if ( commit ): ok = self.commit()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Records::update [sql=%s %s]", __scriptname__, __version__, sql, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) Records::update [sql=%s %s]", __scriptname__, __svn_revision__, sql, sys.exc_info()[ 1 ], )
             return False
 
     def fetch( self, sql, params=None, all=False ):

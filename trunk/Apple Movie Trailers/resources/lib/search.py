@@ -15,6 +15,7 @@ import database
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __version__ = sys.modules[ "__main__" ].__version__
+__svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 
 class GUI( xbmcgui.WindowXMLDialog ):
@@ -53,7 +54,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _set_labels( self ):
         try:
             self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( self._capitalize_text( __scriptname__ ) )
-            self.getControl( self.CONTROL_VERSION_LABEL ).setLabel( self._capitalize_text( "%s: %s" % ( _( 1006 ), __version__, ) ) )
+            self.getControl( self.CONTROL_VERSION_LABEL ).setLabel( self._capitalize_text( "%s: %s (r%s)" % ( _( 1006 ), __version__, __svn_revision__, ) ) )
             self.getControl( self.CONTROL_SQL_RESULTS_LABEL ).setLabel( self._capitalize_text( "%s:" % ( _( 93 ), ) ) )
             self.getControl( 102 ).setLabel( self._capitalize_text( _( 113 ) ) )
             self.getControl( 112 ).setLabel( self._capitalize_text( _( 114 ) ) )

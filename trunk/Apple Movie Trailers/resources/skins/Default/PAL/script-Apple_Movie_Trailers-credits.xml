@@ -29,7 +29,7 @@
 			<description>Credits Version Label</description>
 			<posx>370</posx>
 			<posy>48</posy>
-			<width>150</width>
+			<width>250</width>
 			<align>right</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
