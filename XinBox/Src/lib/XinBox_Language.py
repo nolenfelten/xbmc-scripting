@@ -41,4 +41,4 @@ class Language:
                 return self.strings[int(number)].decode("utf-8")
             else:return self.strings[int(number)]
         else:
-            return "unknown string id"
+            return "unknown string id (%s)" % number
