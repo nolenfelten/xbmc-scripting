@@ -1,9 +1,9 @@
-<window>
+<window id="3000">
 
-	<id>1156</id>
 	<allowoverlay>no</allowoverlay>
 	<resolution>PAL</resolution>
 	<defaultcontrol>10</defaultcontrol>
+    <useincludes>true</useincludes>
 
 	<controls>
 
