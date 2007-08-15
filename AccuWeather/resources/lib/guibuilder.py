@@ -2,109 +2,6 @@
 This module creates your scripts GUI from a standard XBMC skinfile.xml. It works for both Windows and
 WindowDialogs. Hopefully it will make it easier to skin your scripts for different XBMC skins.
 
-There is one optional tag you may use, <resolution>. This tag is used in place of the folder structure XBMC
-skinning engine uses. It's used for setCoordinateResolution().  It is suggested you use the <resolution> tag.
-<resolution> can be one of (1080i, 720p, 480p, 480p16x9, ntsc, ntsc16x9, pal, pal16x9, pal60, pal6016x9)
-e.g. <resolution>pal</resolution>
-
-GUI Builder sets initial focus to the <control> with <id> equal to <defaultcontrol>.
-
-You may use <include> tags and references.xml will be used for default values if no tag is given.
-(Unless you use fastMethod=True) All unsupported tags will be ignored. (e.g. <animation>)
-
-GUI Builder sets up navigation based on the <onup>, <ondown>, <onleft> and <onright> tags.
-
-The <control> <type> fadelabel takes multiple <label> and/or <info> tags.
-
-The <control> <type> list supports an additional tag <label2> for use as the second column.
-GUI Builder creates a listitem from multiple <label>, <label2> and <image> tags. In most cases these
-tags won't be used as your code will populate a list.
-
-You may pass an optional path for any custom textures. If you precede the <texture> tags value with a
-backslash (\) in the xml, it will use the imagePath.
-e.g. <texture>\button.png</texture> will use imagePath
-
-You may pass an optional progress dialog, with an optional first line and percent finished as a continuation
-for your scripts initialization. GUI Builder will begin at percent finished and finish at 100 percent.
-
-You may pass fastMethod=True. If True, no dialogs will be displayed, GUI Builder will not resolve <include> tags
-and will not use default values from references.xml for missing tags. If you do include all necessary tags in the
-xml file and no <include> tags, this can speed up GUI creation slightly.
-
-If you are having problems, pass debug=True and progress will be output to the scripts info window and
-if <loglevel> is at one (1) or higher to xbmc.log.
-
-You need to pass your Window or WindowDialog Class as self and a skin xml file. All other arguments are optional.
-
-**************************************************************************************
-class GUIBuilder:
-    create_gui( win, skin, skinXML, imagePath, useDescAsKey, title, line1, dlg, pct, fastMethod, language, debug )
-
-win					: class - Your Window or WindowDialog class passed as self.
-skin					: [opt] string - The name of the skin you wish to use. ("Default")
-skinXML				: [opt] string - The xml name excluding extension. ("skin") (guibuilder will check for _16x9 also for WS)
-skinPath				: [opt] string - The path of the skins folder. ("q:\scripts\scriptname\resources\skins")
-imageFolder		: [opt] string - The name of the skins image folder. ("gfx")
-useDescAsKey		: [opt] bool - True=<description> as key / False=<id> for key. (False)
-title					: [opt] string - Title you want to use for a new progress dialog. ("Gui Builder)
-line1					: [opt] string - The first line of the progress dialog. ("")
-dlg					: [opt] progress dialog - A current progress dialog. (None)
-pct					: [opt] integer - The percent already completed. (0-100) (0)
-fastMethod			: [opt] bool - True=no dialogs, no <include> tags and no defaults from references.xml. (False)
-language			: [opt] dictionary { int : string } - False=use XBMC language files (False)
-debug				: [opt] bool - True=output debug information / False=no logging. (False)
-
-*Note,	You may use the above as keywords for arguments and skip certain optional arguments.
-			Once you use a keyword, all following arguments require the keyword.
-
-example:
-    def setupGUI( self ):
-        import guibuilder
-        gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, skin="My Skin", fastMethod=True, title="My Script's Name", language=self.language )
-        return ok
-**************************************************************************************
-
-
-GUI Builder's create_gui() returns True if the window creation succeeded or False if something failed. You may
-want to check this before the call to doModal().
-
-GUI Builder creates two variables: self.coordinates[x, y] and self.controls{key : {}}
-	1.	self.coordinates[x, y], a list variable of offsets, for a <coordinates> based window.
-		All control x, y positions will be based on these values if they exist. Defaults to [0, 0]
-	2.	self.controls[key] = { # a dictionary of your controls, with the controls <id> or <description> as the key.
-			"id"				: integer - <id> tag.
-			"controlId"	: integer - Id# XBMC uses for the control.
-			"control"		: <control object> - The control itself.
-			"special"		: integer - Used for list control. (number of items per page)
-			"visible"		: string - <visible> condition.
-			"animation"	: dictionary - <animation> (not used yet).
-			"onclick"		: string - <onclick> event. (eg <onclick>self.exitScript(True)</onclick>)
-			"onfocus"	: string - <onfocus> event (eg <onfocus>self.slidePad(True)</onfocus>)
-		}
-
-	example: How to center zoom a control 20%. w/useDescAsKey=True
-		width = self.controls["Play Button"]["control"].getWidth()
-		height = self.controls["Play Button"]["control"].getHeight()
-		zwidth = width * 1.2
-		zheight = height * 1.2
-		widthOffset = int((zwidth - width) / 2)
-		heightOffset = int((zheight - height) / 2)
-		x, y = self.controls["Play Button"]["control"].getPosition()
-		x -= widthOffset
-		y -= heightOffset
-		self.controls["Play Button"]["control"].setPosition(x, y)
-		self.controls["Play Button"]["control"].setWidth(zwidth)
-		self.controls["Play Button"]["control"].setHeight(zheight)
-
-	example: [visible] w/useDescAsKey=False
-		- self.controls[300]["control"].setVisible(xbmc.getCondVisibility(self.controls[300]["visible"]))
-
-	example: [onclick] w/useDescAsKey=True
-		- exec self.controls["Play Button]["onclick"]
-
-Post a message at http://www.xbmc.xbox-scene.com/forum/ with any suggestions.
-
 Credits:
 GetConditionalVisibility(), GetSkinPath(), LoadIncludes(), LoadIncludesFromXML(), ResolveIncludes()
 The above functions were translated from Xbox Media Center"s source, thanks Developers.
@@ -114,97 +11,73 @@ Nuka1195
 """
 
 import os
-import xbmc, xbmcgui
+import xbmc
+import xbmcgui
 import xml.dom.minidom
-import re
+#import traceback
+
 
 class GUIBuilder:
+    """ Class to create a dictionary of controls and add them to a Window or WindowDialog """
     def __init__( self ):
         pass
         
-    def create_gui(
-        self, win, skin="Default", skinXML="skin", skinPath="resources\\skins", imageFolder="gfx", useDescAsKey=False,
-        title="GUI Builder", line1="", dlg=None, pct=0, fastMethod=False, language=False, debug=False
+    def create_gui( self,
+        win, skin="Default", xml_name="skin", skin_path="resources\\skins", image_path="gfx",
+        use_desc_as_key=True, language=False
         ):
+        """ main function to create the GUI """
         try:
             succeeded = True
-            self.debug = debug
-            self._debug_write( "guibuilder.py", 2 )
             self.win = win
-            skinXML, imagePath = self._get_skin_path( skin, skinPath, imageFolder, skinXML )
-            self.skinXML = os.path.split( skinXML )[ 1 ]
-            self.useDescAsKey = useDescAsKey
-            self.fastMethod = fastMethod
+            xml_file, image_path = self._get_skin_path( skin, xml_name, skin_path, image_path )
+            self.use_desc_as_key = use_desc_as_key
             self._ = language
-            self.pct = pct
-            self.lineno = line1 != ""
-            self.lines = [ "" ] * 3
-            self.lines[ 0 ] = line1
-            self.lines[ self.lineno ] = "Creating GUI from %s." % ( self.skinXML, )
             self._setup_variables()
             self.ClearIncludes()
-            if ( not self.fastMethod ):
-                if ( dlg ): self.dlg = dlg
-                else:
-                    self.dlg = xbmcgui.DialogProgress()
-                    self.dlg.create( title )
-                self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
-            self.pct1 = int( ( 100 - self.pct ) * 0.333 )
-            succeeded = self._parse_xml_file( imagePath, skinXML )
-            if ( succeeded ): succeeded = self._set_navigation()
-            if ( not succeeded ): raise
-            else:
-                if ( self.defaultControl and self.win.controls.has_key( self.navigation[ self.defaultControl ][ 0 ] ) ):
+            succeeded = self._parse_xml_file( xml_file, image_path )
+            if ( succeeded ):
+                self._set_navigation()
+                if ( self.defaultControl and self.defaultControl in self.navigation and self.navigation[ self.defaultControl ][ 0 ] in self.win.controls ):
                     self.win.setFocus( self.win.controls[ self.navigation[ self.defaultControl ][ 0 ] ][ "control" ] )
-                self._set_conditional_visibility()
+                self._set_visibility_and_animations()
                 self._clear_variables()
-        except: succeeded = False
-        if ( not self.fastMethod ): self.dlg.close()
-        return succeeded
+            else: raise
+        except:
+            #traceback.print_exc()
+            succeeded = False
+        return succeeded, image_path
 
-    def _get_skin_path( self, skin, skin_path, image_folder, skin_xml ):
-        cwd = os.path.join( os.getcwd().replace( ";", "" ) )
+    def _get_skin_path( self, skin, xml_name, skin_path, image_path ):
+        """ determines the skin and image path """
+        base_path = os.path.join( os.getcwd().replace( ";", "" ), skin_path )
         if ( skin == "Default" ): current_skin = xbmc.getSkinDir()
-        if ( not os.path.exists( os.path.join( cwd, skin_path, current_skin ))): current_skin = "Default"
-        skin_path = os.path.join( cwd, skin_path, current_skin )
-        image_path = os.path.join( skin_path, image_folder )
-        if ( self.win.getResolution() == 0 or self.win.getResolution() % 2 ): xml_file = "%s_16x9.xml" % ( skin_xml, )
-        else: xml_file = "%s.xml" % ( skin_xml, )
-        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "%s.xml" % ( skin_xml, )
-        skin_xml = os.path.join( skin_path, xml_file )
-        return skin_xml, image_path
-
-
-    def _debug_write( self, function, action, lines=[], values=[] ):
-        if ( self.debug ):
-            Action = ( "Failed", "Succeeded", "Started" )
-            Highlight = ( "__", "__", "<<<<< ", "__", "__", " >>>>>" )
-            xbmc.output( "%s%s%s : (%s)\n" % ( Highlight[ action ], function, Highlight[ action + 3 ], Action[ action ] ) )
-            try:
-                for cnt, line in enumerate( lines ):
-                    fLine = "%s\n" % ( line, )
-                    xbmc.output( fLine % values[ cnt ] )
-            except: pass
-
+        else: current_skin = skin
+        if ( not os.path.exists( os.path.join( base_path, current_skin ))): current_skin = "Default"
+        skin_path = os.path.join( base_path, current_skin )
+        image_path = os.path.join( skin_path, image_path )
+        if ( self.win.getResolution() == 0 or self.win.getResolution() % 2 ): xml_file = "%s_16x9.xml" % ( xml_name, )
+        else: xml_file = "%s.xml" % ( xml_name, )
+        if ( not os.path.isfile( os.path.join( skin_path, xml_file ))): xml_file = "%s.xml" % ( xml_name, )
+        xml_file = os.path.join( skin_path, xml_file )
+        return xml_file, image_path
 
     def _setup_variables( self ):
+        """ initializes variables """
         self.win.controls = {}
         #self.win.controlKey = {}
         self.navigation = {}
-        self.resPath = {}
         self.resolutions = { "1080i" : 0, "720p" : 1, "480p" : 2, "480p16x9" : 3, "ntsc" : 4, "ntsc16x9" : 5, "pal" : 6, "pal16x9" : 7, "pal60" : 8, "pal6016x9" : 9 }
-        for key, value in self.resolutions.items(): self.resPath[ value ] = key
+        self.resPath = dict( zip( self.resolutions.values(), self.resolutions.keys() ) )
         self.currentResolution = self.win.getResolution()
         self.include_doc = []
         self.resolution = self.resolutions[ "pal" ]
-        self._debug_write( "_setup_variables", True )
-
 
     def _clear_variables( self ):
+        """ clears variables and unlinks docs """
         self.navigation = None
         self.resPath = None
         self.resolutions = None
-        self.resPath = None
         self.currentResolution = None
         self.resolution = None
         for doc in self.include_doc:
@@ -212,49 +85,50 @@ class GUIBuilder:
             except: pass
 
     def _add_control( self, control ):
+        """ sets up the controls disctionary and adds the controls to the window """
         try:
             succeeded = True
             control[ "special" ] = False
-            if ( self.useDescAsKey ): key = control[ "description" ]
-            else: key = int( control[ "id" ] )
+            if ( self.use_desc_as_key ): key = control[ "description" ]
+            else: key = control[ "id" ]
             # image control
             if ( control[ "type" ] == "image" ):
-                if ( control.has_key( "info" ) ): 
-                    if ( control[ "info" ][ 0 ] != "" ): control[ "texture" ] = xbmc.getInfoImage( control[ "info" ][ 0 ] )
-                ctl = xbmcgui.ControlImage(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                if ( control[ "info" ] ):
+                    control[ "texture" ] = xbmc.getInfoImage( control[ "info" ][ 0 ] )
+                current_control = xbmcgui.ControlImage(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     filename = control[ "texture" ],
                     colorKey = control[ "colorkey" ],
-                    aspectRatio = int( control[ "aspectratio" ] ),
+                    aspectRatio = control[ "aspectratio" ],
                     colorDiffuse = control[ "colordiffuse" ]
-                    )
-                self.win.addControl( ctl )
+                )
+                self.win.addControl( current_control )
             # progress control
             elif ( control[ "type" ] == "progress" ):
-                ctl = xbmcgui.ControlProgress(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                current_control = xbmcgui.ControlProgress(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     texturebg = control[ "texturebg" ],
                     textureleft = control[ "lefttexture" ],
                     texturemid = control[ "midtexture" ],
                     textureright = control[ "righttexture" ],
                     textureoverlay = control[ "overlaytexture" ]
-                    )
-                self.win.addControl( ctl )
+                )
+                self.win.addControl( current_control )
             # label control
             elif ( control[ "type" ] == "label" ):
-                if ( control.has_key( "info" ) ):
-                    if ( control[ "info" ][ 0 ] != "" ): control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
-                ctl = xbmcgui.ControlLabel(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                if ( control[ "info" ] ):
+                    control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
+                current_control = xbmcgui.ControlLabel(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     label = control[ "label" ][ 0 ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ],
@@ -262,42 +136,41 @@ class GUIBuilder:
                     alignment = control[ "align" ],
                     hasPath = control[ "haspath" ],
                     #shadowColor = control[ "shadowcolor" ],
-                    angle = int( control[ "angle" ] )
-                    )
-                self.win.addControl( ctl )
+                    angle = control[ "angle" ]
+                )
+                self.win.addControl( current_control )
             # button control
             elif ( control[ "type" ] == "button" ):
-                if ( control.has_key( "info" ) ):
-                    if ( control[ "info" ][ 0 ] != "" ): control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
-                ctl = xbmcgui.ControlButton(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy"] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                if ( control[ "info" ] ):
+                    control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
+                current_control = xbmcgui.ControlButton(
+                    x = control[ "posx" ],
+                    y = control[ "posy"],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     label = control[ "label" ][ 0 ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ],
                     focusedColor = control[ "focusedcolor" ],
                     disabledColor = control[ "disabledcolor" ],
                     alignment = control[ "align" ],
-                    angle = int( control[ "angle" ] ),
+                    angle = control[ "angle" ],
                     shadowColor = control[ "shadowcolor" ],
                     focusTexture = control[ "texturefocus" ],
                     noFocusTexture = control[ "texturenofocus" ],
-                    textXOffset = int( control[ "textoffsetx" ] ),
-                    textYOffset = int( control[ "textoffsety"] )
-                    )
-                self.win.addControl( ctl )
-                #control["special"] = ( control["font"], control["textcolor"], control["disabledcolor"], )
+                    textXOffset = control[ "textoffsetx" ],
+                    textYOffset = control[ "textoffsety"]
+                )
+                self.win.addControl( current_control )
             # checkmark control
             elif ( control[ "type" ] == "checkmark" ):
-                if ( control.has_key( "info" ) ):
-                    if ( control[ "info" ][ 0 ] != "" ): control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
-                ctl = xbmcgui.ControlCheckMark(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                if ( control[ "info" ] ):
+                    control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
+                current_control = xbmcgui.ControlCheckMark(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     label = control[ "label" ][ 0 ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ],
@@ -305,66 +178,68 @@ class GUIBuilder:
                     alignment = control[ "align" ],
                     focusTexture = control[ "texturecheckmark" ],
                     noFocusTexture = control[ "texturecheckmarknofocus" ],
-                    checkWidth = int( control[ "markwidth" ] ),
-                    checkHeight = int( control[ "markheight" ] )
-                    )
-                self.win.addControl( ctl )
+                    checkWidth = control[ "markwidth" ],
+                    checkHeight = control[ "markheight" ]
+                )
+                self.win.addControl( current_control )
             # textbox control
             elif ( control[ "type" ] == "textbox" ):
-                ctl = xbmcgui.ControlTextBox(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                if ( control[ "info" ] ):
+                    control[ "label" ][ 0 ] = xbmc.getInfoLabel( control[ "info" ][ 0 ] )
+                current_control = xbmcgui.ControlTextBox(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ]
-                    )
-                self.win.addControl( ctl )
-                if ( control.has_key( "label" ) ): ctl.setText( control[ "label" ][ 0 ] )
+                )
+                self.win.addControl( current_control )
+                if ( "label" in control ): current_control.setText( control[ "label" ][ 0 ] )
             #fadelabel control
             elif ( control[ "type" ] == "fadelabel" ):
-                ctl = xbmcgui.ControlFadeLabel(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                current_control = xbmcgui.ControlFadeLabel(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ],
                     #shadowColor = control[ "shadowcolor" ],
                     alignment = control[ "align" ]
-                    )
-                self.win.addControl( ctl )
-                if ( control.has_key( "info" ) ):
+                )
+                self.win.addControl( current_control )
+                if ( control[ "info" ] ):
                     for item in control[ "info" ]:
-                        if ( item != "" ): ctl.addLabel( xbmc.getInfoLabel( item ) )
-                if ( control.has_key( "label" ) ):
+                        if ( item != "" ): current_control.addLabel( xbmc.getInfoLabel( item ) )
+                if ( control[ "label" ] ):
                     for item in control[ "label" ]:
-                        if ( item != "" ): ctl.addLabel( item )
+                        if ( item != "" ): current_control.addLabel( item )
             # list control
             elif ( control[ "type" ] == "list" or control[ "type" ] == "listcontrol" ):
-                ctl = xbmcgui.ControlList(
-                    x = int( control[ "posx" ] ) + self.posx,
-                    y = int( control[ "posy" ] ) + self.posy,
-                    width = int( control[ "width" ] ),
-                    height = int( control[ "height" ] ),
+                current_control = xbmcgui.ControlList(
+                    x = control[ "posx" ],
+                    y = control[ "posy" ],
+                    width = control[ "width" ],
+                    height = control[ "height" ],
                     font = control[ "font" ],
                     textColor = control[ "textcolor" ],
                     alignmentY = control[ "aligny" ],
                     buttonTexture = control[ "texturenofocus" ],
                     buttonFocusTexture = control[ "texturefocus" ],
                     selectedColor = control[ "selectedcolor" ],
-                    imageWidth = int( control[ "itemwidth" ] ),
-                    imageHeight = int( control[ "itemheight" ] ),
-                    itemTextXOffset = int( control[ "textxoff" ] ),
-                    itemTextYOffset = int( control[ "textyoff" ] ),
-                    itemHeight = int( control[ "textureheight" ] ),
+                    imageWidth = control[ "itemwidth" ],
+                    imageHeight = control[ "itemheight" ],
+                    itemTextXOffset = control[ "textxoff" ],
+                    itemTextYOffset = control[ "textyoff" ],
+                    itemHeight = control[ "textureheight" ],
                     #shadowColor=control["shadowcolor"],
-                    space = int( control[ "spacebetweenitems" ] )
-                    )
-                self.win.addControl( ctl )
-                ctl.setPageControlVisible( not control[ "hidespinner" ] )
+                    space = control[ "spacebetweenitems" ]
+                )
+                self.win.addControl( current_control )
+                current_control.setPageControlVisible( not control[ "hidespinner" ] )
                 control[ "special" ] = control[ "hidespinner" ]
-                if ( control.has_key( "label" ) ):
+                if ( control[ "label" ] ):
                     for cnt, item in enumerate( control[ "label" ] ):
                         if ( item != "" ): 
                             if ( cnt < len( control[ "label2" ] ) ): tmp = control[ "label2" ][ cnt ]
@@ -373,83 +248,60 @@ class GUIBuilder:
                             elif control[ "image" ]: tmp2 = control[ "image" ][ len( control[ "image" ] ) - 1 ]
                             else: tmp2 = ""
                             list_item = xbmcgui.ListItem( item, tmp, tmp2, tmp2 )
-                            ctl.addItem( list_item )
+                            current_control.addItem( list_item )
             
-            try:
-                self.win.controls[ key ] = {
-                    "id"			: int( control[ "id" ] ),
-                    "controlId"	: ctl.getId(),
-                    "control"		: ctl,
-                    "special"		: control[ "special" ],
-                    "visible"		: control[ "visible" ].lower(),
-                    #"animation"	: control[ "animation" ],
-                    "onclick"		: control[ "onclick" ],
-                    "onfocus"	: control[ "onfocus" ]
-                }
-                #self.win.controlKey[ctl.getId()] = key
-                self.navigation[ int( control[ "id" ] ) ] = ( key, int( control[ "onup" ] ), int( control[ "ondown" ] ), int( control[ "onleft" ] ), int( control[ "onright" ] ) )
-                ###ctl.setVisible( xbmc.getCondVisibility( control[ "visible" ] ) )
-            except: pass
+            self.win.controls[ key ] = {
+                "id"			: control[ "id" ],
+                "controlId"	: current_control.getId(),
+                "control"		: current_control,
+                "special"		: control[ "special" ],
+                "visible"		: [ control[ "visible" ].lower(), control[ "allowhiddenfocus" ] ],
+                "enable"		: control[ "enable" ].lower(),
+                "animation"	: control[ "animation" ],
+                "onclick"		: control[ "onclick" ],
+                "onfocus"	: control[ "onfocus" ]
+            }
+            self.navigation[ control[ "id" ] ] = ( key, int( control[ "onup" ] ), int( control[ "ondown" ] ), int( control[ "onleft" ] ), int( control[ "onright" ] ) )
         except:
-            if ( not self.fastMethod ): self.dlg.close()
             succeeded = False
-            self.controlsFailed += str( key ) + ", "
-            self.controlsFailedCnt += 1
         return succeeded
 
     def _set_resolution( self ):
-        try:
-            offset = 0
-            # if current and skinned resolutions differ and skinned resolution is not
-            # 1080i or 720p (they have no 4:3), calculate widescreen offset
-            if ( ( not ( self.currentResolution == self.resolution ) ) and self.resolution > 1 ):
-                # check if current resolution is 16x9
-                if ( self.currentResolution == 0 or self.currentResolution % 2 ): iCur16x9 = 1
-                else: iCur16x9 = 0
-                # check if skinned resolution is 16x9
-                if ( self.resolution % 2 ): i16x9 = 1
-                else: i16x9 = 0
-                # calculate widescreen offset
-                offset = iCur16x9 - i16x9
-            self.win.setCoordinateResolution( self.resolution + offset )
-            self._debug_write( "_set_resolution", True, [ "Current resolution: %i-%s", "Skinned at resolution: %i-%s",
-                "Set coordinate resolution at: %i-%s" ], [ ( self.currentResolution, self.resPath[ self.currentResolution ], ),
-                ( self.resolution, self.resPath[ self.resolution ], ), ( self.resolution + offset, self.resPath[ self.resolution + offset], ) ] )
-        except: self._debug_write( "_set_resolution", False )
+        """ sets the coordinate resolution compensating for widescreen modes """
+        offset = 0
+        # if current and skinned resolutions differ and skinned resolution is not
+        # 1080i or 720p (they have no 4:3), calculate widescreen offset
+        if ( ( not ( self.currentResolution == self.resolution ) ) and self.resolution > 1 ):
+            # check if current resolution is 16x9
+            if ( self.currentResolution == 0 or self.currentResolution % 2 ): iCur16x9 = 1
+            else: iCur16x9 = 0
+            # check if skinned resolution is 16x9
+            if ( self.resolution % 2 ): i16x9 = 1
+            else: i16x9 = 0
+            # calculate widescreen offset
+            offset = iCur16x9 - i16x9
+        self.win.setCoordinateResolution( self.resolution + offset )
 
-
-    def _parse_xml_file(self, imagePath, filename):
+    def _parse_xml_file( self, xml_file, image_path ):
+        """ parses and resolves an xml file and adds any missing tags """
         try:
             succeeded = True
-            cnt = -1
-            self.controlsFailed = ""
-            self.controlsFailedCnt = 0
+            coord_posx = 0
+            coord_posy = 0
             # load and parse skin.xml file
-            skindoc = xml.dom.minidom.parse( filename )
+            skindoc = xml.dom.minidom.parse( xml_file )
             root = skindoc.documentElement
             # make sure this is a valid <window> xml file
             if ( not root or root.tagName != "window" ): raise
-            
-            # check for an overide of <useincludes>
-            useInclude_overide = self.FirstChildElement( root, "useincludes" )
-            if ( useInclude_overide and useInclude_overide.firstChild ): 
-                overide = useInclude_overide.firstChild.nodeValue.lower()
-            else: 
-                overide = str( not self.fastMethod ).lower()
-            if ( overide == "1" or overide == "true" or overide == "yes" ):
-                self.includesExist = self.LoadIncludes()
-                self.pct += self.pct1
-            else: self.includesExist = False
-
-            if ( not self.fastMethod ):
-                self.lines[ self.lineno + 1 ]    = "loading %s file..." % ( self.skinXML, )
-                self.dlg.update( self.pct, self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
-            
+            # check for a <useincludes>tag
+            includes_exist = False
+            useIncludes = self.FirstChildElement( root, "useincludes" )
+            if ( useIncludes and useIncludes.firstChild ): 
+                overide = useIncludes.firstChild.nodeValue.lower()
+                if ( overide == "1" or overide == "true" or overide == "yes" ):
+                    includes_exist = self.LoadIncludes()
             #resolve xml file
-            if ( self.includesExist ): self.ResolveIncludes( root )
-
-            self.posx = 0
-            self.posy = 0
+            if ( includes_exist ): self.ResolveIncludes( root )
             # check for <defaultcontrol> and <coordinates> based system
             try:
                 default = self.FirstChildElement( root, "defaultcontrol" )
@@ -462,48 +314,52 @@ class GUIBuilder:
                         system = int( systemBase.firstChild.nodeValue )
                         if ( system == 1 ):
                             posx = self.FirstChildElement( coordinates, "posx" )
-                            if ( posx and posx.firstChild ): self.posx = int( posx.firstChild.nodeValue )
+                            if ( posx and posx.firstChild ): coord_posx = int( posx.firstChild.nodeValue )
                             posy = self.FirstChildElement( coordinates, "posy" )
-                            if ( posy and posy.firstChild ): self.posy = int( posy.firstChild.nodeValue )
+                            if ( posy and posy.firstChild ): coord_posy = int( posy.firstChild.nodeValue )
             except: pass
-            self.win.coordinates = [ self.posx, self.posy ]
             # check for a <resolution> tag and setCoordinateResolution()
             resolution = self.FirstChildElement( root, "resolution" )
             if ( resolution and resolution.firstChild ): self.resolution = self.resolutions.get( resolution.firstChild.nodeValue.lower(), 6 )
             self._set_resolution()
-
             # make sure <controls> block exists and resolve if necessary
             controls = self.FirstChildElement( root, "controls" )
             if ( controls and controls.firstChild ):
-                if ( self.includesExist ): self.ResolveIncludes( controls )
+                if ( includes_exist ): self.ResolveIncludes( controls )
             else: raise
-            
             # parse and resolve each <control>
             data = controls.getElementsByTagName( "control" )
             if ( not data ): raise
-            if ( not self.fastMethod ):
-                self.lines[ self.lineno + 1 ] = "parsing %s file..." % ( self.skinXML, )
-                t = len( data )
-            for cnt, control in enumerate( data ):
-                if ( not self.fastMethod ): self.dlg.update( int( ( float( self.pct1 ) / float( t ) * ( cnt + 1 ) ) + self.pct ), self.lines[ 0 ], self.lines[ 1 ], self.lines[ 2 ] )
-                
-                ctype = None
+            for control in data:
+            #control = self.FirstChildElement( controls, None )
+            #while ( control ):
+                control_type = None
+                control_group = False
                 if ( control.hasAttributes() ):
-                    ctype = control.getAttribute( "type" )
-                    cid = control.getAttribute( "id" )
-                if (self.includesExist): self.ResolveIncludes( control, ctype )
-                
-                ctl = {}
-                anim = {}
-                lbl1 = []
-                lbl2 = []
-                ifo = []
-                img = []
-                vis = []
+                    control_type = control.getAttribute( "type" )
+                    control_id = control.getAttribute( "id" )
+                #############################
+                #group_posx = 0
+                #group_posy = 0
+                if ( control_type == "group" ): 
+                    control_group = True
+                    continue
+                #############################
 
-                if ( ctype != "" ): ctl[ "type" ] = str( ctype )
-                if ( cid != "" ): ctl[ "id" ] = cid
-                else: ctl[ "id" ] = "1"
+                if ( includes_exist ): self.ResolveIncludes( control, control_type )
+                
+                current_control = {}
+                animation_tags = []
+                label_tags = []
+                label2_tags = []
+                info_tags = []
+                image_tags = []
+                visible_tags = []
+                enable_tags = []
+
+                if ( control_type != "" ): current_control[ "type" ] = str( control_type )
+                if ( control_id != "" ): current_control[ "id" ] = int( control_id )
+                else: current_control[ "id" ] = 1
                 
                 # loop thru control and find all tags
                 node = self.FirstChildElement( control, None )
@@ -515,235 +371,264 @@ class GUIBuilder:
                             if ( self._ ):
                                 ls = self._( int( v ) )
                             else: ls = xbmc.getLocalizedString( int( v ) )
-                            if ( ls ): lbl1.append( ls )
+                            if ( ls ): label_tags.append( ls )
                             else: raise
                         except:
-                            if ( node.hasChildNodes() ): lbl1.append( node.firstChild.nodeValue )
+                            if ( node.hasChildNodes() ): label_tags.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "label2" ):
                         try: 
                             v = node.firstChild.nodeValue
                             if ( self._ ):
                                 ls = self._( int( v ) )
                             else: ls = xbmc.getLocalizedString( int( v ) )
-                            if ( ls ): lbl2.append( ls )
+                            if ( ls ): label2_tags.append( ls )
                             else: raise
                         except:
-                            if ( node.hasChildNodes() ): lbl2.append( node.firstChild.nodeValue )
+                            if ( node.hasChildNodes() ): label2_tags.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "info" ):
-                        if ( node.hasChildNodes() ): ifo.append( node.firstChild.nodeValue )
+                        if ( node.hasChildNodes() ): info_tags.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "image" ):
-                        if ( node.hasChildNodes() ): img.append( node.firstChild.nodeValue )
+                        if ( node.hasChildNodes() ): image_tags.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "visible" ):
-                        if ( node.hasChildNodes() ): vis.append( node.firstChild.nodeValue )
+                        if ( node.hasChildNodes() ):
+                            if ( node.hasAttributes() ):
+                                ah = node.getAttribute( "allowhiddenfocus" )
+                            else: ah = "false"
+                            current_control[ "allowhiddenfocus" ] = ah
+                            visible_tags.append( node.firstChild.nodeValue )
+                    elif ( node.tagName.lower() == "enable" ):
+                        enable_tags.append( node.firstChild.nodeValue )
                     elif ( node.tagName.lower() == "animation" ):
                         if ( node.hasChildNodes() ): 
-                            anim[ "type" ] = node.firstChild.nodeValue
                             if ( node.hasAttributes() ):
-                                anim[ "effect" ]			= node.getAttribute( "effect" )
-                                anim[ "time" ]			    = node.getAttribute( "time" )
-                                anim[ "delay" ]		    = node.getAttribute( "delay" )
-                                anim[ "start" ]			= node.getAttribute( "start" )
-                                anim[ "end" ]				= node.getAttribute( "end" )
-                                anim[ "acceleration" ]	= node.getAttribute( "acceleration" )
-                                anim[ "center" ]			= node.getAttribute( "center" )
-                                anim[ "condition" ]		= node.getAttribute( "condition" )
-                                anim[ "reversible" ]		= node.getAttribute( "reversible" )
-                    elif (node.hasChildNodes()): 
-                        if (node.tagName.lower() == "type"): ctype = node.firstChild.nodeValue
-                        if ( not ctl.has_key( node.tagName.lower() ) ):
-                            ctl[ node.tagName.lower() ] = node.firstChild.nodeValue
+                                condition = ""
+                                if ( node.hasAttribute( "effect" ) ):
+                                    condition += "effect=%s " % node.getAttribute( "effect" ).strip()
+                                if ( node.hasAttribute( "time" ) ):
+                                    condition += "time=%s " % node.getAttribute( "time" ).strip()
+                                if ( node.hasAttribute( "delay" ) ):
+                                    condition += "delay=%s " % node.getAttribute( "delay" ).strip()
+                                if ( node.hasAttribute( "start" ) ):
+                                    condition += "start=%s " % node.getAttribute( "start" ).strip()
+                                if ( node.hasAttribute( "end" ) ):
+                                    condition += "end=%s " % node.getAttribute( "end" ).strip()
+                                if ( node.hasAttribute( "acceleration" ) ):
+                                    condition += "acceleration=%s " % node.getAttribute( "acceleration" ).strip()
+                                if ( node.hasAttribute( "center" ) ):
+                                    condition += "center=%s " % node.getAttribute( "center" ).strip()
+                                if ( node.hasAttribute( "condition" ) ):
+                                    condition += "condition=%s " % node.getAttribute( "condition" ).strip()
+                                if ( node.hasAttribute( "reversible" ) ):
+                                    condition += "reversible=%s " % node.getAttribute( "reversible" ).strip()
+                            animation_tags += [ ( node.firstChild.nodeValue, condition.strip().lower(), ) ]
+                    elif (node.hasChildNodes()):
+                        if (node.tagName.lower() == "type"): control_type = node.firstChild.nodeValue
+                        if ( not node.tagName.lower() in current_control ):
+                            current_control[ node.tagName.lower() ] = node.firstChild.nodeValue
                     node = self.NextSiblingElement( node, None )
                 
                 # setup the controls settings and defaults if necessary
-                if ( ctype ):
+                if ( control_type ):
                     # the following apply to all controls
-                    if (not ctl.has_key("description")): ctl["description"] = ctype
-                    if (not ctl.has_key("posx")): ctl["posx"] = "0"
-                    if (not ctl.has_key("posy")): ctl["posy"] = "0"
-                    if (not ctl.has_key("width")): ctl["width"] = "250"
-                    if (not ctl.has_key("height")): ctl["height"] = "100"
-                    if (not ctl.has_key("onup")): ctl["onup"] = ctl["id"]
-                    if (not ctl.has_key("ondown")): ctl["ondown"] = ctl["id"]
-                    if (not ctl.has_key("onleft")): ctl["onleft"] = ctl["id"]
-                    if (not ctl.has_key("onright")): ctl["onright"] = ctl["id"]
-                    if (vis): ctl["visible"] = self.GetConditionalVisibility(vis)
-                    else: ctl["visible"] = "true"
+                    if ( not "description" in current_control ): current_control[ "description" ] = control_type
+                    if ( "posx" in current_control ): current_control[ "posx" ] = int( current_control[ "posx" ] ) + coord_posx
+                    else: current_control[ "posx" ] = coord_posx
+                    if ( "posy" in current_control ): current_control[ "posy" ] = int( current_control[ "posy" ] ) + coord_posy
+                    else: current_control[ "posy" ] = coord_posy
+                    if ( "width" in current_control ): current_control[ "width" ] = int( current_control[ "width" ] )
+                    else: current_control[ "width" ] = 250
+                    if ( "height" in current_control ): current_control[ "height" ] = int( current_control[ "height" ] )
+                    else: current_control[ "height" ] = 100
+                    if ( not "onup" in current_control ): current_control[ "onup" ] = current_control[ "id" ]
+                    if ( not "ondown" in current_control ): current_control[ "ondown" ] = current_control[ "id" ]
+                    if ( not "onleft" in current_control ): current_control[ "onleft" ] = current_control[ "id" ]
+                    if ( not "onright" in current_control ): current_control[ "onright" ] = current_control[ "id" ]
+                    if ( visible_tags ): current_control[ "visible" ] = self.GetConditionalVisibility( visible_tags )
+                    else: current_control[ "visible" ] = "true"
+                    if ( enable_tags ): current_control[ "enable" ] = self.GetConditionalVisibility( enable_tags )
+                    else: current_control[ "enable" ] = "true"
+                    if ( not "allowhiddenfocus" in current_control ): current_control[ "allowhiddenfocus" ] = "false"
+                    current_control[ "allowhiddenfocus"] = current_control[ "allowhiddenfocus" ] in [ "true", "yes", "1" ]
+                    if ( not "onclick" in current_control ): current_control[ "onclick" ] = ""
+                    if ( not "onfocus" in current_control ): current_control[ "onfocus" ] = ""
+                    if ( animation_tags ): current_control[ "animation" ] = animation_tags
+                    else: current_control[ "animation" ] = ""
 
-                    if (not ctl.has_key("onclick")): ctl["onclick"] = ""
-                    if (not ctl.has_key("onfocus")): ctl["onfocus"] = ""
-                    if (anim): ctl["animation"] = anim
-                    else: ctl["animation"] = ""
-
-                    if (ctype == "image" or ctype == "label" or ctype == "fadelabel" or ctype == "button" or ctype == "checkmark" or ctype == "textbox"):
-                        if (ifo): ctl["info"] = ifo
-                        else: ctl["info"] = [""]
-
-                    if (ctype == "label" or ctype == "fadelabel" or ctype == "button" or ctype == "checkmark" or ctype == "textbox" or ctype == "list" or ctype == "listcontrol"):
-                        if (lbl1): ctl["label"] = lbl1
-                        else: ctl["label"] = [""]
-                        if (not ctl.has_key("shadowcolor")): ctl["shadowcolor"] = ""
-                        if (not ctl.has_key("font")): ctl["font"] = "font12"
-                        if (not ctl.has_key("textcolor")): ctl["textcolor"] = "0xFF000000"
-
-                    if (ctype == "label" or ctype == "fadelabel" or ctype == "button" or ctype == "checkmark" or ctype == "list" or ctype == "listcontrol"):
-                        if (not ctl.has_key("align")): ctl["align"] = "left"
-                        if (ctl["align"] == "left"): ctl["align"] = 0
-                        elif (ctl["align"] == "right"): ctl["align"] = 1
-                        elif (ctl["align"] == "center"): ctl["align"] = 2
-                        else: ctl["align"] = 0
-                        if (not ctl.has_key("aligny")): ctl["aligny"] = 0
-                        if (ctl["aligny"] == "center"): ctl["aligny"] = 4
-                        else: ctl["aligny"] = 0
-                        ctl["align"] += ctl["aligny"]
-
-                    if (ctype == "label" or ctype == "button" or ctype == "checkmark"):
-                        if (not ctl.has_key("disabledcolor")): ctl["disabledcolor"] = "0x60000000"
-
-                    if (ctype == "label" or ctype == "button"):
-                        if (not ctl.has_key("angle")): ctl["angle"] = "0"
-
-                    if (ctype == "list" or ctype == "button" or ctype == "listcontrol"):
-                        if (not ctl.has_key("texturefocus")): ctl["texturefocus"] = ""
-                        elif (ctl["texturefocus"][0] == "\\"): ctl["texturefocus"] = os.path.join(imagePath, ctl["texturefocus"][1:])
-                        if (not ctl.has_key("texturenofocus")): ctl["texturenofocus"] = ""
-                        elif (ctl["texturenofocus"][0] == "\\"): ctl["texturenofocus"] = os.path.join(imagePath, ctl["texturenofocus"][1:])
+                    if ( control_type == "image" or control_type == "label" or control_type == "fadelabel" or control_type == "button" or control_type == "checkmark" or control_type == "textbox" ):
+                        current_control[ "info" ] = info_tags
                         
-                    if (ctype == "image"):
-                        if (not ctl.has_key("aspectratio")): ctl["aspectratio"] = "stretch"
-                        if (ctl["aspectratio"] == "stretch"): ctl["aspectratio"] = 0
-                        elif (ctl["aspectratio"] == "scale"): ctl["aspectratio"] = 1
-                        elif (ctl["aspectratio"] == "keep"): ctl["aspectratio"] = 2
-                        else: ctl["aspectratio"] = 0
-                        if (not ctl.has_key("colorkey")): ctl["colorkey"] = ""
-                        if (not ctl.has_key("colordiffuse")): ctl["colordiffuse"] = "0xFFFFFFFF"
-                        if (not ctl.has_key("texture")): ctl["texture"] = ""
-                        elif (ctl["texture"][0] == "\\"): ctl["texture"] = os.path.join(imagePath, ctl["texture"][1:])
+                    if ( control_type == "label" or control_type == "fadelabel" or control_type == "button" or control_type == "checkmark" or control_type == "textbox" or control_type == "list" or control_type == "listcontrol" ):
+                        if ( label_tags ): current_control[ "label" ] = label_tags
+                        else: current_control[ "label" ] = [ "" ]
+                        if ( not "shadowcolor" in current_control ): current_control[ "shadowcolor" ] = ""
+                        if ( not "font" in current_control): current_control[ "font" ] = "font13"
+                        if ( not "textcolor" in current_control ): current_control[ "textcolor" ] = "FFFFFFFF"
 
-                    if (ctype == "label"):
-                        if (not ctl.has_key("haspath")): ctl["haspath"] = "false"
-                        if (ctl["haspath"] == "false" or ctl["haspath"] == "no"): ctl["haspath"] = 0
-                        elif (ctl["haspath"] == "true" or ctl["haspath"] == "yes"): ctl["haspath"] = 1
-                        else: ctl["haspath"] = 0
-                        if (ctl.has_key("number")): ctl["label"][0] = [ctl["number"]]
+                    if ( control_type == "label" or control_type == "fadelabel" or control_type == "button" or control_type == "checkmark" or control_type == "list" or control_type == "listcontrol" ):
+                        if (not "align" in current_control ): current_control[ "align" ] = "left"
+                        try: current_control["align"] = [ "left", "right", "center" ].index( current_control["align"] )
+                        except: current_control["align"] = 0
+                        if ( not "aligny" in current_control ): current_control[ "aligny" ] = 0
+                        current_control[ "aligny"] = ( current_control[ "aligny" ] in [ "center" ] ) * 4
+                        current_control[ "align" ] += current_control[ "aligny" ]
 
-                    if (ctype == "button"):
-                        if (not ctl.has_key("textoffsetx")): ctl["textoffsetx"] = "0"
-                        if (not ctl.has_key("textoffsety")): ctl["textoffsety"] = "0"
-                        if (not ctl.has_key("focusedcolor")): ctl["focusedcolor"] = ctl["textcolor"]
+                    if ( control_type == "label" or control_type == "button" or control_type == "checkmark" ):
+                        if ( not "disabledcolor" in current_control ): current_control[ "disabledcolor" ] = "60FFFFFF"
 
-                    if (ctype == "checkmark"):
-                        if (not ctl.has_key("texturecheckmark")): ctl["texturecheckmark"] = ""
-                        elif (ctl["texturecheckmark"][0] == "\\"): ctl["texturecheckmark"] = os.path.join(imagePath, ctl["texturecheckmark"][1:])
-                        if (not ctl.has_key("texturecheckmarknofocus")): ctl["texturecheckmarknofocus"] = ""
-                        elif (ctl["texturecheckmarknofocus"][0] == "\\"): ctl["texturecheckmarknofocus"] = os.path.join(imagePath, ctl["texturecheckmarknofocus"][1:])
-                        if (not ctl.has_key("markwidth")): ctl["markwidth"] = "20"
-                        if (not ctl.has_key("markheight")): ctl["markheight"] = "20"
+                    if ( control_type == "label" or control_type == "button" ):
+                        if ( not "angle" in current_control ): current_control[ "angle" ] = 0
+                        else: current_control[ "angle" ] = int( current_control[ "angle" ] )
 
-                    if ( ctype == "progress" ):
-                        if ( not ctl.has_key( "texturebg" ) ): ctl[ "texturebg" ] = ""
-                        elif ( ctl[ "texturebg" ][ 0 ] == "\\" ): ctl[ "texturebg" ] = os.path.join( imagePath, ctl[ "texturebg" ][ 1 : ] )
-                        if ( not ctl.has_key( "lefttexture" ) ): ctl[ "lefttexture" ] = ""
-                        elif ( ctl[ "lefttexture" ][ 0 ] == "\\" ): ctl[ "lefttexture" ] = os.path.join( imagePath, ctl[ "lefttexture" ][ 1 : ] )
-                        if ( not ctl.has_key( "midtexture" ) ): ctl[ "midtexture" ] = ""
-                        elif ( ctl[ "midtexture" ][ 0 ] == "\\" ): ctl[ "midtexture" ] = os.path.join( imagePath, ctl[ "midtexture" ][ 1 : ] )
-                        if ( not ctl.has_key( "righttexture" ) ): ctl[ "righttexture" ] = ""
-                        elif ( ctl[ "righttexture" ][ 0 ] == "\\" ): ctl[ "righttexture" ] = os.path.join( imagePath, ctl[ "righttexture" ][ 1 : ] )
-                        if ( not ctl.has_key( "overlaytexture" ) ): ctl[ "overlaytexture" ] = ""
-                        elif ( ctl[ "overlaytexture" ][ 0 ] == "\\" ): ctl[ "overlaytexture" ] = os.path.join( imagePath, ctl[ "overlaytexture" ][ 1 : ] )
+                    if ( control_type == "list" or control_type == "button" or control_type == "listcontrol" ):
+                        if (not "texturefocus" in current_control ): current_control[ "texturefocus" ] = ""
+                        elif ( current_control[ "texturefocus" ][ 0 ] == "\\" ): current_control[ "texturefocus" ] = os.path.join( image_path, current_control[ "texturefocus" ][ 1 : ] )
+                        if ( not "texturenofocus" in current_control ): current_control[ "texturenofocus" ] = ""
+                        elif ( current_control[ "texturenofocus" ][ 0 ] == "\\" ): current_control[ "texturenofocus" ] = os.path.join( image_path, current_control[ "texturenofocus" ][ 1 : ] )
+                        
+                    if ( control_type == "image" ):
+                        try: current_control[ "aspectratio" ] = [ "stretch", "scale", "keep" ].index( current_control[ "aspectratio" ] )
+                        except: current_control[ "aspectratio" ] = 0
+                        if (not "colorkey" in current_control ): current_control[ "colorkey" ] = ""
+                        if (not "colordiffuse" in current_control ): current_control[ "colordiffuse" ] = "0xFFFFFFFF"
+                        if (not "texture" in current_control ): current_control[ "texture" ] = ""
+                        elif ( current_control[ "texture" ][ 0 ] == "\\" ): current_control[ "texture" ] = os.path.join( image_path, current_control[ "texture" ][ 1 : ] )
 
-                    if (ctype == "list" or ctype == "listcontrol"):
-                        ctl["label2"] = lbl2
-                        ctl["image"] = img
-                        if (not ctl.has_key("selectedcolor")): ctl["selectedcolor"] = "0xFFFFFFFF"
-                        if (not ctl.has_key("itemwidth")): ctl["itemwidth"] = "20"
-                        if (not ctl.has_key("itemheight")): ctl["itemheight"] = "20"
-                        if (not ctl.has_key("textureheight")): ctl["textureheight"] = "20"
-                        if (not ctl.has_key("textxoff")): ctl["textxoff"] = "0"
-                        if (not ctl.has_key("textyoff")): ctl["textyoff"] = "0"
-                        if (not ctl.has_key("spacebetweenitems")): ctl["spacebetweenitems"] = "0"
-                        if (not ctl.has_key("hidespinner")): ctl["hidespinner"] = "false"
-                        if (ctl["hidespinner"] == "false" or ctl["hidespinner"] == "no"): ctl["hidespinner"] = 0
-                        elif (ctl["hidespinner"] == "true" or ctl["hidespinner"] == "yes"): ctl["hidespinner"] = 1
-                        else: ctl["hidespinner"] = 0
-                        if (not ctl["image"]): ctl["image"] = [" "]
-                        for i in range(len(ctl["image"])):
-                            if (ctl["image"][i][0] == "\\"): ctl["image"][i] = os.path.join(imagePath, ctl["image"][i][1:])
+                    elif ( control_type == "label" ):
+                        if ( not "haspath" in current_control ): current_control[ "haspath" ] = "false"
+                        current_control[ "haspath"] = current_control[ "haspath" ] in [ "true", "yes", "1" ]
+                        if ( "number" in current_control ): current_control[ "label" ][ 0 ] = [ current_control[ "number" ] ]
 
-                ok = self._add_control(ctl)
+                    elif (control_type == "button"):
+                        if ( not "textoffsetx" in current_control ): current_control[ "textoffsetx" ] = 0
+                        else: current_control[ "textoffsetx" ] = int( current_control[ "textoffsetx" ] )
+                        if ( not "textoffsety" in current_control ): current_control[ "textoffsety" ] = 0
+                        else: current_control[ "textoffsety" ] = int( current_control[ "textoffsety" ] )
+                        if ( not "focusedcolor" in current_control ): current_control[ "focusedcolor" ] = current_control[ "textcolor" ]
+
+                    elif ( control_type == "checkmark" ):
+                        if (not "texturecheckmark" in current_control ): current_control[ "texturecheckmark" ] = ""
+                        elif ( current_control[ "texturecheckmark" ][ 0 ] == "\\" ): current_control[ "texturecheckmark" ] = os.path.join( image_path, current_control[ "texturecheckmark" ][ 1 : ] )
+                        if (not "texturecheckmarknofocus" in current_control ): current_control[ "texturecheckmarknofocus" ] = ""
+                        elif ( current_control[ "texturecheckmarknofocus" ][ 0 ] == "\\" ): current_control[ "texturecheckmarknofocus" ] = os.path.join( image_path, current_control[ "texturecheckmarknofocus" ][ 1 : ] )
+                        if ( not "markwidth" in current_control ): current_control[ "markwidth" ] = 20
+                        else: current_control[ "markwidth" ] = int( current_control[ "markwidth" ] )
+                        if ( not "markheight" in current_control ): current_control[ "markheight" ] = 20
+                        else: current_control[ "markheight" ] = int( current_control[ "markheight" ] )
+
+                    elif ( control_type == "progress" ):
+                        if ( not "texturebg" in current_control ): current_control[ "texturebg" ] = ""
+                        elif ( current_control[ "texturebg" ][ 0 ] == "\\" ): current_control[ "texturebg" ] = os.path.join( image_path, current_control[ "texturebg" ][ 1 : ] )
+                        if ( not "lefttexture" in current_control ): current_control[ "lefttexture" ] = ""
+                        elif ( current_control[ "lefttexture" ][ 0 ] == "\\" ): current_control[ "lefttexture" ] = os.path.join( image_path, current_control[ "lefttexture" ][ 1 : ] )
+                        if ( not "midtexture" in current_control ): current_control[ "midtexture" ] = ""
+                        elif ( current_control[ "midtexture" ][ 0 ] == "\\" ): current_control[ "midtexture" ] = os.path.join( image_path, current_control[ "midtexture" ][ 1 : ] )
+                        if ( not "righttexture" in current_control ): current_control[ "righttexture" ] = ""
+                        elif ( current_control[ "righttexture" ][ 0 ] == "\\" ): current_control[ "righttexture" ] = os.path.join( image_path, current_control[ "righttexture" ][ 1 : ] )
+                        if ( not "overlaytexture" in current_control ): current_control[ "overlaytexture" ] = ""
+                        elif ( current_control[ "overlaytexture" ][ 0 ] == "\\" ): current_control[ "overlaytexture" ] = os.path.join( image_path, current_control[ "overlaytexture" ][ 1 : ] )
+
+                    elif ( control_type == "list" or control_type == "listcontrol" ):
+                        current_control[ "label2" ] = label2_tags
+                        current_control[ "image" ] = image_tags
+                        if (not "selectedcolor" in current_control ): current_control[ "selectedcolor" ] = "FFFFFFFF"
+                        if (not "itemwidth" in current_control ): current_control[ "itemwidth" ] = 20
+                        else: current_control[ "itemwidth" ] = int( current_control[ "itemwidth" ] )
+                        if (not "itemheight" in current_control ): current_control[ "itemheight" ] = 20
+                        else: current_control[ "itemheight" ] = int( current_control[ "itemheight" ] )
+                        if (not "textureheight" in current_control ): current_control[ "textureheight" ] = 20
+                        else: current_control[ "textureheight" ] = int( current_control[ "textureheight" ] )
+                        if (not "textxoff" in current_control ): current_control[ "textxoff" ] = 0
+                        else: current_control[ "textxoff" ] = int( current_control[ "textxoff" ] )
+                        if (not "textyoff" in current_control ): current_control[ "textyoff" ] = 0
+                        else: current_control[ "textyoff" ] = int( current_control[ "textyoff" ] )
+                        if (not "spacebetweenitems" in current_control ): current_control[ "spacebetweenitems" ] = 0
+                        else: current_control[ "spacebetweenitems" ] = int( current_control[ "spacebetweenitems" ] )
+                        if ( not "hidespinner" in current_control ): current_control[ "hidespinner" ] = "false"
+                        current_control[ "hidespinner"] = current_control[ "hidespinner" ] in [ "true", "yes", "1" ]
+                        if ( not "image" in current_control ): current_control[ "image" ] = [ " " ]
+                        for img in range( len( current_control[ "image" ] ) ):
+                            if ( current_control[ "image" ][ img ][ 0 ] == "\\" ): current_control[ "image" ][ img ] = os.path.join( image_path, current_control[ "image" ][ img ][ 1 : ] )
+
+                ok = self._add_control(current_control)
                 if ( not ok ): raise
-            self.pct += self.pct1
+                ##control = self.NextSiblingElement( control, None )
         except:
-            if (not self.fastMethod): self.dlg.close()
             succeeded = False
         try: skindoc.unlink()
         except: pass
-        if (succeeded):
-            self._debug_write("_parse_xml_file", succeeded, ["Parsed %i control(s) from %s"], [(cnt + 1, self.skinXML,)])
-        else:
-            if (not self.controlsFailed): self.controlsFailed = self.skinXML + " is corrupted--"
-            self._debug_write("_parse_xml_file", succeeded, ["Parsed %i control(s) from %s", "Control(s) Failed: %s"],\
-                [((cnt + 1 - self.controlsFailedCnt), self.skinXML), self.controlsFailed[:-2]])
         return succeeded
 
+    def _set_navigation( self ):
+        """ sets control navigation """
+        for item in self.navigation.values():
+            if ( item[ 1 ] in self.navigation and self.navigation[ item[ 1 ] ][ 0 ] in self.win.controls ):
+                self.win.controls[ item[ 0 ] ][ "control" ].controlUp( self.win.controls[ self.navigation[ item[ 1 ] ][ 0 ] ][ "control" ] )
+            if ( item[ 2 ] in self.navigation and self.navigation[ item[ 2 ] ][ 0 ] in self.win.controls ):
+                self.win.controls[ item[ 0 ] ][ "control" ].controlDown( self.win.controls[ self.navigation[ item[ 2 ] ][ 0 ] ][ "control" ] )
+            if ( item[ 3 ] in self.navigation and self.navigation[ item[ 3 ] ][ 0 ] in self.win.controls ):
+                self.win.controls[ item[ 0 ] ][ "control" ].controlLeft( self.win.controls[ self.navigation[ item[ 3 ] ][ 0 ] ][ "control" ] )
+            if ( item[ 4 ] in self.navigation and self.navigation[ item[ 4 ] ][ 0 ] in self.win.controls ):
+                self.win.controls[ item[ 0 ] ][ "control" ].controlRight( self.win.controls[ self.navigation[ item[ 4 ] ][ 0 ] ][ "control" ] )
 
-    def _set_navigation(self):
-        try:
-            succeeded = True
-            if (not self.fastMethod): 
-                self.lines[self.lineno + 1]    = "setting up navigation..."
-                t = len(self.navigation)
-            for cnt, item in enumerate(self.navigation.values()):
-                if (not self.fastMethod): self.dlg.update(int((float(self.pct1) / float(t) * (cnt + 1)) + self.pct), self.lines[0], self.lines[1], self.lines[2])
-                if (self.navigation.has_key(item[1]) and self.win.controls.has_key(self.navigation[item[1]][0])):
-                    self.win.controls[item[0]]["control"].controlUp(self.win.controls[self.navigation[item[1]][0]]["control"])
-                if (self.navigation.has_key(item[2]) and self.win.controls.has_key(self.navigation[item[2]][0])):
-                    self.win.controls[item[0]]["control"].controlDown(self.win.controls[self.navigation[item[2]][0]]["control"])
-                if (self.navigation.has_key(item[3]) and self.win.controls.has_key(self.navigation[item[3]][0])):
-                    self.win.controls[item[0]]["control"].controlLeft(self.win.controls[self.navigation[item[3]][0]]["control"])
-                if (self.navigation.has_key(item[4]) and self.win.controls.has_key(self.navigation[item[4]][0])):
-                    self.win.controls[item[0]]["control"].controlRight(self.win.controls[self.navigation[item[4]][0]]["control"])
-            self.pct += self.pct1
-            self._debug_write("_set_navigation", True)
-        except:
-            if (not self.fastMethod): self.dlg.close()
-            succeeded = False
-            self._debug_write("_set_navigation", False)
-        return succeeded
-            
-            
-    def _set_conditional_visibility(self):
-        if (not self.fastMethod): 
-            self.lines[self.lineno + 1]    = "setting up visibility..."
-            t = len(self.win.controls)
-        pattern1     = "control.hasfocus\(([0-9]+)\)"
-        pattern2     = "control.isvisible\(([0-9]+)\)"
-        for cnt, key in enumerate(self.win.controls.keys()):
-            if (not self.fastMethod): self.dlg.update(int((float(self.pct1) / float(t) * (cnt + 1)) + self.pct), self.lines[0], self.lines[1], self.lines[2])
-            try:
-                visible = self.win.controls[key]["visible"]
-                visibleChanged = False
-                # fix Control.HasFocus(id) visibility condition
-                items = re.findall(pattern1, visible)
+    def _set_visibility_and_animations( self ):
+        """ corrects control id's for some visible conditions and set's visible status """
+        import re
+        pattern = [ "control.hasfocus\(([0-9]+)\)", "control.isvisible\(([0-9]+)\)" ]
+        rvalue = [ "control.hasfocus(##)", "control.isvisible(##)" ]
+        for key in self.win.controls.keys():
+            visible = self.win.controls[ key ][ "visible" ][ 0 ]
+            enable = self.win.controls[ key ][ "enable" ]
+            visibleChanged = False
+            enableChanged = False
+            animChanged = False
+            final_anim = []
+            for cnt in range( len( pattern ) ):
+                items = re.findall( pattern[ cnt ], visible )
+                visible = re.sub( pattern[ cnt ], rvalue[ cnt ], visible )
+                # fix Control.HasFocus(id) visibility condition and Control.IsVisible(id) visibility condition
                 for item in items:
                     visibleChanged = True
-                    if (self.win.controls.has_key(self.navigation[int(item)][0]) and self.win.controls[self.navigation[int(item)][0]]["id"]==int(item)):
-                        actualId = self.win.controls[self.navigation[int(item)][0]]["controlId"]
-                        visible = re.sub(pattern1, "control.hasfocus(%d)" % actualId, visible)
-                # fix Control.IsVisible(id) visibility condition
-                items = re.findall(pattern2, visible)
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ] == int( item ) ):
+                        actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                        visible = visible.replace( "##", str( actualId ), 1 )
+                items = re.findall( pattern[ cnt ], enable )
+                enable = re.sub( pattern[ cnt ], rvalue[ cnt ], enable )
+                # fix Control.HasFocus(id) enabled condition and Control.IsVisible(id) enabled condition
                 for item in items:
-                    visibleChanged = True
-                    if (self.win.controls.has_key(self.navigation[int(item)][0])):
-                        actualId = self.win.controls[self.navigation[int(item)][0]]["controlId"]
-                        visible = re.sub(pattern2, "control.isvisible(%d)" % actualId, visible)
-                # set the controls new visible condition
-                if (visibleChanged): self.win.controls[key]["visible"] = visible
-                # set the controls initial visibility
-                self.win.controls[key]["control"].setVisible(xbmc.getCondVisibility(visible))
-            except: pass
-        self._debug_write("_set_conditional_visibility", True)
-
-
+                    enableChanged = True
+                    if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                        actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                        enable = enable.replace( "##", str( actualId ), 1 )
+                # fix Control.HasFocus(id) animation condition and Control.IsVisible(id) animation condition
+                for acnt in range( len( self.win.controls[ key ][ "animation" ] ) ):
+                    items = re.findall( pattern[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
+                    anim_attr = re.sub( pattern[ cnt ], rvalue[ cnt ], self.win.controls[ key ][ "animation" ][ acnt ][ 1 ] )
+                    for item in items:
+                        animChanged = True
+                        if ( int( item ) in self.navigation and self.navigation[ int( item ) ][ 0 ] in self.win.controls and self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "id" ]==int( item ) ):
+                            actualId = self.win.controls[ self.navigation[ int( item ) ][ 0 ] ][ "controlId" ]
+                            anim_attr = anim_attr.replace( "##", str( actualId ), 1 )
+                    if ( items ): final_anim += [ ( self.win.controls[ key ][ "animation" ][ acnt ][ 0 ], anim_attr, ) ]
+            
+            # set the controls new visible condition
+            if ( visibleChanged ): self.win.controls[ key ][ "visible" ][ 0 ] = visible
+            # set the controls new visible condition
+            if ( enableChanged ): self.win.controls[ key ][ "enable" ] = enable
+            # set the controls new animation condition
+            if ( animChanged ): 
+                self.win.controls[ key ][ "animation" ] = final_anim
+            # set the controls initial visibility
+            if ( visible != "false" and visible != "true" ):
+                self.win.controls[ key ][ "control" ].setVisibleCondition( visible, self.win.controls[ key ][ "visible" ][ 1 ] )
+            else:
+                self.win.controls[ key ][ "control" ].setVisible( xbmc.getCondVisibility( visible ) )
+            if ( enable != "false" and enable != "true" ):
+                self.win.controls[ key ][ "control" ].setEnableCondition( enable )
+            else:
+                self.win.controls[ key ][ "control" ].setEnabled( xbmc.getCondVisibility( enable ) )
+            # set the controls animations
+            if ( self.win.controls[ key ][ "animation" ] ): self.win.controls[ key ][ "control" ].setAnimations( self.win.controls[ key ][ "animation" ] )
+            
     def GetConditionalVisibility( self, conditions ):
         if ( len( conditions ) == 0 ): return "true"
         if ( len( conditions ) == 1 ): return conditions[ 0 ]
@@ -754,7 +639,6 @@ class GUIBuilder:
                 conditionString += conditions[ i ] + "] + ["
             conditionString += conditions[ len( conditions ) - 1 ] + "]"
         return conditionString
-
 
     def GetSkinPath(self, filename):
         default = 6
@@ -773,32 +657,26 @@ class GUIBuilder:
         fname = os.path.join("Q:\\skin", xbmc.getSkinDir(), self.resPath[self.currentResolution], filename)
         if (os.path.exists(fname)):
             if (filename == "includes.xml"): self.resolution = self.currentResolution
-            self._debug_write("GetSkinPath", True, ["Found path for %s at %s"], [(filename, fname,)])
             return fname
         # if we're in 1080i mode, try 720p next
         if (self.currentResolution == 0):
             fname = os.path.join("Q:\\skin", xbmc.getSkinDir(), self.resPath[1], filename)
             if (os.path.exists(fname)):
                 if (filename == "includes.xml"): self.resolution = 1
-                self._debug_write("GetSkinPath", True, ["Found path for %s at %s"], [(filename, fname,)])
                 return fname
         # that failed - drop to the default widescreen resolution if we're in a widemode
         if (self.currentResolution % 2):
             fname = os.path.join("Q:\\skin", xbmc.getSkinDir(), self.resPath[defaultwide], filename)
             if (os.path.exists(fname)):
                 if (filename == "includes.xml"): self.resolution = defaultwide
-                self._debug_write("GetSkinPath", True, ["Found path for %s at %s"], [(filename, fname,)])
                 return fname
         # that failed - drop to the default resolution
         fname = os.path.join("Q:\\skin", xbmc.getSkinDir(), self.resPath[default], filename)
         if (os.path.exists(fname)):
             if (filename == "includes.xml"): self.resolution = default
-            self._debug_write("GetSkinPath", True, ["Found path for %s at %s"], [(filename, fname,)])
             return fname
         else:
-            self._debug_write("GetSkinPath", False, ["No path for %s found"], [(filename,)])
             return None
-
 
     def FirstChildElement(self, root, value = "include"):
         node = root.firstChild
@@ -808,7 +686,6 @@ class GUIBuilder:
             node = node.nextSibling
         return None
 
-
     def NextSiblingElement(self, node, value = "include"):
         while (node):
             node = node.nextSibling
@@ -816,47 +693,36 @@ class GUIBuilder:
                 if (node.tagName == value or not value): return node
         return None
 
-
     def ClearIncludes( self ):
         self.m_includes = {}
         self.m_defaults = {}
         self.m_files = []
-
 
     def HasIncludeFile( self, file ):
         if ( file in self.m_files ): 
             return True
         else: return False
 
-
     def LoadIncludes( self, includeFile = "includes.xml" ):
         # check to see if we already have this loaded
         if ( self.HasIncludeFile( includeFile ) ):
             return True
-        if (not self.fastMethod):
-            self.lines[self.lineno + 1]    = "loading includes & defaults..."
-            self.dlg.update(self.pct, self.lines[0], self.lines[1], self.lines[2])
         # get the includes.xml file location if it exists
         includeFile = self.GetSkinPath( str( includeFile ) )
         # load and parse includes.xml file
         try: 
             self.include_doc.append( xml.dom.minidom.parse( includeFile ) )
         except:
-            self._debug_write("LoadIncludes", False)
             return False
         # success, load the tags
         if ( self.LoadIncludesFromXML( self.include_doc[-1].documentElement ) ):
             self.m_files.append( includeFile )
-            self._debug_write("LoadIncludes", True)
             return True
         else: 
-            self._debug_write("LoadIncludes", False)
             return False
-
 
     def LoadIncludesFromXML( self, root ):
         if ( not root or root.tagName != "includes" ):
-            self._debug_write( "LoadIncludesFromXML", False )
             return False
         node = self.FirstChildElement( root )
         while ( node ):
@@ -877,9 +743,7 @@ class GUIBuilder:
                 tagName = node.getAttribute( "type" )
                 self.m_defaults[ tagName ] = node
             node = self.NextSiblingElement( node, "default" )
-        self._debug_write( "LoadIncludesFromXML", True )
         return True
-
 
     def ResolveIncludes( self, node, type = None ):
         # we have a node, find any <include file="fileName">tagName</include> tags and replace
@@ -920,6 +784,4 @@ class GUIBuilder:
                 include = self.FirstChildElement( node, "include" )
             else:
                 # invalid include
-                self._debug_write( "ResolveIncludes", False, [ "Skin has invalid include: %s" ], [ ( str( tagName ), ) ] )
                 include = self.NextSiblingElement( node, "include" )
-        self._debug_write( "ResolveIncludes", True )

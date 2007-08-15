@@ -16,6 +16,7 @@ __line1__  = 'Setting up script:'
 __scriptname__ = 'AccuWeather'
 __author__ = 'Nuka1195'
 __url__ = 'http://code.google.com/p/xbmc-scripting/'
+__svn_url__ = 'http://xbmc-scripting.googlecode.com/svn/trunk/AccuWeather'
 __credits__ = 'XBMC TEAM, freenode/#xbmc-scripting'
 __version__ = '0.9.1'
 
@@ -28,7 +29,7 @@ def createProgressDialog():
 
 def updateProgressDialog(line1 = '', line2 = '', line3 = ''):
     global dialog, pct
-    pct += 5
+    pct += 10
     if (line3): dialog.update(pct, line1, line2, line3)
     elif (line2): dialog.update(pct, line1, line2)
     elif (line1): dialog.update(pct, line1)
@@ -42,18 +43,15 @@ import xbmcgui, xbmc
 createProgressDialog()
 
 import threading, sys
+import re, os
 updateProgressDialog()
 
 import urllib, urllib2
 updateProgressDialog()
-
-import time, socket
+import time#, socket
 updateProgressDialog()
 
-import re, os
-updateProgressDialog()
-
-socket.setdefaulttimeout(15.0) #seconds
+#socket.setdefaulttimeout(15.0) #seconds
 
 resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources\\' )
 sys.path.append( os.path.join( resourcesPath, 'lib' ) )
@@ -61,8 +59,6 @@ sys.path.append( os.path.join( resourcesPath, 'lib', '_xmlplus.zip' ) )
 sys.path.append( os.path.join( resourcesPath, 'lib', '_PIL.zip' ) )
     
 from PIL import Image
-updateProgressDialog()
-
 import configmgr, weatherparser, guibuilder
 updateProgressDialog()
 
@@ -70,23 +66,26 @@ MapPath = os.path.join( resourcesPath, 'maps\\' )
 ImagePath = os.path.join( resourcesPath, 'images' )
 DefaultPath = os.path.join( resourcesPath, 'defaults\\' )
 
-ACTION_MOVE_LEFT                             = 1
-ACTION_MOVE_RIGHT                        = 2
-ACTION_MOVE_UP       = 3
-ACTION_MOVE_DOWN     = 4
-ACTION_PARENT_DIR                        = 9
-ACTION_PREVIOUS_MENU                     = 10
-ACTION_WHITE_BUTTON                    = 117
-ACTION_Y_BUTTON                            = 34
+ACTION_MOVE_LEFT = 1
+ACTION_MOVE_RIGHT = 2
+ACTION_MOVE_UP = 3
+ACTION_MOVE_DOWN = 4
+ACTION_PARENT_DIR = 9
+ACTION_PREVIOUS_MENU = 10
+ACTION_WHITE_BUTTON = 117
+ACTION_Y_BUTTON = 34
 
 class GUI(xbmcgui.Window):
     def __init__(self):
         self.INITIALIZING = True
         self.initValues()
         self.gui_loaded = self.getConfigValues()
-        if ( not self.gui_loaded ): self.exitScript()
+        if ( not self.gui_loaded ): 
+            closeProgessDialog()
+            self.exitScript()
         else:
             self.setDefaultMap()
+            updateProgressDialog(__line1__, 'Setting up gui & controls...')
             self.gui_loaded = self.setupGUI()
             closeProgessDialog()
             if (not self.gui_loaded):
@@ -114,10 +113,10 @@ class GUI(xbmcgui.Window):
 
 
     def setupGUI( self ):
+        """ sets up the gui using guibuilder """
         gb = guibuilder.GUIBuilder()
-        ok = gb.create_gui( self, title=__scriptname__, line1=__line1__, dlg=dialog, pct=pct )
+        ok, image_path = gb.create_gui( self, use_desc_as_key=False )
         return ok
-
     
     def getConfigValues(self):
         try:
@@ -221,6 +220,7 @@ class GUI(xbmcgui.Window):
 
 
     def searchCodes(self, location):
+        print "searchCodes:", self.codeURL + location
         if (not debug):
             request = urllib2.Request(self.codeURL + location)
             opener = urllib2.build_opener()
@@ -232,7 +232,7 @@ class GUI(xbmcgui.Window):
         if (debugWrite):
             usock = open(os.getcwd().replace( ";", "" ) + '\\codes.txt','w')
             usock.write(htmlSource)
-            usock.close
+            usock.close()
         ##############################################################
         parser = weatherparser.CityParser()
         parser.feed(htmlSource)
@@ -250,8 +250,10 @@ class GUI(xbmcgui.Window):
             else: location = self.LOCATION.replace(', ', '%2C').replace(' ', '%20')
             parser, htmlSource = self.searchCodes(location)
             dlg.update(50)
+            print self.URL_Location
             #'<meta http-equiv="Set-Cookie" content="canada=1|M3H 6A7|ON|TORONTO|-5|1|YYZ|YYZ|ON|CWKR|43.75|-79.44|YYZ|;path=/;domain=.accuweather.com;expires=Tuesday, 29-Aug-06 00:00:00 GMT;"/>'
             #>WINDSOR, NS (B0N 2T0)</a>
+            print len(parser.city), parser.city
             if (len(parser.city) == 0):
                 if (self.URL_Location == 'Canada'): # let the user select
                     pattern = 'class"textmed">(.*?\([A-Z][0-9][A-Z] [0-9][A-Z][0-9]\))'
@@ -263,7 +265,7 @@ class GUI(xbmcgui.Window):
                 #EUR|DE|GM007|FRANKFURT|">Frankfurt
 #<a href="http://wwwa.accuweather.com/index-world-forecast.asp?partner=accuweather&myadc=0&amp;traveler=0&amp;zipcode=EUR|DE|GM007|FRANKFURT|">Frankfurt</a></td>
 #locz=1|48161|MIMO|083|@MI|ARB|TTF|MIZ083|MIC115|5|1|41.91|-83.47|MONROE|MI|KPTK|NE|MI_||;path=/;domain=.accuweather.com;expires=Saturday, 02-Sep-06 00:00:00 GMT;">#0            1            2        3        4        5        6        7            8        910    11        12        13     14  15   16  17 18
-                
+#locz=1|48161|MIMO|083|@MI|ARB|TTF|MIZ083|MIC115|5|1|41.91|-83.47|MONROE|MI|KPTK|NE|MI_||;path=/;domain=.accuweather.com;expires=Monday, 09-Jul-07 00:00:00 GMT;">                
                 
                 choices = re.findall(pattern, htmlSource)
                 if (len(choices)):
