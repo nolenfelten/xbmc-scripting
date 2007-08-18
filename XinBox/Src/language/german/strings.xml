@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--German Strings VER: 0.4-->
+<!--German Strings VER: 0.5-->
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Hauptmenü</string>
@@ -148,6 +148,9 @@
 	<string id="161">A: Bearbeite Kontaktname/Email Adresse   B: Kontakt löschen   Weiss: Kontakt zum Adressfeld hinzufügen</string>
 	<string id="162">Auswählen um zu entscheiden, ob die "Neue Email" Benachrichtigung bei einer neuen Email abgespielt wird oder nicht.</string>
 	<string id="163">Auswählen um zu entscheiden, ob zwei XinBox + XBMC Promoting Zeilen unten an versendete Emails angefügt werden sollen.</string>
+	<string id="164">Auswählen um entweder auf die neue Version zu aktualisieren oder um die Change Log zu lesen.</string>
+	<string id="165">Auswählen um die Change Log von dieser Version runterzuladen und anzuschauen.</string>
+	<string id="166">Auswählen um XinBox auf diese Version zu aktualisieren.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Konto Menü</string>
@@ -288,16 +291,24 @@
 	<!-- Update Labels -->
 	<string id="390">Deine Version ist aktuell.</string>
 	<string id="391">Suche nach aktuellster Version...</string>
-    	<string id="392">ist neuer</string>
-    	<string id="393">Möchtest du aktualisieren?</string>
+    	<string id="392">Aktualisiere XinBox zu Version %s</string>
+    	<string id="393">Change Log</string>
     	<string id="394">Lade Liste mit Dateien...</string>
     	<string id="395">Bitte warten...</string>
     	<string id="396">Version</string>
     	<string id="397">Lade:</string>
     	<string id="398">Pfad:</string>
     	<string id="399">Datei:</string>
-    	<string id="400">Deine neue Version wurde gespeichert in:</string>
-    	<string id="401">Keine aktuellere Version gefunden!</string>
+    	<string id="400">Downloaden der Change Log...</string>
+    	<string id="401">Fehler beim runterladen der markierten Version!</string>
     	<string id="402">Es kam zu einem Fehler beim Aktualisieren!</string>
-        <string id="403">Alte Version löschen und neue Version starten?</string>
+        <string id="403">Kopie der alten Version behalten?</string>
+	<string id="404">Neue Update(s) verfügbar!</string>
+	<string id="405">Am Neuesten</string>
+	<string id="406">Neuer</string>
+	<string id="407">Aktuell</string>
+	<string id="408">Älter</string>
+	<string id="409">Inkompatibel</string>
+	<string id="410">Update Menü</string>
+	<string id="411">Keine Change Log für diese Version verfügbar.</string>
 </strings>
