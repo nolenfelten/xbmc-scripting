@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Downloader</string>
+    <string id="2">Nuka1195</string>
 
     <!-- Browse dialog headings -->
     <string id="200">download path</string>
