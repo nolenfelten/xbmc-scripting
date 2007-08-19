@@ -14,7 +14,7 @@ _ = language.Language().localized
 socket.setdefaulttimeout( 10 )
 
 __scriptname__ = "T3CH Downloader"
-__svn_revision__ = 0
+__svn_revision__ = "$Rev$"
 
 class Parser( SGMLParser ):
     def reset( self ):
