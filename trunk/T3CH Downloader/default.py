@@ -14,7 +14,7 @@ _ = language.Language().localized
 socket.setdefaulttimeout( 10 )
 
 __scriptname__ = "T3CH Downloader"
-
+__svn_revision__ = 0
 
 class Parser( SGMLParser ):
     def reset( self ):
@@ -26,14 +26,14 @@ class Parser( SGMLParser ):
             if ( key == "href" and value.find( "/STABLE/" ) == -1 and value.find( "ARCHIVE/" ) == -1 
                 and value.find( "/t3ch/XBMC-SVN" ) != -1 and value.find( ".rar" ) != -1 ):
                 self.url = value
-    
+
 class Main:
     def __init__( self ):
-        #self.base_url = "http://t3ch.xil.us/"
-        self.base_url = "http://217.118.215.116/"
+        self.base_url = "http://t3ch.yi.se/"
+        #self.base_url = "http://217.118.215.116/"
         self._get_settings()
         self._download_build()
-        
+
     def _get_settings( self ):
         try:
             settings_file = open( os.path.join( "T:\\script_data", __scriptname__, "settings.txt" ), "r" )
@@ -41,7 +41,7 @@ class Main:
             settings_file.close()
         except:
             self._set_default_settings()
-           
+
     def _set_default_settings( self ):
         self.settings = {}
         self.settings[ "download_path" ] = self._browse_for_path( _( 200 ) )
@@ -77,7 +77,7 @@ class Main:
                 ok = xbmcgui.Dialog().ok( _( 0 ), _( 301 ) )
         except:
             ok = xbmcgui.Dialog().ok( _( 0 ), _( 302 ) )
-            
+
     def _get_latest_version( self ):
         try:
             dialog = xbmcgui.DialogProgress()
@@ -90,7 +90,7 @@ class Main:
             traceback.print_exc()
         dialog.close()
         return url
-                
+
     def _fetch_current_build( self, url, file_path ):
         try:
             self.dialog = xbmcgui.DialogProgress()
@@ -107,7 +107,7 @@ class Main:
         percent = int( float( count * blocksize * 100) / totalsize )
         self.dialog.update( percent )
         if ( self.dialog.iscanceled() ): raise
-        
+
     def _extract_rar( self, file_path ):
         try:
             dialog = xbmcgui.DialogProgress()
@@ -119,7 +119,7 @@ class Main:
             dialog.close()
             traceback.print_exc()
             ok = xbmcgui.Dialog().ok( _( 0 ), _( 303 ) )
-    
+
     def _get_html_source( self, url ):
         try:
             sock = urllib.urlopen( url )
@@ -135,7 +135,7 @@ class Main:
             parser.close()
             return parser.url
         except: return None
-            
+
+
 if ( __name__ == "__main__" ):
     Main()
-    
