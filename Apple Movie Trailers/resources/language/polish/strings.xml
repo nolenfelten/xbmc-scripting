@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
-<!--Email: smuto@xbox-scene.pl-->
-<!--Date of translation: 04/03/2007-->
+<!--Email: smuto@gazeta.pl-->
+<!--Date of translation: 08/26/2007-->
+<!--$Revision$-->
 <strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">Xbox Media Center</string>
   <string id="2">smuto</string>
-
   <string id="40">Kompletne informacje o filmie, dostępne przeszukiwanie. (10 - 60 minut)</string>
   <string id="41">Informacje będą aktualizowane w zakresie gatunków. (1 - 5 minut)</string>
   <string id="42">Odświeżanie listy gatunków...</string>
@@ -30,10 +30,13 @@
   <string id="59">Trzeba zaktualizować bazą danych...</string>
   <string id="60">Plik bazodanowy jest niezgodny z tą wersją AMT.\n|Niestety trzeba go stworzyć od początku.</string>
   <string id="61">Pełna aktualizacja listy dostępnych zwiastunów...</string>
+  <string id="62">Przesłanie nowych plików xml</string>
   <string id="63">Aktualizacja może trwać 5 - 15 minut,|w zależności od prędkości łącza jakim dysponujesz.</string>
   <string id="64">Błąd</string>
+  <string id="65">Analizowanie plików xml dla adresów wszystkich zwiastunów</string>
   <string id="66">Wczytywanie listy gatunków ...</string>
   <string id="67">Proszę czekać.</string>
+  <string id="68">Odświerzanie informacji o zwiastunie</string>
   <string id="69">Błąd - pobrana lista gatunków nie jest kompletna..</string>
   <string id="70">Wczytywanie listy zwiastunów...</string>
   <string id="71">Gatunek:</string>
@@ -49,19 +52,34 @@
   <string id="81">Niestety jeden z modułów jest uszkodzony albo poprostu go nie ma!</string>
   <string id="82">Czy rzeczywiście chcesz usunąć?</string>
   <string id="83">Wczytywanie...</string>
+  <string id="84">filmów</string>
   <string id="85">Przesyłanie danych...</string>
+  <string id="86">plików</string>
   <string id="87">Bieżący gatunek</string>
   <string id="88">Bieżący zwiastun</string>
   <string id="89">Błąd podczas tworzenia bazy danych....</string>
   <string id="90">Błąd podczas kopiowania pozycji....</string>
+  <string id="91">pozostało</string>
+  <string id="92">*nie ma oceny tej pozycji</string>
+  <string id="93">Ilość wyników wyszukiwania</string>
+  <string id="94">*Nie podano żadnych słów</string>
+  <string id="95">Szukaj: słowa oddzielaj angielskimi "and/or/not"</string>
+  <string id="96">z</string>
+  <string id="97">Ustaw sposób szukania</string>
+  <string id="98">Usuń pliki xml starych zwiastunów</string>
   <string id="103">Gatunki..</string>
   <string id="104">Wytwórnia..</string>
   <string id="105">Aktor..</string>
   <string id="106">Szukaj..</string>
   <string id="107">Ustawienia..</string>
+  <string id="108">Lista zasług</string>
+  <string id="109">Aktualizuj skrypt</string>
   <string id="113">Gatunek</string>
   <string id="114">Wytwórnia</string>
   <string id="115">Aktor</string>
+  <string id="116">Ocena</string>
+  <string id="117">Jakość</string>
+  <string id="118">Ustawienia dodatkowe</string>
   <string id="150">Najnowsze</string>
   <string id="151">Specjalne</string>
   <string id="152">Ulubione</string>
@@ -72,6 +90,10 @@
   <string id="157">Obsada</string>
   <string id="158">Pełna</string>
   <string id="159">Minimalna</string>
+  <string id="160">Zwiastuny w jakości HD</string>
+  <string id="161">Zwiastun chwilowo nie ma żadnego aktywnego adresu</string>
+  <string id="162">Szukanie zaawansowane</string>
+  <string id="163">Oglądane</string>
   <string id="200">Wybierz:</string>
   <string id="201">Skóra</string>
   <string id="202">Jakość obrazu</string>
@@ -86,6 +108,8 @@
   <string id="211">Sprawdzaj wersję na starcie</string>
   <string id="212">Showtimes scraper</string>
   <string id="213">Zip code</string>
+  <string id="214">Rozdzielczość odtwarzacza</string>
+  <string id="218">Sprawdzaj wersje na starcie</string>
   <string id="230">Wystąpił błąd podczas zapisywania ustawień!</string>
   <string id="231">* zależna od skóry</string>
   <string id="240">Wprowadzone zmiany wymagają ponownego uruchomienia.</string>
@@ -97,6 +121,9 @@
   <string id="254">Strona</string>
   <string id="255">Restart</string>
   <string id="256">Później</string>
+  <string id="257">SQL - Zapisz</string>
+  <string id="258">SQL - Wyczyść</string>
+  <string id="259">SQL - wczytaj</string>
   <string id="400">*Opis fabuły dla tego tytułu jest niedostępny.</string>
   <string id="401">*Obsada dla tego tytułu jest niedostępna.</string>
   <string id="501">Rozpocznij odtwarzanie</string>
@@ -105,11 +132,13 @@
   <string id="504">Oznacz jako oglądane</string>
   <string id="505">Oznacz jako nieoglądane</string>
   <string id="506">Odśwież opis filmu</string>
+  <string id="507">Odśwież informacje dla wszystkich zwiastunów</string>
   <string id="508">Kopiuj do katalogu z zapisanymi zwiastunami</string>
   <string id="509">Usuń z dysku</string>
   <string id="510">Theater Showtimes</string>
   <string id="511">Przeglądaj.. ten gatunek</string>
   <string id="512">Odśwież gatunek</string>
+  <string id="513">Odśwież wszystkie gatunki</string>
   <string id="521">Przeglądaj.. tą wytwórnię</string>
   <string id="531">Przeglądaj.. z tym aktorem</string>
   <string id="550">Dokończ instalację - pełne info</string>
@@ -117,14 +146,15 @@
   <string id="901">Team Credits:</string>
   <string id="902">Additional Credits:</string>
   <string id="903">Skin Credits:</string>
+  <string id="914">Tłumaczenie</string>
   <string id="1000">Używasz najnowszej wersji.</string>
   <string id="1001">Sprawdzam używaną wersję...</string>
   <string id="1002">jest dostępna nowsza</string>
   <string id="1003">Chcesz zaktualizować?</string>
-  <string id="1004">Sciąganie potrzebnych plików...</string>
+  <string id="1004">Przesyłanie listy potrzebnych plików...</string>
   <string id="1005">Proszę czekać...</string>
   <string id="1006">Wersja</string>
-  <string id="1007">Wczytywanie...</string>
+  <string id="1007">Przesyłanie:</string>
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
   <string id="1010">Nowa wersja zapisana w:</string>
@@ -139,4 +169,9 @@
   <string id="2050">Okładka</string>
   <string id="2051">Domyślna</string>
   <string id="2052">Wyłączone</string>
+  <string id="2110">Nie zmieniaj</string>
+  <string id="2150">Szukaj niekompletnych wpisów</string>
+  <string id="2151">Szukaj w ulubionych</string>
+  <string id="2152">Szukaj w zapisanych na dysku</string>
+  <string id="2153">Szukaj w oglądanych</string>
 </strings>
