@@ -1,0 +1,316 @@
+Index: language/English/strings.xml
+===================================================================
+--- language/English/strings.xml	(revision 10086)
++++ language/English/strings.xml	(working copy)
+@@ -481,6 +481,7 @@
+   <string id="569">Comment</string>
+   <string id="570">Date Added</string>
+   <string id="571">Default</string>
++  <string id="572">Studio</string>
+ 
+   <string id="580">Sort Direction</string>
+   <string id="581">Sort Method</string>
+Index: xbmc/FileItem.cpp
+===================================================================
+--- xbmc/FileItem.cpp	(revision 10086)
++++ xbmc/FileItem.cpp	(working copy)
+@@ -1412,6 +1412,15 @@
+   case SORT_METHOD_MPAA_RATING:
+     Sort(sortOrder==SORT_ORDER_ASC ? SSortFileItem::MPAARatingAscending : SSortFileItem::MPAARatingDescending);
+     break;
++  case SORT_METHOD_VIDEO_RUNTIME:
++    Sort(sortOrder==SORT_ORDER_ASC ? SSortFileItem::MovieRuntimeAscending : SSortFileItem::MovieRuntimeDescending);
++    break;
++  case SORT_METHOD_STUDIO:
++    Sort(sortOrder==SORT_ORDER_ASC ? SSortFileItem::StudioAscending : SSortFileItem::StudioDescending);
++    break;
++  case SORT_METHOD_STUDIO_IGNORE_THE:
++    Sort(sortOrder==SORT_ORDER_ASC ? SSortFileItem::StudioAscendingNoThe : SSortFileItem::StudioDescendingNoThe);
++    break;
+   default:
+     break;
+   }
+Index: xbmc/FileItem.h
+===================================================================
+--- xbmc/FileItem.h	(revision 10086)
++++ xbmc/FileItem.h	(working copy)
+@@ -38,6 +38,9 @@
+   SORT_METHOD_PRODUCTIONCODE,
+   SORT_METHOD_SONG_RATING,
+   SORT_METHOD_MPAA_RATING,
++  SORT_METHOD_VIDEO_RUNTIME,
++  SORT_METHOD_STUDIO,
++  SORT_METHOD_STUDIO_IGNORE_THE,
+   SORT_METHOD_UNSORTED,
+   SORT_METHOD_MAX
+ } SORT_METHOD;
+Index: xbmc/FileSystem/PluginDirectory.cpp
+===================================================================
+--- xbmc/FileSystem/PluginDirectory.cpp	(revision 10086)
++++ xbmc/FileSystem/PluginDirectory.cpp	(working copy)
+@@ -184,6 +184,20 @@
+         dir->m_listItems.AddSortMethod(SORT_METHOD_MPAA_RATING, 563, LABEL_MASKS("%T", "%O"));
+         break;
+       }
++    case SORT_METHOD_VIDEO_RUNTIME:
++      {
++        dir->m_listItems.AddSortMethod(SORT_METHOD_VIDEO_RUNTIME, 555, LABEL_MASKS("%T", "%D"));
++        break;
++      }
++    case SORT_METHOD_STUDIO:
++    case SORT_METHOD_STUDIO_IGNORE_THE:
++      {
++        if (g_guiSettings.GetBool("filelists.ignorethewhensorting"))
++          dir->m_listItems.AddSortMethod(SORT_METHOD_STUDIO_IGNORE_THE, 572, LABEL_MASKS("%T", "%U"));
++        else
++          dir->m_listItems.AddSortMethod(SORT_METHOD_STUDIO, 572, LABEL_MASKS("%T", "%U"));
++        break;
++      }
+   }
+ }
+ 
+Index: xbmc/lib/libPython/xbmcmodule/listitem.cpp
+===================================================================
+--- xbmc/lib/libPython/xbmcmodule/listitem.cpp	(revision 10086)
++++ xbmc/lib/libPython/xbmcmodule/listitem.cpp	(working copy)
+@@ -326,6 +326,14 @@
+         else if (strcmpi(PyString_AsString(key), "size") == 0)
+           self->item->m_dwSize = PyInt_AsLong(value);
+         // TODO: Add a python list of cast members to m_cast
++        /*else if (strcmpi(PyString_AsString(key), "cast") == 0)
++        {
++          if (!PyObject_TypeCheck(value, &PyList_Type)) continue;
++          for (int i = 0; i < PyList_Size(value); i++)
++          {
++            if (!PyGetUnicodeString(tmp, PyList_GetItem(value, i), 1)) continue;
++          }
++        }*/
+         else
+         {
+           if (!PyGetUnicodeString(tmp, value, 1)) continue;
+@@ -346,6 +354,8 @@
+             self->item->GetVideoInfoTag()->m_strTitle = tmp;
+           else if (strcmpi(PyString_AsString(key), "duration") == 0)
+             self->item->GetVideoInfoTag()->m_strRuntime = tmp;
++          else if (strcmpi(PyString_AsString(key), "studio") == 0)
++            self->item->GetVideoInfoTag()->m_strStudio = tmp;
+           else if (strcmpi(PyString_AsString(key), "date") == 0)
+           {
+             if (strlen(tmp) == 10)
+Index: xbmc/lib/libPython/xbmcmodule/xbmcplugin.cpp
+===================================================================
+--- xbmc/lib/libPython/xbmcmodule/xbmcplugin.cpp	(revision 10086)
++++ xbmc/lib/libPython/xbmcmodule/xbmcplugin.cpp	(working copy)
+@@ -24,20 +24,20 @@
+  * start of xbmc methods
+  *****************************************************************/
+   PyDoc_STRVAR(addDirectoryItem__doc__,
+-    "addDirectoryItem(handle, url, listitem [,isFolder, totlalItems]) -- Callback function to pass directory contents back to XBMC.\n"
++    "addDirectoryItem(handle, url, listitem [,isFolder, totalItems]) -- Callback function to pass directory contents back to XBMC.\n"
++    " - Returns a bool for successful completion.\n"
+     "\n"
+     "handle      : Integer - handle the plugin was started with.\n"
+     "url         : string - url of the entry. would be plugin:// for another virtual directory\n"
+     "listitem    : ListItem - item to add.\n"
+     "isFolder    : [opt] bool - True=folder / False=not a folder(default).\n"
+-    "totlaItems  : [opt] Integer - Total number of items that will be passed.(used for progressbar)\n"
++    "totalItems  : [opt] Integer - Total number of items that will be passed.(used for progressbar)\n"
+     "\n"
+     "*Note, You can use the above as keywords for arguments and skip certain optional arguments.\n"
+     "       Once you use a keyword, all following arguments require the keyword.\n"
+     "\n"
+     "example:\n"
+-    "  - ok = xbmcplugin.addDirectoryItem(int(sys.argv[1]), 'F:\\\\Trailers\\\\300.mov', listitem)\n"
+-    "  - if not ok: break\n");
++    "  - if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), 'F:\\\\Trailers\\\\300.mov', listitem, totalItems=50): break\n");
+ 
+   PyObject* XBMCPLUGIN_AddDirectoryItem(PyTypeObject *type, PyObject *args, PyObject *kwds)
+   {
+@@ -81,6 +81,9 @@
+     "handle      : Integer - handle the plugin was started with.\n"
+     "succeeded   : [opt] bool - True=script completed successfully(Default)/False=Script did not.\n"
+     "\n"
++    "*Note, You can use the above as keywords for arguments and skip certain optional arguments.\n"
++    "       Once you use a keyword, all following arguments require the keyword.\n"
++    "\n"
+     "example:\n"
+     "  - xbmcplugin.endOfDirectory(int(sys.argv[1]))\n");
+ 
+@@ -115,8 +118,11 @@
+     "handle      : Integer - handle the plugin was started with.\n"
+     "sortMethod  : Integer - Number for sortmethod see FileItem.h.\n"
+     "\n"
++    "*Note, You can use the above as keywords for arguments and skip certain optional arguments.\n"
++    "       Once you use a keyword, all following arguments require the keyword.\n"
++    "\n"
+     "example:\n"
+-    "  - xbmcplugin.addSortMethod(int(sys.argv[1]), 17)\n");
++    "  - xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)\n");
+ 
+   PyObject* XBMCPLUGIN_AddSortMethod(PyTypeObject *type, PyObject *args, PyObject *kwds)
+   {
+@@ -199,8 +205,10 @@
+     PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_PRODUCTIONCODE", SORT_METHOD_PRODUCTIONCODE);
+     PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_SONG_RATING", SORT_METHOD_SONG_RATING);
+     PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_MPAA_RATING", SORT_METHOD_MPAA_RATING);
++    PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_VIDEO_RUNTIME", SORT_METHOD_VIDEO_RUNTIME);
++    PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_STUDIO", SORT_METHOD_STUDIO);
++    PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_STUDIO_IGNORE_THE", SORT_METHOD_STUDIO_IGNORE_THE);
+     PyModule_AddIntConstant(pXbmcPluginModule, "SORT_METHOD_UNSORTED", SORT_METHOD_UNSORTED);
+-
+   }
+ }
+ 
+Index: xbmc/SortFileItem.cpp
+===================================================================
+--- xbmc/SortFileItem.cpp	(revision 10086)
++++ xbmc/SortFileItem.cpp	(working copy)
+@@ -843,3 +843,97 @@
+   }
+   return left->m_bIsFolder;
+ }
++
++bool SSortFileItem::MovieRuntimeAscending(CFileItem *left, CFileItem *right)
++{
++  // ignore the ".." item - that should always be on top
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    if (left->GetVideoInfoTag()->m_strRuntime < right->GetVideoInfoTag()->m_strRuntime) return true;
++    if (left->GetVideoInfoTag()->m_strRuntime > right->GetVideoInfoTag()->m_strRuntime) return false;
++    return StringUtils::AlphaNumericCompare(left->GetLabel().c_str(), right->GetLabel().c_str()) <= 0;
++  }
++  return left->m_bIsFolder;
++}
++
++bool SSortFileItem::MovieRuntimeDescending(CFileItem *left, CFileItem *right)
++{
++  // ignore the ".." item - that should always be on top
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    if (left->GetVideoInfoTag()->m_strRuntime < right->GetVideoInfoTag()->m_strRuntime) return false;
++    if (left->GetVideoInfoTag()->m_strRuntime > right->GetVideoInfoTag()->m_strRuntime) return true;
++    return StringUtils::AlphaNumericCompare(left->GetLabel().c_str(), right->GetLabel().c_str()) >= 0;
++  }
++  return left->m_bIsFolder;
++}
++
++bool SSortFileItem::StudioAscending(CFileItem *left, CFileItem *right)
++{
++  // special cases
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  // only if they're both folders or both files do we do the full comparison
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    char *l = (char *)left->GetVideoInfoTag()->m_strStudio.c_str();
++    char *r = (char *)right->GetVideoInfoTag()->m_strStudio.c_str();
++    return StringUtils::AlphaNumericCompare(l, r) <= 0;
++  }
++  return left->m_bIsFolder;
++}
++
++bool SSortFileItem::StudioDescending(CFileItem *left, CFileItem *right)
++{
++  // special cases
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  // only if they're both folders or both files do we do the full comparison
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    char *l = (char *)left->GetVideoInfoTag()->m_strStudio.c_str();
++    char *r = (char *)right->GetVideoInfoTag()->m_strStudio.c_str();
++    return StringUtils::AlphaNumericCompare(l, r) >= 0;
++  }
++  return left->m_bIsFolder;
++}
++
++bool SSortFileItem::StudioAscendingNoThe(CFileItem *left, CFileItem *right)
++{
++  // special cases
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  // only if they're both folders or both files do we do the full comparison
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    char *l = (char *)left->GetVideoInfoTag()->m_strStudio.c_str();
++    char *r = (char *)right->GetVideoInfoTag()->m_strStudio.c_str();
++    l += StartsWithToken(left->GetVideoInfoTag()->m_strStudio);
++    r += StartsWithToken(right->GetVideoInfoTag()->m_strStudio);
++    
++    return StringUtils::AlphaNumericCompare(l, r) <= 0;
++  }
++  return left->m_bIsFolder;
++}
++
++bool SSortFileItem::StudioDescendingNoThe(CFileItem *left, CFileItem *right)
++{
++  // special cases
++  if (left->IsParentFolder()) return true;
++  if (right->IsParentFolder()) return false;
++  // only if they're both folders or both files do we do the full comparison
++  if (left->m_bIsFolder == right->m_bIsFolder)
++  {
++    char *l = (char *)left->GetVideoInfoTag()->m_strStudio.c_str();
++    char *r = (char *)right->GetVideoInfoTag()->m_strStudio.c_str();
++    l += StartsWithToken(left->GetVideoInfoTag()->m_strStudio);
++    r += StartsWithToken(right->GetVideoInfoTag()->m_strStudio);
++    
++    return StringUtils::AlphaNumericCompare(l, r) >= 0;
++  }
++  return left->m_bIsFolder;
++}
+Index: xbmc/SortFileItem.h
+===================================================================
+--- xbmc/SortFileItem.h	(revision 10086)
++++ xbmc/SortFileItem.h	(working copy)
+@@ -88,4 +88,15 @@
+   // Sort by Song Rating (0 -> 5)
+   static bool SongRatingAscending(CFileItem *left, CFileItem *right);
+   static bool SongRatingDescending(CFileItem *left, CFileItem *right);
++
++  // Sort by Movie Runtime, and if equal, sort by label
++  static bool MovieRuntimeAscending(CFileItem *left, CFileItem *right);
++  static bool MovieRuntimeDescending(CFileItem *left, CFileItem *right);
++
++  // Sort by Studio, and if equal, sort by label
++  static bool StudioAscending(CFileItem *left, CFileItem *right);
++  static bool StudioDescending(CFileItem *left, CFileItem *right);
++  static bool StudioAscendingNoThe(CFileItem *left, CFileItem *right);
++  static bool StudioDescendingNoThe(CFileItem *left, CFileItem *right);
++
+ };
+\ No newline at end of file
+Index: xbmc/utils/LabelFormatter.cpp
+===================================================================
+--- xbmc/utils/LabelFormatter.cpp	(revision 10086)
++++ xbmc/utils/LabelFormatter.cpp	(working copy)
+@@ -82,9 +82,11 @@
+  *  %P - production code
+  *  %H - season*100+episode
+  *  %Z - tvshow title
++ *  %O - mpaa rating
++ *  %U - studio
+  */
+ 
+-#define MASK_CHARS "NSATBGYFLDIJRCKMEPHZO"
++#define MASK_CHARS "NSATBGYFLDIJRCKMEPHZOU"
+ 
+ CLabelFormatter::CLabelFormatter(const CStdString &mask, const CStdString &mask2)
+ {
+@@ -259,6 +261,12 @@
+       value = movie->m_strMPAARating;
+     }
+     break;
++  case 'U':
++    if (movie && movie->m_strStudio)
++    {// MPAA Rating
++      value = movie ->m_strStudio;
++    }
++    break;
+   }
+   if (!value.IsEmpty())
+     return mask.m_prefix + value + mask.m_postfix;
