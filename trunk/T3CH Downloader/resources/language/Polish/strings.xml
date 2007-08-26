@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Language file translated with Team XBMC Translator-->
+<!--Translator: smuto-->
+<!--Email: smuto@gazeta.pl-->
+<!--Date of translation: 08/26/2007-->
+<!--$Revision$-->
+<!--Based on english strings version 10090-->
+<strings>
+  <string id="0">T3CH Downloader</string>
+  <string id="2">smuto</string>
+  <string id="200">Zapisz do ..</string>
+  <string id="201">Wypakuj do ..</string>
+  <string id="202">Katalog XBMC</string>
+  <string id="300">Błąd podczas zapisywania ustawień.</string>
+  <string id="301">Nie znalazłem żadnej wersji T3CH!</string>
+  <string id="302">Wystąpił błąd podczas pobierania!</string>
+  <string id="303">Pobieranie przerwane!</string>
+  <string id="304">Wystąpił błąd podczas wypakowywania!</string>
+  <string id="400">Pobieranie</string>
+  <string id="401">pomiń</string>
+  <string id="500">Aktualnie używasz wersji T3CH z:</string>
+  <string id="501">Chcesz pobrać tą wersję?</string>
+  <string id="502">Porównywanie i wczytywanie ..</string>
+  <string id="503">Pobieranie wersji T3Ch do:</string>
+  <string id="504">Wypakowywanie wersji T3CH do:</string>
+  <string id="505">Najnowsza wersja T3CH wypakowana do:</string>
+</strings>
