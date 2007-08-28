@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- pre-0.98.9          2.8.2007 Finnish -->
+  <!-- pre-0.98.9          28.8.2007 Finnish -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -27,13 +27,13 @@
   <string id="59">Tietokanta täytyy päivittää...</string>
   <string id="60">Tietokantasi on sopimaton tämän ohjelmaversion kanssa.\nSe täytyy muodostaa uudelleen.</string>
   <string id="61">Päivitetään kaikki lajityyppi ja elokuva tiedot...</string>
-   <!--string id="62">Haluatko varmasti tehdä sen?</string-->
+  <string id="62">Noudetaan uusia xml-tiedostoja.</string>
   <string id="63">Päivitys vie aikaa noin 1 - 5 minuuttia.</string>
   <string id="64">Virhe</string>
-  <string id="65">Käsitellään xml tiedostoja kaikille esittelyiden verkko-osoitteille</string>
+  <string id="65">Käsitellään xml-tiedostoja kaikille esittelyiden verkko-osoitteille</string>
   <string id="66">Haetaan lajityypin tietoja...</string>
   <string id="67">Odota hetki...</string>
-   <!--string id="68">Haetaan:</string-->
+  <string id="68">Päivitetään esittelyn tietoja...</string>
   <string id="69">Tietojen haussa ilmeni virhe yhdessä tai useamassa tyylissä.</string>
   <string id="70">Haetaan elokuvatietoja...</string>
   <string id="71">Lajityyppi:</string>
@@ -63,7 +63,8 @@
   <string id="95">Anna hakusanat: Erilliset sanat ja ehdot and/or/not</string>
   <string id="96">/</string>
   <string id="97">Muodostetaan hakutaulukkoa.</string>
-  
+  <string id="98">Poistetaan vanhojen esittelyjen xml tiedostoja...</string>
+    
   
   <!-- Buttons -->
   <string id="103">Lajityypit</string>
@@ -167,14 +168,15 @@
   <string id="504">Merkitse katsotuksi </string>
   <string id="505">Poista merkintä</string>
   <string id="506">Päivitä elokuvan tiedot</string>
-  <string id="508">Siirrä tallennuskansioon</string>
-  <string id="509">Poista tallennetut esittelyt</string>
-  <string id="510">Teatterin esitysajat</string>
+  <string id="507">Siirrä tallennuskansioon</string>
+  <string id="508">Poista tallennetut esittelyt</string>
+  <string id="509">Teatterin esitysajat</string>
+  <string id="510">Teatterin esityskerrat</string>
   <string id="511">Näytä lajityyppi</string>
   <string id="512">Päivitä lajityyppi</string>
   <string id="513">Päivitä kaikki lajityypit</string>
   <string id="521">Näytä studio</string>
-  <string id="531">Näytä näyttelijät</string>
+  <string id="531">Näytä näyttelijä</string>
   <string id="550">Viimeistele täysiasennus</string>
   
    <!-- Showtimes -->
@@ -192,13 +194,13 @@
   <!-- Credits headings-->
   <string id="910">Kehitys &amp; koodaus</string>
   <string id="911">Koodaus &amp; ulkoasu</string>
-  <string id="912">Grafiikka&amp; ulkoasu</string>
+  <string id="912">Grafiikka &amp; ulkoasu</string>
   <string id="913">Käytettävyys</string>
   <string id="914">Kielitiedosto</string>
   
   <!-- Update messages -->  
   <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
-  <string id="1001">Noudetaan uusinta versiota...</string>
+  <string id="1001">Tarkistetaan uusinta versiota...</string>
   <string id="1002">on uudempi</string>
   <string id="1003">Haluatko päivittää ohjelman?</string>
   <string id="1004">Haetaan tiedostoluetteloa...</string>
