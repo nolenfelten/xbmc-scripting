@@ -238,8 +238,10 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		self.parent = parent
 		self.posX = parent.posX -55
 		self.posY = parent.posY + 30
-		
-		self.hsFileName = "T:\\script_data\\"+self.parent.gamename+"_scores.txt" # changed by blittan
+
+		if not os.path.exists("T:\\script_data\\Tetris\\"):
+		    os.makedirs("T:\\script_data\\Tetris")
+		self.hsFileName = "T:\\script_data\\"+self.parent.gamename+"\\scores.txt" # changed by blittan
 		self.localHighScores = self.loadLocalHighScores()
 		self.onlineHighScores = []
 		
