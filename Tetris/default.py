@@ -897,8 +897,10 @@ class Tetris(xbmcgui.WindowDialog):
 
 			
 	def saveSettings(self):
-		if not os.path.exists("P:\\script_data\\"): # changed by blittan
-			os.mkdir("P:\\script_data\\") # changed by blittan
+		if not os.path.exists("P:\\script_data\\Tetris\\"): # changed by blittan
+		    os.makedirs("P:\\script_data\\Tetris") # changed by blittan
+#			os.mkdir("P:\\script_data") # changed by blittan
+#			os.mkdir("P:\\script_data\\Tetris") # changed by blittan
 		keymap = self.keymap
 		dict = {"username":self.dlgGame.dlgSubmit.username,
 				"password":self.dlgGame.dlgSubmit.password,
@@ -913,14 +915,14 @@ class Tetris(xbmcgui.WindowDialog):
 				dict["button"+str(button)]=str(action)
 		curdat = "<tetris>\n" + "\n".join(["\t<"+key+">"+dict[key]+"</"+key+">" for key in dict.keys()])+ "\n</tetris>"
 		LOG("Save settings : " + curdat)
-		fb = open("P:\\script_data\\tetris_settings.xml",'w') # changed by blittan
+		fb = open("P:\\script_data\\Tetris\\settings.xml",'w') # changed by blittan
 		fb.write(curdat)
 		fb.close()
 	
 	def loadSettings(self):
-		if not os.path.exists("P:\\script_data\\tetris_settings.xml"): # changed by blittan
+		if not os.path.exists("P:\\script_data\\Tetris\\settings.xml"): # changed by blittan
 			return
-		fb = open("P:\\script_data\\tetris_settings.xml",'r') # changed by blittan
+		fb = open("P:\\script_data\\Tetris\\settings.xml",'r') # changed by blittan
 		indat = fb.read()
 		fb.close()
 		LOG("LoadSettings: reading" + indat)
