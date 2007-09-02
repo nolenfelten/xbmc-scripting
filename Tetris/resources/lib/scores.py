@@ -239,7 +239,7 @@ class HighScoreDialog(xbmcgui.WindowDialog):
 		self.posX = parent.posX -55
 		self.posY = parent.posY + 30
 		
-		self.hsFileName = "T:\\"+self.parent.gamename+"_scores.txt"
+		self.hsFileName = "T:\\script_data\\"+self.parent.gamename+"_scores.txt" # changed by blittan
 		self.localHighScores = self.loadLocalHighScores()
 		self.onlineHighScores = []
 		

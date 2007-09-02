@@ -47,4 +47,5 @@ High-score Strategy:
   You must find a good balance between high-scoring multi-line clears and the smaller, safer clears.
   
 Release History:
+  2007-09-02 - changed settings/score save location
   2007-01-16 - Initial public release
