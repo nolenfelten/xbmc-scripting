@@ -35,7 +35,6 @@ except:
     xbmcgui.Dialog().ok( __scriptname__, _( 81 ) )
     raise
 
-
 class GUI( xbmcgui.WindowXML ):
     # control id's
     CONTROL_TITLE_LABEL = 20
@@ -106,7 +105,8 @@ class GUI( xbmcgui.WindowXML ):
         sys.path.append( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers", self.settings[ "showtimes_scraper" ] ) )
 
     def _capitalize_text( self, text ):
-        return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
+        #return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
+        return text
 
     def _get_custom_sql( self ):
         self.search_sql = get_custom_sql()
@@ -256,9 +256,11 @@ class GUI( xbmcgui.WindowXML ):
                     for movie in self.trailers.movies: # now fill the list control
                         thumbnail, poster = self._get_thumbnail( movie )
                         urls = ( "(%s)", "%s", )[ len( movie.trailer_urls ) > 0 ]
-                        rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
-                        list_item = xbmcgui.ListItem( urls % ( self._capitalize_text( movie.title ), ), rating, poster, thumbnail )
+                        #rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
+                        list_item = xbmcgui.ListItem( urls % ( self._capitalize_text( movie.title ), ), movie.rating, poster, thumbnail )
                         list_item.select( movie.favorite )
+                        plot = self._capitalize_text( ( movie.plot, _( 400 ), )[ not movie.plot ] )
+                        list_item.setInfo( "video", { "Plot": plot, "MPAARating": movie.rating } )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
@@ -348,7 +350,7 @@ class GUI( xbmcgui.WindowXML ):
         #self.getControl( CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
         # Plot
-        self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
+        #self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
         #self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( "" )
         # Cast
         self.getControl( self.CONTROL_CAST_LIST ).reset()
@@ -366,8 +368,8 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ trailer ].favorite )
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
             # Plot
-            self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
-            self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( self._capitalize_text( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] ) )
+            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
+            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( self._capitalize_text( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] ) )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
@@ -416,9 +418,18 @@ class GUI( xbmcgui.WindowXML ):
             trailer = self.getCurrentListPosition()
             trailer_urls = self.trailers.movies[ trailer ].trailer_urls
             if ( len( trailer_urls ) ):
+                # get intial choice
                 choice = ( self.settings[ "trailer_quality" ], len( trailer_urls ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailer_urls ) ]
+                # if quality is non progressive
                 if ( self.settings[ "trailer_quality" ] <= 2 ):
+                    # select the correct non progressive trailer
                     while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+                # quality is progressive
+                else:
+                    # select the proper progressive quality
+                    quality = ( "480p", "720p", "1080p", )[ self.settings[ "trailer_quality" ] - 3 ]
+                    # select the correct progressive trailer
+                    while ( quality not in trailer_urls[ choice ] and trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
                 if ( choice >= 0 ):
                     url = trailer_urls[ choice ]
                     LOG( LOG_DEBUG, "%s (rev: %s) [choice=%d url=%s]", __scriptname__, __svn_revision__, choice, url )

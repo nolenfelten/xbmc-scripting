@@ -32,6 +32,7 @@ class Movie:
         - thumbnail (string - path to thumbnail)
         - thumbnail_watched (string - path to watched thumbnail)
         - plot (string - movie plot)
+        - runtime (string - movie runtime)
         - rating (string - movie rating)
         - rating_url (string - path to rating image file)
         - year (integer - year of movie)
@@ -431,6 +432,7 @@ class Trailers:
                 self.rating = ""
                 self.rating_url = ""
                 self.year = 0
+                self.runtime = ""
                 self.times_watched = 0
                 self.last_watched = ""
                 self.favorite = 0
@@ -447,8 +449,8 @@ class Trailers:
                 else:
                     url = ( self.urls[ 0 ] )
 
-                # xml parsing
-                source = fetcher.urlopen( url )
+                # xml parsing. replace <b> and </b> for in theaters. remove if noticeably slower
+                source = fetcher.urlopen( url ).replace( "<b>", "" ).replace( "</b>", "" )
                 try:
                     element = ET.fromstring( source )
                 except:
@@ -474,11 +476,19 @@ class Trailers:
                     plot = plot.replace( "\n", " " )
                     self.plot = plot
                 
+                # -- year --
+                year = element.getiterator( self.ns( "SetFontStyle" ) )[ 3 ].text.strip()
+                if year and "In Theaters:" in year:
+                    try:
+                        self.year = int( year[ -5 : ] )
+                    except:
+                        pass
+
                 # -- actors --
                 SetFontStyles = element.getiterator( self.ns( "SetFontStyle" ) )
                 actors = list()
                 for i in range( 5, 10 ):
-                    actor = SetFontStyles[ i ].text.replace( "(The voice of)", "" ).title().strip()#encode( "ascii", "ignore" ).
+                    actor = SetFontStyles[ i ].text.replace( "(The voice of)", "" ).title().strip()
                     if ( len( actor ) and not actor.startswith( "." ) and actor != "1:46" ) :
                         actors += [ ( actor, ) ]
                         actor_id = records.fetch( self.query[ "actor_exists" ], ( actor.upper(), ) )
@@ -487,7 +497,18 @@ class Trailers:
                         records.add( "actor_link_movie", ( idActor, self.idMovie, ) )
                 self.actors = actors
                 self.actors.sort()
-                
+
+                # -- runtime --
+                try:
+                    runtime = element.getiterator( self.ns( "SetFontStyle" ) )[ 13 ].text
+                    if runtime and "Runtime:" in runtime:
+                        runtime = runtime.replace( "Runtime:", "" ).strip()
+                        if runtime.startswith( ":" ):
+                            runtime = "0" + runtime
+                        self.runtime = runtime
+                except:
+                    pass
+
                 # -- studio --
                 studio = element.getiterator( self.ns( "PathElement" ) )[ 1 ].get( "displayName" ).strip()
                 if studio:
@@ -547,10 +568,10 @@ class Trailers:
                 #traceback.print_exc()
                 print "Trailer XML %s: %s is %s" % ( self.idMovie, url, ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
             
-            info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.rating,
-                            self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite, self.saved_location,
-                            self.saved_core, self.actors, self.studio, )
-            success = records.update( "movies", ( 2, 14, ), ( info_list[ 2 : 14 ] ) + ( self.idMovie, ), "idMovie" )
+            info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.runtime,
+                            self.rating, self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite,
+                            self.saved_location, self.saved_core, self.actors, self.studio, )
+            success = records.update( "movies", ( 2, 15, ), ( info_list[ 2 : 15 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
 
         def _get_actor_and_studio( movie ):
@@ -581,7 +602,7 @@ class Trailers:
                     if ( not full and movie is not None ):
                         if ( movie[4] ): poster = os.path.join( BASE_CACHE_PATH, movie[4][0], movie[4] )
                         else: poster = ""
-                        if ( movie[7] ): rating_url = os.path.join( BASE_CACHE_PATH, movie[7][0], movie[7] )
+                        if ( movie[8] ): rating_url = os.path.join( BASE_CACHE_PATH, movie[8][0], movie[8] )
                         else: rating_url = ""
                         self.movies += [ 
                             Movie(
@@ -593,16 +614,17 @@ class Trailers:
                                 thumbnail = "%s.png" % ( os.path.splitext( poster )[0], ),
                                 thumbnail_watched = "%s-w.png" % ( os.path.splitext( poster )[0], ),
                                 plot = movie[5],
-                                rating = movie[6],
+                                runtime = movie[6],
+                                rating = movie[7],
                                 rating_url = rating_url,
-                                year = movie[8],
-                                watched = movie[9],
-                                watched_date = movie[10],
-                                favorite = movie[11],
-                                saved = movie[12],
-                                saved_core = movie[13],
-                                cast = movie[14],
-                                studio = movie[15]
+                                year = movie[9],
+                                watched = movie[10],
+                                watched_date = movie[11],
+                                favorite = movie[12],
+                                saved = movie[13],
+                                saved_core = movie[14],
+                                cast = movie[15],
+                                studio = movie[16]
                                 )
                             ]
 
