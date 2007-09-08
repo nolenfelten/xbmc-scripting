@@ -251,6 +251,7 @@ class Tables( dict ):
             ( "trailer_urls", "text", "", "", "" ),
             ( "poster", "text", "", "", "" ),
             ( "plot", "text", "", "", "" ),
+            ( "runtime", "text", "", "", "" ),
             ( "rating", "text", "", "", "" ),
             ( "rating_url", "text", "", "", "" ),
             ( "year", "integer", "", "", "" ),

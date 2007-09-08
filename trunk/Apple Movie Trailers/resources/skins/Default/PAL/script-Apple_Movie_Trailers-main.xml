@@ -370,7 +370,7 @@
                         <selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>60ffffff</textcolor>
 						<align>right</align>
-						<info>ListItem.Label2</info>
+						<label>$INFO[ListItem.Label2,$LBRACKET,$RBRACKET]</label>
 					</control>
 				</itemlayout>
 				<focusedlayout height="29">
@@ -419,7 +419,7 @@
                         <selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>60ffffff</textcolor>
 						<align>right</align>
-						<info>ListItem.Label2</info>
+						<label>$INFO[ListItem.Label2,$LBRACKET,$RBRACKET]</label>
 					</control>
 				</focusedlayout>
 			</control>
@@ -876,6 +876,7 @@
 				<height>141</height>
 				<font>font12</font>
 				<textcolor>FFFFFFFF</textcolor>
+                <info>ListItem.Plot</info>
 				<onup>75</onup>
 				<ondown>75</ondown>
 				<onleft>2050</onleft>

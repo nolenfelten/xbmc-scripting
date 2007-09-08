@@ -781,7 +781,7 @@
                         <selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>FFCC99CC</textcolor>
 						<align>right</align>
-						<info>ListItem.Label2</info>
+						<label>$INFO[ListItem.Label2,$LBRACKET,$RBRACKET]</label>
 					</control>
 					<control type="image">
 						<posx>315</posx>
@@ -851,7 +851,7 @@
                         <selectedcolor>FFe2ff43</selectedcolor>
                         <textcolor>FFFFFFFF</textcolor>
 						<align>right</align>
-						<info>ListItem.Label2</info>
+						<label>$INFO[ListItem.Label2,$LBRACKET,$RBRACKET]</label>
 						<visible>Control.HasFocus(50)</visible>
 					</control>
 					<control type="label">
@@ -877,7 +877,7 @@
                         <selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>FFCC99CC</textcolor>
 						<align>right</align>
-						<info>ListItem.Label2</info>
+						<label>$INFO[ListItem.Label2,$LBRACKET,$RBRACKET]</label>
 						<visible>!Control.HasFocus(50)</visible>
 					</control>
 					<control type="image">
@@ -1055,6 +1055,7 @@
 				<height>130</height>
 				<font>lcars-small</font>
 				<textcolor>FFFF9900</textcolor>
+                <info>ListItem.Plot</info>
 				<onup>75</onup>
 				<ondown>75</ondown>
 				<onleft>2050</onleft>
