@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- pre-0.98.9          28.8.2007 Finnish -->
+  <!-- v.pre-0.99         Finnish 9.9.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -8,9 +8,9 @@
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
   <string id="41">Päivitetään lajityypeittäin, kesto n.1 - 5 minuuttia</string>
   <string id="42">Päivitetään lajityyppi tietoja...</string>
-  <string id="43">Puretaan tallenteita tietokannasta...</string>
+  <string id="43">Kirjataan tallenteita tietokantaan...</string>
   <string id="44">Tietokannan luonti...</string>
-  <string id="45">Poistetaan vanhojen lajityyppien xml tiedostoja...</string>
+  <string id="45">Poistetaan vanhojen lajityyppien xml-tiedostoja...</string>
   <string id="46">Tietokannan päivitys epäonnistui...</string>
   <string id="47">Nykyinen taulukko</string>
   <string id="48">Noudetaan tallenteita...</string>
@@ -30,8 +30,8 @@
   <string id="62">Noudetaan uusia xml-tiedostoja.</string>
   <string id="63">Päivitys vie aikaa noin 1 - 5 minuuttia.</string>
   <string id="64">Virhe</string>
-  <string id="65">Käsitellään xml-tiedostoja kaikille esittelyiden verkko-osoitteille</string>
-  <string id="66">Haetaan lajityypin tietoja...</string>
+  <string id="65">Käsitellään xml-tiedostoja kaikien esittelyiden verkko-osoitteille</string>
+  <string id="66">Haetaan lajityyppi tietoja...</string>
   <string id="67">Odota hetki...</string>
   <string id="68">Päivitetään esittelyn tietoja...</string>
   <string id="69">Tietojen haussa ilmeni virhe yhdessä tai useamassa tyylissä.</string>
@@ -63,7 +63,7 @@
   <string id="95">Anna hakusanat: Erilliset sanat ja ehdot and/or/not</string>
   <string id="96">/</string>
   <string id="97">Muodostetaan hakutaulukkoa.</string>
-  <string id="98">Poistetaan vanhojen esittelyjen xml tiedostoja...</string>
+  <string id="98">Poistetaan vanhojen esittelyjen xml-tiedostoja...</string>
     
   
   <!-- Buttons -->
@@ -168,9 +168,9 @@
   <string id="504">Merkitse katsotuksi </string>
   <string id="505">Poista merkintä</string>
   <string id="506">Päivitä elokuvan tiedot</string>
-  <string id="507">Siirrä tallennuskansioon</string>
-  <string id="508">Poista tallennetut esittelyt</string>
-  <string id="509">Teatterin esitysajat</string>
+  <string id="507">Päivitä kaikkien elokuvien tiedot</string>
+  <string id="508">Siirrä tallennuskansioon</string>
+  <string id="509">Poista tallennetut esittelyt</string>
   <string id="510">Teatterin esityskerrat</string>
   <string id="511">Näytä lajityyppi</string>
   <string id="512">Päivitä lajityyppi</string>
@@ -212,6 +212,6 @@
   <string id="1010">Ohjelma tallennettiin kansioon:</string>
 
   <!-- Update error messages -->
-  <string id="1030">Haettua versiota ei löydetty!</string>
+  <string id="1030">Uutta versiota ei löydetty!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
 </strings>
