@@ -2,14 +2,14 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto@gazeta.pl-->
-<!--Date of translation: 08/26/2007-->
+<!--Date of translation: 09/23/2007-->
 <!--$Revision$-->
 <strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">Xbox Media Center</string>
-  <string id="2">smuto</string>
-  <string id="40">Kompletne informacje o filmie, dostępne przeszukiwanie. (10 - 60 minut)</string>
-  <string id="41">Informacje będą aktualizowane w zakresie gatunków. (1 - 5 minut)</string>
+  <string id="2">Smuto</string>
+  <string id="40">Opisy filmów, dostępne szukanie. (10 - 60 minut)</string>
+  <string id="41">Opisy w zakresie gatunku. (1 - 5 minut)</string>
   <string id="42">Odświeżanie listy gatunków...</string>
   <string id="43">uzupełnianie bazy danych o brakujące pozycje...</string>
   <string id="44">Tworzenie bazy danych...</string>
@@ -17,18 +17,18 @@
   <string id="46">błąd podczas konwersji bazy danych...</string>
   <string id="47">Aktualna tablica</string>
   <string id="48">Wczytywanie i porównywanie pozycji...</string>
-  <string id="49">*W dowolnym momencie możesz uruchomić pełne tworzenie bazy danych.</string>
+  <string id="49">*Uzupełnienie bazy zawsze możliwe</string>
   <string id="50">Proces uruchamiania skryptu:</string>
   <string id="51">Wczytywanie modułów...</string>
   <string id="52">moduł:</string>
   <string id="53">Nie znaleziono bazy danych lub jest ona nieaktualna!</string>
-  <string id="54">Konieczne ponowne stworzenie dazy danych</string>
+  <string id="54">Konieczne ponowne stworzenie bazy danych</string>
   <string id="55">Proces uruchamiania skóry:</string>
-  <string id="56">Kopiuję pozycję..</string>
+  <string id="56">Do katalogu z zapisanymi filmami..</string>
   <string id="57">Błąd podczas wczytywania modułu wyświetlania skóry.</string>
   <string id="58">Sprawdź plik wsadowy skóry:</string>
   <string id="59">Trzeba zaktualizować bazą danych...</string>
-  <string id="60">Plik bazodanowy jest niezgodny z tą wersją AMT.\n|Niestety trzeba go stworzyć od początku.</string>
+  <string id="60">Plik bazodanowy jest niezgodny z tą wersją AMT.\n| Niestety trzeba go stworzyć od początku.</string>
   <string id="61">Pełna aktualizacja listy dostępnych zwiastunów...</string>
   <string id="62">Przesłanie nowych plików xml</string>
   <string id="63">Aktualizacja może trwać 5 - 15 minut,|w zależności od prędkości łącza jakim dysponujesz.</string>
@@ -36,11 +36,11 @@
   <string id="65">Analizowanie plików xml dla adresów wszystkich zwiastunów</string>
   <string id="66">Wczytywanie listy gatunków ...</string>
   <string id="67">Proszę czekać.</string>
-  <string id="68">Odświerzanie informacji o zwiastunie</string>
+  <string id="68">Odświeżanie informacji o zwiastunie</string>
   <string id="69">Błąd - pobrana lista gatunków nie jest kompletna..</string>
-  <string id="70">Wczytywanie listy zwiastunów...</string>
+  <string id="70">Wczytywanie informacji o filmie...</string>
   <string id="71">Gatunek:</string>
-  <string id="72">Błąd - pobrana lista tytułów nie jest kompletna.</string>
+  <string id="72">Błąd - pobrane opisy tytułów są niekompletne.</string>
   <string id="73">Wyczyścić katalog z pamięcią podręczną ?</string>
   <string id="74">Zalecane czyszczenie, bez czyszczenia pamięci wzrasta|szansa, że lista będzie nieaktualna i niekompletna.</string>
   <string id="75">Brak wolnego miejsca na dysku.</string>
@@ -53,12 +53,12 @@
   <string id="82">Czy rzeczywiście chcesz usunąć?</string>
   <string id="83">Wczytywanie...</string>
   <string id="84">filmów</string>
-  <string id="85">Przesyłanie danych...</string>
+  <string id="85">Polecenie w toku...</string>
   <string id="86">plików</string>
-  <string id="87">Bieżący gatunek</string>
-  <string id="88">Bieżący zwiastun</string>
+  <string id="87">Gatunek</string>
+  <string id="88">Zwiastun</string>
   <string id="89">Błąd podczas tworzenia bazy danych....</string>
-  <string id="90">Błąd podczas kopiowania pozycji....</string>
+  <string id="90">Błąd podczas przenoszenia pozycji....</string>
   <string id="91">pozostało</string>
   <string id="92">*nie ma oceny tej pozycji</string>
   <string id="93">Ilość wyników wyszukiwania</string>
@@ -67,11 +67,11 @@
   <string id="96">z</string>
   <string id="97">Ustaw sposób szukania</string>
   <string id="98">Usuń pliki xml starych zwiastunów</string>
-  <string id="103">Gatunki..</string>
-  <string id="104">Wytwórnia..</string>
-  <string id="105">Aktor..</string>
-  <string id="106">Szukaj..</string>
-  <string id="107">Ustawienia..</string>
+  <string id="103">Gatunek</string>
+  <string id="104">Wytwórnia</string>
+  <string id="105">Aktor</string>
+  <string id="106">Szukaj</string>
+  <string id="107">Ustawienia</string>
   <string id="108">Lista zasług</string>
   <string id="109">Aktualizuj skrypt</string>
   <string id="113">Gatunek</string>
@@ -100,16 +100,19 @@
   <string id="203">Tryb</string>
   <string id="204">Zapisz do</string>
   <string id="205">Rodzaj wyświetlanych ikonek</string>
-  <string id="206">Kategoria startowa</string>
-  <string id="207">Skrót #1</string>
-  <string id="208">Skrót #2</string>
-  <string id="209">Skrót #3</string>
-  <string id="210">Odśwież najnowsze na starcie</string>
-  <string id="211">Sprawdzaj wersję na starcie</string>
-  <string id="212">Showtimes scraper</string>
-  <string id="213">Zip code</string>
+  <string id="206">Oznaczaj obejrzane pozycje</string>
+  <string id="207">Kategoria startowa</string>
+  <string id="208">Skrót #1</string>
+  <string id="209">Skrót #2</string>
+  <string id="210">Skrót #3</string>
+  <string id="211">Odśwież najnowsze na starcie</string>
+  <string id="212">Szybkie szukanie</string>
+  <string id="213">Tylko, gdy pasują pełne słowa</string>
   <string id="214">Rozdzielczość odtwarzacza</string>
-  <string id="218">Sprawdzaj wersje na starcie</string>
+  <string id="215">Użyj dużych i małych liter</string>
+  <string id="216">Seanse filmowe dla miasta:</string>
+  <string id="217">Repertuar kinowy - scraper</string>
+  <string id="218">Sprawdzaj wersję na starcie</string>
   <string id="230">Wystąpił błąd podczas zapisywania ustawień!</string>
   <string id="231">* zależna od skóry</string>
   <string id="240">Wprowadzone zmiany wymagają ponownego uruchomienia.</string>
@@ -123,7 +126,7 @@
   <string id="256">Później</string>
   <string id="257">SQL - Zapisz</string>
   <string id="258">SQL - Wyczyść</string>
-  <string id="259">SQL - wczytaj</string>
+  <string id="259">SQL - Wczytaj</string>
   <string id="400">*Opis fabuły dla tego tytułu jest niedostępny.</string>
   <string id="401">*Obsada dla tego tytułu jest niedostępna.</string>
   <string id="501">Rozpocznij odtwarzanie</string>
@@ -135,17 +138,18 @@
   <string id="507">Odśwież informacje dla wszystkich zwiastunów</string>
   <string id="508">Kopiuj do katalogu z zapisanymi zwiastunami</string>
   <string id="509">Usuń z dysku</string>
-  <string id="510">Theater Showtimes</string>
+  <string id="510">Repertuar kinowy</string>
   <string id="511">Przeglądaj.. ten gatunek</string>
   <string id="512">Odśwież gatunek</string>
   <string id="513">Odśwież wszystkie gatunki</string>
   <string id="521">Przeglądaj.. tą wytwórnię</string>
   <string id="531">Przeglądaj.. z tym aktorem</string>
   <string id="550">Dokończ instalację - pełne info</string>
+  <string id="600">Żaden film nie pasuje do Twojego zapytania</string>
+  <string id="601">Wczytuję repertuar, proszę czekać..</string>
+  <string id="602">Data</string>
+  <string id="603">Kino</string>
   <string id="900">Wersja</string>
-  <string id="901">Team Credits:</string>
-  <string id="902">Additional Credits:</string>
-  <string id="903">Skin Credits:</string>
   <string id="914">Tłumaczenie</string>
   <string id="1000">Używasz najnowszej wersji.</string>
   <string id="1001">Sprawdzam używaną wersję...</string>
@@ -154,7 +158,7 @@
   <string id="1004">Przesyłanie listy potrzebnych plików...</string>
   <string id="1005">Proszę czekać...</string>
   <string id="1006">Wersja</string>
-  <string id="1007">Przesyłanie:</string>
+  <string id="1007">Przetwarzanie zapytania:</string>
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
   <string id="1010">Nowa wersja zapisana w:</string>
