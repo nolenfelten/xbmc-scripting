@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto@gazeta.pl-->
-<!--Date of translation: 08/26/2007-->
+<!--Date of translation: 09/23/2007-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Downloader</string>
@@ -15,12 +15,12 @@
   <string id="302">Wystąpił błąd podczas pobierania!</string>
   <string id="303">Pobieranie przerwane!</string>
   <string id="304">Wystąpił błąd podczas wypakowywania!</string>
-  <string id="400">Pobieranie</string>
-  <string id="401">pomiń</string>
-  <string id="500">Aktualnie używasz wersji T3CH z:</string>
+  <string id="400">Pobierz</string>
+  <string id="401">Pomiń</string>
+  <string id="500">Najnowsza dostępna wersja T3CH to:</string>
   <string id="501">Chcesz pobrać tą wersję?</string>
-  <string id="502">Porównywanie i wczytywanie ..</string>
+  <string id="502">Przetwarzanie zapytania ..</string>
   <string id="503">Pobieranie wersji T3Ch do:</string>
   <string id="504">Wypakowywanie wersji T3CH do:</string>
-  <string id="505">Najnowsza wersja T3CH wypakowana do:</string>
+  <string id="505">Rozpakowywanie zakończone.</string>
 </strings>

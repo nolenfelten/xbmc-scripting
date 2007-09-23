@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto@gazeta.pl-->
-<!--Date of translation: 08/07/2007-->
+<!--Date of translation: 09/23/2007-->
 <!--$Revision$-->
 <strings>
   <string id="0">XBMC Lyrics</string>
@@ -19,7 +19,7 @@
   <string id="208">Katalog z playlistą</string>
   <string id="209">Wybieraj losowo</string>
   <string id="210">Utrzymuj pliki z tekstami w zgodności z xboksem</string>
-  <string id="211">Plik z tekstem zapisz z rozszeżeniem</string>
+  <string id="211">Plik z tekstem zapisz z rozszerzeniem</string>
   <string id="230">Błąd podczas zapisywania ustawień.!</string>
   <string id="240">Zmiana zostanie wprowadzona przy następnym uruchomieniu skryptu.</string>
   <string id="241">Chcesz uruchomić %s od nowa?</string>
@@ -45,15 +45,15 @@
   <string id="911">Pierwotny autor</string>
   <string id="912">Original Skinning Mod</string>
   <string id="913">Obsługa Unicodu</string>
-  <string id="914">Regionizaja</string>
+  <string id="914">Tłumaczenie</string>
   <string id="1000">Używasz najnowszej wersji ..</string>
   <string id="1001">Sprawdzam używaną wersję...</string>
   <string id="1002">jest dostępna nowsza</string>
   <string id="1003">Chcesz zaktualizować?</string>
-  <string id="1004">Sciąganie potrzebnych plików...</string>
+  <string id="1004">Ściąganie potrzebnych plików...</string>
   <string id="1005">Proszę czekać...</string>
   <string id="1006">Wersja</string>
-  <string id="1007">Wczytywanie i porównywanie:</string>
+  <string id="1007">Przetwarzanie zapytania:</string>
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
   <string id="1010">Nowa wersja zapisana w:</string>
