@@ -401,7 +401,8 @@ class Query( dict ):
 
         self[ "hd_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE ? ORDER BY title;"
         self[ "no_trailer_urls" ]				= "SELECT * FROM movies WHERE (trailer_urls=? OR trailer_urls IS NULL) AND poster IS NOT NULL ORDER BY title;"
-        self[ "simple_search" ]				= """SELECT DISTINCT movies.*
+        self[ "simple_search" ]				= """
+                                                        SELECT DISTINCT movies.*
                                                         FROM movies
                                                         JOIN actor_link_movie
                                                         ON movies.idMovie=actor_link_movie.idMovie
@@ -415,4 +416,5 @@ class Query( dict ):
                                                         ON movies.idMovie=genre_link_movie.idMovie
                                                         JOIN genres
                                                         ON genre_link_movie.idGenre=genres.idGenre
-                                                        WHERE %s ORDER BY title;""" 
+                                                        WHERE %s ORDER BY title;
+                                                        """ 
