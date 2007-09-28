@@ -14,6 +14,11 @@ import time
 #import socket
 #socket.setdefaulttimeout( 20 )
 
+#from keepalive import HTTPHandler
+#keepalive_handler = HTTPHandler()
+#opener = urllib2.build_opener( keepalive_handler )
+#urllib2.install_opener( opener )
+
 from utilities import *
 
 
@@ -156,10 +161,10 @@ class HTTP:
             request = urllib2.Request( url )
             request.add_header( "User-Agent", __useragent__ )
             # hacky, I know, but the chances that the url will fail twice are slimmer than only trying once
-            #try:
-            #    opened = urllib2.urlopen( request )
-            #except:
-            opened = urllib2.urlopen( request )
+            try:
+                opened = urllib2.urlopen( request )
+            except:
+                opened = urllib2.urlopen( request )
         except:
             LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
             self.on_finished( url, "", 0, False )
