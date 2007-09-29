@@ -1,5 +1,3 @@
-XinBox Version 0.99.4 Change Log:
+XinBox Version 0.99.5 Change Log:
 
-Updated: Inbox Menu - Made Exit Button Fully Exit Script
-Updated: Made it focus to Page Down button when email is opened.
-Thanks to "silps" for the ideas :-D
+Fixed: XinBox would freeze when running the script while Mini-Mode was running.

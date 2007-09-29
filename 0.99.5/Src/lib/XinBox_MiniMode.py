@@ -15,8 +15,6 @@ class Minimode:
     def init(self):
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
-        f = open("X:\\mmrunning.xib", "w")
-        f.close()
         f = open("X:\\mmcomu.xib", "w")
         f.close()
         time.sleep(2)
@@ -32,8 +30,6 @@ class Minimode:
             if not len(self.inboxes) == 0:self.startmm()
             else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
-        if exists("X:\\mmrunning.xib"):
-            os.remove("X:\\mmrunning.xib")
         if exists("X:\\mmcomu.xib"):
             os.remove("X:\\mmcomu.xib")
         if self.exit:
