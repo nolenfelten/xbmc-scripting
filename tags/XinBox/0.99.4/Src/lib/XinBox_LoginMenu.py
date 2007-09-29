@@ -46,6 +46,7 @@ class GUI( xbmcgui.WindowXML ):
         else:self.close()
 
     def setupvars(self):
+        self.exitflag = 0
         self.mmenabled = 0
         self.control_action = XinBox_Util.setControllerAction()
         
@@ -81,8 +82,9 @@ class GUI( xbmcgui.WindowXML ):
         w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",self.scriptPath,"DefaultSkin",lang=self.language,theaccount=account,title=self.title)
         w.doModal()
         self.mmenabled = w.mmenabled
+        self.exitflag = w.exitflag
         del w
-        if self.mmenabled != 0:self.close()
+        if self.mmenabled != 0 or self.exitflag == 1:self.close()
 
     def launchinfo(self, focusid, label,heading=False,text=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.scriptPath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading,thetext=text)
