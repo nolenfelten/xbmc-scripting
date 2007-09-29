@@ -1,3 +1,5 @@
-XinBox Version 0.99.3 Change Log:
+XinBox Version 0.99.4 Change Log:
 
-Updated: Inbox Menu/Email Handling - hopefully will stop Inbox freezing bug.
+Updated: Inbox Menu - Made Exit Button Fully Exit Script
+Updated: Made it focus to Page Down button when email is opened.
+Thanks to "silps" for the ideas :-D

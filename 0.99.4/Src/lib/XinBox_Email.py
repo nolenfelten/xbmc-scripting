@@ -67,7 +67,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             self.getattachments()
             self.getControl(64).setEnabled(True)
-        self.setFocusId(61)
+        self.setFocusId(72)
         
     def getattachments(self):
         if self.emailsettings[1].is_multipart():
@@ -144,11 +144,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
-                self.replyvalue = [self.emfrom,"","",self.language(318) + " " + self.subject,self.getreply(self.body),None]
+                self.replyvalue = [self.emfrom,"","","Re: " + self.subject,self.getreply(self.body),None]
                 self.exitme()
             elif controlID == 62:
                 if len(self.attachments) == 0:self.attachments = None
-                self.replyvalue = ["","","",self.language(319) + " " + self.subject,self.getreply(self.body),self.attachments]
+                self.replyvalue = ["","","","Fwd: " + self.subject,self.getreply(self.body),self.attachments]
                 self.exitme()
             elif controlID == 81:
                 self.openattach(self.getControl(81).getSelectedPosition())
@@ -170,12 +170,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.exitme()
 
     def getreply (self, body):
-        newbody = self.language(316) + "\n"
-        newbody = newbody + self.language(260) + " " + self.emfrom + "\n"
-        newbody = newbody + self.language(310) + " " + self.to + "\n"
-        if self.cc != "":newbody = newbody + self.language(311) + " " + self.cc + "\n"
-        newbody = newbody + self.language(317) + " " + self.sent + "\n"
-        newbody = newbody + self.language(313) + " " + self.subject + "\n\n"
+        newbody = "----- Original Message -----\n"
+        newbody = newbody + "From: " + self.emfrom + "\n"
+        newbody = newbody + "To: " + self.to + "\n"
+        if self.cc != "":newbody = newbody + "Cc: " + self.cc + "\n"
+        newbody = newbody + "Sent: " + self.sent + "\n"
+        newbody = newbody + "Subject: " + self.subject + "\n\n"
         for line in body.split("\n"):
             newbody = newbody + "> " + line + "\n"
         return newbody

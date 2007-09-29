@@ -119,7 +119,7 @@
 	<string id="125">Select to Login to this inbox.</string>
 	<string id="126">Select to edit this account.</string>
 	<string id="127">Select to delete current account.</string>
-	<string id="128">Select to exit and return to previous menu.</string>
+	<string id="128">Select to exit the XinBox Script.</string>
 	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
 	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until the Account is saved.</string>
 	<string id="131">Select to toggle if this Inbox is the Default Inbox. A Default Inbox automatically logs in when the account is logged in to. Note: There can only be a maximum of one Default Inbox per Account.</string>

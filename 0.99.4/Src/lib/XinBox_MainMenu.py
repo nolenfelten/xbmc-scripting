@@ -123,7 +123,7 @@ class GUI( xbmcgui.WindowXML ):
         if returnval == 1:
             xbmc.executescript("X:\\XinBox_Update.py")
             self.close()
-
+            
     def launchabout(self):
         w = XinBox_About.GUI("XinBox_About.xml",self.srcpath,"DefaultSkin",lang=self.lang)
         w.doModal()
@@ -157,9 +157,12 @@ class GUI( xbmcgui.WindowXML ):
         w = XinBox_LoginMenu.GUI("XinBox_LoginMenu.xml",self.srcpath,"DefaultSkin",lang=self.lang,title=TITLE)
         w.doModal()
         self.mmenabled = w.mmenabled
+        exitflag = w.exitflag
         del w
         if self.mmenabled != 0:
             xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath + "\\lib\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath + ')')
+            self.close()
+        elif exitflag == 1:
             self.close()
             
     def showKeyboard(self, heading,default="",hidden=0):

@@ -43,6 +43,7 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
         
     def setupvars(self):
+        self.exitflag = 0
         self.removeme = []
         self.emnotread = 0
         self.nwmail = 0
@@ -77,6 +78,7 @@ class GUI( xbmcgui.WindowXML ):
             elif controlID == 63:
                 self.cleaninbox()
             elif controlID == 64:
+                self.exitflag = 1
                 self.exitme()
             elif controlID == 65:
                 self.launchmycontacts()
