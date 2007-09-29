@@ -69,10 +69,13 @@ class GUI( xbmcgui.WindowXML ):
         if self.minibox != False:w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",self.srcpath,"DefaultSkin",lang=self.lang,theaccount=account,title=TITLE,minibox=self.minibox)
         else:w = XinBox_MyAccountMenu.GUI("XinBox_AccountMenu.xml",self.srcpath,"DefaultSkin",lang=self.lang,theaccount=account,title=TITLE)
         w.doModal()
+        exitflag = w.exitflag
         self.mmenabled = w.mmenabled
         del w
         if self.mmenabled != 0:
             xbmc.executebuiltin('XBMC.RunScript(' + self.srcpath+ "\\lib\\XinBox_MiniMode.py" + "," + self.mmenabled + "," + self.srcpath + ')')
+            self.close()
+        elif exitflag == 1:
             self.close()
         
     def getaccountsettings(self,account):
