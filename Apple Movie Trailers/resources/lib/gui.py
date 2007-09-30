@@ -35,6 +35,7 @@ except:
     xbmcgui.Dialog().ok( __scriptname__, _( 81 ) )
     raise
 
+
 class GUI( xbmcgui.WindowXML ):
     # control id's
     CONTROL_TITLE_LABEL = 20
@@ -229,6 +230,9 @@ class GUI( xbmcgui.WindowXML ):
                         else:
                             title = category.title
                         thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
+                        if ( self.main_category == ACTORS ):
+                            actor_path = os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) )
+                            thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                         count = "(%d)" % ( category.count, )
                         list_item = xbmcgui.ListItem( self._capitalize_text( title ), count, "%s.tbn" % category.title, thumbnail )
                         list_item.select( not category.completed )
@@ -378,7 +382,9 @@ class GUI( xbmcgui.WindowXML ):
             if ( self.cast_exists ):
                 #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
-                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( actor[ 0 ] ), "", "%s.tbn" % actor, thumbnail ) )
+                    actor_path = os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) )
+                    actor_thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
+                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( actor[ 0 ] ), "", "%s.tbn" % actor, actor_thumbnail ) )
             else: 
                 #thumbnail = "amt-generic-noactor.tbn"
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( _( 401 ) ), "", thumbnail, thumbnail ) )
