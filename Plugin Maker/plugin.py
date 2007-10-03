@@ -1,6 +1,8 @@
 """
     Plugin Maker: This plugin will create a directory listing of VIDEO_PATH and add videos.
 """
+
+# main imports
 import os
 import sys
 import xbmc
@@ -9,11 +11,17 @@ import xbmcplugin
 
 import datetime
 
+# plugin constants
+__plugin__ = "Plugin Maker"
+__author__ = "nuka1195"
+__credits__ = "Team XBMC"
+__version__ = "1.0"
+
 
 class Main:
     # base paths
     BASE_CACHE_PATH = os.path.join( "P:\\", "Thumbnails", "Video" )
-    # TODO: Make this replaceble
+    # replaceable video path
     VIDEO_PATH = ###VIDEO_PATH###
 
     # add all video extensions wanted in lowercase
@@ -36,9 +44,12 @@ class Main:
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
-    def add_video( self, videos, path, files ):    
+    def add_video( self, videos, path, files ):
+        # enumerate through the list of files and check for a valid video file
         for file in files:
+            # get the files extension
             ext = os.path.splitext( file )[ 1 ].lower()
+            # if it is a video file add it to our videos list
             if ( ext and ext in self.VIDEO_EXT ):
                 videos += [ os.path.join( path, file ) ]
 
@@ -80,7 +91,8 @@ class Main:
             # create filepath to a local tbn file
             thumbnail = os.path.splitext( video )[ 0 ] + ".tbn"
             # if there is no local tbn file use a default
-            if ( not os.path.isfile( thumbnail ) ): thumbnail = "defaultVideoBig.png"
+            if ( not os.path.isfile( thumbnail ) ):
+                thumbnail = "defaultVideoBig.png"
         return thumbnail
 
 
