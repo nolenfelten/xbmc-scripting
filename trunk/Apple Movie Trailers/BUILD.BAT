@@ -49,7 +49,7 @@ COPY default.wtbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
 ECHO # %ScriptName% script revision: %Revision% - built with build.bat version 1.0 #> "BUILD\%ScriptName%\default.py"
-FOR /F "Tokens=1,2* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
+FOR /F "Tokens=1* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
     IF /I "%%M"=="__svn_revision__ = 0" (
         ECHO __svn_revision__ = "%Revision%">> "BUILD\%ScriptName%\default.py"
     ) ELSE IF "%%M"=="" (

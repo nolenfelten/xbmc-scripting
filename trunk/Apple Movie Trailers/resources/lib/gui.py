@@ -22,7 +22,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 try:
     _progress_dialog( None )
-    modules = ( "os", "xbmc", "trailers", "database", "utilities", "context_menu", "cacheurl", "datetime", )
+    modules = ( "os", "xbmc", "utilities", "trailers", "database", "context_menu", "cacheurl", "datetime", )
     for count, module in enumerate( modules ):
         _progress_dialog( count + 1, "%s %s" % ( _( 52 ), module, ) )
         if ( module == "utilities" ):
@@ -88,14 +88,16 @@ class GUI( xbmcgui.WindowXML ):
             self._setup_variables()
             self._set_startup_choices()
             self._set_startup_category()
+            if ( INSTALL_PLUGIN ):
+                install_plugin()
 
     def _set_labels( self ):
         try:
-            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( self._capitalize_text( __scriptname__ ) )
+            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( __scriptname__ )
             self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( "" )
             self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "" )
             for button_id in range( self.CONTROL_BUTTON_GROUP_START, self.CONTROL_BUTTON_GROUP_END + 1 ):
-                self.getControl( button_id ).setLabel( self._capitalize_text( _( button_id ) ) )
+                self.getControl( button_id ).setLabel( _( button_id ) )
         except:
             pass
 
@@ -104,10 +106,6 @@ class GUI( xbmcgui.WindowXML ):
 
     def _get_showtimes_scraper( self ):
         sys.path.append( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers", self.settings[ "showtimes_scraper" ] ) )
-
-    def _capitalize_text( self, text ):
-        #return ( text, text.upper(), )[ self.settings[ "capitalize_words" ] ]
-        return text
 
     def _get_custom_sql( self ):
         self.search_sql = get_custom_sql()
@@ -231,10 +229,10 @@ class GUI( xbmcgui.WindowXML ):
                             title = category.title
                         thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         if ( self.main_category == ACTORS ):
-                            actor_path = os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) )
+                            actor_path = xbmc.translatePath( os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) ) )
                             thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                         count = "(%d)" % ( category.count, )
-                        list_item = xbmcgui.ListItem( self._capitalize_text( title ), count, "%s.tbn" % category.title, thumbnail )
+                        list_item = xbmcgui.ListItem( title, count, thumbnail, thumbnail )
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
@@ -261,9 +259,9 @@ class GUI( xbmcgui.WindowXML ):
                         thumbnail, poster = self._get_thumbnail( movie )
                         urls = ( "(%s)", "%s", )[ len( movie.trailer_urls ) > 0 ]
                         #rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
-                        list_item = xbmcgui.ListItem( urls % ( self._capitalize_text( movie.title ), ), movie.rating, poster, thumbnail )
+                        list_item = xbmcgui.ListItem( urls % ( movie.title, ), movie.rating, poster, thumbnail )
                         list_item.select( movie.favorite )
-                        plot = self._capitalize_text( ( movie.plot, _( 400 ), )[ not movie.plot ] )
+                        plot = ( movie.plot, _( 400 ), )[ not movie.plot ]
                         list_item.setInfo( "video", { "Plot": plot, "MPAARating": movie.rating } )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
@@ -311,7 +309,7 @@ class GUI( xbmcgui.WindowXML ):
         else: self.setFocus( self.getControl( self.CONTROL_CAST_BUTTON ) )
 
     def setCategoryLabel( self ):
-        category= "oops"
+        category= u""
         if ( self.category_id == GENRES ):
             category = _( 113 )
         elif ( self.category_id == STUDIOS ):
@@ -337,10 +335,10 @@ class GUI( xbmcgui.WindowXML ):
                 category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
                 category = self.genres[ self.category_id ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
-        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( self._capitalize_text( category ) )
-            
+        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( category.decode( "utf-8" ) )
+
     def _set_count_label( self, list_control ):
-        separator = ( self._capitalize_text( _( 96 ) ) )
+        separator = ( _( 96 ) )
         if ( list_control == self.CONTROL_TRAILER_LIST_START ):
             pos = self.getCurrentListPosition()
             self.getControl( self.CONTROL_TRAILER_LIST_COUNT ).setLabel( "%d %s %d" % ( pos + 1, separator, len( self.trailers.movies ), ) )
@@ -373,7 +371,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
             # Plot
             ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
-            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( self._capitalize_text( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] ) )
+            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
@@ -382,12 +380,12 @@ class GUI( xbmcgui.WindowXML ):
             if ( self.cast_exists ):
                 #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
-                    actor_path = os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) )
+                    actor_path = xbmc.translatePath( os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) ) )
                     actor_thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
-                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( actor[ 0 ] ), "", "%s.tbn" % actor, actor_thumbnail ) )
+                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", actor_thumbnail, actor_thumbnail ) )
             else: 
                 #thumbnail = "amt-generic-noactor.tbn"
-                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( self._capitalize_text( _( 401 ) ), "", thumbnail, thumbnail ) )
+                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", thumbnail, thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except:
@@ -542,7 +540,7 @@ class GUI( xbmcgui.WindowXML ):
             labels += ( _( 550 ), )
             functions += ( self.force_full_update, )
         force_fallback = self.skin != "Default"
-        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels, caps=self.settings[ "capitalize_words" ] )
+        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels )
         if ( cm.selection is not None ):
             functions[ cm.selection ]()
         del cm
@@ -604,7 +602,7 @@ class GUI( xbmcgui.WindowXML ):
         else:
             import search
             force_fallback = self.skin != "Default"
-            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ] )
+            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
             s.doModal()
             if ( s.query ):
                 self.search_sql = s.query
@@ -641,25 +639,25 @@ class GUI( xbmcgui.WindowXML ):
     def setShortcutLabels( self ):
         for s in range( 3 ):
             if ( self.settings[ "shortcut%d" % ( s + 1, ) ] == FAVORITES ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 152 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 152 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == DOWNLOADED ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 153 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 153 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == HD_TRAILERS ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 160 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 160 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == NO_TRAILER_URLS ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 161 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 161 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == CUSTOM_SEARCH ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 162 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 162 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == WATCHED ):
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( _( 163 ) ) )
+                self.getControl( 100 + s ).setLabel( _( 163 ) )
             else:
-                self.getControl( 100 + s ).setLabel( self._capitalize_text( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
+                self.getControl( 100 + s ).setLabel( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
 
     def showCredits( self ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ] )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
         c.doModal()
         del c
 
@@ -770,7 +768,7 @@ class GUI( xbmcgui.WindowXML ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         import showtimes
         force_fallback = self.skin != "Default"
-        s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.settings[ "capitalize_words" ], title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
+        s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
         s.doModal()
         del s
 

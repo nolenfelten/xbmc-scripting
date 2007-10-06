@@ -37,24 +37,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _get_settings( self ):
         """ reads settings """
         self.settings = Settings().get_settings()
-        self.caps = self.settings[ "capitalize_words" ]
-
-    def _capitalize_text( self, text ):
-        return ( text, text.upper(), )[ self.caps ]
 
     def _set_labels( self ):
         try:
-            self.getControl( 20 ).setLabel( self._capitalize_text( __scriptname__ ) )
-            self.getControl( 30 ).setLabel( self._capitalize_text( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) ) )
-            self.getControl( 250 ).setLabel( self._capitalize_text( _( 250 ) ) )
-            self.getControl( 251 ).setLabel( self._capitalize_text( _( 251 ) ) )
-            self.getControl( 252 ).setLabel( self._capitalize_text( _( 252 ) ) )
-            self.getControl( 253 ).setLabel( self._capitalize_text( _( 253 ) ) )
+            self.getControl( 20 ).setLabel( __scriptname__ )
+            self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
+            self.getControl( 250 ).setLabel( _( 250 ) )
+            self.getControl( 251 ).setLabel( _( 251 ) )
+            self.getControl( 252 ).setLabel( _( 252 ) )
+            self.getControl( 253 ).setLabel( _( 253 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
             for x in range( 1, len( self.settings ) ):
-                self.getControl( 200 + x ).setLabel( self._capitalize_text( _( 200 + x ) ) )
+                self.getControl( 200 + x ).setLabel( _( 200 + x ) )
         except: pass
 
     def _set_functions( self ):
@@ -121,12 +117,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ copies self.settings and adds any settings that require a restart on change """
         self.settings_original = self.settings.copy()
         self.settings_restart = ( "skin", "showtimes_scraper" )
-        self.settings_refresh = ( "thumbnail_display", "fade_thumb", "capitalize_words", )
+        self.settings_refresh = ( "thumbnail_display", "fade_thumb", )
 
 ###### End of Special defs #####################################################
     def _get_chooser( self, choices, original, selection, list_control, title ):
         force_fallback = self.skin != "Default"
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title, caps=self.caps )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title )
         selection = ch.selection
         del ch
         return selection
@@ -147,29 +143,28 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.getControl( 221 ).setLabel( self._capitalize_text( self.settings[ "skin" ] ) )
-            self.getControl( 222 ).setLabel( self._capitalize_text( self.quality[ self.settings[ "trailer_quality" ] ] ) )
-            self.getControl( 223 ).setLabel( self._capitalize_text( self.mode[ self.settings[ "mode" ] ] ) )
-            self.getControl( 224 ).setLabel( self._capitalize_text( self.settings[ "save_folder" ] ) )
+            self.getControl( 221 ).setLabel( self.settings[ "skin" ] )
+            self.getControl( 222 ).setLabel( self.quality[ self.settings[ "trailer_quality" ] ] )
+            self.getControl( 223 ).setLabel( self.mode[ self.settings[ "mode" ] ] )
+            self.getControl( 224 ).setLabel( self.settings[ "save_folder" ] )
             self.getControl( 224 ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.getControl( 204 ).setEnabled( self.settings[ "mode" ] >= 1 )
-            self.getControl( 225 ).setLabel( self._capitalize_text( self.thumbnail[ self.settings[ "thumbnail_display" ] ] ) )
+            self.getControl( 225 ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
             self.getControl( 226 ).setSelected( self.settings[ "fade_thumb" ] )
             self.getControl( 226 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
             self.getControl( 206 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
-            self.getControl( 227 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "startup_category_id" ] ] ) )
-            self.getControl( 228 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut1" ] ] ) )
-            self.getControl( 229 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut2" ] ] ) )
-            self.getControl( 230 ).setLabel( self._capitalize_text( self.startup_categories[ self.settings[ "shortcut3" ] ] ) )
+            self.getControl( 227 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
+            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
+            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
+            self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
             self.getControl( 231 ).setSelected( self.settings[ "refresh_newest" ] )
             self.getControl( 232 ).setSelected( self.settings[ "use_simple_search" ] )
             self.getControl( 233 ).setSelected( self.settings[ "match_whole_words" ] )
             self.getControl( 233 ).setEnabled( self.settings[ "use_simple_search" ] )
             self.getControl( 213 ).setEnabled( self.settings[ "use_simple_search" ] )
-            self.getControl( 234 ).setLabel( self._capitalize_text( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] ) )
-            self.getControl( 235 ).setSelected( self.settings[ "capitalize_words" ] )
-            self.getControl( 236 ).setLabel( self._capitalize_text( self.settings[ "showtimes_local" ] ) )
-            self.getControl( 237 ).setLabel( self._capitalize_text( self.settings[ "showtimes_scraper" ] ) )
+            self.getControl( 234 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 235 ).setLabel( self.settings[ "showtimes_local" ] )
+            self.getControl( 236 ).setLabel( self.settings[ "showtimes_scraper" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -275,16 +270,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._set_controls_values()
 
     def _change_setting15( self ):
-        """ changes settings #15 """
-        self.settings[ "capitalize_words" ] = not self.settings[ "capitalize_words" ]
-        self._set_controls_values()
-
-    def _change_setting16( self ):
         """ changes settings #16 """
         self.settings[ "showtimes_local" ] = get_keyboard( self.settings[ "showtimes_local" ], _( self.controlId ) )
         self._set_controls_values()
 
-    def _change_setting17( self ):
+    def _change_setting16( self ):
         """ changes settings #17 """
         try: original_selection = self.showtimes_scrapers.index( self.settings_original[ "showtimes_scraper" ] )
         except: original_selection = 0
@@ -328,7 +318,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, caps=self.caps )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
         c.doModal()
         del c
 
@@ -344,8 +334,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ controlId ]()
 
     def onFocus( self, controlId ):
-        self.controlId = controlId
-        #pass
+        xbmc.sleep( 5 )
+        self.controlId = self.getFocusId()
 
     def onAction( self, action ):
         if ( action.getButtonCode() in CANCEL_DIALOG ):

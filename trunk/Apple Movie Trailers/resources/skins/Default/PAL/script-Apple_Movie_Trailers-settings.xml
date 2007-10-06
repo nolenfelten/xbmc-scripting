@@ -672,23 +672,22 @@
 					<onup>214</onup>
 					<ondown>216</ondown>
 				</control>
-				<control type="checkmark" id="235">
+				<control type="button" id="235">
 					<description>Setting15 Value</description>
-					<posx>350</posx>
-					<posy>5</posy>
-					<width>50</width>
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>380</width>
 					<height>30</height>
-					<align>left</align>
+					<align>right</align>
+					<aligny>center</aligny>
 					<label>-</label>
 					<font>font13</font>
                     <textcolor>DDced8da</textcolor>
-                    <colordiffuse>DDced8da</colordiffuse>
-					<texturecheckmark>amt-settings-check-box.png</texturecheckmark>
-					<texturecheckmarknofocus>amt-settings-check-boxNF.png</texturecheckmarknofocus>
-					<markwidth>16</markwidth>
-					<markheight>20</markheight>
-					<disabledcolor>00d0d0d0</disabledcolor>
-					<shadowcolor>00000000</shadowcolor>
+					<textoffsetx>10</textoffsetx>
+					<texturefocus>-</texturefocus>
+					<texturenofocus>-</texturenofocus>
+					<disabledcolor>60d0d0d0</disabledcolor>
+					<shadowcolor>ff000000</shadowcolor>
 				</control>
 			</control>
 			<control type="group">
@@ -733,6 +732,7 @@
 				</control>
             </control>
 			<control type="group">
+                <visible>false</visible>
 				<height>30</height>
 				<control type="button" id="217">
 					<description>Setting17 Button</description>

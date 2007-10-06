@@ -17,8 +17,8 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.99", "0.99", )
-SETTINGS_VERSIONS =  ( "pre-0.98.9", "0.98.9", ) + DATABASE_VERSIONS
+DATABASE_VERSIONS = ( "pre-0.99", "0.99", "pre-0.99.1", "0.99.1", )
+SETTINGS_VERSIONS =  ( "pre-0.99.1", "0.99.1", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -48,11 +48,29 @@ LOG_ERROR, LOG_INFO, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 
 def _create_base_paths():
     """ creates the base folders """
+    new = False
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
+        new = True
     if ( not os.path.isdir( BASE_SETTINGS_PATH ) ):
         os.makedirs( BASE_SETTINGS_PATH )
-_create_base_paths()
+    return new
+INSTALL_PLUGIN = _create_base_paths()
+
+def install_plugin():
+    plugin_path1 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin" ) )
+    if ( not os.path.isdir( plugin_path1 ) ):
+        if ( xbmcgui.Dialog().yesno( _( 700 ), _( 701 ), _( 702 ), _( 703 ) ) ):
+            try:
+                from shutil import copytree
+                plugin_path2 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin", "pysqlite2" ) )
+                copy_path1 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, __scriptname__ + " Plugin" ) )
+                copy_path2 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
+                copytree( copy_path1, plugin_path1 )
+                copytree( copy_path2, plugin_path2 )
+                ok = xbmcgui.Dialog().ok( _( 700 ), _( 704 ), _( 705 ) )
+            except:
+                ok = xbmcgui.Dialog().ok( _( 700 ), _( 730 ) )
 
 def get_keyboard( default="", heading="", hidden=False ):
     """ shows a keyboard and returns a value """
@@ -119,7 +137,7 @@ def make_legal_filepath( path, compatible=False, extension=True ):
         for count, part in enumerate( parts ):
             tmp_name = ""
             for char in part:
-                # if char's oed() value is > 127 or an illegal character remove it
+                # if char's ord() value is > 127 or an illegal character remove it
                 if ( char in illegal_characters or ord( char ) > 127 ): char = ""
                 tmp_name += char
             if ( environment == "xbox" or compatible ):
@@ -170,7 +188,6 @@ class Settings:
             "videoplayer_displayresolution": 10,
             "use_simple_search": False,
             "match_whole_words": False,
-            "capitalize_words": False,
             "showtimes_local": "33102",
             "showtimes_scraper": "Google",
             }
