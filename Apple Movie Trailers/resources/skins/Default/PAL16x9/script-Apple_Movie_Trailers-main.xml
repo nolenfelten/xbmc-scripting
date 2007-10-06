@@ -1188,6 +1188,16 @@
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
 			</control>
+            <control type="image">
+                <description>Category List Thumb</description>
+                <posx>40</posx>
+                <posy>440</posy>
+                <width>120</width>
+                <height>120</height>
+                <info>Container(60).ListItem(0).Thumb</info>
+                <texture>-</texture>
+                <aspectratio>keep</aspectratio>
+            </control>
         </control>
     </controls>
 </window>

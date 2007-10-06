@@ -113,10 +113,9 @@
     <string id="212">Use simple search</string>
     <string id="213">Match whole words only</string>
     <string id="214">Video player resolution</string>
-    <string id="215">Use all caps for text</string>
-    <string id="216">Showtimes location</string>
-    <string id="217">Showtimes scraper</string>
-    <string id="218">Check version at startup</string>
+    <string id="215">Showtimes location</string>
+    <string id="216">Showtimes scraper</string>
+    <string id="217">Check version at startup</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
@@ -184,6 +183,16 @@
     <string id="601">Finding showtimes, please wait...</string>
     <string id="602">Date</string>
     <string id="603">Location</string>
+
+    <!-- Plugin -->
+    <string id="700">Apple Movie Trailers Plugin!</string>
+    <string id="701">AMT comes with a plugin. The plugin allows you to</string>
+    <string id="702">watch trailers from the videos window.</string>
+    <string id="703">Would you like to install the plugin?</string>
+    <string id="704">Remember to add new plugin source from files view.</string>
+    <string id="705">Library view is automatic, no further steps are needed.</string>
+
+    <string id="730">There was an error installing plugin!</string>
     
     <!-- Credits -->
     <string id="900">Version</string>

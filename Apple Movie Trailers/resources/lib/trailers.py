@@ -505,6 +505,8 @@ class Trailers:
                         runtime = runtime.replace( "Runtime:", "" ).strip()
                         if runtime.startswith( ":" ):
                             runtime = "0" + runtime
+                        elif ":" not in runtime:
+                            runtime = "0:" + runtime
                         self.runtime = runtime
                 except:
                     pass
