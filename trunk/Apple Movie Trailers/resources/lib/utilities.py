@@ -59,18 +59,19 @@ INSTALL_PLUGIN = _create_base_paths()
 
 def install_plugin():
     plugin_path1 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin" ) )
-    if ( not os.path.isdir( plugin_path1 ) ):
-        if ( xbmcgui.Dialog().yesno( _( 700 ), _( 701 ), _( 702 ), _( 703 ) ) ):
-            try:
-                from shutil import copytree
-                plugin_path2 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin", "pysqlite2" ) )
-                copy_path1 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, __scriptname__ + " Plugin" ) )
-                copy_path2 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
-                copytree( copy_path1, plugin_path1 )
-                copytree( copy_path2, plugin_path2 )
-                ok = xbmcgui.Dialog().ok( _( 700 ), _( 704 ), _( 705 ) )
-            except:
-                ok = xbmcgui.Dialog().ok( _( 700 ), _( 730 ) )
+    if ( xbmcgui.Dialog().yesno( _( 700 ), _( 701 ), _( 702 ), _( 703 ) ) ):
+        try:
+            from shutil import copytree, rmtree
+            if ( os.path.isdir( plugin_path1 ) ):
+                rmtree( plugin_path1 )
+            plugin_path2 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin", "pysqlite2" ) )
+            copy_path1 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, __scriptname__ + " Plugin" ) )
+            copy_path2 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
+            copytree( copy_path1, plugin_path1 )
+            copytree( copy_path2, plugin_path2 )
+            ok = xbmcgui.Dialog().ok( _( 700 ), _( 704 ), _( 705 ) )
+        except:
+            ok = xbmcgui.Dialog().ok( _( 700 ), _( 730 ) )
 
 def get_keyboard( default="", heading="", hidden=False ):
     """ shows a keyboard and returns a value """
