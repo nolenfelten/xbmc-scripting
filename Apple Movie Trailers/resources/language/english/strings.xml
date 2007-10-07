@@ -142,9 +142,11 @@
     <string id="251">Cancel</string>
     <string id="252">Update</string>
     <string id="253">Credits</string>
-    <string id="254">Page</string>
+    <string id="254">Install plugin</string>
     <string id="255">Restart</string>
     <string id="256">Later</string>
+
+    <string id="290">Page</string>
 
     <!-- Search buttons -->
     <string id="257">Save SQL</string>
