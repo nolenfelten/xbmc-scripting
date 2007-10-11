@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99         Finnish 9.9.2007 -->
+  <!-- v.pre-0.99.1         Finnish 11.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -113,10 +113,9 @@
   <string id="212">Yksinkertainen haku käytössä</string>
   <string id="213">Sopivat sanat ainoastaan</string>
   <string id="214">Videon toistoresoluutio</string>
-  <string id="215">Suuret kirjaimet käytössä</string>
-  <string id="216">Teatteriesitysten sijainti</string>
-  <string id="217">Teatteriesitysten hakupaikka</string>
-  <string id="218">Tarkista päivitykset käynnistyessä</string>
+  <string id="215">Teatteriesitysten sijainti</string>
+  <string id="216">Teatteriesitysten hakupaikka</string>
+  <string id="217">Tarkista päivitykset käynnistyessä</string>
 
   <!-- Settings choices -->
   <string id="2020">Matala</string>
@@ -146,6 +145,8 @@
   <string id="254">Sivu</string>
   <string id="255">Käynnistä</string>
   <string id="256">Myöhemmin</string>
+  
+  <string id="290">Sivu</string>
   
   <!-- Search buttons -->
   <string id="257">Tallenna SQL</string>
@@ -185,6 +186,16 @@
   <string id="602">Päivä</string>
   <string id="603">Sijainti</string> 
   
+   <!-- Plugin -->
+    <string id="700">Apple Movie Trailer lisäke!</string>
+    <string id="701">AMT voidaan käyttää myös lisäkkeen kautta. Lisäkettä käyttäessä</string>
+    <string id="702">voidaan esittelyjä katsoa suoraan Video-ikkunassa.</string>
+    <string id="703">Haluatko asentaa AMT-lisäkkeen?</string>
+    <string id="704">Muista lisätä uusi lisäke uutena sijaintina Video-tiedostoihin.</string>
+    <string id="705">Kirjastotila toimii automaattisesti, sinne ei muutoksia tarvita.</string>
+
+    <string id="730">Lisäkkeen asennus epäonnistui!</string>
+    
   <!-- Credits -->
   <string id="900">Versio</string>
   <string id="901">Tekijät:</string>
