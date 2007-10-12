@@ -38,7 +38,7 @@ class Main:
             if ( "plugins" in pack ):
                 pack_type = "plugins"
             for icon in icons:
-                path, cached_thumbnail = self.get_path( pack_type, os.path.splitext( icon )[ 0 ] + "\\"  )
+                path, cached_thumbnail, root_cached_thumbnail = self.get_path( pack_type, os.path.splitext( icon )[ 0 ] )
                 if ( path is not None ):
                     # copy from path
                     icon_copy_path = xbmc.translatePath( os.path.join( pack, icon ) )
@@ -52,6 +52,11 @@ class Main:
                     copyfile( icon_copy_path, icon_install_path )
                     # copy folder.jpg (probably not needed)
                     copyfile( icon_copy_path, folderjpg_install_path )
+                    # root cached thumb path (deleting does not work, so we overwrite the existing, only used for plugins)
+                    if ( root_cached_thumbnail is not None ):
+                        root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "Q:\\", "UserData", "Thumbnails", "Programs", root_cached_thumbnail ) )
+                        # copy default.tbn for our root folder (deleting never refreshes it)
+                        copyfile( icon_copy_path, root_cached_thumbnail_path )
                     # delete our cached thumbnail
                     if ( os.path.isfile( cached_thumbnail_path ) ):
                         os.remove( cached_thumbnail_path )
@@ -63,17 +68,18 @@ class Main:
 
     def get_path( self, pack_type, icon ):
         if ( pack_type == "scripts" ):
-            path = xbmc.translatePath( os.path.join( "Q:\\", pack_type, icon ) )
+            path = xbmc.translatePath( os.path.join( "Q:\\", pack_type, icon + "\\" ) )
             cached_thumbnail = xbmc.getCacheThumbName( os.path.join( path, "default.py" ) )
             if ( os.path.isdir( path ) ):
-                return path, cached_thumbnail
+                return path, cached_thumbnail, None
         else:
             for source in ( "video", "music", "pictures", "programs", ):
-                path = xbmc.translatePath( os.path.join( "Q:\\", pack_type, source, icon ) )
+                path = xbmc.translatePath( os.path.join( "Q:\\", pack_type, source, icon + "\\" ) )
                 cached_thumbnail = xbmc.getCacheThumbName( path )
+                root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/" + icon + "/" )
                 if ( os.path.isdir( path ) ):
-                    return path, cached_thumbnail
-        return None, None
+                    return path, cached_thumbnail, root_cached_thumbnail
+        return None, None, None
 
     def get_browse_dialog( self, default="", heading="", dlg_type=2, shares="files", mask=".tbn", use_thumbs=True, treat_as_folder=False ):
         """ shows a browse dialog and returns a value
