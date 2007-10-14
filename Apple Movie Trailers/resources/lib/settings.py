@@ -47,6 +47,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 252 ).setLabel( _( 252 ) )
             self.getControl( 253 ).setLabel( _( 253 ) )
             self.getControl( 254 ).setLabel( _( 254 ) )
+            self.getControl( 255 ).setLabel( _( 255 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
@@ -60,7 +61,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ 251 ] = self._close_dialog
         self.functions[ 252 ] = self._update_script
         self.functions[ 253 ] = self._show_credits
-        self.functions[ 254 ] = self._install_plugin
+        self.functions[ 254 ] = self._install_plugin_0
+        self.functions[ 255 ] = self._install_plugin_1
         for x in range( 1, len( self.settings ) ):
             self.functions[ 200 + x ] = eval( "self._change_setting%d" % x )
 
@@ -324,8 +326,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         c.doModal()
         del c
 
-    def _install_plugin( self ):
-        install_plugin()
+    def _install_plugin_0( self ):
+        install_plugin( 0 )
+
+    def _install_plugin_1( self ):
+        install_plugin( 1 )
 
     def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """

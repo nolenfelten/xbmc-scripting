@@ -22,7 +22,7 @@ class _Info:
 class Main:
     # base paths
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\", "script_data", sys.modules[ "__main__" ].__plugin__ ) )
+    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\", "script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
         self._parse_argv()
@@ -98,8 +98,10 @@ class Main:
                         genre = self.args.genre
                     else:
                         genre = trailer[ 16 ]
+                    # set our overlay image
+                    overlay = ( 0, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in trailer[ 3 ] or "1080p.mov" in trailer[ 3 ] ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Cast": trailer[ 17 ], "Runtime": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAARating": rating, "Plot": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
+                    listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Cast": trailer[ 17 ], "Runtime": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAARating": rating, "Plot": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
                     # add the item to the media list
                     ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, totalItems=len(trailers) )
                     # if user cancels, call raise to exit loop

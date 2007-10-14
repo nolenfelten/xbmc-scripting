@@ -794,7 +794,7 @@
 				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
 				<onleft>9000</onleft>
 				<onright>9000</onright>
-				<onup>254</onup>
+				<onup>255</onup>
 				<ondown>251</ondown>
 			</control>
 			<control type="button" id="251">
@@ -875,6 +875,26 @@
 				<onleft>9000</onleft>
 				<onright>9000</onright>
 				<onup>253</onup>
+				<ondown>255</ondown>
+			</control>
+			<control type="button" id="255">
+				<description>Plugin Button</description>
+				<posx>0</posx>
+				<posy>185</posy>
+				<width>90</width>
+				<height>32</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label>-</label>
+				<font>font10</font>
+				<textcolor>ffffffff</textcolor>
+				<disabledcolor>60ffffff</disabledcolor>
+				<textoffsetx>17</textoffsetx>
+				<texturenofocus>amt-keyboard-btn-backspace.png</texturenofocus>
+				<texturefocus>amt-keyboard-btn-backspace-focus.png</texturefocus>
+				<onleft>9000</onleft>
+				<onright>9000</onright>
+				<onup>254</onup>
 				<ondown>250</ondown>
 			</control>
 		</control>

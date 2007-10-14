@@ -142,9 +142,10 @@
     <string id="251">Cancel</string>
     <string id="252">Update</string>
     <string id="253">Credits</string>
-    <string id="254">Install plugin</string>
-    <string id="255">Restart</string>
-    <string id="256">Later</string>
+    <string id="254">AMT plugin</string>
+    <string id="255">Theater plugin</string>
+    <string id="258">Restart</string>
+    <string id="259">Later</string>
 
     <string id="290">Page</string>
 
@@ -187,12 +188,23 @@
     <string id="603">Location</string>
 
     <!-- Plugin -->
-    <string id="700">Apple Movie Trailers Plugin!</string>
-    <string id="701">AMT comes with a plugin. The plugin allows you to</string>
-    <string id="702">watch trailers from the videos window.</string>
-    <string id="703">Would you like to install the plugin?</string>
-    <string id="704">Remember to add new plugin source from files view.</string>
-    <string id="705">Library view is automatic, no further steps are needed.</string>
+    <string id="700">Apple Movie Trailers Plugin</string>
+    <string id="701">This plugin allows you to watch trailers</string>
+    <string id="702">from the videos window.</string>
+    <string id="703">Would you like to install this plugin?</string>
+
+    <string id="704">Movie Theater Plugin</string>
+    <string id="705">This plugin plays a number of random trailers</string>
+    <string id="706">before playing the selected movie.</string>
+    <string id="707">Would you like to install this plugin?</string>
+
+    <string id="710">Browse for thumbnail</string>
+    <string id="711">Install</string>
+    <string id="712">Skip</string>
+
+    <string id="720">Remember to add new plugin source from files</string>
+    <string id="721">view. Library view is automatic, no further</string>
+    <string id="722">steps are needed.</string>
 
     <string id="730">There was an error installing plugin!</string>
     

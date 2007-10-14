@@ -31,9 +31,9 @@ class Main:
         # no database was found so notify XBMC we're finished
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__plugin__, "default.py" ) ) ) ):
+        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, "Database not found!", "Would you like to run the main script?" ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__plugin__, "default.py" ) ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
 
