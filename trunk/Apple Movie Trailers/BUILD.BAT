@@ -45,7 +45,6 @@ ECHO.
 ECHO Copying required files to \Build\%ScriptName%\ folder . . .
 XCOPY resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 COPY default.tbn "BUILD\%ScriptName%\"
-COPY default.wtbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
 ECHO # %ScriptName% script revision: %Revision% - built with build.bat version 1.0 #> "BUILD\%ScriptName%\default.py"

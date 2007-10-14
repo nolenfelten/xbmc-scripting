@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- for now you must manually edit this file -->
+<settings>
+    <!-- no slash at end of paths -->
+    <!--setting title="Path to videos" type="folder" option="files" name="path">smb://COMPUTER/SHARENAME/FOLDER</setting-->
+    <setting title="Path to movies" type="folder" option="files" name="path">F:\\Videos</setting>
+    <setting title="Path to pre trailers video [optional]" type="video" option="files" name="trailer_intro_path"></setting>
+    <setting title="Path to post trailers video [optional]" type="video" option="files" name="movie_intro_path"></setting>
+    <!-- passwords are plain text -->
+    <setting title="SMB username" type="string" option="" name="username">Guest</setting>
+    <setting title="SMB password" type="string" option="hidden" name="password"></setting>
+    <!-- an integer is required -->
+    <setting title="Number of trailers to play" type="select int" option="1,2,3,4,5,6,7,8,9,10" name="number_trailers">3</setting>
+    <!-- choose one of the following or leave blank for any: G PG PG-13 R NC-17 -->
+    <setting title="MPAA rating limit" type="select" option="G,PG,PG-13,R,NC-17,-" name="rating"></setting>
+    <!-- choose one of the following or leave blank for any: Low Medium High 480p 720p 1080p -->
+    <setting title="Preferred trailer quality" type="select" option="Low,Medium,High,480p,720p,1080p" name="quality">High</setting>
+    <!-- 0=any type of trailers, 1=only include trailers that have a 720p or 1080p quality -->
+    <setting title="Include only HD trailers" type="bool" option="" name="only_hd">0</setting>
+</settings>

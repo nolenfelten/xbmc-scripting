@@ -46,6 +46,7 @@ MOVEMENT = ( 166, 167, 168, 169, 270, 271, 272, 273, 61477, 61478, 61479, 61480,
 # Log status codes
 LOG_ERROR, LOG_INFO, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 
+
 def _create_base_paths():
     """ creates the base folders """
     new = False
@@ -57,21 +58,56 @@ def _create_base_paths():
     return new
 INSTALL_PLUGIN = _create_base_paths()
 
-def install_plugin():
-    plugin_path1 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin" ) )
-    if ( xbmcgui.Dialog().yesno( _( 700 ), _( 701 ), _( 702 ), _( 703 ) ) ):
+def install_plugin( plugin=0 ):
+    # get the correct plugin message block start
+    msg = ( 700 + ( 4 * plugin ) )
+    if ( xbmcgui.Dialog().yesno( _( msg ), _( msg + 1 ), _( msg + 2 ), _( msg + 3 ), _( 712 ), _( 711 ), ) ):
         try:
-            from shutil import copytree, rmtree
-            if ( os.path.isdir( plugin_path1 ) ):
-                rmtree( plugin_path1 )
-            plugin_path2 = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", __scriptname__ + " Plugin", "pysqlite2" ) )
-            copy_path1 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, __scriptname__ + " Plugin" ) )
-            copy_path2 = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
-            copytree( copy_path1, plugin_path1 )
-            copytree( copy_path2, plugin_path2 )
-            ok = xbmcgui.Dialog().ok( _( 700 ), _( 704 ), _( 705 ) )
+            from shutil import copytree, rmtree, copyfile
+            title = "%s plugin" % ( ( "Apple Movie Trailers", "Movie Theater", )[ plugin ], )
+            # the main plugin path to install to
+            plugin_install_path = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", title ) )
+            # path where plugin is copied from
+            plugin_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title ) )
+            # we need pysqlite2 for database access
+            pysqlite2_install_path = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", title, "pysqlite2" ) )
+            # path where pysqlite2 is copied from
+            pysqlite2_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
+            # remove an existing install if it exists
+            if ( os.path.isdir( plugin_install_path ) ):
+                rmtree( plugin_install_path )
+            # copy our main directory
+            copytree( plugin_copy_path, plugin_install_path )
+            # copy pysqlite2
+            copytree( pysqlite2_copy_path, pysqlite2_install_path )
+            # get the thumbnail the user chooses
+            thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title, "thumbnails", "thumbs", "default.tbn" ) ), heading=_( 710 ), dlg_type=2, mask=".tbn", use_thumbs=True )
+            # default.tbn install path
+            thumbnail_install_path = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", title, "default.tbn" ) )
+            # folder.jpg install path (probably not needed)
+            folderjpg_install_path = xbmc.translatePath( os.path.join( "Q:\\", "plugins", "video", title, "folder.jpg" ) )
+            # get the cached thumb name
+            cached_thumbnail = xbmc.getCacheThumbName( os.path.join( "Q:\\", "plugins", "video", title + "\\" ) )
+            # cached thumb path (we delete the existing, so our plugin re-caches the new thumb)
+            cached_thumbnail_path = xbmc.translatePath( os.path.join( "Q:\\", "UserData", "Thumbnails", "Programs", cached_thumbnail ) )
+            # get the root cached thumb name
+            root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/"+ title + "/" )
+            # root cached thumb path (deleting does not work, so we overwrite the existing)
+            root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "Q:\\", "UserData", "Thumbnails", "Programs", root_cached_thumbnail ) )
+            # copy default.tbn
+            copyfile( thumbnail_copy_path, thumbnail_install_path )
+            # copy folder.jpg (probably not needed)
+            copyfile( thumbnail_copy_path, folderjpg_install_path )
+            # copy default.tbn for our root folder (deleting never refreshes it)
+            copyfile( thumbnail_copy_path, root_cached_thumbnail_path )
+            # delete our cached thumbnail
+            if ( os.path.isfile( cached_thumbnail_path ) ):
+                os.remove( cached_thumbnail_path )
+            # inform user of installation procedure for plugin
+            ok = xbmcgui.Dialog().ok( _( msg ), _( 720 ), _( 721 ), _( 722 ) )
         except:
-            ok = xbmcgui.Dialog().ok( _( 700 ), _( 730 ) )
+            # oops notify user an error occurred
+            ok = xbmcgui.Dialog().ok( _( msg ), _( 730 ) )
 
 def get_keyboard( default="", heading="", hidden=False ):
     """ shows a keyboard and returns a value """

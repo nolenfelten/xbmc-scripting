@@ -90,6 +90,7 @@ class GUI( xbmcgui.WindowXML ):
             self._set_startup_category()
             if ( INSTALL_PLUGIN ):
                 install_plugin()
+                install_plugin( 1 )
 
     def _set_labels( self ):
         try:
@@ -619,7 +620,7 @@ class GUI( xbmcgui.WindowXML ):
             self._get_settings()
             ok = False
             if ( settings.restart ):
-                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 256 ), _( 255 ) )
+                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 259 ), _( 258 ) )
             if ( not ok ):
                 self.setShortcutLabels()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
