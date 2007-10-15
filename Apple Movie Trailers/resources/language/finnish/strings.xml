@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.1         Finnish 11.10.2007 -->
+  <!-- v.pre-0.99.1         Finnish 15.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -142,9 +142,10 @@
   <string id="251">Peruuta</string>
   <string id="252">Päivitä</string>
   <string id="253">Tekijät</string>
-  <string id="254">Sivu</string>
-  <string id="255">Käynnistä</string>
-  <string id="256">Myöhemmin</string>
+  <string id="254">AMT-lisäke</string>
+  <string id="255">Theater-lisäke</string>
+  <string id="258">Käynnistä</string>
+  <string id="259">Myöhemmin</string>
   
   <string id="290">Sivu</string>
   
@@ -187,12 +188,23 @@
   <string id="603">Sijainti</string> 
   
    <!-- Plugin -->
-    <string id="700">Apple Movie Trailer lisäke!</string>
-    <string id="701">AMT voidaan käyttää myös lisäkkeen kautta. Lisäkettä käyttäessä</string>
-    <string id="702">voidaan esittelyjä katsoa suoraan Video-ikkunassa.</string>
-    <string id="703">Haluatko asentaa AMT-lisäkkeen?</string>
-    <string id="704">Muista lisätä uusi lisäke uutena sijaintina Video-tiedostoihin.</string>
-    <string id="705">Kirjastotila toimii automaattisesti, sinne ei muutoksia tarvita.</string>
+    <string id="700">Apple Movie Trailer-lisäke</string>
+    <string id="701">Tätä lisäkettä käytettäessä voidaan</string>
+    <string id="702">esittelyjä katsoa suoraan Video-ikkunassa.</string>
+    <string id="703">Haluatko asentaa lisäkkeen?</string>
+  
+    <string id="704">Movie Theater-lisäke</string>
+    <string id="705">Tämä lisäke toistaa satunnaisia esittelyjä</string>
+    <string id="706">ennen valittua elokuvaa.</string>
+    <string id="707">Haluatko asentaa lisäkkeen?</string>
+
+    <string id="710">Valitse pienoiskuvake</string>
+    <string id="711">Asenna</string>
+    <string id="712">Ohita</string>
+
+    <string id="720">Muista lisätä uusi lisäke uutena sijaintina</string>
+    <string id="721">Video-tiedostoihin. Kirjastotila toimii automaattisesti,</string>
+    <string id="722">sinne ei muutoksia tarvita.</string>
 
     <string id="730">Lisäkkeen asennus epäonnistui!</string>
     
