@@ -31,12 +31,10 @@ class Main:
         else:
             # if this is the first time in, get the settings
             if ( not sys.argv[ 2 ] ):
-                self.get_settings()
-                self.get_items( self.args.path )
+                self._get_settings()
             else:
                 self._parse_argv()
-                if ( self.args.isFolder ):
-                    self.get_items( self.args.path )
+            self._get_items( self.args.path )
 
     def _launch_script( self ):
         # no database was found so notify XBMC we're finished
@@ -48,7 +46,7 @@ class Main:
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
 
-    def get_settings( self ):
+    def _get_settings( self ):
         try:
             f = open( os.path.join( os.getcwd().replace( ";", "" ), "settings.xml" ), "r" )
             data = f.read()
@@ -77,15 +75,15 @@ class Main:
         self.args.trailer_intro_path = self.args.trailer_intro_path.replace( "[[BACKSLASH]]", "\\" )
         self.args.movie_intro_path = self.args.movie_intro_path.replace( "[[BACKSLASH]]", "\\" )
 
-    def get_items( self, path ):
+    def _get_items( self, path ):
         try:
             # if this is a smb share, we need to retrieve the list differently
             if ( path.startswith( "smb://" ) ):
-                entries = self.get_smb_list( path )
+                entries = self._get_smb_list( path )
             else:
                 entries = os.listdir( path )
             # get the item list by
-            items = self.get_directory( path, entries )
+            items = self._get_directory( path, entries )
             # fill media list
             ok = self._fill_media_list( items )
         except:
@@ -95,7 +93,7 @@ class Main:
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
-    def get_smb_list( self, path ):
+    def _get_smb_list( self, path ):
         entries = []
         # import the necessary modules
         from TheaterAPI import smb
@@ -124,7 +122,7 @@ class Main:
                 entries += [ item.get_longname() ]
         return entries
 
-    def get_directory( self, path, entries ):
+    def _get_directory( self, path, entries ):
         items = []
         # enumerate through our entries list and check for a valid video file or folder
         for entry in entries:
@@ -206,7 +204,3 @@ class Main:
             if ( not os.path.isfile( thumbnail ) ):
                 thumbnail = "defaultVideoBig.png"
         return thumbnail
-
-
-if ( __name__ == "__main__" ):
-    Main()

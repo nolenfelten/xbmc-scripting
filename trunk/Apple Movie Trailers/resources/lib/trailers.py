@@ -69,6 +69,7 @@ class Trailers:
     def __init__( self ):
         self.categories = []
         self.base_url = "http://www.apple.com"
+        self.base_movie_url = "http://movies.apple.com"
         self.base_xml = self.base_url + "/moviesxml/h/index.xml"
         db = database.Database( language=_ )
         self.complete = db.complete
@@ -460,6 +461,9 @@ class Trailers:
                 # -- poster & thumbnails --
                 poster = element.getiterator( self.ns( "PictureView" ) )[ 1 ].get( "url" )
                 if poster:
+                    # if it's not the full url add the base url
+                    if ( not poster.startswith( "http://" ) ):
+                        poster = self.base_movie_url + str( poster )
                     # download the actual poster to the local filesystem (or get the cached filename)
                     poster = fetcher.urlretrieve( poster )
                     if poster:

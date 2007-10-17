@@ -46,13 +46,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 251 ).setLabel( _( 251 ) )
             self.getControl( 252 ).setLabel( _( 252 ) )
             self.getControl( 253 ).setLabel( _( 253 ) )
-            self.getControl( 254 ).setLabel( _( 254 ) )
-            self.getControl( 255 ).setLabel( _( 255 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
             for x in range( 1, len( self.settings ) ):
                 self.getControl( 200 + x ).setLabel( _( 200 + x ) )
+            self.getControl( 220 ).setLabel( _( 220 ) )
         except: pass
 
     def _set_functions( self ):
@@ -61,10 +60,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ 251 ] = self._close_dialog
         self.functions[ 252 ] = self._update_script
         self.functions[ 253 ] = self._show_credits
-        self.functions[ 254 ] = self._install_plugin_0
-        self.functions[ 255 ] = self._install_plugin_1
         for x in range( 1, len( self.settings ) ):
             self.functions[ 200 + x ] = eval( "self._change_setting%d" % x )
+        self.functions[ 220 ] = self._change_setting20
 
 ##### Special defs, script dependent, remember to call them from _setup_special #################
     
@@ -288,6 +286,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
             self._set_controls_values()
 
+    def _change_setting20( self ):
+        """ changes settings #20 """
+        selection = self._get_chooser( ( _( 700 ), _( 704 ), ), -1, 0, 1, "%s %s" % ( _( 200 ), _( 713 ), ) )
+        if ( selection is not None ):
+            install_plugin( selection )
+
 ##### End of unique defs ######################################################
     
     def _save_settings( self ):
@@ -325,12 +329,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
         c.doModal()
         del c
-
-    def _install_plugin_0( self ):
-        install_plugin( 0 )
-
-    def _install_plugin_1( self ):
-        install_plugin( 1 )
 
     def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """

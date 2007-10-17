@@ -116,6 +116,7 @@
     <string id="215">Showtimes location</string>
     <string id="216">Showtimes scraper</string>
     <string id="217">Check version at startup</string>
+    <string id="220">Install plugins...</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
@@ -142,8 +143,6 @@
     <string id="251">Cancel</string>
     <string id="252">Update</string>
     <string id="253">Credits</string>
-    <string id="254">AMT plugin</string>
-    <string id="255">Theater plugin</string>
     <string id="258">Restart</string>
     <string id="259">Later</string>
 
@@ -201,6 +200,7 @@
     <string id="710">Browse for thumbnail</string>
     <string id="711">Install</string>
     <string id="712">Skip</string>
+    <string id="713">Plugin</string>
 
     <string id="720">Remember to add new plugin source from files</string>
     <string id="721">view. Library view is automatic, no further</string>

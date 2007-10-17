@@ -1,11 +1,15 @@
 """
-    Movie Theater: Module plays an optional intro video, random trailers then selected video
+    Movie Theater: Module plays:
+    - optional coming attractions video
+    - random trailers
+    - optional feature presentation video
+    - selected video
 """
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
 pDialog = xbmcgui.DialogProgress()
-pDialog.create( "Movie Theater Plugin", "Getting random trailers..." )
+pDialog.create( "Movie Theater Plugin", "Choosing random trailers..." )
 
 # main imports
 import sys
@@ -23,11 +27,14 @@ class _Info:
 class Main:
     # base paths
     BASE_CACHE_PATH = os.path.join( "P:\\", "Thumbnails", "Video" )
+    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\", "script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
         self._parse_argv()
+        # create the playlist
+        playlist = self._create_playlist()
         # play the videos
-        self.play_videos()
+        self._play_videos( playlist )
 
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
@@ -37,32 +44,46 @@ class Main:
         self.args.trailer_intro_path = self.args.trailer_intro_path.replace( "[[BACKSLASH]]", "\\" )
         self.args.movie_intro_path = self.args.movie_intro_path.replace( "[[BACKSLASH]]", "\\" )
 
-    def play_videos( self ):
+    def _create_playlist( self ):
         # create a video playlist
         playlist = xbmc.PlayList( 1 )
         # clear any possible items
         playlist.clear()
-        # if there is an trailer intro video add it first
+        # if there is a trailer intro video add it
         if ( self.args.trailer_intro_path ):
-            playlist.add( self.args.trailer_intro_path )
+            trailer = ( self.args.movie_intro_path, os.path.splitext( os.path.basename( self.args.trailer_intro_path ) )[ 0 ], "", self.args.trailer_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
+            # create the listitem and fill the infolabels
+            listitem = self._get_listitem( trailer )
+            # add our item to the playlist
+            playlist.add( self.args.trailer_intro_path, listitem )
         # fetch our random trailers
         trailers = self._fetch_records()
         # enumerate through our list of trailers and add them to our playlist
         for trailer in trailers:
             # we need to select the proper trailer url
             url = self._get_trailer_url( eval( trailer[ 3 ] ) )
-            playlist.add( url )
-        # if there is an movie intro video add it first
+            # create the listitem and fill the infolabels
+            listitem = self._get_listitem( trailer )
+            # add our item to the playlist
+            playlist.add( url, listitem )
+        # if there is a movie intro video add it
         if ( self.args.movie_intro_path ):
-            playlist.add( self.args.movie_intro_path )
+            trailer = ( self.args.movie_intro_path, os.path.splitext( os.path.basename( self.args.movie_intro_path ) )[ 0 ], "", self.args.movie_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
+            # create the listitem and fill the infolabels
+            listitem = self._get_listitem( trailer )
+            # add our item to the playlist
+            playlist.add( self.args.movie_intro_path, listitem )
         # add the selected video to our playlist
-        playlist.add( self.args.path )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], os.path.splitext( os.path.basename( self.args.path ) )[ 0 ], "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation", )
+        # create the listitem and fill the infolabels
+        listitem = self._get_listitem( trailer )
+        # add our item to the playlist
+        playlist.add( self.args.path, listitem )
+        return playlist
+
+    def _play_videos( self, playlist ):
         pDialog.close()
-        if ( not pDialog.iscanceled() ):
-            # call _get_thumbnail() for the path to the cached thumbnail
-            #thumbnail = self._get_thumbnail( sys.argv[ 0 ] + sys.argv[ 2 ] )
-            #listitem = xbmcgui.ListItem( self.args.title, thumbnailImage=thumbnail )
-            #listitem.setInfo( "video", { "Title": self.args.title, "Director": self.args.director, "Genre": self.args.genre, "Rating": self.args.rating, "Count": self.args.count, "Date": self.args.date } )
+        if ( playlist and not pDialog.iscanceled() ):
             xbmc.Player().play( playlist )
 
     def _fetch_records( self ):
@@ -70,21 +91,24 @@ class Main:
             records = Records()
             # select only trailers with valid trailer urls
             sql = """
-                SELECT * FROM movies 
-                WHERE trailer_urls IS NOT NULL 
-                AND trailer_urls!='[]' 
-                %s
-                %s
-                ORDER BY RANDOM() 
-                LIMIT %d;
-                """
+                        SELECT movies.*, studios.studio, genres.genre  
+                        FROM movies, genres, genre_link_movie, studios, studio_link_movie 
+                        WHERE movies.trailer_urls IS NOT NULL 
+                        AND movies.trailer_urls!='[]' 
+                        %s
+                        %s
+                        AND genre_link_movie.idMovie=movies.idMovie 
+                        AND genre_link_movie.idGenre=genres.idGenre 
+                        AND studio_link_movie.idMovie=movies.idMovie 
+                        AND studio_link_movie.idStudio=studios.idStudio 
+                        ORDER BY RANDOM() 
+                        LIMIT %d;
+                    """
             # mpaa ratings
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             rating_sql = ""
             # if the user set a valid rating add all up to the selection
             if ( self.args.rating in mpaa_ratings ):
-                # use this one if we want to limit ourselves to the exact rating
-                #rating_sql = "AND rating='%s' " % ( self.args.rating, )
                 rating_sql = "AND ("
                 # enumerate through mpaa ratings and add the selected ones to our sql statement
                 for rating in mpaa_ratings:
@@ -102,11 +126,31 @@ class Main:
             # oops print error message
             print sys.exc_info()[ 1 ]
 
-    def _get_thumbnail( self, url ):
-        # make the proper cache filename and path
+    def _get_listitem( self, trailer ):
+        # check for a valid thumbnail
+        thumbnail = ""
+        if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
+            thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
+        else:
+            thumbnail = self._get_thumbnail( trailer[ 3 ], trailer[ 0 ] )
+        # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
+        listitem = xbmcgui.ListItem( trailer[ 1 ], thumbnailImage=thumbnail )
+        # add the different infolabels we want to sort by
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Director": trailer[ 15 ], "Genre": trailer[ 16 ] } )
+        return listitem
+
+    def _get_thumbnail( self, item, url ):
+        # make the proper cache filename and path so duplicate caching is unnecessary
         filename = xbmc.getCacheThumbName( url )
-        filepath = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
-        return filepath
+        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+        # if the cached thumbnail does not exist create the thumbnail
+        if ( not os.path.isfile( thumbnail ) ):
+            # create filepath to a local tbn file
+            thumbnail = os.path.splitext( item )[ 0 ] + ".tbn"
+            # if there is no local tbn file use a default
+            if ( not os.path.isfile( thumbnail ) ):
+                thumbnail = "defaultVideoBig.png"
+        return thumbnail
 
     def _get_trailer_url( self, trailer_urls ):
         qualities = [ "Low", "Medium", "High", "480p", "720p", "1080p" ]
@@ -154,4 +198,3 @@ class Records:
         except:
             retval = None
         return retval
-
