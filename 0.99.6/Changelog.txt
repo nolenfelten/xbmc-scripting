@@ -1,0 +1,3 @@
+XinBox Version 0.99.5 Change Log:
+
+Fixed: XinBox would freeze when running the script while Mini-Mode was running.
