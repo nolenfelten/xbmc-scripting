@@ -20,17 +20,19 @@ import threading
 
 scriptpath = os.getcwd().replace(";","")+"\\"
 
-lang = Language(scriptpath + "\\src\\language")
-_ = lang.localized
+lang = Language(XinBox_Util.__scriptname__)
+lang.load(scriptpath + "\\src\\language")
+_ = lang.string
 
 
 if __name__ == '__main__':
-        if exists("X:\\mmrunning.xib"):
+        if exists("X:\\mmcomu.xib"):
                 dialog = xbmcgui.DialogProgress()
                 dialog.create(_(351), _(352))
-                if exists("X:\\mmcomu.xib"):
-                        os.remove("X:\\mmcomu.xib")
-                while exists("X:\\mmrunning.xib"):time.sleep(0.1)
+                os.remove("X:\\mmcomu.xib")
+                for i in range(0,5):
+                        dialog.update((i*20),_(352))
+                        time.sleep(i)
                 dialog.update(100,_(352))
                 dialog.close()
                 try:

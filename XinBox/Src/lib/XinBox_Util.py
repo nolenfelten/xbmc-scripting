@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.99.2'
+__version__ = '0.99.6'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
@@ -57,20 +57,21 @@ def setControllerAction():
 
 def getpresetservers():
     return {
-            "gmail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0",""],
-            "ihug.co.nz" : ["pop.ihug.co.nz","smtp.ihug.co.nz","0","0","5",""],
-            "xtra.co.nz" : ["pop3.xtra.co.nz","smtp.xtra.co.nz","0","0","100",""],
-            "sky.com" : ["pop.sky.com","smtp.sky.com","0","0","200",""],
-            "aol.com" : ["pop.aol.com","smtp.aol.com","0","587","5000",""],
-            "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000",""],
-            "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100",""],
-            "googlemail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0",""],
-            "yahoo.de" : ["pop.mail.yahoo.de","smtp.mail.yahoo.de","0","0","0",""],
-            "yahoo.com" : ["pop.mail.yahoo.com","smtp.mail.yahoo.com","995","465","0",""],
-            "gmx.net" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer"],
-            "gmx.de" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer"],
-            "web.de" : ["pop3.web.de","smtp.web.de","0","0","0",""],
-            "freenet.de" : ["pop3.freenet.de","mx.freenet.de","0","0","0",""]}
+            #after @,   pop addy,    smtp addy,  pop ssl,  smtp ssl, server inbox size, Username - none for default, Smtp auth
+            "gmail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0","",True],
+            "ihug.co.nz" : ["pop.ihug.co.nz","smtp.ihug.co.nz","0","0","5","",True],
+            "xtra.co.nz" : ["pop3.xtra.co.nz","smtp.xtra.co.nz","0","0","100","",True],
+            "sky.com" : ["pop.sky.com","smtp.sky.com","0","0","200","",True],
+            "aol.com" : ["pop.aol.com","smtp.aol.com","0","587","5000","",True],
+            "aim.com" : ["pop.aim.com","smtp.aim.com","0","587","5000","",True],
+            "earthlink.net" : ["pop.earthlink.net","smtpauth.earthlink.net","0","587","100","",True],
+            "googlemail.com" : ["pop.gmail.com","smtp.gmail.com","995","587","0","",True],
+            "yahoo.de" : ["pop.mail.yahoo.de","smtp.mail.yahoo.de","0","0","0","",True],
+            "yahoo.com" : ["pop.mail.yahoo.com","smtp.mail.yahoo.com","995","465","0","",True],
+            "gmx.net" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer",True],
+            "gmx.de" : ["pop.gmx.net","mail.gmx.net","0","0","1000","Kundennummer",True],
+            "web.de" : ["pop3.web.de","smtp.web.de","0","0","0","",True],
+            "freenet.de" : ["pop3.freenet.de","mx.freenet.de","0","0","0","",True]}
 
 def getfiletypes(filetype):
     if filetype in IMAGETYPES: return "Image"

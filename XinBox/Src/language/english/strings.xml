@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.5-->
+<!--English Strings VER: 0.6-->
+	<!--Changes since Ver: 0.5-->
+		<!--NEW: 244, 167 -->
 	<!--Changes since Ver: 0.4-->
 		<!--NEW: 404, 405-411, 164-166, -->
 		<!--Changed: 393, 392, 403, 400, 401 -->
@@ -119,7 +121,7 @@
 	<string id="125">Select to Login to this inbox.</string>
 	<string id="126">Select to edit this account.</string>
 	<string id="127">Select to delete current account.</string>
-	<string id="128">Select to exit and return to previous menu.</string>
+	<string id="128">Select to exit the XinBox Script.</string>
 	<string id="129">Select to change the "New Email" notification SFX. This is played when new emails are received into this Inbox. Select silent.wav to disable the SFX.</string>
 	<string id="130">Select to confirm changes to your inbox and return to the Account Menu. Note: The inbox changes will not be saved until the Account is saved.</string>
 	<string id="131">Select to toggle if this Inbox is the Default Inbox. A Default Inbox automatically logs in when the account is logged in to. Note: There can only be a maximum of one Default Inbox per Account.</string>
@@ -156,6 +158,7 @@
 	<string id="164">Select to either Update to this Version or read this Version's Change Log.</string>
 	<string id="165">Select to Fetch and read the Change Log for this Version.</string>
 	<string id="166">Select to Update XinBox to this Version.</string>
+	<string id="167">Select to toggle SMTP Authentication.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -186,6 +189,7 @@
 	<string id="241">Browse for "New Email" Notification SFX:</string>
 	<string id="242">OK</string>
 	<string id="243">Default Inbox</string>
+	<string id="244">SMTP Authentication</string>
 
 	<!-- InBox Labels -->
 	<string id="250">Check</string>

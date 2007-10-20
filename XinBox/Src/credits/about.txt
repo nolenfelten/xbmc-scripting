@@ -6,11 +6,10 @@ Beta Testers:
 
 Solarbaby
 bootsy
-mikko70
 
 
-settings Class by Donno
-update & language Class's by Nuka1195
+settings.py by Donno
+update.py by Nuka1195
 Some GFX & Icons by X3lectric
 
 History:
@@ -23,6 +22,8 @@ The scrit eventually changed names to "Xinbox Inbox" as most of the code was now
 After a few more releases, the script came to its final name that it is today.
 XinBox also had a few version updates and the latest version 0.3 was released Jan '07.
 Stanley87 then took a break from scripting. Moved apartments and began again on this new release of XinBox.
+
+
 
 
 
@@ -51,6 +52,6 @@ And, YOU for using my script!
 
 Officail XinBox Feedback/Bug Report Forums:
 
-http://www.xboxmediacenter.com/forum
-http://forums.xbox-scene.com/
+http://xboxmediacenter.com/forum/showthread.php?t=27739
+http://forums.xbox-scene.com/index.php?showtopic=615798
 
