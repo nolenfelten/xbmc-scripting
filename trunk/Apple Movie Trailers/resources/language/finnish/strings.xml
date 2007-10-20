@@ -5,6 +5,7 @@
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
   <!-- Dialog Messages -->
+  <string id="39">Toista kaikki</string>
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
   <string id="41">Päivitetään lajityypeittäin, kesto n.1 - 5 minuuttia</string>
   <string id="42">Päivitetään lajityyppi tietoja...</string>
@@ -47,7 +48,7 @@
   <string id="79">Ladataan...</string>
   <string id="80">KB/s</string>
   <string id="81">Kaikkia tarvittavia osia ei löydy!</string>
-  <string id="82">Haluatko varmasti poistaa</string>
+  <string id="82">Haluatko varmasti poistaa kaikki esittelyt:</string>
   <string id="83">Ladataan tietokanta...</string>
   <string id="84">Videot</string>
   <string id="85">Suoritetaan hakua...</string>
@@ -64,7 +65,7 @@
   <string id="96">/</string>
   <string id="97">Muodostetaan hakutaulukkoa.</string>
   <string id="98">Poistetaan vanhojen esittelyjen xml-tiedostoja...</string>
-    
+  <string id="99">Esittely</string>
   
   <!-- Buttons -->
   <string id="103">Lajityypit</string>
@@ -96,7 +97,8 @@
   <string id="161">Ei esittelyn osoitetta</string>
   <string id="162">Määriteltyhaku</string>
   <string id="163">Katsotut</string>
-      
+  <string id="164">Viimeksi lisätyt</string>
+  
   <!-- Settings labels -->
   <string id="200">Valitse:</string>
   <string id="201">Ulkoasu</string>
@@ -115,7 +117,7 @@
   <string id="214">Videon toistoresoluutio</string>
   <string id="215">Teatteriesitysten sijainti</string>
   <string id="216">Teatteriesitysten hakupaikka</string>
-  <string id="217">Tarkista päivitykset käynnistyessä</string>
+  <string id="217">Toista kaikki esittelyt</string>
   <string id="220">Asenna lisäkkeet...</string> 
 
   <!-- Settings choices -->
@@ -171,7 +173,7 @@
   <string id="506">Päivitä elokuvan tiedot</string>
   <string id="507">Päivitä kaikkien elokuvien tiedot</string>
   <string id="508">Siirrä tallennuskansioon</string>
-  <string id="509">Poista tallennetut esittelyt</string>
+  <string id="509">Poista esittely(t)</string>
   <string id="510">Teatterin esityskerrat</string>
   <string id="511">Näytä lajityyppi</string>
   <string id="512">Päivitä lajityyppi</string>
