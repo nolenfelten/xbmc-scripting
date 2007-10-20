@@ -86,7 +86,7 @@ def set_status_symbol( status_symbol ):
     return [ "-", "\\", "|", "/" ][ status_symbol_index ]
 
 class HTTP:
-    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False ):
+    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False, clear_cache_folder=False ):
         # set the cache directory; default to a .cache directory in BASE_DATA_PATH
         self.cache_dir = cache
         if self.cache_dir.startswith( "." ):
@@ -97,6 +97,7 @@ class HTTP:
         
         # flat_cache means that each request will be cached to a special folder; basically a non-persistent cache
         self.flat_cache = flat_cache
+        self.clear_cache_folder = clear_cache_folder
 
         # normally, an md5 hexdigest will be used to determine a unique filename for each request, but with actual_filename set to True, the real filename will be used
         # this can result in overwriting previously cached results if not used carefully
@@ -107,13 +108,12 @@ class HTTP:
 
     def clear_cache( self, cache_dir=None ):
         try:
-            if " (x1)" in self.title or " (x" not in self.title:
-                if cache_dir is None:
-                    cache_dir = self.cache_dir
-                for root, dirs, files in os.walk( cache_dir, topdown = False ):
-                    for name in files:
-                        os.remove( os.path.join( root, name ) )
-                    os.rmdir( root )
+            if cache_dir is None:
+                cache_dir = self.cache_dir
+            for root, dirs, files in os.walk( cache_dir, topdown = False ):
+                for name in files:
+                    os.remove( os.path.join( root, name ) )
+                os.rmdir( root )
         except:
             LOG( LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
 
@@ -155,7 +155,7 @@ class HTTP:
             return filepath
         
         # if self.flat_cache delete existing flat_cache folder since this is a new movie
-        if self.flat_cache:
+        if self.flat_cache and self.clear_cache_folder:
             self.clear_cache( os.path.join( self.cache_dir, "flat_cache" ) )
 
         try:
@@ -268,8 +268,8 @@ class HTTP:
 
 
 class HTTPProgress( HTTP ):
-    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False ):
-        HTTP.__init__( self, cache, title, actual_filename, flat_cache )
+    def __init__( self, cache = ".cache", title = "", actual_filename = False, flat_cache = False, clear_cache_folder = False ):
+        HTTP.__init__( self, cache, title, actual_filename, flat_cache, clear_cache_folder )
         self.dialog = xbmcgui.DialogProgress()
         self.status_symbol = "-"
         self.download_start_time = time.time()
@@ -296,7 +296,7 @@ class HTTPProgress( HTTP ):
         self.dialog.close()
 
 class HTTPProgressSave( HTTPProgress ):
-    def __init__( self, save_location = ".cache", save_title = "" ):
+    def __init__( self, save_location = ".cache", save_title = "", clear_cache_folder = False ):
         # if filepath is a samba share, save to the flat_cache directory, then copy it to the samba share
         self.save_location = save_location
         if ( save_location.startswith( "smb://" ) or save_location == ".cache" ):
@@ -304,7 +304,7 @@ class HTTPProgressSave( HTTPProgress ):
             save_location = ".cache"
         else:
             flat_cache = False
-        HTTPProgress.__init__( self, save_location, save_title, True, flat_cache )
+        HTTPProgress.__init__( self, save_location, save_title, True, flat_cache, clear_cache_folder )
 
     def urlretrieve( self, url ):
         filepath = HTTPProgress.urlretrieve( self, url )

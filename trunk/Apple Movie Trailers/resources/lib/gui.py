@@ -231,7 +231,7 @@ class GUI( xbmcgui.WindowXML ):
                             title = category.title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
                         else:
                             title = category.title
-                        thumbnail = "amt-generic-%s%s.tbn" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
+                        thumbnail = "amt-generic-%s%s.png" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         if ( self.main_category == ACTORS ):
                             actor_path = xbmc.translatePath( os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) ) )
                             thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
@@ -277,11 +277,11 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
 
     def _get_thumbnail( self, movie ):
-        poster = ( movie.poster, "amt-blank-poster.tbn", )[ not movie.poster ]
+        poster = ( movie.poster, "amt-blank-poster.png", )[ not movie.poster ]
         if ( not movie.poster and self.settings[ "thumbnail_display" ] == 0 ):
             thumbnail = poster
         else:
-            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.tbn" % ( ( "", "-w", )[ movie.watched > 0 ], ), "", )[ self.settings[ "thumbnail_display" ] ]
+            thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.png" % ( ( "", "-w", )[ movie.watched > 0 ], ), "", )[ self.settings[ "thumbnail_display" ] ]
         return thumbnail, poster
         
 
@@ -375,7 +375,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
             self.cast_exists = ( len( self.trailers.movies[ trailer ].cast ) > 0 )
-            thumbnail = "amt-generic-%sactor.tbn" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
+            thumbnail = "amt-generic-%sactor.png" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
             if ( self.cast_exists ):
                 #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
@@ -499,17 +499,17 @@ class GUI( xbmcgui.WindowXML ):
                                 filename = url
                             else:
                                 if ( self.settings[ "mode" ] == 1 ):
-                                    fetcher = cacheurl.HTTPProgressSave( save_title=title )
-                                    filename = fetcher.urlretrieve( url )
-                                    if " (x1)" in title or " (x" not in title:
+                                    if ( not self.check_cache( self.trailers.movies[ trailer ].title ) ):
                                         self.flat_cache = ()
-                                    if ( filename and filename not in repr( self.flat_cache ) ):
+                                    fetcher = cacheurl.HTTPProgressSave( save_title=title, clear_cache_folder=not self.flat_cache )
+                                    filename = fetcher.urlretrieve( url )
+                                    if ( filename and not self.check_cache( filename, 1 ) ):
                                         self.flat_cache += ( ( self.trailers.movies[ trailer ].title, filename, ), )
                                 elif ( self.settings[ "mode" ] >= 2 ):
                                     fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
                                     filename = fetcher.urlretrieve( url )
                                     if ( filename is not None ):
-                                        poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                                        poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.png", )[ not self.trailers.movies[ trailer ].poster ]
                                         self.saveThumbnail( filename, trailer, poster )
                         if ( filename is not None ):
                             listitem = xbmcgui.ListItem( self.trailers.movies[ trailer ].title, thumbnailImage=self.trailers.movies[ trailer ].poster )
@@ -526,6 +526,14 @@ class GUI( xbmcgui.WindowXML ):
                         xbmc.Player().play( playlist )
         except:
             LOG( LOG_ERROR, "%s (rev: %s) GUI::playTrailer [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+
+    def check_cache( self, title, pos=0 ):
+        exists = False
+        for item in self.flat_cache:
+            if ( title == item[ pos ] ):
+                exists = True
+                break
+        return exists
 
     def saveThumbnail( self, filename, trailer, poster ):
         try: 
@@ -574,7 +582,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( self.trailers.movies[ selection ].saved != [] ):
                 labels += ( _( 509 ), )
                 functions += ( self.deleteSavedTrailer, )
-            elif ( self.trailers.movies[ selection ].title in repr( self.flat_cache ) ):
+            elif ( self.check_cache( self.trailers.movies[ selection ].title ) ):
                 labels += ( _( 508 ), )
                 functions += ( self.saveCachedMovie, )
             labels += ( _( 510 ), )
@@ -799,7 +807,7 @@ class GUI( xbmcgui.WindowXML ):
                     xbmc.executehttpapi("FileCopy(%s,%s)" % ( filename[ 1 ], new_filename, ) )
                     if ( not new_filename.startswith( "smb://" ) ):
                         xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filename[ 1 ], new_filename, ) )
-                    poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                    poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.png", )[ not self.trailers.movies[ trailer ].poster ]
                     self.saveThumbnail( new_filename, trailer, poster )
             self.showOverlays( trailer )
             dialog.close()
