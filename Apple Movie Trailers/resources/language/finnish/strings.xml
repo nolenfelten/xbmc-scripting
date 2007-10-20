@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.1         Finnish 15.10.2007 -->
+  <!-- v.pre-0.99.1         Finnish 20.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -116,6 +116,7 @@
   <string id="215">Teatteriesitysten sijainti</string>
   <string id="216">Teatteriesitysten hakupaikka</string>
   <string id="217">Tarkista päivitykset käynnistyessä</string>
+  <string id="220">Asenna lisäkkeet...</string> 
 
   <!-- Settings choices -->
   <string id="2020">Matala</string>
@@ -142,8 +143,6 @@
   <string id="251">Peruuta</string>
   <string id="252">Päivitä</string>
   <string id="253">Tekijät</string>
-  <string id="254">AMT-lisäke</string>
-  <string id="255">Theater-lisäke</string>
   <string id="258">Käynnistä</string>
   <string id="259">Myöhemmin</string>
   
@@ -201,10 +200,11 @@
     <string id="710">Valitse pienoiskuvake</string>
     <string id="711">Asenna</string>
     <string id="712">Ohita</string>
+    <string id="713">Lisäke</string>
 
     <string id="720">Muista lisätä uusi lisäke uutena sijaintina</string>
-    <string id="721">Video-tiedostoihin. Kirjastotila toimii automaattisesti,</string>
-    <string id="722">sinne ei muutoksia tarvita.</string>
+    <string id="721">Video-tiedostoihin. Kirjastotila toimii</string>
+    <string id="722">automaattisesti, sinne ei muutoksia tarvita.</string>
 
     <string id="730">Lisäkkeen asennus epäonnistui!</string>
     
@@ -235,6 +235,6 @@
   <string id="1010">Ohjelma tallennettiin kansioon:</string>
 
   <!-- Update error messages -->
-  <string id="1030">Uutta versiota ei löydetty!</string>
+  <string id="1030">Uutta versiota ei löytynyt!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
 </strings>
