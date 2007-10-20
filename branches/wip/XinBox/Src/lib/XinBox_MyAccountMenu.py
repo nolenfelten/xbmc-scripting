@@ -41,6 +41,7 @@ class GUI( xbmcgui.WindowXML ):
             else:self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
         
     def setupvars(self):
+        self.exitflag = 0
         self.mmenabled = 0
         self.control_action = XinBox_Util.setControllerAction()
         
@@ -131,9 +132,11 @@ class GUI( xbmcgui.WindowXML ):
         self.setupcontrols()
 
     def launchinbox(self, inbox):
-        winSettings = XinBox_Inbox.GUI("XinBox_Inbox.xml",self.srcpath,"DefaultSkin",lang=self.language,theinbox=inbox,account=self.account,title=self.title)
-        winSettings.doModal()
-        del winSettings      
+        w = XinBox_Inbox.GUI("XinBox_Inbox.xml",self.srcpath,"DefaultSkin",lang=self.language,theinbox=inbox,account=self.account,title=self.title)
+        w.doModal()
+        self.exitflag = w.exitflag
+        del w
+        if self.exitflag == 1:self.close()
 
     def launchinfo(self, focusid, label,heading=False):
         dialog = XinBox_InfoDialog.GUI("XinBox_InfoDialog.xml",self.srcpath,"DefaultSkin",thefocid=focusid,thelabel=label,language=self.language,theheading=heading)

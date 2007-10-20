@@ -67,7 +67,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             self.getattachments()
             self.getControl(64).setEnabled(True)
-        self.setFocusId(61)
+        self.setFocusId(72)
         
     def getattachments(self):
         if self.emailsettings[1].is_multipart():
@@ -144,11 +144,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if controlID == 64:
                 self.goattachlist()
             elif controlID == 61:
-                self.replyvalue = [self.emfrom,"","","FW: " + self.subject,self.getreply(self.body),None]
+                self.replyvalue = [self.emfrom,"","","Re: " + self.subject,self.getreply(self.body),None]
                 self.exitme()
             elif controlID == 62:
                 if len(self.attachments) == 0:self.attachments = None
-                self.replyvalue = ["","","","Re: " + self.subject,self.getreply(self.body),self.attachments]
+                self.replyvalue = ["","","","Fwd: " + self.subject,self.getreply(self.body),self.attachments]
                 self.exitme()
             elif controlID == 81:
                 self.openattach(self.getControl(81).getSelectedPosition())

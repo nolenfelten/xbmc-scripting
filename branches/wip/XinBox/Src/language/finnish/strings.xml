@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
 <!-- English Strings v.0.5 -->
 <!--    Xinbox v.0.99.2    -->
-<!--  Finnish v.12.8.2007  -->
+<!--  Finnish v.28.8.2007  -->
 
 <strings>
 	<!-- Main Menu Labels -->
   <string id="10">Päävalikko</string>
   <string id="11">Kirjaudu</string>
   <string id="12">Luo tili</string>
-  <string id="13">Ohjelmapäivitys</string>
+  <string id="13">Päivitys</string>
   <string id="14">Tietoja ohjelmasta</string>
   <string id="15">Lopeta</string>
   <string id="16">Xinbox tiliin</string>
@@ -53,8 +53,8 @@
   <string id="65">Poistu</string>
   <string id="66">Valitse %s</string>
   <string id="67">Näytettävä nimi</string>
-  <string id="68">POP palvelin</string>
-  <string id="69">SMTP palvelin</string>
+  <string id="68">POP-palvelin</string>
+  <string id="69">SMTP-palvelin</string>
   <string id="70">Palvelimen käyttäjänimi</string>
   <string id="71">Palvelimen salasana</string>
   <string id="72">Palvelimen koko</string>
@@ -192,14 +192,14 @@
   <string id="253">Muodostetaan postilaatikkoa...</string>
   <string id="254">Lisätään uusia viestejä...</string>
   <string id="255">Ei aihetta</string>
-  <string id="256">Postilaatikko tyhjä</string>
+  <string id="256">Postilaatikko on tyhjä</string>
   <string id="257">Palvelimen koko:</string>
   <string id="258">Postilaatikon koko:</string>
   <string id="259">Tyhjä</string>
   <string id="260">Saapunut:</string>
   <string id="261">Lähetetty:</string>
   <string id="262">Poistetaan viesti postilaatikosta</string>
-  <string id="263">Poistataan viesti palvelimelta</string>
+  <string id="263">Poistetaan viesti palvelimelta</string>
   <string id="264">Viestiä ei löytynyt palvelimelta</string>
   <string id="265">Poistetaan viesti palvelimelta ja postilaatikosta</string>
   <string id="266">Liitteet</string>
@@ -215,13 +215,13 @@
   <string id="276">Tyhjennä postilaatikko?</string>
   <string id="277">Kaikki viestit poistetaan.</string>
   <string id="278">Postilaatikko tyhjennetty</string>
-  <string id="279">Zip-tiedosto tyhjä</string>
+  <string id="279">Zip-tiedosto on tyhjä</string>
   <string id="280">Zip-tiedostoluettelo</string>
   <string id="281">Sivu ylös/Sivu alas</string>
-  <string id="282">Päivitetään postilaatikon ID tiedostoa..</string>
-  <string id="283">Uusia: </string>
-  <string id="284">Lukemattomia: </string>
-  <string id="285">Yht: </string>
+  <string id="282">Päivitetään postilaatikon ID-tiedostoa..</string>
+  <string id="283">Uusia:</string>
+  <string id="284">Lukemattomia:</string>
+  <string id="285">Yht:</string>
 
 	<!-- Compose Labels -->
   <string id="300">Lähetetään viestiä...</string>
@@ -305,13 +305,14 @@
   <string id="400">Noudetaan muutostietoja</string>
   <string id="401">Uutta versiota ei saatu ladattua!</string>
   <string id="402">Päivitys ei onnistu!</string>
-  <string id="403">Poistetaan vanha ja korvataan uudemmalla %s versiolla?</string>
+  <string id="403">Säilytetäänkö kopio ohjelman aiemmasta %s versiosta?</string>
   <string id="404">Uusi ohjelmaversio on saatavilla!</string>
   <string id="405">Uusin</string>
   <string id="406">Uudempi</string>
   <string id="407">Nykyinen</string>
   <string id="408">Vanhempi</string>
   <string id="409">Sopimaton</string>
-  <string id="410">Päivitys valikko</string>
+  <string id="410">Päivitys</string>
   <string id="411">Tähän versioon ei ole muutoshistoriaa saatavilla.</string>
 </strings>
+

@@ -15,24 +15,21 @@ class Minimode:
     def init(self):
         self.account = sys.argv[1:][0]
         self.srcpath = sys.argv[1:][1]
-        f = open("X:\\mmrunning.xib", "w")
-        f.close()
         f = open("X:\\mmcomu.xib", "w")
         f.close()
         time.sleep(2)
-        lang = Language(self.srcpath + "\\language")
-        self.language = lang.localized
-        xbmc.executebuiltin('XBMC.Notification(XinBox Mini-Mode,Started)')
+        lang = Language(TITLE)
+        lang.load(self.srcpath + "\\language")
+        self.language = lang.string
+        xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
         time.sleep(5)
         try:
             self.exit = False
             self.loadsettings()
             self.inboxes = self.buildinboxdict()
             if not len(self.inboxes) == 0:self.startmm()
-            else:xbmc.executebuiltin('XBMC.Notification(XinBox Mini-Mode,Closed)')
-        except:xbmc.executebuiltin('XBMC.Notification(XinBox Mini-Mode,Closed)')
-        if exists("X:\\mmrunning.xib"):
-            os.remove("X:\\mmrunning.xib")
+            else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+        except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         if exists("X:\\mmcomu.xib"):
             os.remove("X:\\mmcomu.xib")
         if self.exit:

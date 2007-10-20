@@ -61,7 +61,8 @@ class GUI( xbmcgui.WindowXML ):
         8 : "Keep Copy Emails",
         9 : "Email Notification",
         10 : "Default Inbox",
-        11 : "Mini Mode Enabled"
+        11 : "Mini Mode Enabled",
+        12 : "SMTP Auth"
         }
         if self.accountSettings.getSetting("Default Inbox") == self.inbox:
             self.defaultinbox = True
@@ -70,6 +71,12 @@ class GUI( xbmcgui.WindowXML ):
         self.popssl = self.settings.getSetting("POP SSL")
         self.smtpssl = self.settings.getSetting("SMTP SSL")
         self.mmenabled = self.settings.getSetting("Mini Mode Enabled")
+        if self.settings.getSetting("SMTP Auth",None) == None:
+            self.settings.addSetting("SMTP Auth","True","text")
+            self.smtpauth = True
+        elif self.settings.getSetting("SMTP Auth",None) == "True":
+            self.smtpauth = True
+        else:self.smtpauth = False
         if self.popssl == "0":
             self.popdefault = False
             self.getControl(104).setSelected(self.popdefault)
@@ -97,6 +104,7 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl(105).setSelected(self.smtpdefault)
         self.getControl(104).setSelected(self.popdefault)
         self.getControl(107).setSelected(self.defaultinbox)
+        self.getControl(109).setSelected(self.smtpauth)
         if self.newinbox:
             self.getControl(62).setLabel(self.language(61))
         else:self.getControl(62).setLabel(self.language(242))
@@ -125,6 +133,7 @@ class GUI( xbmcgui.WindowXML ):
         self.addItem(self.SettingListItem(self.language(240),self.settings.getSetting("Email Notification")))
         self.addItem(self.SettingListItem(self.language(243),""))
         self.addItem(self.SettingListItem(self.language(350),""))
+        self.addItem(self.SettingListItem(self.language(244),""))
         
     def SettingListItem(self, label1,label2):
         if label2 == "-":
@@ -186,6 +195,9 @@ class GUI( xbmcgui.WindowXML ):
                             self.updatessl(91,"",self.servers[server][2])
                             self.updatessl(92,"",self.servers[server][3])
                             self.updatesizes(self.servers[server][4],6)
+                            self.smtpauth = self.servers[server][6]
+                            self.getControl(109).setSelected(self.smtpauth)
+                            self.settings.setSetting("SMTP Auth",str(self.smtpauth))                            
                         else:
                             self.getListItem(4).setLabel2(name)
                             self.settings.setSetting("Account Name",name)                    
@@ -238,6 +250,10 @@ class GUI( xbmcgui.WindowXML ):
                 self.mmenabled = not self.mmenabled
                 self.getControl(108).setSelected(self.mmenabled)
                 self.settings.setSetting(self.settnames[curPos],str(self.mmenabled))
+            elif curPos == 12:
+                self.smtpauth = not self.smtpauth
+                self.getControl(109).setSelected(self.smtpauth)
+                self.settings.setSetting(self.settnames[curPos],str(self.smtpauth))
         elif ( controlID == 61):
             w = TestInbox(self.settings,self.language,self.srcpath)
             w.testinput()
@@ -281,6 +297,8 @@ class GUI( xbmcgui.WindowXML ):
                     self.launchinfo(131,self.getListItem(self.getCurrentListPosition()).getLabel())
                 elif self.getCurrentListPosition() == 11:
                     self.launchinfo(146,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 12:
+                    self.launchinfo(167,self.getListItem(self.getCurrentListPosition()).getLabel())
                 else:self.launchinfo(113 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             elif focusid == 61:
                 self.launchinfo(122,self.language(89))

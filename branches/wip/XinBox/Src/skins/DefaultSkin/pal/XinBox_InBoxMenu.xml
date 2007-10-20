@@ -72,7 +72,7 @@
                 <control type="checkmark" id="104">
                     	<description>POP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>198</posy>
+                    	<posy>187</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -90,7 +90,7 @@
                 <control type="checkmark" id="105">
                     	<description>SMTP SSL Status</description>
                     	<posx>490</posx>
-                    	<posy>225</posy>
+                    	<posy>214</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -108,7 +108,7 @@
                 <control type="checkmark" id="106">
                     	<description>Keep Copy Emails Status</description>
                     	<posx>515</posx>
-                    	<posy>360</posy>
+                    	<posy>349</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -126,7 +126,7 @@
                 <control type="checkmark" id="107">
                     	<description>Default Inbox Status</description>
                     	<posx>515</posx>
-                    	<posy>415</posy>
+                    	<posy>404</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -144,7 +144,25 @@
                 <control type="checkmark" id="108">
                     	<description>Mini Mode Status</description>
                     	<posx>515</posx>
-                    	<posy>442</posy>
+                    	<posy>431</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
+                <control type="checkmark" id="109">
+                    	<description>SMTP Auth Status</description>
+                    	<posx>515</posx>
+                    	<posy>458</posy>
                     	<width>60</width>
                     	<height>30</height>
                     	<label>-</label>
@@ -163,7 +181,7 @@
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
 			<posx>183</posx>
-			<posy>485</posy>
+			<posy>490</posy>
 			<control type="button" id="61">
 				<description>Test Button</description>
 				<posx>0</posx>
@@ -205,9 +223,9 @@
 		</control>
 		<control type="list" id="51">
 			<posx>175</posx>
-			<posy>145</posy>
+			<posy>134</posy>
 			<width>400</width>
-			<height>330</height>
+			<height>360</height>
 			<ondown>9000</ondown>
 			<onup>9000</onup>
 			<scrolltime>200</scrolltime>

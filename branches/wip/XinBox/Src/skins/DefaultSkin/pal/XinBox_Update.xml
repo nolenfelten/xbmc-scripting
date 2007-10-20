@@ -75,7 +75,7 @@
         		<posx>320</posx>
         		<posy>430</posy>
 			<label>-</label>
-        		<width>300</width>
+        		<width>100</width>
         		<font>font13</font>
 			<textcolor>FFB2D4F5</textcolor>
 			<visible>!Control.HasFocus(50)</visible>
@@ -125,7 +125,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>-</label>
+				<label>Change Log</label>
 				<onup>50</onup>
 				<onright>72</onright>
 				<ondown>61</ondown>
@@ -144,7 +144,7 @@
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
-				<label>-</label>
+				<label>Update</label>
 				<onup>50</onup>
 				<onright>63</onright>
 				<ondown>62</ondown>
