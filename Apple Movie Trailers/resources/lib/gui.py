@@ -513,8 +513,7 @@ class GUI( xbmcgui.WindowXML ):
                                         self.saveThumbnail( filename, trailer, poster )
                         if ( filename is not None ):
                             listitem = xbmcgui.ListItem( self.trailers.movies[ trailer ].title, thumbnailImage=self.trailers.movies[ trailer ].poster )
-                            ##t = "%s%s%s" % ( self.trailers.movies[ trailer ].title
-                            if ( len( items ) > 1 ): s = count
+                            if ( len( items ) > 1 ): s = count + 1
                             else: s = selected
                             t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
                             listitem.setInfo( "video", { "Title": t, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
@@ -523,7 +522,8 @@ class GUI( xbmcgui.WindowXML ):
                     if ( len( playlist ) ):
                         self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
                         self._set_video_resolution()
-                        xbmc.Player( self.core ).play( playlist )
+                        ##xbmc.Player( self.core ).play( playlist )
+                        xbmc.Player().play( playlist )
         except:
             LOG( LOG_ERROR, "%s (rev: %s) GUI::playTrailer [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
