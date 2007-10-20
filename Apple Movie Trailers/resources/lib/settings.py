@@ -87,6 +87,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.startup_categories[ NO_TRAILER_URLS ] = _( 161 )
         self.startup_categories[ CUSTOM_SEARCH ] = _( 162 )
         self.startup_categories[ WATCHED ] = _( 163 )
+        self.startup_categories[ RECENTLY_ADDED ] = _( 164 )
         for title in self.startup_categories.values():
             self.startup_titles += [ title ]
         self.startup_titles.sort()
@@ -167,6 +168,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 234 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
             self.getControl( 235 ).setLabel( self.settings[ "showtimes_local" ] )
             self.getControl( 236 ).setLabel( self.settings[ "showtimes_scraper" ] )
+            self.getControl( 237 ).setSelected( self.settings[ "auto_play_all" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -272,12 +274,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._set_controls_values()
 
     def _change_setting15( self ):
-        """ changes settings #16 """
+        """ changes settings #15 """
         self.settings[ "showtimes_local" ] = get_keyboard( self.settings[ "showtimes_local" ], _( self.controlId ) )
         self._set_controls_values()
 
     def _change_setting16( self ):
-        """ changes settings #17 """
+        """ changes settings #16"""
         try: original_selection = self.showtimes_scrapers.index( self.settings_original[ "showtimes_scraper" ] )
         except: original_selection = 0
         selection = self._get_chooser( self.showtimes_scrapers, original_selection, self.current_showtimes_scraper, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -285,6 +287,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.current_showtimes_scraper = selection
             self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
             self._set_controls_values()
+
+    def _change_setting17( self ):
+        """ changes settings #17 """
+        self.settings[ "auto_play_all" ] = not self.settings[ "auto_play_all" ]
+        self._set_controls_values()
 
     def _change_setting20( self ):
         """ changes settings #20 """

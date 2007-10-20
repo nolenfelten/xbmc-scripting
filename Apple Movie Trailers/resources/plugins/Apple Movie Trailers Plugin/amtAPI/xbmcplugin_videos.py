@@ -68,7 +68,7 @@ class Main:
                     ftrailers[ -1 ][ 17 ] += [ trailer[ 17 ] ]
                 # if it's a new genre add the new genre to the genre string
                 elif ( isinstance( trailer[ 16 ], basestring ) and trailer[ 16 ] not in ftrailers[ -1 ][ 16 ] ):
-                    ftrailers[ -1 ][ 16 ] += " / %s" % trailer[ 16 ]
+                    ftrailers[ -1 ][ 16] += " / %s" % trailer[ 16 ]
         return ftrailers
 
     def _fill_media_list( self, trailers ):
@@ -77,8 +77,8 @@ class Main:
             # enumerate through the list of trailers and add the item to the media list
             for trailer in trailers:
                 # if trailer was saved use this as the url
-                if ( trailer[ 13 ] ):
-                    url = trailer[ 13 ]
+                if ( eval( trailer[ 13 ] ) ):
+                    url = eval( trailer[ 13 ] )[ 0 ][ 0 ]
                 else:
                     # select the correct trailer quality.
                     url = self._get_trailer_url( eval( trailer[ 3 ] ) )
@@ -99,7 +99,7 @@ class Main:
                     else:
                         genre = trailer[ 16 ]
                     # set our overlay image
-                    overlay = ( 0, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in trailer[ 3 ] or "1080p.mov" in trailer[ 3 ] ]
+                    overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in url or "1080p.mov" in url ]
                     # add the different infolabels we want to sort by
                     listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Cast": trailer[ 17 ], "Runtime": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAARating": rating, "Plot": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
                     # add the item to the media list
@@ -122,20 +122,20 @@ class Main:
     def _get_trailer_url( self, trailer_urls ):
         url = ""
         # get intial choice
-        choice = ( int( self.args.quality ), len( trailer_urls ) - 1, )[ int( self.args.quality ) >= len( trailer_urls ) ]
+        choice = ( int( self.args.quality ), len( trailer_urls[ 0 ] ) - 1, )[ int( self.args.quality ) >= len( trailer_urls[ 0 ] ) ]
         # if quality is non progressive
         if ( int( self.args.quality ) <= 2 ):
             # select the correct non progressive trailer
-            while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # quality is progressive
         else:
             # select the proper progressive quality
             quality = ( "480p", "720p", "1080p", )[ int( self.args.quality ) - 3 ]
             # select the correct progressive trailer
-            while ( quality not in trailer_urls[ choice ] and trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( quality not in trailer_urls[ 0 ][ choice ] and trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # if there was a valid trailer set it
         if ( choice >= 0 ):
-            url = trailer_urls[ choice ]
+            url = trailer_urls[ 0 ][ choice ]
         return url
 
     def _fetch_records( self, query, params=None ):

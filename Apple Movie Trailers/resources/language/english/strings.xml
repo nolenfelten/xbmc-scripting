@@ -5,6 +5,7 @@
     <string id="2">Team AMT</string>
 
     <!-- Dialog Messages -->
+    <string id="39">Play All</string>
     <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
     <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
     <string id="42">Refreshing genre information...</string>
@@ -47,7 +48,7 @@
     <string id="79">Downloading...</string>
     <string id="80">KB/s</string>
     <string id="81">All the required modules could not be loaded!</string>
-    <string id="82">Are you sure you want to delete</string>
+    <string id="82">Are you sure you want to delete all trailers for:</string>
     <string id="83">Loading database...</string>
     <string id="84">videos</string>
     <string id="85">Executing query...</string>
@@ -64,7 +65,7 @@
     <string id="96">of</string>
     <string id="97">Setting up search dialog.</string>
     <string id="98">Removing old trailer xml files...</string>
-    
+    <string id="99">Trailer</string>
 
     <!-- Buttons -->
     <string id="103">Genre</string>
@@ -96,6 +97,7 @@
     <string id="161">No Trailer Urls</string>
     <string id="162">Custom Search</string>
     <string id="163">Watched</string>
+    <string id="164">Recently Added</string>
 
     <!-- Settings labels -->
     <string id="200">Choose:</string>
@@ -115,7 +117,7 @@
     <string id="214">Video player resolution</string>
     <string id="215">Showtimes location</string>
     <string id="216">Showtimes scraper</string>
-    <string id="217">Check version at startup</string>
+    <string id="217">Auto play all trailers</string>
     <string id="220">Install plugins...</string>
     
     <!-- Settings choices -->
@@ -171,7 +173,7 @@
     <string id="506">Refresh Trailer Info</string>
     <string id="507">Refresh All Trailers Info</string>
     <string id="508">Move to Save Folder</string>
-    <string id="509">Delete Saved Trailer</string>
+    <string id="509">Delete Saved Trailer(s)</string>
     <string id="510">Theater Showtimes</string>
     <string id="511">View Genre</string>
     <string id="512">Refresh Genre</string>

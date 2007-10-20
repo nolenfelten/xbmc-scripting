@@ -126,7 +126,7 @@ class GUI( xbmcgui.WindowXML ):
         self.trailers = trailers.Trailers()
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
-        self.flat_cache = ( unicode( "", "utf-8" ), "", )
+        self.flat_cache = ()
         self.sql = ""
         self.params = None
         self.display_cast = False
@@ -183,6 +183,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == WATCHED ):
                 sql = self.query[ "watched" ]
                 params = ( 0, )
+            elif ( category_id == RECENTLY_ADDED ):
+                sql = self.query[ "recently_added" ]
+                params = None
             elif ( category_id == CUSTOM_SEARCH ):
                 sql = self.search_sql
                 params = None
@@ -258,12 +261,14 @@ class GUI( xbmcgui.WindowXML ):
                 if ( self.trailers.movies ):
                     for movie in self.trailers.movies: # now fill the list control
                         thumbnail, poster = self._get_thumbnail( movie )
-                        urls = ( "(%s)", "%s", )[ len( movie.trailer_urls ) > 0 ]
+                        total_trailers = ( "", " (x%d)" % len( movie.trailer_urls ), )[ len( movie.trailer_urls ) > 1 ]
+                        urls = ( "(%s)", "%%s%s" % total_trailers, )[ len( movie.trailer_urls ) > 0 ]
                         #rating = ( "[%s]" % movie.rating, "", )[ not movie.rating ]
                         list_item = xbmcgui.ListItem( urls % ( movie.title, ), movie.rating, poster, thumbnail )
                         list_item.select( movie.favorite )
                         plot = ( movie.plot, _( 400 ), )[ not movie.plot ]
-                        list_item.setInfo( "video", { "Plot": plot, "MPAARating": movie.rating } )
+                        overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in repr( movie.trailer_urls ) or "1080p.mov" in repr( movie.trailer_urls ) ]
+                        list_item.setInfo( "video", { "Title": movie.title, "Overlay": overlay, "Plot": plot, "MPAARating": movie.rating } )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
@@ -329,6 +334,8 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 162 )
         elif ( self.category_id == WATCHED ):
             category = _( 163 )
+        elif ( self.category_id == RECENTLY_ADDED ):
+            category = _( 164 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -349,13 +356,7 @@ class GUI( xbmcgui.WindowXML ):
         return pos
     
     def clearTrailerInfo( self ):
-        #self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
-        #self.getControl( CONTROL_TRAILER_POSTER ).setImage( "" )
         self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "" )
-        # Plot
-        #self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
-        #self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( "" )
-        # Cast
         self.getControl( self.CONTROL_CAST_LIST ).reset()
         self.getControl( self.CONTROL_TRAILER_LIST_COUNT ).setLabel( "" )
         self.showOverlays()
@@ -370,9 +371,6 @@ class GUI( xbmcgui.WindowXML ):
                 trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ trailer ].favorite )
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
-            # Plot
-            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).reset()
-            ##self.getControl( self.CONTROL_PLOT_TEXTBOX ).setText( ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ] )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             #cast = self.trailers.movies[ trailer ].cast
@@ -397,7 +395,7 @@ class GUI( xbmcgui.WindowXML ):
         if ( trailer != -1 ):
             self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( self.trailers.movies[ trailer ].favorite )
             self.getControl( self.CONTROL_OVERLAY_WATCHED ).setVisible( self.trailers.movies[ trailer ].watched )
-            self.getControl( self.CONTROL_OVERLAY_SAVED ).setVisible( self.trailers.movies[ trailer ].saved != "" )
+            self.getControl( self.CONTROL_OVERLAY_SAVED ).setVisible( self.trailers.movies[ trailer ].saved != [] )
         else:
             self.getControl( self.CONTROL_OVERLAY_FAVORITE ).setVisible( False )
             self.getControl( self.CONTROL_OVERLAY_WATCHED ).setVisible( False )
@@ -418,69 +416,128 @@ class GUI( xbmcgui.WindowXML ):
         self.actor = self.getControl( self.CONTROL_CAST_LIST ).getSelectedItem().getLabel()
         self.setCategory( choice, 3 )
 
+    def _get_trailer_url( self, title, trailer_urls ):
+        items = ()
+        urls = []
+        for trailers in trailer_urls:
+            # get intial choice
+            choice = ( self.settings[ "trailer_quality" ], len( trailers ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailers ) ]
+            # if quality is non progressive
+            if ( self.settings[ "trailer_quality" ] <= 2 ):
+                # select the correct non progressive trailer
+                while ( trailers[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # quality is progressive
+            else:
+                # select the proper progressive quality
+                quality = ( "480p", "720p", "1080p", )[ self.settings[ "trailer_quality" ] - 3 ]
+                # select the correct progressive trailer
+                while ( quality not in trailers[ choice ] and trailers[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # if we have a valid choice add the url to our list
+            if ( choice >= 0 ):
+                urls += [ trailers[ choice ] ]
+        # if there are selections we and there is more than one trailer, let user choose
+        if len( urls ):
+            trailer = 0
+            if ( len( urls ) > 1 ):
+                # sort the urls, hopefully they will then be in the order of release
+                urls.sort()
+                # let the user choose
+                trailer = self._get_trailer( title, urls )
+            # if the user did not cancel the dialog
+            if ( trailer is not None ):
+                if ( trailer == len( urls ) ):
+                    for c, url in enumerate( urls ):
+                        t = self.get_title( "%s%s" % ( title, os.path.splitext( url )[ 1 ], ), c + 1, len( urls ) > 1 )
+                        items += ( ( t, url, c + 1 ), )
+                else:
+                    t = self.get_title( "%s%s" % ( title, os.path.splitext( urls[ trailer ] )[ 1 ], ), trailer + 1, len( urls ) > 1 )
+                    items = ( ( t, urls[ trailer ], trailer + 1 ), )
+        return items
+
+    def get_title( self, title, count, multiple ):
+        filepath = make_legal_filepath( title )
+        filepath = "%s%s%s" % ( os.path.splitext( filepath )[ 0 ], ( "", "_%d" % ( count, ), )[ multiple ], os.path.splitext( filepath )[ 1 ], )
+        if ( len( os.path.split( filepath )[ 1 ] ) > 37 ):
+            filepath = os.path.join( os.path.split( filepath )[ 0 ], os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ : -( len( os.path.split( filepath )[ 1 ] ) - 35 ) ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ -2 : ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 1 ] )
+        return filepath
+
+    def _get_trailer( self, title, urls ):
+        if ( self.settings[ "auto_play_all" ] and self.settings[ "mode" ] == 0 ):
+            return len( urls )
+        import chooser
+        force_fallback = self.skin != "Default"
+        choices = [ "%s %d%s" % ( _( 99 ), c + 1, ( "", " - [HD]", )[ "720p.mov" in url or "1080p.mov" in url ] ) for c, url in enumerate( urls ) ]
+        #if ( self.settings[ "mode" ] == 0 ):
+        choices += [ _( 39 ) ]
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=-1, selection=0, list_control=1, title=title )
+        selection = ch.selection
+        del ch
+        return selection
+
     def playTrailer( self ):
         try:
             trailer = self.getCurrentListPosition()
-            trailer_urls = self.trailers.movies[ trailer ].trailer_urls
-            if ( len( trailer_urls ) ):
-                # get intial choice
-                choice = ( self.settings[ "trailer_quality" ], len( trailer_urls ) - 1, )[ self.settings[ "trailer_quality" ] >= len( trailer_urls ) ]
-                # if quality is non progressive
-                if ( self.settings[ "trailer_quality" ] <= 2 ):
-                    # select the correct non progressive trailer
-                    while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-                # quality is progressive
-                else:
-                    # select the proper progressive quality
-                    quality = ( "480p", "720p", "1080p", )[ self.settings[ "trailer_quality" ] - 3 ]
-                    # select the correct progressive trailer
-                    while ( quality not in trailer_urls[ choice ] and trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-                if ( choice >= 0 ):
-                    url = trailer_urls[ choice ]
-                    LOG( LOG_DEBUG, "%s (rev: %s) [choice=%d url=%s]", __scriptname__, __svn_revision__, choice, url )
-                    filename = self.trailers.movies[ trailer ].saved
-                    if ( url.endswith( "p.mov" ) ):
-                        self.core = xbmc.PLAYER_CORE_DVDPLAYER
-                    else:
-                        self.core = xbmc.PLAYER_CORE_MPLAYER
-                    if ( not os.path.isfile( filename ) ):
-                        if ( self.settings[ "mode" ] == 0 ):
-                            filename = url
-                        else:
-                            ext = os.path.splitext( url )[ 1 ]
-                            title = "%s%s" % (self.trailers.movies[trailer].title, ext, )
-                            if ( self.settings[ "mode" ] == 1):
-                                fetcher = cacheurl.HTTPProgressSave( save_title=title )
-                                filename = fetcher.urlretrieve( url )
-                                self.flat_cache = ( self.trailers.movies[trailer].title, filename, )
-                            elif ( self.settings[ "mode" ] >= 2):
-                                fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
-                                filename = fetcher.urlretrieve( url )
-                                if ( filename is not None ):
-                                    poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
-                                    self.saveThumbnail( filename, trailer, poster )
-                    elif ( self.trailers.movies[ trailer ].saved_core is not None ):
-                        self.core = self.trailers.movies[ trailer ].saved_core
-                else: filename = None
-                LOG( LOG_DEBUG, "%s (rev: %s) [%s -> %s]", __scriptname__, __svn_revision__, "GUI::playTrailer", filename )
-                if ( filename is not None ):
-                    self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
-                    self._set_video_resolution()
-                    xbmc.Player( self.core ).play( filename.encode( "utf-8" ) )
+            if ( len( self.trailers.movies[ trailer ].trailer_urls ) ):
+                items = self._get_trailer_url( self.trailers.movies[ trailer ].title, self.trailers.movies[ trailer ].trailer_urls )
+                if ( items ):
+                    playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
+                    playlist.clear()
+                    for count, ( title, url, selected ) in enumerate( items ):
+                        LOG( LOG_DEBUG, "%s (rev: %s) [url=%s]", __scriptname__, __svn_revision__, repr( url ) )
+                        filename = None
+                        for saved in self.trailers.movies[ trailer ].saved:
+                            if ( title in saved[ 0 ] ):
+                                filename = saved[ 0 ]
+                                self.core = saved[ 1 ]
+                                break
+                        if ( filename is None or not os.path.isfile( filename ) ):
+                            if ( url.endswith( "p.mov" ) ):
+                                self.core = xbmc.PLAYER_CORE_DVDPLAYER
+                            else:
+                                self.core = xbmc.PLAYER_CORE_MPLAYER
+                            if ( self.settings[ "mode" ] == 0 ):
+                                filename = url
+                            else:
+                                if ( self.settings[ "mode" ] == 1 ):
+                                    fetcher = cacheurl.HTTPProgressSave( save_title=title )
+                                    filename = fetcher.urlretrieve( url )
+                                    if " (x1)" in title or " (x" not in title:
+                                        self.flat_cache = ()
+                                    if ( filename and filename not in repr( self.flat_cache ) ):
+                                        self.flat_cache += ( ( self.trailers.movies[ trailer ].title, filename, ), )
+                                elif ( self.settings[ "mode" ] >= 2 ):
+                                    fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
+                                    filename = fetcher.urlretrieve( url )
+                                    if ( filename is not None ):
+                                        poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                                        self.saveThumbnail( filename, trailer, poster )
+                        if ( filename is not None ):
+                            listitem = xbmcgui.ListItem( self.trailers.movies[ trailer ].title, thumbnailImage=self.trailers.movies[ trailer ].poster )
+                            ##t = "%s%s%s" % ( self.trailers.movies[ trailer ].title
+                            if ( len( items ) > 1 ): s = count
+                            else: s = selected
+                            t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
+                            listitem.setInfo( "video", { "Title": t, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
+                            LOG( LOG_DEBUG, "%s (rev: %s) [%s -> %s]", __scriptname__, __svn_revision__, "GUI::playTrailer", filename )
+                            playlist.add( filename, listitem )
+                    if ( len( playlist ) ):
+                        self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
+                        self._set_video_resolution()
+                        xbmc.Player( self.core ).play( playlist )
         except:
             LOG( LOG_ERROR, "%s (rev: %s) GUI::playTrailer [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
-
 
     def saveThumbnail( self, filename, trailer, poster ):
         try: 
             new_filename = "%s.tbn" % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
                 xbmc.executehttpapi("FileCopy(%s,%s)" % ( poster, new_filename, ) )
-            if ( self.trailers.movies[ trailer ].saved != filename or self.trailers.movies[ trailer ].saved_core != self.core ):
-                success = self.trailers.updateRecord( "movies", ( "saved_location", "saved_core", ), ( filename, self.core, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
-                if ( success ):
-                    self.trailers.movies[ trailer ].saved = filename
-                    ##self.showOverlays( trailer )
+            if ( filename not in repr( self.trailers.movies[ trailer ].saved ) ):
+                self.trailers.movies[ trailer ].saved += [ ( filename, self.core, ) ]
+                success = self.trailers.updateRecord( "movies", ( "saved", ), ( repr( self.trailers.movies[ trailer ].saved ), self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
+                #if ( success ):
+                #    self.trailers.movies[ trailer ].saved = filename
+                #    ##self.showOverlays( trailer )
         except:
             LOG( LOG_ERROR, "%s (rev: %s) GUI::saveThumbnail [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
 
@@ -514,10 +571,10 @@ class GUI( xbmcgui.WindowXML ):
             if ( self.category_id >= 0 and self.list_category == 1 ):
                 labels += ( _( 512 ), )
                 functions += ( self.refreshCurrentGenre, )
-            if ( self.trailers.movies[ selection ].saved ):
+            if ( self.trailers.movies[ selection ].saved != [] ):
                 labels += ( _( 509 ), )
                 functions += ( self.deleteSavedTrailer, )
-            elif ( self.trailers.movies[ selection ].title == self.flat_cache[ 0 ] ):
+            elif ( self.trailers.movies[ selection ].title in repr( self.flat_cache ) ):
                 labels += ( _( 508 ), )
                 functions += ( self.saveCachedMovie, )
             labels += ( _( 510 ), )
@@ -651,6 +708,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl( 100 + s ).setLabel( _( 162 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == WATCHED ):
                 self.getControl( 100 + s ).setLabel( _( 163 ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == RECENTLY_ADDED ):
+                self.getControl( 100 + s ).setLabel( _( 164 ) )
             else:
                 self.getControl( 100 + s ).setLabel( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
 
@@ -730,16 +789,19 @@ class GUI( xbmcgui.WindowXML ):
     def saveCachedMovie( self ):
         try:
             trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-            new_filename = os.path.join( self.settings[ "save_folder" ], os.path.basename( self.flat_cache[ 1 ] ) )
             dialog = xbmcgui.DialogProgress()
-            dialog.create( _( 56 ), "%s %s" % ( _( 1008 ), new_filename, ) )
-            if ( not os.path.isfile( new_filename ) ):
-                xbmc.executehttpapi("FileCopy(%s,%s)" % ( self.flat_cache[ 1 ], new_filename, ) )
-                if ( not new_filename.startswith( "smb://" ) ):
-                    xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( self.flat_cache[ 1 ], new_filename, ) )
-                poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
-                self.saveThumbnail( new_filename, trailer, poster )
-                self.showOverlays( trailer )
+            dialog.create( _( 56 ) )
+            for count, filename in enumerate( self.flat_cache ):
+                percent = int( ( count + 1 ) * ( float( 100 ) / len( self.flat_cache ) ) )
+                new_filename = os.path.join( self.settings[ "save_folder" ], os.path.basename( filename[ 1 ] ) )
+                dialog.update( percent, "%s %s" % ( _( 1008 ), new_filename, ) )
+                if ( not os.path.isfile( new_filename ) ):
+                    xbmc.executehttpapi("FileCopy(%s,%s)" % ( filename[ 1 ], new_filename, ) )
+                    if ( not new_filename.startswith( "smb://" ) ):
+                        xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filename[ 1 ], new_filename, ) )
+                    poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.tbn", )[ not self.trailers.movies[ trailer ].poster ]
+                    self.saveThumbnail( new_filename, trailer, poster )
+            self.showOverlays( trailer )
             dialog.close()
         except:
             LOG( LOG_ERROR, "%s (rev: %s) GUI::saveCachedMovie [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
@@ -748,22 +810,22 @@ class GUI( xbmcgui.WindowXML ):
                 
     def deleteSavedTrailer( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-        saved_trailer = self.trailers.movies[ trailer ].saved
-        if ( xbmcgui.Dialog().yesno( "%s?" % ( _( 509 ), ), _( 82 ), saved_trailer ) ):
-            if ( os.path.isfile( saved_trailer ) ):
-                os.remove( saved_trailer )
-            if ( os.path.isfile( "%s.conf" % ( saved_trailer, ) ) ):
-                os.remove( "%s.conf" % ( saved_trailer, ) )
-            if ( os.path.isfile( "%s.tbn" % ( os.path.splitext( saved_trailer )[0], ) ) ):
-                os.remove( "%s.tbn" % ( os.path.splitext( saved_trailer )[0], ) )
-            success = self.trailers.updateRecord( "Movies", ( "saved_location", ), ( "", self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
-            if ( success ):
-                self.trailers.movies[ trailer ].saved = ""
-                if ( self.category_id == DOWNLOADED ):
-                    self.trailers.movies.pop( trailer )
-                    self.removeItem( trailer )
-                if ( not len( self.trailers.movies ) ): self.clearTrailerInfo()
-                else: self.showTrailerInfo()
+        if ( xbmcgui.Dialog().yesno( "%s?" % ( _( 509 ), ), _( 82 ), self.trailers.movies[ trailer ].title ) ):
+            for saved in self.trailers.movies[ trailer ].saved:
+                if ( os.path.isfile( saved[ 0 ] ) ):
+                    os.remove( saved[ 0 ] )
+                if ( os.path.isfile( "%s.conf" % ( saved[ 0 ], ) ) ):
+                    os.remove( "%s.conf" % ( saved[ 0 ], ) )
+                if ( os.path.isfile( "%s.tbn" % ( os.path.splitext( saved[ 0 ] )[ 0 ], ) ) ):
+                    os.remove( "%s.tbn" % ( os.path.splitext( saved[ 0 ] )[ 0 ], ) )
+                success = self.trailers.updateRecord( "Movies", ( "saved", ), ( "[]", self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
+                if ( success ):
+                    self.trailers.movies[ trailer ].saved = []
+                    if ( self.category_id == DOWNLOADED ):
+                        self.trailers.movies.pop( trailer )
+                        self.removeItem( trailer )
+                    if ( not len( self.trailers.movies ) ): self.clearTrailerInfo()
+                    else: self.showTrailerInfo()
 
     def get_showtimes( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )

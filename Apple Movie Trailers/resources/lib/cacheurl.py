@@ -107,12 +107,13 @@ class HTTP:
 
     def clear_cache( self, cache_dir=None ):
         try:
-            if cache_dir is None:
-                cache_dir = self.cache_dir
-            for root, dirs, files in os.walk( cache_dir, topdown = False ):
-                for name in files:
-                    os.remove( os.path.join( root, name ) )
-                os.rmdir( root )
+            if " (x1)" in self.title or " (x" not in self.title:
+                if cache_dir is None:
+                    cache_dir = self.cache_dir
+                for root, dirs, files in os.walk( cache_dir, topdown = False ):
+                    for name in files:
+                        os.remove( os.path.join( root, name ) )
+                    os.rmdir( root )
         except:
             LOG( LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
 

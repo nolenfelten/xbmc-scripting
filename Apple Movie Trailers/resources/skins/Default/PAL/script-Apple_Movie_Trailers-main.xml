@@ -676,6 +676,14 @@
                     <aspectratio aligny="bottom">keep</aspectratio>
                 </control>
                 <control type="image">
+                    <description>Trailer Poster HD Overlay</description>
+                    <posx>520</posx>
+                    <posy>93</posy>
+                    <width>32</width>
+                    <height>32</height>
+                    <info>ListItem.Overlay</info>
+                </control>
+                <control type="image">
                     <description>Trailer Poster</description>
                     <posx>512</posx>
                     <posy>356</posy>
@@ -684,7 +692,6 @@
                     <info>ListItem.ActualIcon</info>
                     <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
                     <aspectratio aligny="top">keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="202">
@@ -695,7 +702,6 @@
                     <height>15</height>
                     <texture>-</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
@@ -706,7 +712,6 @@
                     <height>16</height>
                     <texture>amt-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
@@ -717,7 +722,6 @@
                     <height>16</height>
                     <texture>amt-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
@@ -727,7 +731,6 @@
                     <height>16</height>
                     <texture>amt-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
-                    <visible>Control.IsVisible(50)</visible>
                 </control>
             </control>
 
@@ -740,7 +743,7 @@
 				<height>32</height>
 				<align>left</align>
 				<aligny>center</aligny>
-				<info>ListItem.Label</info>
+				<info>ListItem.Title</info>
 				<font>special13</font>
 				<textcolor>FFFFFFFF</textcolor>
                 <scroll>true</scroll>
@@ -874,7 +877,7 @@
 				<posy>387</posy>
 				<width>460</width>
 				<height>141</height>
-				<font>font12</font>
+				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
                 <info>ListItem.Plot</info>
 				<onup>75</onup>
@@ -1214,16 +1217,6 @@
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
 			</control>
-            <control type="image">
-                <description>Category List Thumb</description>
-                <posx>40</posx>
-                <posy>440</posy>
-                <width>120</width>
-                <height>120</height>
-                <info>Container(60).ListItem(0).Thumb</info>
-                <texture>-</texture>
-                <aspectratio>keep</aspectratio>
-            </control>
         </control>
     </controls>
 </window>
