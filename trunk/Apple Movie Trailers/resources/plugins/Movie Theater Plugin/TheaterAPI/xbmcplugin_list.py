@@ -10,7 +10,7 @@ import xbmcgui
 import xbmcplugin
 
 import datetime
-
+import traceback
 
 class _Info:
     def __init__( self, *args, **kwargs ):
@@ -80,18 +80,50 @@ class Main:
             # if this is a smb share, we need to retrieve the list differently
             if ( path.startswith( "smb://" ) ):
                 entries = self._get_smb_list( path )
+            elif ( self.args.use_db ):
+                entries = self._get_videodb_list( path )
             else:
-                entries = os.listdir( path )
+                entries = self._get_local_list( path )
             # get the item list by
-            items = self._get_directory( path, entries )
+            #items = self._get_directory( path, entries )
             # fill media list
-            ok = self._fill_media_list( items )
+            ok = self._fill_media_list( entries )
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
             ok = False
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
+
+    def _get_videodb_list( self, path ):
+        try:
+            # if the user has a certain path set it
+            actual_path = " "
+            if ( path ):
+                actual_path = " WHERE path.strPath LIKE '%s%%25' " % path
+            # our sql statement
+            sql = """
+                    SELECT path.strPath, files.strFileName, movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
+                    FROM movie 
+                    JOIN files ON files.idFile=movie.idFile 
+                    JOIN path ON files.idPath=path.idPath 
+                    %s
+                    """ % ( actual_path, ) # ORDER BY movie.c00 LIMIT %d OFFSET %d 
+            xbmc.executehttpapi( 'SetResponseFormat(OpenRecordSet,[)')
+            xbmc.executehttpapi( 'SetResponseFormat(CloseRecordSet,])')
+            xbmc.executehttpapi( 'SetResponseFormat(OpenRecord,()')
+            xbmc.executehttpapi( 'SetResponseFormat(CloseRecord,)%2C)')
+            xbmc.executehttpapi( 'SetResponseFormat(OpenField,""")')
+            xbmc.executehttpapi( 'SetResponseFormat(CloseField,"""%2C)')
+            records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % sql.replace( ",", "%2C" ) )
+            entries = []
+            if ( "Error:" not in records ):
+                items = eval( records.replace( "\\", "\\\\" ) )
+                for entry in items:
+                    entries += [ ( entry[ 0 ] + entry[ 1 ], entry[ 2 ], False, entry[ 3 ], entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
+        except:
+            traceback.print_exc()
+        return entries
 
     def _get_smb_list( self, path ):
         entries = []
@@ -118,31 +150,44 @@ class Main:
         # enumerate through our items list and add the full name to our entries list
         for item in items:
             # we don't want the . or .. directory items
-            if ( item.get_longname() != "." and item.get_longname() != ".." ):
-                entries += [ item.get_longname() ]
+            if ( item.get_longname() and item.get_longname() != "." and item.get_longname() != ".." ):
+                # concatenate directory pairs
+                file_path = "%s/%s" % ( path, item.get_longname(), )
+                # get the item info
+                title, isVideo, isFolder = self._get_file_info( file_path )
+                # add our item to our entry list
+                if ( isVideo or isFolder ):
+                    entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
         return entries
 
-    def _get_directory( self, path, entries ):
-        items = []
-        # enumerate through our entries list and check for a valid video file or folder
-        for entry in entries:
-            # create the file path
-            if ( path.startswith( "smb://" ) ): sep = "/"
-            else: sep = os.sep
-            file_path = "%s%s%s" % ( path, sep, entry, )
-            # is this a folder?
-            isFolder = os.path.isdir( file_path )
-            # if this is a file, check to see if it's a valid video file
-            if ( not isFolder ):
-                # get the files extension
-                ext = os.path.splitext( entry )[ 1 ].lower()
-                # if it is a video file add it to our items list
-                if ( ext and ext in self.VIDEO_EXT ):
-                    items += [ ( file_path, isFolder, ) ]
-            else:
-                # it must be a folder
-                items += [ ( file_path, isFolder, ) ]
-        return items
+    def _get_local_list( self, path ):
+        entries = []
+        # get the paths list
+        items = os.listdir( path )
+        # enumerate through our items list and add the full name to our entries list
+        for item in items:
+            # concatenate directory pairs
+            file_path = "%s%s%s" % ( path, os.sep, item, )
+            # get the item info
+            title, isVideo, isFolder = self._get_file_info( file_path )
+            # add our item to our entry list
+            if ( isVideo or isFolder ):
+                entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
+        return entries
+
+    def _get_file_info( self, file_path ):
+        # parse item for title
+        title = os.path.splitext( os.path.basename( file_path ) )[ 0 ]
+        # is this a folder?
+        isFolder = os.path.isdir( file_path )
+        isVideo = False
+        # if this is a file, check to see if it's a valid video file
+        if ( not isFolder ):
+            # get the files extension
+            ext = os.path.splitext( file_path )[ 1 ].lower()
+            # if it is a video file add it to our items list
+            isVideo = ( ext and ext in self.VIDEO_EXT )
+        return title, isVideo, isFolder
 
     def _fill_media_list( self, items ):
         try:
@@ -150,38 +195,37 @@ class Main:
             # enumerate through the list of items and add the item to the media list
             for item in items:
                 # create our url (backslashes cause issues when passed in the url)
-                url = '%s?path="""%s"""&isFolder=%d&username="""%s"""&password="""%s"""&trailer_intro_path="""%s"""&movie_intro_path="""%s"""&number_trailers=%d&rating="""%s"""&only_hd=%d&quality="""%s"""' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 1 ], self.args.username, self.args.password, self.args.trailer_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.movie_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.number_trailers, self.args.rating, self.args.only_hd, self.args.quality, )
-                if ( item[ 1 ] ):
-                    # parse item for title
-                    title = os.path.basename( item[ 0 ] )
+                url = '%s?path="""%s"""&isFolder=%d&username="""%s"""&password="""%s"""&trailer_intro_path="""%s"""&movie_intro_path="""%s"""&number_trailers=%d&rating="""%s"""&only_hd=%d&quality="""%s"""&use_db=%d' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], self.args.username, self.args.password, self.args.trailer_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.movie_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.number_trailers, self.args.rating, self.args.only_hd, self.args.quality, self.args.use_db, )
+                if ( item[ 2 ] ):
                     # if a folder.jpg exists use that for our thumbnail
                     #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
                     #if ( not os.path.isfile( thumbnail ) ):
                     thumbnail = "DefaultFolderBig.png"
                     # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=title, thumbnailImage=thumbnail )
+                    listitem=xbmcgui.ListItem( label=item[ 1 ], thumbnailImage=thumbnail )
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Title": title + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
+                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
                 else:
                     # call _get_thumbnail() for the path to the cached thumbnail
                     thumbnail = self._get_thumbnail( item[ 0 ] )
-                    # parse item for title
-                    title = os.path.splitext( os.path.basename( item[ 0 ] ) )[ 0 ]
                     # get the date of the file
                     date = datetime.datetime.fromtimestamp( os.path.getmtime( item[ 0 ] ) ).strftime( "%d-%m-%Y" )
                     # get the size of the file
                     size = long( os.path.getsize( item[ 0 ] ) )
                     # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=title, thumbnailImage=thumbnail )
+                    listitem=xbmcgui.ListItem( label=item[ 1 ], thumbnailImage=thumbnail )
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Title": title, "Date": date, "Size": size, "Overlay": overlay } )
+                    #                                                                                                                    SELECT path.strPath, files.strFileName, movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
+                    #                                                                                                                   entries += [ ( entry[ 0 ] + entry[ 1 ], entry[ 2 ], False, entry[ 3 ], entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
+                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
                 # add the item to the media list
-                ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 1 ], totalItems=len( items ) )
+                ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )
                 # if user cancels, call raise to exit loop
                 if ( not ok ): raise
         except:
+            traceback.print_exc()
             # user cancelled dialog or an error occurred
             print sys.exc_info()[ 1 ]
             ok = False

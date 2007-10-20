@@ -39,8 +39,8 @@ class Movie:
         - watched (integer - number of times watched)
         - watched_date (string - last watched date)
         - favorite (integer - 1=favorite)
-        - saved (string - path to saved movie)
-        - saved_core (integer - xbmc.PLAYER_CORE_DVDPLAYER or xbmc.PLAYER_CORE_MPLAYER)
+        - saved (string - list of tuples with path to saved movies and player core)
+        - date_added (text - date the trailer was added to the database)
         - cast (list - list of actors)
         - studio (string - movies studio)
     """
@@ -437,19 +437,19 @@ class Trailers:
                 self.times_watched = 0
                 self.last_watched = ""
                 self.favorite = 0
-                self.saved_location = ""
-                self.saved_core = None
+                self.saved = []
                 self.actors = []
                 self.studio = ""
 
             try:
                 _set_default_movie_info( movie )
                 
-                if ( not self.urls[ 0 ].startswith( "http://" ) ):
-                    url = self.base_url + str( self.urls[ 0 ] )
-                else:
-                    url = ( self.urls[ 0 ] )
-
+                # get the main index xml file
+                for url in self.urls:
+                    if "index" in url:
+                        if ( not url.startswith( "http://" ) ):
+                            url = self.base_url + str( url )
+                        break
                 # xml parsing. replace <b> and </b> for in theaters. remove if noticeably slower
                 source = fetcher.urlopen( url ).replace( "<b>", "" ).replace( "</b>", "" )
                 try:
@@ -505,12 +505,9 @@ class Trailers:
                 # -- runtime --
                 try:
                     runtime = element.getiterator( self.ns( "SetFontStyle" ) )[ 13 ].text
-                    if runtime and "Runtime:" in runtime:
-                        runtime = runtime.replace( "Runtime:", "" ).strip()
-                        if runtime.startswith( ":" ):
-                            runtime = "0" + runtime
-                        elif ":" not in runtime:
-                            runtime = "0:" + runtime
+                    if runtime and "Runtime" in runtime:
+                        runtime = runtime.replace( "Runtime", "" ).replace( ":", "" ).replace( ".", "" ).strip().rjust( 4, "0" )
+                        runtime = "%s:%s" % ( runtime[ : 2 ], runtime[ 2 : ], )
                         self.runtime = runtime
                 except:
                     pass
@@ -533,50 +530,54 @@ class Trailers:
                             self.rating_url = os.path.basename( rating_url )
                             self.rating = os.path.split( temp_url )[ 1 ][ : -4 ].replace( "mpaa_", "" )
                 
-                # -- trailer urls --
-                urls = list()
+                # TODO: maybe parse the index xml file(s) for other trailer xml files, keeping as a list of lists, so user can select
+                # get all url xml files
                 for each in element.getiterator( self.ns( "GotoURL" ) ):
                     temp_url = each.get( "url" )
-                    if "index_1" in temp_url:
-                        continue
-                    if "/moviesxml/g" in temp_url:
-                        continue
-                    if not temp_url.startswith( "/" ):
-                        continue
-                    if temp_url in urls:
-                        continue
-                    urls += [ temp_url ]
-                if len( urls ):
-                    temp_url = self.base_url + urls[0]
-                    self.urls = [ self.urls[ 0 ] ] + [ urls[ 0 ] ]
-                    source = fetcher.urlopen( temp_url )
-                    try:
-                        element = ET.fromstring( source )
-                    except:
-                        source = self.cleanXML( source.decode( "utf-8", "replace" ).encode( "utf-8", "ignore" ) )
-                        element = ET.fromstring( source )
-                    trailer_urls = list()
+                    if not temp_url.endswith( ".xml" ): continue
+                    if "/moviesxml/g" in temp_url: continue
+                    if temp_url in self.urls: continue
+                    self.urls += [ temp_url ]
+                # -- trailer urls --
+                self.trailer_urls = []
+                all_urls = ()
+                for xml_url in self.urls:
+                    new_xml_url = self.base_url + xml_url
+                    if new_xml_url != url:
+                        # xml parsing. replace <b> and </b> for in theaters. remove if noticeably slower
+                        source = fetcher.urlopen( new_xml_url ).replace( "<b>", "" ).replace( "</b>", "" )
+                        try:
+                            element = ET.fromstring( source )
+                        except:
+                            source = self.cleanXML( source.decode( "utf-8", "replace" ).encode( "utf-8", "ignore" ) )
+                            try:
+                                element = ET.fromstring( source )
+                            except:
+                                continue
+                    urls = ()
                     for each in element.getiterator( self.ns( "string" ) ):
                         text = each.text
-                        if text == None:
-                            continue
-                        if "http" not in text:
-                            continue
-                        if "movies.apple.com" not in text:
-                            continue
-                        if text.endswith( ".m4v" ):
-                            continue
-                        if text.replace( "//", "/" ).replace( "/", "//", 1 ) in trailer_urls:
-                            continue
-                        trailer_urls += [ text.replace( "//", "/" ).replace( "/", "//", 1 ) ]
-                    self.trailer_urls = trailer_urls
+                        # invalid urls
+                        if text is None: continue
+                        if not text.endswith( ".mov" ): continue
+                        new_url = text.replace( "//", "/" ).replace( "/", "//", 1 )
+                        if new_url in all_urls:
+                            add_trailer = False
+                        else:
+                            add_trailer = True
+                            all_urls += ( new_url, )
+                        # add the trailer url to our list
+                        if add_trailer:
+                            urls += ( text.replace( "//", "/" ).replace( "/", "//", 1 ), )
+                    if len( urls ):
+                        self.trailer_urls += [ urls ]
             except:
                 #traceback.print_exc()
                 print "Trailer XML %s: %s is %s" % ( self.idMovie, url, ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
-            
+
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.runtime,
                             self.rating, self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite,
-                            self.saved_location, self.saved_core, self.actors, self.studio, )
+                            repr( self.saved ), datetime.date.today(), self.actors, self.studio, )
             success = records.update( "movies", ( 2, 15, ), ( info_list[ 2 : 15 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
 
@@ -627,8 +628,8 @@ class Trailers:
                                 watched = movie[10],
                                 watched_date = movie[11],
                                 favorite = movie[12],
-                                saved = movie[13],
-                                saved_core = movie[14],
+                                saved = eval( movie[13] ),
+                                date_added = movie[14],
                                 cast = movie[15],
                                 studio = movie[16]
                                 )

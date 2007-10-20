@@ -46,7 +46,7 @@ class Main:
 
     def _create_playlist( self ):
         # create a video playlist
-        playlist = xbmc.PlayList( 1 )
+        playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
         # clear any possible items
         playlist.clear()
         # if there is a trailer intro video add it
@@ -136,7 +136,7 @@ class Main:
         # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Director": trailer[ 15 ], "Genre": trailer[ 16 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ] } )
         return listitem
 
     def _get_thumbnail( self, item, url ):
@@ -159,20 +159,20 @@ class Main:
             trailer_quality = qualities.index( self.args.quality )
         url = ""
         # get intial choice
-        choice = ( trailer_quality, len( trailer_urls ) - 1, )[ trailer_quality >= len( trailer_urls ) ]
+        choice = ( trailer_quality, len( trailer_urls[ 0 ] ) - 1, )[ trailer_quality >= len( trailer_urls[ 0 ] ) ]
         # if quality is non progressive
         if ( trailer_quality <= 2 ):
             # select the correct non progressive trailer
-            while ( trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # quality is progressive
         else:
             # select the proper progressive quality
             quality = ( "480p", "720p", "1080p", )[ trailer_quality - 3 ]
             # select the correct progressive trailer
-            while ( quality not in trailer_urls[ choice ] and trailer_urls[ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( quality not in trailer_urls[ 0 ][ choice ] and trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # if there was a valid trailer set it
         if ( choice >= 0 ):
-            url = trailer_urls[ choice ]
+            url = trailer_urls[ 0 ][ choice ]
         return url
 
 

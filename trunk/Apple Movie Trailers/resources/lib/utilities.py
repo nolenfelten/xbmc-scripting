@@ -17,8 +17,8 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.99", "0.99", "pre-0.99.1", "0.99.1", )
-SETTINGS_VERSIONS =  ( "pre-0.99.1", "0.99.1", )
+DATABASE_VERSIONS = ( "pre-0.99.2", "0.99.2", )
+SETTINGS_VERSIONS =  DATABASE_VERSIONS
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -28,6 +28,7 @@ DOWNLOADED = -7
 HD_TRAILERS = -8
 NO_TRAILER_URLS = -9
 WATCHED = -10
+RECENTLY_ADDED = -11
 CUSTOM_SEARCH = -99
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
@@ -163,7 +164,8 @@ def save_custom_sql( query ):
 
 def make_legal_filepath( path, compatible=False, extension=True ):
     environment = os.environ.get( "OS", "xbox" )
-    path = path.replace( "\\", "/" )
+    if ( environment == "win32" or environment == "xbox" ):
+        path = path.replace( "\\", "/" )
     drive = os.path.splitdrive( path )[ 0 ]
     parts = os.path.splitdrive( path )[ 1 ].split( "/" )
     if ( not drive and parts[ 0 ].endswith( ":" ) and len( parts[ 0 ] ) == 2 and compatible ):
@@ -219,7 +221,7 @@ class Settings:
             "fade_thumb": True,
             "startup_category_id": 10,
             "shortcut1": 10,
-            "shortcut2": 4,
+            "shortcut2": RECENTLY_ADDED,
             "shortcut3": FAVORITES,
             "refresh_newest": False,
             "videoplayer_displayresolution": 10,
@@ -227,6 +229,7 @@ class Settings:
             "match_whole_words": False,
             "showtimes_local": "33102",
             "showtimes_scraper": "Google",
+            "auto_play_all": False,
             }
         ok = self.save_settings( settings )
         return settings

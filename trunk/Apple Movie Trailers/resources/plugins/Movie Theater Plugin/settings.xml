@@ -2,10 +2,13 @@
 <!-- for now you must manually edit this file -->
 <settings>
     <!-- no slash at end of paths -->
-    <!--setting title="Path to videos" type="folder" option="files" name="path">smb://COMPUTER/SHARENAME/FOLDER</setting-->
-    <setting title="Path to videos" type="folder" option="files" name="path">F:\\Videos</setting>
+    <!--setting title="Path to videos [optional w/database]" type="folder" option="files" name="path">smb://COMPUTER/SHARE/FOLDER</setting-->
+    <!--setting title="Path to videos [optional w/database]" type="folder" option="files" name="path">smb://COMPUTER/SHARE</setting-->
+    <setting title="Path to videos [optional w/database]" type="folder" option="files" name="path">F:\\Videos</setting>
     <setting title="Path to coming attractions video [optional]" type="video" option="files" name="trailer_intro_path"></setting>
     <setting title="Path to feature presentation video [optional]" type="video" option="files" name="movie_intro_path"></setting>
+    <!-- 0=do not use the database, 1=use the datbase for extra info -->
+    <setting title="Query database for videos" type="bool" option="" name="use_db">0</setting>
     <!-- passwords are plain text -->
     <setting title="SMB username" type="string" option="" name="username">Guest</setting>
     <setting title="SMB password" type="string" option="hidden" name="password"></setting>
