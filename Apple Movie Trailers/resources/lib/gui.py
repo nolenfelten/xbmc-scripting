@@ -235,8 +235,6 @@ class GUI( xbmcgui.WindowXML ):
                         if ( self.main_category == ACTORS ):
                             actor_path = xbmc.translatePath( os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) ) )
                             thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
-                        print thumbnail
-                        
                         count = "(%d)" % ( category.count, )
                         list_item = xbmcgui.ListItem( title, count, thumbnail, thumbnail )
                         list_item.select( not category.completed )
