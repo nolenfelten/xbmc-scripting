@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.6-->
+<!--English Strings VER: 0.7-->
+	<!--Changes since Ver: 0.6-->
+		<!--NEW: 381, 168, 169 -->
 	<!--Changes since Ver: 0.5-->
 		<!--NEW: 244, 167 -->
 	<!--Changes since Ver: 0.4-->
@@ -159,6 +161,8 @@
 	<string id="165">Select to Fetch and read the Change Log for this Version.</string>
 	<string id="166">Select to Update XinBox to this Version.</string>
 	<string id="167">Select to toggle SMTP Authentication.</string>
+	<string id="168">Select to Compose a New Email to All Contacts.</string>
+	<string id="169">Select to add All Contacts to Address Field.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -296,6 +300,7 @@
 	<string id="378">Contact Added</string>
 	<string id="379">Contact Already Exists in Address Field</string>
 	<string id="380">Contact List</string>
+	<string id="381">All</string>
 
 	<!-- Update Labels -->
 	<string id="390">Your version is up to date.</string>

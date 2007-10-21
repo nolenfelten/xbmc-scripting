@@ -33,7 +33,7 @@
 			<height>420</height>
 			<onleft>69</onleft>
 			<onright>82</onright>
-			<onup>82</onup>
+			<onup>9000</onup>
 			<ondown>9000</ondown>
 			<viewtype label="535">list</viewtype>
 			<pagecontrol>69</pagecontrol>
@@ -117,14 +117,33 @@
 			<posy>505</posy>
 			<control type="button" id="61">
 				<description>Add Contact Button</description>
-				<posx>205</posx>
+				<posx>130</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>-</label>
-				<onright>61</onright>
+				<onright>62</onright>
 				<onup>50</onup>
-				<ondown>61</ondown>
+				<ondown>50</ondown>
+				<onleft>61</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>94</width>
+				<height>35</height>
+			</control>	
+			<control type="button" id="62">
+				<description>ALL Button</description>
+				<posx>283</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>-</label>
+				<onright>62</onright>
+				<onup>50</onup>
+				<ondown>50</ondown>
 				<onleft>61</onleft>
 				<align>center</align>
 				<aligny>center</aligny>
