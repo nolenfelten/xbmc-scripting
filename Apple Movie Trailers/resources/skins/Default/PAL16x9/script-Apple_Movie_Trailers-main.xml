@@ -983,15 +983,6 @@
 						<width>22</width>
 						<height>22</height>
 						<info>ListItem.Thumb</info>
-                        <visible>!IsEmpty(ListItem.Thumb)</visible>
-					</control>
-					<control type="image">
-						<posx>0</posx>
-						<posy>3</posy>
-						<width>22</width>
-						<height>22</height>
-						<info>ListItem.Icon</info>
-                        <visible>IsEmpty(ListItem.Thumb)</visible>
 					</control>
 					<control type="label">
 						<posx>22</posx>
