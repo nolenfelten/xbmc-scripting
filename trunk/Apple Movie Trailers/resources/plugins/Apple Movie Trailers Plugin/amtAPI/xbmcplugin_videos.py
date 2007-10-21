@@ -10,6 +10,7 @@ import xbmcgui
 import xbmcplugin
 
 import re
+from random import randrange
 
 from pysqlite2 import dbapi2 as sqlite
 
@@ -78,7 +79,7 @@ class Main:
             for trailer in trailers:
                 # if trailer was saved use this as the url
                 if ( eval( trailer[ 13 ] ) ):
-                    url = eval( trailer[ 13 ] )[ 0 ][ 0 ]
+                    url = eval( trailer[ 13 ] )[ self._get_random_number( len( eval( trailer[ 13 ] ) ) ) ][ 0 ]
                 else:
                     # select the correct trailer quality.
                     url = self._get_trailer_url( eval( trailer[ 3 ] ) )
@@ -119,23 +120,28 @@ class Main:
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
         return ok
 
+    def _get_random_number( self, total ):
+        return randrange( total )
+
     def _get_trailer_url( self, trailer_urls ):
+        # pick a random url (only really applies to multiple urls)
+        r = self._get_random_number( len( trailer_urls ) )
         url = ""
         # get intial choice
-        choice = ( int( self.args.quality ), len( trailer_urls[ 0 ] ) - 1, )[ int( self.args.quality ) >= len( trailer_urls[ 0 ] ) ]
+        choice = ( int( self.args.quality ), len( trailer_urls[ r ] ) - 1, )[ int( self.args.quality ) >= len( trailer_urls[ r ] ) ]
         # if quality is non progressive
         if ( int( self.args.quality ) <= 2 ):
             # select the correct non progressive trailer
-            while ( trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # quality is progressive
         else:
             # select the proper progressive quality
             quality = ( "480p", "720p", "1080p", )[ int( self.args.quality ) - 3 ]
             # select the correct progressive trailer
-            while ( quality not in trailer_urls[ 0 ][ choice ] and trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( quality not in trailer_urls[ r ][ choice ] and trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # if there was a valid trailer set it
         if ( choice >= 0 ):
-            url = trailer_urls[ 0 ][ choice ]
+            url = trailer_urls[ r ][ choice ]
         return url
 
     def _fetch_records( self, query, params=None ):

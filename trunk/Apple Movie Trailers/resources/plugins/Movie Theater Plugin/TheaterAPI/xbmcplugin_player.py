@@ -16,6 +16,8 @@ import sys
 import os
 import xbmc
 
+from random import randrange
+
 from pysqlite2 import dbapi2 as sqlite
 
 
@@ -153,26 +155,29 @@ class Main:
         return thumbnail
 
     def _get_trailer_url( self, trailer_urls ):
+        # pick a random url (only applies to multiple urls)
+        r = randrange( len( trailer_urls ) )
+        # get the preferred quality
         qualities = [ "Low", "Medium", "High", "480p", "720p", "1080p" ]
         trailer_quality = 2
         if ( self.args.quality in qualities ):
             trailer_quality = qualities.index( self.args.quality )
         url = ""
         # get intial choice
-        choice = ( trailer_quality, len( trailer_urls[ 0 ] ) - 1, )[ trailer_quality >= len( trailer_urls[ 0 ] ) ]
+        choice = ( trailer_quality, len( trailer_urls[ r ] ) - 1, )[ trailer_quality >= len( trailer_urls[ r ] ) ]
         # if quality is non progressive
         if ( trailer_quality <= 2 ):
             # select the correct non progressive trailer
-            while ( trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # quality is progressive
         else:
             # select the proper progressive quality
             quality = ( "480p", "720p", "1080p", )[ trailer_quality - 3 ]
             # select the correct progressive trailer
-            while ( quality not in trailer_urls[ 0 ][ choice ] and trailer_urls[ 0 ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            while ( quality not in trailer_urls[ r ][ choice ] and trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # if there was a valid trailer set it
         if ( choice >= 0 ):
-            url = trailer_urls[ 0 ][ choice ]
+            url = trailer_urls[ r ][ choice ]
         return url
 
 
