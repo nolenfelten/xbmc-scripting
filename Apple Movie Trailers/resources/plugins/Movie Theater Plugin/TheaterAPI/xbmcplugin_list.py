@@ -10,7 +10,7 @@ import xbmcgui
 import xbmcplugin
 
 import datetime
-import traceback
+
 
 class _Info:
     def __init__( self, *args, **kwargs ):
@@ -77,15 +77,13 @@ class Main:
 
     def _get_items( self, path ):
         try:
-            # if this is a smb share, we need to retrieve the list differently
+            # smb share, database and local, need to retrieve the lists differently
             if ( path.startswith( "smb://" ) ):
                 entries = self._get_smb_list( path )
             elif ( self.args.use_db ):
                 entries = self._get_videodb_list( path )
             else:
                 entries = self._get_local_list( path )
-            # get the item list by
-            #items = self._get_directory( path, entries )
             # fill media list
             ok = self._fill_media_list( entries )
         except:
@@ -97,10 +95,11 @@ class Main:
 
     def _get_videodb_list( self, path ):
         try:
-            # if the user has a certain path set it
+            # if the user has a certain path, set it
             actual_path = " "
             if ( path ):
                 actual_path = " WHERE path.strPath LIKE '%s%%25' " % path
+            # TODO: add pagination (ORDER BY movie.c00 LIMIT %d OFFSET %d)
             # our sql statement
             sql = """
                     SELECT path.strPath, files.strFileName, movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
@@ -108,21 +107,27 @@ class Main:
                     JOIN files ON files.idFile=movie.idFile 
                     JOIN path ON files.idPath=path.idPath 
                     %s
-                    """ % ( actual_path, ) # ORDER BY movie.c00 LIMIT %d OFFSET %d 
+                    """ % ( actual_path, )
+            # format our response, so it returns a valid python list of records
             xbmc.executehttpapi( 'SetResponseFormat(OpenRecordSet,[)')
             xbmc.executehttpapi( 'SetResponseFormat(CloseRecordSet,])')
             xbmc.executehttpapi( 'SetResponseFormat(OpenRecord,()')
             xbmc.executehttpapi( 'SetResponseFormat(CloseRecord,)%2C)')
             xbmc.executehttpapi( 'SetResponseFormat(OpenField,""")')
             xbmc.executehttpapi( 'SetResponseFormat(CloseField,"""%2C)')
+            # query the database
             records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % sql.replace( ",", "%2C" ) )
             entries = []
+            # if query was successful, set our entries list
             if ( "Error:" not in records ):
+                # eval response to a python list, replace \ with \\ or else eval will fail
                 items = eval( records.replace( "\\", "\\\\" ) )
+                # enumerate through our items list and add the info to our entries list
                 for entry in items:
                     entries += [ ( entry[ 0 ] + entry[ 1 ], entry[ 2 ], False, entry[ 3 ], entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
         except:
-            traceback.print_exc()
+            # oops print error message
+            print sys.exc_info()[ 1 ]
         return entries
 
     def _get_smb_list( self, path ):
@@ -217,15 +222,12 @@ class Main:
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                     # add the different infolabels we want to sort by
-                    #                                                                                                                    SELECT path.strPath, files.strFileName, movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
-                    #                                                                                                                   entries += [ ( entry[ 0 ] + entry[ 1 ], entry[ 2 ], False, entry[ 3 ], entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
                     listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
                 # add the item to the media list
                 ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )
                 # if user cancels, call raise to exit loop
                 if ( not ok ): raise
         except:
-            traceback.print_exc()
             # user cancelled dialog or an error occurred
             print sys.exc_info()[ 1 ]
             ok = False
