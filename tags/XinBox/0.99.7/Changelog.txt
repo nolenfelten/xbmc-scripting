@@ -1,5 +1,7 @@
-XinBox Version 0.99.6 Change Log:
+XinBox Version 0.99.7 Change Log:
 
-Updated: Finnish strings thanks to mikko70
-Added: SMTP Authentication Enable/Disable option in Inbox create menu
-Updated: Credits
+Fixed: There was Hard-Coded Button Labels in Update Menu
+Updated: Mini-Mode function, now when new email is received in mini-mode and user opens it, it will take user to Inbox, 
+         and then if user presses back or exit, script closes and mini-mode resumes.
+
+
