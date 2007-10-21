@@ -152,23 +152,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 224 ).setLabel( self.settings[ "save_folder" ] )
             self.getControl( 224 ).setEnabled( self.settings[ "mode" ] >= 1 )
             self.getControl( 204 ).setEnabled( self.settings[ "mode" ] >= 1 )
-            self.getControl( 225 ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
-            self.getControl( 226 ).setSelected( self.settings[ "fade_thumb" ] )
-            self.getControl( 226 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
-            self.getControl( 206 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
-            self.getControl( 227 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
-            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
-            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
-            self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
-            self.getControl( 231 ).setSelected( self.settings[ "refresh_newest" ] )
-            self.getControl( 232 ).setSelected( self.settings[ "use_simple_search" ] )
-            self.getControl( 233 ).setSelected( self.settings[ "match_whole_words" ] )
-            self.getControl( 233 ).setEnabled( self.settings[ "use_simple_search" ] )
-            self.getControl( 213 ).setEnabled( self.settings[ "use_simple_search" ] )
-            self.getControl( 234 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
-            self.getControl( 235 ).setLabel( self.settings[ "showtimes_local" ] )
-            self.getControl( 236 ).setLabel( self.settings[ "showtimes_scraper" ] )
-            self.getControl( 237 ).setSelected( self.settings[ "auto_play_all" ] )
+            self.getControl( 225 ).setSelected( self.settings[ "auto_play_all" ] )
+            self.getControl( 226 ).setLabel( self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
+            self.getControl( 227 ).setSelected( self.settings[ "fade_thumb" ] )
+            self.getControl( 227 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
+            self.getControl( 207 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
+            self.getControl( 228 ).setLabel( self.startup_categories[ self.settings[ "startup_category_id" ] ] )
+            self.getControl( 229 ).setLabel( self.startup_categories[ self.settings[ "shortcut1" ] ] )
+            self.getControl( 230 ).setLabel( self.startup_categories[ self.settings[ "shortcut2" ] ] )
+            self.getControl( 231 ).setLabel( self.startup_categories[ self.settings[ "shortcut3" ] ] )
+            self.getControl( 232 ).setSelected( self.settings[ "refresh_newest" ] )
+            self.getControl( 233 ).setSelected( self.settings[ "use_simple_search" ] )
+            self.getControl( 234 ).setSelected( self.settings[ "match_whole_words" ] )
+            self.getControl( 234 ).setEnabled( self.settings[ "use_simple_search" ] )
+            self.getControl( 214 ).setEnabled( self.settings[ "use_simple_search" ] )
+            self.getControl( 235 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 236 ).setLabel( self.settings[ "showtimes_local" ] )
+            self.getControl( 237 ).setLabel( self.settings[ "showtimes_scraper" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -205,18 +205,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting5( self ):
         """ changes settings #5 """
+        self.settings[ "auto_play_all" ] = not self.settings[ "auto_play_all" ]
+        self._set_controls_values()
+
+    def _change_setting6( self ):
+        """ changes settings #6 """
         selection = self._get_chooser( self.thumbnail, self.settings_original[ "thumbnail_display" ], self.settings[ "thumbnail_display" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "thumbnail_display" ] = selection
             self._set_controls_values()
 
-    def _change_setting6( self ):
-        """ changes settings #6 """
+    def _change_setting7( self ):
+        """ changes settings #7 """
         self.settings[ "fade_thumb" ] = not self.settings[ "fade_thumb" ]
         self._set_controls_values()
     
-    def _change_setting7( self ):
-        """ changes settings #7 """
+    def _change_setting8( self ):
+        """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "startup_category_id" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -224,8 +229,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting8( self ):
-        """ changes settings #8 """
+    def _change_setting9( self ):
+        """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut1" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -233,8 +238,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting9( self ):
-        """ changes settings #9 """
+    def _change_setting10( self ):
+        """ changes settings #10 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut2" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -242,8 +247,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting10( self ):
-        """ changes settings #10 """
+    def _change_setting11( self ):
+        """ changes settings #11 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut3" ] )
         selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -251,35 +256,35 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.settings[ "shortcut3" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
 
-    def _change_setting11( self ):
-        """ changes settings #11 """
-        self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]
-        self._set_controls_values()
-
     def _change_setting12( self ):
         """ changes settings #12 """
-        self.settings[ "use_simple_search" ] = not self.settings[ "use_simple_search" ]
+        self.settings[ "refresh_newest" ] = not self.settings[ "refresh_newest" ]
         self._set_controls_values()
 
     def _change_setting13( self ):
         """ changes settings #13 """
-        self.settings[ "match_whole_words" ] = not self.settings[ "match_whole_words" ]
+        self.settings[ "use_simple_search" ] = not self.settings[ "use_simple_search" ]
         self._set_controls_values()
 
     def _change_setting14( self ):
         """ changes settings #14 """
+        self.settings[ "match_whole_words" ] = not self.settings[ "match_whole_words" ]
+        self._set_controls_values()
+
+    def _change_setting15( self ):
+        """ changes settings #15 """
         selection = self._get_chooser( self.videoplayer_displayresolutions, self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
             self._set_controls_values()
 
-    def _change_setting15( self ):
-        """ changes settings #15 """
+    def _change_setting16( self ):
+        """ changes settings #16 """
         self.settings[ "showtimes_local" ] = get_keyboard( self.settings[ "showtimes_local" ], _( self.controlId ) )
         self._set_controls_values()
 
-    def _change_setting16( self ):
-        """ changes settings #16"""
+    def _change_setting17( self ):
+        """ changes settings #17"""
         try: original_selection = self.showtimes_scrapers.index( self.settings_original[ "showtimes_scraper" ] )
         except: original_selection = 0
         selection = self._get_chooser( self.showtimes_scrapers, original_selection, self.current_showtimes_scraper, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
@@ -287,11 +292,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.current_showtimes_scraper = selection
             self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
             self._set_controls_values()
-
-    def _change_setting17( self ):
-        """ changes settings #17 """
-        self.settings[ "auto_play_all" ] = not self.settings[ "auto_play_all" ]
-        self._set_controls_values()
 
     def _install_plugin( self ):
         selection = self._get_chooser( ( _( 700 ), _( 704 ), ), -1, 0, 1, "%s %s" % ( _( 200 ), _( 713 ), ) )
