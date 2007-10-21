@@ -105,19 +105,19 @@
     <string id="202">Trailer quality</string>
     <string id="203">Mode</string>
     <string id="204">Save folder</string>
-    <string id="205">Thumbnail display</string>
-    <string id="206">Use watched thumbnail</string>
-    <string id="207">Startup category</string>
-    <string id="208">Shortcut #1</string>
-    <string id="209">Shortcut #2</string>
-    <string id="210">Shortcut #3</string>
-    <string id="211">Refresh newest at startup</string>
-    <string id="212">Use simple search</string>
-    <string id="213">Match whole words only</string>
-    <string id="214">Video player resolution</string>
-    <string id="215">Showtimes location</string>
-    <string id="216">Showtimes scraper</string>
-    <string id="217">Auto play all trailers</string>
+    <string id="205">Auto play all trailers</string>
+    <string id="206">Thumbnail display</string>
+    <string id="207">Use watched thumbnail</string>
+    <string id="208">Startup category</string>
+    <string id="209">Shortcut #1</string>
+    <string id="210">Shortcut #2</string>
+    <string id="211">Shortcut #3</string>
+    <string id="212">Refresh newest at startup</string>
+    <string id="213">Use simple search</string>
+    <string id="214">Match whole words only</string>
+    <string id="215">Video player resolution</string>
+    <string id="216">Showtimes location</string>
+    <string id="217">Showtimes scraper</string>
     <string id="220">Install plugins...</string>
     
     <!-- Settings choices -->
