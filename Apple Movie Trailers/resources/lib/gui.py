@@ -447,18 +447,24 @@ class GUI( xbmcgui.WindowXML ):
             if ( trailer is not None ):
                 if ( trailer == len( urls ) ):
                     for c, url in enumerate( urls ):
-                        t = self.get_title( "%s%s" % ( title, os.path.splitext( url )[ 1 ], ), c + 1, len( urls ) > 1 )
+                        t = self.get_filepath( "%s%s" % ( title, os.path.splitext( url )[ 1 ], ), c + 1, len( urls ) > 1 )
                         items += ( ( t, url, c + 1 ), )
                 else:
-                    t = self.get_title( "%s%s" % ( title, os.path.splitext( urls[ trailer ] )[ 1 ], ), trailer + 1, len( urls ) > 1 )
+                    t = self.get_filepath( "%s%s" % ( title, os.path.splitext( urls[ trailer ] )[ 1 ], ), trailer + 1, len( urls ) > 1 )
                     items = ( ( t, urls[ trailer ], trailer + 1 ), )
         return items
 
-    def get_title( self, title, count, multiple ):
+    def get_filepath( self, title, count, multiple ):
         filepath = make_legal_filepath( title )
         filepath = "%s%s%s" % ( os.path.splitext( filepath )[ 0 ], ( "", "_%d" % ( count, ), )[ multiple ], os.path.splitext( filepath )[ 1 ], )
-        if ( len( os.path.split( filepath )[ 1 ] ) > 37 ):
-            filepath = os.path.join( os.path.split( filepath )[ 0 ], os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ : -( len( os.path.split( filepath )[ 1 ] ) - 35 ) ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ -2 : ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 1 ] )
+        if ( len( os.path.basename( filepath ) ) > 37 ):
+            filename = os.path.splitext( filepath )[ 0 ]
+            ext = os.path.splitext( filepath )[ 1 ]
+            if ( multiple ):
+                filename = filename[ : 35 - len( ext ) ] + filename[ -2 : ]
+            else:
+                filename = filename[ : 37 - len( ext ) ]
+            filepath = "%s%s" % ( filename, ext )
         return filepath
 
     def _get_trailer( self, title, urls ):
@@ -540,7 +546,7 @@ class GUI( xbmcgui.WindowXML ):
             new_filename = "%s.tbn" % ( os.path.splitext( filename )[0], )
             if ( not os.path.isfile( new_filename ) ):
                 xbmc.executehttpapi("FileCopy(%s,%s)" % ( poster, new_filename, ) )
-            if ( filename not in repr( self.trailers.movies[ trailer ].saved ) ):
+            if ( not self.check_cache( filename, 1 ) ):# not in repr( self.trailers.movies[ trailer ].saved ) ):
                 self.trailers.movies[ trailer ].saved += [ ( filename, self.core, ) ]
                 success = self.trailers.updateRecord( "movies", ( "saved", ), ( repr( self.trailers.movies[ trailer ].saved ), self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
                 #if ( success ):
@@ -685,7 +691,7 @@ class GUI( xbmcgui.WindowXML ):
             self._get_settings()
             ok = False
             if ( settings.restart ):
-                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 259 ), _( 258 ) )
+                ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 271 ), _( 270 ) )
             if ( not ok ):
                 self.setShortcutLabels()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
@@ -796,12 +802,16 @@ class GUI( xbmcgui.WindowXML ):
 
     def saveCachedMovie( self ):
         try:
-            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             dialog = xbmcgui.DialogProgress()
             dialog.create( _( 56 ) )
+            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+            environment = os.environ.get( "OS", "xbox" )
+            dirname = self.settings[ "save_folder" ]
+            if ( environment == "xbox" or environment == "win32" ):
+                dirname = dirname.replace( "\\", "/" )
             for count, filename in enumerate( self.flat_cache ):
                 percent = int( ( count + 1 ) * ( float( 100 ) / len( self.flat_cache ) ) )
-                new_filename = os.path.join( self.settings[ "save_folder" ], os.path.basename( filename[ 1 ] ) )
+                new_filename = "%s%s" % ( dirname, os.path.basename( filename[ 1 ] ), )
                 dialog.update( percent, "%s %s" % ( _( 1008 ), new_filename, ) )
                 if ( not os.path.isfile( new_filename ) ):
                     xbmc.executehttpapi("FileCopy(%s,%s)" % ( filename[ 1 ], new_filename, ) )
