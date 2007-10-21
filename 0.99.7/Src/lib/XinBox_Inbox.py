@@ -17,8 +17,9 @@ ACCOUNTSDIR = XinBox_Util.__accountsdir__
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False,mmflag=0):
         self.init = 0
+        self.mmflag = mmflag
         self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
@@ -118,6 +119,8 @@ class GUI( xbmcgui.WindowXML ):
             try:control = self.getFocus()
             except: control = 0
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu' ):
+                if self.mmflag == 1:
+                    self.exitflag = 1
                 self.exitme()
             elif (50 <= focusid <= 59):
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
