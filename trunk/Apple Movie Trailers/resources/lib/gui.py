@@ -373,18 +373,16 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
-            #cast = self.trailers.movies[ trailer ].cast
             self.cast_exists = ( len( self.trailers.movies[ trailer ].cast ) > 0 )
             thumbnail = "amt-generic-%sactor.png" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
             if ( self.cast_exists ):
-                #thumbnail = "amt-generic-actor.tbn"
                 for actor in self.trailers.movies[ trailer ].cast:
                     actor_path = xbmc.translatePath( os.path.join( "P:\\", "Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) ) )
                     actor_thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
-                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", actor_thumbnail, actor_thumbnail ) )
+                    actual_icon = ( "", actor_thumbnail, )[ actor_thumbnail != thumbnail ]
+                    self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", actual_icon, actor_thumbnail ) )
             else: 
-                #thumbnail = "amt-generic-noactor.tbn"
-                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", thumbnail, thumbnail ) )
+                self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", "", thumbnail ) )
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except:

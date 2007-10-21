@@ -674,6 +674,40 @@
                     <info>ListItem.ActualIcon</info>
                     <texture>-</texture>
                     <aspectratio aligny="bottom">keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
+                </control>
+                <control type="image">
+                    <description>Trailer Poster Reflection</description>
+                    <posx>532</posx>
+                    <posy>356</posy>
+                    <width>175</width>
+                    <height>256</height>
+                    <info>ListItem.ActualIcon</info>
+                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
+                    <aspectratio aligny="top">keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
+                </control>
+                <control type="image">
+                    <description>Actor Poster</description>
+                    <posx>532</posx>
+                    <posy>100</posy>
+                    <width>175</width>
+                    <height>256</height>
+                    <info>Container(70).ListItem(0).Thumb</info>
+                    <texture>-</texture>
+                    <aspectratio aligny="bottom">keep</aspectratio>
+                    <visible>!IsEmpty(Container(70).ListItem(0).ActualIcon) + Control.HasFocus(70)</visible>
+                </control>
+                <control type="image">
+                    <description>Actor Poster Reflection</description>
+                    <posx>532</posx>
+                    <posy>356</posy>
+                    <width>175</width>
+                    <height>256</height>
+                    <info>Container(70).ListItem(0).Thumb</info>
+                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
+                    <aspectratio aligny="top">keep</aspectratio>
+                    <visible>!IsEmpty(Container(70).ListItem(0).ActualIcon) + Control.HasFocus(70)</visible>
                 </control>
                 <control type="image">
                     <description>Trailer Poster HD Overlay</description>
@@ -682,16 +716,7 @@
                     <width>32</width>
                     <height>32</height>
                     <info>ListItem.Overlay</info>
-                </control>
-                <control type="image">
-                    <description>Trailer Poster</description>
-                    <posx>532</posx>
-                    <posy>356</posy>
-                    <width>175</width>
-                    <height>256</height>
-                    <info>ListItem.ActualIcon</info>
-                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
-                    <aspectratio aligny="top">keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="202">
@@ -702,6 +727,7 @@
                     <height>15</height>
                     <texture>-</texture>
                     <aspectratio>keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
@@ -712,6 +738,7 @@
                     <height>16</height>
                     <texture>amt-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
@@ -722,6 +749,7 @@
                     <height>16</height>
                     <texture>amt-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
@@ -731,6 +759,7 @@
                     <height>16</height>
                     <texture>amt-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
+                    <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
             </control>
 
@@ -953,7 +982,16 @@
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
+						<info>ListItem.Thumb</info>
+                        <visible>!IsEmpty(ListItem.Thumb)</visible>
+					</control>
+					<control type="image">
+						<posx>0</posx>
+						<posy>3</posy>
+						<width>22</width>
+						<height>22</height>
 						<info>ListItem.Icon</info>
+                        <visible>IsEmpty(ListItem.Thumb)</visible>
 					</control>
 					<control type="label">
 						<posx>22</posx>
@@ -990,7 +1028,7 @@
 						<posy>3</posy>
 						<width>22</width>
 						<height>22</height>
-						<info>ListItem.Icon</info>
+						<info>ListItem.Thumb</info>
 					</control>
 					<control type="label">
 						<posx>22</posx>
