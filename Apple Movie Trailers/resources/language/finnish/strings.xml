@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.1         Finnish 20.10.2007 -->
+  <!-- v.pre-0.99.1         Finnish 21.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
@@ -105,19 +105,19 @@
   <string id="202">Kuvanlaatu</string>
   <string id="203">Toimintatapa</string>
   <string id="204">Tallennuskansio</string>
-  <string id="205">Kuvakenäkymä</string>
-  <string id="206">Käytä katsottu kuvaketta</string>
-  <string id="207">Aloitus kategoria</string>
-  <string id="208">Pikavalinta #1</string>
-  <string id="209">Pikavalinta #2</string>
-  <string id="210">Pikavalinta #3</string>
-  <string id="211">Päivitä käynnistyessä uusimmat</string>
-  <string id="212">Yksinkertainen haku käytössä</string>
-  <string id="213">Sopivat sanat ainoastaan</string>
-  <string id="214">Videon toistoresoluutio</string>
-  <string id="215">Teatteriesitysten sijainti</string>
-  <string id="216">Teatteriesitysten hakupaikka</string>
-  <string id="217">Toista kaikki esittelyt</string>
+  <string id="205">Toista kaikki esittelyt</string>
+  <string id="206">Kuvakenäkymä</string>
+  <string id="207">Käytä katsottu kuvaketta</string>
+  <string id="208">Aloitus kategoria</string>
+  <string id="209">Pikavalinta #1</string>
+  <string id="210">Pikavalinta #2</string>
+  <string id="211">Pikavalinta #3</string>
+  <string id="212">Päivitä käynnistyessä uusimmat</string>
+  <string id="213">Yksinkertainen haku käytössä</string>
+  <string id="214">Sopivat sanat ainoastaan</string>
+  <string id="215">Videon toistoresoluutio</string>
+  <string id="216">Teatteriesitysten sijainti</string>
+  <string id="217">Teatteriesitysten hakupaikka</string>
   <string id="220">Asenna lisäkkeet...</string> 
 
   <!-- Settings choices -->
