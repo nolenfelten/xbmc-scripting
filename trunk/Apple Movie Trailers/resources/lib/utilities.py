@@ -162,7 +162,7 @@ def save_custom_sql( query ):
     except:
         return False
 
-def make_legal_filepath( path, compatible=False, extension=True ):
+def make_legal_filepath( path, compatible=False, extension=True, conf=True, save_end=False ):
     environment = os.environ.get( "OS", "xbox" )
     if ( environment == "win32" or environment == "xbox" ):
         path = path.replace( "\\", "/" )
@@ -173,6 +173,7 @@ def make_legal_filepath( path, compatible=False, extension=True ):
         parts[ 0 ] = ""
     if ( environment == "xbox" or environment == "win32" or compatible ):
         illegal_characters = """,*=|<>?;:"+"""
+        length = ( 42 - ( conf * 5 ) )
         for count, part in enumerate( parts ):
             tmp_name = ""
             for char in part:
@@ -180,10 +181,15 @@ def make_legal_filepath( path, compatible=False, extension=True ):
                 if ( char in illegal_characters or ord( char ) > 127 ): char = ""
                 tmp_name += char
             if ( environment == "xbox" or compatible ):
-                if ( len( tmp_name ) > 42 ):
+                if ( len( tmp_name ) > length ):
                     if ( count == len( parts ) - 1 and extension == True ):
+                        filename = os.path.splitext( tmp_name )[ 0 ]
                         ext = os.path.splitext( tmp_name )[ 1 ]
-                        tmp_name = "%s%s" % ( os.path.splitext( tmp_name )[ 0 ][ : 42 - len( ext ) ].strip(), ext, )
+                        if ( save_end ):
+                            tmp_name = filename[ : 35 - len( ext ) ] + filename[ -2 : ]
+                        else:
+                            tmp_name = filename[ : 37 - len( ext ) ]
+                        tmp_name = "%s%s" % ( tmp_name.strip(), ext )
                     else:
                         tmp_name = tmp_name[ : 42 ].strip()
             parts[ count ] = tmp_name

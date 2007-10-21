@@ -934,7 +934,7 @@
                 <description>Cast List</description>
 				<posx>190</posx>
 				<posy>385</posy>
-				<width>472</width>
+				<width>362</width>
 				<height>145</height>
 				<onleft>2075</onleft>
 				<onright>2070</onright>
@@ -946,7 +946,7 @@
 				<visible allowhiddenfocus="false">Control.IsVisible(175)</visible>
 				<itemlayout height="29">
 					<control type="image">
-						<width>472</width>
+						<width>362</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -962,7 +962,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>400</width>
+						<width>290</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -974,7 +974,7 @@
 				</itemlayout>
 				<focusedlayout height="29">
 					<control type="image">
-						<width>472</width>
+						<width>362</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -982,7 +982,7 @@
 						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<width>472</width>
+						<width>362</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -999,7 +999,7 @@
 					<control type="label">
 						<posx>30</posx>
 						<posy>3</posy>
-						<width>400</width>
+						<width>290</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -1012,7 +1012,7 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>667</posx>
+                <posx>557</posx>
                 <posy>385</posy>
                 <width>16</width>
                 <height>16</height>
@@ -1022,7 +1022,7 @@
 				<visible>Control.IsVisible(70)</visible>
             </control>
 			<control type="scrollbar" id="2070">
-				<posx>667</posx>
+				<posx>557</posx>
 				<posy>401</posy>
 				<width>16</width>
 				<height>113</height>
@@ -1039,13 +1039,22 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>667</posx>
+                <posx>557</posx>
                 <posy>514</posy>
                 <width>16</width>
                 <height>16</height>
                 <texturenofocus>amt-scrollbar-down-arrow.png</texturenofocus>
                 <texturefocus>amt-scrollbar-down-arrow-focus.png</texturefocus>
                 <onclick>PageDown(2070)</onclick>
+				<visible>Control.IsVisible(70)</visible>
+            </control>
+            <control type="image">
+                <posx>580</posx>
+				<posy>385</posy>
+				<width>100</width>
+				<height>145</height>
+                <info>Container(70).ListItem(0).Thumb</info>
+                <aspectratio>keep</aspectratio>
 				<visible>Control.IsVisible(70)</visible>
             </control>
         </control>

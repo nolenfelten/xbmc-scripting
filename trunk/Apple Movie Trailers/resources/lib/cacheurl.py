@@ -137,10 +137,8 @@ class HTTP:
             filename = md5.new( url ).hexdigest() + os.path.splitext( url )[ 1 ]
             filename = os.path.join( filename[ 0 ], filename )
 
-        # ..and the filepath
-        filepath = make_legal_filepath( os.path.join( self.cache_dir, filename ) )
-        if ( len( os.path.split( filepath )[ 1 ] ) > 37 and self.actual_filename ):
-            filepath = os.path.join( os.path.split( filepath )[ 0 ], os.path.splitext( os.path.split( filepath )[ 1 ] )[ 0 ][ : -( len( os.path.split( filepath )[ 1 ] ) - 37 ) ] + os.path.splitext( os.path.split( filepath )[ 1 ] )[ 1 ] )
+        # make the filepath legal
+        filepath = make_legal_filepath( os.path.join( self.cache_dir, filename ), conf=self.actual_filename )
         return filepath
 
     def urlretrieve( self, url ):

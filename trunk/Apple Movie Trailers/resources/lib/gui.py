@@ -445,35 +445,31 @@ class GUI( xbmcgui.WindowXML ):
                 trailer = self._get_trailer( title, urls )
             # if the user did not cancel the dialog
             if ( trailer is not None ):
+                # if play all was selected, get the filepath for each url
                 if ( trailer == len( urls ) ):
                     for c, url in enumerate( urls ):
                         t = self.get_filepath( "%s%s" % ( title, os.path.splitext( url )[ 1 ], ), c + 1, len( urls ) > 1 )
                         items += ( ( t, url, c + 1 ), )
                 else:
+                    # we only want the trailer selected
                     t = self.get_filepath( "%s%s" % ( title, os.path.splitext( urls[ trailer ] )[ 1 ], ), trailer + 1, len( urls ) > 1 )
                     items = ( ( t, urls[ trailer ], trailer + 1 ), )
         return items
 
     def get_filepath( self, title, count, multiple ):
-        filepath = make_legal_filepath( title )
-        filepath = "%s%s%s" % ( os.path.splitext( filepath )[ 0 ], ( "", "_%d" % ( count, ), )[ multiple ], os.path.splitext( filepath )[ 1 ], )
-        if ( len( os.path.basename( filepath ) ) > 37 ):
-            filename = os.path.splitext( filepath )[ 0 ]
-            ext = os.path.splitext( filepath )[ 1 ]
-            if ( multiple ):
-                filename = filename[ : 35 - len( ext ) ] + filename[ -2 : ]
-            else:
-                filename = filename[ : 37 - len( ext ) ]
-            filepath = "%s%s" % ( filename, ext )
+        # add our trailer number if there is more than one trailer
+        filepath = "%s%s%s" % ( os.path.splitext( title )[ 0 ], ( "", "_%d" % ( count, ), )[ multiple ], os.path.splitext( title )[ 1 ], )
+        # now make it legal
+        filepath = make_legal_filepath( filepath, save_end=multiple )
         return filepath
 
     def _get_trailer( self, title, urls ):
-        if ( self.settings[ "auto_play_all" ] and self.settings[ "mode" ] == 0 ):
+        # if Auto play all trailers, return the play all selection
+        if ( self.settings[ "auto_play_all" ] ):
             return len( urls )
         import chooser
         force_fallback = self.skin != "Default"
         choices = [ "%s %d%s" % ( _( 99 ), c + 1, ( "", " - [HD]", )[ "720p.mov" in url or "1080p.mov" in url ] ) for c, url in enumerate( urls ) ]
-        #if ( self.settings[ "mode" ] == 0 ):
         choices += [ _( 39 ) ]
         ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=-1, selection=0, list_control=1, title=title )
         selection = ch.selection
