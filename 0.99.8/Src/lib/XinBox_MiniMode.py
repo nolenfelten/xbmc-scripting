@@ -28,8 +28,8 @@ class Minimode:
             self.loadsettings()
             self.inboxes = self.buildinboxdict()
             if not len(self.inboxes) == 0:self.startmm()
-            else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
-        except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+        except:pass
+        xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         if exists("X:\\mmcomu.xib"):
             os.remove("X:\\mmcomu.xib")
         if self.exit:
