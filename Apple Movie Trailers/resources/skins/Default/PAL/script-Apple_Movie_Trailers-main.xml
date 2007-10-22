@@ -706,29 +706,32 @@
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="203">
                     <description>Trailer Favorite Overlay</description>
-                    <posx>658</posx>
-                    <posy>335</posy>
-                    <width>16</width>
-                    <height>16</height>
+                    <posx>650</posx>
+                    <posy>328</posy>
+                    <width>24</width>
+                    <height>24</height>
                     <texture>amt-overlay-favorite.png</texture>
                     <aspectratio>keep</aspectratio>
+                    <animation effect="slide" start="0,0" end="-22,0" time="0" condition="Control.IsVisible(204)">Conditional</animation>
+                    <animation effect="slide" start="0,0" end="-22,0" time="0" condition="Control.IsVisible(205)">Conditional</animation>
                 </control>
                 <!-- ** Required ** Do not change id or type-->
                 <control type="image" id="204">
                     <description>Trailer Watched Overlay</description>
-                    <posx>643</posx>
-                    <posy>335</posy>
-                    <width>16</width>
-                    <height>16</height>
+                    <posx>650</posx>
+                    <posy>328</posy>
+                    <width>24</width>
+                    <height>24</height>
                     <texture>amt-overlay-watched.png</texture>
                     <aspectratio>keep</aspectratio>
+                    <animation effect="slide" start="0,0" end="-22,0" time="0" condition="Control.IsVisible(205)">Conditional</animation>
                 </control>
                 <control type="image" id="205">
                     <description>Trailer Saved Overlay</description>
-                    <posx>628</posx>
-                    <posy>335</posy>
-                    <width>16</width>
-                    <height>16</height>
+                    <posx>650</posx>
+                    <posy>328</posy>
+                    <width>24</width>
+                    <height>24</height>
                     <texture>amt-overlay-saved.png</texture>
                     <aspectratio>keep</aspectratio>
                 </control>
