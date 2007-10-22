@@ -8,7 +8,8 @@ from email import Charset
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False,myemail=False):
+        self.myemail = myemail
         self.srcpath = strFallbackPath
         self.language = lang
         self.emailsettings = emailsetts
@@ -24,14 +25,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.unreadvalue = 0
         self.click = 0
         self.ziplist = []
-        self.subject = self.emailsettings[1].get('subject').replace("\n","")
-        self.emfrom = self.emailsettings[1].get('from').replace("\n","")
-        self.to = self.emailsettings[1].get('to').replace("\n","")
-        self.cc = self.emailsettings[1].get('Cc')
+        self.subject = self.emailsettings[1][0]
+        self.emfrom = self.emailsettings[1][1]
+        self.to = self.myemail.get('to').replace("\n","")
+        self.cc = self.myemail.get('Cc')
         if self.cc == None:
             self.cc = ""
         else:self.cc = self.cc.replace("\n","")
-        date = self.emailsettings[1].get('date')
+        date = self.myemail.get('date')
         if date == None:
             mytime = time.strptime(xbmc.getInfoLabel("System.Date") + xbmc.getInfoLabel("System.Time"),'%A , %B %d, %Y %I:%M %p')
             self.sent = time.strftime('%a, %d %b %Y %X +0000',mytime).replace("\n","")
@@ -70,8 +71,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.setFocusId(72)
         
     def getattachments(self):
-        if self.emailsettings[1].is_multipart():
-            for part in self.emailsettings[1].walk():
+        if self.myemail.is_multipart():
+            for part in self.myemail.walk():
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
                     filename = part.get_filename()
                     if filename != None:
@@ -105,14 +106,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.animating = False
                    
     def settextbox(self):
-        if self.emailsettings[1].is_multipart():
-            for part in self.emailsettings[1].walk():
+        if self.myemail.is_multipart():
+            for part in self.myemail.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     self.body = self.parse_email(part.get_payload())
                     self.getControl(72).setText(self.body)
                     break
         else:
-            self.body = self.parse_email(self.emailsettings[1].get_payload())
+            self.body = self.parse_email(self.myemail.get_payload())
             self.getControl(72).setText(self.body)
 
     def parse_email(self, email):

@@ -1,10 +1,12 @@
-XinBox Version 0.99.8 Change Log:
+XinBox Version 0.99.9 Change Log:
 
-Updated: Finnish Strings thanks to mikko70
-Added: Scrollbar to Email Preview in Inbox - press right on email list/email list scrollbar to use.
-Added: "M" button to email dialog, use this to Mark current opened email as Un-Read.
-Updated: Mini-mode - Removed "Closing Mini Mode" dialog, So, straight into script, no waiting :-D
-Added: Version number to "Promote" send email lines.
+Updated: Email Engine - New Email system, makes loading inbox SOOOOOOOOO much quicker!
+                      - NOTE: All emails will have to be removed and re-downloaded.
+			Best way to do this is, Click reset Inbox in all your inboxes before updating.
+Updated: Update Engine - it now updates and imports new settings.
+			 Due to this, updates NOT done via the script will need to delete there
+			 XinBox userdata dir and re-do settings.
+
      
 
 
