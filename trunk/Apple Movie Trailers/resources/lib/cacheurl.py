@@ -175,8 +175,9 @@ class HTTP:
         self.info = opened.info()
 
         # get the filename
-        filepath = self.make_cache_filename( actual_url )
-
+        if actual_url != url:
+            filepath = self.make_cache_filename( actual_url )
+        
         # save the total expected size of the file, based on the Content-Length header
         totalsize = int( self.info[ "Content-Length" ] )
         try:
@@ -195,14 +196,14 @@ class HTTP:
             drive = os.path.splitdrive( self.cache_dir )[ 0 ].split( ":" )[ 0 ]
             free_space = xbmc.getInfoLabel( "System.Freespace(%s)" % drive )
             if len( free_space.split() ) > 2:
-                free_space_mb = int( free_space.split()[1] )
+                free_space_mb = int( free_space.split()[ 1 ] )
                 free_space_b = free_space_mb * 1024 * 1024
                 if totalsize >= free_space_b:
-                    header = _(64) # Error
-                    line1 = _(75) # Not enough free space in target drive.
-                    line2_drive = _(76) # Drive
-                    line2_free = _(77) # Free
-                    line2_space_required = _(78) # Space Required
+                    header = _( 64 ) # Error
+                    line1 = _( 75 ) # Not enough free space in target drive.
+                    line2_drive = _( 76 ) # Drive
+                    line2_free = _( 77 ) # Free
+                    line2_space_required = _( 78 ) # Space Required
                     xbmcgui.Dialog().ok( header, line1, line2_drive + ": %s %iMB " + line2_free % ( drive, free_space_mb ), line2_space_required + ": " + byte_measurement( totalsize ) )
                     # notify handler of being finished
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
