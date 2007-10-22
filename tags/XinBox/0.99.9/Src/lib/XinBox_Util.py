@@ -1,7 +1,6 @@
 
 import os, sys, xbmcgui
 from os.path import join, exists
-from XinBox_Settings import Settings
 
 __datadir__ = "P:\\script_data\\"
 __settingdir__ = "P:\\script_data\\XinBox\\"
@@ -125,7 +124,8 @@ def removeauto(scriptpath, accountname, srcpath):
                 return
         return
 class UpdateSettings:   
-    def loadsettings(self):   
+    def loadsettings(self):
+            from XinBox_Settings import Settings
             dialog = xbmcgui.DialogProgress()
             dialog.create("Importing New Settings","Please Wait...")
             self.settings = Settings("XinBox_Settings.xml","XinBox","")
