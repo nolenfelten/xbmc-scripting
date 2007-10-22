@@ -49,6 +49,7 @@ class GUI( xbmcgui.WindowXML ):
         self.emnotread = 0
         self.nwmail = 0
         self.chicon = []
+        self.markunread = []
         self.animating = False
         self.guilist = []
         self.control_action = XinBox_Util.setControllerAction()
@@ -219,11 +220,21 @@ class GUI( xbmcgui.WindowXML ):
         w.doModal()
         returnval = w.returnvalue
         replyvalue = w.replyvalue
+        unreadvalue = w.unreadvalue
         del w
         if replyvalue != 0:
             self.sendemail(replyvalue)
-        if returnval != "-":
+        elif returnval != "-":
             self.deletemail(pos, returnval)
+        elif unreadvalue == 1:
+            self.guilist.pop(pos)
+            self.guilist.insert(pos, [item[0],item[1],item[2],0,item[4],item[5],item[6],item[7]])
+            self.emnotread += 1
+            if item[2] == 0:icon = "XBemailnotread.png"
+            else:icon = "XBemailnotreadattach.png"
+            self.markunread.append(str(self.getListSize() - 1 - pos))
+            self.getListItem(pos).setThumbnailImage(icon)
+            self.updatesizelabel()
 
     def updateicons(self):
         if exists(self.ibfolder + "emid.xib"):
@@ -237,7 +248,9 @@ class GUI( xbmcgui.WindowXML ):
                 myline = theline.split("|")
                 if myline[0] != "-":
                     if myline[0] in self.removeme:pass
-                    elif myline[0] in self.chicon:
+                    if myline[0] in self.markunread:   #list poss, email id, sss file id, attachstat, time, date, readstatus, newstatus
+                        writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|0|0\n")
+                    elif myline[0] in self.chicon:        
                         writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|1|0\n")
                     else:writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|" + myline[6]+ "|0\n")
                 else:writelist.append(line)

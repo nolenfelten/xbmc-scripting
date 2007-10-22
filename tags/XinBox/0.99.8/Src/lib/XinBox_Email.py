@@ -21,6 +21,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
       
     def setupvars(self):
         xbmcgui.lock()
+        self.unreadvalue = 0
         self.click = 0
         self.ziplist = []
         self.subject = self.emailsettings[1].get('subject').replace("\n","")
@@ -39,7 +40,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.replyvalue = 0
         self.curpos = 0
         self.showing = False
-        self.deleserv = False
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
@@ -49,7 +49,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def setupemail(self):
         self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
         self.settextbox()
-        self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
+        self.getControl(74).addLabel(self.emailsettings[4] + " - " + self.emailsettings[5])
         
 
     def setupcontrols(self):
@@ -143,6 +143,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if not self.animating:
             if controlID == 64:
                 self.goattachlist()
+            elif controlID == 65:
+                self.unreadvalue = 1
+                self.exitme()                
             elif controlID == 61:
                 self.replyvalue = [self.emfrom,"","","Re: " + self.subject,self.getreply(self.body),None]
                 self.exitme()
@@ -154,19 +157,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.openattach(self.getControl(81).getSelectedPosition())
             elif controlID == 63:
                 dialog = xbmcgui.Dialog()
-                if self.emailsettings[6] == "-" or self.deleserv:
+                if self.emailsettings[6] == "-":
                     ret = dialog.select( self.language(271), [self.language(272)])
                 else:ret = dialog.select( self.language(271), [ self.language(272), self.language(273), self.language(274)])
-                if ret == 0:
-                    if self.deleserv:
-                        self.returnvalue = 2
-                    else:self.returnvalue = 0
-                    self.exitme()
-                elif ret == 1:
-                    self.deleserv = True
-                    self.returnvalue = 1
-                elif ret == 2:
-                    self.returnvalue = 2
+                if ret != -1 :
+                    self.returnvalue = ret
                     self.exitme()
 
     def getreply (self, body):
@@ -333,6 +328,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.launchinfo(140,"D")
                 elif focusid == 64:
                     self.launchinfo(141,"A")
+                elif focusid == 65:
+                    self.launchinfo(170,"M")                    
                 elif focusid == 72:
                     self.launchinfo(142,self.language(281))
                 elif focusid == 50:
