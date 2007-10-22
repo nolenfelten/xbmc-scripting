@@ -27,14 +27,7 @@ _ = lang.string
 
 if __name__ == '__main__':
         if exists("X:\\mmcomu.xib"):
-                dialog = xbmcgui.DialogProgress()
-                dialog.create(_(351), _(352))
                 os.remove("X:\\mmcomu.xib")
-                for i in range(0,5):
-                        dialog.update((i*20),_(352))
-                        time.sleep(i)
-                dialog.update(100,_(352))
-                dialog.close()
                 try:
                         w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath+ "src","DefaultSkin",bforeFallback=False,minimode=sys.argv[1:][0],lang=_)
                 except:w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",scriptpath + "src","DefaultSkin",lang=_)
