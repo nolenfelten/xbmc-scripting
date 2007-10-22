@@ -136,13 +136,13 @@
 			<textcolor>FFB2D4F5</textcolor>
 		</control> 
 		<control type="fadelabel" id="74">
+			<description>Email Rec</description>
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<description>Email Rec</description>
 			<posx>20</posx>
 			<posy>510</posy>
-			<width>277</width>
+			<width>220</width>
 			<align>left</align>
 			<font>font18</font>
 			<textcolor>FFB2D4F5</textcolor>
@@ -153,7 +153,7 @@
             		<posy>80</posy>
             		<width>500</width>
             		<height>450</height>
-            		<spinposx>315</spinposx>
+            		<spinposx>250</spinposx>
             		<spinposy>435</spinposy>
             		<textureup>XBscroll-up.png</textureup>
             		<texturedown>XBscroll-down.png</texturedown>
@@ -230,7 +230,7 @@
 			<animation effect="slide" start="-700,0" time="800">Visible</animation>
 			<animation effect="slide" end="-700,0" time="800">Hidden</animation>
 			<visible>Skin.HasSetting(emaildialog)</visible>
-			<posx>389</posx>
+			<posx>340</posx>
 			<posy>505</posy>
 			<control type="button" id="61">
 				<description>Reply Button</description>
@@ -279,8 +279,27 @@
 				<label>D</label>
 				<onup>63</onup>
 				<onleft>62</onleft>
-				<onright>64</onright>
+				<onright>65</onright>
 				<ondown>63</ondown>
+				<align>center</align>
+				<aligny>center</aligny>
+      				<texturefocus>XBbuttonF.png</texturefocus>
+				<texturenofocus>XBbuttonNF.png</texturenofocus>
+				<disabledcolor>60ffffff</disabledcolor>
+				<width>36</width>
+				<height>35</height>
+			</control>
+			<control type="button" id="65">
+				<description>Delete Button</description>
+				<posx>117</posx>
+				<posy>0</posy>
+      				<textoffsetx>2</textoffsetx>
+      				<textoffsety></textoffsety>
+				<label>M</label>
+				<onup>65</onup>
+				<onleft>63</onleft>
+				<onright>64</onright>
+				<ondown>65</ondown>
 				<align>center</align>
 				<aligny>center</aligny>
       				<texturefocus>XBbuttonF.png</texturefocus>
@@ -291,13 +310,13 @@
 			</control>
 			<control type="button" id="64">
 				<description>Attach Button</description>
-				<posx>117</posx>
+				<posx>156</posx>
 				<posy>0</posy>
       				<textoffsetx>2</textoffsetx>
       				<textoffsety></textoffsety>
 				<label>A</label>
 				<onup>50</onup>
-				<onleft>63</onleft>
+				<onleft>65</onleft>
 				<onright>81</onright>
 				<ondown>64</ondown>
 				<align>center</align>

@@ -1,9 +1,8 @@
-XinBox Version 0.99.7 Change Log:
+XinBox Version 0.99.8 Change Log:
 
-Fixed: There was Hard-Coded Button Labels in Update Menu
-Updated: Mini-Mode function, now when new email is received in mini-mode and user opens it, it will take user to Inbox, 
-         and then if user presses back or exit, script closes and mini-mode resumes.
-Added: All button to contacts menu. Use this to either compose an email to ALL contacts or add ALL contacts to address field
+Updated: Finnish Strings thanks to mikko70
+Added: Scrollbar to Email Preview in Inbox - press right on email list/email list scrollbar to use.
+Added: "M" button to email dialog, use this to Mark current opened email as Un-Read.
      
 
 

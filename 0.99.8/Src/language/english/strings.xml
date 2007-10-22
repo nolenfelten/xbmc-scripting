@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.7-->
+<!--English Strings VER: 0.8-->
+	<!--Changes since Ver: 0.7-->
+		<!--NEW: 170 -->
 	<!--Changes since Ver: 0.6-->
 		<!--NEW: 381, 168, 169 -->
 	<!--Changes since Ver: 0.5-->
@@ -163,6 +165,7 @@
 	<string id="167">Select to toggle SMTP Authentication.</string>
 	<string id="168">Select to Compose a New Email to All Contacts.</string>
 	<string id="169">Select to add All Contacts to Address Field.</string>
+	<string id="170">Select to Mark this email as Un-Read.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>

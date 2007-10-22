@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!-- English Strings v.0.5 -->
+<!-- English Strings v.0.7 -->
 <!--    Xinbox v.0.99.2    -->
-<!--  Finnish v.28.8.2007  -->
+<!--  Finnish v.21.10.2007  -->
 
 <strings>
 	<!-- Main Menu Labels -->
@@ -30,13 +30,13 @@
   <string id="37">Testataan asetuksia</string>
   <string id="38">Testataan tarvittavat tiedot</string>
   <string id="39">Tarkistetaan %s</string>
-  <string id="40">POP3 palvelimen asetukset</string>
-  <string id="41">SMTP palvelimen asetukset</string>
+  <string id="40">POP3-palvelimen asetukset</string>
+  <string id="41">SMTP-palvelimen asetukset</string>
   <string id="42">Palvelimelle kirjautumisen testaus</string>
   <string id="43">POP3 kirjautumisen asetukset</string>
   <string id="44">SMTP kirjautumisen asetukset</string>
-  <string id="45">POP3 palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
-  <string id="46">SMTP palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
+  <string id="45">POP3-palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
+  <string id="46">SMTP-palvelin ei hyväksy käyttäjänimeä tai salasanaa</string>
   <string id="47">Postilaatikon asetukset kunnossa</string>
 
 	<!-- Edit Account Menu Labels -->
@@ -91,7 +91,7 @@
   <string id="99">Xinbox Ohje</string>
   <string id="100">Valitse mikäli haluat kirjautua sisään XinBox tiliin. Ensimmäiseksi täytyy luoda XinBox tili.</string>
   <string id="101">Valitse mikäli haluat luoda uuden XinBox tilin. XinBox tili vaaditaan kirjautuaksesi.</string>
-  <string id="102">Valitse mikäli haluat päivittää XinBox.</string>
+  <string id="102">Valitse mikäli haluat päivittää XinBox skriptin.</string>
   <string id="103">Valitse mikäli haluat tietoja XinBox skriptistä.</string>
   <string id="104">Valitse mikäli haluat poistua XinBox skriptistä ja palata XBMC:iin.</string>
   <string id="105">Valitse mikäli haluat asettaa XinBox tilin nimen. Huom: Et voi tallentaa tiliä ilman nimeä.</string>	
@@ -103,9 +103,9 @@
   <string id="111">Valitse mikäli haluat tallentaa kaikki muuttamasi asetukset.</string>
   <string id="112">Valitse mikäli haluat poistua valikosta. Huom: Kaikki tallentamattomat asetukset menetetään.</string>
   <string id="113">Valitse mikäli haluat muuttaa näytettävää nimeä. Tämä on postilaatikon ja lähtevässä viestissä näkyvä nimi. Huom: Postilaatikkoa ei voi lisätä ilman nimeä.</string>
-  <string id="114">Valitse mikäli haluat vaihtaa sähköpostiosoitetta. Tätä osoitetta muut käyttävät viestien sinulle lähettämiseen.</string>
-  <string id="115">POP3 palvelimen asetukset. Esim. pop.gmail.com. Valkea nappi: vaihda POP3 SSL palvelimen portin numero. Vain jotkin palvelimet vaativat tämän. Esim. Gmail - Pop3 SSL Portti# 995</string>
-  <string id="116">SMTP palvelimen asetukset. Esim. smtp.gmail.com. Valkea nappi: vaihda SMTP SSL palvelimen portin numero. Vain jotkin palvelimet vaativat tämän. Esim. Gmail - SMTP SSL Portti# 587</string>
+  <string id="114">Valitse mikäli haluat vaihtaa sähköpostiosoiteen. Tätä osoitetta muut käyttävät viestien sinulle lähettämiseen.</string>
+  <string id="115">POP3-palvelin. Esim. pop.gmail.com. Valkea nappi: vaihda mahdollinen POP3 SSL palvelimen portti.Esim. Gmail - Pop3 SSL Portti# 995</string>
+  <string id="116">SMTP-palvelin. Esim. smtp.gmail.com. Valkea nappi: vaihda mahdollinen SMTP SSL palvelimen portti. Esim. Gmail - SMTP SSL Portti# 587</string>
   <string id="117">Valitse mikäli haluat vaihtaa palvelimen tilin nimen. Tämä on tavallisesti nimi jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
   <string id="118">Valitse mikäli haluat vaihtaa palvelimen tilin salasanan. Tämä on tavallisesti salasana jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
   <string id="119">Valitse mikäli haluat vaihtaa palvelimen postilaatikon kokoa. Anna postilaatikon koko joka on palvelimella(MB). Aseta 0 mikäli et halua varoituksia tilan täyttymisestä.</string>
@@ -117,8 +117,8 @@
   <string id="125">Valitse mikäli haluat kirjautua postilaatikkoon.</string>
   <string id="126">Valitse mikäli haluat muokata nykyistä tiliä.</string>
   <string id="127">Valitse mikäli haluat poistaa nykyisen tilin.</string>
-  <string id="128">Valitse mikäli haluat poistua ja siirtyä aiempaan valikkoon.</string>
-  <string id="129">Valitse mikäli haluat vaihtaa "Uusi viesti" merkkiääntä. Tämä ääni kuuluu kun sähköposti saapuu kansioon. Valitse silent.wav jos et halua kuulla ääntä.</string>
+  <string id="128">Valitse mikäli haluat poistua XinBox skriptistä.</string>
+  <string id="129">Valitse mikäli haluat vaihtaa "Uusi viesti" merkkiäänen. Tämä ääni kuuluu kun sähköposti saapuu kansioon. Valitse silent.wav jos et halua kuulla ääntä.</string>
   <string id="130">Valitse mikäli haluat säilyttää muutokset ja palata tili-valikkoon. Huom: Muutoksia ei tallenneta pysyvästi ennenkuin valitset tallenna tili-valikosta.</string>
   <string id="131">Aseta postilaatikko oletukseksi. Oletus postilaatikko avautuu automaattisesti kirjautuessasi tiliin. Huomaa: Ainostaan yksi postilaatikko tiliä kohti voi olla oletuksena.</string>
   <string id="132">Valitse mikäli haluat tarkistaa uudet viestit.</string>
@@ -134,7 +134,7 @@
   <string id="142">Valitse mikäli haluat selata viestiä/liitteeitä ylös- tai alaspäin.</string>
   <string id="143">A: Tallenna valittu tiedosto zip-tiedostoon</string>
   <string id="144">Valitse mikäli haluat asettaa skriptin käynnistymään automaattisesti pienoistilaan.</string>
-  <string id="145">Valitse mikäli haluat muuttaa viivettä (sekunteja) viestien tarkistuksen välille kun pienoistila on käytössä.</string>
+  <string id="145">Valitse mikäli haluat muuttaa viivettä (sekunteja) viestien tarkistuksen välille, kun pienoistila on käynnissä.</string>
   <string id="146">Valitse mikäli haluat valita postilaatikon valituksi kun pienoistila on käynnissä.</string>
   <string id="147">A: Muokkaa Vastaanottaja-kenttää. Useat osoitteet voidaan erotella ;-merkillä                         B: Tyhjennä Vastaanottaja-kenttä                         Valkea nappi: Avaa yhteystiedot-sivu</string>
   <string id="148">A: Muokkaa Kopio-kenttää. Useat osoitteet voidaan erotella ;-merkillä                                    B: Tyhjennä Kopio-kenttä                              Valkea nappi: Avaa yhteystiedot-sivu</string>
@@ -154,6 +154,9 @@
   <string id="164">Valitse joko päivitys tähän ohjelmaversioon tai lue version muutoshistoria.</string>
   <string id="165">Nouda ja lue ohjelman muutoshistoria.</string>
   <string id="166">Valitse XinBoxin päivitys tähän versioon.</string>
+  <string id="167">Valitse mikäli haluat käyttää SMTP-varmennusta.</string>
+  <string id="168">Valitse lähettääksesi viestin kaikille yhteystiedoille.</string>
+  <string id="169">Valitse lisätäksesi yhteystiedot osoitekenttään.</string>
 
 	<!-- Account Menu Labels -->
   <string id="200">Tili</string>
@@ -184,6 +187,7 @@
   <string id="241">Valitse "Uusi viesti" merkkiääni:</string>
   <string id="242">OK</string>
   <string id="243">Oletus postilaatikko</string>
+  <string id="244">SMTP-varmennus</string>
 
 	<!-- InBox Labels -->
   <string id="250">Nouda</string>
@@ -290,6 +294,7 @@
   <string id="378">Yhteystieto lisätty</string>
   <string id="379">Yhteystieto on jo olemassa</string>
   <string id="380">Yhteystieto luettelo</string>
+  <string id="381">Kaikki</string>
 
 	<!-- Update Labels -->
   <string id="390">Ohjelmasi on jo ajantasalla</string>
