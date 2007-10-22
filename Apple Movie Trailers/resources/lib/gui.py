@@ -343,7 +343,7 @@ class GUI( xbmcgui.WindowXML ):
                 category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
                 category = self.genres[ self.category_id ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
-        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( category.encode( "utf-8" ) )
+        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( category )#.encode( "utf-8" ) )
 
     def _set_count_label( self, list_control ):
         separator = ( _( 96 ) )
