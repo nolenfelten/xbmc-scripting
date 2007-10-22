@@ -1,0 +1,9 @@
+XinBox Version 0.99.7 Change Log:
+
+Fixed: There was Hard-Coded Button Labels in Update Menu
+Updated: Mini-Mode function, now when new email is received in mini-mode and user opens it, it will take user to Inbox, 
+         and then if user presses back or exit, script closes and mini-mode resumes.
+Added: All button to contacts menu. Use this to either compose an email to ALL contacts or add ALL contacts to address field
+     
+
+
