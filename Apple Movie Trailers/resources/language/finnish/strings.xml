@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.1         Finnish 21.10.2007 -->
+  <!-- v.pre-0.99.2         Finnish 22.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko</string>
+  
   <!-- Dialog Messages -->
   <string id="39">Toista kaikki</string>
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
@@ -29,7 +30,7 @@
   <string id="60">Tietokantasi on sopimaton tämän ohjelmaversion kanssa.\nSe täytyy muodostaa uudelleen.</string>
   <string id="61">Päivitetään kaikki lajityyppi ja elokuva tiedot...</string>
   <string id="62">Noudetaan uusia xml-tiedostoja.</string>
-  <string id="63">Päivitys vie aikaa noin 1 - 5 minuuttia.</string>
+  <string id="63">Päivitys vie aikaa n. 1 - 5 minuuttia.</string>
   <string id="64">Virhe</string>
   <string id="65">Käsitellään xml-tiedostoja kaikien esittelyiden verkko-osoitteille</string>
   <string id="66">Haetaan lajityyppi tietoja...</string>
@@ -91,7 +92,7 @@
   <string id="155">Tekijät</string>
   <string id="156">Juoni</string>
   <string id="157">Pääosissa</string>
-  <string id="158">Täysi</string>
+  <string id="158">Kaikki</string>
   <string id="159">Minimi</string>
   <string id="160">HD-esittelyt</string>
   <string id="161">Ei esittelyn osoitetta</string>
@@ -145,15 +146,17 @@
   <string id="251">Peruuta</string>
   <string id="252">Päivitä</string>
   <string id="253">Tekijät</string>
-  <string id="258">Käynnistä</string>
-  <string id="259">Myöhemmin</string>
+  <string id="254">Asenna lisäke</string>
   
-  <string id="290">Sivu</string>
-  
-  <!-- Search buttons -->
+   <!-- Search buttons -->
   <string id="257">Tallenna SQL</string>
   <string id="258">Tyhjennä SQL</string>
   <string id="259">Lataa SQL</string>
+
+  <string id="270">Käynnistä</string>
+  <string id="271">Myöhemmin</string>
+
+  <string id="290">Sivu</string>
 
   <string id="2150">Etsi vaillinaiset tallenteet</string>
   <string id="2151">Etsi vain suosikeista</string>
@@ -174,13 +177,13 @@
   <string id="507">Päivitä kaikkien elokuvien tiedot</string>
   <string id="508">Siirrä tallennuskansioon</string>
   <string id="509">Poista esittely(t)</string>
-  <string id="510">Teatterin esityskerrat</string>
+  <string id="510">Teatteri esitykset</string>
   <string id="511">Näytä lajityyppi</string>
   <string id="512">Päivitä lajityyppi</string>
   <string id="513">Päivitä kaikki lajityypit</string>
   <string id="521">Näytä studio</string>
   <string id="531">Näytä näyttelijä</string>
-  <string id="550">Viimeistele täysiasennus</string>
+  <string id="550">Kaikkien esittelyjen haku</string>
   
    <!-- Showtimes -->
   <string id="600">Esityksiä ei löytynyt!</string>
@@ -188,34 +191,34 @@
   <string id="602">Päivä</string>
   <string id="603">Sijainti</string> 
   
-   <!-- Plugin -->
-    <string id="700">Apple Movie Trailer-lisäke</string>
-    <string id="701">Tätä lisäkettä käytettäessä voidaan</string>
-    <string id="702">esittelyjä katsoa suoraan Video-ikkunassa.</string>
-    <string id="703">Haluatko asentaa lisäkkeen?</string>
+  <!-- Plugin -->
+  <string id="700">Apple Movie Trailer-lisäke</string>
+  <string id="701">Tätä lisäkettä käytettäessä voidaan</string>
+  <string id="702">esittelyjä katsoa suoraan Video-ikkunassa.</string>
+  <string id="703">Haluatko asentaa lisäkkeen?</string>
   
-    <string id="704">Movie Theater-lisäke</string>
-    <string id="705">Tämä lisäke toistaa satunnaisia esittelyjä</string>
-    <string id="706">ennen valittua elokuvaa.</string>
-    <string id="707">Haluatko asentaa lisäkkeen?</string>
+  <string id="704">Movie Theater-lisäke</string>
+  <string id="705">Tämä lisäke toistaa satunnaisia esittelyjä</string>
+  <string id="706">ennen valittua elokuvaa.</string>
+  <string id="707">Haluatko asentaa lisäkkeen?</string>
 
-    <string id="710">Valitse pienoiskuvake</string>
-    <string id="711">Asenna</string>
-    <string id="712">Ohita</string>
-    <string id="713">Lisäke</string>
+  <string id="710">Valitse pienoiskuvake</string>
+  <string id="711">Asenna</string>
+  <string id="712">Ohita</string>
+  <string id="713">Lisäke</string>
 
-    <string id="720">Muista lisätä uusi lisäke uutena sijaintina</string>
-    <string id="721">Video-tiedostoihin. Kirjastotila toimii</string>
-    <string id="722">automaattisesti, sinne ei muutoksia tarvita.</string>
+  <string id="720">Muista lisätä uusi lisäke uutena sijaintina</string>
+  <string id="721">Video-tiedostoihin. Kirjastotila toimii</string>
+  <string id="722">automaattisesti, sinne ei muutoksia tarvita.</string>
 
-    <string id="730">Lisäkkeen asennus epäonnistui!</string>
+  <string id="730">Lisäkkeen asennus epäonnistui!</string>
     
   <!-- Credits -->
   <string id="900">Versio</string>
   <string id="901">Tekijät:</string>
   <string id="902">Kiitokset:</string>
   <string id="903">Skinin tekijät</string>
-    
+   
   <!-- Credits headings-->
   <string id="910">Kehitys &amp; koodaus</string>
   <string id="911">Koodaus &amp; ulkoasu</string>
@@ -239,4 +242,5 @@
   <!-- Update error messages -->
   <string id="1030">Uutta versiota ei löytynyt!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
+
 </strings>
