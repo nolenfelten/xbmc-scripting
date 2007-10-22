@@ -64,12 +64,13 @@ class Minimode:
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
 
     def checkfornew(self, ibsettings, inbox):
-        w = Email(ibsettings,inbox,self.account,False, True)
-        w.checkemail()
-        newlist = w.newlist
-        del w
-        if len(newlist) != 0:
-            self.popup(newlist, inbox, ibsettings)
+        if exists("X:\\mmcomu.xib"):
+            w = Email(ibsettings,inbox,self.account,False, True)
+            w.checkemail()
+            newlist = w.newlist
+            del w
+            if len(newlist) != 0:
+                self.popup(newlist, inbox, ibsettings)
 
     def popup(self, newlist, inbox, ibsettings):
         if exists("X:\\mmcomu.xib"):
