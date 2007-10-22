@@ -4,6 +4,7 @@ Updated: Finnish Strings thanks to mikko70
 Added: Scrollbar to Email Preview in Inbox - press right on email list/email list scrollbar to use.
 Added: "M" button to email dialog, use this to Mark current opened email as Un-Read.
 Updated: Mini-mode - Removed "Closing Mini Mode" dialog, So, straight into script, no waiting :-D
+Added: Version number to "Promote" send email lines.
      
 
 
