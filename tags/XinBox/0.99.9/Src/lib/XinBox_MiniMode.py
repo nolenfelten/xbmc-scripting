@@ -29,13 +29,14 @@ class Minimode:
             self.inboxes = self.buildinboxdict()
             if not len(self.inboxes) == 0:self.startmm()
         except:pass
-        xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         if exists("X:\\mmcomu.xib"):
             os.remove("X:\\mmcomu.xib")
         if self.exit:
             w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox, lang=self.language)
             w.doModal()
             del w
+        else:
+            xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         
 
     def startmm(self):

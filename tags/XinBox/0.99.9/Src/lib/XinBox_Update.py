@@ -218,7 +218,7 @@ class Update( xbmcgui.WindowXML):
 
     def createpy(self, version):
         mylines = []
-        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate.txt", "r")
+        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate.py", "r")
         for line in f.readlines():
             if "origpath =" in line:mylines.append("origpath = " + '"' + sys.path[0].replace("\\","\\\\") + '"' + "\n")
             elif "newpath =" in line:mylines.append("newpath = " + '"' + "Q:\\\\scripts\\\\%s_v%s" % ( __scriptname__, version, ) + '"' + "\n")
@@ -230,7 +230,7 @@ class Update( xbmcgui.WindowXML):
 
     def createpy2(self, version):
         mylines = []
-        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate2.txt", "r")
+        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate2.py", "r")
         for line in f.readlines():
             if "origver =" in line:mylines.append("origver = " + '"' + __version__ + '"' + "\n")
             elif "origpath =" in line:mylines.append("origpath = " + '"' + sys.path[0].replace("\\","\\\\") + '"' + "\n")
