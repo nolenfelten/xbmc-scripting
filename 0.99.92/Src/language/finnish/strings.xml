@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!-- English Strings v.0.7 -->
-<!--    Xinbox v.0.99.2    -->
-<!--  Finnish v.21.10.2007  -->
+<!-- English Strings v.0.9 -->
+<!--    Xinbox v.0.99.91    -->
+<!--  Finnish v.26.10.2007  -->
 
 <strings>
 	<!-- Main Menu Labels -->
@@ -157,13 +157,17 @@
   <string id="167">Valitse mikäli haluat käyttää SMTP-varmennusta.</string>
   <string id="168">Valitse lähettääksesi viestin kaikille yhteystiedoille.</string>
   <string id="169">Valitse lisätäksesi yhteystiedot osoitekenttään.</string>
+  <string id="170">Valitse merkitäksesi tämän viestin lukemattomaksi.</string>
+  <string id="171">Valitse halutessasi kirjautuessa hakea uudet sähköpostit automaattisesti.</string>
+  <string id="172">Valitse tuodaksesi .csv osoitekirja tiedoston. Lue readme.txt tiedostosta tarkemmat ohjeet.</string>
 
 	<!-- Account Menu Labels -->
   <string id="200">Tili</string>
   <string id="201">Haluatko poistaa tilin?</string>
-  <string id="202">Kaikki postilaatikot tässä tilissä poistetaan.</string> 
+  <string id="202">Kaikki postilaatikot tässä tilissä poistetaan.</string>
+  <string id="203">Aut. tarkastus</string>
+  <string id="204">(Oletus)</string>
 	
-
 	<!-- Email Labels -->
   <string id="210">Saapuneet - </string>
   <string id="211">Kirjaudutaan...</string>
@@ -254,13 +258,13 @@
   <string id="323">Muokkaa Kopio-osoitetta</string>
   <string id="324">Muokkaa Piilokopio-osoitetta</string>
   <string id="325">Muokkaa aihetta</string>
-  <string id="326">Poista liite?</string>
+  <string id="326">Poistetaanko liite?</string>
   <string id="327">Valitse liite:</string>
-  <string id="328">Sulje lähetysikkuna?</string>
+  <string id="328">Suljetaanko lähetysikkuna?</string>
   <string id="329">Muodosta SMTP viestitiedostoa..</string>
   <string id="330">Lisää rivi:</string>
-  <string id="331">Poista rivi?</string>
-  <string id="332">Lähetä viesti?</string>
+  <string id="331">Poistetaanko rivi?</string>
+  <string id="332">Lähetetäänkö viesti?</string>
   <string id="333">Tyhjennä</string>
   <string id="334">Tyhjennä viestin sisältö?</string>
   <string id="335">Viestin sisältö</string>
@@ -288,13 +292,15 @@
   <string id="372">Muokkaa yhteyden nimeä</string>
   <string id="373">Nimi on jo olemassa</string>
   <string id="374">Muokkaa yhteystiedon sähköpostiosoitetta</string>
-  <string id="375">Poista yhteystieto?</string>
+  <string id="375">Poistetaanko yhteystieto?</string>
   <string id="376">Yhteystieto: </string>
-  <string id="377">Lähetä viesti yhteystiedolle?</string>
+  <string id="377">Lähetetäänkö viesti yhteystiedolle?</string>
   <string id="378">Yhteystieto lisätty</string>
   <string id="379">Yhteystieto on jo olemassa</string>
   <string id="380">Yhteystieto luettelo</string>
-  <string id="381">Kaikki</string>
+  <string id="381">Kaikille</string>
+  <string id="382">Tuo</string>
+  <string id="383">Valitse .csv tiedosto...</string>
 
 	<!-- Update Labels -->
   <string id="390">Ohjelmasi on jo ajantasalla</string>
@@ -310,7 +316,7 @@
   <string id="400">Noudetaan muutostietoja</string>
   <string id="401">Uutta versiota ei saatu ladattua!</string>
   <string id="402">Päivitys ei onnistu!</string>
-  <string id="403">Säilytetäänkö kopio ohjelman aiemmasta %s versiosta?</string>
+  <string id="403">Säilytetäänkö kopio versiosta %s?</string>
   <string id="404">Uusi ohjelmaversio on saatavilla!</string>
   <string id="405">Uusin</string>
   <string id="406">Uudempi</string>

@@ -77,7 +77,10 @@ class AccountSettings(xbmcgui.WindowXML):
         else:self.promote  = False
         if self.accountSettings.getSetting("Auto Check") == "True":
             self.autocheck = True
-        else:self.autocheck  = False        
+        else:self.autocheck  = False
+        if self.accountSettings.getSetting("Email Dialogs") == "True":
+            self.emaildia = True
+        else:self.emaildia  = False        
         self.setupcompsetts()
         self.hashlist = self.buildhashlist()
         self.origaccounthash = str(self.accountSettings.getSetting("Account Hash"))
@@ -120,6 +123,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.getControl(106).setSelected(self.mmenablesfx)
         self.getControl(107).setSelected(self.promote)
         self.getControl(108).setSelected(self.autocheck)
+        self.getControl(109).setSelected(self.emaildia)
         if self.newaccount:
             self.getControl(80).setLabel(self.language(50))
         else:
@@ -139,6 +143,7 @@ class AccountSettings(xbmcgui.WindowXML):
         self.addItem(self.language(353))
         self.addItem(self.language(336))
         self.addItem(self.language(203))
+        self.addItem(self.language(205))
         
     def buildinboxlist(self):
         self.inboxlist.reset()
@@ -181,7 +186,9 @@ class AccountSettings(xbmcgui.WindowXML):
                 elif self.getCurrentListPosition() == 6:
                     self.launchinfo(163,self.getListItem(self.getCurrentListPosition()).getLabel())
                 elif self.getCurrentListPosition() == 7:
-                    self.launchinfo(171,self.getListItem(self.getCurrentListPosition()).getLabel())                    
+                    self.launchinfo(171,self.getListItem(self.getCurrentListPosition()).getLabel())
+                elif self.getCurrentListPosition() == 8:
+                    self.launchinfo(173,self.getListItem(self.getCurrentListPosition()).getLabel())                    
                 else:self.launchinfo(105 + self.getCurrentListPosition(),self.getListItem(self.getCurrentListPosition()).getLabel())
             else:self.launchinfo(focusid+47,self.language(focusid))
 
@@ -249,6 +256,11 @@ class AccountSettings(xbmcgui.WindowXML):
                 self.getControl(108).setSelected(self.autocheck)
                 self.accountSettings.setSetting("Auto Check", str(self.autocheck))
                 self.checkforchanges()
+            elif curPos == 8:
+                self.emaildia = not self.emaildia
+                self.getControl(109).setSelected(self.emaildia)
+                self.accountSettings.setSetting("Email Dialogs", str(self.emaildia))
+                self.checkforchanges()                
         elif ( controlID == 61):
             self.launchinboxmenu("")
         elif ( controlID == 62):

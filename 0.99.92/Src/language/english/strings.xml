@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.9-->
+<!--English Strings VER: 1.0-->
+	<!--Changes since Ver: 0.9-->
+		<!--NEW: 412, 413, 205, 173 -->
 	<!--Changes since Ver: 0.8-->
 		<!--NEW: 203,204, 171, 382, 383, 172 -->
 	<!--Changes since Ver: 0.7-->
@@ -170,13 +172,15 @@
 	<string id="170">Select to Mark this email as Un-Read.</string>
 	<string id="171">Select to toggle if this accounts inboxes automatically check for new emails on login.</string>
 	<string id="172">Select to browse for and import a .csv Address Book export file. See readme.txt for more details.</string>
-
+	<string id="173">Select to toggle if Email Status Notification "Ok" dialogs are shown in this accounts inboxes.</string>
+	
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
 	<string id="201">Delete this Account?</string>
 	<string id="202">All inboxes in this account will also be deleted.</string>
 	<string id="203">Auto Check</string>
 	<string id="204">(Default)</string>
+	<string id="205">Email Dialogs</string>
 
 	<!-- Email Labels -->
 	<string id="210">Inbox - </string>
@@ -335,5 +339,7 @@
 	<string id="409">Incompatible</string>
 	<string id="410">Update Menu</string>
 	<string id="411">No Change Log Available for this Version.</string>
+	<string id="412">Importing New Settings</string>
+	<string id="413">Please Wait...</string>
 </strings>
 
