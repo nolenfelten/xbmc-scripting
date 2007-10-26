@@ -17,8 +17,9 @@ ACCOUNTSDIR = XinBox_Util.__accountsdir__
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXML ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,lang=False,theinbox=False,account=False,title=False,mmflag=0):
         self.init = 0
+        self.mmflag = mmflag
         self.srcpath = strFallbackPath
         self.language = lang
         self.inbox = theinbox
@@ -38,9 +39,14 @@ class GUI( xbmcgui.WindowXML ):
             self.loadsettings()
             self.setupvars()
             self.setupcontrols()
-            self.reademid()
+            self.emaillistprepare()
             self.updatesizelabel()
         xbmcgui.unlock()
+        self.checkauto()
+
+    def checkauto(self):
+        if self.accountsettings.getSetting("Auto Check") == "True":
+            self.checkfornew()
         
     def setupvars(self):
         self.exitflag = 0
@@ -48,10 +54,11 @@ class GUI( xbmcgui.WindowXML ):
         self.emnotread = 0
         self.nwmail = 0
         self.chicon = []
+        self.markunread = []
         self.animating = False
         self.guilist = []
         self.control_action = XinBox_Util.setControllerAction()
-        if self.accountsettings.getSetting("XinBox Promote",None) == None or self.accountsettings.getSetting("XinBox Promote",None) == "True":
+        if self.accountsettings.getSetting("XinBox Promote") == "True":
             self.promote = True
         else:self.promote = False
         if self.ibsettings.getSetting("SERV Inbox Size") != "0":
@@ -118,6 +125,8 @@ class GUI( xbmcgui.WindowXML ):
             try:control = self.getFocus()
             except: control = 0
             if ( button_key == 'Keyboard ESC Button' or button_key == 'Back Button' or button_key == 'Remote Menu' ):
+                if self.mmflag == 1:
+                    self.exitflag = 1
                 self.exitme()
             elif (50 <= focusid <= 59):
                 if ( button_key == 'Keyboard Menu Button' or button_key == 'Y Button' or button_key == 'Remote Info' ):
@@ -190,7 +199,10 @@ class GUI( xbmcgui.WindowXML ):
 
                     
     def printEmail(self, selected):
-        myemail = self.guilist[selected][1]
+        f = open(self.ibfolder + self.guilist[selected][0] + ".sss", "r")                
+        myemail = email.message_from_string(f.read())
+        f.close()
+        self.curremail = myemail
         if myemail.is_multipart():
             for part in myemail.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
@@ -200,27 +212,39 @@ class GUI( xbmcgui.WindowXML ):
         
 
     def openemail(self, pos):
-        item = self.guilist[pos]
-        self.guilist.pop(pos)
-        self.guilist.insert(pos, [item[0],item[1],item[2],1,item[4],item[5],item[6],item[7]])
-        if item[3] != 1:
-            self.chicon.append(str(self.getListSize() - 1 - pos))
-            if item[2] == 0:icon = "XBemailread.png"
-            else:icon = "XBemailreadattach.png"
-            self.getListItem(pos).setThumbnailImage(icon)
-            if item[7] == 1:
-                self.nwmail -= 1
-            else:self.emnotread -= 1
-            self.updatesizelabel()
-        w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language)
-        w.doModal()
-        returnval = w.returnvalue
-        replyvalue = w.replyvalue
-        del w
-        if replyvalue != 0:
-            self.sendemail(replyvalue)
-        if returnval != "-":
-            self.deletemail(pos, returnval)
+        try:
+            item = self.guilist[pos]
+            self.guilist.pop(pos)
+            self.guilist.insert(pos, [item[0],item[1],item[2],1,item[4],item[5],item[6],item[7]])
+            if item[3] != 1:
+                self.chicon.append(item[0])
+                if item[2] == 0:icon = "XBemailread.png"
+                else:icon = "XBemailreadattach.png"
+                self.getListItem(pos).setThumbnailImage(icon)
+                if item[7] == 1:
+                    self.nwmail -= 1
+                else:self.emnotread -= 1
+                self.updatesizelabel()
+            w = XinBox_Email.GUI("XinBox_EmailDialog.xml",self.srcpath,"DefaultSkin",0,emailsetts=item,lang=self.language,myemail=self.curremail)
+            w.doModal()
+            returnval = w.returnvalue
+            replyvalue = w.replyvalue
+            unreadvalue = w.unreadvalue
+            del w
+            if replyvalue != 0:
+                self.sendemail(replyvalue)
+            elif returnval != "-":
+                self.deletemail(pos, returnval)
+            elif unreadvalue == 1:
+                self.guilist.pop(pos)
+                self.guilist.insert(pos, [item[0],item[1],item[2],0,item[4],item[5],item[6],item[7]])
+                self.emnotread += 1
+                if item[2] == 0:icon = "XBemailnotread.png"
+                else:icon = "XBemailnotreadattach.png"
+                self.markunread.append(item[0])
+                self.getListItem(pos).setThumbnailImage(icon)
+                self.updatesizelabel()
+        except:traceback.print_exc()
 
     def updateicons(self):
         if exists(self.ibfolder + "emid.xib"):
@@ -233,10 +257,12 @@ class GUI( xbmcgui.WindowXML ):
                 theline = line.strip("\n")
                 myline = theline.split("|")
                 if myline[0] != "-":
-                    if myline[0] in self.removeme:pass
-                    elif myline[0] in self.chicon:
-                        writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|1|0\n")
-                    else:writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|" + myline[6]+ "|0\n")
+                    if myline[2] in self.removeme:pass
+                    if myline[2] in self.markunread:
+                        writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|0|0|" + myline[8] + "|" + myline[9] + "\n")
+                    elif myline[2] in self.chicon:        
+                        writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|1|0|" + myline[8] + "|" + myline[9] + "\n")
+                    else:writelist.append(myline[0] + "|" + myline[1] + "|" + myline[2] + "|" + myline[3]+ "|" + myline[4]+ "|" + myline[5] + "|" + myline[6]+ "|0|" + myline[8]+ "|" + myline[9]+ "\n")
                 else:writelist.append(line)
             f.close()
             f = open(self.ibfolder + "emid.xib", "w")
@@ -271,7 +297,7 @@ class GUI( xbmcgui.WindowXML ):
         return parser.output()
         
     def checkfornew(self):
-        w = Email(self.ibsettings,self.inbox,self.account,self.language)
+        w = Email(self.ibsettings,self.inbox,self.account,self.language,False,self.accountsettings.getSetting("Email Dialogs"))
         w.checkemail()
         newlist = w.newlist
         self.serversize = w.serversize
@@ -365,13 +391,10 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.lock()
         for i,item in enumerate(newlist):
             dialog.update((i*100)/len(newlist),self.language(254),"")
-            f = open(self.ibfolder + item[0] + ".sss", "r")
-            myemail = email.message_from_string(f.read())
-            f.close()
-            self.guilist.insert(0,[item[0],myemail,item[1],0,item[2],item[3],item[4],1])
+            self.guilist.insert(0,[item[0],item[5],item[1],0,item[2],item[3],item[4],1])
             icon = self.geticon(item[1],0,1)
             try:
-                self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
+                self.addItem(xbmcgui.ListItem(item[5][0],item[5][1],icon,icon),0)
             except:self.addItem("In-Compatible Subject or From Header")
         xbmcgui.unlock()
         dialog.close()
@@ -393,13 +416,8 @@ class GUI( xbmcgui.WindowXML ):
             else:
                 self.nwmail += 1
                 return "XBnewattachemail.png"
-            
-    def parsesubject(self, subject):
-        if subject == "":
-            return self.language(255)
-        else:return subject
 
-    def reademid(self):
+    def emaillistprepare(self):
         try:
             if not exists(self.ibfolder + "emid.xib"):
                 self.serversize = 0
@@ -414,34 +432,27 @@ class GUI( xbmcgui.WindowXML ):
                 theline = line.strip("\n")
                 myline = theline.split("|")
                 if myline[1] == "Account Name":
-                    self.accountname = myline[2]
-                    popname = myline[3]
-                    if self.accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
-                        self.serversize = 0
-                        self.removefiles(self.ibfolder)
-                        break
+                        self.accountname = myline[2]
+                        popname = myline[3]
+                        if self.accountname != self.ibsettings.getSetting("Account Name") or popname != self.ibsettings.getSetting("POP Server"):
+                            self.serversize = 0
+                            self.removefiles(self.ibfolder)
+                            break
                 elif myline[1] == "Server Size":self.serversize = int(myline[2])
                 elif myline[1] == "Inbox Size":self.inboxsize = int(myline[2])
                 else:
                     if myline[0] != "-":
                         if exists(self.ibfolder + myline[2] + ".sss"):
-                            f = open(self.ibfolder + myline[2] + ".sss", "r")
-                            myemail = email.message_from_string(f.read())
-                            f.close()
-                            readstatus = int(myline[6])
-                            newstatus = int(myline[7])
-                            attachstat = int(myline[3])
-                            self.guilist.insert(0,[myline[2],myemail,attachstat,readstatus,myline[4],myline[5],myline[1],newstatus])
-                            icon=self.geticon(attachstat,readstatus, newstatus)
-                            try:
-                                self.addItem(xbmcgui.ListItem(self.parsesubject(myemail.get('subject')).replace("\n",""),myemail.get('From').replace("\n",""),icon,icon),0)
-                            except:self.addItem("In-Compatible Subject or From Header")
-                        else:
-                            print "file does not existst = " + str(myline[0])
-                            self.removeme.append(myline[0])
+                            self.guilist.insert(0,[myline[2],[myline[8],myline[9]],int(myline[3]),int(myline[6]),myline[4],myline[5],myline[1],int(myline[7])])
+            dialog.close()                                      #subject and from
             if len(self.guilist) == 0:self.setinboxempty()
-            dialog.close()
+            else:self.additems(self.guilist)
         except:traceback.print_exc()
+
+    def additems(self, mylist):
+        for item in mylist:
+            icon=self.geticon(int(item[2]),int(item[3]), int(item[7]))
+            self.addItem(xbmcgui.ListItem(item[1][0],item[1][1],icon,icon))
 
     def checkifonserv(self,pos):
         f = open(self.ibfolder + "emid.xib", "r")

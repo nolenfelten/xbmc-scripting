@@ -1,9 +1,10 @@
 
 
 import xbmc, xbmcgui, time, sys, os
-
+from os.path import exists
 import XinBox_InfoDialog
 import XinBox_Util
+from XinBox_Util import UpdateSettings
 import XinBox_LoginMenu
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
@@ -25,6 +26,10 @@ class GUI( xbmcgui.WindowXML ):
         self.minibox = minibox
         self.minimode = minimode
         self.init = 0
+        print self.srcpath
+        if exists(self.srcpath + "\\lib\\firstrun.xib"):
+            UpdateSettings().loadsettings(self.lang)
+            os.remove(self.srcpath + "\\lib\\firstrun.xib")
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",TITLE,defSettings)     

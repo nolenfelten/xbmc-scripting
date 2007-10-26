@@ -37,7 +37,7 @@ class GUI( xbmcgui.WindowXML ):
     def checkdefault(self):
         if self.accountsettings.getSetting("Default Inbox") != "-" or self.minibox != False:
             xbmcgui.unlock()
-            if self.minibox != False:self.launchinbox(self.minibox)
+            if self.minibox != False:self.launchinbox(self.minibox,1)
             else:self.launchinbox(self.accountsettings.getSetting("Default Inbox"))
         
     def setupvars(self):
@@ -131,11 +131,13 @@ class GUI( xbmcgui.WindowXML ):
         self.setupvars()
         self.setupcontrols()
 
-    def launchinbox(self, inbox):
-        w = XinBox_Inbox.GUI("XinBox_Inbox.xml",self.srcpath,"DefaultSkin",lang=self.language,theinbox=inbox,account=self.account,title=self.title)
+    def launchinbox(self, inbox,mm=0):
+        w = XinBox_Inbox.GUI("XinBox_Inbox.xml",self.srcpath,"DefaultSkin",lang=self.language,theinbox=inbox,account=self.account,title=self.title,mmflag=mm)
         w.doModal()
         self.exitflag = w.exitflag
+        mmflag = w.mmflag
         del w
+        if mmflag == 1: self.launchmm()
         if self.exitflag == 1:self.close()
 
     def launchinfo(self, focusid, label,heading=False):

@@ -19,8 +19,10 @@ class Account_Settings (AccountSettings):
             "Account Hash": ["-","text"],
             "Inboxes": [['Inbox',[]],"list"],
             "MiniMode Time": ["60","text"],
-            "XinBox Promote" : ["True","text"],
-            "Mini Mode SFX" : ["True","text"],
+            "XinBox Promote" : ["True","boolean"],
+            "Mini Mode SFX" : ["True","boolean"],
+            "Auto Check" : ["False","boolean"],
+            "Email Dialogs" : ["True","boolean"],
             "Contacts": [['Contact',[["Stanley87","stanley87.matt@gmail.com","text"]]],"list"]}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)
         self.addnewaccount(settingname,newName,newSettings,"settings")
@@ -38,6 +40,7 @@ class Account_Settings (AccountSettings):
             "POP SSL": ["0","text"],
             "SMTP SSL": ["0","text"],
             "Inbox Hash": ["-","text"],
+            "SMTP Auth" : ["True","boolean"],
             "Email Notification": [self.srcpath+"\\SFX\\Email Notification\\You Have Mail.wav","text"],
             "Mini Mode Enabled": ["True","boolean"],}
         newSettings = Settings("",self.title,defSettingsForAnAccount,2)

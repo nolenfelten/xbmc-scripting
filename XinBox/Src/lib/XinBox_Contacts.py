@@ -27,6 +27,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.returnval = 0
         self.getControl(73).addLabel(self.account + " " + self.language(370))
         self.getControl(61).setLabel(self.language(61))
+        self.getControl(62).setLabel(self.language(381))
+        self.getControl(63).setLabel(self.language(382))
         self.listEnabled = True
         self.control_action = XinBox_Util.setControllerAction()
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
@@ -44,6 +46,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def disablelist(self):
         self.listEnabled = False
         self.getControl(50).setEnabled(False)
+        self.getControl(62).setEnabled(False)
         self.clearList()
         self.addItem(self.language(371))
         self.setFocusId(61)
@@ -52,6 +55,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.listEnabled = True
         self.clearList()
         self.getControl(50).setEnabled(True)
+        self.getControl(62).setEnabled(True)
                
     def onClick(self, controlID):
         if not self.animating:
@@ -91,6 +95,42 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             self.addcontact(xbmcgui.ListItem(contname,value,"",""))
                         else:self.addcontact(contname)
                         self.settings.saveXMLfromArray()
+            elif ( controlID == 62):
+                self.returnval = self.gencontlist()
+                self.exitme()
+            elif ( controlID == 63):
+                dialog = xbmcgui.Dialog()
+                ret = dialog.browse(1, self.language(383), 'files','.csv',False,False,"")
+                if ret:
+                    self.importcsv(ret)
+
+    def importcsv(self, csv):
+        f = open(csv, "r")
+        lines = f.readlines()
+        f.close()
+        for line in lines:
+            theline = line.strip("\n")
+            myline = theline.split(",")
+            if myline[0] == "Name" or myline[0] == "E-mail Address" or myline[1] == "Name" or myline[1] == "E-mail Address":
+                pass
+            else:
+                if not myline[0] in self.contacts:
+                    self.accountsettings.addSettingInList("Contacts",myline[0],myline[1],"text")
+                    self.addcontact(xbmcgui.ListItem(myline[0],myline[1],"",""))
+                    self.contacts.append(myline[0])
+        self.settings.saveXMLfromArray()
+                
+    def gencontlist(self):
+        contacts = ""
+        for i, contact in enumerate(self.contacts):
+            curItem = self.getListItem(i)
+            contact = '"' + curItem.getLabel() + '" <' + curItem.getLabel2() + '>'
+            if self.label != False:
+                if contact not in self.label:
+                    contacts += contact + "; "
+            else:
+                contacts += contact + "; "
+        return contacts
                 
     def addcontact(self, item):
         if not self.listEnabled:self.enablelist()
@@ -138,6 +178,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     else:self.launchinfo(161,self.language(380))
                 elif focusid == 61:
                     self.launchinfo(160,self.language(61))
+                elif focusid == 62:
+                    if self.label == False:
+                        self.launchinfo(168,self.language(381))
+                    else:self.launchinfo(169,self.language(381))
+                elif focusid == 63:
+                    self.launchinfo(172,self.language(382))              
 
     def exitme(self):
         self.animating = True
