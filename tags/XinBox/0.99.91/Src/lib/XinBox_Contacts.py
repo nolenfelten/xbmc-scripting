@@ -28,6 +28,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl(73).addLabel(self.account + " " + self.language(370))
         self.getControl(61).setLabel(self.language(61))
         self.getControl(62).setLabel(self.language(381))
+        self.getControl(63).setLabel(self.language(382))
         self.listEnabled = True
         self.control_action = XinBox_Util.setControllerAction()
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
@@ -97,7 +98,28 @@ class GUI( xbmcgui.WindowXMLDialog ):
             elif ( controlID == 62):
                 self.returnval = self.gencontlist()
                 self.exitme()
+            elif ( controlID == 63):
+                dialog = xbmcgui.Dialog()
+                ret = dialog.browse(1, self.language(383), 'files','.csv',False,False,"")
+                if ret:
+                    self.importcsv(ret)
 
+    def importcsv(self, csv):
+        f = open(csv, "r")
+        lines = f.readlines()
+        f.close()
+        for line in lines:
+            theline = line.strip("\n")
+            myline = theline.split(",")
+            if myline[0] == "Name" or myline[0] == "E-mail Address" or myline[1] == "Name" or myline[1] == "E-mail Address":
+                pass
+            else:
+                if not myline[0] in self.contacts:
+                    self.accountsettings.addSettingInList("Contacts",myline[0],myline[1],"text")
+                    self.addcontact(xbmcgui.ListItem(myline[0],myline[1],"",""))
+                    self.contacts.append(myline[0])
+        self.settings.saveXMLfromArray()
+                
     def gencontlist(self):
         contacts = ""
         for i, contact in enumerate(self.contacts):
@@ -159,7 +181,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 elif focusid == 62:
                     if self.label == False:
                         self.launchinfo(168,self.language(381))
-                    else:self.launchinfo(169,self.language(381))                        
+                    else:self.launchinfo(169,self.language(381))
+                elif focusid == 63:
+                    self.launchinfo(172,self.language(382))              
 
     def exitme(self):
         self.animating = True
