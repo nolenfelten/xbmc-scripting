@@ -7,9 +7,10 @@ Updated: Update Engine - Now checks for missing settings when script starts (thi
          Also, made it so you can update to current version - just in case of bad update or something.
 Added: New Account Setting - "Auto Check" Enable to make all accounts inboxes auto check for new
        emails when inbox logged into.
+      Thanks to "realjobe" for the idea :-D
 Added: "Default" label next to default inbox (if one) in account menu.
+      Thanks to "realjobe" for the idea :-D
 
-Thanks to "realjobe" for the ideas :-D
 
 
      
