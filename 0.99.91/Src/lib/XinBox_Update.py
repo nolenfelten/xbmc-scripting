@@ -121,7 +121,6 @@ class Update( xbmcgui.WindowXML):
                         if i == 0:self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(405),"XBNewest.png","XBNewest.png"))
                         else:self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(406),"XBnewer.png","XBnewer.png"))
                     elif ( __version__ == version[ : -1 ] ):
-                        self.nonlist.append(self.getListSize())
                         self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(407),"XBCurrent.png","XBCurrent.png"))
                     elif ( "0.3" >= version[ : -1 ] ):
                         self.nonlist.append(self.getListSize())

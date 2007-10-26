@@ -2,6 +2,7 @@ XinBox Version 0.99.91 Change Log:
 
 Updated: Update Engine - Now checks for missing settings when script starts (this will allow for
 	 scripts updated not via internal update to still work)
+         Also, made it so you can update to current version - just in case of bad update or something.
 Added: New Account Setting - "Auto Check" Enable to make all accounts inboxes auto check for new
        emails when inbox logged into.
 Added: "Default" label next to default inbox (if one) in account menu.
