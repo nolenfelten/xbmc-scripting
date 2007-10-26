@@ -206,8 +206,9 @@
             		<description>email preview</description>
             		<posx>150</posx>
             		<posy>400</posy>
-            		<width>550</width>
-            		<height>200</height>
+            		<width>540</width>
+            		<height>185</height>
+			<pagecontrol>70</pagecontrol>
             		<textureup>scroll-up.png</textureup>
             		<texturedown>scroll-down.png</texturedown>
             		<textureupfocus>scroll-up-focus.gif</textureupfocus>
@@ -320,10 +321,26 @@
 			<textureslidernib>XBscrollbar_nib.png</textureslidernib>
 			<textureslidernibfocus>XBscrollbar_nib_focus.png</textureslidernibfocus>
 			<onleft>50</onleft>
-			<onright>9000</onright>
+			<onright>70</onright>
 			<showonepage>false</showonepage>
 			<orientation>vertical</orientation>
 			<visible>Control.IsVisible(50)</visible>
+		</control>
+		<control type="scrollbar" id="70">
+			<posx>705</posx>
+			<posy>397</posy>
+			<width>16</width>
+			<height>175</height>
+			<texturesliderbackground border="4">XBscrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="3">XBscrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="3">XBscrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>XBscrollbar_nib.png</textureslidernib>
+			<textureslidernibfocus>XBscrollbar_nib_focus.png</textureslidernibfocus>
+			<onleft>50</onleft>
+			<onright>50</onright>
+			<showonepage>false</showonepage>
+			<orientation>vertical</orientation>
+			<visible>Control.IsVisible(67)</visible>
 		</control>
     </controls>
 

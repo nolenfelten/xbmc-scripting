@@ -1,7 +1,6 @@
-import os, xbmc
-
-origpath = 
-newpath = 
+import xbmc, xbmcgui, sys, os, time
+origpath =
+newpath =
 
 for root, dirs, files in os.walk(origpath, topdown=False):
     for name in files:

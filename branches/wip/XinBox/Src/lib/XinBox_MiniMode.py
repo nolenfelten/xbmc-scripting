@@ -28,14 +28,15 @@ class Minimode:
             self.loadsettings()
             self.inboxes = self.buildinboxdict()
             if not len(self.inboxes) == 0:self.startmm()
-            else:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
-        except:xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+        except:pass
         if exists("X:\\mmcomu.xib"):
             os.remove("X:\\mmcomu.xib")
         if self.exit:
             w = XinBox_MainMenu.GUI("XinBox_MainMenu.xml",self.srcpath,"DefaultSkin",bforeFallback=False,minimode=self.account, minibox=self.inbox, lang=self.language)
             w.doModal()
             del w
+        else:
+            xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
         
 
     def startmm(self):
@@ -64,12 +65,13 @@ class Minimode:
         self.accountsettings = self.settings.getSettingInListbyname("Accounts",self.account)
 
     def checkfornew(self, ibsettings, inbox):
-        w = Email(ibsettings,inbox,self.account,False, True)
-        w.checkemail()
-        newlist = w.newlist
-        del w
-        if len(newlist) != 0:
-            self.popup(newlist, inbox, ibsettings)
+        if exists("X:\\mmcomu.xib"):
+            w = Email(ibsettings,inbox,self.account,False, True)
+            w.checkemail()
+            newlist = w.newlist
+            del w
+            if len(newlist) != 0:
+                self.popup(newlist, inbox, ibsettings)
 
     def popup(self, newlist, inbox, ibsettings):
         if exists("X:\\mmcomu.xib"):

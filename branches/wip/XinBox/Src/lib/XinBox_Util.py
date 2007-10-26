@@ -1,5 +1,5 @@
 
-import os, sys
+import os, sys, xbmcgui, time
 from os.path import join, exists
 
 __datadir__ = "P:\\script_data\\"
@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.99.6'
+__version__ = '0.99.92'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
@@ -123,5 +123,30 @@ def removeauto(scriptpath, accountname, srcpath):
                 f.close()
                 return
         return
-    
-    
+class UpdateSettings:   
+    def loadsettings(self, language):
+            from XinBox_Settings import Settings
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(language(412),language(413))
+            self.settings = Settings("XinBox_Settings.xml",__scriptname__,"")
+            self.editallaccounts()
+            self.settings.saveXMLfromArray()
+            time.sleep(1)
+            dialog.close()
+            
+    def editallaccounts(self):
+        for item in self.settings.getSetting("Accounts")[1]:
+                self.accountSettings = self.settings.getSettingInListbyname("Accounts",item[0])
+                if self.accountSettings.getSetting("Mini Mode SFX",None) == None:
+                    self.accountSettings.addSetting("Mini Mode SFX","True","boolean")
+                if self.accountSettings.getSetting("XinBox Promote",None) == None:
+                    self.accountSettings.addSetting("XinBox Promote","True","boolean")
+                if self.accountSettings.getSetting("Auto Check",None) == None:
+                    self.accountSettings.addSetting("Auto Check","False","boolean")
+                if self.accountSettings.getSetting("Email Dialogs",None) == None:
+                    self.accountSettings.addSetting("Email Dialogs","True","boolean")                
+                for item2 in self.accountSettings.getSetting("Inboxes")[1]:
+                    self.inboxSettings = self.accountSettings.getSettingInListbyname("Inboxes",item2[0])
+                    if self.inboxSettings.getSetting("SMTP Auth",None) == None:
+                        self.inboxSettings.addSetting("SMTP Auth","True","boolean")
+

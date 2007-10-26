@@ -8,7 +8,8 @@ from email import Charset
 TEMPFOLDER = XinBox_Util.__tempdir__
 
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailsetts=False,lang=False,myemail=False):
+        self.myemail = myemail
         self.srcpath = strFallbackPath
         self.language = lang
         self.emailsettings = emailsetts
@@ -21,16 +22,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
       
     def setupvars(self):
         xbmcgui.lock()
+        self.unreadvalue = 0
         self.click = 0
         self.ziplist = []
-        self.subject = self.emailsettings[1].get('subject').replace("\n","")
-        self.emfrom = self.emailsettings[1].get('from').replace("\n","")
-        self.to = self.emailsettings[1].get('to').replace("\n","")
-        self.cc = self.emailsettings[1].get('Cc')
+        self.subject = self.emailsettings[1][0]
+        self.emfrom = self.emailsettings[1][1]
+        self.to = self.myemail.get('to').replace("\n","")
+        self.cc = self.myemail.get('Cc')
         if self.cc == None:
             self.cc = ""
         else:self.cc = self.cc.replace("\n","")
-        date = self.emailsettings[1].get('date')
+        date = self.myemail.get('date')
         if date == None:
             mytime = time.strptime(xbmc.getInfoLabel("System.Date") + xbmc.getInfoLabel("System.Time"),'%A , %B %d, %Y %I:%M %p')
             self.sent = time.strftime('%a, %d %b %Y %X +0000',mytime).replace("\n","")
@@ -39,7 +41,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.replyvalue = 0
         self.curpos = 0
         self.showing = False
-        self.deleserv = False
         self.returnvalue = "-"
         self.control_action = XinBox_Util.setControllerAction()
         self.attachlist = False
@@ -49,7 +50,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def setupemail(self):
         self.getControl(73).addLabel(self.subject + "  " + self.language(260) + "   " + self.emfrom)
         self.settextbox()
-        self.getControl(74).addLabel(self.language(261) + self.emailsettings[4] + "-" + self.emailsettings[5])
+        self.getControl(74).addLabel(self.emailsettings[4] + " - " + self.emailsettings[5])
         
 
     def setupcontrols(self):
@@ -70,8 +71,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.setFocusId(72)
         
     def getattachments(self):
-        if self.emailsettings[1].is_multipart():
-            for part in self.emailsettings[1].walk():
+        if self.myemail.is_multipart():
+            for part in self.myemail.walk():
                 if part.get_content_type() != "text/plain" and part.get_content_type() != "text/html" and part.get_content_type() != "multipart/mixed" and part.get_content_type() != "multipart/alternative":
                     filename = part.get_filename()
                     if filename != None:
@@ -105,14 +106,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.animating = False
                    
     def settextbox(self):
-        if self.emailsettings[1].is_multipart():
-            for part in self.emailsettings[1].walk():
+        if self.myemail.is_multipart():
+            for part in self.myemail.walk():
                 if part.get_content_type() == "text/plain" or part.get_content_type() == "text/html":
                     self.body = self.parse_email(part.get_payload())
                     self.getControl(72).setText(self.body)
                     break
         else:
-            self.body = self.parse_email(self.emailsettings[1].get_payload())
+            self.body = self.parse_email(self.myemail.get_payload())
             self.getControl(72).setText(self.body)
 
     def parse_email(self, email):
@@ -143,6 +144,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if not self.animating:
             if controlID == 64:
                 self.goattachlist()
+            elif controlID == 65:
+                self.unreadvalue = 1
+                self.exitme()                
             elif controlID == 61:
                 self.replyvalue = [self.emfrom,"","","Re: " + self.subject,self.getreply(self.body),None]
                 self.exitme()
@@ -154,19 +158,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.openattach(self.getControl(81).getSelectedPosition())
             elif controlID == 63:
                 dialog = xbmcgui.Dialog()
-                if self.emailsettings[6] == "-" or self.deleserv:
+                if self.emailsettings[6] == "-":
                     ret = dialog.select( self.language(271), [self.language(272)])
                 else:ret = dialog.select( self.language(271), [ self.language(272), self.language(273), self.language(274)])
-                if ret == 0:
-                    if self.deleserv:
-                        self.returnvalue = 2
-                    else:self.returnvalue = 0
-                    self.exitme()
-                elif ret == 1:
-                    self.deleserv = True
-                    self.returnvalue = 1
-                elif ret == 2:
-                    self.returnvalue = 2
+                if ret:
+                    self.returnvalue = ret
                     self.exitme()
 
     def getreply (self, body):
@@ -333,6 +329,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     self.launchinfo(140,"D")
                 elif focusid == 64:
                     self.launchinfo(141,"A")
+                elif focusid == 65:
+                    self.launchinfo(170,"M")                    
                 elif focusid == 72:
                     self.launchinfo(142,self.language(281))
                 elif focusid == 50:

@@ -142,6 +142,42 @@
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
                 </control>
+                <control type="checkmark" id="108">
+                    	<description>Auto Check Status</description>
+                    	<posx>410</posx>
+                    	<posy>329</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
+                <control type="checkmark" id="109">
+                    	<description>Email Dialogs Status</description>
+                    	<posx>410</posx>
+                    	<posy>356</posy>
+                    	<width>60</width>
+                    	<height>30</height>
+                    	<label>-</label>
+                    	<font>font13</font>
+                    	<textcolor>ffffffff</textcolor>
+                    	<texturecheckmark>XBsettings-check-box.png</texturecheckmark>
+			<texturecheckmarknofocus>XBsettings-check-boxNF.png</texturecheckmarknofocus>
+                    	<markwidth>18</markwidth>
+                    	<markheight>22</markheight>
+                    	<disabledcolor>00d0d0d0</disabledcolor>
+                    	<shadowcolor>00000000</shadowcolor>
+			<animation effect="fade" time="1000">WindowOpen</animation>
+			<animation effect="fade" time="1000">WindowClose</animation>
+                </control>
 		<control type="group" id="9000">
 			<animation effect="fade" time="1000">WindowOpen</animation>
 			<animation effect="fade" time="1000">WindowClose</animation>
@@ -342,7 +378,7 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>285</posx>
+					<posx>270</posx>
 					<posy>2</posy>
 					<width>300</width>
 					<height>22</height>
@@ -377,7 +413,7 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>285</posx>
+					<posx>270</posx>
 					<posy>2</posy>
 					<width>300</width>
 					<height>22</height>

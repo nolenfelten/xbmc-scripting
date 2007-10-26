@@ -53,6 +53,8 @@ class Update( xbmcgui.WindowXML):
         self.returnval = 0
         self.getControl(80).setLabel(self.language(410))
         self.getControl(81).setLabel("V." + __version__)
+        self.getControl(61).setLabel(self.language(393))
+        self.getControl(62).setLabel(self.language(13))
         self.base_url = XinBox_Util.__BaseURL__
         self.dialog = xbmcgui.DialogProgress()
         self._check_for_new_version()
@@ -119,7 +121,6 @@ class Update( xbmcgui.WindowXML):
                         if i == 0:self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(405),"XBNewest.png","XBNewest.png"))
                         else:self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(406),"XBnewer.png","XBnewer.png"))
                     elif ( __version__ == version[ : -1 ] ):
-                        self.nonlist.append(self.getListSize())
                         self.addItem(xbmcgui.ListItem("%s %s %s" %(__scriptname__ ,self.language(396), version[ : -1 ]), self.language(407),"XBCurrent.png","XBCurrent.png"))
                     elif ( "0.3" >= version[ : -1 ] ):
                         self.nonlist.append(self.getListSize())
@@ -216,7 +217,7 @@ class Update( xbmcgui.WindowXML):
 
     def createpy(self, version):
         mylines = []
-        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate.txt", "r")
+        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate.py", "r")
         for line in f.readlines():
             if "origpath =" in line:mylines.append("origpath = " + '"' + sys.path[0].replace("\\","\\\\") + '"' + "\n")
             elif "newpath =" in line:mylines.append("newpath = " + '"' + "Q:\\\\scripts\\\\%s_v%s" % ( __scriptname__, version, ) + '"' + "\n")
@@ -228,7 +229,7 @@ class Update( xbmcgui.WindowXML):
 
     def createpy2(self, version):
         mylines = []
-        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate2.txt", "r")
+        f = open(sys.path[0] + "\\src\\lib\\XinBox_UpdateTemplate2.py", "r")
         for line in f.readlines():
             if "origver =" in line:mylines.append("origver = " + '"' + __version__ + '"' + "\n")
             elif "origpath =" in line:mylines.append("origpath = " + '"' + sys.path[0].replace("\\","\\\\") + '"' + "\n")
