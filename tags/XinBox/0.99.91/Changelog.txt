@@ -1,12 +1,12 @@
-XinBox Version 0.99.9 Change Log:
+XinBox Version 0.99.91 Change Log:
 
-Updated: Email Engine - New Email system, makes loading inbox SOOOOOOOOO much quicker!
-                      - NOTE: All emails will have to be removed and re-downloaded.
-			Best way to do this is, Click reset Inbox in all your inboxes before updating.
-Updated: Update Engine - it now updates and imports new settings.
-			 Due to this, updates NOT done via the script will need to delete there
-			 XinBox userdata dir and re-do settings.
+Updated: Update Engine - Now checks for missing settings when script starts (this will allow for
+	 scripts updated not via internal update to still work)
+Added: New Account Setting - "Auto Check" Enable to make all accounts inboxes auto check for new
+       emails when inbox logged into.
+Added: "Default" label next to default inbox (if one) in account menu.
 
+Thanks to "realjobe" for the ideas :-D
      
 
 

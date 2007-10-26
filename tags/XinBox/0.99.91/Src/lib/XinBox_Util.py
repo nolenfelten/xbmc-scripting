@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.99.9'
+__version__ = '0.99.91'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
@@ -126,13 +126,9 @@ def removeauto(scriptpath, accountname, srcpath):
 class UpdateSettings:   
     def loadsettings(self):
             from XinBox_Settings import Settings
-            dialog = xbmcgui.DialogProgress()
-            dialog.create("Importing New Settings","Please Wait...")
             self.settings = Settings("XinBox_Settings.xml","XinBox","")
             self.editallaccounts()
             self.settings.saveXMLfromArray()
-            time.sleep(1)
-            dialog.close()
             
     def editallaccounts(self):
         for item in self.settings.getSetting("Accounts")[1]:
@@ -141,6 +137,8 @@ class UpdateSettings:
                     self.accountSettings.addSetting("Mini Mode SFX","True","boolean")
                 if self.accountSettings.getSetting("XinBox Promote",None) == None:
                     self.accountSettings.addSetting("XinBox Promote","True","boolean")
+                if self.accountSettings.getSetting("Auto Check",None) == None:
+                    self.accountSettings.addSetting("Auto Check","False","boolean")                    
                 for item2 in self.accountSettings.getSetting("Inboxes")[1]:
                     self.inboxSettings = self.accountSettings.getSettingInListbyname("Inboxes",item2[0])
                     if self.inboxSettings.getSetting("SMTP Auth",None) == None:
