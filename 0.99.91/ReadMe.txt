@@ -50,7 +50,7 @@ Some things to know before using:
    Click Addresses.
    Click File, then Export
    Then click "Other Address Book.."
-   Select "Text File (Comma Separated Values"
+   Select "Text File (Comma Separated Values)"
    Choose location to save (you can access the .csv over the network from XinBox)
    Now, important!! ONLY check the two tick boxes 1) Name  2) E-mail Address
    Click Finish and you are done.
