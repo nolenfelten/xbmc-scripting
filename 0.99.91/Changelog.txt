@@ -1,0 +1,12 @@
+XinBox Version 0.99.9 Change Log:
+
+Updated: Email Engine - New Email system, makes loading inbox SOOOOOOOOO much quicker!
+                      - NOTE: All emails will have to be removed and re-downloaded.
+			Best way to do this is, Click reset Inbox in all your inboxes before updating.
+Updated: Update Engine - it now updates and imports new settings.
+			 Due to this, updates NOT done via the script will need to delete there
+			 XinBox userdata dir and re-do settings.
+
+     
+
+
