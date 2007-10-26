@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 0.8-->
+<!--English Strings VER: 0.9-->
+	<!--Changes since Ver: 0.8-->
+		<!--NEW: 203,204, 171 -->
 	<!--Changes since Ver: 0.7-->
 		<!--NEW: 170 -->
 	<!--Changes since Ver: 0.6-->
@@ -166,12 +168,14 @@
 	<string id="168">Select to Compose a New Email to All Contacts.</string>
 	<string id="169">Select to add All Contacts to Address Field.</string>
 	<string id="170">Select to Mark this email as Un-Read.</string>
+	<string id="171">Select to toggle if this accounts inboxes automatically check for new emails on login.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
 	<string id="201">Delete this Account?</string>
 	<string id="202">All inboxes in this account will also be deleted.</string>
-	
+	<string id="203">Auto Check</string>
+	<string id="204">(Default)</string>
 
 	<!-- Email Labels -->
 	<string id="210">Inbox - </string>

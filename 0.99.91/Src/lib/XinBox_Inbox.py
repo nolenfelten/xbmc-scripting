@@ -42,6 +42,11 @@ class GUI( xbmcgui.WindowXML ):
             self.emaillistprepare()
             self.updatesizelabel()
         xbmcgui.unlock()
+        self.checkauto()
+
+    def checkauto(self):
+        if self.accountsettings.getSetting("Auto Check") == "True":
+            self.checkfornew()
         
     def setupvars(self):
         self.exitflag = 0

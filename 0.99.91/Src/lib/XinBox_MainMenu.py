@@ -4,6 +4,7 @@ import xbmc, xbmcgui, time, sys, os
 
 import XinBox_InfoDialog
 import XinBox_Util
+from XinBox_Util import UpdateSettings
 import XinBox_LoginMenu
 from XinBox_Settings import Settings
 from XinBox_AccountSettings import Account_Settings
@@ -20,6 +21,7 @@ defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"]
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,minimode=False, minibox = False, lang=False):
+        UpdateSettings().loadsettings()
         self.srcpath = strFallbackPath
         self.lang = lang
         self.minibox = minibox
