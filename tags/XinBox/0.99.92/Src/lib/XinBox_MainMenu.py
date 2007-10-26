@@ -1,7 +1,7 @@
 
 
 import xbmc, xbmcgui, time, sys, os
-
+from os.path import exists
 import XinBox_InfoDialog
 import XinBox_Util
 from XinBox_Util import UpdateSettings
@@ -21,12 +21,15 @@ defSettings = {"Default Account": ["-","text"],"Mini Mode Account": ["-","text"]
 
 class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,minimode=False, minibox = False, lang=False):
-        UpdateSettings().loadsettings()
         self.srcpath = strFallbackPath
         self.lang = lang
         self.minibox = minibox
         self.minimode = minimode
         self.init = 0
+        print self.srcpath
+        if exists(self.srcpath + "\\lib\\firstrun.xib"):
+            UpdateSettings().loadsettings(self.lang)
+            os.remove(self.srcpath + "\\lib\\firstrun.xib")
 
     def loadsettings(self):
         self.settings = Settings("XinBox_Settings.xml",TITLE,defSettings)     

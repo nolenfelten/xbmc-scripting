@@ -297,7 +297,7 @@ class GUI( xbmcgui.WindowXML ):
         return parser.output()
         
     def checkfornew(self):
-        w = Email(self.ibsettings,self.inbox,self.account,self.language)
+        w = Email(self.ibsettings,self.inbox,self.account,self.language,False,self.accountsettings.getSetting("Email Dialogs"))
         w.checkemail()
         newlist = w.newlist
         self.serversize = w.serversize

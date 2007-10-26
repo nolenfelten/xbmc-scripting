@@ -1,15 +1,9 @@
-XinBox Version 0.99.91 Change Log:
+XinBox Version 0.99.92 Change Log:
 
-Added: Import button to contacts menu, this can be used to import an address book in .csv file format.
-       Check the readme.txt for more details.
-Updated: Update Engine - Now checks for missing settings when script starts (this will allow for
-	 scripts updated not via internal update to still work)
-         Also, made it so you can update to current version - just in case of bad update or something.
-Added: New Account Setting - "Auto Check" Enable to make all accounts inboxes auto check for new
-       emails when inbox logged into.
-      Thanks to "realjobe" for the idea :-D
-Added: "Default" label next to default inbox (if one) in account menu.
-      Thanks to "realjobe" for the idea :-D
+Updated: Update Engine - Final Update for this, works great now :-D
+Added: New Account Setting - "Email Dialogs". Toggle if you don't want the little "OK" email dialogs popping up. 
+      Thanks to "silps" for the idea :-D
+Updated: Finnish strings - thanks to mikko70
 
 
 

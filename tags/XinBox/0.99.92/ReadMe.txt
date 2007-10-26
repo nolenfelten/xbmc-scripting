@@ -41,9 +41,11 @@ Some things to know before using:
    using the import button, you can import all the contacts from an address book eg. Windows Address Book.
    The file has to be a .csv file and only contain the contact name and email address separated by a comma.
    EG:
+
       Fake Contact Name,fake@fakedomain.com
       Fake Contact Name2,fake2@fakedomain2.com
       Fake Contact Name3,fake3@fakedomain3.com
+
    Outlook Express can export the address book to a .csv file. (Only tested, other email programs may also as well)
    Heres how:
    Run Outlook Express.
