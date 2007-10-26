@@ -161,7 +161,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 if self.emailsettings[6] == "-":
                     ret = dialog.select( self.language(271), [self.language(272)])
                 else:ret = dialog.select( self.language(271), [ self.language(272), self.language(273), self.language(274)])
-                if ret != -1 :
+                if ret:
                     self.returnvalue = ret
                     self.exitme()
 

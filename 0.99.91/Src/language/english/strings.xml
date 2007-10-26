@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
 <!--English Strings VER: 0.9-->
 	<!--Changes since Ver: 0.8-->
-		<!--NEW: 203,204, 171 -->
+		<!--NEW: 203,204, 171, 382, 383, 172 -->
 	<!--Changes since Ver: 0.7-->
 		<!--NEW: 170 -->
 	<!--Changes since Ver: 0.6-->
@@ -169,6 +169,7 @@
 	<string id="169">Select to add All Contacts to Address Field.</string>
 	<string id="170">Select to Mark this email as Un-Read.</string>
 	<string id="171">Select to toggle if this accounts inboxes automatically check for new emails on login.</string>
+	<string id="172">Select to browse for and import a .csv Address Book export file. See readme.txt for more details.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Account Menu</string>
@@ -308,6 +309,8 @@
 	<string id="379">Contact Already Exists in Address Field</string>
 	<string id="380">Contact List</string>
 	<string id="381">All</string>
+	<string id="382">Import</string>
+	<string id="383">Browse for .csv file....</string>
 
 	<!-- Update Labels -->
 	<string id="390">Your version is up to date.</string>
