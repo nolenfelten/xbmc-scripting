@@ -2,12 +2,12 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto@gazeta.pl-->
-<!--Date of translation: 09/23/2007-->
-<!--$Revision$-->
+<!--Date of translation: 10/27/2007-->
 <strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">Xbox Media Center</string>
   <string id="2">Smuto</string>
+  <string id="39">Odtwarzaj wszystkie</string>
   <string id="40">Opisy filmów, dostępne szukanie. (10 - 60 minut)</string>
   <string id="41">Opisy w zakresie gatunku. (1 - 5 minut)</string>
   <string id="42">Odświeżanie listy gatunków...</string>
@@ -67,6 +67,7 @@
   <string id="96">z</string>
   <string id="97">Ustaw sposób szukania</string>
   <string id="98">Usuń pliki xml starych zwiastunów</string>
+  <string id="99">Zwiastun</string>
   <string id="103">Gatunek</string>
   <string id="104">Wytwórnia</string>
   <string id="105">Aktor</string>
@@ -94,25 +95,27 @@
   <string id="161">Zwiastun chwilowo nie ma żadnego aktywnego adresu</string>
   <string id="162">Szukanie zaawansowane</string>
   <string id="163">Oglądane</string>
+  <string id="164">Ostatnio dodane</string>
+  <string id="165">Kilka zwiastunów</string>
   <string id="200">Wybierz:</string>
   <string id="201">Skóra</string>
   <string id="202">Jakość obrazu</string>
   <string id="203">Tryb</string>
   <string id="204">Zapisz do</string>
-  <string id="205">Rodzaj wyświetlanych ikonek</string>
-  <string id="206">Oznaczaj obejrzane pozycje</string>
-  <string id="207">Kategoria startowa</string>
-  <string id="208">Skrót #1</string>
-  <string id="209">Skrót #2</string>
-  <string id="210">Skrót #3</string>
-  <string id="211">Odśwież najnowsze na starcie</string>
-  <string id="212">Szybkie szukanie</string>
-  <string id="213">Tylko, gdy pasują pełne słowa</string>
-  <string id="214">Rozdzielczość odtwarzacza</string>
-  <string id="215">Użyj dużych i małych liter</string>
+  <string id="205">Automatycznie wszystkie</string>
+  <string id="206">Rodzaj wyświetlanych ikonek</string>
+  <string id="207">Oznaczaj obejrzane pozycje</string>
+  <string id="208">Kategoria startowa</string>
+  <string id="209">Skrót #1</string>
+  <string id="210">Skrót #2</string>
+  <string id="211">Skrót #3</string>
+  <string id="212">Odśwież najnowsze na starcie</string>
+  <string id="213">Szybkie szukanie</string>
+  <string id="214">Tylko, gdy pasują pełne słowa</string>
+  <string id="215">Rozdzielczość odtwarzacza</string>
   <string id="216">Seanse filmowe dla miasta:</string>
   <string id="217">Repertuar kinowy - scraper</string>
-  <string id="218">Sprawdzaj wersję na starcie</string>
+  <string id="220">Zainstaluj wtyczki...</string>
   <string id="230">Wystąpił błąd podczas zapisywania ustawień!</string>
   <string id="231">* zależna od skóry</string>
   <string id="240">Wprowadzone zmiany wymagają ponownego uruchomienia.</string>
@@ -121,12 +124,13 @@
   <string id="251">Anuluj</string>
   <string id="252">Aktualizuj</string>
   <string id="253">Credits</string>
-  <string id="254">Strona</string>
-  <string id="255">Restart</string>
-  <string id="256">Później</string>
+  <string id="254">Wtyczki</string>
   <string id="257">SQL - Zapisz</string>
   <string id="258">SQL - Wyczyść</string>
   <string id="259">SQL - Wczytaj</string>
+  <string id="270">Uruchom ponownie</string>
+  <string id="271">Później</string>
+  <string id="290">Strona</string>
   <string id="400">*Opis fabuły dla tego tytułu jest niedostępny.</string>
   <string id="401">*Obsada dla tego tytułu jest niedostępna.</string>
   <string id="501">Rozpocznij odtwarzanie</string>
@@ -136,19 +140,35 @@
   <string id="505">Oznacz jako nieoglądane</string>
   <string id="506">Odśwież opis filmu</string>
   <string id="507">Odśwież informacje dla wszystkich zwiastunów</string>
-  <string id="508">Kopiuj do katalogu z zapisanymi zwiastunami</string>
+  <string id="508">Przenieś do katalogu z zapisanymi zwiastunami</string>
   <string id="509">Usuń z dysku</string>
   <string id="510">Repertuar kinowy</string>
-  <string id="511">Przeglądaj.. ten gatunek</string>
+  <string id="511">Przeglądaj gatunek</string>
   <string id="512">Odśwież gatunek</string>
   <string id="513">Odśwież wszystkie gatunki</string>
-  <string id="521">Przeglądaj.. tą wytwórnię</string>
+  <string id="521">Przeglądaj wytwórnię</string>
   <string id="531">Przeglądaj.. z tym aktorem</string>
   <string id="550">Dokończ instalację - pełne info</string>
   <string id="600">Żaden film nie pasuje do Twojego zapytania</string>
   <string id="601">Wczytuję repertuar, proszę czekać..</string>
   <string id="602">Data</string>
-  <string id="603">Kino</string>
+  <string id="603">Miejsce</string>
+  <string id="700">Apple Movie Trailers Plugin</string>
+  <string id="701">Dzieki tej wtyczce możesz oglądać zwiastuny</string>
+  <string id="702">bezpośrednio z zakładki "Filmy"</string>
+  <string id="703">Chcesz zainstalować wtyczkę?</string>
+  <string id="704">Movie Theater Plugin</string>
+  <string id="705">Dzieki tej wtyczce możesz zobaczyć kilka</string>
+  <string id="706">zwiastunów przed projekcją wybranego filmu.</string>
+  <string id="707">Chcesz zainstalować wtyczkę?</string>
+  <string id="710">Przeglądaj w poszukiwaniu ikonki</string>
+  <string id="711">Zainstaluj</string>
+  <string id="712">Pomiń</string>
+  <string id="713">Wtyczka</string>
+  <string id="720">Pamiętaj, aby dodawać nowe wtyczki</string>
+  <string id="721">gdy jesteś w widoku plików. Biblioteka jest automatyczna</string>
+  <string id="722">nie wymaga żadnego działania aktualizacyjnego.</string>
+  <string id="730">Błąd podczas instalowania wtyczki!</string>
   <string id="900">Wersja</string>
   <string id="914">Tłumaczenie</string>
   <string id="1000">Używasz najnowszej wersji.</string>
