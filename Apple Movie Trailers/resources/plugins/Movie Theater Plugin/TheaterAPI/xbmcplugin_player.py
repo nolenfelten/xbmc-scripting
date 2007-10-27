@@ -1,10 +1,20 @@
 """
     Movie Theater: Module plays:
     - optional coming attractions video
-    - random trailers
+    - # of random trailers
     - optional feature presentation video
     - selected video
+    - optional end of presentation video
 """
+
+# TODO: remove this when dialog issue is resolved
+import xbmc
+# set our studio (only works if the user is using the video library)
+g_studio = xbmc.getInfoLabel( "ListItem.Studio" )
+# set our genre (only works if the user is using the video library)
+g_genre = xbmc.getInfoLabel( "ListItem.Genre" )
+# set our rating (only works if the user is using the video library)
+g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
@@ -14,7 +24,7 @@ pDialog.create( "Movie Theater Plugin", "Choosing random trailers..." )
 # main imports
 import sys
 import os
-import xbmc
+##import xbmc
 
 from random import randrange
 
@@ -45,6 +55,7 @@ class Main:
         self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
         self.args.trailer_intro_path = self.args.trailer_intro_path.replace( "[[BACKSLASH]]", "\\" )
         self.args.movie_intro_path = self.args.movie_intro_path.replace( "[[BACKSLASH]]", "\\" )
+        self.args.movie_end_path = self.args.movie_end_path.replace( "[[BACKSLASH]]", "\\" )
 
     def _create_playlist( self ):
         # create a video playlist
@@ -53,7 +64,8 @@ class Main:
         playlist.clear()
         # if there is a trailer intro video add it
         if ( self.args.trailer_intro_path ):
-            trailer = ( self.args.movie_intro_path, os.path.splitext( os.path.basename( self.args.trailer_intro_path ) )[ 0 ], "", self.args.trailer_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
+            # create our trailer record
+            trailer = ( self.args.trailer_intro_path, os.path.splitext( os.path.basename( self.args.trailer_intro_path ) )[ 0 ], "", self.args.trailer_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
@@ -70,17 +82,35 @@ class Main:
             playlist.add( url, listitem )
         # if there is a movie intro video add it
         if ( self.args.movie_intro_path ):
+            # create our trailer record
             trailer = ( self.args.movie_intro_path, os.path.splitext( os.path.basename( self.args.movie_intro_path ) )[ 0 ], "", self.args.movie_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
             playlist.add( self.args.movie_intro_path, listitem )
+        # TODO: use these when dialog issue is resolved
+        # set our studio (only works if the user is using the video library)
+        ##studio = xbmc.getInfoLabel( "ListItem.Studio" )
+        studio = g_studio
+        # set our genre (only works if the user is using the video library)
+        ##genre = xbmc.getInfoLabel( "ListItem.Genre" )
+        genre = g_genre
+        if ( not genre ):
+            genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], os.path.splitext( os.path.basename( self.args.path ) )[ 0 ], "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation", )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], os.path.splitext( os.path.basename( self.args.path ) )[ 0 ], "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", studio, genre, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
         playlist.add( self.args.path, listitem )
+        # if there is a end of movie video add it
+        if ( self.args.movie_end_path ):
+            # create our trailer record
+            trailer = ( self.args.movie_end_path, os.path.splitext( os.path.basename( self.args.movie_end_path ) )[ 0 ], "", self.args.movie_end_path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
+            # create the listitem and fill the infolabels
+            listitem = self._get_listitem( trailer )
+            # add our item to the playlist
+            playlist.add( self.args.movie_end_path, listitem )
         return playlist
 
     def _play_videos( self, playlist ):
@@ -103,6 +133,7 @@ class Main:
                         AND genre_link_movie.idGenre=genres.idGenre 
                         AND studio_link_movie.idMovie=movies.idMovie 
                         AND studio_link_movie.idStudio=studios.idStudio 
+                        %s
                         ORDER BY RANDOM() 
                         LIMIT %d;
                     """
@@ -120,8 +151,33 @@ class Main:
                 # fix the sql statement
                 rating_sql = rating_sql[ : -4 ] + ") "
             hd_sql = ( "", "AND (trailer_urls LIKE '%720p.mov%' OR trailer_urls LIKE '%1080p.mov%')", )[ self.args.only_hd ]
+            genre_sql = ""
+            mpaa_sql = ""
+            # if the use sets limit query limit our search to the genre and rating of the movie
+            if ( self.args.limit_query ):
+                # genre limit
+                ##movie_genres = xbmc.getInfoLabel( "ListItem.Genre" ).split( "/" )
+                movie_genres = g_genre.split( "/" )
+                if ( movie_genres[ 0 ] != "" ):
+                    genre_sql = "AND ("
+                    for genre in movie_genres:
+                        genre_sql += "genres.genre='%s' OR " % ( genre.strip(), )
+                    # fix the sql statement
+                    genre_sql = genre_sql[ : -4 ] + ") "
+                # rating limit TODO: decide if this should override the set rating limit
+                ##movie_rating = xbmc.getInfoLabel( "ListItem.MPAA" ).split( "/" )
+                movie_rating = g_mpaa_rating.split( " " )
+                if ( len( movie_rating ) > 1 ):
+                    if ( movie_rating[ 1 ] in mpaa_ratings ):
+                        rating_sql = "AND ("
+                        for rating in mpaa_ratings:
+                            rating_sql += "rating='%s' OR " % ( rating, )
+                            # if we found the users choice, we're finished
+                            if ( rating == movie_rating[ 1 ] ): break
+                        # fix the sql statement
+                        rating_sql = rating_sql[ : -4 ] + ") "
             # fetch our trailers
-            result = records.fetch( sql % ( hd_sql, rating_sql, self.args.number_trailers, ) )
+            result = records.fetch( sql % ( hd_sql, rating_sql, genre_sql, self.args.number_trailers, ) )
             records.close()
             return result
         except:
@@ -142,16 +198,21 @@ class Main:
         return listitem
 
     def _get_thumbnail( self, item, url ):
+        # All these steps are necessary for the differnt caching methods of XBMC
         # make the proper cache filename and path so duplicate caching is unnecessary
-        filename = xbmc.getCacheThumbName( url )
+        filename = xbmc.getCacheThumbName( item )
         thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
-        # if the cached thumbnail does not exist create the thumbnail
+        # if the cached thumbnail does not exist create the thumbnail based on url
         if ( not os.path.isfile( thumbnail ) ):
-            # create filepath to a local tbn file
-            thumbnail = os.path.splitext( item )[ 0 ] + ".tbn"
-            # if there is no local tbn file use a default
+            filename = xbmc.getCacheThumbName( url )
+            thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+            # if the cached thumbnail does not exist create the thumbnail based on filepath.tbn
             if ( not os.path.isfile( thumbnail ) ):
-                thumbnail = "defaultVideoBig.png"
+                # create filepath to a local tbn file
+                thumbnail = os.path.splitext( item )[ 0 ] + ".tbn"
+                # if there is no local tbn file use a default
+                if ( not os.path.isfile( thumbnail ) or thumbnail.startswith( "smb://" ) ):
+                    thumbnail = "defaultVideoBig.png"
         return thumbnail
 
     def _get_trailer_url( self, trailer_urls ):

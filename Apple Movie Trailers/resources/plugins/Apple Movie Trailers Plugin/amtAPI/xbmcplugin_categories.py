@@ -84,7 +84,7 @@ class Main:
             thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( " ", "-" ).lower() + ".tbn" ) )
             # use a default thumbnail if a custom thumbnail does not exists
             if ( not os.path.isfile( thumbnail ) ):
-                thumbnail = "defaultVideoBig.png"
+                thumbnail = "defaultFolderBig.png"
         return thumbnail
 
     def _fetch_records( self ):

@@ -74,14 +74,15 @@ class Main:
         self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
         self.args.trailer_intro_path = self.args.trailer_intro_path.replace( "[[BACKSLASH]]", "\\" )
         self.args.movie_intro_path = self.args.movie_intro_path.replace( "[[BACKSLASH]]", "\\" )
+        self.args.movie_end_path = self.args.movie_end_path.replace( "[[BACKSLASH]]", "\\" )
 
     def _get_items( self, path ):
         try:
             # smb share, database and local, need to retrieve the lists differently
-            if ( path.startswith( "smb://" ) ):
-                entries = self._get_smb_list( path )
-            elif ( self.args.use_db ):
+            if ( self.args.use_db ):
                 entries = self._get_videodb_list( path )
+            elif ( path.startswith( "smb://" ) ):
+                entries = self._get_smb_list( path )
             else:
                 entries = self._get_local_list( path )
             # fill media list
@@ -95,10 +96,24 @@ class Main:
 
     def _get_videodb_list( self, path ):
         try:
+            from urllib import urlencode
             # if the user has a certain path, set it
-            actual_path = " "
+            path_sql = ""
             if ( path ):
-                actual_path = " WHERE path.strPath LIKE '%s%%25' " % path
+                path_sql = "WHERE path.strPath LIKE '%s%%%%' " % path
+            rating_sql = ""
+            mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
+            # if the user set a valid rating and limit query add all up to the selection
+            if ( self.args.limit_query and self.args.rating in mpaa_ratings ):
+                if ( path_sql ): rating_sql = "AND ("
+                else: rating_sql = "WHERE ("
+                # enumerate through mpaa ratings and add the selected ones to our sql statement
+                for rating in mpaa_ratings:
+                    rating_sql += "movie.c12 LIKE '%%%% %s %%%%' OR " % ( rating, )
+                    # if we found the users choice, we're finished
+                    if ( rating == self.args.rating ): break
+                # fix the sql statement
+                rating_sql = rating_sql[ : -4 ] + ") "
             # TODO: add pagination (ORDER BY movie.c00 LIMIT %d OFFSET %d)
             # our sql statement
             sql = """
@@ -107,16 +122,17 @@ class Main:
                     JOIN files ON files.idFile=movie.idFile 
                     JOIN path ON files.idPath=path.idPath 
                     %s
-                    """ % ( actual_path, )
+                    %s
+                    """ % ( path_sql, rating_sql, )
             # format our response, so it returns a valid python list of records
-            xbmc.executehttpapi( 'SetResponseFormat(OpenRecordSet,[)')
-            xbmc.executehttpapi( 'SetResponseFormat(CloseRecordSet,])')
-            xbmc.executehttpapi( 'SetResponseFormat(OpenRecord,()')
-            xbmc.executehttpapi( 'SetResponseFormat(CloseRecord,)%2C)')
-            xbmc.executehttpapi( 'SetResponseFormat(OpenField,""")')
-            xbmc.executehttpapi( 'SetResponseFormat(CloseField,"""%2C)')
+            xbmc.executehttpapi( "SetResponseFormat(OpenRecordSet,%s)" % ( urlencode( {"e": '[' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseRecordSet,%s)" % ( urlencode( {"e": ']' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(OpenRecord,%s)" % ( urlencode( {"e": '(' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseRecord,%s)" % ( urlencode( {"e": '), ' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( urlencode( {"e": '"""' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( urlencode( {"e": '""", ' } )[ 2 : ], ) )
             # query the database
-            records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % sql.replace( ",", "%2C" ) )
+            records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % urlencode({"e": sql })[ 2 : ] )
             entries = []
             # if query was successful, set our entries list
             if ( "Error:" not in records ):
@@ -200,7 +216,7 @@ class Main:
             # enumerate through the list of items and add the item to the media list
             for item in items:
                 # create our url (backslashes cause issues when passed in the url)
-                url = '%s?path="""%s"""&isFolder=%d&username="""%s"""&password="""%s"""&trailer_intro_path="""%s"""&movie_intro_path="""%s"""&number_trailers=%d&rating="""%s"""&only_hd=%d&quality="""%s"""&use_db=%d' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], self.args.username, self.args.password, self.args.trailer_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.movie_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.number_trailers, self.args.rating, self.args.only_hd, self.args.quality, self.args.use_db, )
+                url = '%s?path="""%s"""&isFolder=%d&username="""%s"""&password="""%s"""&trailer_intro_path="""%s"""&movie_intro_path="""%s"""&number_trailers=%d&rating="""%s"""&only_hd=%d&quality="""%s"""&use_db=%d&limit_query=%d&movie_end_path="""%s"""' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], self.args.username, self.args.password, self.args.trailer_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.movie_intro_path.replace( "\\", "[[BACKSLASH]]" ), self.args.number_trailers, self.args.rating, self.args.only_hd, self.args.quality, self.args.use_db, self.args.limit_query, self.args.movie_end_path, )
                 if ( item[ 2 ] ):
                     # if a folder.jpg exists use that for our thumbnail
                     #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
@@ -222,7 +238,7 @@ class Main:
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
+                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "MPAA": item[ 5 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
                 # add the item to the media list
                 ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )
                 # if user cancels, call raise to exit loop
