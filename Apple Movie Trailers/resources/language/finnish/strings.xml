@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.2         Finnish 22.10.2007 -->
+  <!-- v.pre-0.99.2         Finnish 27.10.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
-  <string id="2">Mikko</string>
+  <string id="2">Mikko 70</string>
   
   <!-- Dialog Messages -->
   <string id="39">Toista kaikki</string>
@@ -99,6 +99,7 @@
   <string id="162">Määriteltyhaku</string>
   <string id="163">Katsotut</string>
   <string id="164">Viimeksi lisätyt</string>
+  <string id="165">Usea esittely</string>
   
   <!-- Settings labels -->
   <string id="200">Valitse:</string>
