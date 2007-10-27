@@ -88,6 +88,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.startup_categories[ CUSTOM_SEARCH ] = _( 162 )
         self.startup_categories[ WATCHED ] = _( 163 )
         self.startup_categories[ RECENTLY_ADDED ] = _( 164 )
+        self.startup_categories[ MULTIPLE_TRAILERS ] = _( 165 )
         for title in self.startup_categories.values():
             self.startup_titles += [ title ]
         self.startup_titles.sort()

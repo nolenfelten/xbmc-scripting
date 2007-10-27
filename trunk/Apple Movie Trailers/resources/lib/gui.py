@@ -186,6 +186,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( category_id == RECENTLY_ADDED ):
                 sql = self.query[ "recently_added" ]
                 params = None
+            elif ( category_id == MULTIPLE_TRAILERS ):
+                sql = self.query[ "multiple_trailers" ]
+                params = None
             elif ( category_id == CUSTOM_SEARCH ):
                 sql = self.search_sql
                 params = None
@@ -268,7 +271,7 @@ class GUI( xbmcgui.WindowXML ):
                         list_item.select( movie.favorite )
                         plot = ( movie.plot, _( 400 ), )[ not movie.plot ]
                         overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in repr( movie.trailer_urls ) or "1080p.mov" in repr( movie.trailer_urls ) ]
-                        list_item.setInfo( "video", { "Title": movie.title, "Overlay": overlay, "Plot": plot, "MPAARating": movie.rating } )
+                        list_item.setInfo( "video", { "Title": movie.title, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating } )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
@@ -336,6 +339,8 @@ class GUI( xbmcgui.WindowXML ):
             category = _( 163 )
         elif ( self.category_id == RECENTLY_ADDED ):
             category = _( 164 )
+        elif ( self.category_id == MULTIPLE_TRAILERS ):
+            category = _( 165 )
         elif ( self.category_id >= 0 ):
             if ( self.list_category == 3 ):
                 category = self.actor
@@ -718,6 +723,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.getControl( 100 + s ).setLabel( _( 163 ) )
             elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == RECENTLY_ADDED ):
                 self.getControl( 100 + s ).setLabel( _( 164 ) )
+            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == MULTIPLE_TRAILERS ):
+                self.getControl( 100 + s ).setLabel( _( 165 ) )
             else:
                 self.getControl( 100 + s ).setLabel( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
 

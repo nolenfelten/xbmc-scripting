@@ -29,6 +29,7 @@ HD_TRAILERS = -8
 NO_TRAILER_URLS = -9
 WATCHED = -10
 RECENTLY_ADDED = -11
+MULTIPLE_TRAILERS = -12
 CUSTOM_SEARCH = -99
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
