@@ -93,36 +93,41 @@ def addauto(scriptpath, accountname, srcpath):
                      theLine = line.strip()
                      if script2 in theLine:
                          changing = True
-                         lines.append(Script+"\n")
+                         lines.append("import time#xib\ntime.sleep(2)#xib\n")
+                         lines.append(Script+"#xib\n")
                      else:lines.append(line)
-                if not changing:lines.append(Script+"\n")
+                if not changing:
+                    lines.append("import time#xib\ntime.sleep(2)#xib\n")
+                    lines.append(Script+"#xib\n")
                 fh.close()
                 f = open(autoexecfile, "w")
                 if not "import xbmc\n" in lines:
-                    f.write("import xbmc\n")
+                    f.write("import xbmc#xib\n")
                 f.writelines(lines)
                 f.close()
                 return
         else:
                 f = open(autoexecfile, "w")
-                f.write("import xbmc\n")
-                f.write(Script)
+                f.write("import xbmc#xib\n")
+                f.write(Script+"#xib\n")
                 f.close()
                 return
 
 
-def removeauto(scriptpath, accountname, srcpath):
-        Script = 'xbmc.executebuiltin("XBMC.RunScript(' + scriptpath.replace("\\","\\\\") + "\\\\lib\\\\XinBox_MiniMode.py" + "," + accountname + "," + srcpath.replace("\\","\\\\") + ')")'
+def removeauto():
         autoexecfile = __autoexecdir__ + "autoexec.py"    
         if os.path.exists(autoexecfile):
                 fh = open(autoexecfile)
-                lines = [ line for line in fh if not line.strip().startswith(Script) ]
+                lines = [ line for line in fh if not line.strip().endswith("#xib") ]
                 fh.close()
-                f = open(autoexecfile, "w")
-                f.writelines(lines)
-                f.close()
+                if len(lines) == 0:
+                    os.remove(autoexecfile)
+                else:
+                    f = open(autoexecfile, "w")
+                    f.writelines(lines)
+                    f.close()
                 return
-        return
+            
 class UpdateSettings:   
     def loadsettings(self, language):
             from XinBox_Settings import Settings

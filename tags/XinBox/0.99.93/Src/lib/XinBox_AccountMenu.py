@@ -296,7 +296,7 @@ class AccountSettings(xbmcgui.WindowXML):
             else:
                 if self.theSettings.getSetting("Mini Mode Account") == self.account:
                     self.theSettings.setSetting("Mini Mode Account", "-")
-                    XinBox_Util.removeauto(self.scriptPath, self.account, self.scriptPath)
+                    XinBox_Util.removeauto()
             self.theSettings.saveXMLfromArray()
             self.getControl(64).setEnabled(False)
             self.setupcompsetts()

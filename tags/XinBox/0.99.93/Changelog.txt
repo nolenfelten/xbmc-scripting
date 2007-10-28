@@ -6,7 +6,7 @@ Added: New Mini-Mode menu! White Button when New Email notification pops up.
         You can then click "InBox" to go to inbox or press back to close and mini-mode will continue.
 Updated: "Mini-Mode Started" and "Mini-Mode Closed" - now hard-coded English due to using other languages cause script
          to fail. Don't think XBMC likes it.
-
+Updated: Autoexec.py editor
 
      
 
