@@ -42,12 +42,11 @@
 		</control>
   		<control type="label" id="80">
         		<description>Menu Label</description>
-        		<posx>390</posx>
+        		<posx>400</posx>
         		<posy>95</posy>
-        		<width>150</width>
+        		<width>300</width>
         		<label>-</label>
         		<font>special13</font>
-			<align>center</align>
         		<textcolor>FFB2D4F5</textcolor>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
@@ -57,7 +56,7 @@
         		<posx>435</posx>
         		<posy>65</posy>
 			<label>-</label>
-        		<width>100</width>
+        		<width>300</width>
         		<font>font13</font>
 			<animation effect="slide" start="0,100" time="800">WindowOpen</animation>
 			<animation effect="slide" end="0,100" time="800">WindowClose</animation>
@@ -75,7 +74,7 @@
         		<posx>320</posx>
         		<posy>430</posy>
 			<label>-</label>
-        		<width>100</width>
+        		<width>300</width>
         		<font>font13</font>
 			<textcolor>FFB2D4F5</textcolor>
 			<visible>!Control.HasFocus(50)</visible>
