@@ -191,8 +191,10 @@ class Main:
             thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
         else:
             thumbnail = self._get_thumbnail( trailer[ 3 ], trailer[ 0 ] )
-        # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-        listitem = xbmcgui.ListItem( trailer[ 1 ], thumbnailImage=thumbnail )
+        # set the default icon
+        icon = "DefaultVideo.png"
+        # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
+        listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
         listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ] } )
         return listitem
@@ -212,7 +214,7 @@ class Main:
                 thumbnail = os.path.splitext( item )[ 0 ] + ".tbn"
                 # if there is no local tbn file use a default
                 if ( not os.path.isfile( thumbnail ) or thumbnail.startswith( "smb://" ) ):
-                    thumbnail = "defaultVideoBig.png"
+                    thumbnail = ""
         return thumbnail
 
     def _get_trailer_url( self, trailer_urls ):

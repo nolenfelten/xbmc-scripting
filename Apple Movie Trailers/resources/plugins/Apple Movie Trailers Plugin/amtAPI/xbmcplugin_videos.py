@@ -88,12 +88,14 @@ class Main:
                     thumbnail = ""
                     if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
                         thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
+                    # set the default icon
+                    icon = "DefaultVideo.png"
                     # if a rating exists format it
                     rating = ( "", "[%s]" % trailer[ 7 ], )[ trailer[ 7 ] != "" ]
                     # if a plot does not exist, use a default message
                     plot = ( "No synopsis provided by the studio.", trailer[ 5 ], )[ trailer[ 5 ] != "" ]
-                    # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem = xbmcgui.ListItem( trailer[ 1 ], rating, thumbnailImage=thumbnail )
+                    # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
+                    listitem = xbmcgui.ListItem( trailer[ 1 ], rating, iconImage=icon, thumbnailImage=thumbnail )
                     # get genre
                     if ( isinstance( trailer[ 16 ], int ) ):
                         genre = self.args.genre

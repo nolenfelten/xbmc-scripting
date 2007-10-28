@@ -221,20 +221,22 @@ class Main:
                     # if a folder.jpg exists use that for our thumbnail
                     #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
                     #if ( not os.path.isfile( thumbnail ) ):
-                    thumbnail = "DefaultFolderBig.png"
-                    # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=item[ 1 ], thumbnailImage=thumbnail )
+                    icon = "DefaultFolder.png"
+                    # only need to add label and icon, setInfo() and addSortMethod() takes care of label2
+                    listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon )
                     # add the different infolabels we want to sort by
                     listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
                 else:
                     # call _get_thumbnail() for the path to the cached thumbnail
                     thumbnail = self._get_thumbnail( item[ 0 ] )
+                    # set the default icon
+                    icon = "DefaultVideo.png"
                     # get the date of the file
                     date = datetime.datetime.fromtimestamp( os.path.getmtime( item[ 0 ] ) ).strftime( "%d-%m-%Y" )
                     # get the size of the file
                     size = long( os.path.getsize( item[ 0 ] ) )
                     # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=item[ 1 ], thumbnailImage=thumbnail )
+                    listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                     # add the different infolabels we want to sort by
@@ -264,5 +266,5 @@ class Main:
             thumbnail = os.path.splitext( item )[ 0 ] + ".tbn"
             # if there is no local tbn file use a default
             if ( not os.path.isfile( thumbnail ) ):
-                thumbnail = "defaultVideoBig.png"
+                thumbnail = ""
         return thumbnail
