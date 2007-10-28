@@ -1,6 +1,7 @@
 import time, sys, xbmc, xbmcgui, traceback
 from XinBox_Settings import Settings
 import XinBox_Util
+import XinBox_MMPopup
 from XinBox_EmailEngine import Email
 from XinBox_Language import Language
 import threading
@@ -18,10 +19,11 @@ class Minimode:
         f = open("X:\\mmcomu.xib", "w")
         f.close()
         time.sleep(2)
+        self.emailist = []
         lang = Language(TITLE)
         lang.load(self.srcpath + "\\language")
         self.language = lang.string
-        xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(356) + ')')
+        xbmc.executebuiltin('XBMC.Notification(XinBox Mini-Mode,Started)')
         time.sleep(5)
         try:
             self.exit = False
@@ -36,7 +38,7 @@ class Minimode:
             w.doModal()
             del w
         else:
-            xbmc.executebuiltin('XBMC.Notification(XinBox ' + self.language(252) + ',' + self.language(358) + ')')
+            xbmc.executebuiltin('XBMC.Notification(XinBox Mini-Mode,Closed)')
         
 
     def startmm(self):
@@ -69,11 +71,12 @@ class Minimode:
             w = Email(ibsettings,inbox,self.account,False, True)
             w.checkemail()
             newlist = w.newlist
+            ibfolder = w.ibfolder
             del w
             if len(newlist) != 0:
-                self.popup(newlist, inbox, ibsettings)
+                self.popup(newlist, inbox, ibsettings,ibfolder)
 
-    def popup(self, newlist, inbox, ibsettings):
+    def popup(self, newlist, inbox, ibsettings,ibfolder):
         if exists("X:\\mmcomu.xib"):
             if self.accountsettings.getSetting("Mini Mode SFX",None) == None or self.accountsettings.getSetting("Mini Mode SFX",None) == "True":
                 xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
@@ -82,7 +85,14 @@ class Minimode:
             w.doModal()
             self.returnval = w.returnval
             del w
-            if exists("X:\\mmcomu.xib"):
+            if self.returnval == 1:
+                for item in newlist:
+                    self.emailist.insert(0,ibfolder + item[0] + ".sss")
+                w = XinBox_MMPopup.GUI("XinBox_MMPopup.xml",self.srcpath,"DefaultSkin",0,emailist=self.emailist,lang=self.language)
+                w.doModal()
+                self.returnval = w.returnval
+                del w
+                self.emailist = []
                 if self.returnval == 1:
                     self.inbox = inbox
                     self.exit = True

@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.99.92'
+__version__ = '0.99.93'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]

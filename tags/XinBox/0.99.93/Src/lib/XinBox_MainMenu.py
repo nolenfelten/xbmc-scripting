@@ -1,5 +1,5 @@
 
-
+import XinBox_MMPopup
 import xbmc, xbmcgui, time, sys, os
 from os.path import exists
 import XinBox_InfoDialog
@@ -121,7 +121,7 @@ class GUI( xbmcgui.WindowXML ):
             elif self.getCurrentListPosition() == 3:
                 self.launchabout()
             elif self.getCurrentListPosition() == 4:
-                self.close()
+                self.close()      
 
     def update(self):
         w = XinBox_Update.Update("XinBox_Update.xml",self.srcpath,"DefaultSkin",lang=self.lang)

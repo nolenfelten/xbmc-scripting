@@ -1,10 +1,11 @@
-XinBox Version 0.99.92 Change Log:
+XinBox Version 0.99.93 Change Log:
 
-Updated: Update Engine - Final Update for this, works great now :-D
-Added: New Account Setting - "Email Dialogs". Toggle if you don't want the little "OK" email dialogs popping up. 
-      Thanks to "silps" for the idea :-D
-Updated: Finnish strings - thanks to mikko70
-
+Fixed: Certain labels in menus would not show fully.
+Added: New Mini-Mode menu! White Button when New Email notification pops up.
+	This will take you to the new Mini-Mode menu where you can read the new emails without opening the script.
+        You can then click "InBox" to go to inbox or press back to close and mini-mode will continue.
+Updated: "Mini-Mode Started" and "Mini-Mode Closed" - now hard-coded English due to using other languages cause script
+         to fail. Don't think XBMC likes it.
 
 
      
