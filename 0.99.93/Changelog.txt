@@ -1,0 +1,12 @@
+XinBox Version 0.99.92 Change Log:
+
+Updated: Update Engine - Final Update for this, works great now :-D
+Added: New Account Setting - "Email Dialogs". Toggle if you don't want the little "OK" email dialogs popping up. 
+      Thanks to "silps" for the idea :-D
+Updated: Finnish strings - thanks to mikko70
+
+
+
+     
+
+
