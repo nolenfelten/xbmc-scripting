@@ -57,8 +57,10 @@ class Main:
                 url = "%s?genre_id=%d&genre=%s&quality=%d&wholewords=%d" % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], self.settings[ "trailer_quality" ], self.settings[ "match_whole_words" ], )
                 # check for a valid custom thumbnail for the current category
                 thumbnail = self._get_thumbnail( genre[ 1 ] )
-                # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                listitem=xbmcgui.ListItem( genre[ 1 ], thumbnailImage=thumbnail )#, "(%d)" % genre[ 2 ] )
+                # set the default icon
+                icon = "DefaultFolder.png"
+                # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
+                listitem=xbmcgui.ListItem( genre[ 1 ], iconImage=icon, thumbnailImage=thumbnail )#, "(%d)" % genre[ 2 ] )
                 # add the different infolabels we want to sort by
                 listitem.setInfo( type="Video", infoLabels={ "Date": "%s-%s-%s" % ( genre[ 4 ][ 8 : ], genre[ 4 ][ 5 : 7 ], genre[ 4 ][ : 4 ], ) } )
                 # add the item to the media list
@@ -84,7 +86,7 @@ class Main:
             thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( " ", "-" ).lower() + ".tbn" ) )
             # use a default thumbnail if a custom thumbnail does not exists
             if ( not os.path.isfile( thumbnail ) ):
-                thumbnail = "defaultFolderBig.png"
+                thumbnail = ""
         return thumbnail
 
     def _fetch_records( self ):
