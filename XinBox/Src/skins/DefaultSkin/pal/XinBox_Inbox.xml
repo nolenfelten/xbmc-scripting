@@ -44,7 +44,7 @@
         		<description>Inbox Name Label</description>
         		<posx>170</posx>
         		<posy>50</posy>
-        		<width>200</width>
+        		<width>300</width>
         		<label>-</label>
         		<font>special13</font>
         		<textcolor>FFB2D4F5</textcolor>
@@ -69,7 +69,7 @@
         		<description>Ibox Size Label</description>
         		<posx>420</posx>
         		<posy>25</posy>
-        		<width>250</width>
+        		<width>300</width>
         		<label>-</label>
 			<disabledcolor>FFFF0000</disabledcolor>
       			<texturefocus>XBFAKE.png</texturefocus>
@@ -83,7 +83,7 @@
         		<description>New/Unread Label</description>
         		<posx>420</posx>
         		<posy>50</posy>
-        		<width>250</width>
+        		<width>300</width>
         		<label>-</label>
 			<disabledcolor>FFFF0000</disabledcolor>
       			<texturefocus>XBFAKE.png</texturefocus>

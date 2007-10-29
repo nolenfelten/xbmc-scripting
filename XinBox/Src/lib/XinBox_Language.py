@@ -1,44 +1,49 @@
-import xbmc, xbmcgui, os, re
+"""
+Language module
+
+Nuka1195
+
+Modified to work with XinBox by Stanley87
+"""
+
+import os
+import xbmc
+import xml.dom.minidom, traceback
+
 
 class Language:
-    """
-        Language Class
-            For reading in xml for automatiacall of the selected lanauge XBMC is running in
-            And for returning the string in the given Language for a specified id
-            By RockStar and Donno
-    """
-    title = ""
-
-    def __init__(self,title):
-        self.title = title
-    
-    def load(self,thepath):
-        self.strings = {}
-        tempstrings = []
-        self.language = xbmc.getLanguage().lower()
+    try:
+        title = ""
+        def __init__(self,title):
+            self.title = title
         
-        if os.path.exists(os.path.join(thepath,self.language,"strings.xml")):
-            self.foundlang = self.language
-        else:
-            self.foundlang = "english"
-        self.langdoc = os.path.join(thepath,self.foundlang,"strings.xml")
-        print "- Loading Language: " + self.foundlang
-        try:
-            f=open(self.langdoc,'r')
-            tempstrings=f.read()
-            f.close()
-        except:
-            print "Error: Languagefile "+self.langdoc+" can not be opened"
-            xbmcgui.Dialog().ok(self.title,"Error: Language file",self.langdoc+" can not be opened")
-        self.exp='<string id="(.*?)">(.*?)</string>'
-        self.res=re.findall(self.exp,tempstrings)
-        for stringdat in self.res:
-            self.strings[int(stringdat[0])] = str(stringdat[1])
+        def load(self,thepath):
+            self.strings = {}
+            tempstrings = []
+            language = xbmc.getLanguage().lower()
+            if ( not os.path.isfile( os.path.join( thepath,language,"strings.xml" ) ) ):
+                language = "english"
+            self.strings = {}
+            self._parse_strings_file( os.path.join( thepath,language,"strings.xml" ) )
+            if ( language != "english" ):
+                self._parse_strings_file( os.path.join( thepath, "english", "strings.xml" ) )
 
-    def string(self,number):
-        if int(number) in self.strings:
-            if self.language == "finnish":
-                return self.strings[int(number)].decode("utf-8")
-            else:return self.strings[int(number)]
-        else:
-            return "unknown string id (%s)" % number
+
+        def _parse_strings_file( self, language_path ):
+            try:
+                doc = xml.dom.minidom.parse( language_path )
+                root = doc.documentElement
+                if ( not root or root.tagName != "strings" ): raise
+                strings = root.getElementsByTagName( "string" )
+                for string in strings:
+                    string_id = int( string.getAttribute( "id" ) )
+                    if ( string_id not in self.strings and string.hasChildNodes() ):
+                        self.strings[ string_id ] = string.firstChild.nodeValue
+            except:
+                xbmc.output( "ERROR: Language file %s can't be parsed!" % ( language_path, ) )
+            try: doc.unlink()
+            except: pass        
+
+        def string(self,code):
+            return self.strings.get(code)
+    except:traceback.print_exc()

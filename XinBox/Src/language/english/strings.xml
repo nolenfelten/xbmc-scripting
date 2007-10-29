@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 1.0-->
+<!--English Strings VER: 1.1-->
+	<!--Changes since Ver: 1.0-->
+		<!--NEW: 359 -->
 	<!--Changes since Ver: 0.9-->
 		<!--NEW: 412, 413, 205, 173 -->
 	<!--Changes since Ver: 0.8-->
@@ -294,6 +296,7 @@
         <string id="356">Started</string>
 	<string id="357">Mini-Mode SFX</string>
 	<string id="358">Closed</string>
+	<string id="359">New Email %s</string>
 
 	<!-- About Labels -->
 	<string id="360">About</string>
