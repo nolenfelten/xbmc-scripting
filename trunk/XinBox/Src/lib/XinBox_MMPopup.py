@@ -5,7 +5,8 @@ from sgmllib import SGMLParser
 import XinBox_Util
  
 class GUI( xbmcgui.WindowXMLDialog ):
-    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailist=None,lang=None):
+    def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,emailist=None,lang=None,ibox=None):
+        self.ibox = ibox
         self.emailist = emailist
         self.lang = lang
         self.control_action = XinBox_Util.setControllerAction()
@@ -14,7 +15,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.executebuiltin("Skin.Reset(mmemailpanel)")
         xbmc.executebuiltin("Skin.Reset(mmemail)")
         self.returnval = 0
-        self.getControl(61).setLabel(self.lang(225))
+        self.getControl(61).setLabel(self.ibox)
         self.getControl(62).setLabel(self.lang(73))
         self.printEmail(self.emailist[0])
         for i, email in enumerate(self.emailist):

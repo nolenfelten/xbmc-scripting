@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--English Strings VER: 1.1-->
+<!--English Strings VER: 1.2-->
+	<!--Changes since Ver: 1.1-->
+		<!--Removed: 225 -->
 	<!--Changes since Ver: 1.0-->
-		<!--NEW: 359 -->
+		<!--NEW: 359, 225 -->
 	<!--Changes since Ver: 0.9-->
 		<!--NEW: 412, 413, 205, 173 -->
 	<!--Changes since Ver: 0.8-->
@@ -200,7 +202,6 @@
 	<string id="222">Updating Email Database...</string>
 	<string id="223">Fetched %s New Emails OK.</string>
 	<string id="224">Error Fetching Email(s).</string>
-	<string id="225">Email List</string>
 
 	<!-- MORE InBox Menu Labels -->
 	<string id="240">"New Email" Notification SFX:</string>

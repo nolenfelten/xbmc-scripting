@@ -80,7 +80,7 @@ class Minimode:
         if exists("X:\\mmcomu.xib"):
             if self.accountsettings.getSetting("Mini Mode SFX",None) == None or self.accountsettings.getSetting("Mini Mode SFX",None) == "True":
                 xbmc.playSFX(str(ibsettings.getSetting("Email Notification")))
-            mymessage = self.language(210) + str(inbox) + "\n" + self.language(219) % str(len(newlist))
+            mymessage = self.language(210) + inbox + "\n" + self.language(219) % str(len(newlist))
             w = Popup("XinBox_Popup.xml",self.srcpath,"DefaultSkin",0,message=mymessage, lang=self.language)
             w.doModal()
             self.returnval = w.returnval
@@ -88,7 +88,7 @@ class Minimode:
             if self.returnval == 1:
                 for item in newlist:
                     self.emailist.insert(0,ibfolder + item[0] + ".sss")
-                w = XinBox_MMPopup.GUI("XinBox_MMPopup.xml",self.srcpath,"DefaultSkin",0,emailist=self.emailist,lang=self.language)
+                w = XinBox_MMPopup.GUI("XinBox_MMPopup.xml",self.srcpath,"DefaultSkin",0,emailist=self.emailist,lang=self.language,ibox=inbox)
                 w.doModal()
                 self.returnval = w.returnval
                 del w
