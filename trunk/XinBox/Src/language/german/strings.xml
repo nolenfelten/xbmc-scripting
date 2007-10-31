@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!-- German Strings V.0.4 -->
+<!--German Strings VER: 1.1-->
 
 <strings>
 	<!-- Main Menu Labels -->
   	<string id="10">Hauptmenü</string>
   	<string id="11">Anmelden</string>
-  	<string id="12">Luo tili</string>
+  	<string id="12">Erstelle</string>
   	<string id="13">Aktualisiere</string>
   	<string id="14">Über</string>
   	<string id="15">Beende</string>
@@ -149,15 +149,28 @@
 	<string id="161">A: Bearbeite Kontaktname/Email Adresse   B: Kontakt löschen   Weiss: Kontakt zum Adressfeld hinzufügen</string>
 	<string id="162">Auswählen um zu entscheiden, ob die "Neue Email" Benachrichtigung bei einer neuen Email abgespielt wird oder nicht.</string>
 	<string id="163">Auswählen um zu entscheiden, ob zwei XinBox + XBMC Promoting Zeilen unten an versendete Emails angefügt werden sollen.</string>
+	<string id="164">Auswählen um entweder die Changelog zu lesen oder um auf diese Version zu aktualisieren.</string>
+	<string id="165">Auswählen um die Changelog dieser Version anzuschauen.</string>
+	<string id="166">Auswählen um XinBox auf diese version zu aktualisieren.</string>
+	<string id="167">Auswählen um die SMTP Authentifizierung zu aktivieren/deaktivieren.</string>
+	<string id="168">Auswählen um eine neue Email an ALLE Kontakte zu verfassen.</string>
+	<string id="169">Auswählen um ALLE Kontakte zum Adressfeld hinzuzufügen.</string>
+	<string id="170">Auswählen um diese Email als ungelesen zu markieren.</string>
+	<string id="171">Auswählen um zu entscheiden, ob dieser Account Posteingang beim einloggen automatisch auf neue Emails durchsucht werden soll.</string>
+	<string id="172">Auswählen um nach einer .csv Adressbuch Datei zu suchen und zu importieren. Lies die readme.txt für mehr Details.</string>
+	<string id="173">Auswählen um den Email Status Benachrichigung Dialog "Ok" dieses Account Posteinganges anzuzeigen oder nicht.</string>
 
 	<!-- Account Menu Labels -->
 	<string id="200">Konto Menü</string>
 	<string id="201">Ausgewähltes Konto löschen? Sicher? Alle Posteingänge dieses Kontos werden gelöscht. Drücke OK zur Bestätigung, drücke Back um abzubrechen.</string>
 	<string id="202">Alle Posteingänge dieses Kontos werden gelöscht.</string>
+	<string id="203">Auto Check</string>
+	<string id="204">(Standard)</string>
+	<string id="205">Email Dialoge</string>
 
 	<!-- Email Labels -->
 	<string id="210">Posteingang - </string>
-	<string id="211">Anmelden...</string>
+	<string id="211">Anmelden....</string>
 	<string id="212">Anmeldung OK</string>
 	<string id="213">Anmeldung fehlgeschlagen</string>
 	<string id="214">Bitte überprüfe Posteingang Einstellungen.</string>
@@ -168,7 +181,7 @@
 	<string id="219">Du hast %s neue Emails.</string>
 	<string id="220">Du hast keine neuen Emails.</string>
 	<string id="221">Downloade Email # %s</string>
-	<string id="222">Aktualisiere Email Datenbank...</string>
+	<string id="222">Aktualisiere Email Datenbank....</string>
 	<string id="223">%s neue Emails.</string>
 	<string id="224">Fehler beim downloaden der Email(s).</string>
 	<string id="225">Emailliste</string>
@@ -178,12 +191,13 @@
 	<string id="241">Suche nach "Neue Email" Benachrichtigungs SFX:</string>
 	<string id="242">OK</string>
 	<string id="243">Standard-Posteingang</string>
+	<string id="244">SMTP Authentifizierung</string>
 
 	<!-- InBox Labels -->
 	<string id="250">Suchen</string>
 	<string id="251">Verfassen</string>
 	<string id="252">Mini-Mode</string>
-	<string id="253">Erstelle Posteingang...</string>
+	<string id="253">Erstelle Posteingang....</string>
 	<string id="254">Neue Emails hinzufügen....</string>
 	<string id="255">Kein Betreff</string>
 	<string id="256">Posteingang leer</string>
@@ -192,13 +206,13 @@
 	<string id="259">Leer</string>
 	<string id="260">Von:</string>
 	<string id="261">Erhalten:</string>
-	<string id="262">Lösche Email aus dem Posteingang</string>
-	<string id="263">Lösche Email vom Server</string>
-	<string id="264">Email konnte nicht auf dem Server gefunden werden</string>
-	<string id="265">Lösche Email aus dem Posteingang und vom Server</string>
+	<string id="262">Lösche Email aus dem Posteingang.</string>
+	<string id="263">Lösche Email vom Server.</string>
+	<string id="264">Email konnte nicht auf dem Server gefunden werden.</string>
+	<string id="265">Lösche Email aus dem Posteingang und vom Server.</string>
 	<string id="266">Anhang</string>
 	<string id="267">Größe:</string>
-	<string id="268">Speichere %s nach...</string>
+	<string id="268">Speichere %s nach....</string>
 	<string id="269">gespeichert nach:</string>
 	<string id="270">Fehler beim speichern nach:</string>
 	<string id="271">Lösche Email von:</string>
@@ -208,25 +222,25 @@
 	<string id="275">Zurücksetzen</string>
 	<string id="276">Posteingang zurücksetzen?</string>
 	<string id="277">Alle Emails im Posteingang werden gelöscht.</string>
-	<string id="278">Posteingang zurückgesetzt</string>
+	<string id="278">Posteingang zurückgesetzt.</string>
 	<string id="279">Zip-Archiv leer</string>
 	<string id="280">Zip-Archivliste</string>
 	<string id="281">BildAuf/BildAb</string>
-	<string id="282">Aktualisiere Posteingang ID Datei..</string>
+	<string id="282">Aktualisiere Posteingang ID Datei....</string>
 	<string id="283">Neu: </string>
 	<string id="284">Ungeles.: </string>
 	<string id="285">Total: </string>
 
 	<!-- Compose Labels -->
-	<string id="300">Sende Email..</string>
-	<string id="301">Email gesendet OK.</string>
+	<string id="300">Sende Email....</string>
+	<string id="301">Email gesendet.</string>
 	<string id="302">Fehler beim senden der Email.</string>
-	<string id="303">Vorbereitung der Email..</string>
-	<string id="304">Schreibe Email Header..</string>
-	<string id="305">Schreibe Email Body..</string>
-	<string id="306">Entschlüssele Anhang..</string>
+	<string id="303">Vorbereitung der Email....</string>
+	<string id="304">Schreibe Email Header....</string>
+	<string id="305">Schreibe Email Body....</string>
+	<string id="306">Entschlüssele Anhang....</string>
 	<string id="307">Fehler beim vorbereiten der Email.</string>
-	<string id="308">Anmeldung beim SMTP Server..</string>
+	<string id="308">Anmeldung beim SMTP Server....</string>
 	<string id="309">Fehler beim anmelden beim SMTP Server.</string>
 	<string id="310">An:</string>
 	<string id="311">Cc:</string>
@@ -240,17 +254,17 @@
 	<string id="319">Fw:</string>
 	<string id="320">Anhang:</string>
 	<string id="321">Bearbeite Zeile:</string>
-	<string id="322">Bearbeite To: Adresse(n):</string>
+	<string id="322">Bearbeite An: Adresse(n):</string>
 	<string id="323">Bearbeite Cc: Address(s):</string>
 	<string id="324">Bearbeite Bcc: Address(s):</string>
 	<string id="325">Bearbeite Betreff:</string>
 	<string id="326">Anhang entfernen?</string>
 	<string id="327">Suche nach Anhang:</string>
 	<string id="328">Verfassen beenden?</string>
-	<string id="329">Erstelle SMTP Email Datei..</string>
+	<string id="329">Erstelle SMTP Email Datei....</string>
 	<string id="330">Neue Zeile hinzufügen:</string>
-	<string id="331">Diese Zeile enfernen?</string>
-	<string id="332">Diese Email senden?</string>
+	<string id="331">Zeile enfernen?</string>
+	<string id="332">Email senden?</string>
 	<string id="333">Leeren</string>
 	<string id="334">Email Body leeren?</string>
 	<string id="335">Email Body</string>
@@ -260,12 +274,13 @@
 	<string id="350">Mini-Mode aktivieren</string>
 	<string id="351">Bitte warten</string>
 	<string id="352">Schließe Mini-Mode</string>
-	<string id="353">XBMC mit Mini-Mode starten</string>
+	<string id="353">XBMC mit Mini-Mode starten.</string>
 	<string id="354">Mini-Mode Verzögerung (sek.)</string>
-	<string id="355">Posteingang öffnen</string>
+	<string id="355">Posteingang öffnen.</string>
         <string id="356">Gestartet</string>
 	<string id="357">Mini-Mode SFX</string>
 	<string id="358">Geschlossen</string>
+	<string id="359">Neue Email %s</string>
 
 	<!-- About Labels -->
 	<string id="360">Über</string>
@@ -276,29 +291,42 @@
 	<string id="370">Kontakte</string>
 	<string id="371">Keine Kontakte</string>
 	<string id="372">Kontaktnamen bearbeiten</string>
-	<string id="373">Kontaktname bereits vorhanden</string>
+	<string id="373">Kontaktname bereits vorhanden.</string>
 	<string id="374">Bearbeite Kontakt Email Adresse</string>
 	<string id="375">Kontakt löschen?</string>
 	<string id="376">Kontakt: </string>
 	<string id="377">Email an Kontakt verfassen?</string>
-	<string id="378">Kontakt hinzugefügt</string>
-	<string id="379">Kontakt ist bereits im Adressfeld vorhanden</string>
+	<string id="378">Kontakt hinzugefügt.</string>
+	<string id="379">Kontakt ist bereits im Adressfeld vorhanden.</string>
 	<string id="380">Kontaktliste</string>
+	<string id="381">Alle</string>
+	<string id="382">Importieren</string>
+	<string id="383">Nach .csv Datei suchen....</string>
 
 	<!-- Update Labels -->
 	<string id="390">Deine Version ist aktuell.</string>
-	<string id="391">Suche nach aktuellster Version...</string>
-    	<string id="392">ist neuer</string>
-    	<string id="393">Möchtest du aktualisieren?</string>
-    	<string id="394">Lade Liste mit Dateien...</string>
-    	<string id="395">Bitte warten...</string>
+	<string id="391">Suche nach aktuellen Versionen....</string>
+    	<string id="392">Auf XinBox Version %s aktualisieren?</string>
+    	<string id="393">Change Log</string>
+    	<string id="394">Lade Liste mit Dateien....</string>
+    	<string id="395">Bitte warten....</string>
     	<string id="396">Version</string>
     	<string id="397">Lade:</string>
     	<string id="398">Pfad:</string>
     	<string id="399">Datei:</string>
-    	<string id="400">Deine neue Version wurde gespeichert in:</string>
-    	<string id="401">Keine aktuellere Version gefunden!</string>
+    	<string id="400">Downloade Change Log....</string>
+    	<string id="401">Fehler beim downloaden der markierten Versionen!</string>
     	<string id="402">Es kam zu einem Fehler beim Aktualisieren!</string>
-        <string id="403">Alte Version löschen und neue Version starten?</string>
+        <string id="403">Kopie der Version %s behalten?</string>
+	<string id="404">Neue(s) Update(s) verfügbar!</string>
+	<string id="405">Neueste</string>
+	<string id="406">Neuer</string>
+	<string id="407">Aktuell</string>
+	<string id="408">Älter</string>
+	<string id="409">Inkompatibel</string>
+	<string id="410">Update Menü</string>
+	<string id="411">Keine Change Log für diese Version vorhanden.</string>
+	<string id="412">Importiere neue Einstellungen.</string>
+	<string id="413">Bitte Warten....</string>
 </strings>
 
