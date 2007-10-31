@@ -1,13 +1,10 @@
-XinBox Version 0.99.93 Change Log:
+XinBox Version 0.99.94 Change Log:
 
-Fixed: Certain labels in menus would not show fully.
-Added: New Mini-Mode menu! White Button when New Email notification pops up.
-	This will take you to the new Mini-Mode menu where you can read the new emails without opening the script.
-        You can then click "InBox" to go to inbox or press back to close and mini-mode will continue.
-Updated: "Mini-Mode Started" and "Mini-Mode Closed" - now hard-coded English due to using other languages cause script
-         to fail. Don't think XBMC likes it.
-Updated: Autoexec.py editor
-
+Updated: Finish Strings - thanks to mikko70
+Fixed: Broken German Strings.
+Updated: German Strings - thanks to bootsy
+Updated: Mini-Mode menu (Replaced Email List label with Inbox Name)
+Updated: InBox menu - UP on "Check" Now takes you to "Exit"
      
 
 
