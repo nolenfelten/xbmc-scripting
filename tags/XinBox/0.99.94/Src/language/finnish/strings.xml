@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!-- English Strings v.0.9 -->
-<!--    Xinbox v.0.99.91    -->
-<!--  Finnish v.26.10.2007  -->
+<!-- English Strings v.1.1 -->
+<!--   Xinbox v.0.99.93   -->
+<!--  Finnish v.29.10.2007  -->
 
 <strings>
 	<!-- Main Menu Labels -->
@@ -106,7 +106,7 @@
   <string id="114">Valitse mikäli haluat vaihtaa sähköpostiosoiteen. Tätä osoitetta muut käyttävät viestien sinulle lähettämiseen.</string>
   <string id="115">POP3-palvelin. Esim. pop.gmail.com. Valkea nappi: vaihda mahdollinen POP3 SSL palvelimen portti.Esim. Gmail - Pop3 SSL Portti# 995</string>
   <string id="116">SMTP-palvelin. Esim. smtp.gmail.com. Valkea nappi: vaihda mahdollinen SMTP SSL palvelimen portti. Esim. Gmail - SMTP SSL Portti# 587</string>
-  <string id="117">Valitse mikäli haluat vaihtaa palvelimen tilin nimen. Tämä on tavallisesti nimi jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
+  <string id="117">Valitse mikäli haluat vaihtaa palvelimen tilin nimen. Tämä on tavallisesti nimi jota käytät kirjautuaksesi esim. Outlook/Web mailiin.</string>
   <string id="118">Valitse mikäli haluat vaihtaa palvelimen tilin salasanan. Tämä on tavallisesti salasana jota käytät kirjautuaksesti esim. Outlook/Web mailiin.</string>
   <string id="119">Valitse mikäli haluat vaihtaa palvelimen postilaatikon kokoa. Anna postilaatikon koko joka on palvelimella(MB). Aseta 0 mikäli et halua varoituksia tilan täyttymisestä.</string>
   <string id="120">Valitse mikäli haluat vaihtaa XinBox postilaatikon kokoa. Anna haluttu xboksin postilaatikon koko(MB).Aseta 0 mikäli et halua varoituksia tilan täyttymisestä.</string>
@@ -160,6 +160,7 @@
   <string id="170">Valitse merkitäksesi tämän viestin lukemattomaksi.</string>
   <string id="171">Valitse halutessasi kirjautuessa hakea uudet sähköpostit automaattisesti.</string>
   <string id="172">Valitse tuodaksesi .csv osoitekirja tiedoston. Lue readme.txt tiedostosta tarkemmat ohjeet.</string>
+  <string id="173">Valitse mikäli haluat asettaa "Ok"-ikkunan näkyviin tämän tilin sähköposti viestien yhteydessä.</string>
 
 	<!-- Account Menu Labels -->
   <string id="200">Tili</string>
@@ -167,7 +168,7 @@
   <string id="202">Kaikki postilaatikot tässä tilissä poistetaan.</string>
   <string id="203">Aut. tarkastus</string>
   <string id="204">(Oletus)</string>
-	
+  <string id="205">Postin hyväksymisikkuna</string>	
 	<!-- Email Labels -->
   <string id="210">Saapuneet - </string>
   <string id="211">Kirjaudutaan...</string>
@@ -280,6 +281,7 @@
   <string id="356">Käynnistetty</string>
   <string id="357">Pienoistilan merkkiääni</string>
   <string id="358">Suljettu</string>
+  <string id="359">Uusi viesti %s</string>
 
 	<!-- About Labels -->
   <string id="360">Tietoja</string>
@@ -291,7 +293,7 @@
   <string id="371">Yhteystietoja ei ole</string>
   <string id="372">Muokkaa yhteyden nimeä</string>
   <string id="373">Nimi on jo olemassa</string>
-  <string id="374">Muokkaa yhteystiedon sähköpostiosoitetta</string>
+  <string id="374">Muokkaa yhteystiedon sähköposti osoitetta</string>
   <string id="375">Poistetaanko yhteystieto?</string>
   <string id="376">Yhteystieto: </string>
   <string id="377">Lähetetäänkö viesti yhteystiedolle?</string>
@@ -325,5 +327,7 @@
   <string id="409">Sopimaton</string>
   <string id="410">Päivitys</string>
   <string id="411">Tähän versioon ei ole muutoshistoriaa saatavilla.</string>
+  <string id="412">Tuodaan uusia asetuksia</string>
+  <string id="413">Odota hetki...</string>
 </strings>
 
