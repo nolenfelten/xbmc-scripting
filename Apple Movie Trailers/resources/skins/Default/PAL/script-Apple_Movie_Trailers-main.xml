@@ -782,8 +782,8 @@
                 <texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
                 <texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
                 <texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
-                <textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
-                <textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
+                <textureslidernib>amt-scrollbar-nib-nofocus.png</textureslidernib>
+                <textureslidernibfocus>amt-scrollbar-nib-focus.png</textureslidernibfocus>
                 <onleft>50</onleft>
                 <onright>175</onright>
                 <showonepage>true</showonepage>
@@ -913,8 +913,8 @@
 				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
 				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.png</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.png</textureslidernibfocus>
 				<onleft>170</onleft>
 				<onright>70</onright>
 				<showonepage>true</showonepage>
@@ -1032,8 +1032,8 @@
 				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
 				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.png</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.png</textureslidernibfocus>
 				<onleft>70</onleft>
 				<onright>60</onright>
 				<showonepage>true</showonepage>
@@ -1201,8 +1201,8 @@
 				<texturesliderbackground border="4">amt-scrollbar-bg.png</texturesliderbackground>
 				<texturesliderbar border="3">amt-scrollbar-bar-nofocus.png</texturesliderbar>
 				<texturesliderbarfocus border="3">amt-scrollbar-bar-focus.png</texturesliderbarfocus>
-				<textureslidernib>amt-scrollbar-nib-nofocus.PNG</textureslidernib>
-				<textureslidernibfocus>amt-scrollbar-nib-focus.PNG</textureslidernibfocus>
+				<textureslidernib>amt-scrollbar-nib-nofocus.png</textureslidernib>
+				<textureslidernibfocus>amt-scrollbar-nib-focus.png</textureslidernibfocus>
 				<onleft>60</onleft>
 				<onright>9000</onright>
 				<showonepage>true</showonepage>
