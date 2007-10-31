@@ -107,7 +107,7 @@ class Update:
                 self.dialog.update( pct, "%s %s" % ( _( 1007 ), url, ), "%s %s" % ( _( 1008 ), path, ), "%s %s" % ( _( 1009 ), file, ) )
                 if ( self.dialog.iscanceled() ): raise
                 if ( not os.path.isdir( path ) ): os.makedirs( path )
-                urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), "%s\\%s" % ( path, file, ) )
+                urllib.urlretrieve( "%s%s" % ( self.base_url, url, ), xbmc.translatePath( os.path.join( path, file ) ) )
         except:
             raise
         else:

@@ -104,7 +104,7 @@ class Main:
                     # set our overlay image
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in url or "1080p.mov" in url ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Cast": trailer[ 17 ], "Runtime": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAA": rating, "Plot": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
+                    listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Cast": trailer[ 17 ], "Duration": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAA": rating, "Plot": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
                     # add the item to the media list
                     ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, totalItems=len(trailers) )
                     # if user cancels, call raise to exit loop
