@@ -1,3 +1,8 @@
+version 0.96:
+- added: scrollbar to trainerlist
+- added: version # in script
+- added: trainer download counts
+- changed: some cosmetic things
 
 version 0.95:
 - fixed: some unzip issues, should work fine now

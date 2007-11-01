@@ -1,6 +1,6 @@
 __scriptname__ = 'EvoxT-Trainers'
 __author__ = 'bootsy'
-__version__ = '0.95'
+__version__ = '0.96'
 import xbmc, xbmcgui
 
 dia = xbmcgui.Dialog()
@@ -67,6 +67,7 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         self.textarea.setVisible(False)
         self.resetlist()
         self.set_trainerpath()
+        self.version.setLabel(__version__)
         self.control_action = setControllerAction()
         dialog.update(30, 'Fetching recently added trainers')
         try:
@@ -78,11 +79,16 @@ class EvoxTGUI( xbmcgui.WindowXML ):
             date = self.get_dates(Recent_URL)
         except:
             date = ["cant", "find", "recent", "dates"]
-        dialog.update(75)
+        dialog.update(70)
+        try:
+            dlcount = self.get_dlcount(Recent_URL)
+        except:
+            dlcount = ["cant", "find", "download", "counts"]
+        dialog.update(80)
         self.set_section(Recent_URL)
         dialog.update(100)
         dialog.close()
-        self.buildlist(trainer, date)
+        self.buildlists(trainer, date, dlcount)
         self.setFocus(self.trainerlist)
 
     def unzip(self, filename):
@@ -231,6 +237,18 @@ class EvoxTGUI( xbmcgui.WindowXML ):
             date = ["unable", "to", "find", "dates"]
         return date
 
+    def get_dlcount(self, url):
+        data = urllib.urlopen(url)
+        data = data.read()
+        temp = ('<td class=["].*?["]>(.*?)</td>')
+        try:
+            cou = re.findall(temp, data)
+            count = cou[ 0 : ]
+        except:
+            count = ["unable", "to", "find", "dl count"]
+        return count
+
+
     def set_trainerpath(self):
         if os.path.exists(os.path.join(SCRIPTSETDIR,'settings.txt')):
             data = open(os.path.normpath(os.path.join(SCRIPTSETDIR,'settings.txt')), 'r')
@@ -256,8 +274,14 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         for x in range (0, len(array1)):
             self.trainerlist.addItem(xbmcgui.ListItem(array1[x], array2[x]))
 
+    def buildlists(self, array1, array2, array3):
+        for x in range (0, len(array1)):
+            self.trainerlist.addItem(xbmcgui.ListItem(array1[x], array2[x]))
+            self.dlcountlist.addItem(array3[x])
+
     def resetlist(self):
         self.trainerlist.reset()
+        self.dlcountlist.reset()
 
     def make_dirs(self):
         if not os.path.exists(SETTINGSDIR):
@@ -271,8 +295,10 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         return
 
     def getmycontrols(self):
+        self.version = self.getControl(83)
         self.textarea = self.getControl(5)
         self.trainerlist = self.getControl(81)
+        self.dlcountlist = self.getControl(82)
         self.Recent_Button = self.getControl(71)
         self.Sec0_Button = self.getControl(72)
         self.Sec1_Button = self.getControl(73)
@@ -285,6 +311,9 @@ class EvoxTGUI( xbmcgui.WindowXML ):
         self.Sec8_Button = self.getControl(80)
 
     def onAction(self, action):
+        xbmcgui.lock()
+        self.dlcountlist.selectItem(self.trainerlist.getSelectedPosition())
+        xbmcgui.unlock()
         button_key = self.control_action.get( action.getButtonCode(), 'n/a' )
         actionID   =  action.getId()
         try:focusid = self.getFocusId()
@@ -295,6 +324,7 @@ class EvoxTGUI( xbmcgui.WindowXML ):
             if (focusid == 5):
                 self.textarea.setVisible(False)
                 self.trainerlist.setVisible(True)
+                self.dlcountlist.setVisible(True)
                 self.setFocus(self.trainerlist)
             elif dia.yesno(__scriptname__, 'Exit script?'):
                 self.close()
@@ -312,6 +342,7 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                     nfo = self.get_nfo(nfolink)
                     dialog.update(60)
                     self.trainerlist.setVisible(False)
+                    self.dlcountlist.setVisible(False)
                     dialog.update(85)
                     self.textarea.setVisible(True)
                     self.setFocus(self.textarea)
@@ -343,10 +374,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Recent_URL)
             except:
                 date = ["cant", "find", "recent", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Recent_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Recent_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 72):
@@ -363,10 +399,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section0_URL)
             except:
                 date = ["cant", "find", "0-9", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section0_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section0_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 73):
@@ -383,10 +424,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section1_URL)
             except:
                 date = ["cant", "find", "A-C", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section1_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section1_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 74):
@@ -403,10 +449,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section2_URL)
             except:
                 date = ["cant", "find", "D-F", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section2_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section2_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 75):
@@ -423,10 +474,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section3_URL)
             except:
                 date = ["cant", "find", "G-I", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section3_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section3_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 76):
@@ -443,10 +499,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section4_URL)
             except:
                 date = ["cant", "find", "J-L", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section4_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section4_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 77):
@@ -463,10 +524,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section5_URL)
             except:
                 date = ["cant", "find", "M-O", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section5_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section5_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 78):
@@ -483,10 +549,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section6_URL)
             except:
                 date = ["cant", "find", "P-R", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section6_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section6_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 79):
@@ -503,10 +574,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section7_URL)
             except:
                 date = ["cant", "find", "S-U", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section7_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section7_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif ( controlID == 80):
@@ -523,10 +599,15 @@ class EvoxTGUI( xbmcgui.WindowXML ):
                 date = self.get_dates(Section8_URL)
             except:
                 date = ["cant", "find", "V-Z", "dates"]
+            dialog.update(70)
+            try:
+                dlcount = self.get_dlcount(Section8_URL)
+            except:
+                dlcount = ["cant", "find", "download", "counts"]
             self.set_section(Section8_URL)
             dialog.update(100)
             dialog.close()
-            self.buildlist(trainer, date)
+            self.buildlists(trainer, date, dlcount)
             self.setFocus(self.trainerlist)
 
         elif (controlID == 81):

@@ -46,21 +46,34 @@
 		<control type="label" id="64">
 			<description>updated label</description>
 			<posx>700</posx>
-			<posy>545</posy>
+			<posy>520</posy>
 			<align>right</align>
 			<label>* = Latest Update</label>
 			<width>200</width>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+
+		<control type="label" id="83">
+			<description>version label</description>
+			<posx>700</posx>
+			<posy>545</posy>
+			<align>right</align>
+			<label>-</label>
+			<width>200</width>
+			<font>font10</font>
+			<textcolor>FFFFFFFF</textcolor>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 
 		<control type="image" id="69">
 			<description>Back Button Image</description>
-			<posx>15</posx>
-			<posy>495</posy>
+			<posx>170</posx>
+			<posy>545</posy>
 			<width>20</width>
 			<height>20</height>
 			<texture>evt_button-Back.png</texture>
@@ -70,28 +83,28 @@
 
 		<control type="label" id="70">
 			<description>Back Button label Main</description>
-			<posx>40</posx>
-			<posy>495</posy>
+			<posx>195</posx>
+			<posy>545</posy>
 			<align>left</align>
 			<label>Exit Script</label>
 			<width>200</width>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 
 		<control type="label" id="45">
 			<description>Back Button label NFO</description>
-			<posx>40</posx>
-			<posy>495</posy>
+			<posx>195</posx>
+			<posy>545</posy>
 			<align>left</align>
 			<label>Back</label>
 			<width>200</width>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(5)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -103,7 +116,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>evt_button-A.png</texture>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -117,7 +130,7 @@
 			<width>200</width>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -129,7 +142,7 @@
 			<width>20</width>
 			<height>20</height>
 			<texture>evt_button-Y.png</texture>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -143,33 +156,75 @@
 			<width>200</width>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 
 		<control type="image" id="67">
 			<description>White Button Image</description>
-			<posx>150</posx>
-			<posy>545</posy>
+			<posx>170</posx>
+			<posy>520</posy>
 			<width>20</width>
 			<height>20</height>
 			<texture>evt_button-White.png</texture>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 
 		<control type="label" id="68">
 			<description>White Button label</description>
-			<posx>175</posx>
-			<posy>545</posy>
+			<posx>195</posx>
+			<posy>520</posy>
 			<align>left</align>
 			<label>Change Trainerpath</label>
 			<width>200</width>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<visible>!Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(81)</visible>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+
+		<control type="label" id="46">
+			<description>Title label</description>
+			<posx>130</posx>
+			<posy>100</posy>
+			<align>left</align>
+			<label>Title</label>
+			<width>200</width>
+			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>Control.IsVisible(81)</visible>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+
+		<control type="label" id="47">
+			<description>Trainer date label</description>
+			<posx>512</posx>
+			<posy>100</posy>
+			<align>left</align>
+			<label>Date</label>
+			<width>200</width>
+			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>Control.IsVisible(81)</visible>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+
+		<control type="label" id="48">
+			<description>dL count label</description>
+			<posx>643</posx>
+			<posy>100</posy>
+			<align>left</align>
+			<label>dL's</label>
+			<width>200</width>
+			<font>font12</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>Control.IsVisible(81)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -178,26 +233,26 @@
 		<!-- START: Textarea -->
 		<control type="image" id="4">
 			<description>nfo background image</description>
- 			<posx>180</posx>
+ 			<posx>110</posx>
   			<posy>95</posy>
-			<width>535</width>
-			<height>460</height>
+			<width>600</width>
+			<height>435</height>
 			<texture>evt_nfo_bg.png</texture>
-			<visible>Control.HasFocus(5)</visible>
+			<visible>Control.IsVisible(5)</visible>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 
 		<control type="textbox" id="5">
 			<description>textarea</description>
-			<posx>200</posx>
+			<posx>140</posx>
 			<posy>105</posy>
-			<width>490</width>
-			<height>410</height>
+			<width>540</width>
+			<height>390</height>
 			<font>font12</font>
 			<textcolor>FFFFFFFF</textcolor>
-			<spinposx>465</spinposx>
-			<spinposy>397</spinposy>
+			<spinposx>520</spinposx>
+			<spinposy>375</spinposy>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
@@ -206,14 +261,16 @@
 		<!-- START: Lists -->
 		<control type="list" id="81">
 			<description>Trainerlist</description>
-			<posx>190</posx>
-			<posy>110</posy>
-			<width>520</width>
-			<height>400</height>
+			<posx>120</posx>
+			<posy>120</posy>
+			<width>580</width>
+			<height>380</height>
 			<onleft>9000</onleft>
-			<onright>81</onright>
+			<onright>49</onright>
 			<onup>81</onup>
 			<ondown>81</ondown>
+			<pagecontrol>49</pagecontrol>
+			<scrolltime>200</scrolltime>
 			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 			<itemlayout height="27">
@@ -234,7 +291,7 @@
 				<control type="label">
 					<posx>10</posx>
 					<posy>2</posy>
-					<width>380</width>
+					<width>360</width>
 					<height>22</height>
 					<font>font13</font>
 					<selectedcolor>FFe2ff43</selectedcolor>
@@ -242,7 +299,7 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>505</posx>
+					<posx>470</posx>
 					<posy>2</posy>
 					<width>100</width>
 					<height>22</height>
@@ -254,7 +311,7 @@
 			</itemlayout>
 			<focusedlayout height="27">
 				<control type="image">
-					<width>515</width>
+					<width>560</width>
 					<height>25</height>
 					<posx>0</posx>
 					<posy>0</posy>
@@ -271,7 +328,7 @@
 				<control type="label">
 					<posx>10</posx>
 					<posy>2</posy>
-					<width>380</width>
+					<width>360</width>
 					<height>22</height>
 					<font>font13</font>
 					<selectedcolor>FFe2ff43</selectedcolor>
@@ -279,7 +336,7 @@
 					<info>ListItem.Label</info>
 				</control>
 				<control type="label">
-					<posx>505</posx>
+					<posx>470</posx>
 					<posy>2</posy>
 					<width>100</width>
 					<height>22</height>
@@ -290,18 +347,144 @@
 				</control>
 			</focusedlayout>
 		</control>
+		<control type="list" id="82">
+			<description>DLCountlist</description>
+			<posx>140</posx>
+			<posy>120</posy>
+			<width>580</width>
+			<height>380</height>
+			<onleft>9000</onleft>
+			<onright>82</onright>
+			<onup>82</onup>
+			<ondown>82</ondown>
+			<pagecontrol>49</pagecontrol>
+			<scrolltime>200</scrolltime>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<itemlayout height="27">
+				<control type="image">
+					<width>515</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture>evt_list-nofocus.png</texture>
+				</control>
+				<control type="image">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>530</posx>
+					<posy>2</posy>
+					<width>50</width>
+					<height>22</height>
+					<font>font10</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>580</posx>
+					<posy>2</posy>
+					<width>100</width>
+					<height>22</height>
+					<font>font10</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="27">
+				<control type="image">
+					<width>570</width>
+					<height>25</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(82)</visible>
+					<texture>evt_list-focus.png</texture>
+				</control>
+				<control type="image">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>20</width>
+					<height>20</height>
+					<info>ListItem.Icon</info>
+				</control>
+				<control type="label">
+					<posx>530</posx>
+					<posy>2</posy>
+					<width>50</width>
+					<height>22</height>
+					<font>font10</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>580</posx>
+					<posy>2</posy>
+					<width>100</width>
+					<height>22</height>
+					<font>font10</font>
+					<selectedcolor>FFe2ff43</selectedcolor>
+					<align>right</align>
+					<info>ListItem.Label2</info>
+				</control>
+			</focusedlayout>
+		</control>
+		<control type="button">
+			<posx>690</posx>
+			<posy>122</posy>
+			<width>16</width>
+			<height>20</height>
+			<colordiffuse>99FFFFFF</colordiffuse>
+			<onclick>PageUp(49)</onclick>
+			<texturefocus border="4">evt_scrollbar_arrow_up_focus.png</texturefocus>
+			<texturenofocus border="4">evt_scrollbar_arrow_up.png</texturenofocus>
+			<visible>Control.IsVisible(49)</visible>
+		</control>
+		<control type="button">
+			<posx>690</posx>
+			<posy>470</posy>
+			<width>16</width>
+			<height>20</height>
+			<colordiffuse>99FFFFFF</colordiffuse>
+			<onclick>PageDown(49)</onclick>
+			<texturefocus border="4">evt-scrollbar_arrow_down_focus.png</texturefocus>
+			<texturenofocus border="4">evt_scrollbar_arrow_down.png</texturenofocus>
+			<visible>Control.IsVisible(49)</visible>
+		</control>
+		<control type="scrollbar" id="49">
+			<posx>690</posx>
+			<posy>142</posy>
+			<width>16</width>
+			<height>328</height>
+			<texturesliderbackground border="4">evt_scrollbar_background.png</texturesliderbackground>
+			<texturesliderbar border="4">evt_scrollbar_bar.png</texturesliderbar>
+			<texturesliderbarfocus border="4">evt_scrollbar_bar_focus.png</texturesliderbarfocus>
+			<textureslidernib>-</textureslidernib>
+			<textureslidernibfocus>-</textureslidernibfocus>
+			<onleft>81</onleft>
+			<onright>49</onright>
+			<showonepage>false</showonepage>
+			<orientation>vertical</orientation>
+			<visible>Control.IsVisible(81)</visible>
+		</control>
 		<!-- END: Lists -->
 
 		<!-- START: Main buttons -->
 		<control type="group" id="9000">
-			<posx>30</posx>
+			<posx>36</posx>
 			<posy>-20</posy>
 			<control type="button" id="71">
 				<description>Recent Button</description>
 				<label>Recent</label>
-				<posx>0</posx>
+				<posx>-15</posx>
 				<posy>135</posy>
-				<width>150</width>
+				<width>85</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>80</onup>
@@ -321,7 +504,7 @@
 				<label>0-9</label>
 				<posx>0</posx>
 				<posy>210</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>71</onup>
@@ -341,7 +524,7 @@
 				<label>A-C</label>
 				<posx>0</posx>
 				<posy>240</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>72</onup>
@@ -361,7 +544,7 @@
 				<label>D-F</label>
 				<posx>0</posx>
 				<posy>270</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>73</onup>
@@ -381,7 +564,7 @@
 				<label>G-I</label>
 				<posx>0</posx>
 				<posy>300</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>74</onup>
@@ -401,7 +584,7 @@
 				<label>J-L</label>
 				<posx>0</posx>
 				<posy>330</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>75</onup>
@@ -421,7 +604,7 @@
 				<label>M-O</label>
 				<posx>0</posx>
 				<posy>360</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>76</onup>
@@ -441,7 +624,7 @@
 				<label>P-R</label>
 				<posx>0</posx>
 				<posy>390</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>77</onup>
@@ -461,7 +644,7 @@
 				<label>S-U</label>
 				<posx>0</posx>
 				<posy>420</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>78</onup>
@@ -481,7 +664,7 @@
 				<label>V-Z</label>
 				<posx>0</posx>
 				<posy>450</posy>
-				<width>150</width>
+				<width>70</width>
 				<height>30</height>
 				<onright>81</onright>
 				<onup>79</onup>
