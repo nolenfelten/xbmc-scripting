@@ -206,10 +206,14 @@
     <string id="711">Install</string>
     <string id="712">Skip</string>
     <string id="713">Plugin</string>
+    <string id="714">add</string>
 
     <string id="720">Remember to add new plugin source from files</string>
     <string id="721">view. Library view is automatic, no further</string>
     <string id="722">steps are needed.</string>
+
+    <string id="723">Would you like to add a bookmark for this</string>
+    <string id="724">plugin to your sources.xml file?</string>
 
     <string id="730">There was an error installing plugin!</string>
     

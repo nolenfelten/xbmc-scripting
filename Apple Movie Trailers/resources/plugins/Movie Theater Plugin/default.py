@@ -17,7 +17,7 @@ __version__ = "1.1"
 
 # base paths
 BASE_PATH = os.getcwd().replace( ";", "" )
-BASE_DATABASE_PATH = xbmc.translatePath( os.path.join( "P:\\", "script_data", __script__ ) )
+BASE_DATABASE_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __script__ ) )
 
 
 if ( __name__ == "__main__" ):

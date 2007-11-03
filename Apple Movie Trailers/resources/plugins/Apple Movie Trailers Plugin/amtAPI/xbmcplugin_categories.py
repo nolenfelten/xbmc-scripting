@@ -16,7 +16,7 @@ class Main:
     # base paths
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
     BASE_SETTINGS_PATH = BASE_DATABASE_PATH
-    BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:\\", "skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
+    BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:\\skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
     BASE_PLUGIN_THUMBNAIL_PATH = os.path.join( sys.modules[ "__main__" ].BASE_PATH, "thumbnails" )
 
     def __init__( self ):
@@ -31,9 +31,9 @@ class Main:
         # no database was found so notify XBMC we're finished
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
+        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, "Database not found!", "Would you like to run the main script?" ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
 

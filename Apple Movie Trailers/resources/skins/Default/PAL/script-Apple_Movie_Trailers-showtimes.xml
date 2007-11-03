@@ -57,7 +57,7 @@
 		</control>
 		<!-- ** Required ** Do not change <id> or <type> -->
 		<control type="list" id="100">
-			<description>Team Credits List</description>
+			<description>List</description>
 			<posx>-30</posx>
 			<posy>100</posy>
 			<width>470</width>

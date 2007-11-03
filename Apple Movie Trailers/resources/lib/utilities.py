@@ -105,6 +105,14 @@ def install_plugin( plugin=0 ):
             # delete our cached thumbnail
             if ( os.path.isfile( cached_thumbnail_path ) ):
                 os.remove( cached_thumbnail_path )
+            # TODO: enable this once webserver does not need to be running
+            """
+            # add the bookmark to sources.xml
+            addbookmark = xbmcgui.Dialog().yesno( _( msg ), _( 723 ), _( 724 ), "", _( 712 ), _( 714 ) )
+            if ( addbookmark ):
+                xbmc.executehttpapi( "Config(addbookmark,video,%s,plugin://video/%s/)" % ( title, title, ) )
+            else:
+            """
             # inform user of installation procedure for plugin
             ok = xbmcgui.Dialog().ok( _( msg ), _( 720 ), _( 721 ), _( 722 ) )
         except:
