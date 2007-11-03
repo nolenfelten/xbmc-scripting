@@ -23,7 +23,7 @@ class _Info:
 class Main:
     # base paths
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\", "script_data", sys.modules[ "__main__" ].__script__ ) )
+    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
         self._parse_argv()

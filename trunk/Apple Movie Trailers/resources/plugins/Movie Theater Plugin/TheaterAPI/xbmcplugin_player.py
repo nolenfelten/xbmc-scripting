@@ -38,8 +38,8 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\", "Thumbnails", "Video" )
-    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\", "script_data", sys.modules[ "__main__" ].__script__ ) )
+    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
+    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
         self._parse_argv()

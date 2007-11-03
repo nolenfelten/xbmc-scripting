@@ -19,7 +19,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\", "Thumbnails", "Video" )
+    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
     # add all video extensions wanted in lowercase
     VIDEO_EXT = ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp"
@@ -40,9 +40,9 @@ class Main:
         # no database was found so notify XBMC we're finished
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
+        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, "Database not found!", "Would you like to run the main script?" ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\", "scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
 
@@ -96,11 +96,12 @@ class Main:
 
     def _get_videodb_list( self, path ):
         try:
+            # TODO: change GLOB -> LIKE when and if sqLite get's updated with a fix
             from urllib import urlencode
             # if the user has a certain path, set it
             path_sql = ""
             if ( path ):
-                path_sql = "WHERE path.strPath LIKE '%s%%%%' " % path
+                path_sql = "WHERE path.strPath GLOB '%s*' " % path
             rating_sql = ""
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             # if the user set a valid rating and limit query add all up to the selection
@@ -109,7 +110,7 @@ class Main:
                 else: rating_sql = "WHERE ("
                 # enumerate through mpaa ratings and add the selected ones to our sql statement
                 for rating in mpaa_ratings:
-                    rating_sql += "movie.c12 LIKE '%%%% %s %%%%' OR " % ( rating, )
+                    rating_sql += "movie.c12 GLOB '* %s *' OR " % ( rating, )
                     # if we found the users choice, we're finished
                     if ( rating == self.args.rating ): break
                 # fix the sql statement
@@ -123,24 +124,37 @@ class Main:
                     JOIN path ON files.idPath=path.idPath 
                     %s
                     %s
-                    """ % ( path_sql, rating_sql, )
+                    LIMIT 100 OFFSET %d
+                    """
             # format our response, so it returns a valid python list of records
             xbmc.executehttpapi( "SetResponseFormat(OpenRecordSet,%s)" % ( urlencode( {"e": '[' } )[ 2 : ], ) )
             xbmc.executehttpapi( "SetResponseFormat(CloseRecordSet,%s)" % ( urlencode( {"e": ']' } )[ 2 : ], ) )
             xbmc.executehttpapi( "SetResponseFormat(OpenRecord,%s)" % ( urlencode( {"e": '(' } )[ 2 : ], ) )
             xbmc.executehttpapi( "SetResponseFormat(CloseRecord,%s)" % ( urlencode( {"e": '), ' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( urlencode( {"e": '"""' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( urlencode( {"e": '""", ' } )[ 2 : ], ) )
+            # we use [[TRIPLE_QUOTE]] for fields so as not to interfere with quoted strings
+            xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( urlencode( {"e": '[[TRIPLE_QUOTE]]' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( urlencode( {"e": '[[TRIPLE_QUOTE]], ' } )[ 2 : ], ) )
             # query the database
-            records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % urlencode({"e": sql })[ 2 : ] )
             entries = []
-            # if query was successful, set our entries list
-            if ( "Error:" not in records ):
-                # eval response to a python list, replace \ with \\ or else eval will fail
-                items = eval( records.replace( "\\", "\\\\" ) )
+            offset = 0
+            records = ""
+            while records != "[]":
+                # create new sql based on our offset. (we limit the number of records returned each time to 100 for memory)
+                new_sql = sql % ( path_sql, rating_sql, offset, )
+                records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % urlencode({"e": new_sql })[ 2 : ] )
+                # if query was not successful, raise an error
+                if ( "Error:" in records ): raise
+                # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
+                items = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
                 # enumerate through our items list and add the info to our entries list
                 for entry in items:
-                    entries += [ ( entry[ 0 ] + entry[ 1 ], entry[ 2 ], False, entry[ 3 ], entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
+                    # call _get_thumbnail() for the path to the cached thumbnail
+                    thumbnail = self._get_thumbnail( entry[ 0 ] + entry[ 1 ] )
+                    # set the path with username:password
+                    fpath = self._fix_samba_path( entry[ 0 ] + entry[ 1 ] )
+                    # add video to our list
+                    entries += [ ( fpath, entry[ 2 ].replace( "[[QUOTE]]", '"' ), False, thumbnail, entry[ 3 ].replace( "[[QUOTE]]", '"' ), entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
+                offset += 100
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -168,18 +182,32 @@ class Main:
         folder = "/".join( share_string_list[ 4 : ] ) + "/*"
         # get the paths list
         items = remote_conn.list_path( remote_share, folder )
+        # set the path with username:password
+        fpath = self._fix_samba_path( path )
         # enumerate through our items list and add the full name to our entries list
         for item in items:
             # we don't want the . or .. directory items
             if ( item.get_longname() and item.get_longname() != "." and item.get_longname() != ".." ):
                 # concatenate directory pairs
-                file_path = "%s/%s" % ( path, item.get_longname(), )
+                file_path = "%s/%s" % ( fpath, item.get_longname(), )
                 # get the item info
                 title, isVideo, isFolder = self._get_file_info( file_path )
+                # call _get_thumbnail() for the path to the cached thumbnail
+                thumbnail = self._get_thumbnail( "%s/%s" % ( path, item.get_longname(), ) )
                 # add our item to our entry list
                 if ( isVideo or isFolder ):
-                    entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
+                    entries += [ ( file_path, title, isFolder, thumbnail, "", "", "", "", "" ) ]
         return entries
+
+    def _fix_samba_path( self, path ):
+        if ( not path.startswith( "smb://" ) ): return path
+        share_string_list = path.split( "/" )
+        fpath = share_string_list[ 0 ] + "//"
+        # only add the username:password if username exists
+        if ( self.args.username ):
+            fpath = fpath + "%s:%s@" % ( self.args.username, self.args.password, )
+        fpath = fpath + "/".join( share_string_list[ 2 : ] )
+        return fpath
 
     def _get_local_list( self, path ):
         entries = []
@@ -191,9 +219,11 @@ class Main:
             file_path = "%s%s%s" % ( path, os.sep, item, )
             # get the item info
             title, isVideo, isFolder = self._get_file_info( file_path )
+            # call _get_thumbnail() for the path to the cached thumbnail
+            thumbnail = self._get_thumbnail( file_path )
             # add our item to our entry list
             if ( isVideo or isFolder ):
-                entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
+                entries += [ ( file_path, title, isFolder, thumbnail, "", "", "", "", "" ) ]
         return entries
 
     def _get_file_info( self, file_path ):
@@ -227,8 +257,6 @@ class Main:
                     # add the different infolabels we want to sort by
                     listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
                 else:
-                    # call _get_thumbnail() for the path to the cached thumbnail
-                    thumbnail = self._get_thumbnail( item[ 0 ] )
                     # set the default icon
                     icon = "DefaultVideo.png"
                     # get the date of the file
@@ -236,11 +264,11 @@ class Main:
                     # get the size of the file
                     size = long( os.path.getsize( item[ 0 ] ) )
                     # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
+                    listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=item[ 3 ] )
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "MPAA": item[ 5 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
+                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 4 ], "MPAA": item[ 6 ], "Genre": item[ 7 ], "Studio": item[ 8 ] } )
                 # add the item to the media list
                 ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )
                 # if user cancels, call raise to exit loop
