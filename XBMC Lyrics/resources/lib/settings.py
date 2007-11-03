@@ -237,7 +237,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ controlId ]()
 
     def onFocus( self, controlId ):
-        self.controlId = controlId
+        xbmc.sleep( 5 )
+        self.controlId = self.getFocusId()
 
     def onAction( self, action ):
         if ( action.getButtonCode() in CANCEL_DIALOG ):

@@ -50,7 +50,7 @@ def get_keyboard( default="", heading="", hidden=False ):
         return keyboard.getText()
     return default
 
-def get_numeric_dialog( default="", heading="", type=3 ):
+def get_numeric_dialog( default="", heading="", dlg_type=3 ):
     """ shows a numeric dialog and returns a value
         - 0 : ShowAndGetNumber		(default format: #)
         - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
@@ -61,7 +61,7 @@ def get_numeric_dialog( default="", heading="", type=3 ):
     value = dialog.numeric( type, heading, default )
     return value
 
-def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
+def get_browse_dialog( default="", heading="", dlg_type=1, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
     """ shows a browse dialog and returns a value
         - 0 : ShowAndGetDirectory
         - 1 : ShowAndGetFile
@@ -69,7 +69,7 @@ def get_browse_dialog( default="", heading="", type=1, shares="files", mask="", 
         - 3 : ShowAndGetWriteableDirectory
     """
     dialog = xbmcgui.Dialog()
-    value = dialog.browse( type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+    value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
 
 def LOG( status, format, *args ):
