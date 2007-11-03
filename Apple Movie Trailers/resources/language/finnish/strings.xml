@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.2         Finnish 27.10.2007 -->
+  <!-- v.pre-0.99.2         Finnish 3.11.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko 70</string>
@@ -10,7 +10,7 @@
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
   <string id="41">Päivitetään lajityypeittäin, kesto n.1 - 5 minuuttia</string>
   <string id="42">Päivitetään lajityyppi tietoja...</string>
-  <string id="43">Kirjataan tallenteita tietokantaan...</string>
+  <string id="43">Kirjataan tallenteet tietokantaan...</string>
   <string id="44">Tietokannan luonti...</string>
   <string id="45">Poistetaan vanhojen lajityyppien xml-tiedostoja...</string>
   <string id="46">Tietokannan päivitys epäonnistui...</string>
@@ -20,8 +20,8 @@
   <string id="50">Käynnistetään skriptiä:</string>
   <string id="51">Ladataan osia &amp; asennetaan...</string>
   <string id="52">Osa:</string>
-  <string id="53">Tietokantaversio on yhteensopimaton</string>
-  <string id="54">Sinun täytyy päivittää kaikki lajityyppi ja elokuvatiedot.</string>
+  <string id="53">Tietokantaversio on yhteensopimaton.</string>
+  <string id="54">Sinun täytyy luoda tietokanta uudelleen.</string>
   <string id="55">Ladataan skini ja luodaan käyttöliittymä.</string>
   <string id="56">Siirretään elokuvaa tallennuskansioon.</string>
   <string id="57">Käyttöliittymän asetuksissasi on virhe.</string>
@@ -48,7 +48,7 @@
   <string id="78">Tilaa tarvitaan</string>
   <string id="79">Ladataan...</string>
   <string id="80">KB/s</string>
-  <string id="81">Kaikkia tarvittavia osia ei löydy!</string>
+  <string id="81">Kaikkia tarvittavia osia ei saatu ladattua!</string>
   <string id="82">Haluatko varmasti poistaa kaikki esittelyt:</string>
   <string id="83">Ladataan tietokanta...</string>
   <string id="84">Videot</string>
@@ -207,19 +207,23 @@
   <string id="711">Asenna</string>
   <string id="712">Ohita</string>
   <string id="713">Lisäke</string>
+  <string id="714">lisää</string>
 
   <string id="720">Muista lisätä uusi lisäke uutena sijaintina</string>
   <string id="721">Video-tiedostoihin. Kirjastotila toimii</string>
   <string id="722">automaattisesti, sinne ei muutoksia tarvita.</string>
+ 
+  <string id="723">Lisätäänkö tälle lisäkkeelle</string>
+  <string id="724">kirjanmerkki sources.xml tiedostoon?</string>
 
   <string id="730">Lisäkkeen asennus epäonnistui!</string>
-    
+
   <!-- Credits -->
   <string id="900">Versio</string>
   <string id="901">Tekijät:</string>
   <string id="902">Kiitokset:</string>
   <string id="903">Skinin tekijät</string>
-   
+
   <!-- Credits headings-->
   <string id="910">Kehitys &amp; koodaus</string>
   <string id="911">Koodaus &amp; ulkoasu</string>
