@@ -11,6 +11,7 @@ import xbmcgui
 __scriptname__ = "XBMC Changelog"
 __author__ = "Nuka1195/EnderW/Killarny"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
+__svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Changelog"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
 __version__ = "1.1"
 
@@ -20,7 +21,7 @@ resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 class GUI( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         base_url = "http://appliedcuriosity.cc/xbox/changelog.txt"
-        self.exit_script = [ 247, 275, 61467 ]
+        self.exit_script = ( 247, 275, 61467, )
         self._fetch_changelog( base_url )
 
     def onInit( self ):
