@@ -1,4 +1,4 @@
-@ECHO off
+@ECHO OFF
 CLS
 COLOR 1B
 
@@ -47,20 +47,20 @@ XCOPY resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclud
 COPY default.tbn "BUILD\%ScriptName%\"
 
 :: Create new default.py with __svn_revision__ embedded
-ECHO # Built with build.bat version 1.0 - %ScriptName% script revision: %Revision%> "BUILD\%ScriptName%\default.py"
-FOR /F "Tokens=1,2* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
+ECHO # %ScriptName% script revision: %Revision% - built with build.bat version 1.0 #> "BUILD\%ScriptName%\default.py"
+FOR /F "Tokens=1* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
     IF /I "%%M"=="__svn_revision__ = 0" (
-        ECHO __svn_revision__ = "%Revision%" >> "BUILD\%ScriptName%\default.py"
+        ECHO __svn_revision__ = "%Revision%">> "BUILD\%ScriptName%\default.py"
     ) ELSE IF "%%M"=="" (
-        ECHO. >> "BUILD\%ScriptName%\default.py"
+        ECHO.>> "BUILD\%ScriptName%\default.py"
     ) ELSE (
-        ECHO %%M >> "BUILD\%ScriptName%\default.py"
+        ECHO %%M>> "BUILD\%ScriptName%\default.py"
         )
     )
 )
 ECHO.
 
-:Cleanp
+:Cleanup
 :: Delete exclude.txt file
 ECHO ----------------------------------------------------------------------
 ECHO.
