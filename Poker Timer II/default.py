@@ -61,7 +61,7 @@ debug = False     # True outputs debug info to debug screen
 
 import os, sys
 import xbmc, xbmcgui
-#from time import sleep
+from time import sleep
 import thread, threading
 
 resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
@@ -153,7 +153,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.padFontLabel = "font14"
             self.padFontMessage = "font14"
 
-        self.slideSpeed = 15#0.015
+        self.slideSpeed = .015#0.015
 
         self.msg = []
         self.msg.append("")
@@ -1015,7 +1015,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             try:
                 for cnt in range(1, seconds + 1):
                     for x in range(10):
-                        xbmc.sleep(100)
+                        sleep(.100)
                         if x == 4:
                             self.blinkTimer(False, t2)
                         elif x == 9:
@@ -1056,10 +1056,10 @@ class windowOverlay(xbmcgui.WindowDialog):
         try:
             for cnt in range(1, seconds + 1):
                 for x in range(10):
-                    xbmc.sleep(100)
+                    sleep(.100)
                     while self.VISIBLE_BUTTON == 3:
                         for y in range(10):
-                            xbmc.sleep(100)
+                            sleep(.100)
                             if self.EXIT_SCRIPT:
                                 self.blinkTimer(True, t2)
                                 cnt = seconds
@@ -1144,7 +1144,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 m = int(pct**2 * 0.295)
                 self.set_panel(m)
                 pct += slide
-                xbmc.sleep(self.slideSpeed)
+                sleep(self.slideSpeed)
         else:
             if slide == -1:
                 self.set_panel(0)
@@ -1315,7 +1315,7 @@ class autoHideTimer(threading.Thread):
                 while self.windowOverlay.HIDE_PANEL and self.windowOverlay.autoHide:
                     s = self.windowOverlay.autoHideTime * 10
                     for x in range(s):
-                        xbmc.sleep(100)
+                        sleep(.100)
                         if self.windowOverlay.VISIBLE_BUTTON == 3 or not self.windowOverlay.HIDE_PANEL \
                             or not self.windowOverlay.TIMER_RUNNING or self.windowOverlay.RESET_PANEL:
                             raise loopExit
@@ -1332,7 +1332,7 @@ def activateGUI():
         xbmc.executebuiltin('XBMC.ActivateWindow(2006)')
     elif xbmc.Player().isPlayingVideo():
         xbmc.executebuiltin('XBMC.ActivateWindow(2005)')
-    xbmc.sleep(500)
+    sleep(.500)
 
 def returnStringAmount(a):
     e = ''
