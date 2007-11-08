@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="0">T3CH Upgrader</string>
+
+    <!-- Browse dialog headings -->
+    <string id="200">Installationssökväg (ex. E:\apps) </string>
+    <string id="201">Ange genvägsnamn</string>
+
+    <!-- Error messages -->
+    <string id="300">Ett fel uppstod vid sparande av inställningar!</string>
+    <string id="301">Ingen T3CH version kunde hittas!</string>
+    <string id="302">Fel vid nedladdning av dokument!</string>
+    <string id="303">Nedladdning avbruten!</string>
+    <string id="304">Ett fel uppstod under uppackning av versionen!</string>
+    <string id="305">Ett fel uppstod under läsning av versionsströmmen!</string>
+    <string id="306">Ett fel uppstod under flyttning av din UserData!</string>
+    <string id="307">Ett fel uppstod under skapning av genväg!</string>
+    <string id="308">Ett fel uppstod under flyttning av skripten!</string>
+    <string id="309">Genvägsnamn måste anges.</string>
+    <string id="310">Ändringslogg inte tillgänglig.</string>
+
+    <!-- Yes/No buttons -->
+    <string id="400">Ladda ned</string>
+    <string id="401">Hoppa över</string>
+    <string id="402">Ja</string>
+    <string id="403">Nej</string>
+    <string id="404">Byt</string>
+    <string id="405">Manuellt"</string>
+
+    <!-- Status messages -->
+    <string id="500">Nuvarande T3CH version är</string>
+    <string id="501">Vill du ladda ner denna version?</string>
+    <string id="502">Laddar ner dokument från:</string>
+    <string id="503">Laddar ner T3CH version till:</string>
+    <string id="504">Packar upp T3CH version till:</string>
+    <string id="505">T3CH version uppackad till:</string>
+    <string id="506">Analyserar T3CH versions ström ...</string>
+    <string id="507">Kopiera existerande data till T3CH ?</string>
+    <string id="508">(UserData kopierad, skripts, instick endast om dom inte existerade)</string>
+    <string id="509">Keymap.xml annorlunda, kopiera din ?</string>
+    <string id="510">Tar bort T3CH UserData ...</string>
+    <string id="511">Flyttar din UserData till T3CH ...</string>
+    <string id="512">Installation klar.  Starta om nu ?</string>
+    <string id="513">Installationen inte komplett.  Starta nu ?</string>
+    <string id="514">Uppdaterar menysystemsgenväg ...</string>
+    <string id="515">Flyttar mapp:</string>
+    <string id="516">Tar bort arkivfil:</string>
+    <string id="517">Ingen ny T3CH version</string>
+    <string id="518">Ny T3CH version hittad !</string>
+    <string id="519">_NEW and _OLD genvägar skapade.</string>
+    <string id="520">Byt till NEW genväg nu ?</string>
+    <string id="521">(Manuell omdöpning krävs annars)</string>
+
+    <!-- Menu Titles -->
+
+    <!-- Menu options -->
+    <string id="611">Visa ändringslogg</string>
+    <string id="612">Ladda ned: </string>
+    <string id="619">Uppdatera skript</string>
+
+    <!-- Misc Menu Options Options -->
+    <string id="650">Avsluta</string>
+
+    <!-- Update messages -->
+    <string id="1000">Din version är aktuell.</string>
+    <string id="1001">Hämtar nuvarande taggade versioner...</string>
+    <string id="1002">är nyare</string>
+    <string id="1003">Vill du uppgradera?</string>
+    <string id="1004">Hämtar fillista...</string>
+    <string id="1005">Var god vänta...</string>
+    <string id="1006">Version</string>
+    <string id="1007">Hämtar:</string>
+    <string id="1008">Sökväg:</string>
+    <string id="1009">Fil:</string>
+    <string id="1010">Din nya version sparades som:</string>
+
+    <!-- Update error messages -->
+    <string id="1030">Inga taggade versioner hittades!</string>
+    <string id="1031">Ett fel uppstod vid uppdatering av skriptet!</string>
+</strings>
