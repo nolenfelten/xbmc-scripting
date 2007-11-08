@@ -34,7 +34,7 @@ __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
 __date__ = '07-11-2007'
 __version__ = "v1.0 b23"
-__svn_revision__ = "0000"
+__svn_revision__ = "1653"
 xbmc.output( __scriptname__ + " Version: " + __version__ + " SVN Revision: " + __svn_revision__ + " Date: " + __date__)
 
 # Shared resources
@@ -567,8 +567,6 @@ class Main:
 			xbmc.output("copytree UserData done")
 
 			return True
-		except (IOError, os.error), why:
-			dialogOK(_(0), __language__( 306 ), str(why) )
 		except:
 			handleException("_copy_user_data()", __language__( 306 ))
 		return False
