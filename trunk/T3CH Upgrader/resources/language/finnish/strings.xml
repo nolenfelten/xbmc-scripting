@@ -63,41 +63,21 @@
     <string id="522">Paketin purku valmis. Tarkistetaan polkua ...</string>
     <string id="523">Poistetaanko vanha T3CH paketti ?</string>
     <string id="524">Odota hetki ...</string>
-
-    <!-- Menu Titles -->
-    <string id="600">Päävalikko</string>
-    <string id="601">Asetukset</string>
+    <string id="525">Näytetäänkö huomautus uudesta T3CH paketista ?</string>
 
     <!-- Menu options -->
-    <string id="610">Asetukset</string>
-    <string id="611">Näytä muutoshistoria</string>
-    <string id="612">Lataa: </string>
-    <string id="615">Muuta kopioitavien tiedostojen luetteloa</string>
-    <string id="616">Vaihda toiseen T3CH versioon</string>
-    <string id="617">Poista vanha T3CH versio</string>
-    <string id="618">Muuta poistettavien tiedostojen luetteloa</string>
-    <string id="619">Skriptin päivitys</string>
+    <string id="600">Valitse asetus</string>
+    <string id="601">Näytä muutoshistoria</string>
+    <string id="602">Lataa: </string>
+    <string id="603">Asetukset</string>
+    <string id="604">Poistu</string>
+    <string id="605">Muuta kopioitavien tiedostojen luetteloa</string>
+    <string id="606">Vaihda toiseen T3CH versioon</string>
+    <string id="607">Poista vanha T3CH versio</string>
+    <string id="608">Muuta poistettavien tiedostojen luetteloa</string>
 
-    <!-- Settings Options -->
-
-    <!-- Misc Menu Options Options -->
-    <string id="650">Poistu</string>
-
-    <!-- Update messages -->  
-    <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
-    <string id="1001">Tarkistetaan uusinta versiota...</string>
-    <string id="1002">on uudempi</string>
-    <string id="1003">Haluatko pÃ¤ivittÃ¤Ã¤ ohjelman?</string>
-    <string id="1004">Haetaan tiedostoluetteloa...</string>
-    <string id="1005">Odota hetki..</string>
-    <string id="1006">Versio</string>
-    <string id="1007">Haetaan:</string>
-    <string id="1008">Polku:</string>
-    <string id="1009">Tiedosto:</string>
-    <string id="1010">Ohjelma tallennettiin kansioon:</string>
-
-    <!-- Update error messages -->
-    <string id="1030">Uutta versiota ei lÃ¶ytynyt!</string>
-    <string id="1031">PÃ¤ivitys ei onnistunut!</string>
+    <!-- Menu Titles -->
+    <string id="700">Päävalikko</string>
+    <string id="701">Asetukset</string>
 
 </strings>
