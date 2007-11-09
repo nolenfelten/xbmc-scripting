@@ -5,7 +5,7 @@
     <!-- Browse dialog headings -->
     <string id="200">Installationspfad (z.B. E:\apps) </string>
     <string id="201">Hauptdash Verknüpfungsname?</string>
-    <string id="202">Laufwerk der Dash Verknüpfung:</string>
+    <string id="202">Laufwerk der Dashverknüpfung:</string>
     <string id="203">Datei auswählen:</string>
     <string id="204">Pfad auswählen:</string>
     <string id="205">T3CH auswählen:</string>
@@ -63,17 +63,15 @@
     <string id="522">Entpacken beendet. Suche nach Pfad...</string>
     <string id="523">Altes T3CH Build löschen?</string>
     <string id="524">Bitte warten...</string>
-    <string id="525">Benachrichtigung bei keinem neuen T3CH anzeigen?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
     <string id="601">Einstellungen</string>
 
     <!-- Menu options -->
-    <string id="600">Einstellungen</string>
+    <string id="610">Einstellungen</string>
     <string id="611">Zeige Changelog</string>
     <string id="612">Download: </string>
-    <string id="614">Beenden</string>
     <string id="615">Zu kopierende Dateien verwalten</string>
     <string id="616">Zu einem anderen T3CH wechseln</string>
     <string id="617">Ein altes T3CH löschen</string>
@@ -81,13 +79,20 @@
     <string id="619">Script aktualisieren</string>
 
     <!-- Settings Options -->
+    <string id="630">Laufwerk der Dashverknüpfung:</string>
+    <string id="631">Name der Dashverknüpfung:</string>
+    <string id="632">Installationspfad:</string>
+    <string id="633">Benachrichtigen bei keinem neuen T3CH?</string>
+    <string id="634">Beim Starten nach Updates suchen?</string>
 
     <!-- Misc Menu Options Options -->
-    <string id="650">Ausgang</string>
+    <string id="650">Beenden</string>
+    <string id="651">Hinzufügen...</string>
+    <string id="652">Tastatur verwenden</string>
 
     <!-- Update Menu -->
     <string id="1000">Deine Version ist aktuell.</string>
-    <string id="1001">Momentan markierte Versionen pruefen...</string>
+    <string id="1001">Momentan markierte Versionen prüfen...</string>
     <string id="1002">ist neuer</string>
     <string id="1003">Möchtest du aktualisieren?</string>
     <string id="1004">Dateiliste wird geladen...</string>
@@ -99,5 +104,7 @@
     <string id="1010">Deine neue Version wurde hier gespeichert:</string>
 
     <!-- Update Error Msgs -->
+    <string id="1030">Es konnten keine Versionen gefunden werden!</string>
+    <string id="1031">Fehler beim Aktualisieren des Scripts!</string>
 
 </strings>
