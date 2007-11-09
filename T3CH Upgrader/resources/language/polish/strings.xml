@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Language file translated with Team XBMC Translator-->
+<!--Translator: smuto-->
+<!--Email: smuto@gazeta.pl-->
+<!--Date of translation: 11/09/2007-->
+<strings>
+  <string id="0">T3CH Upgrader</string>
+  <string id="200">Ścieżka instalacji (np. E:\apps) </string>
+  <string id="201">Określ nazwę pliku dasha (zależy od ustawień w Biosie)</string>
+  <string id="202">Określ dysk na którym masz plik dasha</string>
+  <string id="203">Wybierz plik:</string>
+  <string id="204">Wybierz ścieżkę:</string>
+  <string id="303">Pobieranie anulowane!</string>
+  <string id="310">Lista zmian niedostępna</string>
+  <string id="400">Pobierz</string>
+  <string id="401">Pomiń</string>
+  <string id="402">Tak</string>
+  <string id="403">Nie</string>
+  <string id="404">Przełącz</string>
+  <string id="405">Ręcznie</string>
+  <string id="406">Usuń</string>
+  <string id="407">Edytuj</string>
+  <string id="500">Najnowsza dostępna wersja to:</string>
+  <string id="501">Chcesz pobrać tą wersję?</string>
+  <string id="502">Pobieram info z:</string>
+  <string id="503">Pobieranie do:</string>
+  <string id="504">Wypakowywanie do:</string>
+  <string id="505">Rozpakowywanie zakończone.</string>
+  <string id="515">Kopiowanie:</string>
+  <string id="516">Usuwanie:</string>
+  <string id="619">Aktualizuj</string>
+  <string id="633">Powiadamiać, gdy nie ma nowej wersji T3CH?</string>
+  <string id="634">Sprawdź aktualizacje na starcie</string>
+  <string id="650">Wyjście</string>
+  <string id="651">Dodaj nowe</string>
+  <string id="652">Użyj klawiatury</string>
+  <string id="1000">Używasz najnowszej wersji.</string>
+  <string id="1001">Sprawdzam dostępną wersję...</string>
+  <string id="1002">jest dostępna nowsza</string>
+  <string id="1003">Chcesz zaktualizować?</string>
+  <string id="1004">Przesyłanie listy potrzebnych plików...</string>
+  <string id="1005">Proszę czekać...</string>
+  <string id="1006">Wersja</string>
+  <string id="1007">Przetwarzanie zapytania:</string>
+  <string id="1008">Ścieżka:</string>
+  <string id="1009">Plik:</string>
+  <string id="1010">Nowa wersja zapisana w:</string>
+  <string id="1030">Żadna oficjalna wersja nie jest dostępna!</string>
+  <string id="1031">Wystąpił błąd podczas aktualizacji!</string>
+</strings>
