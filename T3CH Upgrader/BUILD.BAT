@@ -20,13 +20,6 @@ IF EXIST BUILD (
 MD BUILD
 ECHO.
 
-:GetRevision
-:: Extract Revision # and SET %Revision% variable
-ECHO ----------------------------------------------------------------------
-ECHO.
-ECHO Extracting revision number . . .
-ECHO.
-FOR /F "Tokens=2* Delims=]" %%R IN ('FIND /v /n "&_&_&_&" ".svn\entries" ^| FIND "[11]"') DO SET Revision=%%R
 
 :MakeExcludeFile
 :: Create exclude file
@@ -38,27 +31,15 @@ ECHO .svn>"BUILD\exclude.txt"
 ECHO Thumbs.db>>"BUILD\exclude.txt"
 ECHO Desktop.ini>>"BUILD\exclude.txt"
 
-:MakeReleaseBuild
-:: Create release build
-ECHO ----------------------------------------------------------------------
-ECHO.
-ECHO Copying required files to \Build\%ScriptName%\ folder . . .
-XCOPY resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
-COPY default.tbn "BUILD\%ScriptName%\"
 
-:: Create new default.py with __svn_revision__ embedded
-ECHO # %ScriptName% script revision: %Revision% - built with build.bat version 1.0 #> "BUILD\%ScriptName%\default.py"
-FOR /F "Tokens=1* Delims=]" %%L IN ('FIND /v /n "&_&_&_&" default.py') DO (
-    IF /I "%%M"=="__svn_revision__ = 0" (
-        ECHO __svn_revision__ = "%Revision%">> "BUILD\%ScriptName%\default.py"
-    ) ELSE IF "%%M"=="" (
-        ECHO.>> "BUILD\%ScriptName%\default.py"
-    ) ELSE (
-        ECHO %%M>> "BUILD\%ScriptName%\default.py"
-        )
-    )
-)
-ECHO.
+Echo ------------------------------
+Echo Copying required files to \Build\%ScriptName%\ folder . . .
+xcopy resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
+copy default.* "BUILD\%ScriptName%\"
+copy autoexec.* "BUILD\%ScriptName%\"
+Echo.
+
+
 
 :Cleanup
 :: Delete exclude.txt file
@@ -73,7 +54,7 @@ ECHO.
 :: Notify user of completion
 ECHO ======================================================================
 ECHO.
-ECHO Build Complete - Scroll up to check for errors.
+ECHO Build Complete
 ECHO.
 ECHO Final build is located in the \BUILD\ folder.
 ECHO.
