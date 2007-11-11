@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Videoiden haku tietokannasta</string>
+    <string id="30010">Rajoita esittelyt elokuvan tyylin ja mpaa luokituksen mukaan</string>
+    <string id="30020">Polku tai videoiden sijainti[ei käytössä tietokannassa]</string>
+    <string id="30030">MPAA luokituksen rajoitus esittelyille ja/tai tietokannan listaukselle</string>
+    <string id="30040">Toistettavien esittelyjen määrä</string>
+    <string id="30050">Haluttu esittelyn laaatu</string>
+    <string id="30060">Sisällytä vain HD esittelyt</string>
+    <string id="30070">Haluttu aloitus video #1 [valinnainen]</string>
+    <string id="30071">Haluttu aloitus video #2 [valinnainen]</string>
+    <string id="30080">Ominaisuuksien esittelyvideo #1 [valinnainen]</string>
+    <string id="30081">Ominaisuuksien esittelyvideo #2 [valinnainen]</string>
+    <string id="30090">Lopun ominaisuuksien esittelyvideo #1 [valinnainen]</string>
+    <string id="30091">Lopun ominaisuuksien esittelyvideo #2 [valinnainen]</string>
+</strings>
