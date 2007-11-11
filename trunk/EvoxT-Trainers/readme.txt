@@ -28,4 +28,8 @@ Y        | Info   | Menu      = Show Info
 White    | Back   | Backspace = Change Trainerpath
 
 
+SVN:
+http://xbmc-scripting.googlecode.com/svn/trunk/EvoxT-Trainers/
+
+
 bootsy/EvoxT
