@@ -1,14 +1,16 @@
 """
     Movie Theater: Module plays:
-    - optional coming attractions video
+    - # of optional coming attraction videos
     - # of random trailers
-    - optional feature presentation video
+    - # of optional feature presentation videos
     - selected video
-    - optional end of presentation video
+    - # of optional end of presentation videos
 """
 
 # TODO: remove this when dialog issue is resolved
 import xbmc
+# set our title
+g_title = xbmc.getInfoLabel( "ListItem.Title" )
 # set our studio (only works if the user is using the video library)
 g_studio = xbmc.getInfoLabel( "ListItem.Studio" )
 # set our genre (only works if the user is using the video library)
@@ -25,6 +27,7 @@ pDialog.create( "Movie Theater Plugin", "Choosing random trailers..." )
 import sys
 import os
 ##import xbmc
+import xbmcplugin
 
 from random import randrange
 
@@ -42,20 +45,41 @@ class Main:
     BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
+        self._get_settings()
         self._parse_argv()
         # create the playlist
         playlist = self._create_playlist()
         # play the videos
         self._play_videos( playlist )
 
+    def _get_settings( self ):
+        self.settings = {}
+        self.settings[ "limit_query" ] = xbmcplugin.getSetting( "limit_query" ) == "true"
+        self.settings[ "rating" ] = xbmcplugin.getSetting( "rating" )
+        self.settings[ "number_trailers" ] = int( xbmcplugin.getSetting( "number_trailers" ) )
+        self.settings[ "quality" ] = xbmcplugin.getSetting( "quality" )
+        self.settings[ "only_hd" ] = xbmcplugin.getSetting( "only_hd" ) == "true"
+        self.settings[ "coming_attraction_videos" ] = []
+        if ( xbmcplugin.getSetting( "coming_attraction_videos1" ) ):
+            self.settings[ "coming_attraction_videos" ] += [ xbmcplugin.getSetting( "coming_attraction_videos1" ) ]
+        if ( xbmcplugin.getSetting( "coming_attraction_videos2" ) ):
+            self.settings[ "coming_attraction_videos" ] += [ xbmcplugin.getSetting( "coming_attraction_videos2" ) ]
+        self.settings[ "feature_presentation_videos" ] = []
+        if ( xbmcplugin.getSetting( "feature_presentation_videos1" ) ):
+            self.settings[ "feature_presentation_videos" ] += [ xbmcplugin.getSetting( "feature_presentation_videos1" ) ]
+        if ( xbmcplugin.getSetting( "feature_presentation_videos2" ) ):
+            self.settings[ "feature_presentation_videos" ] += [ xbmcplugin.getSetting( "feature_presentation_videos2" ) ]
+        self.settings[ "end_presentation_videos" ] = []
+        if ( xbmcplugin.getSetting( "end_presentation_videos1" ) ):
+            self.settings[ "end_presentation_videos" ] += [ xbmcplugin.getSetting( "end_presentation_videos1" ) ]
+        if ( xbmcplugin.getSetting( "end_presentation_videos2" ) ):
+            self.settings[ "end_presentation_videos" ] += [ xbmcplugin.getSetting( "end_presentation_videos2" ) ]
+
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
         # backslashes cause issues when passed in the url
         self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
-        self.args.trailer_intro_path = self.args.trailer_intro_path.replace( "[[BACKSLASH]]", "\\" )
-        self.args.movie_intro_path = self.args.movie_intro_path.replace( "[[BACKSLASH]]", "\\" )
-        self.args.movie_end_path = self.args.movie_end_path.replace( "[[BACKSLASH]]", "\\" )
 
     def _create_playlist( self ):
         # create a video playlist
@@ -63,13 +87,14 @@ class Main:
         # clear any possible items
         playlist.clear()
         # if there is a trailer intro video add it
-        if ( self.args.trailer_intro_path ):
-            # create our trailer record
-            trailer = ( self.args.trailer_intro_path, os.path.splitext( os.path.basename( self.args.trailer_intro_path ) )[ 0 ], "", self.args.trailer_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
-            # create the listitem and fill the infolabels
-            listitem = self._get_listitem( trailer )
-            # add our item to the playlist
-            playlist.add( self.args.trailer_intro_path, listitem )
+        if ( self.settings[ "coming_attraction_videos" ] ):
+            for path in self.settings[ "coming_attraction_videos" ]:
+                # create our trailer record
+                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
+                # create the listitem and fill the infolabels
+                listitem = self._get_listitem( trailer )
+                # add our item to the playlist
+                playlist.add( path, listitem )
         # fetch our random trailers
         trailers = self._fetch_records()
         # enumerate through our list of trailers and add them to our playlist
@@ -81,14 +106,18 @@ class Main:
             # add our item to the playlist
             playlist.add( url, listitem )
         # if there is a movie intro video add it
-        if ( self.args.movie_intro_path ):
-            # create our trailer record
-            trailer = ( self.args.movie_intro_path, os.path.splitext( os.path.basename( self.args.movie_intro_path ) )[ 0 ], "", self.args.movie_intro_path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
-            # create the listitem and fill the infolabels
-            listitem = self._get_listitem( trailer )
-            # add our item to the playlist
-            playlist.add( self.args.movie_intro_path, listitem )
+        if ( self.settings[ "feature_presentation_videos" ] ):
+            for path in self.settings[ "feature_presentation_videos" ]:
+                # create our trailer record
+                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
+                # create the listitem and fill the infolabels
+                listitem = self._get_listitem( trailer )
+                # add our item to the playlist
+                playlist.add( path, listitem )
         # TODO: use these when dialog issue is resolved
+        # set our title
+        ##title = xbmc.getInfoLabel( "ListItem.Title" )
+        title = g_title
         # set our studio (only works if the user is using the video library)
         ##studio = xbmc.getInfoLabel( "ListItem.Studio" )
         studio = g_studio
@@ -98,19 +127,20 @@ class Main:
         if ( not genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], os.path.splitext( os.path.basename( self.args.path ) )[ 0 ], "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", studio, genre, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], title, "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", studio, genre, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
         playlist.add( self.args.path, listitem )
         # if there is a end of movie video add it
-        if ( self.args.movie_end_path ):
-            # create our trailer record
-            trailer = ( self.args.movie_end_path, os.path.splitext( os.path.basename( self.args.movie_end_path ) )[ 0 ], "", self.args.movie_end_path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
-            # create the listitem and fill the infolabels
-            listitem = self._get_listitem( trailer )
-            # add our item to the playlist
-            playlist.add( self.args.movie_end_path, listitem )
+        if ( self.settings[ "end_presentation_videos" ] ):
+            for path in self.settings[ "end_presentation_videos" ]:
+                # create our trailer record
+                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
+                # create the listitem and fill the infolabels
+                listitem = self._get_listitem( trailer )
+                # add our item to the playlist
+                playlist.add( path, listitem )
         return playlist
 
     def _play_videos( self, playlist ):
@@ -141,20 +171,20 @@ class Main:
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             rating_sql = ""
             # if the user set a valid rating add all up to the selection
-            if ( self.args.rating in mpaa_ratings ):
+            if ( self.settings[ "rating" ] in mpaa_ratings ):
                 rating_sql = "AND ("
                 # enumerate through mpaa ratings and add the selected ones to our sql statement
                 for rating in mpaa_ratings:
                     rating_sql += "rating='%s' OR " % ( rating, )
                     # if we found the users choice, we're finished
-                    if ( rating == self.args.rating ): break
+                    if ( rating == self.settings[ "rating" ] ): break
                 # fix the sql statement
                 rating_sql = rating_sql[ : -4 ] + ") "
-            hd_sql = ( "", "AND (trailer_urls LIKE '%720p.mov%' OR trailer_urls LIKE '%1080p.mov%')", )[ self.args.only_hd ]
+            hd_sql = ( "", "AND (movies.trailer_urls LIKE '%720p.mov%' OR movies.trailer_urls LIKE '%1080p.mov%')", )[ self.settings[ "only_hd" ] ]
             genre_sql = ""
             mpaa_sql = ""
             # if the use sets limit query limit our search to the genre and rating of the movie
-            if ( self.args.limit_query ):
+            if ( self.settings[ "limit_query" ] ):
                 # genre limit
                 ##movie_genres = xbmc.getInfoLabel( "ListItem.Genre" ).split( "/" )
                 movie_genres = g_genre.split( "/" )
@@ -177,12 +207,13 @@ class Main:
                         # fix the sql statement
                         rating_sql = rating_sql[ : -4 ] + ") "
             # fetch our trailers
-            result = records.fetch( sql % ( hd_sql, rating_sql, genre_sql, self.args.number_trailers, ) )
+            result = records.fetch( sql % ( hd_sql, rating_sql, genre_sql, self.settings[ "number_trailers" ], ) )
             records.close()
-            return result
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
+            result = []
+        return result
 
     def _get_listitem( self, trailer ):
         # check for a valid thumbnail
@@ -223,8 +254,8 @@ class Main:
         # get the preferred quality
         qualities = [ "Low", "Medium", "High", "480p", "720p", "1080p" ]
         trailer_quality = 2
-        if ( self.args.quality in qualities ):
-            trailer_quality = qualities.index( self.args.quality )
+        if ( self.settings[ "quality" ] in qualities ):
+            trailer_quality = qualities.index( self.settings[ "quality" ] )
         url = ""
         # get intial choice
         choice = ( trailer_quality, len( trailer_urls[ r ] ) - 1, )[ trailer_quality >= len( trailer_urls[ r ] ) ]
