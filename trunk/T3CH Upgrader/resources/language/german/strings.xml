@@ -104,7 +104,7 @@
     <string id="1010">Deine neue Version wurde hier gespeichert:</string>
 
     <!-- Update Error Msgs -->
-    <string id="1030">Es konnten keine Versionen gefunden werden!</string>
+    <string id="1030">Es konnten keine neueren Versionen gefunden werden!</string>
     <string id="1031">Fehler beim Aktualisieren des Scripts!</string>
 
 </strings>
