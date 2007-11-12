@@ -191,7 +191,8 @@ class Main:
                 if ( movie_genres[ 0 ] != "" ):
                     genre_sql = "AND ("
                     for genre in movie_genres:
-                        genre_sql += "genres.genre='%s' OR " % ( genre.strip(), )
+                        # fix certain genres
+                        genre_sql += "genres.genre='%s' OR " % ( genre.strip().replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and Adventure" ).replace( "Adventure", "Action and Adventure" ), )
                     # fix the sql statement
                     genre_sql = genre_sql[ : -4 ] + ") "
                 # rating limit TODO: decide if this should override the set rating limit
