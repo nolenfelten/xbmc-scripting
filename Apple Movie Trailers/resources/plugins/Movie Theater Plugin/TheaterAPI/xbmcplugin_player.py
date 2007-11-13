@@ -10,11 +10,11 @@
 # TODO: remove this when dialog issue is resolved
 import xbmc
 # set our title
-g_title = xbmc.getInfoLabel( "ListItem.Title" )
+g_title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
 # set our studio (only works if the user is using the video library)
-g_studio = xbmc.getInfoLabel( "ListItem.Studio" )
+g_studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
 # set our genre (only works if the user is using the video library)
-g_genre = xbmc.getInfoLabel( "ListItem.Genre" )
+g_genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
 # set our rating (only works if the user is using the video library)
 g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 
@@ -55,9 +55,9 @@ class Main:
     def _get_settings( self ):
         self.settings = {}
         self.settings[ "limit_query" ] = xbmcplugin.getSetting( "limit_query" ) == "true"
-        self.settings[ "rating" ] = xbmcplugin.getSetting( "rating" )
+        self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
         self.settings[ "number_trailers" ] = int( xbmcplugin.getSetting( "number_trailers" ) )
-        self.settings[ "quality" ] = xbmcplugin.getSetting( "quality" )
+        self.settings[ "quality" ] = int( xbmcplugin.getSetting( "quality" ) )
         self.settings[ "only_hd" ] = xbmcplugin.getSetting( "only_hd" ) == "true"
         self.settings[ "coming_attraction_videos" ] = []
         if ( xbmcplugin.getSetting( "coming_attraction_videos1" ) ):
@@ -90,11 +90,11 @@ class Main:
         if ( self.settings[ "coming_attraction_videos" ] ):
             for path in self.settings[ "coming_attraction_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
-                playlist.add( path, listitem )
+                playlist.add( unicode( path, "utf-8" ), listitem )
         # fetch our random trailers
         trailers = self._fetch_records()
         # enumerate through our list of trailers and add them to our playlist
@@ -109,20 +109,20 @@ class Main:
         if ( self.settings[ "feature_presentation_videos" ] ):
             for path in self.settings[ "feature_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
-                playlist.add( path, listitem )
+                playlist.add( unicode( path, "utf-8" ), listitem )
         # TODO: use these when dialog issue is resolved
         # set our title
-        ##title = xbmc.getInfoLabel( "ListItem.Title" )
+        ##title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
         title = g_title
         # set our studio (only works if the user is using the video library)
-        ##studio = xbmc.getInfoLabel( "ListItem.Studio" )
+        ##studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
         studio = g_studio
         # set our genre (only works if the user is using the video library)
-        ##genre = xbmc.getInfoLabel( "ListItem.Genre" )
+        ##genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
         genre = g_genre
         if ( not genre ):
             genre = "Feature Presentation"
@@ -131,16 +131,16 @@ class Main:
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
-        playlist.add( self.args.path, listitem )
+        playlist.add( unicode( self.args.path, "utf-8" ), listitem )
         # if there is a end of movie video add it
         if ( self.settings[ "end_presentation_videos" ] ):
             for path in self.settings[ "end_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( path ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
-                playlist.add( path, listitem )
+                playlist.add( unicode( path, "utf-8" ), listitem )
         return playlist
 
     def _play_videos( self, playlist ):
@@ -171,13 +171,14 @@ class Main:
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             rating_sql = ""
             # if the user set a valid rating add all up to the selection
-            if ( self.settings[ "rating" ] in mpaa_ratings ):
+            if ( self.settings[ "rating" ] < len( mpaa_ratings ) ):
+                user_rating = mpaa_ratings[ self.settings[ "rating" ] ]
                 rating_sql = "AND ("
                 # enumerate through mpaa ratings and add the selected ones to our sql statement
                 for rating in mpaa_ratings:
                     rating_sql += "rating='%s' OR " % ( rating, )
                     # if we found the users choice, we're finished
-                    if ( rating == self.settings[ "rating" ] ): break
+                    if ( rating == user_rating ): break
                 # fix the sql statement
                 rating_sql = rating_sql[ : -4 ] + ") "
             hd_sql = ( "", "AND (movies.trailer_urls LIKE '%720p.mov%' OR movies.trailer_urls LIKE '%1080p.mov%')", )[ self.settings[ "only_hd" ] ]
@@ -186,7 +187,7 @@ class Main:
             # if the use sets limit query limit our search to the genre and rating of the movie
             if ( self.settings[ "limit_query" ] ):
                 # genre limit
-                ##movie_genres = xbmc.getInfoLabel( "ListItem.Genre" ).split( "/" )
+                ##movie_genres = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" ).split( "/" )
                 movie_genres = g_genre.split( "/" )
                 if ( movie_genres[ 0 ] != "" ):
                     genre_sql = "AND ("
@@ -196,7 +197,7 @@ class Main:
                     # fix the sql statement
                     genre_sql = genre_sql[ : -4 ] + ") "
                 # rating limit TODO: decide if this should override the set rating limit
-                ##movie_rating = xbmc.getInfoLabel( "ListItem.MPAA" ).split( "/" )
+                ##movie_rating = xbmc.getInfoLabel( "ListItem.MPAA" ).split( " " )
                 movie_rating = g_mpaa_rating.split( " " )
                 if ( len( movie_rating ) > 1 ):
                     if ( movie_rating[ 1 ] in mpaa_ratings ):
@@ -254,20 +255,17 @@ class Main:
         r = randrange( len( trailer_urls ) )
         # get the preferred quality
         qualities = [ "Low", "Medium", "High", "480p", "720p", "1080p" ]
-        trailer_quality = 2
-        if ( self.settings[ "quality" ] in qualities ):
-            trailer_quality = qualities.index( self.settings[ "quality" ] )
         url = ""
         # get intial choice
-        choice = ( trailer_quality, len( trailer_urls[ r ] ) - 1, )[ trailer_quality >= len( trailer_urls[ r ] ) ]
+        choice = ( self.settings[ "quality" ], len( trailer_urls[ r ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ r ] ) ]
         # if quality is non progressive
-        if ( trailer_quality <= 2 ):
+        if ( self.settings[ "quality" ] <= 2 ):
             # select the correct non progressive trailer
             while ( trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # quality is progressive
         else:
             # select the proper progressive quality
-            quality = ( "480p", "720p", "1080p", )[ trailer_quality - 3 ]
+            quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
             # select the correct progressive trailer
             while ( quality not in trailer_urls[ r ][ choice ] and trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
         # if there was a valid trailer set it
