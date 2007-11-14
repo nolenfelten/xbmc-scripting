@@ -80,7 +80,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.startup_categories = {}
         self.startup_titles = []
         for count, genre in enumerate( self.genres ):
-            self.startup_categories[ count ] = str( genre.title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
+            self.startup_categories[ count ] = genre.title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
         self.startup_categories[ FAVORITES ] = _( 152 )
         self.startup_categories[ DOWNLOADED ] = _( 153 )
         self.startup_categories[ HD_TRAILERS ] = _( 160 )
