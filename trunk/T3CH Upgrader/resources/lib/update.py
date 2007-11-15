@@ -34,7 +34,8 @@ class Update:
 		self.tagsPath = "%s/tags/%s/" % ( self.base_url, __scriptname__)
 
 		self.dialog = xbmcgui.DialogProgress()
-		if ( self._check_for_new_version() ):
+		new = self._check_for_new_version() 
+		if ( new ):
 			self._update_script()
 		elif not self.isSilent:
 			xbmcgui.Dialog().ok( _(0), _( 1000 + ( 30 * ( new is None ) ) ) )
@@ -54,7 +55,8 @@ class Update:
 				new = ( __version__ < self.version or ( __version__.startswith( "pre-" ) and __version__.replace( "pre-", "" ) <= self.version ) )
 		if not self.isSilent:
 			self.dialog.close()
-		return new
+		xbmc.output( "Update()._check_for_new_version() new="+str(new) )
+
 				
 	def _update_script( self ):
 		""" main update function """
@@ -133,8 +135,7 @@ class Update:
 			tagList = re.compile('<li><a href="(.*?)"', re.MULTILINE+re.IGNORECASE+re.DOTALL).findall(htmlsource)
 			if tagList[0] == "../":
 				del tagList[0]
+			return tagList, url
 		except:
-			print sys.exc_info()[ 1 ]
 			return None, None
 
-		return tagList, url
