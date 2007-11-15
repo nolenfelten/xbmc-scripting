@@ -102,6 +102,7 @@
     <string id="1008">Path:</string>
     <string id="1009">File:</string>
     <string id="1010">Your new version was saved to:</string>
+    <string id="1011">Use FileManager to delete old versions</string>
 
     <!-- Update error messages -->
     <string id="1030">No tagged versions were found!</string>
