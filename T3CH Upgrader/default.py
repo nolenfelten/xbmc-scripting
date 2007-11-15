@@ -32,8 +32,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '07-11-2007'
-__version__ = "v1.0 b23"
+__date__ = '15-11-2007'
+__version__ = "1.0"
 __svn_revision__ = "1653"
 xbmc.output( __scriptname__ + " Version: " + __version__ + " SVN Revision: " + __svn_revision__ + " Date: " + __date__)
 
@@ -455,18 +455,19 @@ class Main:
 	######################################################################################
 	def _fetch_current_build( self, url, file_name ):
 		xbmc.output( "_fetch_current_build() " + url +" " + file_name )
+		success = False
 		try:
 			if not os.path.exists( file_name ):
 				self._dialog_update( __language__(0), __language__( 503 ), file_name, time=10) 
 				urllib.urlretrieve( url , file_name, self._report_hook )
 			else:
 				xbmc.output( "rar already exists" )
-			return True
-		except IOError:
-			handleException("_fetch_current_build()")
+			success = True
 		except:
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
-		return False
+		if not success:
+			deleteFile(file_name)			# remove RAR, might be a partial DL
+		return success
 
 	######################################################################################
 	def _report_hook( self, count, blocksize, totalsize ):
@@ -593,20 +594,11 @@ class Main:
 
 		# copy TEAM XBMC dash XBE shortcut to root - only if diff and backup first
 		try:
-			do_copy = False
+			copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
 			src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
-			if os.path.exists( shortcut_xbe_file ):
-				# DOES EXIST, check is diff
-				if not filecmp.cmp( src_xbe_file, shortcut_xbe_file ):
-					# backup
-					copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
-					do_copy = True
-			else:
-				do_copy = True
-			if do_copy:
-				copy(src_xbe_file, shortcut_xbe_file)
+			copy(src_xbe_file, shortcut_xbe_file)
 		except:
-			handleException("_update_shortcut()", "error copying 'SHORTCUT by TEAM XBMC' to root")
+			handleException("_update_shortcut()", "error copying 'SHORTCUT by TEAM XBMC' to " + shortcut_drive)
 
 		try:
 			# create shortcut cfg - this points to the new T3CH XBMC build
@@ -732,7 +724,7 @@ class Main:
 				options.extend(self.includes)
 
 				# show menu
-				selected = selectDialog.select( __language__( 605 ), options )
+				selected = selectDialog.select( __language__( 615 ), options )
 				if selected <= 0:						# quit
 					break
 				elif selected == 1:						# add new
@@ -807,7 +799,7 @@ class Main:
 				options.extend(self.excludes)
 
 				# show menu
-				selected = selectDialog.select( __language__( 608 ), options )
+				selected = selectDialog.select( __language__( 618 ), options )
 				if selected <= 0:						# quit
 					break
 				elif selected == 1:						# add new
@@ -928,7 +920,7 @@ class Main:
 	def _update_script( self):
 		xbmc.output( "_update_script() ")
 		import update
-		updt = update.Update()
+		updt = update.Update(self.isSilent)
 		del updt
 
 	#####################################################################################
@@ -1165,7 +1157,13 @@ try:
 		raise
 except:
 	runMode = RUNMODE_NORMAL
-Main(runMode)
+
+import update
+updt = update.Update()
+del updt
+
+
+#Main(runMode)
 
 # remove globals
 try:
