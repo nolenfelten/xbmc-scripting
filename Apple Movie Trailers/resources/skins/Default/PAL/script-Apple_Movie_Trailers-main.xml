@@ -882,6 +882,7 @@
 				<height>141</height>
 				<font>font13</font>
 				<textcolor>FFFFFFFF</textcolor>
+                <align>justify</align>
                 <info>ListItem.Plot</info>
 				<onup>75</onup>
 				<ondown>75</ondown>
