@@ -34,8 +34,7 @@ __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
 __date__ = '15-11-2007'
 __version__ = "1.0"
-__svn_revision__ = "1653"
-xbmc.output( __scriptname__ + " Version: " + __version__ + " SVN Revision: " + __svn_revision__ + " Date: " + __date__)
+xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
 DIR_HOME = os.path.join( os.getcwd().replace( ";", "" ) )
@@ -88,7 +87,7 @@ class Main:
 		if self._initialize():
 			# check for script update ?
 			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):
-				self._update_script()
+				self._update_script(True)		# always silent at startup
 
 			url = self._get_latest_version()										# discover latest build
 #			url = "http://somehost/XBMC-SVN_2007-11-04_rev10675-T3CH.rar"			# DEV ONLY!!, saves DL it
@@ -340,7 +339,7 @@ class Main:
 			elif selected == 6:										# delete old t3ch
 				self._delete_old_t3ch()
 			elif selected == 7:										# update script
-				self._update_script()
+				self._update_script(False)							# never silent from config menu
 			elif selected == 8:										# settings
 				if not self._initialize(forceSetup=True):			# setup incomplete, quit
 					break
@@ -917,10 +916,10 @@ class Main:
 		return (curr_build_date_secs, curr_build_date)
 
 	######################################################################################
-	def _update_script( self):
-		xbmc.output( "_update_script() ")
+	def _update_script( self, isSilent=False):
+		xbmc.output( "_update_script() isSilent="+str(isSilent))
 		import update
-		updt = update.Update(self.isSilent)
+		updt = update.Update(isSilent)
 		del updt
 
 	#####################################################################################
@@ -1154,16 +1153,12 @@ try:
 	# get runMode as arg
 	runMode = sys.argv[1].strip()
 	if not runMode in [RUNMODE_NORMAL, RUNMODE_NOTIFY, RUNMODE_SILENT]:
+		print "unknown runmode"
 		raise
 except:
 	runMode = RUNMODE_NORMAL
 
-import update
-updt = update.Update()
-del updt
-
-
-#Main(runMode)
+Main(runMode)
 
 # remove globals
 try:
