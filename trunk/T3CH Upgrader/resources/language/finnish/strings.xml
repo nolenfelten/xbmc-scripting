@@ -67,6 +67,8 @@
    <!-- Menu Titles -->
     <string id="600">Päävalikko</string>
     <string id="601">Asetukset</string>
+    <string id="605">Kopioitavat tiedostot</string>
+    <string id="608">Poistettavat tiedostot</string>
   
     <!-- Menu options -->
     <string id="610">Asetukset</string>
@@ -78,7 +80,8 @@
     <string id="618">Muuta poistettavien tiedostojen luetteloa</string>
     <string id="619">Päivitä skripti</string>
    
-    <!-- Settings Options -->
+   
+   <!-- Settings Options -->
     <string id="630">Dashin asema:</string>
     <string id="631">Dashin nimi:</string>
     <string id="632">Asennuspolku:</string>
@@ -90,21 +93,22 @@
     <string id="651">Lisää uusi</string>
     <string id="652">Näppäimistö käytössä</string>
 
-    <!-- Update messages -->  
-    <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
-    <string id="1001">Tarkistetaan uusinta versiota...</string>
-    <string id="1002">on uudempi</string>
-    <string id="1003">Haluatko päivittää ohjelman?</string>
-    <string id="1004">Haetaan tiedostoluetteloa...</string>
-    <string id="1005">Odota hetki..</string>
-    <string id="1006">Versio</string>
-    <string id="1007">Haetaan:</string>
-    <string id="1008">Polku:</string>
-    <string id="1009">Tiedosto:</string>
-    <string id="1010">Ohjelma tallennettiin kansioon:</string>
-  
-    <!-- Update error messages -->
-    <string id="1030">Uutta versiota ei löytynyt!</string>
-    <string id="1031">Päivitys ei onnistunut!</string>
+  <!-- Update messages -->  
+  <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
+  <string id="1001">Tarkistetaan uusinta versiota...</string>
+  <string id="1002">on uudempi</string>
+  <string id="1003">Haluatko päivittää ohjelman?</string>
+  <string id="1004">Haetaan tiedostoluetteloa...</string>
+  <string id="1005">Odota hetki..</string>
+  <string id="1006">Versio</string>
+  <string id="1007">Haetaan:</string>
+  <string id="1008">Polku:</string>
+  <string id="1009">Tiedosto:</string>
+  <string id="1010">Ohjelma tallennettiin kansioon:</string>
+  <string id="1011">Käytä tiedostoselainta vanhan version poistamiseen</string> 
+
+  <!-- Update error messages -->
+  <string id="1030">Uutta versiota ei löytynyt!</string>
+  <string id="1031">Päivitys ei onnistunut!</string>
 
 </strings>
