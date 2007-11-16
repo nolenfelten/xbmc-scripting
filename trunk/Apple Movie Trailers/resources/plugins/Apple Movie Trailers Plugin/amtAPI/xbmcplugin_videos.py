@@ -44,6 +44,8 @@ class Main:
             trailers = self._parse_actors( trailers )
             # fill media list
             ok = self._fill_media_list( trailers )
+            # set content
+            if ( ok ): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
