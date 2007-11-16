@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Päivitys</string>
-    <!--  Finnish v.10.11.2007 -->
+    <!--  Finnish v.16.11.2007 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
     <string id="201">Anna boottaavan dashin nimi.</string>
@@ -67,8 +67,6 @@
    <!-- Menu Titles -->
     <string id="600">Päävalikko</string>
     <string id="601">Asetukset</string>
-    <string id="605">Kopioitavat tiedostot</string>
-    <string id="608">Poistettavat tiedostot</string>
   
     <!-- Menu options -->
     <string id="610">Asetukset</string>
