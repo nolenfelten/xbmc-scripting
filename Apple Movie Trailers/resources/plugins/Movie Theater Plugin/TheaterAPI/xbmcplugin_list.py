@@ -93,6 +93,8 @@ class Main:
                         entries += self._get_local_list( path )
             # fill media list
             ok = self._fill_media_list( entries )
+            # set content
+            if ( ok ): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]

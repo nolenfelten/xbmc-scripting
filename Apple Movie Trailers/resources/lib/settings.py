@@ -104,13 +104,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _setup_skins( self ):
         """ special def for setting up scraper choices """
-        self.skins = os.listdir( unicode( os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" ), "utf-8" ) )
+        self.skins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" ) )
         try: self.current_skin = self.skins.index( self.settings[ "skin" ] )
         except: self.current_skin = 0
 
     def _setup_showtimes_scrapers( self ):
         """ special def for setting up scraper choices """
-        self.showtimes_scrapers = os.listdir( unicode( os.path.join( os.getcwd().replace( ";", "" ), "resources", "showtimes_scrapers" ), "utf-8" ) )
+        self.showtimes_scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "showtimes_scrapers" ) )
         try: self.current_showtimes_scraper = self.showtimes_scrapers.index( self.settings[ "showtimes_scraper" ] )
         except: self.current_showtimes_scraper = 0
 
