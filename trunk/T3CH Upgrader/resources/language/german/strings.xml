@@ -45,17 +45,17 @@
     <string id="504">Entpacke T3CH Build nach:</string>
     <string id="505">T3CH Build erfolgreich entpackt nach:</string>
     <string id="506">Lese T3CH Build Feed...</string>
-    <string id="507">Kopieren der bestehenden Daten beginnen?</string>
+    <string id="507">Kopieren der vorhandenen Daten beginnen?</string>
     <string id="508">(UserData,Scripts,Plugins,Skins ...)</string>
-    <string id="509">Keymap.xml ist verändert! Bestehende kopieren?</string>
+    <string id="509">Keymap.xml ist verändert! Aktuelle behalten?</string>
     <string id="510">Entferne T3CH UserData...</string>
     <string id="511">Übertrage deine UserData zum T3CH...</string>
     <string id="512">Installation vollständig.  Jetzt neustarten?</string>
-    <string id="513">Setup unvollständig.  Jetzt betreten?</string>
+    <string id="513">Setup unvollständig.  Jetzt ansehen?</string>
     <string id="514">Aktualisiere Dash Boot Verknüpfungen...</string>
     <string id="515">Kopiere:</string>
     <string id="516">Lösche:</string>
-    <string id="517">Kein neues T3CH Build</string>
+    <string id="517">Kein neues T3CH Build!</string>
     <string id="518">Neues T3CH Build gefunden!</string>
     <string id="519">_NEW und _OLD Verknüpfungen erstellt.</string>
     <string id="520">Zum neuen wechseln?</string>
@@ -102,6 +102,7 @@
     <string id="1008">Pfad:</string>
     <string id="1009">Datei:</string>
     <string id="1010">Deine neue Version wurde hier gespeichert:</string>
+    <string id="1011">Dateimanager zum Löschen alter Versionen verwenden</string>
 
     <!-- Update Error Msgs -->
     <string id="1030">Es konnten keine neueren Versionen gefunden werden!</string>
