@@ -285,8 +285,9 @@ class Main:
                         listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
                         # set an overlay if one is practical
                         overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
+                        ##TODO fix year and add other items
                         # add the different infolabels we want to sort by
-                        listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "MPAA": item[ 5 ], "Genre": item[ 6 ], "Studio": item[ 7 ] } )
+                        listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 3 ], "MPAA": item[ 5 ], "Genre": item[ 6 ], "Studio": item[ 7 ], "Year": 0 } )
                     except:
                         continue
                 # add the item to the media list

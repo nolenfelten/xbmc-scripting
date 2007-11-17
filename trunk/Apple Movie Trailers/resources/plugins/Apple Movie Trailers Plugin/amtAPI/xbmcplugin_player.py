@@ -14,6 +14,12 @@ g_genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
 g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 # set our thumbnail
 g_thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
+# set our plotoutline
+g_plotoutline = xbmc.getInfoLabel( "ListItem.PlotOutline" )
+# set our year
+g_year = 0
+if ( xbmc.getInfoLabel( "ListItem.Year" ) ):
+    g_year = int( xbmc.getInfoLabel( "ListItem.Year" ) )
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
@@ -172,7 +178,7 @@ class Main:
                 # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
                 listitem = xbmcgui.ListItem( g_title, iconImage=icon, thumbnailImage=thumbnail )
                 # set the key information
-                listitem.setInfo( "video", { "Title": "%s%s" % ( g_title, ( "", " %d" % ( count + 1, ) )[ len( filepaths ) > 1 ], ), "Genre": g_genre, "Studio": g_studio } )
+                listitem.setInfo( "video", { "Title": "%s%s" % ( g_title, ( "", " %d" % ( count + 1, ) )[ len( filepaths ) > 1 ], ), "Genre": g_genre, "Studio": g_studio, "PlotOutline": g_plotoutline, "Year": g_year } )
                 # add our item
                 playlist.add( filepath, listitem )
             # we're finished

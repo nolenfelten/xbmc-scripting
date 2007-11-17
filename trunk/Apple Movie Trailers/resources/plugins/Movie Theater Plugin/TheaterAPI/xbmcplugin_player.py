@@ -17,6 +17,12 @@ g_studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
 g_genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
 # set our rating (only works if the user is using the video library)
 g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
+# set our plotoutline
+g_plotoutline = xbmc.getInfoLabel( "ListItem.PlotOutline" )
+# set our year
+g_year = 0
+if ( xbmc.getInfoLabel( "ListItem.Year" ) ):
+    g_year = int( xbmc.getInfoLabel( "ListItem.Year" ) )
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
@@ -127,7 +133,7 @@ class Main:
         if ( not genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], title, "", self.args.path, "", "", "", "", "", 0, "", "", "", "", "", studio, genre, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], title, "", self.args.path, "", g_plotoutline, "", "", "", g_year, "", "", "", "", "", studio, genre, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
@@ -228,7 +234,7 @@ class Main:
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ] } )
         return listitem
 
     def _get_thumbnail( self, item, url ):
