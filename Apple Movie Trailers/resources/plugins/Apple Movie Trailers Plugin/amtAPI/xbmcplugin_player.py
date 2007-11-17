@@ -78,19 +78,21 @@ class Main:
                 # split and insert the trailer number if more than one
                 filepath = "%s%s" % ( title, ( "", "_%d" % ( count + 1, ), )[ multiple ], )
                 # folder to save to
-                dirname = "F:\\videos"
+                dirname = "Z:\\"
                 if ( not self.settings[ "download_path" ].startswith( "smb://" ) ):
                     dirname = self.settings[ "download_path" ]
                 # get a valid filepath
                 filepath = self._make_legal_filepath( os.path.join( dirname, filepath + ext ), save_end=multiple )
                 # if the file does not exist, download it
-                if ( not os.path.isfile( os.path.join( self.settings[ "download_path" ], os.path.basename( filepath ) ) ) ):
+                if ( os.path.isfile( os.path.join( self.settings[ "download_path" ], os.path.basename( filepath ) ) ) ):
+                    filepath = os.path.join( self.settings[ "download_path" ], os.path.basename( filepath ) )
+                else:
                     if ( self.settings[ "mode" ] == 1 ):
                         filepath = "Z:\\AMT_Video_%d%s" % ( count, ext, )
                     # set our display message
                     self.msg = "Downloading trailer %d of %d" % ( count + 1, len( urls ), )
                     # fetch the video
-                    ##urllib.urlretrieve( url, filepath, self._report_hook )
+                    urllib.urlretrieve( url, filepath, self._report_hook )
                     # make the conf file and copy to smb share if necessary
                     filepath = self._make_conf_file( filepath )
                 filepaths += [ filepath ]

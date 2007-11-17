@@ -17,6 +17,8 @@ g_studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
 g_genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
 # set our rating (only works if the user is using the video library)
 g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
+# set our thumbnail
+g_thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
 # set our plotoutline
 g_plotoutline = xbmc.getInfoLabel( "ListItem.PlotOutline" )
 # set our year
@@ -120,20 +122,12 @@ class Main:
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
                 playlist.add( unicode( path, "utf-8" ), listitem )
-        # TODO: use these when dialog issue is resolved
-        # set our title
-        ##title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
-        title = g_title
-        # set our studio (only works if the user is using the video library)
-        ##studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
-        studio = g_studio
-        # set our genre (only works if the user is using the video library)
-        ##genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
+        # set the genre if missing
         genre = g_genre
-        if ( not genre ):
+        if ( not g_genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], title, "", self.args.path, "", g_plotoutline, "", "", "", g_year, "", "", "", "", "", studio, genre, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
