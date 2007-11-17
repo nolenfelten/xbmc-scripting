@@ -105,7 +105,7 @@
     <string id="1011">Dateimanager zum Löschen alter Versionen verwenden</string>
 
     <!-- Update Error Msgs -->
-    <string id="1030">Es konnten keine neueren Versionen gefunden werden!</string>
+    <string id="1030">Keine neueren Versionen verfügbar!</string>
     <string id="1031">Fehler beim Aktualisieren des Scripts!</string>
 
 </strings>
