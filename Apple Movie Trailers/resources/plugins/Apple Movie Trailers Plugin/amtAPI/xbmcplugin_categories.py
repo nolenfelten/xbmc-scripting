@@ -15,7 +15,6 @@ from pysqlite2 import dbapi2 as sqlite
 class Main:
     # base paths
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-    BASE_SETTINGS_PATH = BASE_DATABASE_PATH
     BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:\\skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
     BASE_PLUGIN_THUMBNAIL_PATH = os.path.join( sys.modules[ "__main__" ].BASE_PATH, "thumbnails" )
 
@@ -24,7 +23,6 @@ class Main:
         if ( not os.path.isfile( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) ) ):
             self._launch_script()
         else:
-            self.settings = self.get_settings()
             self.get_categories()
 
     def _launch_script( self ):
@@ -42,7 +40,7 @@ class Main:
             # fetch genres from database
             genres = self._fetch_records()
             # add search category
-            genres += [ ( -99, "-Search Videos", 0, 0, "", ) ]
+            genres += [ ( -99, "*Search Videos", 0, 0, "", ) ]
             # fill media list
             self._fill_media_list( genres )
         except:
@@ -54,7 +52,7 @@ class Main:
             ok = True
             # enumerate through the list of genres and add the item to the media list
             for genre in genres:
-                url = "%s?genre_id=%d&genre=%s&quality=%d&wholewords=%d" % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], self.settings[ "trailer_quality" ], self.settings[ "match_whole_words" ], )
+                url = '%s?genre_id=%d&genre="""%s"""' % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], )
                 # check for a valid custom thumbnail for the current category
                 thumbnail = self._get_thumbnail( genre[ 1 ] )
                 # set the default icon
@@ -79,11 +77,11 @@ class Main:
 
     def _get_thumbnail( self, title ):
         # create the full thumbnail path for skins directory
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( " ", "-" ).lower() + ".tbn" ) )
+        thumbnail = xbmc.translatePath( os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( "*", "-" ).replace( " ", "-" ).lower() + ".tbn" ) )
         # use a plugin custom thumbnail if a custom skin thumbnail does not exists
         if ( not os.path.isfile( thumbnail ) ):
             # create the full thumbnail path for plugin directory
-            thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( " ", "-" ).lower() + ".tbn" ) )
+            thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( "*", "-" ).replace( " ", "-" ).lower() + ".tbn" ) )
             # use a default thumbnail if a custom thumbnail does not exists
             if ( not os.path.isfile( thumbnail ) ):
                 thumbnail = ""
@@ -94,15 +92,6 @@ class Main:
         result = records.fetch( Query()[ "genres" ] )
         records.close()
         return result
-
-    def get_settings( self ):
-        try:
-            settings_file = open( os.path.join( self.BASE_SETTINGS_PATH, "settings.txt" ), "r" )
-            settings = eval( settings_file.read() )
-            settings_file.close()
-        except:
-            settings = { "trailer_quality": 2 }
-        return settings
 
 
 class Records:

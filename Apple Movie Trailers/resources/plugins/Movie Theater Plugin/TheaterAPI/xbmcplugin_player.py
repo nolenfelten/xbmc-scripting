@@ -183,7 +183,6 @@ class Main:
                 rating_sql = rating_sql[ : -4 ] + ") "
             hd_sql = ( "", "AND (movies.trailer_urls LIKE '%720p.mov%' OR movies.trailer_urls LIKE '%1080p.mov%')", )[ self.settings[ "only_hd" ] and ( self.settings[ "quality" ] > 3 ) ]
             genre_sql = ""
-            mpaa_sql = ""
             # if the use sets limit query limit our search to the genre and rating of the movie
             if ( self.settings[ "limit_query" ] ):
                 # genre limit
