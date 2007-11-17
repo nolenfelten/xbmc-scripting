@@ -103,7 +103,7 @@
     <!-- Settings labels -->
     <string id="200">Choose:</string>
     <string id="201">Skin</string>
-    <string id="202">Trailer quality</string>
+    <string id="202">Preferred trailer quality</string>
     <string id="203">Mode</string>
     <string id="204">Save folder</string>
     <string id="205">Auto play all trailers</string>

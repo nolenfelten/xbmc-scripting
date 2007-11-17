@@ -13,6 +13,7 @@ import re
 from random import randrange
 
 from pysqlite2 import dbapi2 as sqlite
+import traceback
 
 
 class _Info:
@@ -26,26 +27,37 @@ class Main:
     BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
 
     def __init__( self ):
+        self._get_settings()
         self._parse_argv()
         self.get_videos()
 
     def _parse_argv( self ):
-        # call _Info() with our formatted argv to create the constants
-        exec "self.args = _Info(%s)" % ( sys.argv[ 2 ].replace( "?", "" ).replace( "=", "='" ).replace( "&", "', " ) + "'", )
+        # call _Info() with our formatted argv to create the self.args object
+        exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
+
+    def _get_settings( self ):
+        self.settings = {}
+        self.settings[ "quality" ] = int( xbmcplugin.getSetting( "quality" ) )
+        self.settings[ "only_hd" ] = xbmcplugin.getSetting( "only_hd" ) == "true"
+        self.settings[ "play_all" ] = xbmcplugin.getSetting( "play_all" ) == "true"
+        self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
+        self.settings[ "mode" ] = int( xbmcplugin.getSetting( "mode" ) )
+        self.settings[ "download_path" ] = xbmcplugin.getSetting( "download_path" )
+        self.settings[ "whole_words" ] = xbmcplugin.getSetting( "whole_words" ) == "true"
 
     def get_videos( self ):
         try:
             # fetch trailers from database
-            if ( self.args.genre_id == "-99" ):
+            if ( self.args.genre_id == -99 ):
                 trailers = self._search_query()
             else:
-                trailers = self._fetch_records( Query()[ "movies" ], ( int( self.args.genre_id ), ) )
+                trailers = self._genre_query()
             # concatenate actors
             trailers = self._parse_actors( trailers )
             # fill media list
             ok = self._fill_media_list( trailers )
             # set content
-            if ( ok ): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+            if (ok): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -129,23 +141,35 @@ class Main:
 
     def _get_trailer_url( self, trailer_urls ):
         # pick a random url (only really applies to multiple urls)
-        r = self._get_random_number( len( trailer_urls ) )
+        rnd = self._get_random_number( len( trailer_urls ) )
+        total = rnd + 1
         url = ""
-        # get intial choice
-        choice = ( int( self.args.quality ), len( trailer_urls[ r ] ) - 1, )[ int( self.args.quality ) >= len( trailer_urls[ r ] ) ]
-        # if quality is non progressive
-        if ( int( self.args.quality ) <= 2 ):
-            # select the correct non progressive trailer
-            while ( trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-        # quality is progressive
-        else:
-            # select the proper progressive quality
-            quality = ( "480p", "720p", "1080p", )[ int( self.args.quality ) - 3 ]
-            # select the correct progressive trailer
-            while ( quality not in trailer_urls[ r ][ choice ] and trailer_urls[ r ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-        # if there was a valid trailer set it
-        if ( choice >= 0 ):
-            url = trailer_urls[ r ][ choice ]
+        
+        if ( self.settings[ "play_all" ] and len( trailer_urls ) > 1 ):
+            rnd = 0
+            total = len( trailer_urls )
+        for count in range( rnd, total ):
+            # get intial choice
+            choice = ( self.settings[ "quality" ], len( trailer_urls[ count ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ count ] ) ]
+            # if quality is non progressive
+            if ( self.settings[ "quality" ] <= 2 ):
+                # select the correct non progressive trailer
+                while ( trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # quality is progressive
+            else:
+                # select the proper progressive quality
+                quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
+                # select the correct progressive trailer
+                while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # if there was a valid trailer set it
+            if ( choice >= 0 and ( not self.settings[ "only_hd" ] or ( self.settings[ "only_hd" ] and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
+                url += trailer_urls[ count ][ choice ] + " , "
+        if ( url.endswith( " , " ) ):
+            url = url[ : -3 ]
+            if ( url and self.settings[ "play_all" ] and " , " in url ):
+                url = "stack://" + url
+        if ( url and self.settings[ "mode" ] > 0 ):
+            url = '%s?download_url="""%s"""' % ( sys.argv[ 0 ], url, )
         return url
 
     def _fetch_records( self, query, params=None ):
@@ -154,39 +178,57 @@ class Main:
         records.close()
         return result
 
-    def _search_query( self ):
-        try:
-            trailers = []
-            qv = self.get_keyboard( heading="Enter keywords: separate words with and/or/not" )
-            xbmc.sleep(10)
-            if ( qv ):
-                keywords = qv.split()
-                where = ""
-                compare = False
-                pattern = ( "LIKE '%%%s%%'", "regexp('\\b%s\\b')", )[ int( self.args.wholewords ) ]
-                for word in keywords:
-                    if ( word.upper() == "AND" or word.upper() == "OR" ):
-                        where += " %s " % word.upper()
-                        compare = False
-                        continue
-                    elif ( word.upper() == "NOT" ):
-                        where += "NOT "
-                        continue
-                    elif ( compare ):
-                        where += " AND "
-                        compare = False
-                    where += "(title %s OR " % ( pattern % ( word, ), )
-                    where += "plot %s OR " % ( pattern % ( word, ), )
-                    where += "actor %s OR " % ( pattern % ( word, ), )
-                    where += "studio %s OR " % ( pattern % ( word, ), )
-                    where += "genre %s)" % ( pattern % ( word, ), )
-                    compare = True
-                trailers = self._fetch_records( Query()[ "search" ] % ( where, ) )
-        except:
-            # oops print error message
-            print sys.exc_info()[ 1 ]
+    def _genre_query( self ):
+        trailers = self._fetch_records( Query()[ "movies" ] % self._get_limits(), ( self.args.genre_id, ) )
         return trailers
 
+    def _get_limits( self ):
+        # HD sql statement
+        hd_sql = ( "", "AND (movies.trailer_urls LIKE '%720p.mov%' OR movies.trailer_urls LIKE '%1080p.mov%')", )[ self.settings[ "only_hd" ] and ( self.settings[ "quality" ] > 3 ) ]
+        # mpaa ratings
+        mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
+        rating_sql = ""
+        # if the user set a valid rating add all up to the selection
+        if ( self.settings[ "rating" ] < len( mpaa_ratings ) ):
+            user_rating = mpaa_ratings[ self.settings[ "rating" ] ]
+            rating_sql = "AND ("
+            # enumerate through mpaa ratings and add the selected ones to our sql statement
+            for rating in mpaa_ratings:
+                rating_sql += "rating='%s' OR " % ( rating, )
+                # if we found the users choice, we're finished
+                if ( rating == user_rating ): break
+            # fix the sql statement
+            rating_sql = rating_sql[ : -4 ] + ") "
+        return ( hd_sql, rating_sql, )
+
+    def _search_query( self ):
+        trailers = []
+        qv = self.get_keyboard( heading="Enter keywords: separate words with and/or/not" )
+        xbmc.sleep(10)
+        if ( qv ):
+            keywords = qv.split()
+            where = ""
+            compare = False
+            pattern = ( "LIKE '%%%s%%'", "regexp('\\b%s\\b')", )[ self.settings[ "whole_words" ] ]
+            for word in keywords:
+                if ( word.upper() == "AND" or word.upper() == "OR" ):
+                    where += " %s " % word.upper()
+                    compare = False
+                    continue
+                elif ( word.upper() == "NOT" ):
+                    where += "NOT "
+                    continue
+                elif ( compare ):
+                    where += " AND "
+                    compare = False
+                where += "(title %s OR " % ( pattern % ( word, ), )
+                where += "plot %s OR " % ( pattern % ( word, ), )
+                where += "actor %s OR " % ( pattern % ( word, ), )
+                where += "studio %s OR " % ( pattern % ( word, ), )
+                where += "genre %s)" % ( pattern % ( word, ), )
+                compare = True
+            trailers = self._fetch_records( Query()[ "search" ] % ( ( where, ) + self._get_limits() ), )
+        return trailers
 
     def get_keyboard( self, default="", heading="", hidden=False ):
         """ shows a keyboard and returns a value """
@@ -220,7 +262,9 @@ class Records:
             else: self.cursor.execute( sql )
             retval = self.cursor.fetchall()
         except:
-            retval = None
+            # oops print error message
+            print sys.exc_info()[ 1 ]
+            retval = []
         return retval
 
 
@@ -233,6 +277,8 @@ class Query( dict ):
                                     AND genre_link_movie.idGenre=? 
                                     AND movies.trailer_urls IS NOT NULL 
                                     AND movies.trailer_urls!='[]' 
+                                    %s
+                                    %s
                                     AND studio_link_movie.idMovie=movies.idMovie 
                                     AND studio_link_movie.idStudio=studios.idStudio 
                                     AND actor_link_movie.idMovie=movies.idMovie 
@@ -246,6 +292,8 @@ class Query( dict ):
                                     WHERE %s 
                                     AND movies.trailer_urls IS NOT NULL 
                                     AND movies.trailer_urls!='[]' 
+                                    %s
+                                    %s
                                     AND studio_link_movie.idMovie=movies.idMovie 
                                     AND studio_link_movie.idStudio=studios.idStudio 
                                     AND actor_link_movie.idMovie=movies.idMovie 
