@@ -1148,14 +1148,14 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 		except: pass
 
 		xpos += 25
-		ypos += 15
+		ypos += 10
 		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '','font14', "0xFFFFFF99", alignment=0x00000002)
 		self.addControl(self.titleCL)
-		ypos += 30
-		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-80, 'font10', '0xFFFFFFEE')
+		ypos += 25
+		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-85, 'font10', '0xFFFFFFEE')
 		self.addControl(self.descCTB)
 
-	def ask(self, title, text, width=675, height=540, panel=''):
+	def ask(self, title, text, width=685, height=560, panel=''):
 		xbmc.output( "TextBoxDialog().ask()" )
 		self._setupDisplay(width, height, panel)
 		self.titleCL.setLabel(title)
