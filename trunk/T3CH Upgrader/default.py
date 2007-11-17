@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '15-11-2007'
+__date__ = '17-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -351,8 +351,6 @@ class Main:
 
 		success = False
 		try:
-			if not self.isSilent:
-				dialogProgress.create( __language__( 0 ) )
 			# create work paths
 			unrar_path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name)
 			xbmc.output( "unrar_path= " + unrar_path )
@@ -365,6 +363,9 @@ class Main:
 				if self._extract_rar( unrar_file, unrar_path ):
 
 					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):		# switch to new build ?
+
+						if not self.isSilent:
+							dialogProgress.create( __language__( 0 ) )
 
 						if self._copy_user_data(unrar_path):								# copy userdata
 
@@ -389,16 +390,16 @@ class Main:
 								dest_path = os.path.join( unrar_path, "XBMC", "plugins", dir )
 								self._copy_folder(src_path, dest_path )
 
-							# copy then delete files listed in INCLUDE and EXCLUDE file lists
-							self._copy_includes()											# copy custom files
-							self._delete_excludes()											# delete custom files
+							# do INCLUDE and EXCLUDE file lists
+							self._copy_includes()
+							self._delete_excludes()
 
 							success = self._update_shortcut(unrar_path)		# create shortcut
 
 					# delete unwanted files/folders
 					self._delete_excess(unrar_file)
-			if not self.isSilent:
-				dialogProgress.close()
+					if not self.isSilent:
+						dialogProgress.close()
 		except:
 			handleException("process()")
 		return success
@@ -416,7 +417,7 @@ class Main:
 				if os.path.exists(f):
 					if os.path.isdir(f):
 						rmtree(f, ignore_errors=True)
-						xbmc.output( "deleted: " + f)
+						xbmc.output( "rmtree: " + f)
 					else:
 						deleteFile(f)
 			except:
@@ -457,41 +458,58 @@ class Main:
 		success = False
 		try:
 			if not os.path.exists( file_name ):
-				self._dialog_update( __language__(0), __language__( 503 ), file_name, time=10) 
+				if not self.isSilent:
+					dialogProgress.create( __language__( 0 ), __language__( 503 ), file_name )
+				else:
+					showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 50)
+
 				urllib.urlretrieve( url , file_name, self._report_hook )
+
+				if not self.isSilent:
+					dialogProgress.close()
 			else:
 				xbmc.output( "rar already exists" )
 			success = True
 		except:
+			handleException("_fetch_current_build")
+			if not self.isSilent:
+				dialogProgress.close()
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
+
 		if not success:
 			deleteFile(file_name)			# remove RAR, might be a partial DL
+		xbmc.output( "_fetch_current_build() success=" + str(success) )
 		return success
 
 	######################################################################################
 	def _report_hook( self, count, blocksize, totalsize ):
 		if not self.isSilent:
-			percent = int( float( count * blocksize * 100) / totalsize )
 			# just update every x%
+			percent = int( float( count * blocksize * 100) / totalsize )
 			if (percent % 5) == 0:
 				dialogProgress.update( percent )
-		if ( dialogProgress.iscanceled() ): raise
+			if ( dialogProgress.iscanceled() ): raise
 
 	######################################################################################
 	def _extract_rar( self, file_name, unrar_path ):
 		xbmc.output( "_extract_rar() file_name=" + file_name + " unrar_path=" + unrar_path )
 		success = False
 		try:
-			self._dialog_update( __language__(0), __language__( 504 ), unrar_path, time=10)
-			time.sleep(1)	# give dialogProgress a chance to appear
+			# use a new dialog cos an update shows an empty bar that ppl expect to move
+			if not self.isSilent:
+				dialogProgress.create( __language__( 0 ), __language__( 504 ), unrar_path )
+			else:
+				showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), unrar_path), 40 )
+				
 			result = xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_name, unrar_path, ), )
 
-			self._dialog_update( __language__(0), __language__( 522 )) 
-			time.sleep(5)
+			# inform user of os path checking
+			if not self.isSilent:
+				self._dialog_update( __language__(0), __language__( 522 ))
 
 			# loop to check if unrar path appears
 			userdata_path = os.path.join(unrar_path, 'XBMC','UserData' )
-
+			time.sleep(5)
 			MAX = 20
 			for count in range(MAX):
 				if not os.path.exists( unrar_path ) or not os.path.exists( userdata_path ):
@@ -499,14 +517,22 @@ class Main:
 						if not self.isSilent:
 							dialogProgress.update( int(int(100 / MAX) * count) )
 						time.sleep(2)
-					else:
-						dialogOK( __language__( 0 ), __language__( 312 ), unrar_path )
 				else:
 					success = True
 					break
+
+			if not self.isSilent:
+				dialogProgress.close()
 		except:
+			if not self.isSilent:
+				dialogProgress.close()
 			handleException( "_extract_rar()", __language__( 304 ) )
+
+		# unrar path not found
+		if not success:
+			dialogOK( __language__( 0 ), __language__( 312 ), unrar_path )
 			deleteFile(os.path.join( unrar_path, file_name ))			# remove RAR, might be a partial DL
+
 		xbmc.output( "_extract_rar() success=" + str(success) )
 		return success
 
@@ -765,7 +791,6 @@ class Main:
 					path = os.path.join("Q:\\", path)
 				try:
 					# pick folder first
-					print os.path.dirname(path)
 					path = self._browse_for_path(__language__(204), os.path.dirname(path), 3)		# dirs
 					if not path or path[0] != "Q":
 						raise
@@ -835,10 +860,8 @@ class Main:
 		if not self.isSilent:
 			dialogProgress.update( pct, line1, line2,line3 )
 		else:
-			time *= 1000		# make into milliseconds
 			msg = ("%s %s %s" % (line1, line2, line3)).strip()
-			cmdArg = '"%s","%s",%d' % (title, msg, time)
-			xbmc.executebuiltin( "XBMC.Notification(" + cmdArg +")" )
+			showNotification(title, msg, time)
 
 	#####################################################################################
 	def _downgrade(self):
@@ -921,6 +944,7 @@ class Main:
 		import update
 		updt = update.Update(isSilent)
 		del updt
+		xbmc.output( "_update_script() done")
 
 	#####################################################################################
 	def _settings_menu(self):
@@ -1035,13 +1059,16 @@ def getKeyboard(default, heading, hidden=False):
 #################################################################################################################
 def dialogOK(title, line1='', line2='',line3='', isSilent=False, time=3):
 	if isSilent:
-		time *= 1000		# make into milliseconds
 		msg = ("%s %s %s" % (line1, line2, line3)).strip()
-		cmdArg = '"%s","%s",%d' % (title, msg, time)
-		xbmc.executebuiltin( "XBMC.Notification(" + cmdArg +")" )
+		showNotification(title, msg, time)
 	else:
 		xbmcgui.Dialog().ok(title ,line1,line2,line3)
 
+#################################################################################################################
+def showNotification(title, msg, time=4):
+	time *= 1000		# make into milliseconds
+	cmdArg = '"%s","%s",%d' % (title, msg, time)
+	xbmc.executebuiltin( "XBMC.Notification(" + cmdArg +")" )
 
 #################################################################################################################
 def dialogYesNo(title='', line1='', line2='',line3='', yesButton="", noButton=""):
@@ -1121,11 +1148,11 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 		except: pass
 
 		xpos += 25
-		ypos += 20
+		ypos += 15
 		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '','font14', "0xFFFFFF99", alignment=0x00000002)
 		self.addControl(self.titleCL)
 		ypos += 30
-		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-40, height-70, 'font10', '0xFFFFFFEE')
+		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-80, 'font10', '0xFFFFFFEE')
 		self.addControl(self.descCTB)
 
 	def ask(self, title, text, width=675, height=540, panel=''):
