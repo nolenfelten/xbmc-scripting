@@ -3,7 +3,7 @@ Update module
 
 Nuka1195
 
-07-11-2007 Modified by BBB 
+18-11-2007 Modified by BBB 
  Use language _(0) in dialogs instead of __scriptname__
  Used regex to parse svn.
  Added a 'silent' mode.
@@ -55,8 +55,8 @@ class Update:
 		if not self.isSilent:
 			self.dialog.close()
 		xbmc.output( "Update()._check_for_new_version() new="+str(new) )
+		return new
 
-				
 	def _update_script( self ):
 		""" main update function """
 		xbmc.output( "Update()._update_script()" )
