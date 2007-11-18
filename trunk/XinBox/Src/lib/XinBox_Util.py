@@ -1,5 +1,5 @@
 
-import os, sys, xbmcgui, time
+import os, sys, xbmcgui, time, traceback
 from os.path import join, exists
 
 __datadir__ = "P:\\script_data\\"
@@ -128,16 +128,17 @@ def removeauto():
                     f.close()
                 return
             
-class UpdateSettings:   
+class UpdateSettings:
     def loadsettings(self, language):
-            from XinBox_Settings import Settings
-            dialog = xbmcgui.DialogProgress()
-            dialog.create(language(412),language(413))
-            self.settings = Settings("XinBox_Settings.xml",__scriptname__,"")
-            self.editallaccounts()
-            self.settings.saveXMLfromArray()
-            time.sleep(1)
-            dialog.close()
+            if os.path.exists(__settingdir__+"XinBox_Settings.xml"):
+                from XinBox_Settings import Settings
+                dialog = xbmcgui.DialogProgress()
+                dialog.create(language(412),language(413))
+                self.settings = Settings("XinBox_Settings.xml",__scriptname__,"")
+                self.editallaccounts()
+                self.settings.saveXMLfromArray()
+                time.sleep(1)
+                dialog.close()
             
     def editallaccounts(self):
         for item in self.settings.getSetting("Accounts")[1]:
