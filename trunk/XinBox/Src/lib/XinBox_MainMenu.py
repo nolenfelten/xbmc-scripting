@@ -23,12 +23,13 @@ class GUI( xbmcgui.WindowXML ):
     def __init__(self,strXMLname, strFallbackPath,strDefaultName,bforeFallback=0,minimode=False, minibox = False, lang=False):
         self.srcpath = strFallbackPath
         self.lang = lang
+        self.loadsettings()
         self.minibox = minibox
         self.minimode = minimode
         self.init = 0
         print self.srcpath
         if exists(self.srcpath + "\\lib\\firstrun.xib"):
-            UpdateSettings().loadsettings(self.lang)
+            UpdateSettings().loadsettings(self.lang,self.settings)
             os.remove(self.srcpath + "\\lib\\firstrun.xib")
 
     def loadsettings(self):
@@ -45,7 +46,6 @@ class GUI( xbmcgui.WindowXML ):
 
     def onInit(self):
         xbmcgui.lock()
-        self.loadsettings()
         self.accounts = self.buildaccounts()
         self.setupvars()
         if self.init == 0:

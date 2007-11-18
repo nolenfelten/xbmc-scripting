@@ -129,18 +129,14 @@ def removeauto():
                 return
             
 class UpdateSettings:   
-    def loadsettings(self, language):
-        try:
-            if os.path.exists(__settingdir__+"XinBox_Settings.xml"):
-                    from XinBox_Settings import Settings
-                    dialog = xbmcgui.DialogProgress()
-                    dialog.create(language(412),language(413))
-                    self.settings = Settings("XinBox_Settings.xml",__scriptname__,"")
-                    self.editallaccounts()
-                    self.settings.saveXMLfromArray()
-                    time.sleep(1)
-                    dialog.close()
-        except:pass
+    def loadsettings(self, language, setts):
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(language(412),language(413))
+            self.settings = setts
+            self.editallaccounts()
+            self.settings.saveXMLfromArray()
+            time.sleep(1)
+            dialog.close()
             
     def editallaccounts(self):
         for item in self.settings.getSetting("Accounts")[1]:
