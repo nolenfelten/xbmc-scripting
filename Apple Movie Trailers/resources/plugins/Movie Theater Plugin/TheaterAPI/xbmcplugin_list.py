@@ -105,7 +105,7 @@ class Main:
     def _get_videodb_list( self ):
         try:
             # TODO: change GLOB -> LIKE when and if sqLite get's updated with a fix
-            from urllib import urlencode
+            from urllib import quote_plus
             rating_sql = ""
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             # if the user set a valid rating and limit query add all up to the selection
@@ -120,23 +120,30 @@ class Main:
                 # fix the sql statement
                 rating_sql = rating_sql[ : -4 ] + ") "
             # TODO: add pagination (ORDER BY movie.c00 LIMIT %d OFFSET %d)
-            # our sql statement
+            # our sql statement movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
             sql = """
-                    SELECT path.strPath, files.strFileName, movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
+                    SELECT path.strPath, files.strFileName, movie.* 
                     FROM movie 
                     JOIN files ON files.idFile=movie.idFile 
                     JOIN path ON files.idPath=path.idPath 
                     %s
-                    LIMIT 100 OFFSET %d
+                    LIMIT 50 OFFSET %d;
                     """
+            cast_sql = """
+                            SELECT actors.strActor, actorlinkmovie.strRole 
+                            FROM actorlinkmovie 
+                            JOIN actors ON actors.idActor=actorlinkmovie.idActor 
+                            WHERE actorlinkmovie.idMovie=%s;
+                            """
+            # TODO: determine why 'u[[TRIPLE_QUOTE]]' as an OpenField response does not work as a unicode qualifier
             # format our response, so it returns a valid python list of records
-            xbmc.executehttpapi( "SetResponseFormat(OpenRecordSet,%s)" % ( urlencode( {"e": '[' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(CloseRecordSet,%s)" % ( urlencode( {"e": ']' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(OpenRecord,%s)" % ( urlencode( {"e": '(' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(CloseRecord,%s)" % ( urlencode( {"e": '), ' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(OpenRecordSet,%s)" % ( quote_plus( '[' ), ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseRecordSet,%s)" % ( quote_plus( ']' ), ) )
+            xbmc.executehttpapi( "SetResponseFormat(OpenRecord,%s)" % ( quote_plus( '(' ), ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseRecord,%s)" % ( quote_plus( '), ' ), ) )
             # we use [[TRIPLE_QUOTE]] for fields so as not to interfere with quoted strings
-            xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( urlencode( {"e": '[[TRIPLE_QUOTE]]' } )[ 2 : ], ) )
-            xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( urlencode( {"e": '[[TRIPLE_QUOTE]], ' } )[ 2 : ], ) )
+            xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( quote_plus( '[[TRIPLE_QUOTE]]' ), ) )
+            xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( quote_plus( '[[TRIPLE_QUOTE]], ' ), ) )
             # query the database
             entries = []
             offset = 0
@@ -145,21 +152,32 @@ class Main:
                 # create new sql based on our offset. (we limit the number of records returned each time to 100 for memory)
                 new_sql = sql % ( rating_sql, offset, )
                 # fetch the records
-                records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % urlencode({"e": new_sql })[ 2 : ] )
-                # if query was not successful, raise an error
-                if ( "Error:" in records ): raise
+                records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( new_sql ), )
                 # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
                 items = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
                 # enumerate through our items list and add the info to our entries list
                 for entry in items:
+                    # fetch the cast
+                    records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( cast_sql % ( entry[ 2 ], ) ), )
+                    # our final actor/role list
+                    actors = []
+                    # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
+                    try:
+                        cast = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
+                        # we enumerate through and convert actors/roles to a unicode object
+                        # we have to do this because adding a 'u' to OpenField response does not work
+                        for actor in cast:
+                            actors += [ ( unicode( actor[ 0 ], "utf-8" ), unicode( actor[ 1 ], "utf-8" ), ) ]
+                    except:
+                        pass
                     # TODO: fix a stacked path
                     # for stacked paths we do not concatenate the file and path
                     fpath = entry[ 0 ]
                     if ( not entry[ 0 ].startswith( "stack://" ) ):
                         fpath += entry[ 1 ]
                     # add video to our list
-                    entries += [ ( unicode( fpath, "utf-8" ), unicode( entry[ 2 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, entry[ 3 ].replace( "[[QUOTE]]", '"' ), entry[ 4 ], entry[ 5 ], entry[ 6 ], entry[ 7 ] ) ]
-                offset += 100
+                    entries += [ ( unicode( fpath, "utf-8" ), unicode( entry[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( entry[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( entry[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( entry[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), entry[ 7 ], entry[ 8 ], unicode( entry[ 9 ], "utf-8" ), entry[ 10 ], entry[ 11 ], entry[ 12 ], entry[ 13 ], entry[ 14 ], entry[ 15 ], entry[ 16 ], entry[ 17 ], unicode( entry[ 18 ], "utf-8" ), entry[ 19 ], entry[ 20 ], unicode( entry[ 21 ], "utf-8" ), actors ) ]
+                offset += 50
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -212,7 +230,7 @@ class Main:
                     title, isVideo, isFolder = self._get_file_info( file_path )
                     # add our item to our entry list
                     if ( isVideo or isFolder ):
-                        entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
+                        entries += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [] ) ]
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -231,7 +249,7 @@ class Main:
                 title, isVideo, isFolder = self._get_file_info( file_path )
                 # add our item to our entry list
                 if ( isVideo or isFolder ):
-                    entries += [ ( file_path, title, isFolder, "", "", "", "", "" ) ]
+                    entries += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [] ) ]
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -252,6 +270,9 @@ class Main:
                 isVideo = ( ext and ext in self.VIDEO_EXT )
             return title, isVideo, isFolder
         except:
+            # oops print error message
+            print repr( file_path )
+            print sys.exc_info()[ 1 ]
             return "", False, False
 
     def _fill_media_list( self, items ):
@@ -285,10 +306,12 @@ class Main:
                         listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
                         # set an overlay if one is practical
                         overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
-                        ##TODO fix year and add other items
                         # add the different infolabels we want to sort by
-                        listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 3 ], "MPAA": item[ 5 ], "Genre": item[ 6 ], "Studio": item[ 7 ], "Year": 0 } )
+                        listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 18 ], "Cast": item[ 21 ] } )
                     except:
+                        # oops print error message
+                        print repr( item[ 1 ] )
+                        print sys.exc_info()[ 1 ]
                         continue
                 # add the item to the media list
                 ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )

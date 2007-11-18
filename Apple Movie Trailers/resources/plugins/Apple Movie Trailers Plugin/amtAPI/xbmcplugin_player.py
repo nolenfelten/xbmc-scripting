@@ -29,7 +29,6 @@ pDialog.create( g_title, "Downloading trailer" )
 # main imports
 import sys
 import os
-##import xbmc
 import xbmcplugin
 
 import urllib
