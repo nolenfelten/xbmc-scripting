@@ -1,5 +1,5 @@
 
-import os, sys, xbmcgui, time, traceback
+import os, sys, xbmcgui, time
 from os.path import join, exists
 
 __datadir__ = "P:\\script_data\\"
@@ -11,7 +11,7 @@ __autoexecdir__ = "Q:\\scripts\\"
 __scriptname__ = 'XinBox'
 __author__ = 'Stanley87'
 __url__ = 'http://xbmc-scripting.googlecode.com/svn/tags/XinBox/'
-__version__ = '0.99.93'
+__version__ = '0.99.95'
 __BaseURL__ = "http://xbmc-scripting.googlecode.com/svn"
 
 IMAGETYPES = ["jpg","jpeg","gif","png","bmp","tbn"]
@@ -128,9 +128,9 @@ def removeauto():
                     f.close()
                 return
             
-class UpdateSettings:
+class UpdateSettings:   
     def loadsettings(self, language):
-            if os.path.exists(__settingdir__+"XinBox_Settings.xml"):
+        if os.path.exists(__settingdir__+"XinBox_Settings.xml"):
                 from XinBox_Settings import Settings
                 dialog = xbmcgui.DialogProgress()
                 dialog.create(language(412),language(413))
