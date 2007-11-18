@@ -520,8 +520,9 @@ class GUI( xbmcgui.WindowXML ):
                             listitem = xbmcgui.ListItem( self.trailers.movies[ trailer ].title, thumbnailImage=self.trailers.movies[ trailer ].poster )
                             if ( len( items ) > 1 ): s = count + 1
                             else: s = selected
+                            plot = ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ]
                             t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
-                            listitem.setInfo( "video", { "Title": t, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
+                            listitem.setInfo( "video", { "Title": t, "Year": self.trailers.movies[ trailer ].year, "PlotOutline": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
                             LOG( LOG_DEBUG, "%s (rev: %s) [%s -> %s]", __scriptname__, __svn_revision__, "GUI::playTrailer", filename )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):

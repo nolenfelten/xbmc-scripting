@@ -7,7 +7,6 @@
     - # of optional end of presentation videos
 """
 
-# TODO: remove this when dialog issue is resolved
 import xbmc
 # set our title
 g_title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
@@ -20,11 +19,15 @@ g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 # set our thumbnail
 g_thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
 # set our plotoutline
-g_plotoutline = xbmc.getInfoLabel( "ListItem.PlotOutline" )
+g_plotoutline = unicode( xbmc.getInfoLabel( "ListItem.PlotOutline" ), "utf-8" )
 # set our year
 g_year = 0
 if ( xbmc.getInfoLabel( "ListItem.Year" ) ):
     g_year = int( xbmc.getInfoLabel( "ListItem.Year" ) )
+# set our rating
+g_rating = 0.0
+if ( xbmc.getInfoLabel( "ListItem.Rating" ) ):
+    g_rating = float( xbmc.getInfoLabel( "ListItem.Rating" ) )
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
@@ -34,7 +37,6 @@ pDialog.create( "Movie Theater Plugin", "Choosing random trailers..." )
 # main imports
 import sys
 import os
-##import xbmc
 import xbmcplugin
 
 from random import randrange
@@ -98,7 +100,7 @@ class Main:
         if ( self.settings[ "coming_attraction_videos" ] ):
             for path in self.settings[ "coming_attraction_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", 0.0, )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -109,6 +111,8 @@ class Main:
         for trailer in trailers:
             # we need to select the proper trailer url
             url = self._get_trailer_url( eval( trailer[ 3 ] ) )
+            # add a false rating
+            trailer += ( 0.0, )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
@@ -117,7 +121,7 @@ class Main:
         if ( self.settings[ "feature_presentation_videos" ] ):
             for path in self.settings[ "feature_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", 0.0, )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -127,7 +131,7 @@ class Main:
         if ( not g_genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, g_rating, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
@@ -136,7 +140,7 @@ class Main:
         if ( self.settings[ "end_presentation_videos" ] ):
             for path in self.settings[ "end_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", 0, "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -228,7 +232,7 @@ class Main:
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ], "rating": trailer[ 17 ] } )
         return listitem
 
     def _get_thumbnail( self, item, url ):

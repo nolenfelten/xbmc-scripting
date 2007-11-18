@@ -93,7 +93,7 @@ class Main:
             for trailer in trailers:
                 # if trailer was saved use this as the url
                 if ( eval( trailer[ 13 ] ) ):
-                    url = eval( trailer[ 13 ] )[ self._get_random_number( len( eval( trailer[ 13 ] ) ) ) ][ 0 ]
+                    url = self._get_trailer_url( eval( trailer[ 13 ] ), True )
                 else:
                     # select the correct trailer quality.
                     url = self._get_trailer_url( eval( trailer[ 3 ] ) )
@@ -136,34 +136,33 @@ class Main:
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
         return ok
 
-    def _get_random_number( self, total ):
-        return randrange( total )
-
-    def _get_trailer_url( self, trailer_urls ):
+    def _get_trailer_url( self, trailer_urls, saved=False ):
         # pick a random url (only really applies to multiple urls)
-        rnd = self._get_random_number( len( trailer_urls ) )
+        rnd = randrange( len( trailer_urls ) )
         total = rnd + 1
         url = ""
-        
         if ( self.settings[ "play_all" ] and len( trailer_urls ) > 1 ):
             rnd = 0
             total = len( trailer_urls )
         for count in range( rnd, total ):
-            # get intial choice
-            choice = ( self.settings[ "quality" ], len( trailer_urls[ count ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ count ] ) ]
-            # if quality is non progressive
-            if ( self.settings[ "quality" ] <= 2 ):
-                # select the correct non progressive trailer
-                while ( trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-            # quality is progressive
+            if ( saved ):
+                url += trailer_urls[ count ][ 0 ] + " , "
             else:
-                # select the proper progressive quality
-                quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
-                # select the correct progressive trailer
-                while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-            # if there was a valid trailer set it
-            if ( choice >= 0 and ( not self.settings[ "only_hd" ] or ( self.settings[ "only_hd" ] and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
-                url += trailer_urls[ count ][ choice ] + " , "
+                # get intial choice
+                choice = ( self.settings[ "quality" ], len( trailer_urls[ count ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ count ] ) ]
+                # if quality is non progressive
+                if ( self.settings[ "quality" ] <= 2 ):
+                    # select the correct non progressive trailer
+                    while ( trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+                # quality is progressive
+                else:
+                    # select the proper progressive quality
+                    quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
+                    # select the correct progressive trailer
+                    while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+                # if there was a valid trailer set it
+                if ( choice >= 0 and ( not self.settings[ "only_hd" ] or ( self.settings[ "only_hd" ] and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
+                    url += trailer_urls[ count ][ choice ] + " , "
         if ( url.endswith( " , " ) ):
             url = url[ : -3 ]
             if ( url and self.settings[ "play_all" ] and " , " in url ):
