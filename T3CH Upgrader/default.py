@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '17-11-2007'
+__date__ = '18-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -96,10 +96,11 @@ class Main:
 			else:
 				self.short_build_name = ""
 
-			# empty short_build_name indicates No New Build found, but we can still enter menu
-			# if NOTIFY, no further processing
-			if self.runMode in (RUNMODE_NORMAL, RUNMODE_SILENT):
+			# empty short_build_name indicates No New Build found.
+			if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
 				self._menu( url )
+
+		xbmc.output("__init__() done - exit script")
 
 	######################################################################################
 	def _initialize( self, forceSetup=False ):
@@ -284,23 +285,26 @@ class Main:
 			# extract new build date from name
 			try:
 				rar_name = os.path.splitext( os.path.basename( url ) )[0]       # removes ext
-				new_build_date = searchRegEx(rar_name, '(\d+-\d+-\d+)') 
-				new_build_date_secs = time.mktime( time.strptime(new_build_date,"%Y-%m-%d") )
-				xbmc.output( "new_build_date= " + new_build_date)
-				xbmc.output( "new_build_date_secs= " + str(new_build_date_secs ))
+				found_build_date = searchRegEx(rar_name, '(\d+-\d+-\d+)') 
+				found_build_date_secs = time.mktime( time.strptime(found_build_date,"%Y-%m-%d") )
+				xbmc.output( "found_build_date= " + found_build_date)
+				xbmc.output( "found_build_date_secs= " + str(found_build_date_secs ))
 			except:
-				new_build_date_secs = 0
+				xbmc.output("unable to parse 'found_build_date' - setting to None Found")
+				found_build_date_secs = 0
 
-			if curr_build_date_secs >= new_build_date_secs:							# No new build
-				if self.settings[self.SETTING_NOTIFY_NOT_NEW] == __language__(402):	# YES, show notification
+			if curr_build_date_secs >= found_build_date_secs:							# No new build
+				if self.settings[self.SETTING_NOTIFY_NOT_NEW] == __language__(402):		# YES, show notification
 					dialogOK( __language__( 0 ), __language__( 517 ), isSilent=True )						# always use xbmc.notification
 			else:
 				# new build
-				short_build_name = "T3CH_%s" % (new_build_date)
+				short_build_name = "T3CH_%s" % (found_build_date)
 				if self.runMode != RUNMODE_NORMAL:
 					dialogOK( __language__( 0 ), __language__( 518 ), short_build_name, isSilent=True )		# always use xbmc.notification
 		except:
-			handleException("_check_build_date")
+			handleException("_check_build_date()")
+
+		xbmc.output("_check_build_date() new available = " +str(short_build_name != ""))
 		return (rar_name, short_build_name)
 
 	######################################################################################
@@ -329,7 +333,7 @@ class Main:
 				if self._process(url):
 					if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
 						xbmc.executebuiltin( "XBMC.Reboot" )
-					break											# stop
+				break											# stop
 			elif selected == 3:										# copy includes
 				self._maintain_includes()
 			elif selected == 4:										# delete excludes
@@ -442,8 +446,6 @@ class Main:
 	def _parse_html_source( self, htmlsource ):
 		xbmc.output( "_parse_html_source()" )
 		try:
-			if not self.isSilent:
-				self._dialog_update( __language__(0), __language__( 506 )) 
 			parser = Parser()
 			parser.feed( htmlsource )
 			parser.close()
@@ -461,7 +463,7 @@ class Main:
 				if not self.isSilent:
 					dialogProgress.create( __language__( 0 ), __language__( 503 ), file_name )
 				else:
-					showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 50)
+					showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 240)
 
 				urllib.urlretrieve( url , file_name, self._report_hook )
 
@@ -499,7 +501,7 @@ class Main:
 			if not self.isSilent:
 				dialogProgress.create( __language__( 0 ), __language__( 504 ), unrar_path )
 			else:
-				showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), unrar_path), 40 )
+				showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), unrar_path), 60 )
 				
 			result = xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_name, unrar_path, ), )
 
@@ -580,10 +582,13 @@ class Main:
 				xbmc.output( "keymap missing=" + new_build_userdata_file )
 
 			# remove new build UserData
-			xbmc.output("rmtree UserData")
-			self._dialog_update( __language__(0), __language__( 510 ), time=2)
-			rmtree( new_build_userdata_path, ignore_errors=True )
-			time.sleep(1)	# give os chance to complete rmdir
+			for checkCount in range(5):
+				xbmc.output("rmtree UserData checkCount="+str(checkCount))
+				self._dialog_update( __language__(0), __language__( 510 ), time=2)
+				rmtree( new_build_userdata_path, ignore_errors=True )
+				time.sleep(2)	# give os chance to complete rmdir
+				if not os.path.isdir(new_build_userdata_path):
+					break
 			xbmc.output("rmtree UserData done")
 
 			# copy current build to new build
@@ -617,9 +622,10 @@ class Main:
 		if os.path.exists( shortcut_cfg_file ):
 			copy( shortcut_cfg_file, shortcut_cfg_file + "_old" )
 
-		# copy TEAM XBMC dash XBE shortcut to root - only if diff and backup first
+		# copy TEAM XBMC dash XBE shortcut to root - backup first
 		try:
-			copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
+			if os.path.exists( shortcut_xbe_file ):
+				copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
 			src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
 			copy(src_xbe_file, shortcut_xbe_file)
 		except:
@@ -1126,6 +1132,7 @@ def readURL( url, msg='', isSilent=False):
 		doc = sock.read()
 		sock.close()
 	except:
+		print sys.exc_info()[ 1 ]
 		doc = None
 
 	if not isSilent:
