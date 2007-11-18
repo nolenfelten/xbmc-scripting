@@ -139,7 +139,7 @@
   <string id="231">*Skinistä riippuva</string>
 
   <!-- Settings restart required message -->
-  <string id="240">Muutokset vaativat ohjelman uudelleenkäynnistyksen.</string>
+  <string id="240">Muutokset vaativat uudelleenkäynnistyksen.</string>
   <string id="241">Haluatko uudelleenkäynnistää ?</string>
   
   <!-- Settings buttons -->
@@ -174,7 +174,7 @@
   <string id="503">Poista suosikeista</string>
   <string id="504">Merkitse katsotuksi </string>
   <string id="505">Poista merkintä</string>
-  <string id="506">Päivitä elokuvan tiedot</string>
+  <string id="506">Päivitä elokuvien tiedot</string>
   <string id="507">Päivitä kaikkien elokuvien tiedot</string>
   <string id="508">Siirrä tallennuskansioon</string>
   <string id="509">Poista esittely(t)</string>

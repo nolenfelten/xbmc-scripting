@@ -3,7 +3,7 @@
 <!-- Finnish 13.11.2007 -->
     <string id="30000">Videoiden haku tietokannasta</string>
     <string id="30010">Rajoita esittelyt elokuvan tyylin ja mpaa luokituksen mukaan</string>
-    <string id="30020">Polku tai videoiden sijainti [ei käytössä tietokannassa]</string>
+    <string id="30020">Polku tai videoiden sijainti</string>
     <string id="30030">MPAA luokituksen rajoitus esittelyille ja/tai tietokannan listaukselle</string>
     <string id="30040">Toistettavien esittelyjen määrä</string>
     <string id="30050">Haluttu esittelyn kuvanlaatu</string>
