@@ -1,0 +1,10 @@
+XinBox Version 0.99.94 Change Log:
+
+Updated: Finish Strings - thanks to mikko70
+Fixed: Broken German Strings.
+Updated: German Strings - thanks to bootsy
+Updated: Mini-Mode menu (Replaced Email List label with Inbox Name)
+Updated: InBox menu - UP on "Check" Now takes you to "Exit"
+     
+
+
