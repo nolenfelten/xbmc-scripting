@@ -28,6 +28,7 @@ class Settings:
         self.filename = filename
         self.defaultSettings = defaultSettings
         self.settings = {}
+        self.createdirs()
         if (fromFile == 1):
             # Load from File
             self.load()
@@ -35,7 +36,16 @@ class Settings:
             # Load from Default Settings
             self.settings = defaultSettings
 
-        
+    def createdirs(self):
+        if not exists(DATADIR):
+            mkdir(DATADIR)
+        if not exists(SETTINGSDIR):
+            mkdir(SETTINGSDIR)
+        if not exists(ACCOUNTDIR):
+            mkdir(ACCOUNTDIR)
+        if not exists(TEMPDIR):
+            mkdir(TEMPDIR)
+            
     def getSettingType(self,settingName):
         """
             Returns the value of the setting
@@ -227,7 +237,7 @@ class Settings:
             self.create()
 
     def create(self,forceOverwrite=0):
-        filepath = join("P:\\","script_settings", self.filename)
+        filepath = join(SETTINGSDIR, self.filename)
         if not exists(filepath) or forceOverwrite:
             self.setDefaultSettings()
             self.saveXMLfromArray()
@@ -298,16 +308,6 @@ class Settings:
             This function takes a xml Document object and saves it to XML
         """
         filepath = join(SETTINGSDIR, self.filename)
-        if not exists(DATADIR):
-            mkdir(DATADIR)
-        if not exists(SETTINGSDIR):
-            mkdir(SETTINGSDIR)
-        if not exists(ACCOUNTDIR):
-            mkdir(ACCOUNTDIR)
-        if not exists(TEMPDIR):
-            mkdir(TEMPDIR)            
-            
-
         fsock = open(filepath,"w")
         fsock.write(xmldoc.toprettyxml(indent="    "))
         fsock.close()
