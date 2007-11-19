@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!--German Strings VER: 1.1-->
+<!--German Strings VER: 1.2-->
 
 <strings>
 	<!-- Main Menu Labels -->
@@ -183,8 +183,7 @@
 	<string id="221">Downloade Email # %s</string>
 	<string id="222">Aktualisiere Email Datenbank....</string>
 	<string id="223">%s neue Emails.</string>
-	<string id="224">Fehler beim downloaden der Email(s).</string>
-	<string id="225">Emailliste</string>
+	<string id="224">Fehler beim Downloaden der Email(s).</string>
 
 	<!-- MORE InBox Menu Labels -->
 	<string id="240">"Neue Email" Benachrichtigungs SFX:</string>
