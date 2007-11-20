@@ -83,18 +83,16 @@ class Main:
         try:
             # smb share, database and local, need to retrieve the lists differently
             if ( self.settings[ "use_db" ] ):
-                entries = self._get_videodb_list()
+                ok = self._get_videodb_list()
             else:
-                entries = []
-                for path in self.args.path:
-                    if ( path.startswith( "smb://" ) ):
-                        entries += self._get_smb_list( path )
-                    else:
-                        entries += self._get_local_list( path )
-            # fill media list
-            ok = self._fill_media_list( entries )
-            # set content
-            if ( ok ): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+                ok = self._get_list()
+            # if successful and user did not cancel, add all the required sort methods and set the content
+            if ( ok ):
+                xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+                xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
+                xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
+                # set content
+                xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
@@ -104,6 +102,7 @@ class Main:
 
     def _get_videodb_list( self ):
         try:
+            ok = True
             # TODO: change GLOB -> LIKE when and if sqLite get's updated with a fix
             from urllib import quote_plus
             rating_sql = ""
@@ -121,20 +120,8 @@ class Main:
                 rating_sql = rating_sql[ : -4 ] + ") "
             # TODO: add pagination (ORDER BY movie.c00 LIMIT %d OFFSET %d)
             # our sql statement movie.c00, movie.c01, movie.c09, movie.c12, movie.c14, movie.c18 
-            sql = """
-                    SELECT path.strPath, files.strFileName, movie.* 
-                    FROM movie 
-                    JOIN files ON files.idFile=movie.idFile 
-                    JOIN path ON files.idPath=path.idPath 
-                    %s
-                    LIMIT 50 OFFSET %d;
-                    """
-            cast_sql = """
-                            SELECT actors.strActor, actorlinkmovie.strRole 
-                            FROM actorlinkmovie 
-                            JOIN actors ON actors.idActor=actorlinkmovie.idActor 
-                            WHERE actorlinkmovie.idMovie=%s;
-                            """
+            sql = "SELECT path.strPath, files.strFileName, movie.* FROM movie JOIN files ON files.idFile=movie.idFile JOIN path ON files.idPath=path.idPath %sLIMIT 50 OFFSET %d;"
+            cast_sql = "SELECT actors.strActor, actorlinkmovie.strRole FROM actorlinkmovie JOIN actors ON actors.idActor=actorlinkmovie.idActor WHERE actorlinkmovie.idMovie=%s;"
             # TODO: determine why 'u[[TRIPLE_QUOTE]]' as an OpenField response does not work as a unicode qualifier
             # format our response, so it returns a valid python list of records
             xbmc.executehttpapi( "SetResponseFormat(OpenRecordSet,%s)" % ( quote_plus( '[' ), ) )
@@ -145,7 +132,7 @@ class Main:
             xbmc.executehttpapi( "SetResponseFormat(OpenField,%s)" % ( quote_plus( '[[TRIPLE_QUOTE]]' ), ) )
             xbmc.executehttpapi( "SetResponseFormat(CloseField,%s)" % ( quote_plus( '[[TRIPLE_QUOTE]], ' ), ) )
             # query the database
-            entries = []
+            items = []
             offset = 0
             records = ""
             while records != "[]":
@@ -154,38 +141,50 @@ class Main:
                 # fetch the records
                 records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( new_sql ), )
                 # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
-                items = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
-                # enumerate through our items list and add the info to our entries list
-                for entry in items:
-                    # fetch the cast
-                    records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( cast_sql % ( entry[ 2 ], ) ), )
-                    # our final actor/role list
-                    actors = []
-                    # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
-                    try:
-                        cast = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
-                        # we enumerate through and convert actors/roles to a unicode object
-                        # we have to do this because adding a 'u' to OpenField response does not work
-                        for actor in cast:
-                            actors += [ ( unicode( actor[ 0 ], "utf-8" ), unicode( actor[ 1 ], "utf-8" ), ) ]
-                    except:
-                        pass
-                    # TODO: fix a stacked path
-                    # for stacked paths we do not concatenate the file and path
-                    fpath = entry[ 0 ]
-                    if ( not entry[ 0 ].startswith( "stack://" ) ):
-                        fpath += entry[ 1 ]
-                    # add video to our list
-                    entries += [ ( unicode( fpath, "utf-8" ), unicode( entry[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( entry[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( entry[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( entry[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), entry[ 7 ], entry[ 8 ], unicode( entry[ 9 ], "utf-8" ), entry[ 10 ], entry[ 11 ], entry[ 12 ], entry[ 13 ], entry[ 14 ], entry[ 15 ], entry[ 16 ], entry[ 17 ], unicode( entry[ 18 ], "utf-8" ), entry[ 19 ], entry[ 20 ], unicode( entry[ 21 ], "utf-8" ), actors ) ]
+                items += eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
+                # increment our record offset
                 offset += 50
+            # enumerate through our items list and add the info to our media list
+            for item in items:
+                # fetch the cast
+                records = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( cast_sql % ( item[ 2 ], ) ), )
+                # our final actor/role list
+                actors = []
+                # eval response to a python list, replace \ with \\ or else eval will fail, same with handling quotes
+                try:
+                    cast = eval( records.replace( "\\", "\\\\" ).replace( '"', "[[QUOTE]]" ).replace( "[[TRIPLE_QUOTE]]", '"""' ) )
+                    # we enumerate through and convert actors/roles to a unicode object
+                    # we have to do this because adding a 'u' to OpenField response does not work
+                    for actor in cast:
+                        actors += [ ( unicode( actor[ 0 ], "utf-8" ), unicode( actor[ 1 ], "utf-8" ), ) ]
+                except:
+                    pass
+                # TODO: fix a stacked path
+                # for stacked paths we do not concatenate the file and path(maybe we do?)
+                fpath = item[ 0 ]
+                if ( not item[ 0 ].startswith( "stack://" ) ):
+                    fpath += item[ 1 ]
+                # add video to our list
+                ok = self._add_item( ( unicode( fpath, "utf-8" ), unicode( item[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( item[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), item[ 7 ], item[ 8 ], unicode( item[ 9 ], "utf-8" ), item[ 10 ], item[ 11 ], item[ 12 ], item[ 13 ], item[ 14 ], item[ 15 ], item[ 16 ], item[ 17 ], unicode( item[ 18 ], "utf-8" ), item[ 19 ], item[ 20 ], unicode( item[ 21 ], "utf-8" ), actors ), len( items ) )
+                if ( not ok ): raise
         except:
-            # oops print error message
+            #oops print error message
+            ok = False
             print sys.exc_info()[ 1 ]
-        return entries
+        return ok
+
+    def _get_list( self ):
+        items = []
+        for path in self.args.path:
+            if ( path.startswith( "smb://" ) ):
+                items += self._get_smb_list( path )
+            else:
+                items += self._get_local_list( path )
+        return self._fill_media_list( items )
 
     def _get_smb_list( self, path ):
         try:
-            entries = []
+            items = []
             # import the necessary modules
             from TheaterAPI import smb
             from TheaterAPI import nmb
@@ -219,41 +218,44 @@ class Main:
             # set our folder
             folder = "/".join( share_string_list[ 4 : ] ) + "/*"
             # get the paths list
-            items = remote_conn.list_path( remote_share, folder )
+            entries = remote_conn.list_path( remote_share, folder )
             # enumerate through our items list and add the full name to our entries list
-            for item in items:
+            for entry in entries:
                 # we don't want the . or .. directory items
-                if ( item.get_longname() and item.get_longname() != "." and item.get_longname() != ".." ):
+                if ( entry.get_longname() and entry.get_longname() != "." and entry.get_longname() != ".." ):
                     # concatenate directory pairs
-                    file_path = "%s/%s" % ( path, item.get_longname(), )
-                    # get the item info
+                    file_path = "%s/%s" % ( path, entry.get_longname(), )
+                    # get the entry info
                     title, isVideo, isFolder = self._get_file_info( file_path )
-                    # add our item to our entry list
+                    # add our entry to our items list
                     if ( isVideo or isFolder ):
-                        entries += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [] ) ]
+                        items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
-        return entries
+        return items
 
     def _get_local_list( self, path ):
         try:
-            entries = []
+            items = []
             # get the paths list
-            items = os.listdir( unicode( path, "utf-8" ) )
+            if ( os.path.supports_unicode_filenames or os.environ.get( "OS", "n/a" ) == "win32"  or os.environ.get( "OS", "n/a" ) == "xbox" ):
+                entries = os.listdir( unicode( path, "utf-8" ) )
+            else:
+                entries = os.listdir( path )
             # enumerate through our items list and add the full name to our entries list
-            for item in items:
+            for entry in entries:
                 # concatenate directory pairs
-                file_path = "%s%s%s" % ( path, os.sep, item, )
+                file_path = "%s%s%s" % ( path, os.sep, entry, )
                 # get the item info
                 title, isVideo, isFolder = self._get_file_info( file_path )
                 # add our item to our entry list
                 if ( isVideo or isFolder ):
-                    entries += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [] ) ]
+                    items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
         except:
             # oops print error message
             print sys.exc_info()[ 1 ]
-        return entries
+        return items
 
     def _get_file_info( self, file_path ):
         try:
@@ -277,55 +279,52 @@ class Main:
 
     def _fill_media_list( self, items ):
         try:
-            ok = True
-            # enumerate through the list of items and add the item to the media list
             for item in items:
-                # create our url (backslashes cause issues when passed in the url)
-                url = '%s?path="""%s"""&isFolder=%d' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], )
-                if ( item[ 2 ] ):
-                    # if a folder.jpg exists use that for our thumbnail
-                    #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
-                    #if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
-                    icon = "DefaultFolder.png"
-                    # only need to add label and icon, setInfo() and addSortMethod() takes care of label2
-                    listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon )
-                    # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
-                else:
-                    fpath = self._fix_stacked_path( item[ 0 ] )
-                    # call _get_thumbnail() for the path to the cached thumbnail
-                    thumbnail = self._get_thumbnail( fpath )
-                    # set the default icon
-                    icon = "DefaultVideo.png"
-                    try:
-                        # get the date of the file
-                        date = datetime.datetime.fromtimestamp( os.path.getmtime( fpath ) ).strftime( "%d-%m-%Y" )
-                        # get the size of the file
-                        size = long( os.path.getsize( fpath ) )
-                        # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                        listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
-                        # set an overlay if one is practical
-                        overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
-                        # add the different infolabels we want to sort by
-                        listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 18 ], "Cast": item[ 21 ] } )
-                    except:
-                        # oops print error message
-                        print repr( item[ 1 ] )
-                        print sys.exc_info()[ 1 ]
-                        continue
-                # add the item to the media list
-                ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=len( items ) )
-                # if user cancels, call raise to exit loop
+                ok = self._add_item( item, len( items ) )
                 if ( not ok ): raise
         except:
-            # user cancelled dialog or an error occurred
-            print sys.exc_info()[ 1 ]
             ok = False
-        # if successful and user did not cancel, add all the required sort methods
-        if ( ok ):
-            xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-            xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
-            xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
+        return ok
+
+    def _add_item( self, item, total ):
+        ok = True
+        add = True
+        # create our url (backslashes cause issues when passed in the url)
+        url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], )
+        if ( item[ 2 ] ):
+            # if a folder.jpg exists use that for our thumbnail
+            #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
+            #if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
+            icon = "DefaultFolder.png"
+            # only need to add label and icon, setInfo() and addSortMethod() takes care of label2
+            listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon )
+            # add the different infolabels we want to sort by
+            listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
+        else:
+            fpath = self._fix_stacked_path( item[ 0 ] )
+            # call _get_thumbnail() for the path to the cached thumbnail
+            thumbnail = self._get_thumbnail( fpath )
+            # set the default icon
+            icon = "DefaultVideo.png"
+            try:
+                # get the date of the file
+                date = datetime.datetime.fromtimestamp( os.path.getmtime( fpath ) ).strftime( "%d-%m-%Y" )
+                # get the size of the file
+                size = long( os.path.getsize( fpath ) )
+                # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
+                listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
+                # set an overlay if one is practical
+                overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
+                # add the different infolabels we want to sort by
+                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 18 ], "Cast": item[ 21 ] } )
+            except:
+                # oops print error message
+                add = False
+                print repr( item[ 1 ] )
+                print sys.exc_info()[ 1 ]
+        if ( add ):
+            # add the item to the media list
+            ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=total )
         return ok
 
     def _fix_stacked_path( self, path ):

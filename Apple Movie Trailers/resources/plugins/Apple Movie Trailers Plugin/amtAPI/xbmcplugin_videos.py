@@ -13,7 +13,6 @@ import re
 from random import randrange
 
 from pysqlite2 import dbapi2 as sqlite
-import traceback
 
 
 class _Info:
@@ -52,8 +51,6 @@ class Main:
                 trailers = self._search_query()
             else:
                 trailers = self._genre_query()
-            # concatenate actors
-            trailers = self._parse_actors( trailers )
             # fill media list
             ok = self._fill_media_list( trailers )
             # set content
@@ -65,29 +62,22 @@ class Main:
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
-    def _parse_actors( self, trailers ):
-        ftrailers = []
-        idMovie = -1
+    def _parse_extra_info( self, records ):
+        if ( not records ): return self.args.genre, "", []
         genre = ""
-        # enumerate through the list of trailers, eliminating duplicates and adding the actors to the cast list
-        for trailer in trailers:
-            # if it's a new trailer convert the tuple to a list and add the actor as a cast list
-            if ( trailer[ 0 ] != idMovie ):
-                idMovie = trailer[ 0 ]
-                ftrailers += [ list( trailer[ : 17 ] ) ]
-                ftrailers[ -1 ] += [ [ trailer[ 17 ] ] ]
-                genre = trailer[ 16 ]
-            else:
-                # if it's the same genre add the next actor to the cast list
-                if ( genre == trailer[ 16 ] ):
-                    ftrailers[ -1 ][ 17 ] += [ trailer[ 17 ] ]
-                # if it's a new genre add the new genre to the genre string
-                elif ( isinstance( trailer[ 16 ], basestring ) and trailer[ 16 ] not in ftrailers[ -1 ][ 16 ] ):
-                    ftrailers[ -1 ][ 16] += " / %s" % trailer[ 16 ]
-        return ftrailers
+        studio = records[ 0 ][ 1 ]
+        cast = []
+        for record in records:
+            if ( record[ 0 ] not in genre ):
+                genre += record[ 0 ] + " / "
+            if ( record[ 2 ] not in cast ):
+                cast += [ record[ 2 ] ]
+        genre = genre[ : -3 ]
+        return genre, studio, cast
 
     def _fill_media_list( self, trailers ):
         try:
+            records = Records()
             ok = True
             # enumerate through the list of trailers and add the item to the media list
             for trailer in trailers:
@@ -110,15 +100,14 @@ class Main:
                     plot = ( "No synopsis provided by the studio.", trailer[ 5 ], )[ trailer[ 5 ] != "" ]
                     # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
                     listitem = xbmcgui.ListItem( trailer[ 1 ], rating, iconImage=icon, thumbnailImage=thumbnail )
-                    # get genre
-                    if ( isinstance( trailer[ 16 ], int ) ):
-                        genre = self.args.genre
-                    else:
-                        genre = trailer[ 16 ]
+                    # fetch extra info
+                    result = records.fetch( Query()[ "extra" ], ( trailer[ 0 ], ) )
+                    # parse information
+                    genre, studio, cast = self._parse_extra_info( result )
                     # set our overlay image
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in url or "1080p.mov" in url ]
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Cast": trailer[ 17 ], "Duration": trailer[ 6 ], "Studio": trailer[ 15 ], "Genre": genre, "MPAA": rating, "Plot": plot, "Plotoutline": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ] } )
+                    listitem.setInfo( type="Video", infoLabels={ "Overlay": overlay, "Duration": trailer[ 6 ], "MPAA": rating, "Plot": plot, "Plotoutline": plot, "Title": trailer[ 1 ], "year": trailer[ 9 ], "Genre": genre, "Studio": studio, "Cast": cast } )
                     # add the item to the media list
                     ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, totalItems=len(trailers) )
                     # if user cancels, call raise to exit loop
@@ -127,6 +116,7 @@ class Main:
             # user cancelled dialog or an error occurred
             print sys.exc_info()[ 1 ]
             ok = False
+        records.close()
         # if successful and user did not cancel, add all the required sort methods
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
@@ -269,24 +259,31 @@ class Records:
 
 class Query( dict ):
     def __init__( self ):
+        self[ "extra" ] = """
+                                    SELECT genres.genre, studios.studio, actors.actor 
+                                    FROM movies, genres, genre_link_movie, studios, studio_link_movie, actors, actor_link_movie 
+                                    WHERE movies.idMovie=? 
+                                    AND studio_link_movie.idMovie=movies.idMovie 
+                                    AND studio_link_movie.idStudio=studios.idStudio 
+                                    AND actor_link_movie.idMovie=movies.idMovie 
+                                    AND actor_link_movie.idActor=actors.idActor 
+                                    AND genre_link_movie.idMovie=movies.idMovie 
+                                    AND genre_link_movie.idGenre=genres.idGenre;
+                                """
+
         self[ "movies" ] = """
-                                    SELECT DISTINCT movies.*, studios.studio, genre_link_movie.idGenre, actors.actor 
-                                    FROM movies, genre_link_movie, studios, studio_link_movie, actors, actor_link_movie 
+                                    SELECT movies.* 
+                                    FROM movies, genre_link_movie
                                     WHERE genre_link_movie.idMovie=movies.idMovie 
                                     AND genre_link_movie.idGenre=? 
                                     AND movies.trailer_urls IS NOT NULL 
                                     AND movies.trailer_urls!='[]' 
                                     %s
-                                    %s
-                                    AND studio_link_movie.idMovie=movies.idMovie 
-                                    AND studio_link_movie.idStudio=studios.idStudio 
-                                    AND actor_link_movie.idMovie=movies.idMovie 
-                                    AND actor_link_movie.idActor=actors.idActor 
-                                    ORDER BY movies.title;
+                                    %s;
                                 """
 
         self[ "search" ] = """
-                                    SELECT DISTINCT movies.*, studios.studio, genre, actors.actor 
+                                    SELECT DISTINCT movies.*
                                     FROM movies, genres, genre_link_movie, studios, studio_link_movie, actors, actor_link_movie 
                                     WHERE %s 
                                     AND movies.trailer_urls IS NOT NULL 
@@ -298,6 +295,5 @@ class Query( dict ):
                                     AND actor_link_movie.idMovie=movies.idMovie 
                                     AND actor_link_movie.idActor=actors.idActor 
                                     AND genre_link_movie.idMovie=movies.idMovie 
-                                    AND genre_link_movie.idGenre=genres.idGenre 
-                                    ORDER BY movies.title;
+                                    AND genre_link_movie.idGenre=genres.idGenre;
                                 """ 
