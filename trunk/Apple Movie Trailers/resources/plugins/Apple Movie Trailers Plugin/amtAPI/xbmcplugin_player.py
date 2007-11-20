@@ -15,7 +15,7 @@ g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 # set our thumbnail
 g_thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
 # set our plotoutline
-g_plotoutline = xbmc.getInfoLabel( "ListItem.PlotOutline" )
+g_plotoutline = unicode( xbmc.getInfoLabel( "ListItem.PlotOutline" ), "utf-8" )
 # set our year
 g_year = 0
 if ( xbmc.getInfoLabel( "ListItem.Year" ) ):
