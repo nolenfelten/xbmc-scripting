@@ -65,8 +65,14 @@ def install_plugin( plugin=0 ):
     msg = ( 700 + ( 4 * plugin ) )
     if ( xbmcgui.Dialog().yesno( _( msg ), _( msg + 1 ), _( msg + 2 ), _( msg + 3 ), _( 712 ), _( 711 ), ) ):
         try:
-            from shutil import copytree, rmtree, copyfile
             title = "%s Plugin" % ( ( "Apple Movie Trailers", "Movie Theater", )[ plugin ], )
+            # get the thumbnail the user chooses
+            thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title, "thumbnails", "thumbs", "default.tbn" ) ), heading=_( 710 ), dlg_type=2, mask=".tbn", use_thumbs=True )
+            # create the progress dialog
+            dialog = xbmcgui.DialogProgress()
+            dialog.create( _( msg ) )
+            dialog.update(-1, _( 725 ), "", _( 67 ) )
+            from shutil import copytree, rmtree, copyfile
             # the main plugin path to install to
             plugin_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title ) )
             # path where plugin is copied from
@@ -82,8 +88,6 @@ def install_plugin( plugin=0 ):
             copytree( plugin_copy_path, plugin_install_path )
             # copy pysqlite2
             copytree( pysqlite2_copy_path, pysqlite2_install_path )
-            # get the thumbnail the user chooses
-            thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title, "thumbnails", "thumbs", "default.tbn" ) ), heading=_( 710 ), dlg_type=2, mask=".tbn", use_thumbs=True )
             # default.tbn install path
             thumbnail_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title, "default.tbn" ) )
             # folder.jpg install path (probably not needed)
@@ -105,6 +109,7 @@ def install_plugin( plugin=0 ):
             # delete our cached thumbnail
             if ( os.path.isfile( cached_thumbnail_path ) ):
                 os.remove( cached_thumbnail_path )
+            dialog.close()
             # TODO: enable this once webserver does not need to be running
             """
             # add the bookmark to sources.xml
@@ -117,6 +122,7 @@ def install_plugin( plugin=0 ):
             ok = xbmcgui.Dialog().ok( _( msg ), _( 720 ), _( 721 ), _( 722 ) )
         except:
             # oops notify user an error occurred
+            dialog.close()
             ok = xbmcgui.Dialog().ok( _( msg ), _( 730 ) )
 
 def get_keyboard( default="", heading="", hidden=False ):

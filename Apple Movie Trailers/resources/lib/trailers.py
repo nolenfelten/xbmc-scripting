@@ -434,10 +434,22 @@ class Trailers:
                 self.rating_url = ""
                 self.year = 0
                 self.runtime = ""
-                self.times_watched = 0
-                self.last_watched = ""
-                self.favorite = 0
-                self.saved = []
+                if ( movie[ 10 ] ):
+                    self.times_watched = movie[ 10 ]
+                else:
+                    self.times_watched = 0
+                if ( movie[ 11 ] ):
+                    self.last_watched = movie[ 11 ]
+                else:
+                    self.last_watched = ""
+                if ( movie[ 12 ] ):
+                    self.favorite = movie[ 12 ]
+                else:
+                    self.favorite = 0
+                if ( movie[ 13 ] ):
+                    self.saved = eval( movie[ 13 ] )
+                else:
+                    self.saved = []
                 self.actors = []
                 self.studio = ""
 
