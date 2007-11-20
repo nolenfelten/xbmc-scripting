@@ -52,7 +52,7 @@ class Main:
             ok = True
             # enumerate through the list of genres and add the item to the media list
             for genre in genres:
-                url = '%s?genre_id=%d&genre="""%s"""' % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], )
+                url = '%s?genre_id=%d&genre="%s"' % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], )
                 # check for a valid custom thumbnail for the current category
                 thumbnail = self._get_thumbnail( genre[ 1 ] )
                 # set the default icon
