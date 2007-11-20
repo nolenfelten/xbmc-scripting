@@ -215,6 +215,8 @@
     <string id="723">Would you like to add a bookmark for this</string>
     <string id="724">plugin to your sources.xml file?</string>
 
+    <string id="725">Installing plugin...</string>
+
     <string id="730">There was an error installing plugin!</string>
     
     <!-- Credits -->
