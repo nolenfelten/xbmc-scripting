@@ -151,7 +151,7 @@ class Main:
                     # select the correct progressive trailer
                     while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
                 # if there was a valid trailer set it
-                if ( choice >= 0 and ( not self.settings[ "only_hd" ] or ( self.settings[ "only_hd" ] and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
+                if ( choice >= 0 and ( not self.settings[ "only_hd" ] or self.settings[ "quality" ] < 4 or ( self.settings[ "only_hd" ] and self.settings[ "quality" ] > 3 and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
                     url += trailer_urls[ count ][ choice ] + " , "
         if ( url.endswith( " , " ) ):
             url = url[ : -3 ]
