@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <!-- v.pre-0.99.2         Finnish 3.11.2007 -->
+   <!--  Finnish 21.11.2007 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko 70</string>
-  
-  <!-- Dialog Messages -->
+    <!-- Dialog Messages -->
   <string id="39">Toista kaikki</string>
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
   <string id="41">Päivitetään lajityypeittäin, kesto n.1 - 5 minuuttia</string>
@@ -133,7 +132,7 @@
   <string id="2051">Yleinen kuvake</string>
   <string id="2052">Ei käytössä</string>
   <string id="2110">Ei muuteta</string>
-  
+
   <!-- Settings error messages -->
   <string id="230">Asetusten tallennuksessa tapahtui virhe!</string>
   <string id="231">*Skinistä riippuva</string>
@@ -214,8 +213,10 @@
   <string id="722">automaattisesti, sinne ei muutoksia tarvita.</string>
  
   <string id="723">Lisätäänkö tälle lisäkkeelle</string>
-  <string id="724">kirjanmerkki sources.xml tiedostoon?</string>
+  <string id="724">sijainti merkintä sources.xml tiedostoon?</string>
 
+  <string id="725">Asennetaan lisäke...</string>
+  
   <string id="730">Lisäkkeen asennus epäonnistui!</string>
 
   <!-- Credits -->
@@ -231,7 +232,7 @@
   <string id="913">Käytettävyys</string>
   <string id="914">Kielitiedosto</string>
   
-  <!-- Update messages -->  
+  <!-- Update messages -->
   <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
   <string id="1001">Tarkistetaan uusinta versiota...</string>
   <string id="1002">on uudempi</string>
@@ -247,5 +248,6 @@
   <!-- Update error messages -->
   <string id="1030">Uutta versiota ei löytynyt!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
+
 
 </strings>
