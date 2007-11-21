@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '18-11-2007'
+__date__ = '21-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -556,29 +556,36 @@ class Main:
 		xbmc.output( "_copy_user_data() " + unrar_path )
 
 		try:
-			# compare keymapping.xml, only copy if user happy
-			filename = "keymap.xml"
+			# compare keymapping.xml, always copy, but make backups
+			keymapFilename = "keymap.xml"
 			curr_build_userdata_path = "T:\\"
 			xbmc.output( "curr_build_userdata_path= " + curr_build_userdata_path )
 
-			curr_build_userdata_file = os.path.join( "T:\\", filename)
+			curr_build_userdata_file = os.path.join( "T:\\", keymapFilename)
 			xbmc.output( "curr_build_userdata_file= " + curr_build_userdata_file )
 
 			new_build_userdata_path = os.path.join( unrar_path, "XBMC", "UserData")
 			xbmc.output( "new_build_userdata_path= " + new_build_userdata_path )
 
-			new_build_userdata_file = os.path.join( new_build_userdata_path, filename)
+			new_build_userdata_file = os.path.join( new_build_userdata_path, keymapFilename)
 			xbmc.output( "new_build_userdata_file= " + new_build_userdata_file )
 
+			# backup new keymap as _new
+			copy(new_build_userdata_file, curr_build_userdata_file+"_new")
+
+			# backup curr keymap as _old
+			copy(curr_build_userdata_file, curr_build_userdata_file+"_old")
+			xbmc.output("backup made of keymap _new and _old")
+
 			# if kemap.xml has changed, ask before copying
-			if os.path.exists( new_build_userdata_file ):
+			try:
 				if not filecmp.cmp( curr_build_userdata_file, new_build_userdata_file ):
 					if self.isSilent or not dialogYesNo( __language__( 0 ), __language__( 509 ) ):
 						# NO, keep new
 						# copy new Keymap to current, so it will be included in copytree
 						copy(new_build_userdata_file, curr_build_userdata_file)
-						xbmc.output("keymap copied")
-			else:
+						xbmc.output("new keymap kept")
+			except:
 				xbmc.output( "keymap missing=" + new_build_userdata_file )
 
 			# remove new build UserData
@@ -589,7 +596,6 @@ class Main:
 				time.sleep(2)	# give os chance to complete rmdir
 				if not os.path.isdir(new_build_userdata_path):
 					break
-			xbmc.output("rmtree UserData done")
 
 			# copy current build to new build
 			xbmc.output("copytree UserData")
@@ -608,8 +614,6 @@ class Main:
 		xbmc.output( "_update_shortcut() " +unrar_path )
 
 		success = False
-		self._dialog_update( __language__(0), __language__( 514 )) 
-
 		# get users prefered booting dash name eg. XBMC.xbe
 		# if required, copy SHORTCUT by TEAM XBMCto root\<dash_name>
 		dash_name = self.settings[self.SETTING_SHORTCUT_NAME]
@@ -696,57 +700,47 @@ class Main:
 	######################################################################################
 	def _copy_includes(self):
 		xbmc.output( "_copy_includes() ")
-		try:
-			for path in self.includes:
+
+		TOTAL = len(self.includes)
+		count = 0
+		for path in self.includes:
+			try:
 				src_path = os.path.join("Q:\\", path)
 				dest_path = os.path.join( self.settings[self.SETTING_UNRAR_PATH], self.short_build_name, "XBMC", path )
 				if not self.isSilent:
-					self._dialog_update( __language__(0), __language__( 515 ), src_path ) 
+					percent = int(int(100 / TOTAL) * count)
+					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent ) 
 				localCopy(src_path, dest_path, self.isSilent)
-		except:
-			handleException("_copy_includes()")
+			except:
+				handleException("_copy_includes() path="+path)
 
 
 	######################################################################################
 	def _delete_excludes(self):
 		xbmc.output( "_delete_excludes() ")
-		try:
-			for path in self.excludes:
-				full_path = os.path.join( self.settings[self.SETTING_UNRAR_PATH], self.short_build_name, "XBMC", path )
+
+		TOTAL = len(self.excludes)
+		count = 0
+		for path in self.excludes:
+			try:
+				dest_path = os.path.join( self.settings[self.SETTING_UNRAR_PATH], self.short_build_name, "XBMC", path )
 				if not self.isSilent:
-					self._dialog_update( __language__(0), __language__( 516 ), full_path )
-				deleteFile(full_path)
-		except:
-			handleException("_delete_excludes()")
+					percent = int(int(100 / TOTAL) * count)
+					self._dialog_update( __language__(0), __language__( 516 ), dest_path, pct=percent )
+				if path[-1] in ["\\","/"]:
+					xbmc.output( "rmtree " + dest_path )
+					rmtree(dest_path, ignore_errors=True)
+				else:
+					deleteFile(dest_path)
+			except:
+				handleException("_delete_excludes() path="+path)
 
 
 	######################################################################################
 	def _maintain_includes(self):
 		xbmc.output( "_maintain_includes() ")
+
 		try:
-
-			def _pick_file(path=''):
-				if not path:
-					path = "Q:\\"
-				else:
-					path = os.path.join("Q:\\", path)
-				try:
-					path = self._browse_for_path(__language__(203), path, 1)		# file
-					if not path or path[0] != "Q":
-						raise
-
-					# subs dest drive with new build path
-					bare_dest_path = str(os.path.splitdrive( path )[1])	# get path+filename, no drive
-					if bare_dest_path and (bare_dest_path[0] == '\\' or bare_dest_path[0] == '/'):
-						bare_dest_path = bare_dest_path[1:]
-					# create dest path into new build
-					path = bare_dest_path.replace('/','\\')
-				except:
-					path = ''
-
-				xbmc.output("_pick_file() final path=" + path)
-				return path
-			
 			selectDialog = xbmcgui.Dialog()
 			while True:
 				# make menu
@@ -758,68 +752,90 @@ class Main:
 				selected = selectDialog.select( __language__( 615 ), options )
 				if selected <= 0:						# quit
 					break
-				elif selected == 1:						# add new
-					path = _pick_file()
-					if path:
+
+				path = ""
+				deleteOption = False
+				addOption = False
+				if selected == 1:						# add new
+					addOption = True
+					path, type = self._select_file_folder(path)
+				else:									# remove or edit
+					deleteOption = True
+					path = options[selected]
+					# ask what action to take (remove, edit)
+					if not dialogYesNo( __language__( 0 ), path, yesButton=__language__(406), noButton=__language__(407)):
+						path, type = self._select_file_folder(path)		# edit
+						addOption = True
+
+				if path:
+					if deleteOption:
+						del self.includes[selected-2]									# del
+
+					if addOption:
 						# add if not a duplicat
 						try:
 							self.includes.index(path)
 						except:
 							self.includes.append(path)
-				else:									# remove or edit
-					path = options[selected]
-					# ask what action to take (remove, edit)
-					if dialogYesNo( __language__( 0 ), path, yesButton=__language__(406), noButton=__language__(407)):
-						del self.includes[selected-2]								# del
-					else:
-						path = _pick_file(path)										# edit
-						if path:
-							# add if not a duplicat
-							try:
-								self.includes.index(path)
-							except:
-								del self.includes[selected-2]						# del orig entry
-								self.includes.append(path)
 
 			# save options to file
 			self._save_file_obj(self.INCLUDES_FILENAME, self.includes)
 		except:
 			handleException("_maintain_includes()")
 
+
+
 	######################################################################################
 	def _maintain_excludes(self):
 		xbmc.output( "_maintain_excludes() ")
 		try:
 			def _pick_file(path=''):
+				FILE = 1
+				FOLDER = 0
 				if not path:
-					path = "Q:\\"
+					# add new
+					if dialogYesNo(__language__(0), __language__(525), yesButton=__language__(408), noButton=__language__(409)):
+						type = FOLDER
+					else:
+						type = FILE
 				else:
+					# editing existing
 					path = os.path.join("Q:\\", path)
+					path,filename = os.path.split(path)
+					if not filename:
+						type = FOLDER
+					else:
+						type = FILE
+
 				try:
-					# pick folder first
-					path = self._browse_for_path(__language__(204), os.path.dirname(path), 3)		# dirs
+					if not path:
+						path = "Q:\\"
+
+					# always pick folder first
+					path = self._browse_for_path(__language__(204), path, FOLDER)
 					if not path or path[0] != "Q":
 						raise
-	
-					# append filename using keyboard
-					if path[-1] != '\\': path += '\\'
-					path = getKeyboard(path, __language__(207))
 
-					# ensure filename entered
-					basename = os.path.basename(path)
-					if not basename:
-						raise
+					if path[-1] not in ["\\","/"]:
+						path += "\\"
 
-					# subs dest drive with new build path
+					# enter filename using keyboard
+					if type == FILE:
+						path = getKeyboard(path, __language__(207))
+						# ensure filename entered
+						basename = os.path.basename(path)
+						if not basename:
+							raise
+
 					bare_dest_path = str(os.path.splitdrive( path )[1])	# get path+filename, no drive
-					if bare_dest_path and (bare_dest_path[0] == '\\' or bare_dest_path[0] == '/'):
+					if bare_dest_path and bare_dest_path[0] in ["/", "\\"]:
 						bare_dest_path = bare_dest_path[1:]
 					path = bare_dest_path.replace('/','\\')
 				except:
 					path = ''
 
-				xbmc.output("_pick_file() final path=" + path)
-				return path
+				xbmc.output("_pick_file() final path=" + path + " type="+str(type))
+				return path, type
 			
 			selectDialog = xbmcgui.Dialog()
 			while True:
@@ -832,34 +848,88 @@ class Main:
 				selected = selectDialog.select( __language__( 618 ), options )
 				if selected <= 0:						# quit
 					break
-				elif selected == 1:						# add new
-					path = _pick_file()
-					if path:
+
+				path = ""
+				deleteOption = False
+				addOption = False
+				if selected == 1:						# add new
+					addOption = True
+					path, type = _pick_file()
+					if self._isRestrictedFolder(path):
+						path = ''
+
+				else:									# remove or edit
+					deleteOption = True
+					path = options[selected]
+					# ask what action to take (remove, edit)
+					if not dialogYesNo( __language__( 0 ), path, yesButton=__language__(406), noButton=__language__(407)):
+						path, type = _pick_file(path)					# edit
+						addOption = True
+
+				if path:
+					if deleteOption:
+						del self.excludes[selected-2]									# del
+
+					if addOption:
 						# add if not a duplicat
 						try:
 							self.excludes.index(path)
 						except:
 							self.excludes.append(path)
-				else:									# remove or edit
-					path = options[selected]
-					# ask what action to take (remove, edit)
-					if dialogYesNo( __language__( 0 ), path, yesButton=__language__(406), noButton=__language__(407)):
-						del self.excludes[selected-2]								# del
-					else:
-						path = _pick_file(path)										# edit
-						if path:
-							# add if not a duplicat
-							try:
-								self.excludes.index(path)
-							except:
-								del self.excludes[selected-2]						# del orig entry
-								self.excludes.append(path)
 
 			# save options to file
 			self._save_file_obj(self.EXCLUDES_FILENAME, self.excludes)
 		except:
 			handleException("_maintain_excludes()")
 
+	#####################################################################################
+	def _isRestrictedFolder(self, path):
+		if (os.path.dirname(path).lower() in ["credits","language","media","screensavers","scripts","skin","sounds","system","credits","visualisations"]):
+			dialogOK(__language__(0), __language__(313))
+			return True
+		else:
+			return False
+
+	#####################################################################################
+	def _select_file_folder(self, path=""):
+		xbmc.output( "_select_file_folder() path="+path)
+		FILE = 1
+		FOLDER = 0
+		if not path:
+			# add new
+			if dialogYesNo(__language__(0), __language__(525), yesButton=__language__(408), noButton=__language__(409)):
+				type = FOLDER
+			else:
+				type = FILE
+		else:
+			# editing existing
+			path = os.path.join("Q:\\", path)
+			if path[-1] in ["\\","/"]:
+				type = FOLDER
+			else:
+				type = FILE
+
+		try:
+			if not path:
+				path = "Q:\\"
+
+			if type == FILE:
+				msg = __language__(203)
+			else:
+				msg = __language__(204)
+			path = self._browse_for_path(msg, path, type)
+			if not path or path[0] != "Q":
+				raise
+
+			bare_dest_path = str(os.path.splitdrive( path )[1])	# get path+filename, no drive
+			if bare_dest_path and bare_dest_path[0] in ["/", "\\"]:
+				bare_dest_path = bare_dest_path[1:]
+			path = bare_dest_path.replace('/','\\')
+		except:
+			path = ''
+
+		xbmc.output("_select_file_folder() final path=" + path + " type=" +str(type))
+		return path, type
 
 	#####################################################################################
 	def _dialog_update(self, title="", line1="", line2="", line3="", pct=0, time=4):
@@ -1032,6 +1102,7 @@ def localCopy(src_path, dest_path, isSilent=False):
 			copy( src_path, dest_path )
 		else:
 			# dir
+			xbmc.output("copy dir")
 			files = os.listdir(src_path)
 			TOTAL = len(files)
 			count = 0
@@ -1077,7 +1148,7 @@ def showNotification(title, msg, time=4):
 	xbmc.executebuiltin( "XBMC.Notification(" + cmdArg +")" )
 
 #################################################################################################################
-def dialogYesNo(title='', line1='', line2='',line3='', yesButton="", noButton=""):
+def dialogYesNo(title="", line1="", line2="",line3="", yesButton="", noButton=""):
 	if not title:
 		title = __language__( 0 )
 	if not yesButton:

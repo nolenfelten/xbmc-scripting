@@ -26,6 +26,7 @@
     <string id="310">Changelog unavailable.</string>
     <string id="311">Source file/folder does not exist!</string>
     <string id="312">Extraction path does not exist!  Retry.</string>
+    <string id="313">Restricted File or Folder!</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -36,6 +37,8 @@
     <string id="405">Manual</string>
     <string id="406">Remove</string>
     <string id="407">Edit</string>
+    <string id="408">Folder</string>
+    <string id="409">File</string>
 
     <!-- Status messages -->
     <string id="500">The current T3CH build is:</string>
@@ -63,6 +66,7 @@
     <string id="522">Extraction finished. Checking for path ...</string>
     <string id="523">Delete old T3CH Build ?</string>
     <string id="524">Please wait ...</string>
+    <string id="525">Select File or Folder ?</string>
 
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
