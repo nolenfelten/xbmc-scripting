@@ -279,6 +279,7 @@ class Main:
 
     def _fill_media_list( self, items ):
         try:
+            ok = True
             for item in items:
                 ok = self._add_item( item, len( items ) )
                 if ( not ok ): raise
