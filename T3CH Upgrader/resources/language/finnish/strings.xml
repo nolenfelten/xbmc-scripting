@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Päivitys</string>
-    <!--  Finnish v.16.11.2007 -->
+    <!--  Finnish v.21.11.2007 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
     <string id="201">Anna boottaavan dashin nimi.</string>
@@ -26,7 +26,8 @@
     <string id="310">Muutoshistoriaa ei ole saatavilla.</string>
     <string id="311">Lähde tiedostoa/kansiota ei löydy!</string>
     <string id="312">Purkupolkua ei löydy! Yritä uudelleen.</string>
-  
+    <string id="313">Rajoitettu tiedosto tai kansio!</string>
+
     <!-- Yes/No buttons -->
     <string id="400">Lataa</string>
     <string id="401">Ohita</string>
@@ -36,6 +37,8 @@
     <string id="405">Manuaalinen</string>
     <string id="406">Poista</string>
     <string id="407">Muokkaa</string>
+    <string id="408">Kansio</string>
+    <string id="409">Tiedosto</string>
 
     <!-- Status messages -->
     <string id="500">Nykyinen T3CH paketti:</string>
@@ -63,10 +66,13 @@
     <string id="522">Paketin purku valmis. Tarkistetaan polkua ...</string>
     <string id="523">Poistetaanko vanha T3CH paketti ?</string>
     <string id="524">Odota hetki ...</string>
+    <string id="525">Valitse tiedosto tai kansio ?</string>
 
-   <!-- Menu Titles -->
+    <!-- Menu Titles -->
     <string id="600">Päävalikko</string>
     <string id="601">Asetukset</string>
+    <string id="605">Kopioitavat tiedostot</string>
+    <string id="608">Poistettavat tiedostot</string>
   
     <!-- Menu options -->
     <string id="610">Asetukset</string>
@@ -77,8 +83,7 @@
     <string id="617">Poista vanha T3CH versio</string>
     <string id="618">Muuta poistettavien tiedostojen luetteloa</string>
     <string id="619">Päivitä skripti</string>
-   
-   
+      
    <!-- Settings Options -->
     <string id="630">Dashin asema:</string>
     <string id="631">Dashin nimi:</string>
@@ -89,7 +94,7 @@
     <!-- Misc Menu Options Options -->
     <string id="650">Poistu</string>
     <string id="651">Lisää uusi</string>
-    <string id="652">Näppäimistö käytössä</string>
+    <string id="652">Käytä näppäimistöä</string>
 
   <!-- Update messages -->  
   <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
