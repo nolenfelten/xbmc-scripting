@@ -26,6 +26,7 @@
     <string id="310">Changelog nicht verfügbar.</string>
     <string id="311">Source Datei/Ordner nicht vorhanden!</string>
     <string id="312">Entpackungspfad nicht vorhanden!  Wiederholen.</string>
+    <string id="313">Eingeschränkte Datei oder Ordner!</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -36,6 +37,8 @@
     <string id="405">Manuell</string>
     <string id="406">Entfernen</string>
     <string id="407">Bearbeiten</string>
+    <string id="408">Ordner</string>
+    <string id="409">Datei</string>
 
     <!-- Status messages -->
     <string id="500">Aktuelles T3CH Build:</string>
@@ -63,6 +66,7 @@
     <string id="522">Entpacken beendet. Suche nach Pfad...</string>
     <string id="523">Altes T3CH Build löschen?</string>
     <string id="524">Bitte warten...</string>
+    <string id="525">Datei oder Ordner auswählen?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
@@ -72,10 +76,10 @@
     <string id="610">Einstellungen</string>
     <string id="611">Zeige Changelog</string>
     <string id="612">Download: </string>
-    <string id="615">Zu kopierende Dateien verwalten</string>
+    <string id="615">Zu kopierende Daten verwalten</string>
     <string id="616">Zu einem anderen T3CH wechseln</string>
     <string id="617">Ein altes T3CH löschen</string>
-    <string id="618">Zu löschende Dateien verwalten</string>
+    <string id="618">Zu löschende Daten verwalten</string>
     <string id="619">Script aktualisieren</string>
 
     <!-- Settings Options -->
