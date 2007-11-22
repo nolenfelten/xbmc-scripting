@@ -88,6 +88,8 @@
     <string id="632">Installationspfad:</string>
     <string id="633">Benachrichtigen bei keinem neuen T3CH?</string>
     <string id="634">Beim Starten nach Updates suchen?</string>
+    <string id="635">UserData zum T3CH hinzufügen?</string>
+    <string id="636">Einstellungen zurücksetzen</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Beenden</string>
