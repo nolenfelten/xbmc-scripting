@@ -79,54 +79,67 @@ class Main:
 		self.SETTING_UNRAR_PATH = "unrar_path"
 		self.SETTING_NOTIFY_NOT_NEW = "notify_when_not_new"
 		self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP = "check_script_update_startup"
+		self.SETTING_XFER_USERDATA = "transfer_userdata"
 
 		# COPY INCLUDES
 		self.INCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "includes.txt" )
 		self.EXCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "excludes.txt" )
 
-		if self._initialize():
-			# check for script update ?
-			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):
-				self._update_script(True)		# always silent at startup
-
-			url = self._get_latest_version()										# discover latest build
-#			url = "http://somehost/XBMC-SVN_2007-11-04_rev10675-T3CH.rar"			# DEV ONLY!!, saves DL it
-			if url:
-				self.rar_name, self.short_build_name = self._check_build_date( url )
-			else:
-				self.short_build_name = ""
-
-			# empty short_build_name indicates No New Build found.
-			if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
-				self._menu( url )
-
-		xbmc.output("__init__() done - exit script")
-
-	######################################################################################
-	def _initialize( self, forceSetup=False ):
-		xbmc.output( "_initialize()" )
-		success = False
-
-		self._make_script_data_path()
+		# init
+		makeDir(self.SCRIPT_DATA_DIR)
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
 		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
 		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
-		while not success:
-			# if forcing setup, skip initial setting check
-			if not forceSetup:
-				success = self._check_default_settings()
-			else:
-				forceSetup = False								# will now check on next loop
 
-			# enter and save settings
-			if not success:
-				self.isSilent = False							# come out of silent inorder to setup
-				self._set_default_settings()
-				self._settings_menu()
+		self._check_settings()
+		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
+			self._update_script(True)														# silent
 
-		xbmc.output( "_initialize() success= " + str(success) )
+		url = self._get_latest_version()										# discover latest build
+#		url = "http://somehost/XBMC-SVN_2007-11-17_rev10770-T3CH.rar"			# DEV ONLY!!, saves DL it
+		if url:
+			self.rar_name, self.short_build_name = self._check_build_date( url )
+		else:
+			self.short_build_name = ""
+
+		# empty short_build_name indicates No New Build found.
+		if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
+			self._menu( url )
+
+		xbmc.output("__init__() done - exit script")
+
+
+	######################################################################################
+	def _check_settings( self, forceSetup=False ):
+		xbmc.output( "_check_settings()" )
+		while forceSetup or not self._set_default_settings(False):
+			self.isSilent = False							# come out of silent inorder to setup
+			self._settings_menu()							# enter settings
+			forceSetup = False								# cancel force entry, can now exit when ok
+
+	######################################################################################
+	def _set_default_settings( self, forceReset=False ):
+		""" set settings to default values if not exist """
+		success = True
+
+		items = {
+			self.SETTING_SHORTCUT_DRIVE : "C:\\",
+			self.SETTING_SHORTCUT_NAME : "xbmc",
+			self.SETTING_UNRAR_PATH : "E:\\apps",
+			self.SETTING_NOTIFY_NOT_NEW :  __language__(402), # yes
+			self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP : __language__(403),	# No
+			self.SETTING_XFER_USERDATA : __language__(402)	# yes
+			}
+
+		for key, defaultValue in items.items():
+			if forceReset or not self.settings.has_key( key ) or not self.settings[key]:
+				self.settings[key] = defaultValue
+				if not forceReset:
+					success = False
+
+		xbmc.output( "_set_default_settings() success=" +str(success))
 		return success
-
+		
 	######################################################################################
 	def _load_file_obj( self, filename, dataType ):
 		xbmc.output( "_load_file_obj() " + filename)
@@ -153,62 +166,6 @@ class Main:
 		except:
 			handleException( "_save_file_obj()" )
 
-	######################################################################################
-	def _set_default_settings( self ):
-		xbmc.output( "_set_default_settings()" )
-		key = self.SETTING_SHORTCUT_DRIVE
-		if not self.settings.has_key( key ) or not self.settings[key]:
-			self.settings[key] = "C:\\" 
-
-		key = self.SETTING_SHORTCUT_NAME
-		if not self.settings.has_key( key ) or not self.settings[key]:
-			self.settings[ key ] = "xbmc"
-			
-		key = self.SETTING_UNRAR_PATH
-		if not self.settings.has_key( key ) or not self.settings[key]:
-			self.settings[ key ] = "E:\\apps"
-
-		key = self.SETTING_NOTIFY_NOT_NEW
-		if not self.settings.has_key( key ) or not self.settings[key]:
-			self.settings[ self.SETTING_NOTIFY_NOT_NEW ] = __language__(402)	# yes
-			
-		key = self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP
-		if not self.settings.has_key( key ) or not self.settings[key]:
-			self.settings[ key ] = __language__(403)	# No
-
-	######################################################################################
-	def _check_default_settings( self ):
-		xbmc.output( "_check_default_settings()" )
-		error = False
-		try:
-			if not self.settings:
-				raise
-
-			# check all keys exist
-			keysList = [self.SETTING_SHORTCUT_DRIVE,
-						self.SETTING_UNRAR_PATH,
-						self.SETTING_SHORTCUT_NAME,
-						self.SETTING_NOTIFY_NOT_NEW,
-						self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]
-			for key in keysList:
-				if not self.settings.has_key( key ):
-					xbmc.output( "setting missing, key= " + key )
-					raise
-				elif self.settings[ key ] in ["",None]:
-					xbmc.output( "setting empty, key= " + key )
-					raise
-		except:
-			error = True
-
-		xbmc.output( "_check_default_settings() error = " + str(error) )
-		return not error
-
-	######################################################################################
-	def _make_script_data_path( self ):
-		xbmc.output( "_make_script_data_path() " + self.SCRIPT_DATA_DIR)
-		try:
-			os.makedirs( self.SCRIPT_DATA_DIR )
-		except: pass
 
 	######################################################################################
 	def _browse_for_path( self, heading, default_path='', dialog_type=3):
@@ -345,8 +302,7 @@ class Main:
 			elif selected == 7:										# update script
 				self._update_script(False)							# never silent from config menu
 			elif selected == 8:										# settings
-				if not self._initialize(forceSetup=True):			# setup incomplete, quit
-					break
+				self._check_settings(forceSetup=True)
 
 
 	######################################################################################
@@ -371,34 +327,35 @@ class Main:
 						if not self.isSilent:
 							dialogProgress.create( __language__( 0 ) )
 
-						if self._copy_user_data(unrar_path):								# copy userdata
+						if self.settings[self.SETTING_XFER_USERDATA] == __language__(402):
+							self._copy_user_data(unrar_path)
 
-							# copy additional folders
-							src_path = os.path.join( "Q:\\", "skin" )
-							dest_path = os.path.join( unrar_path, "XBMC", "skin" )
-							self._copy_folder(src_path, dest_path)
+						# copy additional folders
+						src_path = os.path.join( "Q:\\", "skin" )
+						dest_path = os.path.join( unrar_path, "XBMC", "skin" )
+						self._copy_folder(src_path, dest_path)
 
-							src_path = os.path.join( "Q:\\", "screensavers" )
-							dest_path = os.path.join( unrar_path, "XBMC", "screensavers" )
-							self._copy_folder(src_path, dest_path)
+						src_path = os.path.join( "Q:\\", "screensavers" )
+						dest_path = os.path.join( unrar_path, "XBMC", "screensavers" )
+						self._copy_folder(src_path, dest_path)
 
-							src_path = os.path.join( "Q:\\", "scripts" )
-							dest_path = os.path.join( unrar_path, "XBMC", "scripts" )
-							self._copy_folder(src_path, dest_path)
+						src_path = os.path.join( "Q:\\", "scripts" )
+						dest_path = os.path.join( unrar_path, "XBMC", "scripts" )
+						self._copy_folder(src_path, dest_path)
 
-							# for each subdir in plugins copy their subdirs
-							src_path = os.path.join( "Q:\\", "plugins" )
-							dirList = os.listdir(src_path)
-							for dir in dirList:
-								src_path = os.path.join( "Q:\\", "plugins", dir )
-								dest_path = os.path.join( unrar_path, "XBMC", "plugins", dir )
-								self._copy_folder(src_path, dest_path )
+						# for each subdir in plugins copy their subdirs
+						src_path = os.path.join( "Q:\\", "plugins" )
+						dirList = os.listdir(src_path)
+						for dir in dirList:
+							src_path = os.path.join( "Q:\\", "plugins", dir )
+							dest_path = os.path.join( unrar_path, "XBMC", "plugins", dir )
+							self._copy_folder(src_path, dest_path )
 
-							# do INCLUDE and EXCLUDE file lists
-							self._copy_includes()
-							self._delete_excludes()
+						# do INCLUDE and EXCLUDE file lists
+						self._copy_includes()
+						self._delete_excludes()
 
-							success = self._update_shortcut(unrar_path)		# create shortcut
+						success = self._update_shortcut(unrar_path)		# create shortcut
 
 					# delete unwanted files/folders
 					self._delete_excess(unrar_file)
@@ -759,6 +716,10 @@ class Main:
 				if selected == 1:						# add new
 					addOption = True
 					path, type = self._select_file_folder(path)
+					if path and \
+						((type in [0,3] and self._isRestrictedFolder(path)) or \
+						(type == 1 and self._isRestrictedFile(path))):
+						path = ''
 				else:									# remove or edit
 					deleteOption = True
 					path = options[selected]
@@ -855,7 +816,9 @@ class Main:
 				if selected == 1:						# add new
 					addOption = True
 					path, type = _pick_file()
-					if self._isRestrictedFolder(path):
+					if path and \
+						((type in [0,3] and self._isRestrictedFolder(path)) or \
+						(type == 1 and self._isRestrictedFile(path))):
 						path = ''
 
 				else:									# remove or edit
@@ -884,11 +847,23 @@ class Main:
 
 	#####################################################################################
 	def _isRestrictedFolder(self, path):
-		if (os.path.dirname(path).lower() in ["credits","language","media","screensavers","scripts","skin","sounds","system","credits","visualisations"]):
+		if (os.path.dirname(path).lower() in ["q:\\","credits","language","media","screensavers","scripts","skin","sounds","system","credits","visualisations"]):
 			dialogOK(__language__(0), __language__(313))
-			return True
+			restricted = True
 		else:
-			return False
+			restricted = False
+		xbmc.output("_isRestrictedFolder() " + str(restricted))
+		return restricted
+
+	#####################################################################################
+	def _isRestrictedFile(self, path):
+		if (os.path.basename(path).lower() in ["default.xbe"]):
+			dialogOK(__language__(0), __language__(313))
+			restricted = True
+		else:
+			restricted = False
+		xbmc.output("_isRestrictedFile() " + str(restricted))
+		return restricted
 
 	#####################################################################################
 	def _select_file_folder(self, path=""):
@@ -1026,13 +1001,22 @@ class Main:
 	def _settings_menu(self):
 		xbmc.output( "_settings_menu() ")
 
+		def _set_yes_no(key, prompt):
+			if dialogYesNo( __language__( 0 ), prompt ):
+				self.settings[key] = __language__( 402 )	# YES
+			else:
+				self.settings[key] = __language__( 403 )	# NO
+
+
 		def _make_menu(settings):
 			options = [ __language__(650),
 						"%s -> %s" %(__language__(630),self.settings[self.SETTING_SHORTCUT_DRIVE]),
 						"%s -> %s" %(__language__(631),self.settings[self.SETTING_SHORTCUT_NAME]),
 						"%s -> %s" %(__language__(632),self.settings[self.SETTING_UNRAR_PATH]),
 						"%s -> %s" %(__language__(633),self.settings[self.SETTING_NOTIFY_NOT_NEW]),
-						"%s -> %s" %(__language__(634),self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP])
+						"%s -> %s" %(__language__(634),self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]),
+						"%s -> %s" %(__language__(635),self.settings[self.SETTING_XFER_USERDATA]),
+						"%s" % (__language__(636))
 						]
 			return options
 
@@ -1043,10 +1027,6 @@ class Main:
 			selected = selectDialog.select( heading, options )
 			if selected <= 0:						# quit
 				break
-
-#			matches = re.search('(.*?)->(.*?)$', options[selected], re.IGNORECASE)
-#			optionName = matches.group(1).strip()
-#			optionValue = matches.group(2).strip()
 
 			# match option name to settings key
 			if selected == 1:
@@ -1060,23 +1040,24 @@ class Main:
 					self.settings[self.SETTING_SHORTCUT_NAME] = value
 
 			elif selected == 3:
-				value = self._browse_for_path( __language__( 200 ) )
+				value = self._browse_for_path( __language__( 200 ), self.settings[self.SETTING_UNRAR_PATH] )
 				if value and value[0] != "Q":
 					self.settings[self.SETTING_UNRAR_PATH] = value
 
 			elif selected == 4:
-				if dialogYesNo( __language__( 0 ), __language__( 633 ) ):
-					self.settings[self.SETTING_NOTIFY_NOT_NEW] = __language__( 402 )	# YES
-				else:
-					self.settings[self.SETTING_NOTIFY_NOT_NEW] = __language__( 403 )	# NO
+				_set_yes_no(self.SETTING_NOTIFY_NOT_NEW, __language__( 633 ))
 
 			elif selected == 5:
-				if dialogYesNo( __language__( 0 ), __language__( 634 ) ):
-					self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = __language__( 402 )	# YES
-				else:
-					self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = __language__( 403 )	# NO
+				_set_yes_no(self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP, __language__( 634 ))
 
-		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
+			elif selected == 6:
+				_set_yes_no(self.SETTING_XFER_USERDATA, __language__( 635 ))
+
+			elif selected == 7:												# reset
+				if dialogYesNo(__language__(0), __language__( 636 ) + " ?"):
+					self._set_default_settings(forceReset=True)
+
+			self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
 
 
 ######################################################################################
@@ -1209,6 +1190,7 @@ def readURL( url, msg='', isSilent=False):
 	if not isSilent:
 		dialogProgress.close()
 	return doc
+
 
 #################################################################################################################
 class TextBoxDialog(xbmcgui.WindowDialog):
