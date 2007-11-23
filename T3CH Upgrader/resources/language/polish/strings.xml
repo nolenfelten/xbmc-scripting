@@ -2,7 +2,8 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 11/09/2007-->
+<!--Date of translation: 11/23/2007-->
+<!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
   <string id="200">Ścieżka instalacji (np. E:\apps) </string>
@@ -25,7 +26,8 @@
   <string id="309">Wymagana jest nazwa pliku startowego dasha</string>
   <string id="310">Lista zmian niedostępna</string>
   <string id="311">Źródłowy plik/katalog nie istnieje!</string>
-  <string id="312">Ścieżka wypakowania nie istnieje! Spróbować jeszcze raz</string>
+  <string id="312">Ścieżka wypakowania nie istnieje! Spróbuj jeszcze raz</string>
+  <string id="313">Plik lub katalog zastrzeżony!</string>
   <string id="400">Pobierz</string>
   <string id="401">Pomiń</string>
   <string id="402">Tak</string>
@@ -34,6 +36,8 @@
   <string id="405">Ręcznie</string>
   <string id="406">Usuń</string>
   <string id="407">Edytuj</string>
+  <string id="408">Katalog</string>
+  <string id="409">Plik</string>
   <string id="500">Najnowsza dostępna wersja to:</string>
   <string id="501">Chcesz pobrać tą wersję?</string>
   <string id="502">Pobieram info dane z:</string>
@@ -59,6 +63,7 @@
   <string id="522">Rozpakowywanie zakończone. Sprawdzam  ścieżkę ...</string>
   <string id="523">Naprawdę usunąć starą wersję T3CH?</string>
   <string id="524">Proszę czekać ...</string>
+  <string id="525">Wybierz plik lub katalog?</string>
   <string id="600">Menu</string>
   <string id="601">Ustawienia - opcje</string>
   <string id="610">Ustawienia</string>
@@ -74,11 +79,13 @@
   <string id="632">Ścieżka instalacji:</string>
   <string id="633">Powiadamiaj, gdy nie ma nowej wersji T3CH?</string>
   <string id="634">Sprawdź aktualizacje na starcie</string>
+  <string id="635">Skopiować UserData do nowej wersji T3CH?</string>
+  <string id="636">Usuń wszystkie ustawienia</string>
   <string id="650">Zastosuj i wyjdź</string>
   <string id="651">Dodaj nowe</string>
   <string id="652">Użyj klawiatury</string>
   <string id="1000">Używasz najnowszej wersji.</string>
-  <string id="1001">Sprawdzam dostępną wersję...</string>
+  <string id="1001">Sprawdzam dostępną oficjalną wersję...</string>
   <string id="1002">jest dostępna nowsza</string>
   <string id="1003">Chcesz zaktualizować?</string>
   <string id="1004">Przesyłanie listy potrzebnych plików...</string>
@@ -88,6 +95,7 @@
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
   <string id="1010">Nowa wersja zapisana w:</string>
-  <string id="1030">Żadna oficjalna wersja nie jest dostępna!</string>
+  <string id="1011">Użyj Eksploratora do kasowania starych wersji</string>
+  <string id="1030">Żadna nowa oficjalna wersja nie jest dostępna!</string>
   <string id="1031">Wystąpił błąd podczas aktualizacji!</string>
 </strings>
