@@ -419,7 +419,10 @@ class GUI( xbmcgui.WindowXML ):
         self.actor = self.getControl( self.CONTROL_CAST_LIST ).getSelectedItem().getLabel()
         self.setCategory( choice, 3 )
 
-    def _get_trailer_url( self, title, trailer_urls ):
+    def _get_trailer_url( self, trailer ):
+        title = self.trailers.movies[ trailer ].title
+        trailer_urls = self.trailers.movies[ trailer ].trailer_urls
+        saved = self.trailers.movies[ trailer ].saved
         items = ()
         urls = []
         for trailers in trailer_urls:
@@ -438,7 +441,7 @@ class GUI( xbmcgui.WindowXML ):
             # if we have a valid choice add the url to our list
             if ( choice >= 0 ):
                 urls += [ trailers[ choice ] ]
-        # if there are selections we and there is more than one trailer, let user choose
+        # if there are selections and there is more than one trailer, let user choose
         if len( urls ):
             trailer = 0
             if ( len( urls ) > 1 ):
@@ -483,7 +486,7 @@ class GUI( xbmcgui.WindowXML ):
         try:
             trailer = self.getCurrentListPosition()
             if ( len( self.trailers.movies[ trailer ].trailer_urls ) ):
-                items = self._get_trailer_url( self.trailers.movies[ trailer ].title, self.trailers.movies[ trailer ].trailer_urls )
+                items = self._get_trailer_url( trailer )
                 if ( items ):
                     playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
                     playlist.clear()
@@ -491,15 +494,17 @@ class GUI( xbmcgui.WindowXML ):
                         LOG( LOG_DEBUG, "%s (rev: %s) [url=%s]", __scriptname__, __svn_revision__, repr( url ) )
                         filename = None
                         for saved in self.trailers.movies[ trailer ].saved:
-                            if ( title in saved[ 0 ] ):
+                            #if ( title in saved[ 0 ] ):
+                            if ( url in saved[ 1 ] ):
                                 filename = saved[ 0 ]
-                                self.core = saved[ 1 ]
+                                self.url = saved[ 1 ]
                                 break
                         if ( filename is None or not os.path.isfile( filename ) ):
-                            if ( url.endswith( "p.mov" ) ):
-                                self.core = xbmc.PLAYER_CORE_DVDPLAYER
-                            else:
-                                self.core = xbmc.PLAYER_CORE_MPLAYER
+                            #if ( url.endswith( "p.mov" ) ):
+                                #self.core = xbmc.PLAYER_CORE_DVDPLAYER
+                            #else:
+                            #    self.core = xbmc.PLAYER_CORE_MPLAYER
+                            self.url = url
                             if ( self.settings[ "mode" ] == 0 ):
                                 filename = url
                             else:
@@ -547,7 +552,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( not os.path.isfile( new_filename ) ):
                 xbmc.executehttpapi("FileCopy(%s,%s)" % ( poster, new_filename, ) )
             if ( not self.check_cache( filename, 1 ) ):# not in repr( self.trailers.movies[ trailer ].saved ) ):
-                self.trailers.movies[ trailer ].saved += [ ( filename, self.core, ) ]
+                self.trailers.movies[ trailer ].saved += [ ( filename, self.url, ) ]
                 success = self.trailers.updateRecord( "movies", ( "saved", ), ( repr( self.trailers.movies[ trailer ].saved ), self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
                 #if ( success ):
                 #    self.trailers.movies[ trailer ].saved = filename
