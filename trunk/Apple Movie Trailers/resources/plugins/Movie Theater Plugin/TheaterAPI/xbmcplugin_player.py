@@ -12,6 +12,8 @@ import xbmc
 g_title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
 # set our studio (only works if the user is using the video library)
 g_studio = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
+# set our director (only works if the user is using the video library)
+g_director = unicode( xbmc.getInfoLabel( "ListItem.Director" ), "utf-8" )
 # set our genre (only works if the user is using the video library)
 g_genre = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" )
 # set our rating (only works if the user is using the video library)
@@ -100,7 +102,7 @@ class Main:
         if ( self.settings[ "coming_attraction_videos" ] ):
             for path in self.settings[ "coming_attraction_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", 0.0, )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", 0.0, "", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -114,14 +116,14 @@ class Main:
             # add a false rating
             trailer += ( 0.0, )
             # create the listitem and fill the infolabels
-            listitem = self._get_listitem( trailer )
+            listitem = self._get_listitem( trailer + ( "", ) )
             # add our item to the playlist
             playlist.add( url, listitem )
         # if there is a movie intro video add it
         if ( self.settings[ "feature_presentation_videos" ] ):
             for path in self.settings[ "feature_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", 0.0, )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", 0.0, "", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -131,7 +133,7 @@ class Main:
         if ( not g_genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, g_rating, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, g_rating, g_director, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
@@ -140,7 +142,7 @@ class Main:
         if ( self.settings[ "end_presentation_videos" ] ):
             for path in self.settings[ "end_presentation_videos" ]:
                 # create our trailer record
-                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", 0, "", 0, "", "", "", "", "", "", "End of Feature Presentation", )
+                trailer = ( path, os.path.splitext( os.path.basename( unicode( path, "utf-8" ) ) )[ 0 ], "", path, "", "", "", 0, "", 0, "", "", "", "", "", "", "End of Feature Presentation", 0.0, "", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -232,7 +234,7 @@ class Main:
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ], "rating": trailer[ 17 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ], "Rating": trailer[ 17 ], "Director": trailer[ 18 ] } )
         return listitem
 
     def _get_thumbnail( self, item, url ):

@@ -10,6 +10,7 @@ import xbmcgui
 import xbmcplugin
 
 import datetime
+from urllib import quote_plus
 
 
 class _Info:
@@ -81,7 +82,7 @@ class Main:
 
     def _get_items( self, path ):
         try:
-            # smb share, database and local, need to retrieve the lists differently
+            # smb share and local retrieve the lists differently than database
             if ( self.settings[ "use_db" ] ):
                 ok = self._get_videodb_list()
             else:
@@ -104,7 +105,6 @@ class Main:
         try:
             ok = True
             # TODO: change GLOB -> LIKE when and if sqLite get's updated with a fix
-            from urllib import quote_plus
             rating_sql = ""
             mpaa_ratings = [ "G", "PG", "PG-13", "R", "NC-17" ]
             # if the user set a valid rating and limit query add all up to the selection
@@ -176,77 +176,22 @@ class Main:
     def _get_list( self ):
         items = []
         for path in self.args.path:
-            if ( path.startswith( "smb://" ) ):
-                items += self._get_smb_list( path )
-            else:
-                items += self._get_local_list( path )
+            items += self._get_file_list( path )
         return self._fill_media_list( items )
 
-    def _get_smb_list( self, path ):
+    def _get_file_list( self, path ):
+        #    if ( os.path.supports_unicode_filenames or os.environ.get( "OS", "n/a" ) == "win32"  or os.environ.get( "OS", "n/a" ) == "xbox" ):
         try:
             items = []
-            # import the necessary modules
-            from TheaterAPI import smb
-            from TheaterAPI import nmb
-            # split the path into useable parts
-            share_string_list = path.split( "/" )
-            # check for username/password in path
-            username = password = ""
-            if ( "@" in share_string_list[ 2 ] ):
-                # this is the computers name
-                remote_name = share_string_list[ 2 ].split( "@" )[ 1 ]
-                # get the username/password
-                login = share_string_list[ 2 ].split( "@" )[ 0 ]
-                # username is the first parameter
-                username = login.split( ":" )[ 0 ]
-                # password is the second parameter if it exists
-                if ( ":" in login ): password = login.split( ":" )[ 1 ]
-            else:
-                # this is the computers name
-                remote_name = share_string_list[ 2 ]
-                # default to Guest (May not work with all shares)
-                username = "Guest"
-            # we need the ip address of the computer
-            remote_ip = nmb.NetBIOS().gethostbyname( remote_name )[ 0 ].get_ip()
-            # this is the share name
-            remote_share = share_string_list[ 3 ]
-            # create our connection
-            remote_conn = smb.SMB( remote_name, remote_ip )
-            # if login is required, pass our username/password
-            if ( remote_conn.is_login_required() ):
-                remote_conn.login( username, password )
-            # set our folder
-            folder = "/".join( share_string_list[ 4 : ] ) + "/*"
-            # get the paths list
-            entries = remote_conn.list_path( remote_share, folder )
+            # get the directory listing
+            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
             # enumerate through our items list and add the full name to our entries list
             for entry in entries:
-                # we don't want the . or .. directory items
-                if ( entry.get_longname() and entry.get_longname() != "." and entry.get_longname() != ".." ):
-                    # concatenate directory pairs
-                    file_path = "%s/%s" % ( path, entry.get_longname(), )
-                    # get the entry info
-                    title, isVideo, isFolder = self._get_file_info( file_path )
-                    # add our entry to our items list
-                    if ( isVideo or isFolder ):
-                        items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
-        except:
-            # oops print error message
-            print sys.exc_info()[ 1 ]
-        return items
-
-    def _get_local_list( self, path ):
-        try:
-            items = []
-            # get the paths list
-            if ( os.path.supports_unicode_filenames or os.environ.get( "OS", "n/a" ) == "win32"  or os.environ.get( "OS", "n/a" ) == "xbox" ):
-                entries = os.listdir( unicode( path, "utf-8" ) )
-            else:
-                entries = os.listdir( path )
-            # enumerate through our items list and add the full name to our entries list
-            for entry in entries:
-                # concatenate directory pairs
-                file_path = "%s%s%s" % ( path, os.sep, entry, )
+                # fix path
+                entry = entry.replace( "<li>", "" )
+                if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
+                    entry = entry[ : -1 ]
+                file_path = unicode( entry, "utf-8" )
                 # get the item info
                 title, isVideo, isFolder = self._get_file_info( file_path )
                 # add our item to our entry list
@@ -256,13 +201,14 @@ class Main:
             # oops print error message
             print sys.exc_info()[ 1 ]
         return items
-
+        
     def _get_file_info( self, file_path ):
         try:
             # parse item for title
             title = os.path.splitext( os.path.basename( file_path ) )[ 0 ]
             # is this a folder?
             isFolder = os.path.isdir( self._fix_stacked_path( file_path ) )
+            # default isVideo to false
             isVideo = False
             # if this is a file, check to see if it's a valid video file
             if ( not isFolder ):
@@ -287,11 +233,26 @@ class Main:
             ok = False
         return ok
 
+    def _fix_rar_path( self, path ):
+        # TODO: find a way to list rar's as a directory
+        # if it's not a rar file, return it with the backslash fix
+        if ( not path.endswith( ".rar" ) ): return path.replace( "\\", "[[BACKSLASH]]" )
+        # we split the basename off and use that for the video's filename with an .avi extension
+        rar_video_name = os.path.splitext( os.path.basename( path ) )[ 0 ] + ".avi"
+        # rar paths need to be quoted, including ._-
+        url_path = quote_plus( path ).replace( ".", "%2e").replace( "-", "%2d").replace( "_", "%5f")
+        # append the path with our filename
+        filepath = "rar://%s/%s" % ( url_path, rar_video_name, )
+        # return the filename with the backslash fix
+        return filepath.replace( "\\", "[[BACKSLASH]]" )
+
     def _add_item( self, item, total ):
         ok = True
         add = True
+        # call this hack for rar files, strict rules apply to the naming of the video inside
+        url_path = self._fix_rar_path( item[ 0 ] )
         # create our url (backslashes cause issues when passed in the url)
-        url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], item[ 0 ].replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], )
+        url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url_path, item[ 2 ], )
         if ( item[ 2 ] ):
             # if a folder.jpg exists use that for our thumbnail
             #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
@@ -309,9 +270,9 @@ class Main:
             icon = "DefaultVideo.png"
             try:
                 # get the date of the file
-                date = datetime.datetime.fromtimestamp( os.path.getmtime( fpath ) ).strftime( "%d-%m-%Y" )
+                date = datetime.datetime.fromtimestamp( os.path.getmtime( fpath.encode( "utf-8" ) ) ).strftime( "%d-%m-%Y" )
                 # get the size of the file
-                size = long( os.path.getsize( fpath ) )
+                size = long( os.path.getsize( fpath.encode( "utf-8" ) ) )
                 # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
                 listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
                 # set an overlay if one is practical
