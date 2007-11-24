@@ -233,19 +233,6 @@ class Main:
             ok = False
         return ok
 
-    def _fix_rar_path( self, path ):
-        # TODO: find a way to list rar's as a directory
-        # if it's not a rar file, return it with the backslash fix
-        if ( not path.endswith( ".rar" ) ): return path.replace( "\\", "[[BACKSLASH]]" )
-        # we split the basename off and use that for the video's filename with an .avi extension
-        rar_video_name = os.path.splitext( os.path.basename( path ) )[ 0 ] + ".avi"
-        # rar paths need to be quoted, including ._-
-        url_path = quote_plus( path ).replace( ".", "%2e").replace( "-", "%2d").replace( "_", "%5f")
-        # append the path with our filename
-        filepath = "rar://%s/%s" % ( url_path, rar_video_name, )
-        # return the filename with the backslash fix
-        return filepath.replace( "\\", "[[BACKSLASH]]" )
-
     def _add_item( self, item, total ):
         ok = True
         add = True
@@ -274,7 +261,7 @@ class Main:
                 # get the size of the file
                 size = long( os.path.getsize( fpath.encode( "utf-8" ) ) )
                 # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
+                listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail.encode( "utf-8" ) )
                 # set an overlay if one is practical
                 overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                 # add the different infolabels we want to sort by
@@ -294,6 +281,19 @@ class Main:
             path = path[ 8 : ].split( " , " )[ 0 ]
         return path
 
+    def _fix_rar_path( self, path ):
+        # TODO: find a way to list rar's as a directory
+        # if it's not a rar file, return it with the backslash fix
+        if ( not path.endswith( ".rar" ) ): return path.replace( "\\", "[[BACKSLASH]]" )
+        # we split the basename off and use that for the video's filename with an .avi extension
+        rar_video_name = os.path.splitext( os.path.basename( path ) )[ 0 ] + ".avi"
+        # rar paths need to be quoted, including ._-
+        url_path = quote_plus( path ).replace( ".", "%2e").replace( "-", "%2d").replace( "_", "%5f")
+        # append the path with our filename
+        filepath = "rar://%s/%s" % ( url_path, rar_video_name, )
+        # return the filename with the backslash fix
+        return filepath.replace( "\\", "[[BACKSLASH]]" )
+
     def _get_thumbnail( self, path ):
         fpath = path
         # if this is a smb path, we need to eliminate username/password
@@ -312,6 +312,6 @@ class Main:
             # create filepath to a local tbn file
             thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
             # if there is no local tbn file leave blank
-            if ( not os.path.isfile( thumbnail ) ):
+            if ( not os.path.isfile( thumbnail.encode( "utf-8" ) ) ):
                 thumbnail = ""
         return thumbnail
