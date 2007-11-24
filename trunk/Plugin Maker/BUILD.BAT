@@ -31,13 +31,13 @@ FOR /F "Tokens=2* Delims=]" %%R IN ('FIND /v /n "&_&_&_&" ".svn\entries" ^| FIND
 
 :MakeExcludeFile
 :: Create exclude file
-::ECHO ----------------------------------------------------------------------
-::ECHO.
-::ECHO Creating exclude.txt file . . .
-::ECHO.
-::ECHO .svn>"BUILD\exclude.txt"
-::ECHO Thumbs.db>>"BUILD\exclude.txt"
-::ECHO Desktop.ini>>"BUILD\exclude.txt"
+ECHO ----------------------------------------------------------------------
+ECHO.
+ECHO Creating exclude.txt file . . .
+ECHO.
+ECHO .svn>"BUILD\exclude.txt"
+ECHO Thumbs.db>>"BUILD\exclude.txt"
+ECHO Desktop.ini>>"BUILD\exclude.txt"
 
 :MakeReleaseBuild
 :: Create release build
@@ -46,6 +46,7 @@ ECHO.
 ECHO Copying required files to \Build\%ScriptName%\ folder . . .
 COPY plugin.py "BUILD\%ScriptName%\"
 COPY default.tbn "BUILD\%ScriptName%\"
+XCOPY resources "BUILD\%ScriptName%\resources" /E /Q /I /Y /EXCLUDE:BUILD\exclude.txt
 
 :: Create new default.py with __svn_revision__ embedded
 ECHO # %ScriptName% script revision: %Revision% - built with build.bat version 1.0 #> "BUILD\%ScriptName%\default.py"

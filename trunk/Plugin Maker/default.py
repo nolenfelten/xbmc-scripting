@@ -36,13 +36,15 @@ class Main:
     def create_plugin( self, path ):
         plugin = os.path.join( os.getcwd().replace( ";", "" ), "plugin.py" )
         plugin_name = self.get_keyboard( default=os.path.basename( path[ : -1 ] ) + " plugin", heading="Enter plugin name" )
-        plugin_path = os.path.join( "Q:\\", "plugins", "video", plugin_name )
+        plugin_path = os.path.join( "Q:\\plugins", "video", plugin_name )
         if ( not os.path.isdir( plugin_path ) ):
             os.makedirs( plugin_path )
         try:
             # TODO: copy a generic thumb also or browse for thumb
             shutil.copy( plugin, os.path.join( plugin_path, "default.py" ) )
-            self.edit_videopath( os.path.join( plugin_path, "default.py" ), path )
+            shutil.copytree( os.path.join( os.getcwd().replace( ";", "" ), "resources" ), os.path.join( plugin_path, "resources" ) )
+            ok = self.edit_videopath( os.path.join( plugin_path, "resources", "settings.xml" ), path )
+            if ( not ok ): raise
         except:
             ok = xbmcgui.Dialog().ok( "Plugin Maker", "Copying plugin to new plugin folder failed!" )
 
@@ -56,16 +58,15 @@ class Main:
 
     def edit_videopath( self, filepath, sourcepath ):
         try:
-            # read .py file
-            file_object = open( filepath, "r" )
-            data = file_object.read()
-            file_object.close()
+            ok = True
+            text = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n<settings>\n\t<setting id="path" type="folder" source="video" label="30000" default="%s" />\n</settings>""" % ( sourcepath, )
             # write new .py file
             file_object = open( filepath, "w" )
-            file_object.write( data.replace( "###VIDEO_PATH###", '"%s"' % sourcepath.replace( "\\", "\\\\" ) ) )
+            file_object.write( text )
             file_object.close()
         except:
-            ok = xbmcgui.Dialog().ok( "Plugin Maker", "Creating new default.py file failed!" )
+            ok = xbmcgui.Dialog().ok( "Plugin Maker", "Creating settings.xml file failed!" )
+        return ok
 
 
 if ( __name__ == "__main__" ):
