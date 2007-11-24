@@ -10,7 +10,7 @@ import xbmcgui
 import xbmcplugin
 
 import datetime
-from urllib import quote_plus
+from urllib import quote_plus, unquote_plus
 
 
 class _Info:
@@ -55,7 +55,6 @@ class Main:
         self.args = _Info( path=self.settings[ "path" ] )
 
     def _get_path_list( self, paths ):
-        from urllib import unquote
         # we do not want the slash at end
         if ( paths.endswith( "\\" ) or paths.endswith( "/" ) ):
             paths = paths[ : -1 ]
@@ -71,7 +70,7 @@ class Main:
             if ( path.endswith( "\\" ) or path.endswith( "/" ) ):
                 path = path[ : -1 ]
             # add our path
-            fpaths += [ unquote( path ) ]
+            fpaths += [ unquote_plus( path ) ]
         return fpaths
 
     def _parse_argv( self ):
@@ -238,7 +237,7 @@ class Main:
         add = True
         # call this hack for rar files, strict rules apply to the naming of the video inside
         url_path = self._fix_rar_path( item[ 0 ] )
-        # create our url (backslashes cause issues when passed in the url)
+        # create our url
         url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url_path, item[ 2 ], )
         if ( item[ 2 ] ):
             # if a folder.jpg exists use that for our thumbnail
