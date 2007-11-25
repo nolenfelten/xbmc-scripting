@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '21-11-2007'
+__date__ = '25-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -120,6 +120,7 @@ class Main:
 	######################################################################################
 	def _set_default_settings( self, forceReset=False ):
 		""" set settings to default values if not exist """
+		xbmc.output( "_set_default_settings() forceReset="+str(forceReset) )
 		success = True
 
 		items = {
@@ -412,25 +413,21 @@ class Main:
 			return None
 
 	######################################################################################
-	def _fetch_current_build( self, url, file_name ):
+	def  ( self, url, file_name ):
 		xbmc.output( "_fetch_current_build() " + url +" " + file_name )
 		success = False
 		try:
-			if not os.path.exists( file_name ):
-				if not self.isSilent:
-					dialogProgress.create( __language__( 0 ), __language__( 503 ), file_name )
-				else:
-					showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 240)
-
-				urllib.urlretrieve( url , file_name, self._report_hook )
-
-				if not self.isSilent:
-					dialogProgress.close()
+			if not self.isSilent:
+				dialogProgress.create( __language__( 0 ), __language__( 503 ), file_name )
 			else:
-				xbmc.output( "rar already exists" )
+				showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 240)
+
+			urllib.urlretrieve( url , file_name, self._report_hook )
+
+			if not self.isSilent:
+				dialogProgress.close()
 			success = True
 		except:
-			handleException("_fetch_current_build")
 			if not self.isSilent:
 				dialogProgress.close()
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )

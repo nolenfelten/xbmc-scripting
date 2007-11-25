@@ -49,7 +49,7 @@
     <string id="505">T3CH build successfully extracted to:</string>
     <string id="506">Parsing T3CH build feed ...</string>
     <string id="507">Start copying existing data to T3CH ?</string>
-    <string id="508">(UserData,Scripts,Plugins,Skins ...)</string>
+    <string id="508">UserData (if enabled),Scripts,Plugins,Skins ...</string>
     <string id="509">Keymap.xml different, Copy yours ?</string>
     <string id="510">Removing T3CH UserData ...</string>
     <string id="511">Transferring your UserData to T3CH ...</string>
