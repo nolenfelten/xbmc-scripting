@@ -5,6 +5,12 @@
     <!-- Browse dialog headings -->
     <string id="200">Installationssökväg (ex. E:\apps) </string>
     <string id="201">Ange genvägsnamn</string>
+    <string id="202">Välj menysystemsgenvägsenhet:</string>
+    <string id="203">Välj fil:</string>
+    <string id="204">Välj sökväg:</string>
+    <string id="205">Välj T3CH:</string>
+    <string id="206">Ta bort gammal T3CH:</string>
+    <string id="207">Ange filnamn:</string>
 
     <!-- Error messages -->
     <string id="300">Ett fel uppstod vid sparande av inställningar!</string>
@@ -18,6 +24,9 @@
     <string id="308">Ett fel uppstod under flyttning av skripten!</string>
     <string id="309">Genvägsnamn måste anges.</string>
     <string id="310">Ändringslogg inte tillgänglig.</string>
+    <string id="311">Källfil/mapp existerar inte!</string>
+    <string id="312">Uppackningssökväg existerar inte!  Försök igen.</string>
+    <string id="313">Begränsad fil eller mapp!</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Ladda ned</string>
@@ -26,6 +35,10 @@
     <string id="403">Nej</string>
     <string id="404">Byt</string>
     <string id="405">Manuellt"</string>
+    <string id="406">Ta bort</string>
+    <string id="407">Redigera</string>
+    <string id="408">Mapp</string>
+    <string id="409">Fil</string>
 
     <!-- Status messages -->
     <string id="500">Nuvarande T3CH version är</string>
@@ -50,16 +63,38 @@
     <string id="519">_NEW and _OLD genvägar skapade.</string>
     <string id="520">Byt till NEW genväg nu ?</string>
     <string id="521">(Manuell omdöpning krävs annars)</string>
+    <string id="522">Uppackning färdig. Kontrollerar sökväg ...</string>
+    <string id="523">Ta bort gammal T3CH version ?</string>
+    <string id="524">Var god vänta ...</string>
+    <string id="525">Välj fil eller mapp ?</string>
 
     <!-- Menu Titles -->
+    <string id="600">Huvudmeny</string>
+    <string id="601">Inställningsmeny</string>
 
     <!-- Menu options -->
+    <string id="610">Inställningar</string>
     <string id="611">Visa ändringslogg</string>
     <string id="612">Ladda ned: </string>
+    <string id="615">Behåll kopieringslista</string>
+    <string id="616">Byt till en annan T3CH</string>
+    <string id="617">Ta bort en gammal T3CH</string>
+    <string id="618">Behåll raderingslista</string>
     <string id="619">Uppdatera skript</string>
+
+    <!-- Settings Options -->
+    <string id="630">Dash Shortcut Drive:</string>
+    <string id="631">Dash Shortcut Name:</string>
+    <string id="632">Installationssökväg:</string>
+    <string id="633">Varna när det inte finns en ny T3CH?</string>
+    <string id="634">Kontrollera skriptuppdateringar vid start?</string>
+    <string id="635">Kopiera UserData till T3CH?</string>
+    <string id="636">Återställ inställningar</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Avsluta</string>
+    <string id="651">Lägg till ny</string>
+    <string id="652">Använd tangentbord</string>
 
     <!-- Update messages -->
     <string id="1000">Din version är aktuell.</string>
@@ -73,6 +108,7 @@
     <string id="1008">Sökväg:</string>
     <string id="1009">Fil:</string>
     <string id="1010">Din nya version sparades som:</string>
+    <string id="1011">Använd filhanteraren för att ta bort gamla versioner</string>
 
     <!-- Update error messages -->
     <string id="1030">Inga taggade versioner hittades!</string>
