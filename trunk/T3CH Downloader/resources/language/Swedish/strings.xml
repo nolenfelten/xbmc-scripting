@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Nedladdare</string>
+    <string id="2">blittan</string>
 
     <!-- Browse dialog headings -->
     <string id="200">nedladdnings sökväg</string>
