@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '25-11-2007'
+__date__ = '26-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -85,18 +85,33 @@ class Main:
 		self.INCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "includes.txt" )
 		self.EXCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "excludes.txt" )
 
-		# init
+		# init settings folder
 		makeDir(self.SCRIPT_DATA_DIR)
+
+		# check if custom copies exists
+		setupIncludes = not os.path.exists(self.INCLUDES_FILENAME)
+		
+		# check if custom deletes exists
+		setupExcludes = not os.path.exists(self.EXCLUDES_FILENAME)
+		
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
 		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
 		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
+
+		# setup additional Custom Copies/Delete if files dont exist
+		if setupIncludes:
+			self._hardcoded_includes()
+			self._save_file_obj(self.INCLUDES_FILENAME, self.includes)
+		if setupExcludes:
+			self._hardcoded_excludes()
+			self._save_file_obj(self.EXCLUDES_FILENAME, self.excludes)
 
 		self._check_settings()
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
 			self._update_script(True)														# silent
 
 		url = self._get_latest_version()										# discover latest build
-#		url = "http://somehost/XBMC-SVN_2007-11-17_rev10770-T3CH.rar"			# DEV ONLY!!, saves DL it
+#		url = "http://somehost/XBMC-SVN_2007-11-04_rev10675-T3CH.rar"			# DEV ONLY!!, saves DL it
 		if url:
 			self.rar_name, self.short_build_name = self._check_build_date( url )
 		else:
@@ -331,40 +346,41 @@ class Main:
 						if self.settings[self.SETTING_XFER_USERDATA] == __language__(402):
 							self._copy_user_data(unrar_path)
 
-						# copy additional folders
-						src_path = os.path.join( "Q:\\", "skin" )
-						dest_path = os.path.join( unrar_path, "XBMC", "skin" )
-						self._copy_folder(src_path, dest_path)
-
-						src_path = os.path.join( "Q:\\", "screensavers" )
-						dest_path = os.path.join( unrar_path, "XBMC", "screensavers" )
-						self._copy_folder(src_path, dest_path)
-
-						src_path = os.path.join( "Q:\\", "scripts" )
-						dest_path = os.path.join( unrar_path, "XBMC", "scripts" )
-						self._copy_folder(src_path, dest_path)
-
-						# for each subdir in plugins copy their subdirs
-						src_path = os.path.join( "Q:\\", "plugins" )
-						dirList = os.listdir(src_path)
-						for dir in dirList:
-							src_path = os.path.join( "Q:\\", "plugins", dir )
-							dest_path = os.path.join( unrar_path, "XBMC", "plugins", dir )
-							self._copy_folder(src_path, dest_path )
-
-						# do INCLUDE and EXCLUDE file lists
+						# do Custom Copies
 						self._copy_includes()
+
+						# do Custom Deletes
 						self._delete_excludes()
 
 						success = self._update_shortcut(unrar_path)		# create shortcut
 
-					# delete unwanted files/folders
-					self._delete_excess(unrar_file)
+					deleteFile(unrar_file)									# remove RAR
 					if not self.isSilent:
 						dialogProgress.close()
 		except:
 			handleException("process()")
 		return success
+
+	######################################################################################
+	def _hardcoded_includes(self):
+		""" Additional files/folders for post installation copying. All relative to Q:\ """
+		xbmc.output("_hardcoded_includes()")
+		# add if not already included
+		srcList = [ "skin\\", "screensavers\\", "scripts\\", "plugins\\", "system\\profiles.xml" ]
+		for src in srcList:
+			if src not in self.includes:
+				self.includes.append(src)
+		print "final includes=", self.includes
+
+	######################################################################################
+	def _hardcoded_excludes(self):
+		""" Additional files/folders for post installation deleting. All relative to unrar_path\\XBMC """
+		xbmc.output("_hardcoded_excludes()")
+		srcList = [ "..\\_tools", "..\\win32", "..\\Changelog.txt", "..\\copying.txt" ]
+		for src in srcList:
+			if src not in self.excludes:
+				self.excludes.append(src)
+		print "final excludes=", self.excludes
 
 	######################################################################################
 	def _delete_excess( self, unrar_file ):
@@ -513,14 +529,10 @@ class Main:
 			# compare keymapping.xml, always copy, but make backups
 			keymapFilename = "keymap.xml"
 			curr_build_userdata_path = "T:\\"
-			xbmc.output( "curr_build_userdata_path= " + curr_build_userdata_path )
-
 			curr_build_userdata_file = os.path.join( "T:\\", keymapFilename)
 			xbmc.output( "curr_build_userdata_file= " + curr_build_userdata_file )
 
 			new_build_userdata_path = os.path.join( unrar_path, "XBMC", "UserData")
-			xbmc.output( "new_build_userdata_path= " + new_build_userdata_path )
-
 			new_build_userdata_file = os.path.join( new_build_userdata_path, keymapFilename)
 			xbmc.output( "new_build_userdata_file= " + new_build_userdata_file )
 
@@ -631,23 +643,22 @@ class Main:
 				if f in ['.','..']: continue
 
 				src_file = os.path.join( src_path, f )
-				xbmc.output( "src_file= " + src_file )
 				dest_file = os.path.join( dest_path, f )
-				xbmc.output( "dest_file= " + dest_file )
 
 				if not os.path.exists( dest_file ):
 					if not self.isSilent:
 						dialogProgress.update( int(100 / TOTAL) * count, __language__( 515 ), src_file)
+						if dialogProgress.iscanceled(): break
 					if os.path.isdir( src_file ):
 						# copy directory
 						copytree( src_file, dest_file )
-						xbmc.output("copied tree OK")
+						xbmc.output("copied tree OK " + src_file)
 					else:
 						# copy file
 						copy( src_file, dest_file )
-						xbmc.output("copied file OK")
+						xbmc.output("copied file OK " + src_file)
 				else:
-					xbmc.output( "ignored as exists in T3CH" )
+					xbmc.output( "ignored as exists in T3CH: " + dest_file)
 		except:
 			handleException("_copy_folder()", __language__( 308 ))
 
@@ -657,13 +668,18 @@ class Main:
 
 		TOTAL = len(self.includes)
 		count = 0
+		unrar_path = self.settings[self.SETTING_UNRAR_PATH]
 		for path in self.includes:
 			try:
-				src_path = os.path.join("Q:\\", path)
-				dest_path = os.path.join( self.settings[self.SETTING_UNRAR_PATH], self.short_build_name, "XBMC", path )
+				if not path.startswith("Q:\\"): 
+					src_path = os.path.join("Q:\\", path)
+				else:
+					src_path = path
+				dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
 				if not self.isSilent:
 					percent = int(int(100 / TOTAL) * count)
-					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent ) 
+					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent )
+					if dialogProgress.iscanceled(): break
 				localCopy(src_path, dest_path, self.isSilent)
 			except:
 				handleException("_copy_includes() path="+path)
@@ -675,13 +691,14 @@ class Main:
 
 		TOTAL = len(self.excludes)
 		count = 0
+		unrar_path = self.settings[self.SETTING_UNRAR_PATH]
 		for path in self.excludes:
 			try:
-				dest_path = os.path.join( self.settings[self.SETTING_UNRAR_PATH], self.short_build_name, "XBMC", path )
+				dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
 				if not self.isSilent:
 					percent = int(int(100 / TOTAL) * count)
 					self._dialog_update( __language__(0), __language__( 516 ), dest_path, pct=percent )
-				if path[-1] in ["\\","/"]:
+				if path[-1] in ["\\","/"] or os.path.isdir(dest_path):
 					xbmc.output( "rmtree " + dest_path )
 					rmtree(dest_path, ignore_errors=True)
 				else:
@@ -1063,7 +1080,7 @@ class Main:
 
 
 ######################################################################################
-def localCopy(src_path, dest_path, isSilent=False):
+def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 	xbmc.output( "localCopy() ")
 	print "src=" + src_path, "dest=" + dest_path
 
@@ -1089,16 +1106,16 @@ def localCopy(src_path, dest_path, isSilent=False):
 				src_file = os.path.join( src_path, f )
 				xbmc.output( "src_file= " + src_file )
 				dest_file = os.path.join( dest_path, f )
-				xbmc.output( "dest_file= " + dest_file )
 
-				if os.path.isdir( src_file ):
-					# copy directory
-					if os.path.exists( dest_file ):
-						os.remove(dest_file)
-					copytree( src_file, dest_file )
+				if overwrite or not os.path.exists( dest_file ):
+					if os.path.isdir( src_file ):
+						# copy directory
+						copytree( src_file, dest_file )
+					else:
+						# copy file
+						copy( src_file, dest_file )
 				else:
-					# copy file
-					copy( src_file, dest_file )
+					xbmc.output( "exists, ignored" )
 	except:
 		handleException("copyFolder()", src_path, dest_path )
 
