@@ -413,7 +413,7 @@ class Main:
 			return None
 
 	######################################################################################
-	def  ( self, url, file_name ):
+	def _fetch_current_build( self, url, file_name ):
 		xbmc.output( "_fetch_current_build() " + url +" " + file_name )
 		success = False
 		try:
