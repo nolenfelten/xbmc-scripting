@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Päivitys</string>
-    <!--  Finnish v.21.11.2007 -->
+    <!--  Finnish v.26.11.2007 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
     <string id="201">Anna boottaavan dashin nimi.</string>
@@ -90,6 +90,8 @@
     <string id="632">Asennuspolku:</string>
     <string id="633">Ilmoita uudesta T3CH paketista?</string>
     <string id="634">Tarkista päivitykset käynnistyessä?</string>
+    <string id="635">Siirrä UserData T3CH:iin?</string>
+    <string id="636">Oletus asetukset</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Poistu</string>
