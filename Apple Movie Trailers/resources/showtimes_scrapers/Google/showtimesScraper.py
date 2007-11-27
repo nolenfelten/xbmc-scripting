@@ -225,10 +225,10 @@ if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
     movie = [ "The Seeker: the Dark is Rising", "el cantante", "Rush Hour 3", "The Simpsons Movie", "Transformers", "I Now Pronounce You Chuck & Larry", "Transformers", "I Now Pronounce You Chuck & Larry" ]
     location = [ "detroit", "Houston", "detroit", "new york", "London", "Toronto", "33102", "W2 4YL", "T1A 3T9" ]
-    url = [ "http://www.google.com/movies?near=Monroe,+MI&tid=f91ac86eb99bc459" ]
+    url = [ "http://www.google.com/movies?near=London&tid=6642f6f298729f38" ]
     for cnt in range( 1 ):
-        date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
-        #date, theaters = ShowtimesFetcher().get_selection( url[ cnt ] )
+        #date, theaters = ShowtimesFetcher().get_showtimes( movie[ cnt ], location[ cnt ] )
+        date, theaters = ShowtimesFetcher().get_selection( url[ cnt ] )
 
         # print the results
         print "====================================================="

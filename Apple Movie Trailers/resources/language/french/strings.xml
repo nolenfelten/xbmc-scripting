@@ -1,117 +1,250 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+    <string id="0">Apple Movie Trailers</string>
+    <string id="1">Xbox Media Center</string>
+    <string id="2">Team AMT</string>
 
-	<!-- Start home strings -->
-	<string id="31001">Films</string>
-	<string id="31002">Programmes</string>
-	<string id="31003">Musiques</string>
-	<string id="31004">Photos</string>
-	<string id="31005">Météo</string>
-	<string id="31006">Fichiers</string>
-	<string id="31007">Scripts</string>
-	<string id="31008">Réglages</string>
-	<string id="31009">Lire le Disque</string>
-	<string id="31010">Série TV</string>
-	<!-- End home strings -->
+    <!-- Dialog Messages -->
+    <string id="39">Tout lire</string>
+    <string id="40">Toutes les infos sont récupérées. (10 - 60 minutes)</string>
+    <string id="41">Info récupérée par genre. (1 - 5 minutes)</string>
+    <string id="42">Mise à jour infos par genre...</string>
+    <string id="43">Chargement des enregistrement dans la base de données...</string>
+    <string id="44">Création de la base de données...</string>
+    <string id="45">Suppression des anciens xml Genre...</string>
+    <string id="46">La mise à jour de la base de données n'a pas fonctionnée...</string>
+    <string id="47">Table en cours</string>
+    <string id="48">Récupération des enregistrements...</string>
+    <string id="49">*Vous pouvez finaliser l'installation plus tard.</string>
+    <string id="50">Initialisation du script:</string>
+    <string id="51">Importation des modules &amp; initialisation...</string>
+    <string id="52">module:</string>
+    <string id="53">La version de votre base de données est trop vieille !</string>
+    <string id="54">Vous devez recréer votre base de données.</string>
+    <string id="55">Chargement du thème et création de l'interface...</string>
+    <string id="56">Déplacement du film vers le dossier d'enregistrement...</string>
+    <string id="57">Une erreur est survenue lors de la mise en place de la GUI.</string>
+    <string id="58">Vérifier votre fichier skin:</string>
+    <string id="59">Votre base de données doit être mise à jour...</string>
+    <string id="60">Votre base de données est incompatible avec cette version de AMT.\nElle doit être mise à jour.</string>
+    <string id="61">Mise à jour de toutes les informations films/genres...</string>
+    <string id="62">Récupération nouveaux fichiers xml.</string>
+    <string id="63">La mise à jour peut durer de 1 à 5 minutes.</string>
+    <string id="64">Erreur</string>
+    <string id="65">Application des fichiers xml pour tout les trailers.</string>
+    <string id="66">Récupération des infos par genre...</string>
+    <string id="67">Merci de patienter...</string>
+    <string id="68">Mise à jour infos trailer...</string>
+    <string id="69">Erreur lors de la récupération des informations d'un ou plusieurs genres.</string>
+    <string id="70">Récupération des informations du film...</string>
+    <string id="71">Genre:</string>
+    <string id="72">Erreur lors de la récupération des informations d'un ou plusieurs titres de films.</string>
+    <string id="73">Nettoyage du cache...</string>
+    <string id="74">Si vous n'effacez pas votre cache, la mise à jour sera |plus rapide mais certaines données peuvent ne pas être mise à jour.</string>
+    <string id="75">Pas assez de place disponible sur la partition cible.</string>
+    <string id="76">Partition</string>
+    <string id="77">Libre</string>
+    <string id="78">Espace nécessaire</string>
+    <string id="79">Téléchargement...</string>
+    <string id="80">Ko/s</string>
+    <string id="81">Tous les modules requis n'ont pas pu être chargé !</string>
+    <string id="82">Etes-vous sur de vouloir effacer toutes les bandes annonces de:</string>
+    <string id="83">Chargement de la base de données...</string>
+    <string id="84">vidéos</string>
+    <string id="85">Execution de la requête...</string>
+    <string id="86">fichiers</string>
+    <string id="87">Genre actuel</string>
+    <string id="88">Trailer en cours</string>
+    <string id="89">Une erreur est survenue lors de la création de la base de données.</string>
+    <string id="90">Une erreur est survenue lors du déplacment du film !</string>
+    <string id="91">Temps restant</string>
+    <string id="92">*Aucun vote trouvé</string>
+    <string id="93">Nombre d'enregistrements retournés depuis la requête</string>
+    <string id="94">*Aucune recherche spécifiée</string>
+    <string id="95">Entrez mots clefs: Mots séparés avec and/or/not</string>
+    <string id="96">sur</string>
+    <string id="97">Initialisation de la fenêtre Recherche.</string>
+    <string id="98">Suppression des anciens xml de trailers...</string>
+    <string id="99">Trailer</string>
 
-	<!-- Start video strings -->
-	<string id="31011">Bandes Annonces</string>
-	<string id="31012">Playlist Vidéo</string>
-	<!-- End video strings -->
+    <!-- Buttons -->
+    <string id="103">Genres</string>
+    <string id="104">Studios</string>
+    <string id="105">Acteurs</string>
+    <string id="106">Rechercher</string>
+    <string id="107">Paramètres</string>
+    <string id="108">Afficher crédits</string>
+    <string id="109">Mettre à jour le script</string>
 
-	<!-- Start programs strings -->
-	<string id="31013">Sauvegardes</string>
-	<!-- End programs strings -->
+    <string id="113">Genre</string>
+    <string id="114">Studio</string>
+    <string id="115">Acteur</string>
+    <string id="116">Vote</string>
+    <string id="117">Qualitée du Trailer</string>
+    <string id="118">Extra</string>
 
-	<!-- Start music strings -->
-	<string id="31014">CDDB</string>
-	<!-- End music strings -->
+    <string id="150">Nouveautés</string>
+    <string id="151">Exclusivités</string>
+    <string id="152">Favoris</string>
+    <string id="153">Téléchargés</string>
+    <string id="154">Mettre à jour</string>
+    <string id="155">Crédits</string>
+    <string id="156">Synopsis</string>
+    <string id="157">Casting</string>
+    <string id="158">Complète</string>
+    <string id="159">Minimale</string>
+    <string id="160">Trailers HD</string>
+    <string id="161">Trailers sans url</string>
+    <string id="162">Recherche personalisée</string>
+    <string id="163">Déjà vu</string>
+    <string id="164">Ajoutés récemment</string>
+    <string id="165">Trailers multiple</string>
 
-	<!-- Start system strings -->
-	<string id="31015">Système</string>
-	<string id="31016">Gestionnaire de Fichiers</string>
-	<string id="31017">Scripts</string>
-	<string id="31018">Sauvegardes</string>
-	<string id="31019">Profils</string>
-	<string id="31020">Réglages Skin</string>
-	<string id="31021">A propos d' xTV</string>
-	<string id="31022">Eteindre</string>
-	<string id="31023">Info Système</string>
-	<!-- End system strings -->
+    <!-- Settings labels -->
+    <string id="200">Sélectionner:</string>
+    <string id="201">Thème</string>
+    <string id="202">Qualitée des Trailers</string>
+    <string id="203">Mode</string>
+    <string id="204">Dossier des trailers sauvegardés</string>
+    <string id="205">Lire automatiquement tout les trailers</string>
+    <string id="206">Affichage des vignettes</string>
+    <string id="207">Utiliser les vignettes "déjà-vu"</string>
+    <string id="208">Page principale par défaut</string>
+    <string id="209">Raccourci #1</string>
+    <string id="210">Raccourci #2</string>
+    <string id="211">Raccourci #3</string>
+    <string id="212">Rafraichir les nouveautés au démarrage</string>
+    <string id="213">Utiliser la recherche simplifiée</string>
+    <string id="214">Mots entiers seulement</string>
+    <string id="215">Résolution du lecteur Vidéo</string>
+    <string id="216">Séances localité</string>
+    <string id="217">Séances scraper</string>
+    <string id="220">Installer plugins...</string>
+    
+    <!-- Settings choices -->
+    <string id="2020">Petite</string>
+    <string id="2021">Moyenne</string>
+    <string id="2022">Grande</string>
+    <string id="2030">Stream</string>
+    <string id="2031">Télécharger</string>
+    <string id="2032">Télécharger &amp; Sauvegarder</string>
+    <string id="2050">Affiche de Film</string>
+    <string id="2051">Vignette générique</string>
+    <string id="2052">Aucune</string>
+    <string id="2110">Ne pas changer</string>
 
-	<!-- Begin skin settings strings -->
-	<string id="31024">Ajouter Barre de défilement</string>
-	<string id="31025">Superpositions sur les Media</string>
-	<string id="31026">Utiliser l'état déjà-vu</string>
-	<string id="31027">Ecran lecture en cours</string>
-	<string id="31028">Changer Couleur du Texte</string>
-	<string id="31029">Style visuel En Lecture</string>
-	<string id="31030">Choisir un Fond Perso.</string>
-	<string id="31031">Réinitialiser le Fond Perso.</string>
-	<string id="31032">Visualisations arrière-plan</string>
-	<string id="31033">Bouton Films vers Biblio.</string>
-	<string id="31068">Information</string>
-	<string id="31069">Télécharger des Thèmes</string>
-	<string id="31070">Général</string>
-	<string id="31071">Arrière-plan</string>
-	<string id="31072">Page d'Accueil</string>
-	<string id="31073">Enlever la vue Liste</string>
-	<string id="31074">Verrouiller changement vue</string>
-	<string id="31075">Playlist au Démarrage</string>
-	<string id="31076">Choisir Playlist</string>
-	<string id="31077">Série TV sur l'Accueil</string>
-	<string id="31078">YouTube sur l'Accueil</string>
-	<string id="31079">Météo sur l'Accueil</string>
-	<!-- End skin settings strings -->
+    <!-- Settings error messages -->
+    <string id="230">Une erreur est survenue lors de la sauvegarde de vos paramètres!</string>
+    <string id="231">*Dépend du Thème</string>
 
-	<!-- Start progress strings -->
-	<string id="31034">Paramètres</string>
-	<string id="31035">Vidéo</string>
-	<string id="31036">Audio</string>
-	<string id="31037">Signets</string>
-	<string id="31038">Lyrics</string>
-	<string id="31039">Préréglages</string>
-	<string id="31040">Visuels</string>
-	<string id="31041">Playlist</string>
-	<string id="31042">Stop</string>
-	<string id="31043">Pause</string>
-	<string id="31044">Lecture</string>
-	<string id="31045">En Pause</string>
-	<string id="31046">Lecture</string>
-	<string id="31047">Menu DVD</string>
-	<string id="31048">Enregistrer</string>
-	<string id="31049">Enregistrement</string>
-	<string id="31050">|-Retour</string>
-	<string id="31051">Avance-|</string>
-	<string id="31052">Retour</string>
-	<string id="31053">Retour-2x</string>
-	<string id="31054">Retour-4x</string>
-	<string id="31055">Retour-8x</string>
-	<string id="31056">Retour-16x</string>
-	<string id="31057">Retour-32x</string>
-	<string id="31058">Avance</string>
-	<string id="31059">Avance-2x</string>
-	<string id="31060">Avance-4x</string>
-	<string id="31061">Avance-8x</string>
-	<string id="31062">Avance-16x</string>
-	<string id="31063">Avance-32x</string>
-	<!-- End progress strings -->
+    <!-- Settings restart required message -->
+    <string id="240">Les changements seront appliqués au prochain redémarrage.</string>
+    <string id="241">Souhaitez-vous relancer le script maintenant ?</string>
+    
+    <!-- Settings buttons -->
+    <string id="250">Ok</string>
+    <string id="251">Annuler</string>
+    <string id="252">Mise à jour</string>
+    <string id="253">Credits</string>
+    <string id="254">Extensions</string>
 
-	<!-- Begin weather strings -->
-	<string id="31064">Haut</string>
-	<string id="31065">Bas</string>
-	<!-- End weather strings -->
+    <!-- Search buttons -->
+    <string id="257">Sauver SQL</string>
+    <string id="258">Effacer SQL</string>
+    <string id="259">Charger SQL</string>
 
-	<!-- Begin Misc. strings -->
-	<string id="31066">Muet</string>
-	<string id="31067">Favoris</string>
-	<!-- End Misc. strings -->
+    <string id="270">Redémarrer</string>
+    <string id="271">Plus tard</string>
+
+    <string id="290">Page</string>
+
+    <string id="2150">Enregistrement incomplets</string>
+    <string id="2151">Chercher seulement favoris</string>
+    <string id="2152">Chercher seulement sauvés</string>
+    <string id="2153">Chercher seulement vu</string>
+
+    <!-- Plot/Cast Error Information -->
+    <string id="400">*Aucun synopsis ne peut être récupéré pour ce titre.</string>
+    <string id="401">*Aucune liste d'acteurs ne peut être récupérée pour ce titre.</string>
+
+    <!-- Context Menu -->
+    <string id="501">Lire le Trailer</string>
+    <string id="502">Ajouter aux Favoris</string>
+    <string id="503">Retirer des Favoris</string>
+    <string id="504">Marquer comme Vu</string>
+    <string id="505">Marquer comme Non Vu</string>
+    <string id="506">Rafraichir les infos du trailer</string>
+    <string id="507">Rafraichir tout les trailers</string>
+    <string id="508">Déplacer vers le dossier de sauvegarde</string>
+    <string id="509">Effacer le(s) trailer(s) sauvegardé(s)</string>
+    <string id="510">Séances Cinéma</string>
+    <string id="511">Voir Genre</string>
+    <string id="512">Rafraichir Genre</string>
+    <string id="513">Rafraichir tout les Genres</string>
+    <string id="521">>Voir Studio</string>
+    <string id="531">Voir Acteur</string>
+    <string id="550">Finaliser l'installation</string>
+    
+    <!-- Showtimes -->
+    <string id="600">Aucune Séance trouvée !</string>
+    <string id="601">Recherche des séances, merci de patienter...</string>
+    <string id="602">Date</string>
+    <string id="603">Localité</string>
+
+    <!-- Plugin -->
+    <string id="700">Apple Movie Trailers Plugin</string>
+    <string id="701">Ce plugin vous permet de regarder des</string>
+    <string id="702">bandes-annonces depuis la section Vidéo de XBMC.</string>
+    <string id="703">Souhaitez-vous installer cette extension ?</string>
+
+    <string id="704">Movie Theater Plugin</string>
+    <string id="705">Ce plugin va jouer une série de bandes annonces</string>
+    <string id="706">avant de débuter le film selectionné.</string>
+    <string id="707">Souhaitez-vous installer cette extension ?</string>
+
+    <string id="710">Sélectionnez une vignette</string>
+    <string id="711">Installer</string>
+    <string id="712">Passer</string>
+    <string id="713">Plugin</string>
+    <string id="714">ajouter</string>
+
+    <string id="720">Pensez à ajouter la source du plugin depuis</string>
+    <string id="721">la vue fichier. En mode Bibliotheque aucune</string>
+    <string id="722">étape supplémentaire n'est nécessaire.</string>
+
+    <string id="723">Voulez-vous ajouter un raccourci pour cette</string>
+    <string id="724">extension à votre fichier sources.xml ?</string>
+
+    <string id="730">Une erreur est survenue lors de l'installation du plugin !</string>
+    
+    <!-- Credits -->
+    <string id="900">Version</string>
+    <string id="901">Team Credits:</string>
+    <string id="902">Additional Credits:</string>
+    <string id="903">Skin Credits:</string>
+    
+    <!-- Credits headings-->
+    <string id="910">Head Developer &amp; Coder</string>
+    <string id="911">Coder &amp; Skinning</string>
+    <string id="912">Graphics &amp; Skinning</string>
+    <string id="913">Usability</string>
+    <string id="914">Language file</string>
+
+    <!-- Update messages -->
+    <string id="1000">Votre version est à jour.</string>
+    <string id="1001">Informations sur la version actuelle...</string>
+    <string id="1002">est plus récente</string>
+    <string id="1003">Voulez-vous mettre à jour ?</string>
+    <string id="1004">Récupération de la liste des fichiers...</string>
+    <string id="1005">Veuillez patienter...</string>
+    <string id="1006">Version</string>
+    <string id="1007">Récupération:</string>
+    <string id="1008">Chemin:</string>
+    <string id="1009">Fichier:</string>
+    <string id="1010">Votre nouvelle version a été souvegardé sur:</string>
+
+    <!-- Update error messages -->
+    <string id="1030">Aucune version identifiée n'a été trouvée !</string>
+    <string id="1031">Une erreur est survenue lors de la mise à jour du script !</string>
+
 </strings>
-
-
-
-
-
-
-
-

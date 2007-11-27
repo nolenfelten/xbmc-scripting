@@ -244,7 +244,7 @@ class GUI( xbmcgui.WindowXML ):
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::showCategories [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
         xbmcgui.unlock()
 
     def showTrailers( self, sql, params=None, choice=0, force_update=False ):
@@ -276,7 +276,7 @@ class GUI( xbmcgui.WindowXML ):
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::showTrailers [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
         xbmcgui.unlock()
 
     def _get_thumbnail( self, movie ):
@@ -391,7 +391,7 @@ class GUI( xbmcgui.WindowXML ):
             self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::showTrailerInfo [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
         xbmcgui.unlock()
 
     def showOverlays( self, trailer=-1 ):
@@ -491,7 +491,7 @@ class GUI( xbmcgui.WindowXML ):
                     playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
                     playlist.clear()
                     for count, ( title, url, selected ) in enumerate( items ):
-                        LOG( LOG_DEBUG, "%s (rev: %s) [url=%s]", __scriptname__, __svn_revision__, repr( url ) )
+                        LOG( LOG_DEBUG, self.__class__.__name__, "[url: %s]", repr( url ) )
                         filename = None
                         for saved in self.trailers.movies[ trailer ].saved:
                             #if ( title in saved[ 0 ] ):
@@ -528,7 +528,7 @@ class GUI( xbmcgui.WindowXML ):
                             plot = ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ]
                             t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
                             listitem.setInfo( "video", { "Title": t, "Year": self.trailers.movies[ trailer ].year, "PlotOutline": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
-                            LOG( LOG_DEBUG, "%s (rev: %s) [%s -> %s]", __scriptname__, __svn_revision__, "GUI::playTrailer", filename )
+                            LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
                         self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
@@ -536,7 +536,7 @@ class GUI( xbmcgui.WindowXML ):
                         ##xbmc.Player( self.core ).play( playlist )
                         xbmc.Player().play( playlist )
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::playTrailer [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
 
     def check_cache( self, title, pos=0 ):
         exists = False
@@ -558,7 +558,7 @@ class GUI( xbmcgui.WindowXML ):
                 #    self.trailers.movies[ trailer ].saved = filename
                 #    ##self.showOverlays( trailer )
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::saveThumbnail [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
 
     def showContextMenu( self ):
         if ( self.controlId == self.CONTROL_CATEGORY_LIST or self.controlId == self.CONTROL_CAST_LIST ):
@@ -643,7 +643,7 @@ class GUI( xbmcgui.WindowXML ):
             self.getListItem( trailer ).setThumbnailImage( thumbnail )
             self.showOverlays( trailer )
         else:
-            LOG( LOG_ERROR, "%s (rev: %s) [%s]", __scriptname__, __svn_revision__, "GUI::markAsWatched" )
+            LOG( LOG_ERROR, self.__class__.__name__, "[failed]" )
 
     def perform_search( self ):
         self.search_sql = ""
@@ -829,7 +829,7 @@ class GUI( xbmcgui.WindowXML ):
             self.showOverlays( trailer )
             dialog.close()
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::saveCachedMovie [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
             dialog.close()
             xbmcgui.Dialog().ok( _( 56 ), _( 90 ) )
                 
@@ -897,8 +897,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( controlId == self.CONTROL_CAST_LIST and self.cast_exists ):
                 self.getActorChoice()
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::onClick [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
-
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
 
     def onFocus( self, controlId ):
         #xbmc.sleep( 10 )
@@ -948,7 +947,7 @@ class GUI( xbmcgui.WindowXML ):
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getActorChoice()
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::onAction [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
 
 def main():
     _progress_dialog( len( modules ) + 1, _( 55 ) )

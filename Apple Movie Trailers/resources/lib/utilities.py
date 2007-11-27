@@ -155,9 +155,10 @@ def get_browse_dialog( default="", heading="", dlg_type=1, shares="files", mask=
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
 
-def LOG( status, format, *args ):
+def LOG( status, _class_, format, *args ):
     if ( DEBUG_MODE >= status ):
-        xbmc.output( "%s: %s\n" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
+        _function_ = "(%s) %s::%s" % ( sys._getframe( 1 ).f_code.co_filename, _class_, sys._getframe( 1 ).f_code.co_name, )
+        xbmc.output( "%s: %s - %s" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], _function_, format % args, ) )
 
 def get_custom_sql():
     try:
@@ -231,7 +232,7 @@ class Settings:
 
     def _use_defaults( self, show_dialog=False ):
         """ setup default values if none obtained """
-        LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
+        LOG( LOG_NOTICE, self.__class__.__name__, "[used default settings]" )
         settings = {  
             "version": __version__,
             "skin": "Default",
@@ -263,5 +264,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) Settings::save_settings [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
             return False
