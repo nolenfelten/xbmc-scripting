@@ -115,7 +115,7 @@ class HTTP:
                     os.remove( os.path.join( root, name ) )
                 os.rmdir( root )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) HTTP::clear_cache [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "%s.%s [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ] )
 
     def urlopen( self, url ):
         # retrieve the file so it is cached
@@ -165,7 +165,7 @@ class HTTP:
             #except:
             #    opened = urllib2.urlopen( request )
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "%s.%s [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ] )
             self.on_finished( url, "", 0, False )
             return None
 
@@ -209,7 +209,7 @@ class HTTP:
                     self.on_finished( actual_url, filepath, totalsize, is_completed )
                     return None
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) HTTP::freespace [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, self.__class__.__name__, "%s.%s [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ] )
             self.on_finished( url, "", 0, False )
             return None
             
@@ -239,7 +239,7 @@ class HTTP:
                     xbmcgui.Dialog().ok( _(64), "[%i] %s" % ( errno, strerror ) )
                     break
                 except:
-                    LOG( LOG_ERROR, "%s (ver: %s) HTTP::urlretrieve [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+                    LOG( LOG_ERROR, self.__class__.__name__, "%s.%s [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ] )
                     break
             filehandle.close()
         except:
@@ -327,5 +327,5 @@ class HTTPProgressSave( HTTPProgress ):
                     xbmc.executehttpapi("FileCopy(%s,%s)" % ( filepath, self.filepath, ) )
                     #xbmc.executehttpapi("FileCopy(%s.conf,%s.conf)" % ( filepath, self.filepath, ) )
             except:
-                LOG( LOG_ERROR, "%s (ver: %s) HTTPProgressSave::on_finished [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ], )
+                LOG( LOG_ERROR, self.__class__.__name__, "%s.%s [%s]", __module_name__, __module_version__, sys.exc_info()[ 1 ] )
         HTTPProgress.on_finished( self, url, self.filepath, filesize, is_completed )
