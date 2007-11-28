@@ -75,7 +75,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             return keyboard.getText()
         return default
 
-    def _get_numeric( self, default="", heading="", type=3 ):
+    def _get_numeric_dialog( self, default="", heading="", type=3 ):
         """ shows a numeric dialog and returns a value
             - 0 : ShowAndGetNumber		(default format: #)
             - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
@@ -151,23 +151,23 @@ class GUI( xbmcgui.WindowXMLDialog ):
     
     def _change_setting2( self ):
         """ changes settings #2 """
-        self.settings[ "router_ip" ] = self._get_numeric( self.settings[ "router_ip" ], self._( 202 ) )
+        self.settings[ "router_ip" ] = self._get_numeric_dialog( self.settings[ "router_ip" ], self._( self.controlId ) )
         
     def _change_setting3( self ):
         """ changes settings #3 """
-        self.settings[ "router_user" ] = self._get_keyboard( self.settings[ "router_user" ], self._( 203 ) )
+        self.settings[ "router_user" ] = self._get_keyboard( self.settings[ "router_user" ], self._( self.controlId ) )
 
     def _change_setting4( self ):
         """ changes settings #4 """
-        self.settings[ "router_pwd" ] = self._get_keyboard( self.settings[ "router_pwd" ], self._( 204 ) )
+        self.settings[ "router_pwd" ] = self._get_keyboard( self.settings[ "router_pwd" ], self._( self.controlId ) )
         
     def _change_setting5( self ):
         """ changes settings #5 """
-        self.settings[ "path_to_kaid" ] = self._get_browse_dialog( self.settings[ "path_to_kaid" ], self._( 205 ) )
+        self.settings[ "path_to_kaid" ] = self._get_browse_dialog( self.settings[ "path_to_kaid" ], self._( self.controlId ) )
     
     def _change_setting6( self ):
         """ changes settings #6 """
-        self.settings[ "path_to_kaid_conf" ] = self._get_browse_dialog( self.settings[ "path_to_kaid_conf" ], self._( 206 ) )
+        self.settings[ "path_to_kaid_conf" ] = self._get_browse_dialog( self.settings[ "path_to_kaid_conf" ], self._( self.controlId ) )
 
     def _change_setting7( self ):
         """ changes settings #7 """
@@ -175,11 +175,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def _change_setting8( self ):
         """ changes settings #8 """
-        self.settings[ "xbox_user" ] = self._get_keyboard( self.settings[ "xbox_user" ], self._( 208 ) )
+        self.settings[ "xbox_user" ] = self._get_keyboard( self.settings[ "xbox_user" ], self._( self.controlId ) )
 
     def _change_setting9( self ):
         """ changes settings #9 """
-        self.settings[ "xbox_pwd" ] = self._get_keyboard( self.settings[ "xbox_pwd" ], self._( 209 ) )
+        self.settings[ "xbox_pwd" ] = self._get_keyboard( self.settings[ "xbox_pwd" ], self._( self.controlId ) )
 
     def _change_setting10( self ):
         """ changes settings #10 """
@@ -256,7 +256,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._set_controls_values()
 
     def onFocus( self, controlId ):
-        pass
+        xbmc.sleep( 5 )
+        self.controlId = self.getFocusId()
 
     def onAction( self, action ):
         button_key = self.controller_action.get( action.getButtonCode(), "n/a" )
