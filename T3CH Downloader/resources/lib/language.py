@@ -64,4 +64,4 @@ class Language:
 
     def localized( self, code ):
         """ returns the localized string if it exists """
-        return self.strings.get( code, "Invailid Id %d" % ( code, ) )
+        return self.strings.get( code, "Invalid Id %d" % ( code, ) )
