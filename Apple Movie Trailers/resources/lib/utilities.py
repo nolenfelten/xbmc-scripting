@@ -158,7 +158,7 @@ def get_browse_dialog( default="", heading="", dlg_type=1, shares="files", mask=
 def LOG( status, _class_, format, *args ):
     if ( DEBUG_MODE >= status ):
         _function_ = "(%s) %s::%s" % ( sys._getframe( 1 ).f_code.co_filename, _class_, sys._getframe( 1 ).f_code.co_name, )
-        xbmc.output( "%s: %s - %s" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], _function_, format % args, ) )
+        xbmc.output( "%s: %s - %s\n" % ( ( "ERROR", "INFO", "NOTICE", "DEBUG", )[ status - 1 ], _function_, format % args, ) )
 
 def get_custom_sql():
     try:
