@@ -495,7 +495,7 @@ class GUI( xbmcgui.WindowXML ):
                         filename = None
                         for saved in self.trailers.movies[ trailer ].saved:
                             #if ( title in saved[ 0 ] ):
-                            if ( url in saved[ 1 ] ):
+                            if ( url == saved[ 1 ] ):
                                 filename = saved[ 0 ]
                                 self.url = saved[ 1 ]
                                 break

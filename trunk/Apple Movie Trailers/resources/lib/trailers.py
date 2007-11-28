@@ -585,7 +585,7 @@ class Trailers:
                         self.trailer_urls += [ urls ]
             except:
                 #traceback.print_exc()
-                print "Trailer XML %s: %s is %s" % ( self.idMovie, url, ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
+                print "Trailer XML %s: %s is %s" % ( self.idMovie, repr( url ), ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
 
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.runtime,
                             self.rating, self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite,
