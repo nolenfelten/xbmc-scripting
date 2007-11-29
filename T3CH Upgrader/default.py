@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '26-11-2007'
+__date__ = '29-11-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -88,23 +88,8 @@ class Main:
 		# init settings folder
 		makeDir(self.SCRIPT_DATA_DIR)
 
-		# check if custom copies exists
-		setupIncludes = not os.path.exists(self.INCLUDES_FILENAME)
-		
-		# check if custom deletes exists
-		setupExcludes = not os.path.exists(self.EXCLUDES_FILENAME)
-		
+		self._init_includes_excludes()
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
-		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
-		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
-
-		# setup additional Custom Copies/Delete if files dont exist
-		if setupIncludes:
-			self._hardcoded_includes()
-			self._save_file_obj(self.INCLUDES_FILENAME, self.includes)
-		if setupExcludes:
-			self._hardcoded_excludes()
-			self._save_file_obj(self.EXCLUDES_FILENAME, self.excludes)
 
 		self._check_settings()
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
@@ -151,6 +136,7 @@ class Main:
 			if forceReset or not self.settings.has_key( key ) or not self.settings[key]:
 				self.settings[key] = defaultValue
 				if not forceReset:
+					xbmc.output( "bad setting: " + key )
 					success = False
 
 		xbmc.output( "_set_default_settings() success=" +str(success))
@@ -362,6 +348,29 @@ class Main:
 		return success
 
 	######################################################################################
+	def _init_includes_excludes(self, forceReset=False):
+		xbmc.output("_init_includes_excludes()")
+
+		if forceReset:
+			deleteFile( self.INCLUDES_FILENAME )
+			deleteFile( self.EXCLUDES_FILENAME )
+
+		# if not exist we can setup using default includes & excludes files/folders
+		setupIncludes = not os.path.exists(self.INCLUDES_FILENAME)
+		setupExcludes = not os.path.exists(self.EXCLUDES_FILENAME)
+		
+		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
+		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
+
+		# setup additional Custom Copies/Delete if files dont exist
+		if setupIncludes:
+			self._hardcoded_includes()
+			self._save_file_obj(self.INCLUDES_FILENAME, self.includes)
+		if setupExcludes:
+			self._hardcoded_excludes()
+			self._save_file_obj(self.EXCLUDES_FILENAME, self.excludes)
+
+	######################################################################################
 	def _hardcoded_includes(self):
 		""" Additional files/folders for post installation copying. All relative to Q:\ """
 		xbmc.output("_hardcoded_includes()")
@@ -370,7 +379,6 @@ class Main:
 		for src in srcList:
 			if src not in self.includes:
 				self.includes.append(src)
-		print "final includes=", self.includes
 
 	######################################################################################
 	def _hardcoded_excludes(self):
@@ -380,26 +388,6 @@ class Main:
 		for src in srcList:
 			if src not in self.excludes:
 				self.excludes.append(src)
-		print "final excludes=", self.excludes
-
-	######################################################################################
-	def _delete_excess( self, unrar_file ):
-		xbmc.output( "_delete_excess" )
-		deleteFile(unrar_file)									# remove RAR
-		removeList = [ os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name,"_tools"), \
-					 os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name,"win32"), \
-					 os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name,"Changelog.txt") ]
-
-		for f in removeList:
-			try:
-				if os.path.exists(f):
-					if os.path.isdir(f):
-						rmtree(f, ignore_errors=True)
-						xbmc.output( "rmtree: " + f)
-					else:
-						deleteFile(f)
-			except:
-				xbmc.output("delete failed: " + f)
 
 	######################################################################################
 	def _get_latest_version( self ):
@@ -638,7 +626,6 @@ class Main:
 			TOTAL = len(files)
 			count = 0
 			for f in files:
-				count += 1
 				# ignore parent dirs
 				if f in ['.','..']: continue
 
@@ -659,6 +646,7 @@ class Main:
 						xbmc.output("copied file OK " + src_file)
 				else:
 					xbmc.output( "ignored as exists in T3CH: " + dest_file)
+				count += 1
 		except:
 			handleException("_copy_folder()", __language__( 308 ))
 
@@ -681,6 +669,7 @@ class Main:
 					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent )
 					if dialogProgress.iscanceled(): break
 				localCopy(src_path, dest_path, self.isSilent)
+				count += 1
 			except:
 				handleException("_copy_includes() path="+path)
 
@@ -694,7 +683,12 @@ class Main:
 		unrar_path = self.settings[self.SETTING_UNRAR_PATH]
 		for path in self.excludes:
 			try:
-				dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
+				if path.startswith(".."):
+					path = path.replace("..\\","").replace("../","")
+					dest_path = os.path.join( unrar_path, self.short_build_name, path )
+				else:
+					dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
+				xbmc.output( "dest_path=" + dest_path )
 				if not self.isSilent:
 					percent = int(int(100 / TOTAL) * count)
 					self._dialog_update( __language__(0), __language__( 516 ), dest_path, pct=percent )
@@ -703,9 +697,9 @@ class Main:
 					rmtree(dest_path, ignore_errors=True)
 				else:
 					deleteFile(dest_path)
+				count += 1
 			except:
 				handleException("_delete_excludes() path="+path)
-
 
 	######################################################################################
 	def _maintain_includes(self):
@@ -1030,7 +1024,8 @@ class Main:
 						"%s -> %s" %(__language__(633),self.settings[self.SETTING_NOTIFY_NOT_NEW]),
 						"%s -> %s" %(__language__(634),self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]),
 						"%s -> %s" %(__language__(635),self.settings[self.SETTING_XFER_USERDATA]),
-						"%s" % (__language__(636))
+						"%s" % (__language__(636)),
+						"%s" % (__language__(637))
 						]
 			return options
 
@@ -1071,7 +1066,10 @@ class Main:
 				if dialogYesNo(__language__(0), __language__( 636 ) + " ?"):
 					self._set_default_settings(forceReset=True)
 
-			self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
+			elif selected == 8:												# reset
+				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
+					self._init_includes_excludes(forceReset=True)
+		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
 
 
 ######################################################################################
@@ -1082,7 +1080,6 @@ class Main:
 ######################################################################################
 def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 	xbmc.output( "localCopy() ")
-	print "src=" + src_path, "dest=" + dest_path
 
 	try:	
 		if not os.path.exists(src_path):
