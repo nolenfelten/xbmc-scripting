@@ -298,7 +298,8 @@ class Main:
 			elif selected == 4:										# delete excludes
 				self._maintain_excludes()
 			elif selected == 5:										# downgrade to an old t3ch
-				self._downgrade()
+				if self._downgrade():
+					break
 			elif selected == 6:										# delete old t3ch
 				self._delete_old_t3ch()
 			elif selected == 7:										# update script
@@ -573,19 +574,31 @@ class Main:
 		dash_name = self.settings[self.SETTING_SHORTCUT_NAME]
 		shortcut_drive = self.settings[self.SETTING_SHORTCUT_DRIVE]
 		shortcut_xbe_file = os.path.join( shortcut_drive, dash_name + ".xbe" )
-		shortcut_cfg_file = os.path.join( shortcut_drive, dash_name + ".cfg" )
 		xbmc.output( "shortcut_xbe_file= " + shortcut_xbe_file )
+		shortcut_cfg_file = os.path.join( shortcut_drive, dash_name + ".cfg" )
+		xbmc.output( "shortcut_cfg_file= " + shortcut_cfg_file )
 
 		# backup CFG shortcut
 		if os.path.exists( shortcut_cfg_file ):
 			copy( shortcut_cfg_file, shortcut_cfg_file + "_old" )
+			xbmc.output( "shortcut_cfg _old made" )
 
-		# copy TEAM XBMC dash XBE shortcut to root - backup first
+
+		# copy TEAM XBMC dash XBE shortcut to root - only if diff and backup first
 		try:
-			if os.path.exists( shortcut_xbe_file ):
-				copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
+			do_copy = False
 			src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
-			copy(src_xbe_file, shortcut_xbe_file)
+			if os.path.exists( shortcut_xbe_file ):
+				# DOES EXIST, check if diff
+				if not filecmp.cmp( src_xbe_file, shortcut_xbe_file ):
+					copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
+					do_copy = True
+					xbmc.output( "xbe diff to TEAM XBMC, shortcut_xbe _old made" )
+			else:
+				do_copy = True
+			if do_copy:
+				copy(src_xbe_file, shortcut_xbe_file)
+				xbmc.output( "TEAM XBMC xbe copied" )
 		except:
 			handleException("_update_shortcut()", "error copying 'SHORTCUT by TEAM XBMC' to " + shortcut_drive)
 
@@ -605,6 +618,7 @@ class Main:
 		except:
 			handleException("_update_shortcut()", __language__( 307 ))
 
+		xbmc.output( "_update_shortcut() success=" + str(success) )
 		return success
 
 	######################################################################################
@@ -926,6 +940,7 @@ class Main:
 	def _downgrade(self):
 		xbmc.output( "_downgrade() ")
 
+		reboot = False
 		# find all t3ch builds
 		oldBuilds = self._find_t3ch_dirs()
 		oldBuilds.insert(0, __language__( 650 ))
@@ -940,7 +955,10 @@ class Main:
 			path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], selectedBuildName)
 			if self._update_shortcut(path):
 				if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
+					reboot = True
 					xbmc.executebuiltin( "XBMC.Reboot" )
+
+		return reboot
 
 
 	#####################################################################################
