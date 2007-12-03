@@ -25,8 +25,8 @@ class GUI( xbmcgui.WindowXML ):
         self._fetch_changelog( base_url )
 
     def onInit( self ):
-        self.getControl( 4 ).setLabel( self.header.replace( "\n", "[CR]" ) )
-        self.getControl( 5 ).setText( self.changelog.replace( "\n", "[CR]" ) )
+        self.getControl( 4 ).setLabel( self.header )
+        self.getControl( 5 ).setText( self.changelog )
         self.getControl( 6 ).setLabel( "Last change: %s" % self.last_change )
 
     def _fetch_changelog( self, base_url ):
