@@ -672,7 +672,8 @@
                     <width>175</width>
                     <height>256</height>
                     <info>ListItem.ActualIcon</info>
-                    <texture>-</texture>
+                    <!--bordertexture border="4">amt-icon-border.png</bordertexture>
+                    <bordersize>2</bordersize-->
                     <aspectratio aligny="bottom">keep</aspectratio>
                     <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
                 </control>
@@ -683,10 +684,12 @@
                     <width>175</width>
                     <height>256</height>
                     <info>ListItem.ActualIcon</info>
-                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
+                    <!--bordertexture flipy="true" diffuse="amt-diffuse_mirror.png" border="4">amt-icon-border.png</bordertexture>
+                    <bordersize>2</bordersize-->
+                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" />
                     <aspectratio aligny="top">keep</aspectratio>
                     <visible>IsEmpty(Container(70).ListItem(0).ActualIcon) | !Control.HasFocus(70)</visible>
-                </control>
+                </control>                
                 <control type="image">
                     <description>Actor Poster</description>
                     <posx>532</posx>
@@ -694,6 +697,8 @@
                     <width>175</width>
                     <height>256</height>
                     <info>Container(70).ListItem(0).Thumb</info>
+                    <!--bordertexture border="4">amt-icon-border.png</bordertexture>
+                    <bordersize>2</bordersize-->
                     <texture>-</texture>
                     <aspectratio aligny="bottom">keep</aspectratio>
                     <visible>!IsEmpty(Container(70).ListItem(0).ActualIcon) + Control.HasFocus(70)</visible>
@@ -705,7 +710,9 @@
                     <width>175</width>
                     <height>256</height>
                     <info>Container(70).ListItem(0).Thumb</info>
-                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" /> 
+                    <!--bordertexture flipy="true" diffuse="amt-diffuse_mirror.png" border="4">amt-icon-border.png</bordertexture>
+                    <bordersize>2</bordersize-->
+                    <texture flipy="true" diffuse="amt-diffuse_mirror.png" />
                     <aspectratio aligny="top">keep</aspectratio>
                     <visible>!IsEmpty(Container(70).ListItem(0).ActualIcon) + Control.HasFocus(70)</visible>
                 </control>
