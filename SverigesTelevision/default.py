@@ -57,9 +57,11 @@ class SVTGui(xbmcgui.WindowXML):
 
 		self.player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
 
+		self.stack.append(self.svt.get_start_url())
+
 	def onInit(self):
 		try:
-			self.list_contents(self.svt.get_start_url())
+			self.list_contents(self.stack.pop())
 		except:
 			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
@@ -85,7 +87,7 @@ class SVTGui(xbmcgui.WindowXML):
 	def search(self, term=None):
 		if term is None:
 			term = xbmcutils.gui.get_input('Search')
-		
+
 		# Only update the list if the user entered something.
 		if term is None:
 			return False
@@ -132,7 +134,7 @@ class SVTGui(xbmcgui.WindowXML):
 		dlg.update(percent, msg)
 
 		return not dlg.iscanceled()
-	
+
 	def download_data(self, url, func):
 		data = None
 

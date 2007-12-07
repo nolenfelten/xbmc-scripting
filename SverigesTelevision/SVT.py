@@ -25,6 +25,7 @@
 
 from BeautifulSoup import BeautifulSoup
 from xml.sax.saxutils import unescape
+import re
 
 import xbmcutils.net
 
@@ -45,13 +46,15 @@ class SVTMedia:
 		self.search_url = play_url + '/search/video/MediaplayerSearch.jsp'
 
 		self.default_url = self.base_url+'navigation.jsp?&frameset=true'
-	
+
+		self.flash_pattern = re.compile('http://[^"]+')
+
 	def get_start_url(self):
 		return self.default_url
 
 	def _get_soup_text(self, node):
 		return " ".join([x for x in node.recursiveChildGenerator() if isinstance(x, basestring)]).strip()
-	
+
 	def _parse_ram(self, url):
 		ram = None
 
@@ -109,7 +112,7 @@ class SVTMedia:
 			list.append((desc, url, SVTMedia.VIDEO))
 
 		return list
-	
+
 	def parse_video(self, url):
 		list = []
 
@@ -136,6 +139,13 @@ class SVTMedia:
 
 			list = list + entries
 
+		if not list:
+			for node in soup.findAll('div', {'id':'playerWrapper'}):
+				text = self._get_soup_text(node.script)
+				match = self.flash_pattern.search(text)
+				if match is not None:
+					list = list + [match.group(0)]
+
 		return list
 
 	def set_report_hook(self, func, udata=None):
@@ -160,10 +170,12 @@ if __name__ == '__main__':
 
 	svt = SVTMedia()
 	svt.set_report_hook(test)
+	"""
 	print 'downloading'
 	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=2156')
 	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=37689')
-	list = svt.list_directory(svt.base_url + '/navigation.jsp?d=63330')
+	#list = svt.list_directory(svt.base_url + '/navigation.jsp?d=63330')
+	list = svt.list_directory(svt.base_url + '/navigation.jsp?d=37689')
 	print 'download complete'
 	for name, url, type in list:
 		if type == SVTMedia.DIR:
@@ -192,6 +204,10 @@ if __name__ == '__main__':
 
 	print svt.parse_video(u)
 
-	print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743767')
-	print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
+	print svt.base_url
+	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743767')
+	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
+	#print svt.parse_video(svt.base_url + '/player.jsp?&d=60388&a=927600&lid=is_mediaplayer_search&lpos=0')
+	#print svt.parse_video(svt.base_url + 'player.jsp?a=995955&d=37689')
+	"""
 
