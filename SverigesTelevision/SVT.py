@@ -141,10 +141,11 @@ class SVTMedia:
 
 		if not list:
 			for node in soup.findAll('div', {'id':'playerWrapper'}):
-				text = self._get_soup_text(node.script)
-				match = self.flash_pattern.search(text)
-				if match is not None:
-					list = list + [match.group(0)]
+				if node.script:
+					text = self._get_soup_text(node.script)
+					match = self.flash_pattern.search(text)
+					if match is not None:
+						list = list + [match.group(0)]
 
 		return list
 
@@ -204,10 +205,10 @@ if __name__ == '__main__':
 
 	print svt.parse_video(u)
 
+	"""
 	print svt.base_url
 	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743767')
 	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
 	#print svt.parse_video(svt.base_url + '/player.jsp?&d=60388&a=927600&lid=is_mediaplayer_search&lpos=0')
 	#print svt.parse_video(svt.base_url + 'player.jsp?a=995955&d=37689')
-	"""
 
