@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '29-11-2007'
+__date__ = '09-12-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -341,9 +341,9 @@ class Main:
 
 						success = self._update_shortcut(unrar_path)		# create shortcut
 
-					deleteFile(unrar_file)									# remove RAR
 					if not self.isSilent:
 						dialogProgress.close()
+			deleteFile(unrar_file)									# remove RAR
 		except:
 			handleException("process()")
 		return success
@@ -357,8 +357,8 @@ class Main:
 			deleteFile( self.EXCLUDES_FILENAME )
 
 		# if not exist we can setup using default includes & excludes files/folders
-		setupIncludes = not os.path.exists(self.INCLUDES_FILENAME)
-		setupExcludes = not os.path.exists(self.EXCLUDES_FILENAME)
+		setupIncludes = not fileExist(self.INCLUDES_FILENAME)
+		setupExcludes = not fileExist(self.EXCLUDES_FILENAME)
 		
 		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
 		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
@@ -385,7 +385,7 @@ class Main:
 	def _hardcoded_excludes(self):
 		""" Additional files/folders for post installation deleting. All relative to unrar_path\\XBMC """
 		xbmc.output("_hardcoded_excludes()")
-		srcList = [ "..\\_tools", "..\\win32", "..\\Changelog.txt", "..\\copying.txt" ]
+		srcList = [ "..\\_tools", "..\\win32", "..\\Changelog.txt", "..\\copying.txt", "..\\keymapping.txt" ]
 		for src in srcList:
 			if src not in self.excludes:
 				self.excludes.append(src)
@@ -471,9 +471,14 @@ class Main:
 			# loop to check if unrar path appears
 			userdata_path = os.path.join(unrar_path, 'XBMC','UserData' )
 			time.sleep(5)
-			MAX = 20
+			MAX = 30
+			newXBE = os.path.join(unrar_path, 'XBMC','default.xbe' )
 			for count in range(MAX):
-				if not os.path.exists( unrar_path ) or not os.path.exists( userdata_path ):
+				isNewXBE = fileExist(newXBE)
+				isUserDataPath = os.path.isdir( userdata_path )
+				xbmc.output("checkCount=" + str(count) + " isUserDataPath="+str(isUserDataPath) + " isNewXBE="+str(isNewXBE))
+
+				if not isNewXBE or not isUserDataPath:
 					if count < MAX-1:
 						if not self.isSilent:
 							dialogProgress.update( int(int(100 / MAX) * count) )
@@ -487,12 +492,12 @@ class Main:
 		except:
 			if not self.isSilent:
 				dialogProgress.close()
-			handleException( "_extract_rar()", __language__( 304 ) )
+			handleException( "_extract_rar()" )
 
 		# unrar path not found
 		if not success:
+			deleteFile(file_name)			# remove RAR, might be a partial DL
 			dialogOK( __language__( 0 ), __language__( 312 ), unrar_path )
-			deleteFile(os.path.join( unrar_path, file_name ))			# remove RAR, might be a partial DL
 
 		xbmc.output( "_extract_rar() success=" + str(success) )
 		return success
@@ -579,7 +584,7 @@ class Main:
 		xbmc.output( "shortcut_cfg_file= " + shortcut_cfg_file )
 
 		# backup CFG shortcut
-		if os.path.exists( shortcut_cfg_file ):
+		if fileExist( shortcut_cfg_file ):
 			copy( shortcut_cfg_file, shortcut_cfg_file + "_old" )
 			xbmc.output( "shortcut_cfg _old made" )
 
@@ -588,7 +593,7 @@ class Main:
 		try:
 			do_copy = False
 			src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
-			if os.path.exists( shortcut_xbe_file ):
+			if fileExist( shortcut_xbe_file ):
 				# DOES EXIST, check if diff
 				if not filecmp.cmp( src_xbe_file, shortcut_xbe_file ):
 					copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
@@ -646,7 +651,7 @@ class Main:
 				src_file = os.path.join( src_path, f )
 				dest_file = os.path.join( dest_path, f )
 
-				if not os.path.exists( dest_file ):
+				if not fileExist( dest_file ):
 					if not self.isSilent:
 						dialogProgress.update( int(100 / TOTAL) * count, __language__( 515 ), src_file)
 						if dialogProgress.iscanceled(): break
@@ -1122,7 +1127,7 @@ def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 				xbmc.output( "src_file= " + src_file )
 				dest_file = os.path.join( dest_path, f )
 
-				if overwrite or not os.path.exists( dest_file ):
+				if overwrite or not fileExist( dest_file ):
 					if os.path.isdir( src_file ):
 						# copy directory
 						copytree( src_file, dest_file )
@@ -1220,6 +1225,9 @@ def readURL( url, msg='', isSilent=False):
 		dialogProgress.close()
 	return doc
 
+#################################################################################################################
+def fileExist(filename):
+	return os.path.exists(filename)
 
 #################################################################################################################
 class TextBoxDialog(xbmcgui.WindowDialog):
