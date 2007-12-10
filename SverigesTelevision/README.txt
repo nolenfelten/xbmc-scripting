@@ -1,10 +1,10 @@
 --------------------------------------------------------------------------------
- Sveriges Television for Xbox Media Center v0.93
+ Sveriges Television for Xbox Media Center v0.94
 --------------------------------------------------------------------------------
 
  By: Daniel Svensson, <dsvensson@gmail.com>
 
- Requirements: T3CH XBMC 2007-05-07 SVN rev8807 is known to work.
+ Requirements: T3CH XBMC SVN rev10070 is known to work.
 
  With this script you don't need any antenna to your TV any longer to enjoy
  the contents of Swedish Television. I myself gave up the antenna cable up
@@ -22,7 +22,7 @@
 
  If you like this script and feel like chipping in a buck or two, so that
  I can pay my future my future TV licenses, and spend more time on XBMC
- script hacks, you can donate using the email above over at PayPal.
+ script hacking, you can donate using the email above over at PayPal.
 
  If you are a Swede and have no TV license yourself I strongly suggest
  you use that money to get one on your own pronto!
@@ -30,3 +30,7 @@
  Long Live Free (as in speech) Television!
 
  http://svt.se/svt/jsp/Crosslink.jsp?d=50813&lid=Fri_television
+
+ Oh, and there is a petition that wants SVT to use free codecs here:
+
+ http://www.namninsamling.se/index.php?sida=2&nid=1120
