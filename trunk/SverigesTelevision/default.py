@@ -59,13 +59,17 @@ class SVTGui(xbmcgui.WindowXML):
 
 		self.stack.append(self.svt.get_start_url())
 
+		self.inited = False
+
 	def onInit(self):
-		try:
-			self.list_contents(self.stack.pop())
-		except:
-			xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
-			traceback.print_exc()
-			self.close()
+		if not self.inited:
+			try:
+				self.list_contents(self.stack.pop())
+				self.inited = True
+			except:
+				xbmc.log('Exception (init): ' + str(sys.exc_info()[0]))
+				traceback.print_exc()
+				self.close()
 
 	def show_about(self):
 		dlg = xbmcgui.Dialog()
@@ -166,7 +170,7 @@ class SVTGui(xbmcgui.WindowXML):
 		pass
 
 	def onClick(self, control_id):
-		try: 
+		try:
 			if control_id == SVTGui.CONTENT_LIST:
 				list = self.getControl(SVTGui.CONTENT_LIST)
 				pos = list.getSelectedPosition()
@@ -183,9 +187,9 @@ class SVTGui(xbmcgui.WindowXML):
 			xbmc.log('Exception (onControl): ' + str(sys.exc_info()[0]))
 			traceback.print_exc()
 			self.close()
-	
+
 	def onAction(self, action):
-		try: 
+		try:
 			if action == xbmcutils.gui.ACTION_PREVIOUS_MENU:
 				self.close()
 			elif action == xbmcutils.gui.ACTION_PARENT_DIR and len(self.stack) > 1:
