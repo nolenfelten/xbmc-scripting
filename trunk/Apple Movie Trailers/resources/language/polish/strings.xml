@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
-<!--Email: smuto@gazeta.pl-->
-<!--Date of translation: 10/27/2007-->
+<!--Email: smuto.promyk@gmail.com-->
+<!--Date of translation: 12/14/2007-->
+<!--$Revision$-->
 <strings>
   <string id="0">Apple Movie Trailers</string>
   <string id="1">Xbox Media Center</string>
@@ -165,9 +166,11 @@
   <string id="711">Zainstaluj</string>
   <string id="712">Pomiń</string>
   <string id="713">Wtyczka</string>
-  <string id="720">Pamiętaj, aby dodawać nowe wtyczki</string>
-  <string id="721">gdy jesteś w widoku plików. Biblioteka jest automatyczna</string>
+  <string id="714">dodaj</string>
+  <string id="720">Pamiętaj, aby dodawać nowe wtyczki gdy jesteś</string>
+  <string id="721">w widoku plików. Biblioteka jest automatyczna</string>
   <string id="722">nie wymaga żadnego działania aktualizacyjnego.</string>
+  <string id="725">Instaluję wtyczkę...</string>
   <string id="730">Błąd podczas instalowania wtyczki!</string>
   <string id="900">Wersja</string>
   <string id="914">Tłumaczenie</string>

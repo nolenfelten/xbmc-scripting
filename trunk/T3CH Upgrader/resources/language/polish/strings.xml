@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 11/23/2007-->
+<!--Date of translation: 12/14/2007-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -46,7 +46,7 @@
   <string id="505">Rozpakowywanie zakończone.</string>
   <string id="506">Uzyskiwanie info danych o wersji ...</string>
   <string id="507">Rozpocząć kopiowanie istniejących danych do T3CH?</string>
-  <string id="508">(UserData, Skrypty, Wtyczki, Skóry ...)</string>
+  <string id="508">UserData (opcjonalnie), Skrypty, Wtyczki, Skóry ...</string>
   <string id="509">Keymap.xml jest inny, skopiować twój?</string>
   <string id="510">Usuwanie T3CH UserData ...</string>
   <string id="511">Twój UserData kopiowany do T3CH ...</string>
@@ -65,7 +65,7 @@
   <string id="524">Proszę czekać ...</string>
   <string id="525">Wybierz plik lub katalog?</string>
   <string id="600">Menu</string>
-  <string id="601">Ustawienia - opcje</string>
+  <string id="601">Opcje ustawień</string>
   <string id="610">Ustawienia</string>
   <string id="611">Podgląd listy zmian</string>
   <string id="612">Pobierz:</string>
@@ -81,6 +81,7 @@
   <string id="634">Sprawdź aktualizacje na starcie</string>
   <string id="635">Skopiować UserData do nowej wersji T3CH?</string>
   <string id="636">Usuń wszystkie ustawienia</string>
+  <string id="637">Wyczyść listy kopiowanych i kasowanych plików</string>
   <string id="650">Zastosuj i wyjdź</string>
   <string id="651">Dodaj nowe</string>
   <string id="652">Użyj klawiatury</string>
