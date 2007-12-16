@@ -582,8 +582,9 @@ class GUI( xbmcgui.WindowXML ):
             else: watched_lbl = ""
             labels += ( "%s" % ( _( 504 + ( self.trailers.movies[ selection ].watched > 0 ) ) + watched_lbl, ), )
             functions += ( self.toggleAsWatched, )
-            labels += ( _( 506 ), )
-            functions += ( self.refreshTrailerInfo, )
+            if ( self.category_id != MULTIPLE_TRAILERS ):
+                labels += ( _( 506 ), )
+                functions += ( self.refreshTrailerInfo, )
             if ( self.category_id == NO_TRAILER_URLS ):
                 labels += ( _( 507 ), )
                 functions += ( self.refreshAllTrailersInfo, )
@@ -596,8 +597,9 @@ class GUI( xbmcgui.WindowXML ):
             elif ( self.check_cache( self.trailers.movies[ selection ].title ) ):
                 labels += ( _( 508 ), )
                 functions += ( self.saveCachedMovie, )
-            labels += ( _( 510 ), )
-            functions += ( self.get_showtimes, )
+            if ( self.settings[ "showtimes_local" ] ):
+                labels += ( _( 510 ), )
+                functions += ( self.get_showtimes, )
         elif ( controlId == self.CONTROL_CATEGORY_LIST ):
             functions += ( self.getTrailerGenre, )
             if ( self.category_id == GENRES ):
