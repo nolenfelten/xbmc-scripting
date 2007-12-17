@@ -69,10 +69,15 @@ class SVTMedia:
 		soup = BeautifulSoup(data)
 
 		try:
-			mms = soup.asx.entry.ref['href'].replace('mms','http')
+			mms = soup.asx.entry.ref['href']
 		except AttributeError, e:
-			msg = 'Unable to parse ASX file.'
-			raise ParseError(msg)
+			try:
+				mms = self._get_soup_text(soup)
+			except Exception, e:
+				msg = 'Unable to parse ASX file.'
+				raise ParseError(msg)
+
+		mms = mms.replace('mms', 'http')
 
 		return [mms]
 
@@ -134,7 +139,7 @@ class SVTMedia:
 			# get the real video clip urls
 			if url.endswith('ram'):
 				entries = self._parse_ram(url)
-			elif url.endswith('asx'):
+			elif url.endswith('asx') or '.asx?' in url:
 				entries = self._parse_asx(url)
 
 			list = list + entries
@@ -211,4 +216,5 @@ if __name__ == '__main__':
 	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
 	#print svt.parse_video(svt.base_url + '/player.jsp?&d=60388&a=927600&lid=is_mediaplayer_search&lpos=0')
 	#print svt.parse_video(svt.base_url + 'player.jsp?a=995955&d=37689')
+	print svt.parse_video(svt.base_url + 'player.jsp?a=1003341&d=37591')
 
