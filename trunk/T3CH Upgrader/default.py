@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '09-12-2007'
+__date__ = '17-12-2007'
 __version__ = "1.0"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -72,6 +72,10 @@ class Main:
 		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
 
+		# init settings folder
+		makeDir("T:\\script_data")
+		makeDir(self.SCRIPT_DATA_DIR)
+
 		# SETTINGS
 		self.SETTINGS_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "settings.txt" )
 		self.SETTING_SHORTCUT_DRIVE = "shortcut_drive"
@@ -85,8 +89,6 @@ class Main:
 		self.INCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "includes.txt" )
 		self.EXCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "excludes.txt" )
 
-		# init settings folder
-		makeDir(self.SCRIPT_DATA_DIR)
 
 		self._init_includes_excludes()
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
