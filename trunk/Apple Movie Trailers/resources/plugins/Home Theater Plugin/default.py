@@ -1,5 +1,5 @@
 """
-    Movie Theater: Plugin for viewing random trailers from Apple.com before viewing the main movie
+    Home Theater Plugin for viewing random trailers from Apple.com before viewing the main movie
 """
 # main imports
 import os
