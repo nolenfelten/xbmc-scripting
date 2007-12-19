@@ -1,5 +1,5 @@
 """
-    Movie Theater: Module plays:
+    Home Theater Plugin: Module plays:
     - # of optional coming attraction videos
     - # of random trailers
     - # of optional feature presentation videos

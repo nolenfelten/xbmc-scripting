@@ -1,5 +1,5 @@
 """
-    Movie Theater: Module creates a directory listing of videos and folders.
+    Home Theater Plugin: Module creates a directory listing of videos and folders.
 """
 
 # main imports
@@ -158,11 +158,8 @@ class Main:
                         actors += [ ( unicode( actor[ 0 ], "utf-8" ), unicode( actor[ 1 ], "utf-8" ), ) ]
                 except:
                     pass
-                # TODO: fix a stacked path
-                # for stacked paths we do not concatenate the file and path(maybe we do?)
-                fpath = item[ 0 ]
-                if ( not item[ 0 ].startswith( "stack://" ) ):
-                    fpath += item[ 1 ]
+                # concatenate the file and path
+                fpath = item[ 0 ] + item[ 1 ]
                 # add video to our list
                 ok = self._add_item( ( unicode( fpath, "utf-8" ), unicode( item[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( item[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), item[ 7 ], item[ 8 ], unicode( item[ 9 ], "utf-8" ), item[ 10 ], item[ 11 ], item[ 12 ], item[ 13 ], item[ 14 ], item[ 15 ], item[ 16 ], item[ 17 ], unicode( item[ 18 ], "utf-8" ), item[ 19 ], item[ 20 ], unicode( item[ 21 ], "utf-8" ), actors ), len( items ) )
                 if ( not ok ): raise
