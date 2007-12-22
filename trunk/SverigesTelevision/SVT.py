@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
  Copyright (c) 2007 Daniel Svensson
 
@@ -95,6 +96,8 @@ class SVTMedia:
 				continue
 
 			desc = unescape(self._get_soup_text(node.a))
+			if isinstance(desc, unicode):
+				desc = desc.encode('latin1')
 
 			if node.a['href'].startswith('http'):
 				url = node.a['href']
@@ -107,6 +110,8 @@ class SVTMedia:
 				continue
 
 			desc = unescape(self._get_soup_text(node.a))
+			if isinstance(desc, unicode):
+				desc = desc.encode('latin1')
 
 			if node.a['href'].startswith('http'):
 				url = node.a['href']
@@ -129,7 +134,7 @@ class SVTMedia:
 				continue
 
 			# fixup the url
-			if node.a['href'].startswith('http'):
+			if node.a['href'][:4] in ('http', 'rtsp'):
 				url = node.a['href']
 			else:
 				url = 'http://svt.se' + node.a['href']
@@ -137,7 +142,9 @@ class SVTMedia:
 			entries = []
 
 			# get the real video clip urls
-			if url.endswith('ram'):
+			if url.startswith('rtsp'):
+				entries = [url]
+			elif url.endswith('ram'):
 				entries = self._parse_ram(url)
 			elif url.endswith('asx') or '.asx?' in url:
 				entries = self._parse_asx(url)
@@ -216,5 +223,6 @@ if __name__ == '__main__':
 	#print svt.parse_video(svt.base_url + '/player.jsp?d=63330&a=743771')
 	#print svt.parse_video(svt.base_url + '/player.jsp?&d=60388&a=927600&lid=is_mediaplayer_search&lpos=0')
 	#print svt.parse_video(svt.base_url + 'player.jsp?a=995955&d=37689')
-	print svt.parse_video(svt.base_url + 'player.jsp?a=1003341&d=37591')
-
+	#print svt.parse_video(svt.base_url + 'player.jsp?a=1003341&d=37591')
+	print svt.parse_video(svt.base_url + 'player.jsp?a=1009572&d=37689')
+	print svt.parse_video(svt.base_url + 'player.jsp?a=997324&d=13276')
