@@ -67,6 +67,7 @@ class Main:
     def _get_settings( self ):
         self.settings = {}
         self.settings[ "limit_query" ] = xbmcplugin.getSetting( "limit_query" ) == "true"
+        self.settings[ "newest_only" ] = xbmcplugin.getSetting( "newest_only" ) == "true"
         self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
         self.settings[ "number_trailers" ] = int( xbmcplugin.getSetting( "number_trailers" ) )
         self.settings[ "quality" ] = int( xbmcplugin.getSetting( "quality" ) )
@@ -189,18 +190,21 @@ class Main:
                 rating_sql = rating_sql[ : -4 ] + ") "
             hd_sql = ( "", "AND (movies.trailer_urls LIKE '%720p.mov%' OR movies.trailer_urls LIKE '%1080p.mov%')", )[ self.settings[ "only_hd" ] and ( self.settings[ "quality" ] > 3 ) ]
             genre_sql = ""
+            if ( self.settings[ "newest_only" ] ):
+                genre_sql = "AND genres.genre='Newest'\n"
             # if the use sets limit query limit our search to the genre and rating of the movie
             if ( self.settings[ "limit_query" ] ):
                 # genre limit
                 ##movie_genres = unicode( xbmc.getInfoLabel( "ListItem.Genre" ), "utf-8" ).split( "/" )
-                movie_genres = g_genre.split( "/" )
-                if ( movie_genres[ 0 ] != "" ):
-                    genre_sql = "AND ("
-                    for genre in movie_genres:
-                        # fix certain genres
-                        genre_sql += "genres.genre='%s' OR " % ( genre.strip().replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and Adventure" ).replace( "Adventure", "Action and Adventure" ), )
-                    # fix the sql statement
-                    genre_sql = genre_sql[ : -4 ] + ") "
+                if ( not genre_sql ):
+                    movie_genres = g_genre.split( "/" )
+                    if ( movie_genres[ 0 ] != "" ):
+                        genre_sql = "AND ("
+                        for genre in movie_genres:
+                            # fix certain genres
+                            genre_sql += "genres.genre='%s' OR " % ( genre.strip().replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and Adventure" ).replace( "Adventure", "Action and Adventure" ), )
+                        # fix the sql statement
+                        genre_sql = genre_sql[ : -4 ] + ") "
                 # rating limit TODO: decide if this should override the set rating limit
                 ##movie_rating = xbmc.getInfoLabel( "ListItem.MPAA" ).split( " " )
                 movie_rating = g_mpaa_rating.split( " " )
