@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30000">Query database for videos</string>
+    <string id="30000">Use library for listing</string>
     <string id="30010">- Limit trailer results by genre and mpaa rating of movie</string>
     <string id="30020">Path or share to videos</string>
     <string id="30030">MPAA rating limit for trailers and/or database listing</string>
@@ -19,4 +19,5 @@
     <string id="30081">Feature presentation video #2 [optional]</string>
     <string id="30090">End of feature presentation video #1 [optional]</string>
     <string id="30091">End of feature presentation video #2 [optional]</string>
+    <string id="30100">Select trailers from newest only</string>
 </strings>
