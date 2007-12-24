@@ -1,5 +1,5 @@
 """
-    Apple Movie Trailers: Module sownloads then plays trailers
+    Apple Movie Trailers: Module downloads then plays trailers
 """
 
 # TODO: remove this when dialog issue is resolved

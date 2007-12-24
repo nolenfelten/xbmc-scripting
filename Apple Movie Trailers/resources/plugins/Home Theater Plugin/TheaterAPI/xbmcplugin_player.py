@@ -72,6 +72,7 @@ class Main:
         self.settings[ "number_trailers" ] = int( xbmcplugin.getSetting( "number_trailers" ) )
         self.settings[ "quality" ] = int( xbmcplugin.getSetting( "quality" ) )
         self.settings[ "only_hd" ] = xbmcplugin.getSetting( "only_hd" ) == "true"
+        self.settings[ "player_core" ] = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ int( xbmcplugin.getSetting( "player_core" ) ) ]
         self.settings[ "coming_attraction_videos" ] = []
         if ( xbmcplugin.getSetting( "coming_attraction_videos1" ) ):
             self.settings[ "coming_attraction_videos" ] += [ xbmcplugin.getSetting( "coming_attraction_videos1" ) ]
@@ -153,7 +154,7 @@ class Main:
     def _play_videos( self, playlist ):
         pDialog.close()
         if ( playlist and not pDialog.iscanceled() ):
-            xbmc.Player().play( playlist )
+            xbmc.Player( self.settings[ "player_core" ] ).play( playlist )
 
     def _fetch_records( self ):
         try:

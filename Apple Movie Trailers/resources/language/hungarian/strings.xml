@@ -2,7 +2,7 @@
 <strings>
     <string id="0">Apple Movie Trailers</string>
     <string id="1">Xbox Media Center</string>
-    <string id="2">Bali</string>
+    <string id="2">Bali at xboxklub</string>
 
     <!-- Dialog Messages -->
     <string id="39">Összes lejtászása</string>
@@ -157,6 +157,8 @@
     <string id="270">Újraindítás</string>
     <string id="271">Később</string>
 
+    <string id="290">Oldal</string>
+
     <string id="2150">Keresés hiányosak között</string>
     <string id="2151">Keresés Kedvencek között</string>
     <string id="2152">Keresés mentettek között</string>
@@ -180,8 +182,8 @@
     <string id="511">Műfaj megtekintése</string>
     <string id="512">Műfaj frissítése</string>
     <string id="513">Az össezs műfaj frissítése</string>
-    <string id="521">View Studio</string>
-    <string id="531">View Actor</string>
+    <string id="521">Studió megtekintése</string>
+    <string id="531">Színész megtekintése</string>
     <string id="550">Teljes install</string>
     
     <!-- Showtimes -->
@@ -214,6 +216,8 @@
     <string id="723">Hozzáadjuk a Kedvencek részhez ezt a</string>
     <string id="724">plugint (a sources.xml-ben)?</string>
 
+    <string id="725">Plugin installálása...</string>
+
     <string id="730">Hiba a plugin installálása során!</string>
 
     <!-- Credits -->
@@ -231,8 +235,8 @@
 
     <!-- Update messages -->
     <string id="1000">Ez a verzió a legfrissebb.</string>
-    <string id="1001">Fetching current tagged versions...</string>
-    <string id="1002">is newer</string>
+    <string id="1001">Jelenlegi tagged verziók lekérése...</string>
+    <string id="1002">újabb</string>
     <string id="1003">Szeretné frissíteni?</string>
     <string id="1004">Fájllista lekérése...</string>
     <string id="1005">Kis türelmet...</string>
