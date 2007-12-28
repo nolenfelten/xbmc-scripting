@@ -33,8 +33,8 @@ MULTIPLE_TRAILERS = -12
 CUSTOM_SEARCH = -99
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
-BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__ ) )
-BASE_DATABASE_PATH = BASE_SETTINGS_PATH
+BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "settings.txt" ) )
+BASE_DATABASE_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "AMT.db" ) )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special action codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -55,7 +55,7 @@ def _create_base_paths():
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
         new = True
-    if ( not os.path.isdir( BASE_SETTINGS_PATH ) ):
+    if ( not os.path.isdir( os.path.dirname( BASE_SETTINGS_PATH ) ) ):
         os.makedirs( BASE_SETTINGS_PATH )
     return new
 INSTALL_PLUGIN = _create_base_paths()
@@ -179,17 +179,24 @@ def save_custom_sql( query ):
         return False
 
 def make_legal_filepath( path, compatible=False, extension=True, conf=True, save_end=False ):
+    # xbox, win32 and linux have different filenaming requirements
     environment = os.environ.get( "OS", "xbox" )
+    # first we normalize the path (win32 and xbox support / as path separators)
     if ( environment == "win32" or environment == "xbox" ):
         path = path.replace( "\\", "/" )
-    drive = os.path.splitdrive( path )[ 0 ]
-    parts = os.path.splitdrive( path )[ 1 ].split( "/" )
+    # split our drive letter
+    drive, tail = os.path.splitdrive( path )
+    # split the rest of the path
+    parts = tail.split( "/" )
+    # if this is a linux path and compatible is true set the drive
     if ( not drive and parts[ 0 ].endswith( ":" ) and len( parts[ 0 ] ) == 2 and compatible ):
         drive = parts[ 0 ]
         parts[ 0 ] = ""
+    # here is where we make the filepath valid
     if ( environment == "xbox" or environment == "win32" or compatible ):
+        # win32 and xbox invalid characters
         illegal_characters = """,*=|<>?;:"+"""
-        length = ( 42 - ( conf * 5 ) )
+        # enumerate through and make each part valid
         for count, part in enumerate( parts ):
             tmp_name = ""
             for char in part:
@@ -197,19 +204,26 @@ def make_legal_filepath( path, compatible=False, extension=True, conf=True, save
                 if ( char in illegal_characters or ord( char ) > 127 ): char = ""
                 tmp_name += char
             if ( environment == "xbox" or compatible ):
-                if ( len( tmp_name ) > length ):
+                # we need to trim the part if it's larger than 42, we need to account for ".conf"
+                if ( len( tmp_name ) > 42 - ( conf * 5 ) ):
+                    # special handling of the last part with extension
                     if ( count == len( parts ) - 1 and extension == True ):
-                        filename = os.path.splitext( tmp_name )[ 0 ]
-                        ext = os.path.splitext( tmp_name )[ 1 ]
+                        # split the part into filename and extention
+                        filename, ext = os.path.splitext( tmp_name )
+                        # do we need to save the last two characters of the part for file number (eg _1, _2...)
                         if ( save_end ):
                             tmp_name = filename[ : 35 - len( ext ) ] + filename[ -2 : ]
                         else:
                             tmp_name = filename[ : 37 - len( ext ) ]
                         tmp_name = "%s%s" % ( tmp_name.strip(), ext )
+                    # not the last part so just trim the length
                     else:
                         tmp_name = tmp_name[ : 42 ].strip()
+            # add our validated part to our list
             parts[ count ] = tmp_name
+    # join the parts into a valid path, we use forward slash to remain os neutral
     filepath = drive + "/".join( parts )
+    # win32 needs to be encoded to utf-8
     if ( environment == "win32" ):
         return filepath.encode( "utf-8" )
     else:
@@ -219,9 +233,9 @@ def make_legal_filepath( path, compatible=False, extension=True, conf=True, save
 class Settings:
     """ Settings class """
     def get_settings( self ):
-        """ read settings from a settings.txt file in BASE_SETTINGS_PATH """
+        """ read settings from BASE_SETTINGS_PATH """
         try:
-            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "r" )
+            settings_file = open( BASE_SETTINGS_PATH, "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
@@ -257,9 +271,9 @@ class Settings:
         return settings
 
     def save_settings( self, settings ):
-        """ save settings to a settings.txt file in BASE_SETTINGS_PATH """
+        """ save settings to BASE_SETTINGS_PATH """
         try:
-            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "w" )
+            settings_file = open( BASE_SETTINGS_PATH, "w" )
             settings_file.write( repr( settings ) )
             settings_file.close()
             return True

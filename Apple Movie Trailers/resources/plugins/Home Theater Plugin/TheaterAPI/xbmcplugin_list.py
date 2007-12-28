@@ -27,7 +27,7 @@ class Main:
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) ) ):
+        if ( not os.path.isfile( self.BASE_DATABASE_PATH ) ):
             self._launch_script()
         else:
             self._get_settings()
@@ -36,14 +36,18 @@ class Main:
             self._get_items( self.args.path )
 
     def _launch_script( self ):
-        # no database was found so notify XBMC we're finished
+        # we need to get the localized strings before the call to endOfDirectory()
+        msg1 = xbmc.getLocalizedString( 30600 )
+        msg2 = xbmc.getLocalizedString( 30601 )
+        msg3 = xbmc.getLocalizedString( 30602 )
+        # no database was found so notify XBMC we're finished, false so no blank list is shown
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
         if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
-            if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, "Database not found!", "Would you like to run the main script?" ) ):
+            if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, msg1, msg3 ) ):
                 xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
-            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
+            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, msg1, msg2, sys.modules[ "__main__" ].__svn_url__ )
 
     def _get_settings( self ):
         self.settings = {}
@@ -95,7 +99,7 @@ class Main:
                 xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
@@ -164,9 +168,9 @@ class Main:
                 ok = self._add_item( ( unicode( fpath, "utf-8" ), unicode( item[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( item[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), item[ 7 ], item[ 8 ], unicode( item[ 9 ], "utf-8" ), item[ 10 ], item[ 11 ], item[ 12 ], item[ 13 ], item[ 14 ], item[ 15 ], item[ 16 ], item[ 17 ], unicode( item[ 18 ], "utf-8" ), item[ 19 ], item[ 20 ], unicode( item[ 21 ], "utf-8" ), actors ), len( items ) )
                 if ( not ok ): raise
         except:
-            #oops print error message
+            # oops print error message
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
-            print sys.exc_info()[ 1 ]
         return ok
 
     def _get_list( self ):
@@ -195,7 +199,7 @@ class Main:
                     items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         return items
         
     def _get_file_info( self, file_path ):
@@ -216,7 +220,7 @@ class Main:
         except:
             # oops print error message
             print repr( file_path )
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return "", False, False
 
     def _fill_media_list( self, items ):
@@ -269,7 +273,7 @@ class Main:
                 # oops print error message
                 add = False
                 print repr( item[ 1 ] )
-                print sys.exc_info()[ 1 ]
+                print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         if ( add ):
             # add the item to the media list
             ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=total )

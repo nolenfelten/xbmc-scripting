@@ -215,7 +215,7 @@ class Database:
             if ( ok ): return ( __version__, complete )
         """
         xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
-        os.remove( os.path.join( BASE_DATABASE_PATH, "AMT.db" ) )
+        os.remove( BASE_DATABASE_PATH )
         version, complete = self._create_database()
         return ( __version__, complete )
 
@@ -282,7 +282,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( BASE_DATABASE_PATH, "AMT.db" ) )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+        self.db = sqlite.connect( BASE_DATABASE_PATH )#, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
         self.db.create_function( "regexp", 2, self.regexp )
         self.cursor = self.db.cursor()
     

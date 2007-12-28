@@ -22,8 +22,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
+    BASE_DATA_PATH = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ )
 
     def __init__( self ):
         self._get_settings()
@@ -42,7 +41,9 @@ class Main:
         self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
         self.settings[ "mode" ] = int( xbmcplugin.getSetting( "mode" ) )
         self.settings[ "download_path" ] = xbmcplugin.getSetting( "download_path" )
+        self.settings[ "mark_watched" ] = xbmcplugin.getSetting( "mark_watched" ) == "true"
         self.settings[ "whole_words" ] = xbmcplugin.getSetting( "whole_words" ) == "true"
+        ##self.settings[ "player_core" ] = int( xbmcplugin.getSetting( "player_core" ) )
 
     def get_videos( self ):
         try:
@@ -57,7 +58,7 @@ class Main:
             if (ok): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
@@ -81,17 +82,13 @@ class Main:
             ok = True
             # enumerate through the list of trailers and add the item to the media list
             for trailer in trailers:
-                # if trailer was saved use this as the url
-                if ( eval( trailer[ 13 ] ) ):
-                    url = self._get_trailer_url( eval( trailer[ 13 ] ), True )
-                else:
-                    # select the correct trailer quality.
-                    url = self._get_trailer_url( eval( trailer[ 3 ] ) )
+                # select the correct trailer quality.
+                url = self._get_trailer_url( trailer[ 0 ], eval( trailer[ 3 ] ), eval( trailer[ 13 ] ) )
                 if ( url ):
                     # check for a valid thumbnail
                     thumbnail = ""
                     if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
-                        thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
+                        thumbnail = xbmc.translatePath( os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] ) )
                     # set the default icon
                     icon = "DefaultVideo.png"
                     # if a rating exists format it
@@ -117,7 +114,7 @@ class Main:
                     if ( not ok ): raise
         except:
             # user cancelled dialog or an error occurred
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         records.close()
         # if successful and user did not cancel, add all the required sort methods
@@ -129,39 +126,52 @@ class Main:
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
         return ok
 
-    def _get_trailer_url( self, trailer_urls, saved=False ):
+    def _get_trailer_url( self, idMovie, trailer_urls, saved_trailers ):
         # pick a random url (only really applies to multiple urls)
         rnd = randrange( len( trailer_urls ) )
         total = rnd + 1
-        url = ""
+        urls = []
+        # if play_all is enabled we want to cycle through all the videos
         if ( self.settings[ "play_all" ] and len( trailer_urls ) > 1 ):
             rnd = 0
             total = len( trailer_urls )
         for count in range( rnd, total ):
-            if ( saved ):
-                url += trailer_urls[ count ][ 0 ] + " , "
+            # get intial choice
+            choice = ( self.settings[ "quality" ], len( trailer_urls[ count ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ count ] ) ]
+            # if quality is non progressive
+            if ( self.settings[ "quality" ] <= 2 ):
+                # select the correct non progressive trailer
+                while ( trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # quality is progressive
             else:
-                # get intial choice
-                choice = ( self.settings[ "quality" ], len( trailer_urls[ count ] ) - 1, )[ self.settings[ "quality" ] >= len( trailer_urls[ count ] ) ]
-                # if quality is non progressive
-                if ( self.settings[ "quality" ] <= 2 ):
-                    # select the correct non progressive trailer
-                    while ( trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-                # quality is progressive
-                else:
-                    # select the proper progressive quality
-                    quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
-                    # select the correct progressive trailer
-                    while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
-                # if there was a valid trailer set it
-                if ( choice >= 0 and ( not self.settings[ "only_hd" ] or self.settings[ "quality" ] < 4 or ( self.settings[ "only_hd" ] and self.settings[ "quality" ] > 3 and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
-                    url += trailer_urls[ count ][ choice ] + " , "
-        if ( url.endswith( " , " ) ):
-            url = url[ : -3 ]
-            if ( url and self.settings[ "play_all" ] and " , " in url ):
-                url = "stack://" + url
-        if ( url and self.settings[ "mode" ] > 0 ):
-            url = '%s?download_url="""%s"""' % ( sys.argv[ 0 ], url, )
+                # select the proper progressive quality
+                quality = ( "480p", "720p", "1080p", )[ self.settings[ "quality" ] - 3 ]
+                # select the correct progressive trailer
+                while ( quality not in trailer_urls[ count ][ choice ] and trailer_urls[ count ][ choice ].endswith( "p.mov" ) and choice != -1 ): choice -= 1
+            # if there was a valid trailer set it
+            if ( choice >= 0 and ( not self.settings[ "only_hd" ] or self.settings[ "quality" ] < 4 or ( self.settings[ "only_hd" ] and self.settings[ "quality" ] > 3 and ( "720p.mov" in trailer_urls[ count ][ choice ] or "1080p.mov" in trailer_urls[ count ][ choice ] ) ) ) ):
+                urls += [ trailer_urls[ count ][ choice ] ]
+        # sort the urls, same as in main script
+        urls.sort()
+        # initialize our new list
+        url_list = []
+        # enumerate through the urls and check if a saved trailer exists
+        for url in urls:
+            for trailer in saved_trailers:
+                # if a svaed trailer with the exact http address exists, use the saved trailer
+                if ( url == trailer[ 1 ] ):
+                    url = trailer[ 0 ]
+                    break
+            # add our url to the new list
+            url_list += [ url ]
+        # we now join multiple urls together and create a stack:// url to pass to the player module
+        url = " , ".join( url_list )
+        if ( " , " in url ):
+            url = "stack://" + url
+        # TODO: fix player core when XBMC supports it
+        # if it is a stack:// url (multiple trailers), we want to download the trailer or mark it as watched, set the new url callback to the plugin
+        if ( url and ( url.startswith( "stack://" ) or self.settings[ "mode" ] > 0 or self.settings[ "mark_watched" ] ) ):#or self.settings[ "player_core" ] > 0 ) ):
+            url = "%s?idMovie=%d&trailer_url=%s" % ( sys.argv[ 0 ], idMovie, repr( url ), )
         return url
 
     def _fetch_records( self, query, params=None ):
@@ -195,7 +205,7 @@ class Main:
 
     def _search_query( self ):
         trailers = []
-        qv = self.get_keyboard( heading="Enter keywords: separate words with and/or/not" )
+        qv = self.get_keyboard( heading=xbmc.getLocalizedString( 30501 ) )
         xbmc.sleep(10)
         if ( qv ):
             keywords = qv.split()
@@ -238,7 +248,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) )
+        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
         self.db.create_function( "regexp", 2, self.regexp )
         self.cursor = self.db.cursor()
     
@@ -255,7 +265,7 @@ class Records:
             retval = self.cursor.fetchall()
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             retval = []
         return retval
 
