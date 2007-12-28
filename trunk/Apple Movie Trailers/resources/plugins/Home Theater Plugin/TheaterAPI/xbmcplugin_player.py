@@ -72,7 +72,7 @@ class Main:
         self.settings[ "number_trailers" ] = int( xbmcplugin.getSetting( "number_trailers" ) )
         self.settings[ "quality" ] = int( xbmcplugin.getSetting( "quality" ) )
         self.settings[ "only_hd" ] = xbmcplugin.getSetting( "only_hd" ) == "true"
-        self.settings[ "player_core" ] = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ int( xbmcplugin.getSetting( "player_core" ) ) ]
+        ##self.settings[ "player_core" ] = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ int( xbmcplugin.getSetting( "player_core" ) ) ]
         self.settings[ "coming_attraction_videos" ] = []
         if ( xbmcplugin.getSetting( "coming_attraction_videos1" ) ):
             self.settings[ "coming_attraction_videos" ] += [ xbmcplugin.getSetting( "coming_attraction_videos1" ) ]
@@ -154,7 +154,8 @@ class Main:
     def _play_videos( self, playlist ):
         pDialog.close()
         if ( playlist and not pDialog.iscanceled() ):
-            xbmc.Player( self.settings[ "player_core" ] ).play( playlist )
+            # TODO: enable player core when XBMC supports it for playlists
+            xbmc.Player().play( playlist )# self.settings[ "player_core" ]
 
     def _fetch_records( self ):
         try:
@@ -223,7 +224,7 @@ class Main:
             records.close()
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             result = []
         return result
 
@@ -292,7 +293,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) )
+        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
         self.cursor = self.db.cursor()
     
     def close( self ):

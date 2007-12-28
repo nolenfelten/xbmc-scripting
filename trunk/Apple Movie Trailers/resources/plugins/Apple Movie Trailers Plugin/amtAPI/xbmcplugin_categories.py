@@ -20,39 +20,43 @@ class Main:
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) ) ):
+        if ( not os.path.isfile( self.BASE_DATABASE_PATH ) ):
             self._launch_script()
         else:
             self.get_categories()
 
     def _launch_script( self ):
-        # no database was found so notify XBMC we're finished
+        # we need to get the localized strings before the call to endOfDirectory()
+        msg1 = xbmc.getLocalizedString( 30600 )
+        msg2 = xbmc.getLocalizedString( 30601 )
+        msg3 = xbmc.getLocalizedString( 30602 )
+        # no database was found so notify XBMC we're finished, false so no blank list is shown
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
         if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
-            if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, "Database not found!", "Would you like to run the main script?" ) ):
+            if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, msg1, msg3 ) ):
                 xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
-            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, "Database not found!", "You need to install and run the main script.", sys.modules[ "__main__" ].__svn_url__ )
+            ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, msg1, msg2, sys.modules[ "__main__" ].__svn_url__ )
 
     def get_categories( self ):
         try:
             # fetch genres from database
             genres = self._fetch_records()
             # add search category
-            genres += [ ( -99, "*Search Videos", 0, 0, "", ) ]
+            genres += [ ( -99, xbmc.getLocalizedString( 30900 ), 0, 0, "", ) ]
             # fill media list
             self._fill_media_list( genres )
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
 
     def _fill_media_list( self, genres ):
         try:
             ok = True
             # enumerate through the list of genres and add the item to the media list
             for genre in genres:
-                url = '%s?genre_id=%d&genre="%s"' % ( sys.argv[ 0 ], genre[ 0 ], genre[ 1 ], )
+                url = "%s?genre_id=%d&genre=%s" % ( sys.argv[ 0 ], genre[ 0 ], repr( genre[ 1 ] ), )
                 # check for a valid custom thumbnail for the current category
                 thumbnail = self._get_thumbnail( genre[ 1 ] )
                 # set the default icon
@@ -66,7 +70,7 @@ class Main:
                 if ( not ok ): raise
         except:
             # user cancelled dialog or an error occurred
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         # if successful and user did not cancel, add all the required sort methods
         if ( ok ):
@@ -102,7 +106,7 @@ class Records:
         self.connect()
 
     def connect( self ):
-        self.db = sqlite.connect( os.path.join( self.BASE_DATABASE_PATH, "AMT.db" ) )
+        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
         self.cursor = self.db.cursor()
     
     def close( self ):
