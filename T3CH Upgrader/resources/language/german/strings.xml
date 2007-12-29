@@ -39,6 +39,8 @@
     <string id="407">Bearbeiten</string>
     <string id="408">Ordner</string>
     <string id="409">Datei</string>
+    <string id="410">XBMC</string>
+    <string id="411">T3CH</string>
 
     <!-- Status messages -->
     <string id="500">Aktuelles T3CH Build:</string>
@@ -67,6 +69,8 @@
     <string id="523">Altes T3CH Build löschen?</string>
     <string id="524">Bitte warten...</string>
     <string id="525">Datei oder Ordner auswählen?</string>
+    <string id="526">Neuer Pfad vorhanden?</string>
+    <string id="527">Neue XBE vorhanden?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
