@@ -18,11 +18,20 @@ You can setup several aspects of the installation using the Settings Menu:
 
    eg. E:\apps
 
+   Will then result in build being unpacked to;
+   eg.  E:\apps\<t3ch_build_name>\XBMC
+
 2) The location of your xbox shortcut that boots to the XBMC as a dashboard, and the name of the shortcut that your mod chip boot too
    It is this location that a new shortcut will be wrutten too inorder to boot to the newly installed T3CH build XBMC.
    It uses the TEAM XBMC Shortcut.xbe  and associated .cfg inorder to achieve this.
 
-   eg. C:\xbmc
+
+   Drive: eg. C:
+
+   DashName:  eg. xbmc
+   You can also use a subfolder in the dashname;
+   
+   eg. dashboard\xbmc
 
 3) Maintain Copies;  
    This is a list of Folders and Files that you want to the post installation to be forced to COPY to new build.

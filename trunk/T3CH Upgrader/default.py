@@ -1,6 +1,5 @@
-# T3CH Upgrader - An extention of official 'T3CH Loader' script.
+# T3CH Upgrader - Update your current T3CH Build to latest release.
 #
-# Heavily modified by BigBellyBilly to extend functionality to also copy UserData, Scripts,Plugins etc
 # Process:
 # Find & DL & unrar new build (keeping T3CH build name)
 # Copies your UserData, preserving keymap.xml (if reqd).
@@ -32,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '17-12-2007'
-__version__ = "1.0"
+__date__ = '23-12-2007'
+__version__ = "1.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -89,7 +88,6 @@ class Main:
 		self.INCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "includes.txt" )
 		self.EXCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "excludes.txt" )
 
-
 		self._init_includes_excludes()
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
 
@@ -98,7 +96,7 @@ class Main:
 			self._update_script(True)														# silent
 
 		url = self._get_latest_version()										# discover latest build
-#		url = "http://somehost/XBMC-SVN_2007-11-04_rev10675-T3CH.rar"			# DEV ONLY!!, saves DL it
+#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
 		if url:
 			self.rar_name, self.short_build_name = self._check_build_date( url )
 		else:
@@ -108,7 +106,7 @@ class Main:
 		if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
 			self._menu( url )
 
-		xbmc.output("__init__() done - exit script")
+		xbmc.output("__init__() done")
 
 
 	######################################################################################
@@ -193,14 +191,19 @@ class Main:
 
 	######################################################################################
 	def _browse_dashname(self, dash_name=''):
-		xbmc.output( "_browse_dashname() ")
+		xbmc.output( "_browse_dashname() curr dash_name="+dash_name)
 		try:
 			xbeFiles = [__language__(650), __language__(652)]
+
+			# include current dash name into list after Exit and Manual
+			xbeFiles.append(dash_name)
+
 			# get shortcut drive to check for existing dash names
 			try:
 				drive = self.settings["shortcut_drive"]
 			except:
 				drive = "C:\\"
+			xbmc.output( "checking for names on drive=" + drive)
 			# find all existing dash name
 			allFiles = os.listdir( drive )
 			for f in allFiles:
@@ -219,6 +222,8 @@ class Main:
 					break
 				elif selected == 1:
 					dash_name = getKeyboard(dash_name, __language__( 201 ))
+					if dash_name[-1] in ['\\','/']:
+						dash_name = dash_name[:-1]
 				else:
 					# select dash name form list
 					dash_name = xbeFiles[selected]
@@ -230,6 +235,7 @@ class Main:
 
 		except:
 			handleException("_browse_dashname()")
+		xbmc.output( "_browse_dashname() final dash_name="+dash_name)
 		return dash_name
 
 
@@ -288,8 +294,12 @@ class Main:
 
 			if selected <= 0:						# quit
 				break
-			elif selected == 1:										# view log
-				self._view_changelog()
+			elif selected == 1:										# view logs (XBMC or T3CH)
+				if dialogYesNo( __language__( 0 ), __language__( 611 ), \
+								yesButton=__language__( 411 ), noButton=__language__( 410 )):
+					self._view_t3ch_changelog()
+				else:
+					self._view_xbmc_changelog()
 			elif selected == 2 and self.short_build_name:			# if available, download & process
 				if self._process(url):
 					if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
@@ -441,6 +451,7 @@ class Main:
 
 		if not success:
 			deleteFile(file_name)			# remove RAR, might be a partial DL
+#		success = True						# DEV ONLY !!
 		xbmc.output( "_fetch_current_build() success=" + str(success) )
 		return success
 
@@ -472,9 +483,11 @@ class Main:
 
 			# loop to check if unrar path appears
 			userdata_path = os.path.join(unrar_path, 'XBMC','UserData' )
-			time.sleep(5)
-			MAX = 30
+			xbmc.output("userdata_path="+ userdata_path)
 			newXBE = os.path.join(unrar_path, 'XBMC','default.xbe' )
+			xbmc.output("newXBE="+ newXBE)
+			time.sleep(5)
+			MAX = 35
 			for count in range(MAX):
 				isNewXBE = fileExist(newXBE)
 				isUserDataPath = os.path.isdir( userdata_path )
@@ -483,7 +496,10 @@ class Main:
 				if not isNewXBE or not isUserDataPath:
 					if count < MAX-1:
 						if not self.isSilent:
-							dialogProgress.update( int(int(100 / MAX) * count) )
+							dialogProgress.update( int(int(100 / MAX) * count), \
+												__language__(526) + "  " + str(isUserDataPath), \
+												__language__(527) + "  " + str(isNewXBE))
+							if ( dialogProgress.iscanceled() ): break
 						time.sleep(2)
 				else:
 					success = True
@@ -505,15 +521,27 @@ class Main:
 		return success
 
 	######################################################################################
-	def _view_changelog( self, ):
-		xbmc.output( "_view_changelog()" )
+	def _view_t3ch_changelog( self, ):
+		xbmc.output( "_view_t3ch_changelog()" )
+		doc = ""
+		url = 'http://ftp1.srv.endpoint.nu/pub/repository/t3ch/T3CH-README_1ST.txt'
+		doc = readURL( url, __language__( 502 ), self.isSilent )
+
+		if doc:
+			tbd = TextBoxDialog().ask("T3CH Changelog:", doc, panel=os.path.join( DIR_RESOURCES, 'dialog-panel.png'))
+		else:
+			dialogOK( __language__( 0 ), __language__( 310 ))
+
+	######################################################################################
+	def _view_xbmc_changelog( self, ):
+		xbmc.output( "_view_xbmc_changelog()" )
 		doc = ""
 		for url in self.BASE_URL_LIST:
 			doc = readURL( os.path.join( url, "latest.txt" ), __language__( 502 ), self.isSilent )
 			if doc: break
 
 		if doc:
-			tbd = TextBoxDialog().ask("Changelog:", doc, panel=os.path.join( DIR_RESOURCES, 'dialog-panel.png'))
+			tbd = TextBoxDialog().ask("XBMC Changelog:", doc, panel=os.path.join( DIR_RESOURCES, 'dialog-panel.png'))
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
 
@@ -577,7 +605,7 @@ class Main:
 
 		success = False
 		# get users prefered booting dash name eg. XBMC.xbe
-		# if required, copy SHORTCUT by TEAM XBMCto root\<dash_name>
+		# if required, copy SHORTCUT by TEAM XBMC to root\<dash_name>
 		dash_name = self.settings[self.SETTING_SHORTCUT_NAME]
 		shortcut_drive = self.settings[self.SETTING_SHORTCUT_DRIVE]
 		shortcut_xbe_file = os.path.join( shortcut_drive, dash_name + ".xbe" )
@@ -590,6 +618,11 @@ class Main:
 			copy( shortcut_cfg_file, shortcut_cfg_file + "_old" )
 			xbmc.output( "shortcut_cfg _old made" )
 
+		# if shortcutname has dir prefix, ensure it exists
+		prefix_dir = os.path.dirname(shortcut_xbe_file)
+		xbmc.output("prefix_dir="+prefix_dir)
+		if prefix_dir and not os.path.isdir(prefix_dir):
+			makeDir(prefix_dir)
 
 		# copy TEAM XBMC dash XBE shortcut to root - only if diff and backup first
 		try:
