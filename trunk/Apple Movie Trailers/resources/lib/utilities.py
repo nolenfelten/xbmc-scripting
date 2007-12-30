@@ -56,7 +56,7 @@ def _create_base_paths():
         os.makedirs( BASE_DATA_PATH )
         new = True
     if ( not os.path.isdir( os.path.dirname( BASE_SETTINGS_PATH ) ) ):
-        os.makedirs( BASE_SETTINGS_PATH )
+        os.makedirs( os.path.dirname( BASE_SETTINGS_PATH ) )
     return new
 INSTALL_PLUGIN = _create_base_paths()
 
