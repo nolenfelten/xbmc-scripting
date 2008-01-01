@@ -55,6 +55,7 @@ class Main:
         self.settings[ "use_db" ] = xbmcplugin.getSetting( "use_db" ) == "true"
         self.settings[ "limit_query" ] = xbmcplugin.getSetting( "limit_query" ) == "true"
         self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
+        self.settings[ "transparent_archives" ] = xbmc.executehttpapi( "getguisetting(1,filelists.unrollarchives)" ).replace("<li>","").lower() == "true"
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
 
@@ -80,7 +81,7 @@ class Main:
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
-        # backslashes cause issues when passed in the url
+        # backslashes cause issues when passed in the url, so replace them
         self.args.path = [ self.args.path.replace( "[[BACKSLASH]]", "\\" ) ]
 
     def _get_items( self, path ):
@@ -187,35 +188,58 @@ class Main:
             entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
             # enumerate through our items list and add the full name to our entries list
             for entry in entries:
-                # fix path
-                entry = entry.replace( "<li>", "" )
-                if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
-                    entry = entry[ : -1 ]
-                file_path = unicode( entry, "utf-8" )
-                # get the item info
-                title, isVideo, isFolder = self._get_file_info( file_path )
-                # add our item to our entry list
-                if ( isVideo or isFolder ):
-                    items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
+                if ( entry ):
+                    # fix path
+                    file_path = self._clean_file_path( entry )
+                    # get the item info
+                    title, isVideo, isFolder = self._get_file_info( file_path )
+                    # add our entry to our items list
+                    if ( isVideo or isFolder ):
+                        items += [ ( file_path, title, isFolder, "", "", "", "", "0", "", "0", "", "", "", "", "", "", "", "", "", "", "", [], ) ]
         except:
             # oops print error message
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         return items
-        
+
+    def _clean_file_path( self, path ):
+        # replace <li>
+        path = path.replace( "<li>", "" )
+        # remove slash at end
+        if ( path.endswith( "/" ) or path.endswith( "\\" ) ):
+            path = path[ : -1 ]
+        """
+        # if it is a rar we check for a single video
+        if ( path and path.endswith( ".rar" ) and self.settings[ "transparent_archives" ] ):
+            # fetch the archives listing
+            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
+            # if there is only one entry set the new path
+            if ( len( entries ) == 2 ):
+                path = entries[ 1 ]
+                # replace <li>
+                path = path.replace( "<li>", "" )
+                # remove slash at end
+                if ( path.endswith( "/" ) or path.endswith( "\\" ) ):
+                    path = path[ : -1 ]
+        """
+        # make it a unicode object
+        path = unicode( path, "utf-8" )
+        # return final rsult
+        return path
+
     def _get_file_info( self, file_path ):
         try:
             # parse item for title
-            title = os.path.splitext( os.path.basename( file_path ) )[ 0 ]
+            title, ext = os.path.splitext( os.path.basename( file_path ) )
             # is this a folder?
-            isFolder = os.path.isdir( self._fix_stacked_path( file_path ) )
+            isFolder = ( ext == ".rar" or os.path.isdir( self._fix_stacked_path( file_path ) ) )
+            # if it's a folder keep extension in title
+            title += ( "", ext, )[ isFolder ]
             # default isVideo to false
             isVideo = False
             # if this is a file, check to see if it's a valid video file
             if ( not isFolder ):
-                # get the files extension
-                ext = os.path.splitext( file_path )[ 1 ].lower()
                 # if it is a video file add it to our items list
-                isVideo = ( ext and ext in self.VIDEO_EXT )
+                isVideo = ( ext and ext.lower() in self.VIDEO_EXT )
             return title, isVideo, isFolder
         except:
             # oops print error message
@@ -226,20 +250,25 @@ class Main:
     def _fill_media_list( self, items ):
         try:
             ok = True
+            # enumerate through the list and add the item to our media list
             for item in items:
+                # add the item
                 ok = self._add_item( item, len( items ) )
+                # if there was an error or the user cancelled, raise an exception
                 if ( not ok ): raise
         except:
+            # listing failed for some reason
             ok = False
         return ok
 
     def _add_item( self, item, total ):
         ok = True
         add = True
-        # call this hack for rar files, strict rules apply to the naming of the video inside
-        url_path = self._fix_rar_path( item[ 0 ] )
+        # backslashes cause issues when passed in the url, so replace them
+        url_path = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
         # create our url
         url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url_path, item[ 2 ], )
+        # handle folders differently
         if ( item[ 2 ] ):
             # if a folder.jpg exists use that for our thumbnail
             #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
@@ -250,6 +279,7 @@ class Main:
             # add the different infolabels we want to sort by
             listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
         else:
+            # we only want the first path in a stack:// file item
             fpath = self._fix_stacked_path( item[ 0 ] )
             # call _get_thumbnail() for the path to the cached thumbnail
             thumbnail = self._get_thumbnail( fpath )
@@ -280,22 +310,10 @@ class Main:
         return ok
 
     def _fix_stacked_path( self, path ):
+        # we need to strip stack:// and return only the first path
         if ( path.startswith( "stack://" ) ):
             path = path[ 8 : ].split( " , " )[ 0 ]
         return path
-
-    def _fix_rar_path( self, path ):
-        # TODO: find a way to list rar's as a directory
-        # if it's not a rar file, return it with the backslash fix
-        if ( not path.endswith( ".rar" ) ): return path.replace( "\\", "[[BACKSLASH]]" )
-        # we split the basename off and use that for the video's filename with an .avi extension
-        rar_video_name = os.path.splitext( os.path.basename( path ) )[ 0 ] + ".avi"
-        # rar paths need to be quoted, including ._-
-        url_path = quote_plus( path ).replace( ".", "%2e").replace( "-", "%2d").replace( "_", "%5f")
-        # append the path with our filename
-        filepath = "rar://%s/%s" % ( url_path, rar_video_name, )
-        # return the filename with the backslash fix
-        return filepath.replace( "\\", "[[BACKSLASH]]" )
 
     def _get_thumbnail( self, path ):
         fpath = path
