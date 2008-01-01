@@ -1,5 +1,5 @@
 """
-    Plugin Maker: This plugin will create a directory listing of videos.
+    Plugin Maker: This plugin will create a directory listing of media files.
 """
 
 # main imports
@@ -26,10 +26,12 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
+    BASE_CACHE_PATH = "P:\\Thumbnails"
 
-    # add all video extensions wanted in lowercase
-    VIDEO_EXT = ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp"
+    # music media extensions
+    MEDIA_EXT = ( ".nsv|.m4a|.flac|.aac|.strm|.pls|.rm|.mpa|.wav|.wma|.ogg|.mp3|.mp2|.m3u|.mod|.amf|.669|.dmf|.dsm|.far|.gdm|.imf|.it|.m15|.med|.okt|.s3m|.stm|.sfx|.ult|.uni|.xm|.sid|.ac3|.dts|.cue|.aif|.aiff|.wpl|.ape|.mac|.mpc|.mp+|.mpp|.shn|.zip|.rar|.wv|.nsf|.spc|.gym|.adplug|.adx|.dsp|.adp|.ymf|.ast|.afc|.hps|.xsp|.xwav|.waa|.wvs|.wam|.gcm|.idsp|.mpdsp|.mss|.spt|.rsd|.mid|.kar", )
+    # video media extensions
+    MEDIA_EXT += ( ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp", )
 
     def __init__( self ):
         self._get_settings()
@@ -40,6 +42,8 @@ class Main:
     def _get_settings( self ):
         self.settings = {}
         self.settings[ "path" ] = self._get_path_list( xbmcplugin.getSetting( "path" ) )
+        self.settings[ "content" ] = ( "movies","music","tvshows", )[ int( xbmcplugin.getSetting( "content" ) ) ]
+        self.media_type = ( "video" in os.getcwd() )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
 
@@ -77,10 +81,10 @@ class Main:
                 xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
                 xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
                 # set content
-                xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+                xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content=self.settings[ "content" ] )
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
@@ -99,61 +103,74 @@ class Main:
             entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
             # enumerate through our items list and add the full name to our entries list
             for entry in entries:
-                # fix path
-                entry = entry.replace( "<li>", "" )
-                if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
-                    entry = entry[ : -1 ]
-                file_path = unicode( entry, "utf-8" )
-                # get the item info
-                title, isVideo, isFolder = self._get_file_info( file_path )
-                # add our item to our entry list
-                if ( isVideo or isFolder ):
-                    items += [ ( file_path, title, isFolder, ) ]
+                if ( entry ):
+                    # fix path
+                    file_path = self._clean_file_path( entry )
+                    # get the item info
+                    title, isMedia, isFolder = self._get_file_info( file_path )
+                    # add our entry to our items list
+                    if ( isMedia or isFolder ):
+                        items += [ ( file_path, title, isFolder, ) ]
         except:
             # oops print error message
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         return items
-        
+
+    def _clean_file_path( self, path ):
+        # replace <li>
+        path = path.replace( "<li>", "" )
+        # remove slash at end
+        if ( path.endswith( "/" ) or path.endswith( "\\" ) ):
+            path = path[ : -1 ]
+        # make it a unicode object
+        path = unicode( path, "utf-8" )
+        # return final rsult
+        return path
+
     def _get_file_info( self, file_path ):
         try:
             # parse item for title
-            title = os.path.splitext( os.path.basename( file_path ) )[ 0 ]
+            title, ext = os.path.splitext( os.path.basename( file_path ) )
             # is this a folder?
-            isFolder = os.path.isdir( self._fix_stacked_path( file_path ) )
-            # default isVideo to false
-            isVideo = False
-            # if this is a file, check to see if it's a valid video file
+            isFolder = ( ext == ".rar" or os.path.isdir( self._fix_stacked_path( file_path ) ) )
+            # if it's a folder keep extension in title
+            title += ( "", ext, )[ isFolder ]
+            # default isMedia to false
+            isMedia = False
+            # if this is a file, check to see if it's a valid media file
             if ( not isFolder ):
-                # get the files extension
-                ext = os.path.splitext( file_path )[ 1 ].lower()
-                # if it is a video file add it to our items list
-                isVideo = ( ext and ext in self.VIDEO_EXT )
-            return title, isVideo, isFolder
+                # if it is a media file add it to our items list
+                isMedia = ( ext and ext.lower() in self.MEDIA_EXT[ self.media_type ] )
+            return title, isMedia, isFolder
         except:
             # oops print error message
             print repr( file_path )
-            print sys.exc_info()[ 1 ]
+            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return "", False, False
 
     def _fill_media_list( self, items ):
         try:
             ok = True
+            # enumerate through the list and add the item to our media list
             for item in items:
+                # add the item
                 ok = self._add_item( item, len( items ) )
+                # if there was an error or the user cancelled, raise an exception
                 if ( not ok ): raise
         except:
+            # listing failed for some reason
             ok = False
         return ok
 
     def _add_item( self, item, total ):
         ok = True
         add = True
-        # call this hack for rar files, strict rules apply to the naming of the video inside
-        url = self._fix_rar_path( item[ 0 ] )
+        # backslashes cause issues when passed in the url, so replace them
+        url = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
         # if it is a folder handle it different
         if ( item[ 2 ] ):
-            # create our url (backslashes cause issues when passed in the url)
-            url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url.replace( "\\", "[[BACKSLASH]]" ), item[ 2 ], )
+            # create our url
+            url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url, item[ 2 ], )
             # if a folder.jpg exists use that for our thumbnail
             #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
             #if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
@@ -161,51 +178,40 @@ class Main:
             # only need to add label and icon, setInfo() and addSortMethod() takes care of label2
             listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon )
             # add the different infolabels we want to sort by
-            listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
+            #listitem.setInfo( type=( "music", "video", )[ self.media_type ], infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
         else:
+            # we only want the first path in a stack:// file item
             fpath = self._fix_stacked_path( item[ 0 ] )
             # call _get_thumbnail() for the path to the cached thumbnail
             thumbnail = self._get_thumbnail( fpath )
             # set the default icon
-            icon = "DefaultVideo.png"
+            icon = "Default%s.png" % ( "Audio", "Video", )[ self.media_type ]
             try:
                 # get the date of the file
                 date = datetime.datetime.fromtimestamp( os.path.getmtime( fpath.encode( "utf-8" ) ) ).strftime( "%d-%m-%Y" )
                 # get the size of the file
                 size = long( os.path.getsize( fpath.encode( "utf-8" ) ) )
                 # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
-                listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail.encode( "utf-8" ) )
+                listitem = xbmcgui.ListItem( label=item[ 1 ], iconImage=icon, thumbnailImage=thumbnail.encode( "utf-8" ) )
                 # set an overlay if one is practical
                 overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                 # add the different infolabels we want to sort by
-                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay } )
+                listitem.setInfo( type=( "music", "video", )[ self.media_type ], infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay } )
             except:
                 # oops print error message
                 add = False
                 print repr( item[ 1 ] )
-                print sys.exc_info()[ 1 ]
+                print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         if ( add ):
             # add the item to the media list
             ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=item[ 2 ], totalItems=total )
         return ok
 
     def _fix_stacked_path( self, path ):
+        # we need to strip stack:// and return only the first path
         if ( path.startswith( "stack://" ) ):
             path = path[ 8 : ].split( " , " )[ 0 ]
         return path
-
-    def _fix_rar_path( self, path ):
-        # TODO: find a way to list rar's as a directory
-        # if it's not a rar file, return it
-        if ( not path.endswith( ".rar" ) ): return path
-        # we split the basename off and use that for the video's filename with an .avi extension
-        rar_video_name = os.path.splitext( os.path.basename( path ) )[ 0 ] + ".avi"
-        # rar paths need to be quoted, including ._-
-        url_path = quote_plus( path ).replace( ".", "%2e").replace( "-", "%2d").replace( "_", "%5f")
-        # append the path with our filename
-        filepath = "rar://%s/%s" % ( url_path, rar_video_name, )
-        # return the filename
-        return filepath
 
     def _get_thumbnail( self, path ):
         fpath = path
