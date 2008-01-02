@@ -8,6 +8,7 @@ Nuka1195
  Used regex to parse svn.
  Added a 'silent' mode.
  Changed to use YES/NO string ids.
+02-01-2008 Fixed error in _update_script()
 """
 
 import sys
@@ -16,6 +17,7 @@ import xbmcgui, xbmc
 import urllib
 import socket
 import re
+import traceback
 
 socket.setdefaulttimeout( 10 )
 
@@ -75,21 +77,24 @@ class Update:
 						# append folders to those we're looping throu and store file
 						for item in itemList:
 							if item[-1] == "/":
-								folders.append( os.path.join(folders[ 0 ], item) )
+								folders.append( "%s/%s" % (folders[ 0 ], item) )
 							else:
-								script_files.append( os.path.join(folders[ 0 ], file) )
+								script_files.append( "%s/%s" % (folders[ 0 ], item) )
 
 						folders = folders[ 1 : ]
 					else:
+						xbmc.output("empty htmlsource - raise")
 						raise
 
 				if not script_files:
+					xbmc.output("empty script_files - raise")
 					raise
 				self._get_files( script_files )
 				self.dialog.close()
 				xbmcgui.Dialog().ok( _(0), _( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, self.version, ), _(1011) )
 		except:
 			self.dialog.close()
+			traceback.print_exc()
 			xbmcgui.Dialog().ok( _(0), _( 1031 ) )
 		
 	def _get_files( self, script_files ):
@@ -123,7 +128,7 @@ class Update:
 			sock.close()
 			return doc
 		except:
-			print sys.exc_info()[ 1 ]
+			traceback.print_exc()
 			return None
 
 	def _parse_html_source( self, htmlsource ):
@@ -136,5 +141,6 @@ class Update:
 				del tagList[0]
 			return tagList, url
 		except:
+			traceback.print_exc()
 			return None, None
 
