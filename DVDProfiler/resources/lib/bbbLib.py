@@ -12,10 +12,13 @@ import urllib, urllib2, socket
 from string import strip, replace, find, rjust
 import ConfigParser
 
+# cookie stuff
+import cookielib
+
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '14-12-2007'
+__date__ = '04-01-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -25,6 +28,11 @@ DIR_GFX = sys.modules[ "__main__" ].DIR_GFX
 DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA
 
 __language__ = sys.modules[ "__main__" ].__language__
+
+# setup cookiejar
+cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
+urlopener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+urllib2.install_opener(urlopener)
 
 socket.setdefaulttimeout( 15 )
 
@@ -1132,7 +1140,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 #################################################################################################################
 # fetch using urllib2 and Cookies
 #################################################################################################################
-def fetchCookieURL(url, file='', params='', headers={}, encodeURL=True):
+def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
 	else:
@@ -1142,25 +1150,29 @@ def fetchCookieURL(url, file='', params='', headers={}, encodeURL=True):
 	debug("> fetchCookieURL() ")
 
 	data = None
-	if file:
-		# remove destination file if exists already
-		deleteFile(file)
+	if fn:
+		deleteFile(fn)		# remove destination file if exists already
 
 	try:
-		if not headers.has_key('User-Agent'):
-			headers['User-Agent'] = 'Mozilla/5.0'
-
 		if DEBUG:
 			print "safe_url=", safe_url
-			print "filename=", file
+			print "fn=", fn
 			print "params=", params
 			print "headers=", headers
+			print "isImage=", isImage
 
-		req = urllib2.Request(url, params, headers)       # create a request object
-		handle = urllib2.urlopen(req)                       # and open it to return a handle on the url
+		if newRequest:
+			debug("create new Request")
+			if not headers.has_key('User-Agent') and not headers.has_key('User-agent'):
+				headers['User-Agent'] = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+			req = urllib2.Request(safe_url, params, headers)       # create a request object
+			handle = urllib2.urlopen(req)
+		else:
+			handle = urllib2.urlopen(safe_url)					# open new url using existing req
 
 		if DEBUG:
 			print handle.info()
+			showCookies()
 
 		urllib.urlcleanup()
 	except IOError, errobj:
@@ -1168,17 +1180,33 @@ def fetchCookieURL(url, file='', params='', headers={}, encodeURL=True):
 	except:
 		handleException("fetchCookieURL()")
 	else:
+		debug("reading from url ...")
 		data = handle.read()
 		# write to file if required
-		if file and data:
-			f = open(filename,"w")
-			f.write(data)
-			f.close()
+		if fn and data:
+			debug("writing to file ...")
+			if isImage:
+				mode = "wb"
+			else:
+				mode = "w"
+			try:
+				f = open(fn,mode)
+				f.write(data)
+				f.close()
+			except:
+				data = None
 
 	debug("< fetchCookieURL()")
 	return data
 
 
+#################################################################################################################
+def showCookies():
+	try:
+		for index, cookie in enumerate(cookiejar):
+			print index, '  :  ', cookie
+	except:
+		print "no cookiejar"
 
 #################################################################################################################
 # extract URL and name from data
