@@ -39,3 +39,4 @@ Version     Date        Change
                         New: Checks for newer collection via SMB
                         New: Animation on Open/Close
                         New: Config Menu option to check for new script update.
+ 1.6        04/01/08    Change: Removed ClientCookie.py by improving bbbLib to use python 2.4 cookieLib

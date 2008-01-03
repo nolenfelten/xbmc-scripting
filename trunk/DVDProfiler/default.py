@@ -20,9 +20,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.5'
+__version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '22-12-2007'
+__date__ = '04-01-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -42,7 +42,6 @@ __language__ = language.Language().localized
 from bbbLib import *								# requires __language__ to be defined
 from IMDbWin import IMDbWin
 from smbLib import *
-from urlCookieLib import urlCookieRead, urlCookieRetrieve
 import time
 
 # GLOBALS
@@ -1234,7 +1233,9 @@ class DVDProfiler(xbmcgui.Window):
 				else:
 					url = "%s/mpimages/%s/%s" % (aliasURL, coverFilename[:2],coverFilename)
 				dialogProgress.create(__language__(416), coverFilename)
-				success = urlCookieRetrieve(url, localFile, ignore404=True)
+				if fetchCookieURL(url, localFile, isImage=True):
+					success = True
+
 				dialogProgress.close()
 			elif self.settings[self.SETTING_SMB_USE]:
 				smbPath = "%s/%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH],
@@ -1986,9 +1987,7 @@ class DVDCollectionOnline:
 		deleteFile(self.FILENAME_DVD)
 		dialogProgress.create(__language__(429),__language__(430) + self.alias)
 
-		html = urlCookieRead(self.URL + self.alias)
-#		html = fetchCookieURL(reqHostURL)
-
+		html = fetchCookieURL(self.URL + self.alias)
 		if html:
 			# check if known alias
 			if find(html,'Unknown Alias') >= 0:
@@ -1998,9 +1997,9 @@ class DVDCollectionOnline:
 			else:
 				debug("fetching data page")
 				dialogProgress.update(50, __language__(431) + self.alias)
-				success = urlCookieRetrieve(self.URL_TITLES, self.FILENAME_ONLINE_COLLECTION)
-#				if fetchCookieURL(self.URL_TITLES, self.FILENAME_ONLINE_COLLECTION):
-#					success = True
+
+				if fetchCookieURL(self.URL_TITLES, self.FILENAME_ONLINE_COLLECTION,newRequest=False):
+					success = True
 
 				dialogProgress.update(100, __language__(403))
 		dialogProgress.close()
@@ -2017,7 +2016,11 @@ class DVDCollectionOnline:
 		id = self.getDVDKey(int(collNum))[self.KEYS_DATA_ID]
 
 		dialogProgress.create(__language__(429), self.alias, title)
-		success = urlCookieRetrieve(self.URL_DVD + id, self.FILENAME_DVD)
+		if fetchCookieURL(self.URL_DVD + id, self.FILENAME_DVD):
+			success = True
+		else:
+			success = False
+
 		dialogProgress.close()
 
 		debug ("< fetchDVD() success="+str(success))
