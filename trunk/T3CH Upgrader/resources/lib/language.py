@@ -2,19 +2,21 @@
 Language module
 
 Nuka1195
+05/01/2008 Update by BigBellyBilly
 """
 
-import os
+import os, sys
 import xbmc
 import xml.dom.minidom
-
 
 class Language:
     """ Language Class: creates a dictionary of localized strings { int: string } """
     def __init__( self ):
         """ initializer """
         # language folder
-        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        module_dir = os.path.dirname( sys.modules['language'].__file__ )
+        base_path = os.path.join( os.path.dirname( module_dir ), 'language' )
+
         # get the current language
         language = self._get_language( base_path )
         # create strings dictionary
