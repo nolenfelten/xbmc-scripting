@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '23-12-2007'
-__version__ = "1.1"
+__date__ = '06-01-2008'
+__version__ = "1.2"		# not really - just for update testing
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -44,9 +44,14 @@ sys.path.append( DIR_LIB )
 
 import language
 __language__ = language.Language().localized
+import update
 
 socket.setdefaulttimeout( 15 )
 dialogProgress = xbmcgui.DialogProgress()
+
+EXIT_SCRIPT = ( 9, 10, 247, 275, 61467, )
+CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
+TEXTBOX_XML_FILENAME = "script-T3CH_Upgrader-textbox.xml"
 
 class Parser( SGMLParser ):
 	def reset( self ):
@@ -92,19 +97,21 @@ class Main:
 		self.settings = self._load_file_obj( self.SETTINGS_FILENAME, {} )
 
 		self._check_settings()
+		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
-			self._update_script(True)														# silent
+			scriptUpdated = self._update_script(True) # silent
 
-		url = self._get_latest_version()										# discover latest build
-#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
-		if url:
-			self.rar_name, self.short_build_name = self._check_build_date( url )
-		else:
-			self.short_build_name = ""
+		if not scriptUpdated:
+			url = self._get_latest_version()										# discover latest build
+	#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
+			if url:
+				self.rar_name, self.short_build_name = self._check_build_date( url )
+			else:
+				self.short_build_name = ""
 
-		# empty short_build_name indicates No New Build found.
-		if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
-			self._menu( url )
+			# empty short_build_name indicates No New Build found.
+			if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
+				self._menu( url )
 
 		xbmc.output("__init__() done")
 
@@ -279,7 +286,7 @@ class Main:
 		xbmc.output( "_menu() " + url )
 
 		selectDialog = xbmcgui.Dialog()
-		heading = "%s: %s" % (__language__( 0 ), __language__( 600 ))
+		heading = "%s (v%s): %s" % (__language__( 0 ), __version__, __language__( 600 ))
 		if self.short_build_name:
 			dlOpt = "%s  %s"  % (__language__(612),self.rar_name)		# download
 		else:
@@ -309,13 +316,15 @@ class Main:
 				self._maintain_includes()
 			elif selected == 4:										# delete excludes
 				self._maintain_excludes()
-			elif selected == 5:										# downgrade to an old t3ch
+			elif selected == 5:										# change to another t3ch
 				if self._downgrade():
 					break
 			elif selected == 6:										# delete old t3ch
 				self._delete_old_t3ch()
 			elif selected == 7:										# update script
-				self._update_script(False)							# never silent from config menu
+				if self._update_script(False):						# never silent from config menu
+					xbmc.output("script updating ... closing current instance")
+					break									# stop script if updated
 			elif selected == 8:										# settings
 				self._check_settings(forceSetup=True)
 
@@ -405,6 +414,7 @@ class Main:
 	######################################################################################
 	def _get_latest_version( self ):
 		xbmc.output( "_get_latest_version" )
+
 		url = ""
 		for baseUrl in self.BASE_URL_LIST:
 			doc = readURL( baseUrl, __language__( 502 ), self.isSilent )
@@ -526,9 +536,11 @@ class Main:
 		doc = ""
 		url = 'http://ftp1.srv.endpoint.nu/pub/repository/t3ch/T3CH-README_1ST.txt'
 		doc = readURL( url, __language__( 502 ), self.isSilent )
-
 		if doc:
-			tbd = TextBoxDialog().ask("T3CH Changelog:", doc, panel=os.path.join( DIR_RESOURCES, 'dialog-panel.png'))
+			title = "T3CH Changelog"
+			tbd = TextBoxDialogXML(TEXTBOX_XML_FILENAME, DIR_RESOURCES, "Default")
+			tbd.ask(title, doc)
+			del tbd
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
 
@@ -536,12 +548,16 @@ class Main:
 	def _view_xbmc_changelog( self, ):
 		xbmc.output( "_view_xbmc_changelog()" )
 		doc = ""
+		# read from several home urls until get connection and doc
 		for url in self.BASE_URL_LIST:
 			doc = readURL( os.path.join( url, "latest.txt" ), __language__( 502 ), self.isSilent )
 			if doc: break
 
 		if doc:
-			tbd = TextBoxDialog().ask("XBMC Changelog:", doc, panel=os.path.join( DIR_RESOURCES, 'dialog-panel.png'))
+			title = "XBMC Changelog"
+			tbd = TextBoxDialogXML(TEXTBOX_XML_FILENAME, DIR_RESOURCES, "Default")
+			tbd.ask(title, doc )
+			del tbd
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
 
@@ -1015,19 +1031,19 @@ class Main:
 			selected = selectDialog.select( __language__( 206 ), oldBuilds )
 			if selected <= 0:						# quit
 				break
-			else:
-				selectedBuildName = oldBuilds[selected]
 
-				# delete path
-				path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], selectedBuildName)
-				if dialogYesNo(__language__( 0 ), __language__( 523 ), selectedBuildName ):
-					try:
-						dialogProgress.create(__language__( 0 ), __language__( 524 ))
-						rmtree(path, ignore_errors=True)
-						del oldBuilds[selected]
-						dialogProgress.close()
-					except:
-						handleException("_delete_old_t3ch()")
+			selectedBuildName = oldBuilds[selected]
+
+			# delete path
+			path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], selectedBuildName)
+			if dialogYesNo(__language__( 0 ), __language__( 523 ), selectedBuildName ):
+				try:
+					dialogProgress.create(__language__( 0 ), __language__( 524 ))
+					rmtree(path, ignore_errors=True)
+					del oldBuilds[selected]
+					dialogProgress.close()
+				except:
+					handleException("_delete_old_t3ch()")
 
 	#####################################################################################
 	def _find_t3ch_dirs(self):
@@ -1057,11 +1073,29 @@ class Main:
 
 	######################################################################################
 	def _update_script( self, isSilent=False):
-		xbmc.output( "_update_script() isSilent="+str(isSilent))
-		import update
-		updt = update.Update(isSilent)
-		del updt
-		xbmc.output( "_update_script() done")
+		xbmc.output( "> _update_script() isSilent="+str(isSilent))
+
+		updated = False
+		up = update.Update(__language__, __scriptname__)
+		version = up.getLatestVersion()
+		xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
+		if version != "-1":
+			if __version__ < version:
+				if ( dialogYesNo( __language__(0), \
+					  "%s %s %s." % ( __language__( 1006 ), version, __language__( 1002 ), ), __language__( 1003 ),\
+					  "", noButton=__language__( 403 ), \
+					  yesButton=__language__( 402 ) ) ):
+					updated = True
+					up.makeBackup()
+					up.issueUpdate(version)
+			elif not isSilent:
+				dialogOK(__language__(0), __language__(1000))
+		elif not isSilent:
+			dialogOK(__language__(0), __language__(1030))
+
+#		del up
+		xbmc.output( "< _update_script() updated="+str(updated))
+		return updated
 
 	#####################################################################################
 	def _settings_menu(self):
@@ -1248,13 +1282,13 @@ def readURL( url, msg='', isSilent=False):
 	if not isSilent:
 		dialogProgress.create( __language__(0), msg, url )
 
+	doc = None
 	try:
 		sock = urllib.urlopen( url )
 		doc = sock.read()
 		sock.close()
 	except:
 		print sys.exc_info()[ 1 ]
-		doc = None
 
 	if not isSilent:
 		dialogProgress.close()
@@ -1265,42 +1299,37 @@ def fileExist(filename):
 	return os.path.exists(filename)
 
 #################################################################################################################
-class TextBoxDialog(xbmcgui.WindowDialog):
-	def __init__(self):
-		self.setCoordinateResolution(6)	# PAL 4:3
+class TextBoxDialogXML( xbmcgui.WindowXML ):
+	""" Create a skinned textbox window """
+	def __init__( self, *args, **kwargs):
+		pass
+		
+	def onInit( self ):
+		xbmc.output( "TextBoxDialogXML.onInit()" )
+#		self.getControl( 1 ).setLabel( self.banner_info_1 )
+#		self.getControl( 2 ).setLabel( self.banner_info_2 )
+		self.getControl( 3 ).setLabel( self.title )
+#		self.getControl( 4 ).setLabel( self.sub_title )
+		self.getControl( 5 ).setText( self.text )
 
-	def _setupDisplay(self, width, height, panel='dialog-panel.png'):
-		xbmc.output( "TextBoxDialog().ask()" )
+	def onClick( self, controlId ):
+		pass
 
-		xpos = int((720 /2) - (width /2))
-		ypos = int((576 /2) - (height /2))
+	def onFocus( self, controlId ):
+		pass
 
-		try:
-			self.addControl(xbmcgui.ControlImage(xpos, ypos, width, height, panel))
-		except: pass
-
-		xpos += 25
-		ypos += 10
-		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '','font14', "0xFFFFFF99", alignment=0x00000002)
-		self.addControl(self.titleCL)
-		ypos += 25
-		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-85, 'font10', '0xFFFFFFEE')
-		self.addControl(self.descCTB)
-
-	def ask(self, title, text, width=685, height=560, panel=''):
-		xbmc.output( "TextBoxDialog().ask()" )
-		self._setupDisplay(width, height, panel)
-		self.titleCL.setLabel(title)
-		self.descCTB.setText(text)
-		self.setFocus(self.descCTB)
-		self.doModal()
-
-	def onAction(self, action):
-		if action in [9, 10]:
+	def onAction( self, action ):
+#		print( "onAction(): actionID=%i buttonCode=%i " % ( action.getId(), action.getButtonCode()) )
+		if ( action.getButtonCode() in CANCEL_DIALOG or action.getId() in CANCEL_DIALOG):
 			self.close()
 
-	def onControl(self, control):
-		xbmc.output( "TextBoxDialog().onControl()" )
+	def ask(self, title, text ):
+		xbmc.output("TextBoxDialogXML().ask()")
+		self.title = title
+		self.text = text
+
+		self.doModal()		# causes window to be drawn
+
 
 #################################################################################################################
  # Script starts here
@@ -1319,6 +1348,7 @@ except:
 
 Main(runMode)
 
+xbmc.output("script exit and housekeeping")
 # remove globals
 try:
 	del dialogProgress
