@@ -1306,10 +1306,7 @@ class TextBoxDialogXML( xbmcgui.WindowXML ):
 		
 	def onInit( self ):
 		xbmc.output( "TextBoxDialogXML.onInit()" )
-#		self.getControl( 1 ).setLabel( self.banner_info_1 )
-#		self.getControl( 2 ).setLabel( self.banner_info_2 )
 		self.getControl( 3 ).setLabel( self.title )
-#		self.getControl( 4 ).setLabel( self.sub_title )
 		self.getControl( 5 ).setText( self.text )
 
 	def onClick( self, controlId ):
