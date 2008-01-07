@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 12/14/2007-->
+<!--Date of translation: 12/30/2007-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -38,6 +38,8 @@
   <string id="407">Edytuj</string>
   <string id="408">Katalog</string>
   <string id="409">Plik</string>
+  <string id="410">XBMC</string>
+  <string id="411">T3CH</string>
   <string id="500">Najnowsza dostępna wersja to:</string>
   <string id="501">Chcesz pobrać tą wersję?</string>
   <string id="502">Pobieram info dane z:</string>
@@ -64,6 +66,8 @@
   <string id="523">Naprawdę usunąć starą wersję T3CH?</string>
   <string id="524">Proszę czekać ...</string>
   <string id="525">Wybierz plik lub katalog?</string>
+  <string id="526">Nowa ścieżka istnieje?</string>
+  <string id="527">Nowy XBE istnieje?</string>
   <string id="600">Menu</string>
   <string id="601">Opcje ustawień</string>
   <string id="610">Ustawienia</string>

@@ -36,11 +36,11 @@
 			<font>special12</font>
 		</control>
 		<control type="label" id="3">
-			<description>banner label 2</description>
+			<description>title</description>
 			<posx>227</posx>
 			<posy>43</posy>
 			<align>left</align>
-			<label>banner label 2</label>
+			<label>title</label>
 			<font>special13</font>
 		</control>
 		<control type="textbox" id="5">
