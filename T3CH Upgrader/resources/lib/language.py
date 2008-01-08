@@ -2,7 +2,7 @@
 Language module
 
 Nuka1195
-05/01/2008 Update by BigBellyBilly
+05/01/2008 Some changes by BigBellyBilly
 """
 
 import os, sys
