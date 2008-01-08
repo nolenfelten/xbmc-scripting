@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '06-01-2008'
-__version__ = "1.2"
+__date__ = '07-01-2008'
+__version__ = "1.2.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -444,8 +444,10 @@ class Main:
 		xbmc.output( "_fetch_current_build() " + url +" " + file_name )
 		success = False
 		try:
+			self.reporthook_msg1 = __language__( 503 )
+			self.reporthook_msg2 = file_name
 			if not self.isSilent:
-				dialogProgress.create( __language__( 0 ), __language__( 503 ), file_name )
+				dialogProgress.create( __language__( 0 ), self.reporthook_msg1, self.reporthook_msg2 )
 			else:
 				showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 240)
 
@@ -470,8 +472,8 @@ class Main:
 		if not self.isSilent:
 			# just update every x%
 			percent = int( float( count * blocksize * 100) / totalsize )
-			if (percent % 5) == 0:
-				dialogProgress.update( percent )
+			if percent % 5 == 0:
+				dialogProgress.update( percent, self.reporthook_msg1, self.reporthook_msg2 )
 			if ( dialogProgress.iscanceled() ): raise
 
 	######################################################################################
@@ -484,7 +486,8 @@ class Main:
 				dialogProgress.create( __language__( 0 ), __language__( 504 ), unrar_path )
 			else:
 				showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), unrar_path), 60 )
-				
+
+			time.sleep(2)
 			result = xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_name, unrar_path, ), )
 
 			# inform user of os path checking
@@ -493,10 +496,8 @@ class Main:
 
 			# loop to check if unrar path appears
 			userdata_path = os.path.join(unrar_path, 'XBMC','UserData' )
-			xbmc.output("userdata_path="+ userdata_path)
 			newXBE = os.path.join(unrar_path, 'XBMC','default.xbe' )
-			xbmc.output("newXBE="+ newXBE)
-			time.sleep(5)
+			time.sleep(2)
 			MAX = 35
 			for count in range(MAX):
 				isNewXBE = fileExist(newXBE)
@@ -506,12 +507,17 @@ class Main:
 				if not isNewXBE or not isUserDataPath:
 					if count < MAX-1:
 						if not self.isSilent:
-							dialogProgress.update( int(int(100 / MAX) * count), \
-												__language__(526) + "  " + str(isUserDataPath), \
-												__language__(527) + "  " + str(isNewXBE))
+							percent = int( count * 100.0 / MAX )
+							msg1 = "%s (%d/%d)" % (__language__( 522 ), count, MAX)
+							msg2 = "%s  %s" % (__language__(526), str(isUserDataPath))
+							msg3 = "%s  %s" % (__language__(527), str(isNewXBE))
+							dialogProgress.update( percent, msg1, msg2, msg3)
 							if ( dialogProgress.iscanceled() ): break
 						time.sleep(2)
+					else:
+						xbmc.output("check max reached")
 				else:
+					xbmc.output("checks successful")
 					success = True
 					break
 
@@ -524,7 +530,12 @@ class Main:
 
 		# unrar path not found
 		if not success:
+			xbmc.output("extract failed, clean up")
 			deleteFile(file_name)			# remove RAR, might be a partial DL
+			try:
+				rmtree( unrar_path, ignore_errors=True )	# remove partial extract
+				xbmc.output("extract failed, extract path rmtree done")
+			except: pass
 			dialogOK( __language__( 0 ), __language__( 312 ), unrar_path )
 
 		xbmc.output( "_extract_rar() success=" + str(success) )
@@ -735,7 +746,7 @@ class Main:
 					src_path = path
 				dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
 				if not self.isSilent:
-					percent = int(int(100 / TOTAL) * count)
+					percent = int( count * 100.0 / TOTAL )
 					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent )
 					if dialogProgress.iscanceled(): break
 				localCopy(src_path, dest_path, self.isSilent)
@@ -758,9 +769,9 @@ class Main:
 					dest_path = os.path.join( unrar_path, self.short_build_name, path )
 				else:
 					dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
-				xbmc.output( "dest_path=" + dest_path )
+
 				if not self.isSilent:
-					percent = int(int(100 / TOTAL) * count)
+					percent = int( count * 100.0 / TOTAL )
 					self._dialog_update( __language__(0), __language__( 516 ), dest_path, pct=percent )
 				if path[-1] in ["\\","/"] or os.path.isdir(dest_path):
 					xbmc.output( "rmtree " + dest_path )
@@ -1171,7 +1182,7 @@ class Main:
 
 ######################################################################################
 def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
-	xbmc.output( "localCopy() ")
+	xbmc.output( "localCopy() " + src_path)
 
 	try:	
 		if not os.path.exists(src_path):
@@ -1186,25 +1197,26 @@ def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 			copy( src_path, dest_path )
 		else:
 			# dir
-			xbmc.output("copy dir")
 			files = os.listdir(src_path)
 			TOTAL = len(files)
+			xbmc.output("isdir; file count= " +str(TOTAL))
 			count = 0
 			for f in files:
 				count += 1
 				src_file = os.path.join( src_path, f )
-				xbmc.output( "src_file= " + src_file )
 				dest_file = os.path.join( dest_path, f )
 
 				if overwrite or not fileExist( dest_file ):
 					if os.path.isdir( src_file ):
 						# copy directory
+						xbmc.output( "copytree dir: " + src_file)
 						copytree( src_file, dest_file )
 					else:
 						# copy file
+						xbmc.output( "copy file: " + src_file)
 						copy( src_file, dest_file )
 				else:
-					xbmc.output( "exists, ignored" )
+					xbmc.output( "exists, ignored: " + src_file)
 	except:
 		handleException("copyFolder()", src_path, dest_path )
 
