@@ -2,11 +2,10 @@
 Language module
 
 Nuka1195
-
-Modified *slightly* by BigBellyBilly
+05/01/2008 Some changes by BigBellyBilly
 """
 
-import os
+import os, sys
 import xbmc
 import xml.dom.minidom
 
@@ -17,15 +16,16 @@ class Language:
         """ initializer """
         self.default_language = "english"
         # language folder
-        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        module_dir = os.path.dirname( sys.modules['language'].__file__ )
+        base_path = os.path.join( os.path.dirname( module_dir ), 'language' )
 
         # get language
         language = self._get_language( base_path )
         if not language:
             xbmc.output("No language files found")
         else:
-            # create strings dictionary
-            self._create_localized_dict( base_path, language )
+	        # create strings dictionary
+	        self._create_localized_dict( base_path, language )
         
     def _get_language( self, base_path ):
         """ returns the current language if a strings.xml file exists else returns english """
@@ -48,7 +48,7 @@ class Language:
         self.strings = {}
         # add localized strings
         if self._parse_strings_file( os.path.join( base_path, language, "strings.xml" ) ):
-            # fill-in missing strings with english strings
+        	# fill-in missing strings with english strings
             if ( language != self.default_language ):
                 self._parse_strings_file( os.path.join( base_path, self.default_language, "strings.xml" ) )
         

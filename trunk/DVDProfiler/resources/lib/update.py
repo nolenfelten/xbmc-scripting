@@ -1,14 +1,14 @@
 """
 Update module
 
-Nuka1195
-
-18-11-2007 Modified by BBB 
- Use language _(0) in dialogs instead of __scriptname__
+Changes:
+18-11-2007 
+ Use language self._(0) in dialogs instead of __scriptname__
  Used regex to parse svn.
  Added a 'silent' mode.
  Changed to use YES/NO string ids.
-02-01-2008 Fixed error in _update_script()
+02-01-2008 Fixed error in downloadVersion()
+06-02-2008 Changed to update into same folder
 """
 
 import sys
@@ -18,110 +18,145 @@ import urllib
 import socket
 import re
 import traceback
+from shutil import copytree, rmtree
 
 socket.setdefaulttimeout( 10 )
 
-_ = sys.modules[ "__main__" ].__language__
-__scriptname__ = sys.modules[ "__main__" ].__scriptname__
-__version__ = sys.modules[ "__main__" ].__version__
-
-
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
-	def __init__( self, isSilent=False ):
-		xbmc.output( "Update().__init__() isSilent="+str(isSilent) )
-		self.isSilent = isSilent
+	def __init__( self, language, script ):
+		xbmc.output( "Update().__init__" )
+		self._ = language
+		self.script = script.replace( ' ', '%20' )
 		self.base_url = "http://xbmc-scripting.googlecode.com/svn"
-		self.tagsPath = "%s/tags/%s/" % ( self.base_url, __scriptname__)
+		self.tags_url = "%s/tags/%s/" % ( self.base_url, self.script)
+		self.local_dir = 'Q:\\scripts\\' + script
+		self.local_backup_dir = self.local_dir+ "_backup"
+
+		xbmc.output("script=" + script)
+		xbmc.output("base_url=" + self.base_url)
+		xbmc.output("tags_url=" + self.tags_url)
+		xbmc.output("local_dir=" + self.local_dir)
+		xbmc.output("local_backup_dir=" + self.local_backup_dir)
 
 		self.dialog = xbmcgui.DialogProgress()
-		new = self._check_for_new_version() 
-		if ( new ):
-			self._update_script()
-		elif not self.isSilent:
-			xbmcgui.Dialog().ok( _(0), _( 1000 + ( 30 * ( new is None ) ) ) )
 			
-	def _check_for_new_version( self ):
-		""" checks for a newer version """
-		xbmc.output( "Update()._check_for_new_version()" )
-		if not self.isSilent:
-			self.dialog.create( _(0), _( 1001 ) )
-		# get version tags
-		new = None
-		htmlsource = self._get_html_source( self.tagsPath )
-		if ( htmlsource ):
-			tagList, url = self._parse_html_source( htmlsource )
-			if ( tagList ):
-				self.version = tagList[-1].replace("/","")  # remove trailing /
-				new = ( __version__ < self.version or ( __version__.startswith( "pre-" ) and __version__.replace( "pre-", "" ) <= self.version ) )
-		if not self.isSilent:
-			self.dialog.close()
-		xbmc.output( "Update()._check_for_new_version() new="+str(new) )
-		return new
-
-	def _update_script( self ):
+	def downloadVersion( self, version ):
 		""" main update function """
-		xbmc.output( "Update()._update_script()" )
+		xbmc.output( "> Update().downloadVersion() version=" +version)
+		success = False
 		try:
-			if ( xbmcgui.Dialog().yesno( _(0), "%s %s %s." % ( _( 1006 ), self.version, _( 1002 ), ), _( 1003 ), "", _( 403 ), _( 402 ) ) ):
-				self.dialog.create( _(0), _( 1004 ), _( 1005 ) )
-				script_files = []
-				folders = [self.version]
-				# recusivly look for folders and files
-				while folders:
-					htmlsource = self._get_html_source( os.path.join(self.tagsPath, folders[0]) )
+			self.dialog.create( self._(0), self._( 1004 ), self._( 1005 ) )
+			folders = [version]
+			script_files = []
+			# recusivly look for folders and files
+			while folders:
+				try:
+					htmlsource = self.getHTMLSource( '%s%s' % (self.tags_url, folders[0]) )
 					if ( htmlsource ):
 						# extract folder/files sored in path
-						itemList, url = self._parse_html_source( htmlsource )
+						itemList, url = self.parseHTMLSource( htmlsource )
 
 						# append folders to those we're looping throu and store file
 						for item in itemList:
 							if item[-1] == "/":
-								folders.append( "%s/%s" % (folders[ 0 ], item) )
+								folders.append( ("%s/%s" % (folders[ 0 ], item)) )
 							else:
-								script_files.append( "%s/%s" % (folders[ 0 ], item) )
-
-						folders = folders[ 1 : ]
-					else:
-						xbmc.output("empty htmlsource - raise")
+								script_files.append( ("%s/%s" % (folders[ 0 ], item)).replace('//','/') )
+					else: 
 						raise
+					folders = folders[1:]
+				except:
+					folders = None
 
-				if not script_files:
-					xbmc.output("empty script_files - raise")
-					raise
-				self._get_files( script_files )
-				self.dialog.close()
-				xbmcgui.Dialog().ok( _(0), _( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, self.version, ), _(1011) )
+			if not script_files:
+				xbmc.output("empty script_files - raise")
+			else:
+				success = self.getFiles( script_files, version )
+			self.dialog.close()
 		except:
 			self.dialog.close()
 			traceback.print_exc()
-			xbmcgui.Dialog().ok( _(0), _( 1031 ) )
+			xbmcgui.Dialog().ok( self._(0), self._( 1031 ) )
+		xbmc.output("< Update().downloadVersion() success = " + str(success))
+		return success
+
+	def getLatestVersion( self, quiet=True ):
+		""" checks for latest tag version """
+		version = "-1"
+		try:
+			if not quiet:
+				self.dialog.create( self.self._(0), self.self._( 1001 ) )
+
+			# get version tags
+			htmlsource = self.getHTMLSource( self.tags_url )
+			if ( htmlsource ):
+				tagList, url = self.parseHTMLSource( htmlsource )
+				if ( tagList ):
+					version = tagList[-1].replace("/","")  # remove trailing /
+
+		except:
+			traceback.print_exc()
+			xbmcgui.Dialog().ok( self._(0), self._( 1031 ) )
+		self.dialog.close()
+
+		xbmc.output( "Update().getLatestVersion() new version="+str(version) )
+		return version
+
+	def makeBackup( self ):
+		xbmc.output("makeBackup()")
+		self.removeBackup()
+		copytree(self.local_dir, self.local_backup_dir)
+		xbmc.output("makeBackup() done")
+
+	def issueUpdate( self, version ):
+		xbmc.output("issueUpdate() version="+str(version))
+		path = os.path.join(self.local_backup_dir, 'resources\\lib\\update.py')
+		command = 'XBMC.RunScript(%s,%s,%s)'%(path, self.script.replace('%20',' '), version)
+		xbmc.executebuiltin(command)
+	
+	def removeBackup( self ):
+		xbmc.output("removeBackup()")
+		if self.backupExists():
+			rmtree(self.local_backup_dir,ignore_errors=True)		
+	
+	def removeOriginal( self ):
+		xbmc.output("removeOriginal()")
+		rmtree(self.local_dir,ignore_errors=True)		
 		
-	def _get_files( self, script_files ):
+	def backupExists( self ):
+		exists = os.path.exists(self.local_backup_dir)
+		xbmc.output("backupExists() " + str(exists))
+		return exists
+
+	def getFiles( self, script_files, version ):
 		""" fetch the files """
-		xbmc.output( "Update()._get_files()" )
+		xbmc.output( "Update().getFiles() version=" + version )
+		success = False
 		try:
 			totalFiles = len(script_files)
 			for cnt, url in enumerate( script_files ):
-				url = url.replace( "//", "\\" ).replace( "/", "\\" )
-				items = os.path.split( url.replace( "%20", " " ) )
-				path = "Q:\\scripts\\%s_v%s" % ( __scriptname__, items[0])
-				file = items[ 1 ]
-
+				items = os.path.split( url )
+				path = os.path.join(self.local_dir, items[0]).replace( version+'/', '' ).replace( version, '' ).replace('/','\\')
+				file = items[ 1 ].replace( '%20', ' ' )
 				pct = int( ( float( cnt ) / totalFiles ) * 100 )
-				self.dialog.update( pct, "%s %s" % ( _( 1007 ), url, ), "%s %s" % ( _( 1008 ), path, ), "%s %s" % ( _( 1009 ), file, ) )
+				self.dialog.update( pct, "%s %s" % ( self._( 1007 ), url, ), "%s %s" % ( self._( 1008 ), path, ), "%s %s" % ( self._( 1009 ), file, ) )
 				if ( self.dialog.iscanceled() ): raise
 				if ( not os.path.isdir( path ) ): os.makedirs( path )
-				src = "%s\\%s" % (self.base_url, url)
-				dest = "%s\\%s" % (path, file)
+				src = "%s%s" % (self.tags_url, url)
+				dest = os.path.join(path, file)
+#				print src, dest
 				urllib.urlretrieve( src,  dest)
+
+			success = True
 		except:
 			raise
+		return success
 
-	def _get_html_source( self, url ):
+	def getHTMLSource( self, url ):
 		""" read a doc from a url """
 		safe_url = url.replace( " ", "%20" )
-		xbmc.output( "Update()._get_html_source() " + safe_url)
+		xbmc.output( "Update().getHTMLSource() " + safe_url)
 		try:
 			sock = urllib.urlopen( safe_url )
 			doc = sock.read()
@@ -131,9 +166,9 @@ class Update:
 			traceback.print_exc()
 			return None
 
-	def _parse_html_source( self, htmlsource ):
+	def parseHTMLSource( self, htmlsource ):
 		""" parse html source for tagged version and url """
-		xbmc.output( "Update()._parse_html_source()" )
+		xbmc.output( "Update().parseHTMLSource()" )
 		try:
 			url = re.search('Revision \d+:(.*?)<', htmlsource, re.IGNORECASE).group(1).strip()
 			tagList = re.compile('<li><a href="(.*?)"', re.MULTILINE+re.IGNORECASE+re.DOTALL).findall(htmlsource)
@@ -144,3 +179,12 @@ class Update:
 			traceback.print_exc()
 			return None, None
 
+if __name__ == "__main__":
+	xbmc.output("update.py running from __main__")
+	if len(sys.argv) != 3:
+		xbmcgui.Dialog().ok("Update error",  "Not enough arguments were passed for update")
+		sys.exit(1)
+	up = Update(language.Language().localized,sys.argv[1])
+	up.removeOriginal()
+	up.downloadVersion(sys.argv[2])
+	xbmc.executebuiltin('XBMC.RunScript(%s)'%(up.local_dir+'\\default.py'))

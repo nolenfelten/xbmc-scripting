@@ -20,9 +20,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.6'
+__version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '04-01-2008'
+__date__ = '22-12-2007'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -39,8 +39,10 @@ sys.path.insert(0, DIR_RESOURCES_LIB)
 # Custom libs
 import language
 __language__ = language.Language().localized
+
 from bbbLib import *								# requires __language__ to be defined
 from IMDbWin import IMDbWin
+import update                                       # script update module
 from smbLib import *
 import time
 
@@ -249,10 +251,11 @@ class DVDProfiler(xbmcgui.Window):
 		self._initSettings(forceReset=False)
 
 		# check for script update
+		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]:	# check for update ?
-			self._update_script(True)														# silent
+			scriptUpdated = self._update_script(True)							# updated, stop
 
-		if self.startupMenu():
+		if not scriptUpdated and self.startupMenu():
 			self.ready = True
 		else:
 			self.close()
@@ -396,11 +399,29 @@ class DVDProfiler(xbmcgui.Window):
 
 	######################################################################################
 	def _update_script( self, isSilent=False):
-		xbmc.output( "_update_script() isSilent="+str(isSilent))
-		import update
-		updt = update.Update(isSilent)
-		del updt
-		xbmc.output( "_update_script() done")
+		xbmc.output( "> _update_script() isSilent="+str(isSilent))
+
+		updated = False
+		up = update.Update(__language__, __scriptname__)
+		version = up.getLatestVersion()
+		xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
+		if version != "-1":
+			if __version__ < version:
+				if ( dialogYesNo( __language__(0), \
+					  "%s %s %s." % ( __language__( 1006 ), version, __language__( 1002 ), ), __language__( 1003 ),\
+					  "", noButton=__language__( 501 ), \
+					  yesButton=__language__( 500 ) ) ):
+					updated = True
+					up.makeBackup()
+					up.issueUpdate(version)
+			elif not isSilent:
+				dialogOK(__language__(0), __language__(1000))
+		elif not isSilent:
+			dialogOK(__language__(0), __language__(1030))
+
+#		del up
+		xbmc.output( "< _update_script() updated="+str(updated))
+		return updated
 
 	##############################################################################################
 	def setupDisplay(self):
@@ -1393,7 +1414,11 @@ class DVDProfiler(xbmcgui.Window):
 				self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = dialogYesNo( __language__(0), OPT_UPDATE_SCRIPT_CHECK_STARTUP )
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 			elif selectedOpt == OPT_UPDATE_SCRIPT:
-				self._update_script(False)							# never silent from config menu
+				if self._update_script(False):							# never silent from config menu
+					dialogOK(__language__(0),__language__(1010))
+					# restart script after update
+					xbmc.executebuiltin('XBMC.RunScript(%s)'%(os.path.join(DIR_HOME, 'default.py')))
+					sys.exit(0)	# end current instance
 			elif selectedOpt == OPT_CLEAR_CACHE:
 				restart = self.clearCache()
 			elif selectedOpt == OPT_START_MODE:

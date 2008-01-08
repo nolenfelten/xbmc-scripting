@@ -7,8 +7,8 @@
     <!-- Error messages -->
     <string id="300">There was an error saving your settings!</string>
     <string id="301">Startup SMB Failed!</string>
-    <string id="302">Collection not retrieved \n or XML export file is empty ?</string>
-    <string id="303">Local Collection file missing/empty. \n Manually ftp to:</string>
+    <string id="302">Collection not retrieved or XML export file is empty ?</string>
+    <string id="303">Local Collection file missing/empty. Manually ftp to:</string>
     <string id="304">SMB Setup Incomplete!</string>
     <string id="305">Please configure or Disable SMB</string>
     <string id="306">SMB Connection Failed</string>
@@ -41,7 +41,7 @@
     <string id="424">Delete local collection files ?</string>
     <string id="425">XML Collection Initializing</string>
     <string id="426">Loading File, Keys and Filters</string>
-    <string id="427">Creating Flat File from XML \n (May take 3/4 mins on large collections)</string>
+    <string id="427">Creating Flat File from XML (3/4 mins on large collections)</string>
     <string id="428">Saving Keys and Filters</string>
     <string id="429">Online Collection</string>
     <string id="430">Finding Alias: </string>
@@ -117,8 +117,7 @@
     <string id="1007">Fetching:</string>
     <string id="1008">Path:</string>
     <string id="1009">File:</string>
-    <string id="1010">Your new version was saved to:</string>
-    <string id="1011">Use FileManager to delete old versions</string>
+    <string id="1010">Script updated, will now restart.</string>
 
     <!-- Update error messages -->
     <string id="1030">No tagged versions were found!</string>
