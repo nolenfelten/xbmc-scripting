@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '07-01-2008'
-__version__ = "1.2.1"
+__date__ = '13-01-2008'
+__version__ = "1.3"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -105,13 +105,13 @@ class Main:
 			url = self._get_latest_version()										# discover latest build
 	#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
 			if url:
-				self.rar_name, self.short_build_name = self._check_build_date( url )
+				remote_rar_name, remote_short_build_name = self._check_build_date( url )
 			else:
-				self.short_build_name = ""
+				short_build_name = ""
 
 			# empty short_build_name indicates No New Build found.
-			if self.runMode == RUNMODE_NORMAL or (self.short_build_name and self.runMode == RUNMODE_SILENT):
-				self._menu( url )
+			if self.runMode == RUNMODE_NORMAL or (remote_short_build_name and self.runMode == RUNMODE_SILENT):
+				self._menu( url, remote_rar_name, remote_short_build_name )
 
 		xbmc.output("__init__() done")
 
@@ -248,7 +248,7 @@ class Main:
 
 	######################################################################################
 	def _check_build_date( self, url ):
-		xbmc.output( "_check_build_date() " + url )
+		xbmc.output( "> _check_build_date() " + url )
 
 		rar_name = ''
 		short_build_name = ''
@@ -257,41 +257,73 @@ class Main:
 			curr_build_date_secs, curr_build_date = self._get_current_build_info()
 
 			# extract new build date from name
-			try:
-				rar_name = os.path.splitext( os.path.basename( url ) )[0]       # removes ext
-				found_build_date = searchRegEx(rar_name, '(\d+-\d+-\d+)') 
-				found_build_date_secs = time.mktime( time.strptime(found_build_date,"%Y-%m-%d") )
-				xbmc.output( "found_build_date= " + found_build_date)
-				xbmc.output( "found_build_date_secs= " + str(found_build_date_secs ))
-			except:
-				xbmc.output("unable to parse 'found_build_date' - setting to None Found")
-				found_build_date_secs = 0
+			rar_name, found_build_date, found_build_date_secs, short_build_name = self._parse_rar_filename(url)
 
 			if curr_build_date_secs >= found_build_date_secs:							# No new build
+				short_build_name = ''
+				rar_name = ''
 				if self.settings[self.SETTING_NOTIFY_NOT_NEW] == __language__(402):		# YES, show notification
-					dialogOK( __language__( 0 ), __language__( 517 ), isSilent=True )						# always use xbmc.notification
-			else:
-				# new build
-				short_build_name = "T3CH_%s" % (found_build_date)
-				if self.runMode != RUNMODE_NORMAL:
-					dialogOK( __language__( 0 ), __language__( 518 ), short_build_name, isSilent=True )		# always use xbmc.notification
+					dialogOK( __language__( 0 ), __language__( 517 ), isSilent=True )	# always use xbmc.notification
+			elif self.runMode != RUNMODE_NORMAL:										# new build
+				dialogOK( __language__( 0 ), __language__( 518 ), short_build_name, isSilent=True )		# always use xbmc.notification
 		except:
-			handleException("_check_build_date()")
+			traceback.print_exc()
 
-		xbmc.output("_check_build_date() new available = " +str(short_build_name != ""))
+		xbmc.output("< _check_build_date() new available = " +str(short_build_name != ""))
 		return (rar_name, short_build_name)
 
 	######################################################################################
-	def _menu( self, url ):
-		xbmc.output( "_menu() " + url )
+	# parse local file or url to get build info
+	def _parse_rar_filename(self, filename):
+		xbmc.output( "_parse_rar_filename()" )
+		filenameInfo = ()
+		try:
+			rar_name = os.path.splitext( os.path.basename( filename ) )[0]       # removes ext
+			found_build_date = searchRegEx(rar_name, '(\d+-\d+-\d+)') 
+			found_build_date_secs = time.mktime( time.strptime(found_build_date,"%Y-%m-%d") )
+			short_build_name = "T3CH_%s" % (found_build_date)
+			xbmc.output( "rar_name= " + rar_name)
+			xbmc.output( "found_build_date= " + found_build_date)
+			xbmc.output( "found_build_date_secs= " + str(found_build_date_secs ))
+			xbmc.output( "short_build_name= " + short_build_name)
+			filenameInfo = (rar_name, found_build_date, found_build_date_secs, short_build_name)
+		except:
+			xbmc.output("exception parsing filename")
+			traceback.print_exc()
+
+		if not filenameInfo:
+			dialogOK(__language__(0), "Unable to parse filename.", \
+					 "EG.: XBMC-SVN_2007-12-23_rev11071-T3CH.rar", rar_name)
+
+		return filenameInfo
+
+	######################################################################################
+	def _menu( self, url, remote_rar_name="", remote_short_build_name="" ):
+		xbmc.output( "_menu() url=" + url )
 
 		selectDialog = xbmcgui.Dialog()
 		heading = "%s (v%s): %s" % (__language__( 0 ), __version__, __language__( 600 ))
-		if self.short_build_name:
-			dlOpt = "%s  %s"  % (__language__(612),self.rar_name)		# download
+		local_rar_name = ''
+
+		if remote_rar_name:
+			dlOpt = "%s  %s"  % (__language__(612), remote_rar_name)			# download w/ rar name
 		else:
 			dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
 		options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ),__language__( 618 ),__language__(616), __language__(617), __language__(619), __language__(610) ]
+
+		# if we have a local T3CH rar, add option to install from it
+		# this opt only appears on menu if a rar exists in the settings download location.
+		# inserted after Download T3CH option
+		menuOptOffset = 0
+		local_rar_file = self._get_local_rar_filename()
+		if local_rar_file:
+			try:
+				local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
+				options.insert(3, "%s:  %s" % (__language__(620), local_rar_name))
+				menuOptOffset += 1
+			except:
+				local_rar_file = '' # failed parsing local rar, don't add to menu
+
 		while True:
 			if not self.isSilent:
 				selected = selectDialog.select( heading, options )
@@ -299,39 +331,67 @@ class Main:
 				selected = 2										# do process
 			xbmc.output("menu selected="+ str(selected))
 
-			if selected <= 0:						# quit
+			if selected <= 0:										# quit
 				break
-			elif selected == 1:										# view logs (XBMC or T3CH)
+
+			if selected == 1:										# view logs (XBMC or T3CH)
 				if dialogYesNo( __language__( 0 ), __language__( 611 ), \
 								yesButton=__language__( 411 ), noButton=__language__( 410 )):
 					self._view_t3ch_changelog()
 				else:
 					self._view_xbmc_changelog()
-			elif selected == 2 and self.short_build_name:			# if available, download & process
+			elif (selected == 2 and remote_rar_name) or (selected == 3 and local_rar_name):	# install
+				if selected == 2:														# local rar install
+					self.rar_name = remote_rar_name
+					self.short_build_name = remote_short_build_name
+				else:
+					self.rar_name = local_rar_name
+					self.short_build_name = local_short_build_name
+					url = ''
+
 				if self._process(url):
-					if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
+					if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
 						xbmc.executebuiltin( "XBMC.Reboot" )
-				break											# stop
-			elif selected == 3:										# copy includes
+					break											# stop
+			elif selected == (3 + menuOptOffset):										# copy includes
 				self._maintain_includes()
-			elif selected == 4:										# delete excludes
+			elif selected == (4 + menuOptOffset):										# delete excludes
 				self._maintain_excludes()
-			elif selected == 5:										# change to another t3ch
+			elif selected == (5 + menuOptOffset):										# change to another t3ch
 				if self._downgrade():
 					break
-			elif selected == 6:										# delete old t3ch
+			elif selected == (6 + menuOptOffset):										# delete old t3ch
 				self._delete_old_t3ch()
-			elif selected == 7:										# update script
+			elif selected == (7 + menuOptOffset):										# update script
 				if self._update_script(False):						# never silent from config menu
 					xbmc.output("script updating ... closing current instance")
 					break									# stop script if updated
-			elif selected == 8:										# settings
+			elif selected == (8  + menuOptOffset):										# settings
 				self._check_settings(forceSetup=True)
 
 
+	def _get_local_rar_filename(self):
+		""" return latest T3CH rar found in install dir """
+
+		rar_file = ""
+		flist = []
+		files = os.listdir( self.settings[ self.SETTING_UNRAR_PATH ] )
+		for f in files:
+			if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?.rar)'):
+				flist.append(f)
+
+		if flist:
+			flist.sort()
+			flist.reverse()
+			rar_file = flist[0]
+		xbmc.output("_get_local_rar_filename() " + rar_file)
+		return rar_file
+
 	######################################################################################
-	def _process( self, url):
-		xbmc.output( "_process()" + url )
+	# if given local unrar_file, no DL needed
+	######################################################################################
+	def _process( self, url='' ):
+		xbmc.output( "_process() url=" + url)
 
 		success = False
 		try:
@@ -341,9 +401,12 @@ class Main:
 			unrar_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.rar_name + '.rar' )
 			xbmc.output( "unrar_file= " + unrar_file )
 
-			if self._fetch_current_build( url, unrar_file ):
+			if url:
+				have_file = self._fetch_current_build( url, unrar_file )
+			else:
+				have_file = fileExist(unrar_file)
 
-				# try unrar twice
+			if have_file:
 				if self._extract_rar( unrar_file, unrar_path ):
 
 					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):		# switch to new build ?
@@ -364,7 +427,7 @@ class Main:
 
 					if not self.isSilent:
 						dialogProgress.close()
-			deleteFile(unrar_file)									# remove RAR
+					deleteFile(unrar_file)									# remove RAR
 		except:
 			handleException("process()")
 		return success
@@ -481,6 +544,11 @@ class Main:
 		xbmc.output( "_extract_rar() file_name=" + file_name + " unrar_path=" + unrar_path )
 		success = False
 		try:
+			# check extract destination folder doesnt exist
+			if os.path.exists(unrar_path):
+				dialogOK(__language__( 0 ), __language__( 314 ), unrar_path)
+				return False
+
 			# use a new dialog cos an update shows an empty bar that ppl expect to move
 			if not self.isSilent:
 				dialogProgress.create( __language__( 0 ), __language__( 504 ), unrar_path )
