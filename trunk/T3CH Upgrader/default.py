@@ -319,7 +319,7 @@ class Main:
 		if local_rar_file:
 			try:
 				local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
-				options.insert(3, "%s:  %s" % (__language__(620), local_rar_name))
+				options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
 				menuOptOffset += 1
 			except:
 				local_rar_file = '' # failed parsing local rar, don't add to menu
