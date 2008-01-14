@@ -1,0 +1,9 @@
+ Version    Date        Change
+ v1.0       Sept 07     Created
+ v2.0       17/10/07    Re-written to use WindowXML.
+ v2.01      20/10/07    Improved txinfo scrapping
+                        Fix finding Radio Live feed when has intro clip first.
+ v2.2       14/01/08    Change: Uses UserData for its settings/cache location.
+                        New: Self updating from svn.
+                        New: Uses external language strings.
+
