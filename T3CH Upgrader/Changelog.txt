@@ -10,6 +10,7 @@ v1.1     Dec 07 Fix: update.py
 v1.2   06/01/08 New: Re-written to self update to same folder path (after making a backup).
                 New: Changelogs now displayed in a skinned window. (PMIII, MC360, Basics-101 included) Thanks smuto.
                 Change: Script version displayed in Menu title.
-v1.2.1 07/01/08 Fix: Some dialog progress bar percent calcs were wrong.
+v1.3   14/01/08 Fix: Some dialog progress bar percent calcs were wrong.
                 Fix: Now displays again both 'Downloading ' message and rar filename in download dialog.
                 Change: Tidy up some debug logging.
+                New: Menu option to install from a local T3CH rar found in install folder (eg. E:\apps\)
