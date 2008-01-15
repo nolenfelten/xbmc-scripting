@@ -1,4 +1,5 @@
 # T3CH Upgrader - Update your current T3CH Build to latest release.
+# T3CH Upgrader - Update your current T3CH Build to latest release.
 #
 # Process:
 # Find & DL & unrar new build (keeping T3CH build name)
@@ -31,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '13-01-2008'
+__date__ = '15-01-2008'
 __version__ = "1.3"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -88,6 +89,7 @@ class Main:
 		self.SETTING_NOTIFY_NOT_NEW = "notify_when_not_new"
 		self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP = "check_script_update_startup"
 		self.SETTING_XFER_USERDATA = "transfer_userdata"
+		self.SETTING_PROMPT_DEL_RAR = "prompt_del_rar"
 
 		# COPY INCLUDES
 		self.INCLUDES_FILENAME = os.path.join( self.SCRIPT_DATA_DIR, "includes.txt" )
@@ -136,7 +138,8 @@ class Main:
 			self.SETTING_UNRAR_PATH : "E:\\apps",
 			self.SETTING_NOTIFY_NOT_NEW :  __language__(402), # yes
 			self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP : __language__(403),	# No
-			self.SETTING_XFER_USERDATA : __language__(402)	# yes
+			self.SETTING_XFER_USERDATA : __language__(402),	# yes
+			self.SETTING_PROMPT_DEL_RAR : __language__(402)	# yes
 			}
 
 		for key, defaultValue in items.items():
@@ -427,7 +430,11 @@ class Main:
 
 					if not self.isSilent:
 						dialogProgress.close()
-					deleteFile(unrar_file)									# remove RAR
+
+					# del rar if setting is NO or if YES and OK to prompt
+					if self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
+						dialogYesNo( __language__( 0 ), __language__( 528 ), yesButton=__language__( 412 ), noButton=__language__( 413 )):
+						deleteFile(unrar_file)									# remove RAR
 		except:
 			handleException("process()")
 		return success
@@ -1195,6 +1202,7 @@ class Main:
 						"%s -> %s" %(__language__(633),self.settings[self.SETTING_NOTIFY_NOT_NEW]),
 						"%s -> %s" %(__language__(634),self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]),
 						"%s -> %s" %(__language__(635),self.settings[self.SETTING_XFER_USERDATA]),
+						"%s -> %s" %(__language__(638),self.settings[self.SETTING_PROMPT_DEL_RAR]),
 						"%s" % (__language__(636)),
 						"%s" % (__language__(637))
 						]
@@ -1209,35 +1217,38 @@ class Main:
 				break
 
 			# match option name to settings key
-			if selected == 1:
+			if selected == 1:															# shortcut drive
 				value = self._pick_shortcut_drive()
 				if value:
 					self.settings[self.SETTING_SHORTCUT_DRIVE] = value
 
-			elif selected == 2:
+			elif selected == 2:															# shortcut name
 				value = self._browse_dashname(self.settings[self.SETTING_SHORTCUT_NAME])
 				if value:
 					self.settings[self.SETTING_SHORTCUT_NAME] = value
 
-			elif selected == 3:
+			elif selected == 3:															# unrar path
 				value = self._browse_for_path( __language__( 200 ), self.settings[self.SETTING_UNRAR_PATH] )
 				if value and value[0] != "Q":
 					self.settings[self.SETTING_UNRAR_PATH] = value
 
-			elif selected == 4:
+			elif selected == 4:															# notify when not new
 				_set_yes_no(self.SETTING_NOTIFY_NOT_NEW, __language__( 633 ))
 
-			elif selected == 5:
+			elif selected == 5:															# check for update
 				_set_yes_no(self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP, __language__( 634 ))
 
-			elif selected == 6:
+			elif selected == 6:															# xfer userdata
 				_set_yes_no(self.SETTING_XFER_USERDATA, __language__( 635 ))
 
-			elif selected == 7:												# reset
+			elif selected == 7:															# prompt del rar
+				_set_yes_no(self.SETTING_PROMPT_DEL_RAR, __language__( 638 ))
+
+			elif selected == 8:															# reset settings
 				if dialogYesNo(__language__(0), __language__( 636 ) + " ?"):
 					self._set_default_settings(forceReset=True)
 
-			elif selected == 8:												# reset
+			elif selected == 9:															# reset incl & excl
 				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
 					self._init_includes_excludes(forceReset=True)
 		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )

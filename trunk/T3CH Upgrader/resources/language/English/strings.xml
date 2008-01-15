@@ -42,6 +42,8 @@
     <string id="409">File</string>
     <string id="410">XBMC</string>
     <string id="411">T3CH</string>
+    <string id="412">Delete</string>
+    <string id="413">Cancel</string>
 
     <!-- Status messages -->
     <string id="500">The current T3CH build is:</string>
@@ -72,6 +74,7 @@
     <string id="525">Select File or Folder ?</string>
     <string id="526">New Path Exists ?</string>
     <string id="527">New XBE Exists ?</string>
+    <string id="528">Delete RAR ?</string>
 
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
@@ -97,6 +100,7 @@
     <string id="635">Transfer UserData to T3CH?</string>
     <string id="636">Reset Settings</string>
     <string id="637">Reset Custom Copy and Delete Lists</string>
+    <string id="638">Prompt Before Deleting RAR?</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Exit</string>
