@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 01/14/2008-->
+<!--Date of translation: 01/16/2008-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -41,6 +41,8 @@
   <string id="409">Plik</string>
   <string id="410">XBMC</string>
   <string id="411">T3CH</string>
+  <string id="412">Usuń</string>
+  <string id="413">Anuluj</string>
   <string id="500">Najnowsza dostępna wersja to:</string>
   <string id="501">Chcesz pobrać tą wersję?</string>
   <string id="502">Pobieram info dane z:</string>
@@ -63,12 +65,13 @@
   <string id="519">_new (nowy) i _old (stary) skrót utworzony.</string>
   <string id="520">Chcesz teraz aktywować nową wersję XBMC jako dash?</string>
   <string id="521">(Później będziesz musiał ręczne zmienić nazwę )</string>
-  <string id="522">Rozpakowywanie zakończone. Porównywanie ...</string>
+  <string id="522">Sprawdzanie poprawności wypakowania. Porównywanie ...</string>
   <string id="523">Naprawdę usunąć tą wersję T3CH?</string>
   <string id="524">Proszę czekać ...</string>
   <string id="525">Wybierz plik lub katalog?</string>
-  <string id="526">Nowa ścieżka istnieje?</string>
-  <string id="527">Nowy XBE istnieje?</string>
+  <string id="526">Sprawdzam czy istnieją nowe ścieżki?</string>
+  <string id="527">Sprawdzam czy istnieje nowy XBE?</string>
+  <string id="528">Usunąć pobrane archiwum rar ?</string>
   <string id="600">Menu</string>
   <string id="601">Opcje ustawień</string>
   <string id="610">Ustawienia</string>
@@ -88,12 +91,13 @@
   <string id="635">Skopiować UserData do nowej wersji T3CH?</string>
   <string id="636">Usuń wszystkie ustawienia</string>
   <string id="637">Wyczyść listy kopiowanych i kasowanych plików</string>
+  <string id="638">Zawsze pytaj zanim usuniesz archiwum .rar</string>
   <string id="650">Zastosuj i wyjdź</string>
   <string id="651">Dodaj nowe</string>
   <string id="652">Użyj klawiatury</string>
   <string id="1000">Używasz najnowszej wersji.</string>
   <string id="1001">Sprawdzam dostępną oficjalną wersję...</string>
-  <string id="1002">jest dostępna nowsza</string>
+  <string id="1002">jest nowsza od tej którą używasz</string>
   <string id="1003">Chcesz zaktualizować?</string>
   <string id="1004">Przesyłanie listy potrzebnych plików...</string>
   <string id="1005">Proszę czekać...</string>
