@@ -42,6 +42,8 @@
     <string id="409">Datei</string>
     <string id="410">XBMC</string>
     <string id="411">T3CH</string>
+    <string id="412">Löschen</string>
+    <string id="413">Abbrechen</string>
 
     <!-- Status messages -->
     <string id="500">Aktuelles T3CH Build:</string>
@@ -72,6 +74,7 @@
     <string id="525">Datei oder Ordner auswählen?</string>
     <string id="526">Neuer Pfad vorhanden?</string>
     <string id="527">Neue XBE vorhanden?</string>
+    <string id="528">RAR löschen?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
@@ -97,6 +100,7 @@
     <string id="635">Alte UserData zum T3CH hinzufügen?</string>
     <string id="636">Einstellungen zurücksetzen</string>
     <string id="637">Lösch- und Kopierlisten zurücksetzen</string>
+    <string id="638">Vor dem Löschen der RAR nachfragen?</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Beenden</string>
