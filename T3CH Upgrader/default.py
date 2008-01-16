@@ -318,6 +318,8 @@ class Main:
 			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ),__language__( 618 ),__language__(616), __language__(617), __language__(619), __language__(610) ]
 
 			# if we have a local T3CH rar, add option to install from it
+			local_rar_name = ''
+			local_short_build_name = ''
 			menuOptOffset = 0
 			local_rar_file = self._get_local_rar_filename()
 			if local_rar_file:
@@ -326,7 +328,7 @@ class Main:
 					options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
 					menuOptOffset += 1
 				except:
-					local_rar_file = '' # failed parsing local rar, don't add to menu
+					local_rar_name = '' # failed parsing local rar, don't add to menu
 
 
 			if not self.isSilent:
