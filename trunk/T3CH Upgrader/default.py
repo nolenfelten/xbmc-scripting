@@ -106,10 +106,12 @@ class Main:
 		if not scriptUpdated:
 			url = self._get_latest_version()										# discover latest build
 	#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
+			
 			if url:
 				remote_rar_name, remote_short_build_name = self._check_build_date( url )
 			else:
-				short_build_name = ""
+				remote_rar_name = ""
+				remote_short_build_name = ""
 
 			# empty short_build_name indicates No New Build found.
 			if self.runMode == RUNMODE_NORMAL or (remote_short_build_name and self.runMode == RUNMODE_SILENT):
@@ -306,28 +308,27 @@ class Main:
 
 		selectDialog = xbmcgui.Dialog()
 		heading = "%s (v%s): %s" % (__language__( 0 ), __version__, __language__( 600 ))
-		local_rar_name = ''
-
-		if remote_rar_name:
-			dlOpt = "%s  %s"  % (__language__(612), remote_rar_name)			# download w/ rar name
-		else:
-			dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
-		options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ),__language__( 618 ),__language__(616), __language__(617), __language__(619), __language__(610) ]
-
-		# if we have a local T3CH rar, add option to install from it
-		# this opt only appears on menu if a rar exists in the settings download location.
-		# inserted after Download T3CH option
-		menuOptOffset = 0
-		local_rar_file = self._get_local_rar_filename()
-		if local_rar_file:
-			try:
-				local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
-				options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
-				menuOptOffset += 1
-			except:
-				local_rar_file = '' # failed parsing local rar, don't add to menu
 
 		while True:
+			# build menu
+			if remote_rar_name:
+				dlOpt = "%s  %s"  % (__language__(612), remote_rar_name)			# download w/ rar name
+			else:
+				dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
+			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ),__language__( 618 ),__language__(616), __language__(617), __language__(619), __language__(610) ]
+
+			# if we have a local T3CH rar, add option to install from it
+			menuOptOffset = 0
+			local_rar_file = self._get_local_rar_filename()
+			if local_rar_file:
+				try:
+					local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
+					options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
+					menuOptOffset += 1
+				except:
+					local_rar_file = '' # failed parsing local rar, don't add to menu
+
+
 			if not self.isSilent:
 				selected = selectDialog.select( heading, options )
 			else:
@@ -431,7 +432,7 @@ class Main:
 					if not self.isSilent:
 						dialogProgress.close()
 
-					# del rar if setting is NO or if YES and OK to prompt
+					# del rar according to del setting
 					if self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
 						dialogYesNo( __language__( 0 ), __language__( 528 ), yesButton=__language__( 412 ), noButton=__language__( 413 )):
 						deleteFile(unrar_file)									# remove RAR
@@ -606,7 +607,7 @@ class Main:
 		# unrar path not found
 		if not success:
 			xbmc.output("extract failed, clean up")
-			deleteFile(file_name)			# remove RAR, might be a partial DL
+#			deleteFile(file_name)			# remove RAR, might be a partial DL
 			try:
 				rmtree( unrar_path, ignore_errors=True )	# remove partial extract
 				xbmc.output("extract failed, extract path rmtree done")
