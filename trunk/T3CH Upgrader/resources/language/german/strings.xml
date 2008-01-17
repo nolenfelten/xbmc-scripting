@@ -118,8 +118,6 @@
     <string id="1007">Laden:</string>
     <string id="1008">Pfad:</string>
     <string id="1009">Datei:</string>
-    <string id="1010">Deine neue Version wurde hier gespeichert:</string>
-    <string id="1011">Dateimanager zum Löschen alter Versionen verwenden</string>
 
     <!-- Update Error Msgs -->
     <string id="1030">Keine neueren Versionen verfügbar!</string>
