@@ -27,7 +27,7 @@
     <string id="311">Source Datei/Ordner nicht vorhanden!</string>
     <string id="312">Entpackungspfad nicht vorhanden!  Wiederholen.</string>
     <string id="313">Eingeschränkte Datei oder Ordner!</string>
-    <string id="314">Entpackungsordner bereits vorhanden!</string>
+    <string id="314">Entpackungsordner bereits vorhanden, überschreiben?</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
