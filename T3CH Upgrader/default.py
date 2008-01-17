@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '15-01-2008'
+__date__ = '17-01-2008'
 __version__ = "1.3"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -556,8 +556,10 @@ class Main:
 		try:
 			# check extract destination folder doesnt exist
 			if os.path.exists(unrar_path):
-				dialogOK(__language__( 0 ), __language__( 314 ), unrar_path)
-				return False
+				# ask to overwrite 
+				if not dialogYesNo(__language__( 0 ), __language__( 314 ), unrar_path, \
+								yesButton=__language__( 411 ), noButton=__language__( 410 )):
+					return False
 
 			# use a new dialog cos an update shows an empty bar that ppl expect to move
 			if not self.isSilent:

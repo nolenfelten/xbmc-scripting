@@ -27,7 +27,7 @@
     <string id="311">Source file/folder does not exist!</string>
     <string id="312">Extraction path does not exist!  Retry.</string>
     <string id="313">Restricted File or Folder!</string>
-    <string id="314">Extract folder already exists!</string>
+    <string id="314">Extract folder already exists, Overwrite ?</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -118,8 +118,6 @@
     <string id="1007">Fetching:</string>
     <string id="1008">Path:</string>
     <string id="1009">File:</string>
-    <string id="1010">Your new version was saved to:</string>
-    <string id="1011">Use FileManager to delete old versions</string>
 
     <!-- Update error messages -->
     <string id="1030">No tagged versions were found!</string>
