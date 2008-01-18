@@ -16,10 +16,16 @@ Changelog:
 05/06/07 Fix: Gallery regex
 09/07/07 Fix: Seach for title. caused by site change
 11/12/07 Fix: Scraping regex (see date comments)
+18/01/08 Fix: regex for Cast
 """
 
 import os,sys,re,urllib,string
 from string import find
+
+DEBUG = True
+def log(s):
+    if DEBUG:
+        print s
 
 fixReg = re.compile(r"&#[0-9]{1,3};")
 
@@ -55,17 +61,12 @@ creatorsReg   = re.compile(r'.*?Creator.*')
 
 in_directorsReg = re.compile(r'href="/name/.*?>(.*?)</')
 in_writersReg   = re.compile(r'href="/name/.*?>(.*?)</')
-in_castReg   = re.compile(r'href="/name/[nm0-9]*/">(.*?)<.*?/character/.*?>(.*?)<')
+in_castReg   = re.compile(r'href="/name/[nm0-9]*/">(.*?)<.*?(?:/character/|"char").*?>(.*?)<')	# 18/01/08
 in_creatorsReg = re.compile(r'href="/name/.*?>(.*?)</')
 
 # gallery RE
 galleriesRE = re.compile('href="photogallery(-.*?)"',reFlags)
 galleryRE = re.compile('<a href="/gallery.*? src="(.*?)".*?(?:width|height)="(\d+)".*?(?:width|height)="(\d+)".*?</a>',reFlags)
-
-DEBUG = False
-def log(text):
-	if DEBUG:
-		print text
 
 class IMDb:
 	def __init__(self,url):
@@ -203,6 +204,7 @@ class IMDb:
 		if matches:
 			self.Certs = ','.join(matches)
 
+		log("do pre line regex searches ...")
 		pageLines = page.split('\n')
 		i = 0
 		while i < len(pageLines):
@@ -228,7 +230,6 @@ class IMDb:
 				matches = in_creatorsReg.findall(pageLines[i])
 				if matches:
 					self.Creators = clean(','.join(matches))
-
 
 			i+=1
 

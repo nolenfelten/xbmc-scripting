@@ -329,7 +329,9 @@ class IMDbWin(xbmcgui.WindowDialog):
 #		except: pass
 
 		try:
+			print "self.movie.Cast=", self.movie.Cast
 			for actor,role in self.movie.Cast:
+				print actor,role
 				castCL.addItem(xbmcgui.ListItem(decodeEntities(actor), decodeEntities(role)))
 		except:
 			castCL.addItem(xbmcgui.ListItem('No Cast Details'))
