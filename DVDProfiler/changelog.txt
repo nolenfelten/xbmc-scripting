@@ -41,4 +41,5 @@ Version     Date        Change
                         New: Config Menu option to check for new script update.
  1.6        07/01/08    Change: Removed ClientCookie.py by improving bbbLib to use python 2.4 cookieLib
                         Change: Self update rewritten to update to same path (after making backup)
+                        Fix: IMdb scrapping for Cast
 
