@@ -298,7 +298,7 @@ class Main:
                 overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                 overlay = ( overlay, xbmcgui.ICON_OVERLAY_WATCHED, )[ watched ]
                 # add the different infolabels we want to sort by
-                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Watched": watched, "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 18 ], "Cast": item[ 21 ] } )
+                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Votes": item[ 6 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Watched": watched, "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 20 ], "Cast": item[ 21 ] } )
             except:
                 # oops print error message
                 add = False
