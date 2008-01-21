@@ -32,7 +32,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '17-01-2008'
+__date__ = '21-01-2008'
 __version__ = "1.3"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -307,7 +307,10 @@ class Main:
 		xbmc.output( "_menu() url=" + url )
 
 		selectDialog = xbmcgui.Dialog()
-		heading = "%s (v%s): %s" % (__language__( 0 ), __version__, __language__( 600 ))
+		heading = "%s v%s (XBMC: %s %s): %s" % (__language__( 0 ), __version__, \
+												xbmc.getInfoLabel('System.BuildVersion'), \
+												xbmc.getInfoLabel('System.BuildDate'), \
+												__language__( 600 ))
 
 		while True:
 			# build menu

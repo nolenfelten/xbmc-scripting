@@ -109,8 +109,6 @@
   <string id="1007">Haetaan:</string>
   <string id="1008">Polku:</string>
   <string id="1009">Tiedosto:</string>
-  <string id="1010">Ohjelma tallennettiin kansioon:</string>
-  <string id="1011">Käytä tiedostoselainta vanhan version poistamiseen</string> 
 
   <!-- Update error messages -->
   <string id="1030">Uutta versiota ei löytynyt!</string>
