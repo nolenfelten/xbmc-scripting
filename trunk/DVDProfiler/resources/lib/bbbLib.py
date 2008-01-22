@@ -10,15 +10,13 @@ import xbmc, xbmcgui
 import os, re, unicodedata, traceback
 import urllib, urllib2, socket
 from string import strip, replace, find, rjust
-import ConfigParser
-
 # cookie stuff
 import cookielib
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '04-01-2008'
+__date__ = '21-01-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -34,7 +32,7 @@ cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar
 urlopener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
 urllib2.install_opener(urlopener)
 
-socket.setdefaulttimeout( 15 )
+#socket.setdefaulttimeout( 15 )
 
 # KEYPAD CODES
 ACTION_UNKNOWN			= 0
@@ -130,16 +128,18 @@ BTN_B_FILENAME = os.path.join(DIR_GFX,'bbutton.png')
 BTN_X_FILENAME = os.path.join(DIR_GFX,'xbutton.png')
 BTN_Y_FILENAME = os.path.join(DIR_GFX,'ybutton.png')
 BTN_WHITE_FILENAME = os.path.join(DIR_GFX,'whitebutton.png')
+BTN_BACK_FILENAME = os.path.join(DIR_GFX,'backbutton.png')
 LIST_HIGHLIGHT_FILENAME = os.path.join(DIR_GFX,'list_highlight.png')
 FRAME_FOCUS_FILENAME = os.path.join(DIR_GFX,'frame_focus.png')
 FRAME_NOFOCUS_FILENAME = os.path.join(DIR_GFX,'frame_nofocus.png')
 FRAME_NOFOCUS_LRG_FILENAME = os.path.join(DIR_GFX,'frame_nofocus_large.png')
 README_FILENAME = os.path.join(DIR_HOME , 'readme.txt')
 CHANGELOG_FILENAME = os.path.join(DIR_HOME , 'changelog.txt')
-PANEL_FILENAME = 'dialog-panel.png'
-PANEL_FILENAME_MC360 = 'dialog-panel_mc360.png'
+PANEL_FILENAME = os.path.join(DIR_GFX,'dialog-panel.png')
+PANEL_FILENAME_MC360 = os.path.join(DIR_GFX,'dialog-panel_mc360.png')
+MENU_FILENAME = os.path.join(DIR_GFX,'menu.png')
 
-dialogProgress = xbmcgui.DialogProgress()
+#dialog = xbmcgui.DialogProgress()
 # rez GUI defined in
 REZ_W = 720
 REZ_H = 576
@@ -150,7 +150,7 @@ except: Emulating = False
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = False
+DEBUG = True
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -191,6 +191,7 @@ def handleException(txt=''):
 		text = ''
 		for l in list:
 			text += l
+		print text
 		messageOK(title, text)
 	except: pass
 
@@ -203,12 +204,19 @@ def makeScriptDataDir():
 	dir = os.path.join(dir, __scriptname__)
 	makeDir(dir)
 
-#################################################################################################################
-def makeDir( dir ):
+#############################################################################################################
+def makeDir(dir):
 	try:
 		os.mkdir( dir )
-		debug( "made dir: " + dir)
+		debug("created dir: " + dir)
 	except: pass
+
+#############################################################################################################
+def removeDir(dir, title="", msg="", msg2=""):
+	if xbmcgui.Dialog().yesno(title, msg, msg2):
+		try:
+			os.path.rmdir(dir)
+		except: pass
 
 #################################################################################################################
 # delete a single file
@@ -221,7 +229,6 @@ def deleteFile(filename):
 #			errCodeStr = str(ex[0]) + ", " + str(ex[1])
 #			dialogOK("File Delete Error",errCodeStr,filename)
 	except: pass
-
 
 #################################################################################################################
 def readFile(filename):
@@ -236,8 +243,7 @@ def fileExist(filename):
 	try:
 		if os.path.isfile(filename) and os.path.getsize(filename) > 0:
 			exist = True
-	except:
-		pass
+	except: pass
 	return exist
 
 #################################################################################################################
@@ -253,6 +259,7 @@ def isFileNewer(oldFilename, newFilename):
 		new = True	# incase old doesnt exist
 
 	return new
+
 
 ##############################################################################################
 def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
@@ -300,7 +307,6 @@ def setResolution(win):
 	win.setCoordinateResolution(rez)
 	debug("setResolution() curr Rez=" + str(currRez) + " new Rez="+str(rez))
 
-
 #################################################################################################################
 # Dialog with options
 #################################################################################################################
@@ -315,7 +321,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 		self.menuCL = None
 		self.lastAction = 0
 
-	def setup(self, title='Menu',width=430, height=450, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
+	def setup(self, title='',width=430, height=450, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
 			  imageWidth=0,imageHeight=22, itemHeight=22, rows=0,
 			  useY=False, useX=False, isDelete=False, panel='', banner=''):
 		debug("> DialogSelect().setup() useY="+str(useY) + " useX=" + str(useX) + " isDelete=" + str(isDelete))
@@ -369,7 +375,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 			self.removeControl(self.panelCI)
 		except: pass
 		try:
-			self.panelCI = xbmcgui.ControlImage(xpos, ypos, width, height, DIALOG_PANEL)
+			self.panelCI = xbmcgui.ControlImage(xpos, ypos, width, height, panel)
 			self.addControl(self.panelCI)
 		except: pass
 
@@ -479,6 +485,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 		debug ("< DialogSelect.ask() selectedPos: " + str(self.selectedPos) + " lastAction: " + str(self.lastAction))
 		return self.selectedPos, self.lastAction
 
+
 #######################################################################################################################    
 def parseDocList(doc, regex, startStr='', endStr=''):
 	# find section
@@ -543,6 +550,69 @@ def HTTPErrorCode(e):
 	debug("HTTPErrorCode: " + str(code) + " " + txt)
 	messageOK(title, txt)
 
+#################################################################################################################
+# Class to return a char or string pixel length. Thanks to madtw.
+# Until truncation of labels on ControlButtons is working.
+#################################################################################################################
+class FontAttr:
+	def __init__(self):
+		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
+		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
+		self.adjust = {'font10':-3, 'font11':-3, 'font12':-2, 'font13':-1, 'font14':0, 'font18':4}
+
+		# base widths based on font14
+		self.width = [ \
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			#       SP   !   "   #   $   %   &   '
+			0,  0,  6,  6,  8, 14, 10, 19, 13,  4,
+			#(   )   *   +   ,   -   .   /   0   1
+			7,  7, 24, 14,  6,  7,  6,  7, 10, 10,
+			#2   3   4   5   6   7   8   9   :  ;
+			10, 10, 10, 10, 10, 10, 10, 10,  7,  7,
+			#<   =   >   ?   @   A   B   C   D   E
+			14, 14, 14,  9, 17, 11, 11, 11, 13, 11,
+			#F   G   H   I   J   K   L   M   N   O
+			10, 13, 13,  7,  8, 11,  9, 15, 13, 13,
+			#P   Q   R   S   T   U   V   W   X   Y
+			10, 13, 12, 11, 11, 12, 11, 17, 11, 11,
+			#Z   [   \   ]   ^   _   `   a   b   c
+			11,  7,  7,  7, 14, 10, 10, 10, 11,  9,
+			#d   e   f   g   h   i   j   k   l   m
+			11, 10,  6, 11, 11,  4,  5,  9,  4, 16,
+			#n   o   p   q   r   s   t   u   v   w
+			11, 10, 11, 11,  7,  8,  6, 11,  9, 14,
+			#x   y   z   {   |   }   ~
+			9,  9,  8,  9,  7,  9, 14
+		]
+
+	def getWidth( self, c, font = 'font14' ):
+		try:
+			w = self.width[ord(c)] + self.adjust[font]
+		except:
+			w = 14			# unknown ch, use avg width
+		return w
+
+	def getTextWidth(self, txt, font = 'font14'):
+		len = 0
+		for c in txt:
+			len += self.getWidth(c, font)
+		return len
+
+	def truncate(self, maxWidth, text, font = 'font14', rez = 6):
+		sz = len(text)
+		try:
+			maxWidth *= self.rezAdjust[rez]
+		except: pass
+			
+		newText = ''
+		for i in range(sz, 0, -1):
+			if self.getTextWidth(text[0:i], font) <= maxWidth:
+				newText = text[0:i]
+				break
+
+		return newText
 
 #################################################################################################################
 # Convert a text string containing &#x<hex_value> to ascii ch
@@ -1208,13 +1278,14 @@ def showCookies():
 	except:
 		print "no cookiejar"
 
+
 #################################################################################################################
 # extract URL and name from data
 def extractURLName(data):
 	# URL and name
 	link = ''
 	name = ''
-	matches = re.search("href=[\"'](.*?)[\"'](?:.*?)>(.*?)<", data, re.IGNORECASE)
+	matches = re.search("href=[\"'](.*?)[\"'].*?>(.*?)<", data, re.IGNORECASE)
 	if matches:
 		link = matches.group(1)
 		name = matches.group(2)
@@ -1231,18 +1302,18 @@ def searchRegEx(data, regex, flags=re.IGNORECASE):
 	return value
 
 #################################################################################################################
-def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE):
+def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 	try:
 		matchList = re.compile(regex, flags).findall(data)
 	except:
 		matchList = []
 
-	if matches:
-		sz = len(matches)
+	if matchList:
+		sz = len(matchList)
 	else:
 		sz = 0
 	debug ("findAllRegEx() matches= " + str(sz))
-	return matches
+	return matchList
 
 #############################################################################################################
 def safeFilename(path):
@@ -1250,7 +1321,7 @@ def safeFilename(path):
 	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=]', '_', tail))
 
 #################################################################################################################
-# Does a direct image URL exist in any RSS object elements?
+# Does a direct image URL exist in string ?
 def isImageURL(url):
 	match = re.search('([^"\'<>]+)(?<=(?:\.gif|\.jpg|\.bmp))', url, re.IGNORECASE)
 	try:
@@ -1262,12 +1333,10 @@ def isImageURL(url):
 
 #################################################################################################################
 def isRSSLink(url):
-	debug("isRSSLink()")
 	return searchRegEx(url, '(rss|rdf|xml)$')
 
 #################################################################################################################
 def isHTMLLink(url):
-	debug("isHTMLLink()")
 	return searchRegEx(url, '(html|htm)$')
 
 #################################################################################################################
@@ -1324,6 +1393,7 @@ def isMC360():
 	except:
 		state = False
 	debug("bbbLib.isMC360() " +str(state))
+	return state
 
 ######################################################################################
 def loadFileObj( filename, dataType ):
@@ -1352,9 +1422,432 @@ def saveFileObj( filename, saveObj ):
     except:
         handleException( "_save_file_obj()" )
 
+#################################################################################################################
+def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=False):
+	debug("> listDir()")
+
+	fileList = []
+	if ext:
+		ext = ext.lower()
+		if ext[0] != '.':
+			ext = '.'+ext
+
+	if os.path.isdir(path):
+		files = os.listdir(path)
+		for f in files:
+			fn, ex = os.path.splitext(f)
+			if not ext or ex.lower() == ext:
+				found = False
+				if fnRE:
+					matches = re.search(fnRE, fn)
+					if matches:
+						found = True
+				else:
+					found = True
+
+				if found:
+					if not getFullFilename:
+						filename = fn
+					else:
+						filename = f
+
+					if lower:
+						fileList.append(filename.lower())
+					elif upper:
+						fileList.append(filename.upper())
+					else:
+						fileList.append(filename)
+
+	sz = len(fileList)
+	debug("< listDir() file count="+str(sz))
+	return fileList
+
+
+#################################################################################################################
+# RSS Parser, copes with badly formed data
+# Thanks to www.xml.com
+#################################################################################################################
+class RSSParser(sgmllib.SGMLParser):
+	def reset(self):
+		self.items = []
+		self.currentTag = None
+		self.lastTag = None
+		self.currentValue = ''
+		self.initem = 0
+		sgmllib.SGMLParser.reset(self)
+
+	def start_item(self, attrs):
+		# set a flag that we're within an RSS item now
+		self.items.append({})
+		self.initem = 1
+
+	def end_item(self):
+		# OK, we're out of the RSS item
+		self.initem = 0
+
+	def unknown_starttag(self, tag, attrs):
+		self.currentTag = tag
+
+	def unknown_endtag(self, tag):
+		# if we're within an RSS item, save the data we've buffered
+		if self.initem:
+			# decode entities and strip whitespace
+			self.currentValue = decodeEntities(self.currentValue.strip())
+			self.items[-1][self.currentTag] = self.currentValue
+		self.currentValue = ''
+
+	def handle_data(self, data):
+		# buffer all text data
+#		self.currentValue += data
+		self.currentValue += data.decode('latin-1')
+
+	def handle_entityref(self, data):
+		# buffer all entities
+		self.currentValue += '&' + data
+	handle_charref = handle_entityref
+
+# Parser that parses version 2.0 RSS documents
+class RSSParser2:
+	def __init__(self):
+		debug("RSSParser2().init()")
+
+	# feeds the xml document from given url or file to the parser
+	def feed(self, url="", file="", doc="", title="Downloading XML"):
+		debug("> RSSParser2().feed()")
+		success = False
+		self.dom = None
+
+		if url:
+			debug("parseString from URL")
+			if not file:
+				dir = os.getcwd()
+				if dir[-1]==';': dir=dir[0:-1]
+				if dir[-1]!='\\': dir=dir+'\\'
+				file = dir + "temp.xml"
+			deleteFile(file)
+			doc = fetchURL(url, file)
+		elif file:
+			debug("parseString from FILE")
+			doc = readFile(file)
+		else:
+			debug("parseString from DOC")
+
+		if doc:
+			try:
+				self.dom = parseString(doc)
+			except:
+				debug("parseString exception")
+
+		if not self.dom:
+			messageOK("XML Parser Failed","Empty/Bad XML file","Unable to parse data.")
+		else:
+			success = True
+
+		debug("< RSSParser2().feed() success: " + str(success))
+		return success
+
+
+	# parses RSS document items and returns an list of objects
+	def __parseElements(self, tagName, elements, elementDict):
+		debug("> RSSParser2().__parseElements()")
+		if DEBUG:
+			print "elements count=", len(elements)
+			print "elementDict=", elementDict
+
+
+		def _get_element_attributes(el, attrNameList):
+			attrDataList = {}
+			for attrName in attrNameList:
+				data = el.getAttribute( attrName )
+				if data:
+					attrDataList[attrName] = data
+			return attrDataList
+		
+		objectsList = []
+		for el in elements:
+			dict = {}
+			# check element attributes
+			elAttrItems = el.attributes.items()
+
+			# extract required attributes from element attribites
+			if elAttrItems and elementDict.has_key(tagName):
+				attrDataList= _get_element_attributes(el, elementDict[tagName])
+				if attrDataList:
+					dict[tagName] = attrDataList
+
+			for elTagName, attrNameList in elementDict.items():
+				if elTagName == tagName:
+					# skip element tagName - already processed it attributes
+					continue
+
+				data = None
+
+				try:
+					# get value for tag (has no without any attributes)
+					data = el.getElementsByTagName(elTagName)[0].childNodes[0].data
+				except:
+					try:
+						# get required attributes from tag
+						subEl = el.getElementsByTagName(elTagName)[0]
+						attrItems = subEl.attributes.items()
+						data = _get_element_attributes(subEl, attrNameList)
+					except:
+						print "tag has no attributes either !?"
+
+				if data:
+					if DEBUG:
+						print "Tag: " + elTagName + " = ", data
+					dict[elTagName] = data
+
+			if DEBUG:
+				print "dict=", dict
+			objectsList.append(RSSNode(dict))
+
+		debug("< RSSParser2().__parseElements() No. objects : " + str(len(objectsList)))
+		return objectsList
+
+
+	# parses the RSS document
+	def parse(self, tagName, elementDict):
+		debug("> RSSParser2().parse() tagName: " + tagName)
+
+		parsedList = None
+		if self.dom:
+			try:
+				elements = self.dom.getElementsByTagName(tagName)
+				parsedList = self.__parseElements(tagName, elements, elementDict)
+			except:
+				debug("exception No parent elements found for tagName")
+
+		debug("< RSSParser2().parse()")
+		return parsedList
+
+
+#################################################################################################################
+class RSSNode:
+	def __init__(self, elements):
+		self.elements = elements
+		
+	def getElement(self, element):
+		try:
+			return self.elements[element]
+		except:
+			return ""
+		
+	def getElementNames(self):
+		return self.elements.keys()
+		
+	def hasElement(self, element):
+		return self.elements.has_key(element)
+
+#############################################################################################################
+def getSkinName():
+	skinName = os.path.basename(xbmc.getSkinDir())
+	debug("getSkinName() skinName="+skinName)
+	return skinName
+
+
+#################################################################################################################
+def gethostipbyname(host):
+	ip = host
+	if not isIP(host):
+		try:
+			hostEnt = nmb.NetBIOS().gethostbyname( host )
+			ip = hostEnt[0].get_ip()
+		except:
+			ip = ''
+	debug("gethostipbyname() ip=" + ip)
+	return ip
+
+#################################################################################################################
+def isIP(host):
+	return re.match('^\d+\.\d+\.\d+\.\d+$', host)
+
+#######################################################################################################
+class AdjustOverscan(xbmcgui.Window):
+	def __init__(self):
+		if Emulating: xbmcgui.Window.__init__(self)
+		debug("> AdjustOverscan() init()")
+
+		setResolution(self)
+		self.isTL = True
+		self.backg = xbmcgui.ControlImage(0,0, REZ_W, REZ_H, DIR_GFX + 'blank_background.png')
+		self.info = xbmcgui.ControlTextBox(150, 150, 400, 300, 'font12')
+		self.tlCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_TL_FILENAME)
+		self.brCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_BR_FILENAME)
+
+		debug("< AdjustOverscan() init()")
+
+	###################################################################################################
+	def onAction(self, action):
+		if action == ACTION_PREVIOUS_MENU:
+			self.close()
+		elif action == ACTION_SELECT_ITEM:
+			self.isTL = not self.isTL
+			self.draw()
+		elif action == ACTION_MOVE_LEFT or action == ACTION_MOVE_RIGHT or \
+			 action == ACTION_MOVE_UP or action == ACTION_MOVE_DOWN:
+			if action == ACTION_MOVE_LEFT:
+				if self.isTL:
+					self.overscanL -= 1
+				else:
+					self.overscanR += 1
+			elif action == ACTION_MOVE_RIGHT:
+				if self.isTL:
+					self.overscanL += 1
+				else:
+					self.overscanR -= 1
+			elif action == ACTION_MOVE_UP:
+				if self.isTL:
+					self.overscanT -= 1
+				else:
+					self.overscanB += 1
+			elif action == ACTION_MOVE_DOWN:
+				if self.isTL:
+					self.overscanT += 1
+				else:
+					self.overscanB -= 1
+			self.draw()
+
+	###################################################################################################
+	def onControl(self, control):
+		pass
+
+	##############################################################################################
+	def draw(self):
+		xbmcgui.lock()
+		text = 'To Adjust Overscan:\n\nDPAD = Move corner.  A Button = Change corner.  BACK = Exit.\n\nAdjusting: '
+		if self.isTL:
+			text +=  'TOP LEFT'
+		else:
+			text += 'BOTTOM RIGHT'
+		text += '\n\nOverscan TOP: ' + str(self.overscanT) + \
+			   '\nOverscan LEFT: ' + str(self.overscanL) + \
+			   '\nOverscan BOTTOM: ' + str(self.overscanB) + \
+			   '\nOverscan RIGHT: ' + str(self.overscanR)
+		self.info.setText(text)
+
+		self.brCB.setEnabled(not self.isTL)
+		self.brCB.setVisible(not self.isTL)
+		self.tlCB.setEnabled(self.isTL)
+		self.tlCB.setVisible(self.isTL)
+
+		if self.isTL:
+			self.tlCB.setPosition(self.overscanL, self.overscanT)
+			self.setFocus(self.tlCB)
+		else:
+			x = REZ_W - self.overscanR - 57	# img w
+			y = REZ_H - self.overscanB - 57 # img h
+			self.brCB.setPosition(x, y)
+			self.setFocus(self.brCB)
+
+		xbmcgui.unlock()
+
+	##############################################################################################
+	def ask(self, top=5, left=5, bottom=5, right=5):
+		debug("> ask()")
+		# OVERSCAN
+		self.overscanT = top
+		self.overscanL = left
+		self.overscanB = bottom
+		self.overscanR = right
+		self.addControl(self.backg)
+		self.addControl(self.info)
+		self.addControl(self.tlCB)
+		self.addControl(self.brCB)
+		self.draw()
+		self.doModal()
+		debug("< ask()")
+		return self.overscanT, self.overscanL, self.overscanB, self.overscanR
+
+
+
+#######################################################################################################################    
+def updateGlobals(basePath=''):
+	debug("> updateGlobals() basePath="+basePath)
+
+	global DIR_SYSTEM, DIR_CACHE, DIR_GFX, DIR_SKIN, SKIN_NAME
+	global BACKGROUND_FILENAME, BACKG_BLANK_FILENAME, HEADER_FILENAME, FOOTER_FILENAME, MENU_FILENAME
+	global BTN_A_FILENAME, BTN_B_FILENAME, BTN_X_FILENAME, BTN_Y_FILENAME, BTN_WHITE_FILENAME,BTN_BACK_FILENAME
+	global OVERSCAN_TL_FILENAME, OVERSCAN_BR_FILENAME, LIST_DELETE_FILENAME
+	global FRAME_FOCUS_FILENAME, FRAME_NOFOCUS_FILENAME, FRAME_NOFOCUS_LRG_FILENAME
+	global README_FILENAME,CHANGELOG_FILENAME,DIALOG_PANEL,LOGO_FILENAME
+	global IS_MC360
+
+	if DEBUG:
+		print "bbbLib __file__=", __file__
+		print "bbbLib os.getcwd()=", os.getcwd()
+
+	if not basePath:
+		DIR_SYSTEM, tail = os.path.split(__file__)
+		if DIR_SYSTEM[-1]!='\\': DIR_SYSTEM += '\\'
+		DIR_CACHE = DIR_SYSTEM.replace('system','cache')
+	else:
+		if basePath[-1]==';': basePath=basePath[0:-1]
+		if basePath[-1]!='\\': basePath += '\\'
+		DIR_SYSTEM = basePath + 'system\\'
+		DIR_CACHE = basePath + 'cache\\'
+
+	DIR_GFX = DIR_SYSTEM + "gfx\\"
+	DIR_SKIN = DIR_SYSTEM + 'skin\\'
+	SKIN_NAME = getSkinName()
+	IS_MC360 = isMC360(SKIN_NAME)
+	PMIII = 'PMIII'
+	
+	# set skin dir according to xbmc skin, otherwise default to gfx dir
+	PANEL = 'dialog-panel.png'
+	if os.path.isdir(DIR_SKIN + SKIN_NAME):
+		DIR_SKIN += SKIN_NAME + '\\'
+	elif os.path.isdir(DIR_SKIN + PMIII):
+		SKIN_NAME = PMIII
+		DIR_SKIN += SKIN_NAME + '\\'
+	else:
+		debug("no xbmc skin named dir or PMIII dir, default to GFX dir")
+		SKIN_NAME = ''
+		DIR_SKIN = DIR_GFX
+		# use a mc360 panel if that skin is set
+		if IS_MC360:
+			PANEL = 'dialog-panel_mc360.png'
+
+	# gfx specific to skin
+	DIALOG_PANEL = DIR_SKIN + PANEL
+	BACKGROUND_FILENAME = DIR_SKIN + 'background.png'
+	HEADER_FILENAME = DIR_SKIN + 'header.png'
+	FOOTER_FILENAME = DIR_SKIN + 'footer.png'
+
+	# common path + gfx 
+	BACKG_BLANK_FILENAME = DIR_GFX + 'blank_background.png'
+	LOGO_FILENAME = DIR_GFX + 'logo.png'
+	BTN_A_FILENAME = DIR_GFX + 'abutton.png'
+	BTN_B_FILENAME = DIR_GFX + 'bbutton.png'
+	BTN_X_FILENAME = DIR_GFX + 'xbutton.png'
+	BTN_Y_FILENAME = DIR_GFX + 'ybutton.png'
+	BTN_WHITE_FILENAME = DIR_GFX + 'whitebutton.png'
+	BTN_BACK_FILENAME = DIR_GFX + 'backbutton.png'
+	OVERSCAN_TL_FILENAME = DIR_GFX + 'overscan_tl.png'
+	OVERSCAN_BR_FILENAME = DIR_GFX + 'overscan_br.png'
+	LIST_DELETE_FILENAME = DIR_GFX + 'list_delete.png'
+	FRAME_FOCUS_FILENAME = DIR_GFX + 'frame_focus.png'
+	FRAME_NOFOCUS_FILENAME = DIR_GFX + 'frame_nofocus.png'
+	FRAME_NOFOCUS_LRG_FILENAME = DIR_GFX + 'frame_nofocus_large.png'
+	MENU_FILENAME = DIR_GFX + 'menu.png'
+	README_FILENAME = 'readme.txt'
+	CHANGELOG_FILENAME = 'changelog.txt'
+
+	if DEBUG:
+		print __name__+" DIR_SYSTEM=", DIR_SYSTEM
+		print __name__+" DIR_CACHE=", DIR_CACHE
+		print __name__+" DIR_GFX=", DIR_GFX
+		print __name__+" DIR_SKIN=", DIR_SKIN
+		print __name__+" SKIN_NAME=", SKIN_NAME
+		print __name__+" DIALOG_PANEL=", DIALOG_PANEL
+
+	debug("< updateGlobals()")    
+
+
+######################################################################################
 # establish default panel to use for dialogs
 if isMC360():
 	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME_MC360)
 else:
 	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME)
-

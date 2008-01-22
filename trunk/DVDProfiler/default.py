@@ -40,9 +40,9 @@ sys.path.insert(0, DIR_RESOURCES_LIB)
 import language
 __language__ = language.Language().localized
 
+import update                                       # script update module
 from bbbLib import *								# requires __language__ to be defined
 from IMDbWin import IMDbWin
-import update                                       # script update module
 from smbLib import *
 import time
 
