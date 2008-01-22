@@ -14,5 +14,7 @@ v1.3   15/01/08 Fix: Some dialog progress bar percent calcs were wrong.
                 Fix: Now displays again both 'Downloading ' message and rar filename in download dialog.
                 Change: Tidy up some debug logging.
                 New: Menu option to install from a local T3CH rar found in install folder (eg. E:\apps\)
-                New: Setting to Prompt before deleting RAR after installation
+                New: Setting to Prompt before deleting RAR after installation.
                 New: French strings.
+                New: XBMC build displayed in menu title.
+                Mew: Skin for 'Basic-Vision' by smuto - thanks.

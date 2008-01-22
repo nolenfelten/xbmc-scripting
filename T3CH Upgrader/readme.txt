@@ -59,9 +59,13 @@ The following will happen;
 
 If all is well after reboot, you will be now running the latest T3CH build!
 
+Local Installation:
+-------------------
+If you ftp a T3CH build rar to the designed rar download location (eg. E:\apps\) the Main Menu will give you the option to do an installation from that.
+
 
 NB. *sometimes* the newly extracted rar folder strcture doesnt appear to exist, and the script won't continue.
-This is known problem and the best thing to do is simply try again, your existing XBMC installation has not been touched.
+This is known problem and the best thing to do is, reboot and try again, your existing XBMC installation has not been touched.
 
 If you're stuck, post in the appropiate forum at http://www.xboxmediacenter.com/forum/
 
