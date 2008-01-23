@@ -64,7 +64,22 @@ Local Installation:
 If you ftp a T3CH build rar to the designed rar download location (eg. E:\apps\) the Main Menu will give you the option to do an installation from that.
 
 
-NB. *sometimes* the newly extracted rar folder strcture doesnt appear to exist, and the script won't continue.
+Auto startup with XBMC Startup:
+-------------------------------
+It is possible to have the script start with XBMC by the use of autoexec.py.
+It is included, all you need to do is copy it to Q:\scripts
+
+It can startup in three modes:
+# SILENT = do whole upgrade without GUI interaction.
+# NOTIFY = just inform of new build
+# NORMAL = Interactive prompt driven
+
+The required mode needs to be edited into autoexec.py executebuiltin.  The script comes with it set to NOTIFY
+
+
+Knonw Problems:
+---------------
+*sometimes* the newly extracted rar folder strcture doesnt appear to exist, and the script won't continue.
 This is known problem and the best thing to do is, reboot and try again, your existing XBMC installation has not been touched.
 
 If you're stuck, post in the appropiate forum at http://www.xboxmediacenter.com/forum/
