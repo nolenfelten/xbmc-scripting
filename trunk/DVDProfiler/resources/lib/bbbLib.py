@@ -1,5 +1,5 @@
 """
- bbbLib.py
+ bbbLib.py - DVDProfiler
 
  General functions.
  
@@ -16,7 +16,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '21-01-2008'
+__date__ = '22-01-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -118,32 +118,7 @@ FONT13 = 'font13'
 FONT14 = 'font14'
 FONT18 = 'font18'
 
-# GFX - for library funcs
-BACKGROUND_FILENAME = os.path.join(DIR_GFX,'background.png')
-HEADER_FILENAME = os.path.join(DIR_GFX,'header.png')
-FOOTER_FILENAME = os.path.join(DIR_GFX,'footer.png')
-LOGO_FILENAME = os.path.join(DIR_GFX,'logo.png')
-BTN_A_FILENAME = os.path.join(DIR_GFX,'abutton.png')
-BTN_B_FILENAME = os.path.join(DIR_GFX,'bbutton.png')
-BTN_X_FILENAME = os.path.join(DIR_GFX,'xbutton.png')
-BTN_Y_FILENAME = os.path.join(DIR_GFX,'ybutton.png')
-BTN_WHITE_FILENAME = os.path.join(DIR_GFX,'whitebutton.png')
-BTN_BACK_FILENAME = os.path.join(DIR_GFX,'backbutton.png')
-LIST_HIGHLIGHT_FILENAME = os.path.join(DIR_GFX,'list_highlight.png')
-FRAME_FOCUS_FILENAME = os.path.join(DIR_GFX,'frame_focus.png')
-FRAME_NOFOCUS_FILENAME = os.path.join(DIR_GFX,'frame_nofocus.png')
-FRAME_NOFOCUS_LRG_FILENAME = os.path.join(DIR_GFX,'frame_nofocus_large.png')
-README_FILENAME = os.path.join(DIR_HOME , 'readme.txt')
-CHANGELOG_FILENAME = os.path.join(DIR_HOME , 'changelog.txt')
-PANEL_FILENAME = os.path.join(DIR_GFX,'dialog-panel.png')
-PANEL_FILENAME_MC360 = os.path.join(DIR_GFX,'dialog-panel_mc360.png')
-MENU_FILENAME = os.path.join(DIR_GFX,'menu.png')
-
-#dialog = xbmcgui.DialogProgress()
-# rez GUI defined in
-REZ_W = 720
-REZ_H = 576
-
+dialogProgress = xbmcgui.DialogProgress()
 try: Emulating = xbmcgui.Emulating
 except: Emulating = False
 
@@ -167,7 +142,6 @@ def debug( value ):
 def messageOK(title='', line1='', line2='',line3=''):
 	xbmcgui.Dialog().ok(title ,line1,line2,line3)
 
-
 #################################################################################################################
 def dialogOK(title, line1='', line2='',line3=''):
 	xbmcgui.Dialog().ok(title ,line1,line2,line3)
@@ -177,9 +151,9 @@ def dialogYesNo(title="", line1="", line2="",line3="", yesButton="", noButton=""
 	if not title:
 		title = __language__( 0 )
 	if not yesButton:
-		yesButton= __language__( 500 )
+		yesButton= __language__( 350 )
 	if not noButton:
-		noButton= __language__( 501 )
+		noButton= __language__( 351 )
 	return xbmcgui.Dialog().yesno(title, line1, line2, line3, noButton, yesButton)
 
 #################################################################################################################
@@ -208,7 +182,7 @@ def makeScriptDataDir():
 def makeDir(dir):
 	try:
 		os.mkdir( dir )
-		debug("created dir: " + dir)
+		debug("bbbLib.created dir: " + dir)
 	except: pass
 
 #############################################################################################################
@@ -223,11 +197,7 @@ def removeDir(dir, title="", msg="", msg2=""):
 def deleteFile(filename):
 	try:
 		os.remove(filename)
-		debug("file deleted: " + filename)
-#	except OSError, ex:
-#		if ex[0] == 13:		# perm denied
-#			errCodeStr = str(ex[0]) + ", " + str(ex[1])
-#			dialogOK("File Delete Error",errCodeStr,filename)
+		debug("bbbLib.file deleted: " + filename)
 	except: pass
 
 #################################################################################################################
@@ -248,18 +218,14 @@ def fileExist(filename):
 
 #################################################################################################################
 def isFileNewer(oldFilename, newFilename):
-	new = False
+	new = True
 	try:
 		# returns secs since epoch
 		oldFileTime = os.path.getmtime(oldFilename)
 		newFileTime = os.path.getmtime(newFilename)
-		if newFileTime > oldFileTime:
-			new = True
-	except:
-		new = True	# incase old doesnt exist
-
+		new = (newFileTime > oldFileTime)
+	except: pass
 	return new
-
 
 ##############################################################################################
 def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
@@ -306,185 +272,6 @@ def setResolution(win):
 
 	win.setCoordinateResolution(rez)
 	debug("setResolution() curr Rez=" + str(currRez) + " new Rez="+str(rez))
-
-#################################################################################################################
-# Dialog with options
-#################################################################################################################
-class DialogSelect(xbmcgui.WindowDialog):
-	def __init__(self):
-		if Emulating: xbmcgui.WindowDialog.__init__(self)
-
-		setResolution(self)
-
-		self.selectedPos = -1		# EXIT option
-		self.panelCI = None
-		self.menuCL = None
-		self.lastAction = 0
-
-	def setup(self, title='',width=430, height=450, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
-			  imageWidth=0,imageHeight=22, itemHeight=22, rows=0,
-			  useY=False, useX=False, isDelete=False, panel='', banner=''):
-		debug("> DialogSelect().setup() useY="+str(useY) + " useX=" + str(useX) + " isDelete=" + str(isDelete))
-
-		if not panel:
-			panel = DIALOG_PANEL
-		self.useY = useY
-		self.useX = useX
-		self.isDelete = isDelete
-		offsetLabelX = 15
-		offsetListX = 20
-		listW = width - offsetListX - 5
-		if imageHeight > itemHeight:
-			itemHeight = imageHeight
-
-		if banner:
-			bannerH = 40
-		else:
-			bannerH = 0
-
-		if title:
-			titleH = 25
-		else:
-			titleH = 0
-
-		# calc height based on rows, otherwise use supplied height
-		if rows > 0:
-			rows += 3		 # add 'exit' + extra rows
-			listH = (rows * itemHeight)
-		else:
-			listH = height
-
-		if height > listH:
-			height = listH						# shrink height to fit list
-		elif height < listH:
-			listH = height-itemHeight			# shrink list to height, minus 1 line
-
-		height += titleH + bannerH				# add space onto for title + gap
-
-		# center on screen
-		if xpos < 0:
-			xpos = int((REZ_W /2) - (width /2))
-		if ypos < 0:
-			ypos = int((REZ_H /2) - (height /2)) + 10
-
-		bannerY = ypos + 10
-		titleY = bannerY + bannerH 
-		listY = titleY + titleH
-
-		try:
-			self.removeControl(self.panelCI)
-		except: pass
-		try:
-			self.panelCI = xbmcgui.ControlImage(xpos, ypos, width, height, panel)
-			self.addControl(self.panelCI)
-		except: pass
-
-		if isDelete:
-			title += " " + __language__(699)
-
-		if title:
-			self.titleCL = xbmcgui.ControlLabel(xpos+offsetLabelX, titleY, listW, titleH, \
-												title, FONT13, '0xFFFFFF00', alignment=XBFONT_CENTER_X)
-			self.addControl(self.titleCL)
-
-		if bannerH:
-			try:
-				self.removeControl(self.bannerCI)
-			except: pass
-			try:
-				self.bannerCI = xbmcgui.ControlImage(xpos+offsetListX, bannerY,
-													listW, bannerH, banner, aspectRatio=2)
-				self.addControl(self.bannerCI)
-			except:
-				debug("failed to place banner")
-
-		try:
-			self.removeControl(self.menuCL)
-		except: pass
-		if not self.isDelete:
-			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
-											listW, listH, textColor=textColor, \
-											imageWidth=imageWidth, imageHeight=imageHeight, \
-											itemHeight=itemHeight, \
-											itemTextXOffset=0, space=0, alignmentY=XBFONT_CENTER_Y)
-		else:
-			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
-											listW, listH, textColor=textColor, \
-											imageWidth=imageWidth, imageHeight=imageHeight, \
-											itemHeight=itemHeight, buttonFocusTexture=LIST_HIGHLIGHT_FILENAME, \
-											itemTextXOffset=0, space=0, alignmentY=XBFONT_CENTER_Y)
-		self.addControl(self.menuCL)
-		self.menuCL.setPageControlVisible(False)
-		debug("< DialogSelect().setup()")
-
-	def onAction(self, action):
-		debug("DialogSelect.onAction()")
-		if action == 0:
-			return
-		self.lastAction = action
-		if action in [ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR]:
-			self.selectedPos = -1
-			self.close()
-		elif (self.useY and action == ACTION_Y_BUTTON) or \
-			 (self.useX and action == ACTION_X_BUTTON):
-			self.selectedPos = self.menuCL.getSelectedPosition()
-			self.close()
-
-	def onControl(self, control):
-		debug("DialogSelect.onControl()")
-		try:
-			self.selectedPos = self.menuCL.getSelectedPosition()
-		except: pass
-		self.close()
-
-	def setMenu(self, menu, icons=[]):
-		debug("> DialogSelect.setMenu()")
-		self.menuCL.reset()
-		self.menuCL.addItem("Exit")
-		if menu:
-			for idx in range(len(menu)):
-				opt = menu[idx]
-				try:
-					img = icons[idx]
-				except:
-					img = ''
-
-				if isinstance(opt, xbmcgui.ListItem):
-					# associate an img with listitems that have them
-					if img:
-						opt.setIconImage(img)
-						opt.setThumbnailImage(img)
-					self.menuCL.addItem(opt)
-				elif isinstance(opt, list) or isinstance(opt, tuple):
-					# option is itself a list [lbl1, lbl2]
-					l1 = opt[0].strip()
-					try:
-						l2 = opt[1].strip()
-					except:
-						l2 = ''
-					self.menuCL.addItem(xbmcgui.ListItem(l1, l2, img, img))
-				else:
-					# single string value
-					self.menuCL.addItem(xbmcgui.ListItem(opt.strip(), '', img, img))
-
-			if self.selectedPos > len(menu):
-				self.selectedPos = len(menu)-1
-			self.menuCL.selectItem(self.selectedPos)
-		debug("< DialogSelect.setMenu()")
-
-	# show this dialog and wait until it's closed
-	def ask(self, menu, selectIdx=-1, icons=[]):
-		debug ("> DialogSelect().ask() selectIdx=" +str(selectIdx))
-
-		self.selectedPos = selectIdx+1	# allow for exit option
-		self.setMenu(menu, icons)
-		self.setFocus(self.menuCL)
-		self.doModal()
-		self.selectedPos -= 1
-
-		debug ("< DialogSelect.ask() selectedPos: " + str(self.selectedPos) + " lastAction: " + str(self.lastAction))
-		return self.selectedPos, self.lastAction
-
 
 #######################################################################################################################    
 def parseDocList(doc, regex, startStr='', endStr=''):
@@ -547,7 +334,7 @@ def HTTPErrorCode(e):
 			txt = str(e[1])
 		except:
 			txt = 'Unknown reason'
-	debug("HTTPErrorCode: " + str(code) + " " + txt)
+	debug("bbbLib.HTTPErrorCode: " + str(code) + " " + txt)
 	messageOK(title, txt)
 
 #################################################################################################################
@@ -630,9 +417,9 @@ def urlTextToASCII(text):
 		for match in match_obj:
 			ch = chr(int(match[1]))
 			text = text.replace(match[0], ch)
-		debug("urlTextToASCII() DONE")
+		debug("bbbLib.urlTextToASCII() DONE")
 	except:
-		debug("urlTextToASCII() exception")
+		debug("bbbLib.urlTextToASCII() exception")
 	return text
 
 
@@ -1152,10 +939,11 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 		safe_url = url
 	if not safe_url.startswith('http://'):
 		safe_url = 'http://' + safe_url
-	debug("> fetchURL() " + safe_url)
+	debug("> bbbLib.fetchURL() " + safe_url)
 
 	def _report_hook( count, blocksize, totalsize ):
 		# just update every x%
+		if count:
 		percent = int( float( count * blocksize * 100) / totalsize )
 		if (percent % 5) == 0:
 			dialogProgress.update( percent )
@@ -1164,7 +952,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 	data = None
 	# create temp file if needed
 	if not file:
-		file = os.path.join(DIR_USERDATA, "temp.html")
+		file = os.path.join(os.getcwd().replace( ";", "" ), "temp.html")
 	debug("file: " + file)
 
 	# remove destination file if exists already
@@ -1211,13 +999,13 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 # fetch using urllib2 and Cookies
 #################################################################################################################
 def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
+	debug("> bbbLib.fetchCookieURL() ")
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
 	else:
 		safe_url = url
 	if not safe_url.startswith('http://'):
 		safe_url = 'http://' + safe_url
-	debug("> fetchCookieURL() ")
 
 	data = None
 	if fn:
@@ -1266,7 +1054,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 			except:
 				data = None
 
-	debug("< fetchCookieURL()")
+	debug("< bbbLib.fetchCookieURL()")
 	return data
 
 
@@ -1328,7 +1116,7 @@ def isImageURL(url):
 		url = match.group(1)
 	except:
 		url = ''
-	debug("isImageURL() " + str(url != ''))
+	debug("bbbLib.isImageURL() " + str(url != ''))
 	return url
 
 #################################################################################################################
@@ -1338,62 +1126,6 @@ def isRSSLink(url):
 #################################################################################################################
 def isHTMLLink(url):
 	return searchRegEx(url, '(html|htm)$')
-
-#################################################################################################################
-class TextBoxDialog(xbmcgui.WindowDialog):
-	def __init__(self):
-		if Emulating: xbmcgui.WindowDialog.__init__(self)
-		setResolution(self)
-
-	def _setupDisplay(self, width, height):
-		debug( "TextBoxDialog()._setupDisplay()" )
-
-		xpos = int((REZ_W /2) - (width /2))
-		ypos = int((REZ_H /2) - (height /2))
-
-		try:
-			self.addControl(xbmcgui.ControlImage(xpos, ypos, width, height, DIALOG_PANEL))
-		except: pass
-
-		xpos += 25
-		ypos += 10
-		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '', \
-											FONT14, "0xFFFFFF99", alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
-		self.addControl(self.titleCL)
-		ypos += 25
-		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-85, FONT10, '0xFFFFFFEE')
-		self.addControl(self.descCTB)
-
-	def ask(self, title, text="", file=None, width=685, height=560):
-		debug( "> TextBoxDialog().ask()" )
-		self._setupDisplay(width, height)
-		if not title and file:
-			head, title = os.path.split(file)
-		self.titleCL.setLabel(title)
-		if file:
-			text = readFile(file)
-		self.descCTB.setText(text)
-		self.setFocus(self.descCTB)
-		self.doModal()
-		debug( "< TextBoxDialog().ask()" )
-
-	def onAction(self, action):
-		if action in CANCEL_DIALOG:
-			self.close()
-
-	def onControl(self, control):
-		debug("onControl()")
-
-#############################################################################################################
-# detect if using MC360 style skin - any theme
-def isMC360():
-	try:
-		sd = xbmc.getSkinDir()
-		state = (find(sd,'360') >= 0)
-	except:
-		state = False
-	debug("bbbLib.isMC360() " +str(state))
-	return state
 
 ######################################################################################
 def loadFileObj( filename, dataType ):
@@ -1424,7 +1156,7 @@ def saveFileObj( filename, saveObj ):
 
 #################################################################################################################
 def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=False):
-	debug("> listDir()")
+	debug("> bbbLib.listDir() path=" + path)
 
 	fileList = []
 	if ext:
@@ -1459,7 +1191,7 @@ def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=Fal
 						fileList.append(filename)
 
 	sz = len(fileList)
-	debug("< listDir() file count="+str(sz))
+	debug("< bbbLib.listDir() file count="+str(sz))
 	return fileList
 
 
@@ -1509,7 +1241,7 @@ class RSSParser(sgmllib.SGMLParser):
 # Parser that parses version 2.0 RSS documents
 class RSSParser2:
 	def __init__(self):
-		debug("RSSParser2().init()")
+		debug("bbbLib.RSSParser2().init()")
 
 	# feeds the xml document from given url or file to the parser
 	def feed(self, url="", file="", doc="", title="Downloading XML"):
@@ -1543,7 +1275,7 @@ class RSSParser2:
 		else:
 			success = True
 
-		debug("< RSSParser2().feed() success: " + str(success))
+		debug("< bbbLib.RSSParser2().feed() success: " + str(success))
 		return success
 
 
@@ -1641,213 +1373,21 @@ class RSSNode:
 		return self.elements.has_key(element)
 
 #############################################################################################################
+# detect if using MC360 style skin - any theme
+def isMC360():
+	skinName = getSkinName()
+	is360 = (find(skinName,'360') >= 0)
+	debug("bbbLib.isMC360() " +str(is360))
+	return is360
+
+#############################################################################################################
 def getSkinName():
 	skinName = os.path.basename(xbmc.getSkinDir())
-	debug("getSkinName() skinName="+skinName)
+	debug("bbbLib.getSkinName() skinName="+skinName)
 	return skinName
 
-
-#################################################################################################################
-def gethostipbyname(host):
-	ip = host
-	if not isIP(host):
-		try:
-			hostEnt = nmb.NetBIOS().gethostbyname( host )
-			ip = hostEnt[0].get_ip()
-		except:
-			ip = ''
-	debug("gethostipbyname() ip=" + ip)
-	return ip
 
 #################################################################################################################
 def isIP(host):
 	return re.match('^\d+\.\d+\.\d+\.\d+$', host)
 
-#######################################################################################################
-class AdjustOverscan(xbmcgui.Window):
-	def __init__(self):
-		if Emulating: xbmcgui.Window.__init__(self)
-		debug("> AdjustOverscan() init()")
-
-		setResolution(self)
-		self.isTL = True
-		self.backg = xbmcgui.ControlImage(0,0, REZ_W, REZ_H, DIR_GFX + 'blank_background.png')
-		self.info = xbmcgui.ControlTextBox(150, 150, 400, 300, 'font12')
-		self.tlCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_TL_FILENAME)
-		self.brCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_BR_FILENAME)
-
-		debug("< AdjustOverscan() init()")
-
-	###################################################################################################
-	def onAction(self, action):
-		if action == ACTION_PREVIOUS_MENU:
-			self.close()
-		elif action == ACTION_SELECT_ITEM:
-			self.isTL = not self.isTL
-			self.draw()
-		elif action == ACTION_MOVE_LEFT or action == ACTION_MOVE_RIGHT or \
-			 action == ACTION_MOVE_UP or action == ACTION_MOVE_DOWN:
-			if action == ACTION_MOVE_LEFT:
-				if self.isTL:
-					self.overscanL -= 1
-				else:
-					self.overscanR += 1
-			elif action == ACTION_MOVE_RIGHT:
-				if self.isTL:
-					self.overscanL += 1
-				else:
-					self.overscanR -= 1
-			elif action == ACTION_MOVE_UP:
-				if self.isTL:
-					self.overscanT -= 1
-				else:
-					self.overscanB += 1
-			elif action == ACTION_MOVE_DOWN:
-				if self.isTL:
-					self.overscanT += 1
-				else:
-					self.overscanB -= 1
-			self.draw()
-
-	###################################################################################################
-	def onControl(self, control):
-		pass
-
-	##############################################################################################
-	def draw(self):
-		xbmcgui.lock()
-		text = 'To Adjust Overscan:\n\nDPAD = Move corner.  A Button = Change corner.  BACK = Exit.\n\nAdjusting: '
-		if self.isTL:
-			text +=  'TOP LEFT'
-		else:
-			text += 'BOTTOM RIGHT'
-		text += '\n\nOverscan TOP: ' + str(self.overscanT) + \
-			   '\nOverscan LEFT: ' + str(self.overscanL) + \
-			   '\nOverscan BOTTOM: ' + str(self.overscanB) + \
-			   '\nOverscan RIGHT: ' + str(self.overscanR)
-		self.info.setText(text)
-
-		self.brCB.setEnabled(not self.isTL)
-		self.brCB.setVisible(not self.isTL)
-		self.tlCB.setEnabled(self.isTL)
-		self.tlCB.setVisible(self.isTL)
-
-		if self.isTL:
-			self.tlCB.setPosition(self.overscanL, self.overscanT)
-			self.setFocus(self.tlCB)
-		else:
-			x = REZ_W - self.overscanR - 57	# img w
-			y = REZ_H - self.overscanB - 57 # img h
-			self.brCB.setPosition(x, y)
-			self.setFocus(self.brCB)
-
-		xbmcgui.unlock()
-
-	##############################################################################################
-	def ask(self, top=5, left=5, bottom=5, right=5):
-		debug("> ask()")
-		# OVERSCAN
-		self.overscanT = top
-		self.overscanL = left
-		self.overscanB = bottom
-		self.overscanR = right
-		self.addControl(self.backg)
-		self.addControl(self.info)
-		self.addControl(self.tlCB)
-		self.addControl(self.brCB)
-		self.draw()
-		self.doModal()
-		debug("< ask()")
-		return self.overscanT, self.overscanL, self.overscanB, self.overscanR
-
-
-
-#######################################################################################################################    
-def updateGlobals(basePath=''):
-	debug("> updateGlobals() basePath="+basePath)
-
-	global DIR_SYSTEM, DIR_CACHE, DIR_GFX, DIR_SKIN, SKIN_NAME
-	global BACKGROUND_FILENAME, BACKG_BLANK_FILENAME, HEADER_FILENAME, FOOTER_FILENAME, MENU_FILENAME
-	global BTN_A_FILENAME, BTN_B_FILENAME, BTN_X_FILENAME, BTN_Y_FILENAME, BTN_WHITE_FILENAME,BTN_BACK_FILENAME
-	global OVERSCAN_TL_FILENAME, OVERSCAN_BR_FILENAME, LIST_DELETE_FILENAME
-	global FRAME_FOCUS_FILENAME, FRAME_NOFOCUS_FILENAME, FRAME_NOFOCUS_LRG_FILENAME
-	global README_FILENAME,CHANGELOG_FILENAME,DIALOG_PANEL,LOGO_FILENAME
-	global IS_MC360
-
-	if DEBUG:
-		print "bbbLib __file__=", __file__
-		print "bbbLib os.getcwd()=", os.getcwd()
-
-	if not basePath:
-		DIR_SYSTEM, tail = os.path.split(__file__)
-		if DIR_SYSTEM[-1]!='\\': DIR_SYSTEM += '\\'
-		DIR_CACHE = DIR_SYSTEM.replace('system','cache')
-	else:
-		if basePath[-1]==';': basePath=basePath[0:-1]
-		if basePath[-1]!='\\': basePath += '\\'
-		DIR_SYSTEM = basePath + 'system\\'
-		DIR_CACHE = basePath + 'cache\\'
-
-	DIR_GFX = DIR_SYSTEM + "gfx\\"
-	DIR_SKIN = DIR_SYSTEM + 'skin\\'
-	SKIN_NAME = getSkinName()
-	IS_MC360 = isMC360(SKIN_NAME)
-	PMIII = 'PMIII'
-	
-	# set skin dir according to xbmc skin, otherwise default to gfx dir
-	PANEL = 'dialog-panel.png'
-	if os.path.isdir(DIR_SKIN + SKIN_NAME):
-		DIR_SKIN += SKIN_NAME + '\\'
-	elif os.path.isdir(DIR_SKIN + PMIII):
-		SKIN_NAME = PMIII
-		DIR_SKIN += SKIN_NAME + '\\'
-	else:
-		debug("no xbmc skin named dir or PMIII dir, default to GFX dir")
-		SKIN_NAME = ''
-		DIR_SKIN = DIR_GFX
-		# use a mc360 panel if that skin is set
-		if IS_MC360:
-			PANEL = 'dialog-panel_mc360.png'
-
-	# gfx specific to skin
-	DIALOG_PANEL = DIR_SKIN + PANEL
-	BACKGROUND_FILENAME = DIR_SKIN + 'background.png'
-	HEADER_FILENAME = DIR_SKIN + 'header.png'
-	FOOTER_FILENAME = DIR_SKIN + 'footer.png'
-
-	# common path + gfx 
-	BACKG_BLANK_FILENAME = DIR_GFX + 'blank_background.png'
-	LOGO_FILENAME = DIR_GFX + 'logo.png'
-	BTN_A_FILENAME = DIR_GFX + 'abutton.png'
-	BTN_B_FILENAME = DIR_GFX + 'bbutton.png'
-	BTN_X_FILENAME = DIR_GFX + 'xbutton.png'
-	BTN_Y_FILENAME = DIR_GFX + 'ybutton.png'
-	BTN_WHITE_FILENAME = DIR_GFX + 'whitebutton.png'
-	BTN_BACK_FILENAME = DIR_GFX + 'backbutton.png'
-	OVERSCAN_TL_FILENAME = DIR_GFX + 'overscan_tl.png'
-	OVERSCAN_BR_FILENAME = DIR_GFX + 'overscan_br.png'
-	LIST_DELETE_FILENAME = DIR_GFX + 'list_delete.png'
-	FRAME_FOCUS_FILENAME = DIR_GFX + 'frame_focus.png'
-	FRAME_NOFOCUS_FILENAME = DIR_GFX + 'frame_nofocus.png'
-	FRAME_NOFOCUS_LRG_FILENAME = DIR_GFX + 'frame_nofocus_large.png'
-	MENU_FILENAME = DIR_GFX + 'menu.png'
-	README_FILENAME = 'readme.txt'
-	CHANGELOG_FILENAME = 'changelog.txt'
-
-	if DEBUG:
-		print __name__+" DIR_SYSTEM=", DIR_SYSTEM
-		print __name__+" DIR_CACHE=", DIR_CACHE
-		print __name__+" DIR_GFX=", DIR_GFX
-		print __name__+" DIR_SKIN=", DIR_SKIN
-		print __name__+" SKIN_NAME=", SKIN_NAME
-		print __name__+" DIALOG_PANEL=", DIALOG_PANEL
-
-	debug("< updateGlobals()")    
-
-
-######################################################################################
-# establish default panel to use for dialogs
-if isMC360():
-	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME_MC360)
-else:
-	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME)

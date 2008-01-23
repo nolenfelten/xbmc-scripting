@@ -202,7 +202,7 @@ class DVDProfiler(xbmcgui.Window):
 						debug("location=" + location);
 						if not location: raise
 					except:
-						dialogOK(__language__(410),__language__(411))
+						dialogOK(__language__(210),__language__(211))
 					else:
 						smbPath = "%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH], \
 												self.settings[self.SETTING_SMB_MOVIES_SHARE],
@@ -210,7 +210,7 @@ class DVDProfiler(xbmcgui.Window):
 						debug(smbPath)
 						result = xbmc.Player().play(smbPath)
 						if not xbmc.Player().isPlaying():
-							dialogOK(__language__(410),__language__(412),smbPath)
+							dialogOK(__language__(210),__language__(212),smbPath)
 			elif not self.showDVD():
 				self.reset()
 		elif control == self.sortColCB:				# sort by column btn
@@ -276,7 +276,7 @@ class DVDProfiler(xbmcgui.Window):
 
 			if startupMode == self.START_MODE_MENU:
 				selectDialog = DialogSelect()
-				selectDialog.setup(__language__(413), width=300, rows=len(menu),banner=LOGO_FILENAME)
+				selectDialog.setup(__language__(213), width=300, rows=len(menu),banner=LOGO_FILENAME)
 				selectedPos, action = selectDialog.ask(menu, selectedPos)
 				if selectedPos < 0:
 					break
@@ -322,7 +322,7 @@ class DVDProfiler(xbmcgui.Window):
 				if self.dvdCollection and self.dvdCollection.getCollectionSize() > 0:
 					success = True
 				else:
-					dialogOK(__language__(301),__language__(302))
+					dialogOK(__language__(101),__language__(102))
 		else:
 			debug("LOCAL collection")
 			if fileExist(self.localCollectionFilename):
@@ -330,7 +330,7 @@ class DVDProfiler(xbmcgui.Window):
 				if self.dvdCollection and self.dvdCollection.getCollectionSize() > 0:
 					success = True
 			if not success:
-				dialogOK(__language__(301),__language__(303), self.localCollectionFilename)
+				dialogOK(__language__(101),__language__(103), self.localCollectionFilename)
 
 		# final check
 		if success:
@@ -362,7 +362,7 @@ class DVDProfiler(xbmcgui.Window):
 		while not success:
 			if forceConfig or not self._checkSMBSettings():
 				if not forceConfig:
-					dialogOK(__language__(304),__language__(305))
+					dialogOK(__language__(104),__language__(105))
 				self.configSMB()
 				forceConfig = False
 				continue									# loop to re-check SMB setup
@@ -374,7 +374,7 @@ class DVDProfiler(xbmcgui.Window):
 			smbPath = "%s/%s" % (self.settings[self.SETTING_SMB_PATH], self.settings[self.SETTING_SMB_DVDPRO_SHARE])
 			self.remote, remoteInfo = smbConnect(self.settings[self.SETTING_SMB_PC_IP], smbPath)
 			if not self.remote or not remoteInfo:
-				title = __language__(306)
+				title = __language__(106)
 			else:
 				smbPath = self.makeDVDProSMBPath()
 				if not fileExist(self.localCollectionFilename) or \
@@ -382,13 +382,13 @@ class DVDProfiler(xbmcgui.Window):
 							self.remote, self.settings[self.SETTING_SMB_PC_IP]):
 					success = self.fetchCollectionSMB(True)
 					if not success:
-						title = __language__(307)
+						title = __language__(107)
 				else:
 					success = True
 
 			# report failure reason
 			if not success:
-				if dialogYesNo(title, line1=__language__(414)):
+				if dialogYesNo(title, line1=__language__(214)):
 					forceConfig = True
 				else:
 					self.settings[self.SETTING_SMB_USE] = False
@@ -408,9 +408,9 @@ class DVDProfiler(xbmcgui.Window):
 		if version != "-1":
 			if __version__ < version:
 				if ( dialogYesNo( __language__(0), \
-					  "%s %s %s." % ( __language__( 1006 ), version, __language__( 1002 ), ), __language__( 1003 ),\
-					  "", noButton=__language__( 501 ), \
-					  yesButton=__language__( 500 ) ) ):
+					  "%s %s %s." % ( __language__(1006 ), version, __language__(1002 ), ), __language__(1003 ),\
+					  "", noButton=__language__(301 ), \
+					  yesButton=__language__(300 ) ) ):
 					updated = True
 					up.makeBackup()
 					up.issueUpdate(version)
@@ -1002,7 +1002,7 @@ class DVDProfiler(xbmcgui.Window):
 			success = fileExist(self.localCollectionFilename)
 
 		if not success:
-			dialogProgress.create(__language__(415), __language__(400))
+			dialogProgress.create(__language__(215), __language__(100))
 			# remove any old parsed files
 			deleteFile(KEYS_FILE)
 			deleteFile(COLLECTION_FLAT_FILE)
@@ -1043,7 +1043,7 @@ class DVDProfiler(xbmcgui.Window):
 		self.clearControls()
 
 		# load data into controls
-		self.title.setLabel(__language__(400))
+		self.title.setLabel(__language__(100))
 		success = self.dvdCollection.parseDVD(collNum)
 		if not success:
 			debug ("< showDVD() failed to parseDVD")
@@ -1253,7 +1253,7 @@ class DVDProfiler(xbmcgui.Window):
 					url = "%s/cgi-bin/data/myprofiler/images/%s" % (aliasURL, coverFilename)
 				else:
 					url = "%s/mpimages/%s/%s" % (aliasURL, coverFilename[:2],coverFilename)
-				dialogProgress.create(__language__(416), coverFilename)
+				dialogProgress.create(__language__(216), coverFilename)
 				if fetchCookieURL(url, localFile, isImage=True):
 					success = True
 
@@ -1277,7 +1277,7 @@ class DVDProfiler(xbmcgui.Window):
 	def fetchAllImages(self):
 		debug("> fetchAllImages()")
 
-		dialogProgress.create(__language__(417))
+		dialogProgress.create(__language__(17))
 		MAX = self.dvdCollection.getCollectionSize()
 		count = float(1.0)
 		for collNum, data in self.dvdCollection.keys.items():
@@ -1387,9 +1387,9 @@ class DVDProfiler(xbmcgui.Window):
 			menu = []
 			menu.append(xbmcgui.ListItem(OPT_CONFIG_SMB))
 			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]:
-				value = __language__(500)
+				value = __language__(350)
 			else:
-				value = __language__(501)
+				value = __language__(351)
 			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT_CHECK_STARTUP, value))
 			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT))
 			menu.append(xbmcgui.ListItem(OPT_CLEAR_CACHE))
@@ -1453,9 +1453,9 @@ class DVDProfiler(xbmcgui.Window):
 			debug("_makeMenu()")
 			menu = []
 			if self.settings[self.SETTING_SMB_USE]:
-				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(500)))
+				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(350)))
 			else:
-				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(501)))
+				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(351)))
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_PATH, self.settings[self.SETTING_SMB_PATH]))
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_PC_IP, self.settings[self.SETTING_SMB_PC_IP]))
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_DVDPRO_SHARE, self.settings[self.SETTING_SMB_DVDPRO_SHARE]))
@@ -1496,28 +1496,28 @@ class DVDProfiler(xbmcgui.Window):
 					changed = True
 
 			elif key == MENU_OPT_SMB_PC_IP:
-				ip = doKeyboard(value, __language__(418), KBTYPE_IP)	# IP dialog)
+				ip = doKeyboard(value, __language__(218), KBTYPE_IP)	# IP dialog)
 				if not isIP(ip):
-					messageOK(__language__(308),__language__(419))
+					messageOK(__language__(108),__language__(219))
 				else:
 					self.settings[self.SETTING_SMB_PC_IP] = ip
 					changed = True
 
 			elif key == MENU_OPT_SMB_FILENAME:
-				filename = doKeyboard(value,__language__(420),KBTYPE_ALPHA)
+				filename = doKeyboard(value,__language__(220),KBTYPE_ALPHA)
 				if filename:
 					self.settings[self.SETTING_SMB_FILENAME] = filename
 					changed = True
 
 			elif key == MENU_OPT_SMB_COLLECTION_DIR:
-				value = doKeyboard(value,__language__(421),KBTYPE_ALPHA)
+				value = doKeyboard(value,__language__(221),KBTYPE_ALPHA)
 				if value.endswith('/'): value = value[:-1]
 				value = value.replace('\\','/')
 				self.settings[self.SETTING_SMB_COLLECTION_DIR] = value
 				changed = True
 
 			elif key == MENU_OPT_SMB_IMAGES_DIR:
-				value = doKeyboard(value,__language__(422),KBTYPE_ALPHA)
+				value = doKeyboard(value,__language__(222),KBTYPE_ALPHA)
 				if value.endswith('/'): value = value[:-1]
 				value = value.replace('\\','/')
 				self.settings[self.SETTING_SMB_IMAGES_DIR] = value
@@ -1547,7 +1547,7 @@ class DVDProfiler(xbmcgui.Window):
 				smbPath = "%s/%s" % (self.settings[self.SETTING_SMB_PATH], self.settings[self.SETTING_SMB_DVDPRO_SHARE])
 				remote, remoteInfo = smbConnect(self.settings[self.SETTING_SMB_PC_IP],smbPath)
 				if remote and remoteInfo:
-					messageOK(__language__(648),__language__(401), smbPath)
+					messageOK(__language__(648),__language__(201), smbPath)
 
 			if changed:
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
@@ -1561,14 +1561,14 @@ class DVDProfiler(xbmcgui.Window):
 		success = False
 		try:
 			title = __language__(631).replace('?','')
-			if dialogYesNo(title, __language__(423)):
+			if dialogYesNo(title, __language__(223)):
 				debug("rmtree " + DIR_IMG_CACHE)
 				rmtree( DIR_IMG_CACHE )
 				time.sleep(1)
 				debug("makeDir " + DIR_IMG_CACHE)
 				makeDir( DIR_IMG_CACHE )
 
-			if dialogYesNo(title, __language__(424)):
+			if dialogYesNo(title, __language__(224)):
 				debug("rmtree " + DIR_DATA_CACHE)
 				rmtree( DIR_DATA_CACHE )
 				time.sleep(1)
@@ -1627,19 +1627,19 @@ class DVDCollectionXML:
 
 
 		if fileExist(COLLECTION_FLAT_FILE) and fileExist(KEYS_FILE):
-			dialogProgress.create(__language__(425),__language__(426))
+			dialogProgress.create(__language__(225),__language__(226))
 			self.loadKeys()
 		elif fileExist(self.localCollectionFilename):
-			dialogProgress.create(__language__(425),__language__(427))
+			dialogProgress.create(__language__(225),__language__(227))
 			self.saveFlatFile()
-			dialogProgress.update(50,__language__(428))
+			dialogProgress.update(50,__language__(228))
 			self.saveKeys()
-			dialogProgress.update(50,__language__(428))
+			dialogProgress.update(50,__language__(228))
 
 		if self.keys:
-			dialogProgress.update(100,__language__(403))	# success
+			dialogProgress.update(100,__language__(203))	# success
 		else:
-			dialogProgress.update(100,__language__(402))	# failed
+			dialogProgress.update(100,__language__(202))	# failed
 
 		if Emulating:
 			print "filterGenres=", self.filterGenres
@@ -2010,23 +2010,23 @@ class DVDCollectionOnline:
 
 		deleteFile(self.FILENAME_ONLINE_COLLECTION)
 		deleteFile(self.FILENAME_DVD)
-		dialogProgress.create(__language__(429),__language__(430) + self.alias)
+		dialogProgress.create(__language__(229),__language__(230) + self.alias)
 
 		html = fetchCookieURL(self.URL + self.alias)
 		if html:
 			# check if known alias
 			if find(html,'Unknown Alias') >= 0:
-				dialogOK(__language__(429), __language__(309) + self.alias)
+				dialogOK(__language__(229), __language__(109) + self.alias)
 			elif find(html,'Empty Online') >= 0:
-				dialogOK(__language__(429), __language__(310) +  self.alias)
+				dialogOK(__language__(229), __language__(110) +  self.alias)
 			else:
 				debug("fetching data page")
-				dialogProgress.update(50, __language__(431) + self.alias)
+				dialogProgress.update(50, __language__(231) + self.alias)
 
 				if fetchCookieURL(self.URL_TITLES, self.FILENAME_ONLINE_COLLECTION,newRequest=False):
 					success = True
 
-				dialogProgress.update(100, __language__(403))
+				dialogProgress.update(100, __language__(203))
 		dialogProgress.close()
 
 		debug ("< fetchCollectionOnline() success="+str(success))
@@ -2040,7 +2040,7 @@ class DVDCollectionOnline:
 		title = self.getDVDKey(int(collNum))[self.KEYS_DATA_SORTTITLE]
 		id = self.getDVDKey(int(collNum))[self.KEYS_DATA_ID]
 
-		dialogProgress.create(__language__(429), self.alias, title)
+		dialogProgress.create(__language__(229), self.alias, title)
 		if fetchCookieURL(self.URL_DVD + id, self.FILENAME_DVD):
 			success = True
 		else:
@@ -2140,7 +2140,7 @@ class ManageOnlineCollection:
 		debug("> ManageOnlineCollection() init()")
 
 		self.ONLINE_FILENAME = os.path.join( DIR_USERDATA, 'online_users.dat' )
-		self.TITLE = __language__(440)
+		self.TITLE = __language__(240)
 
 		debug("< ManageOnlineCollection() init()")
 
@@ -2193,14 +2193,14 @@ class ManageOnlineCollection:
 			elif action == ACTION_Y_BUTTON: 	# add new
 				debug("add user")
 				# ALIAS
-				user = doKeyboard("",__language__(441))
+				user = doKeyboard("",__language__(241))
 
 				# HOST URL
 				if user:
-					if dialogYesNo(__language__(442), \
-									__language__(500) + " = " + BASE_URL_INTER, \
-									__language__(501) + " = " + BASE_URL_INVOS, \
-									yesButton=__language__(500), noButton=__language__(501)):
+					if dialogYesNo(__language__(242), \
+									__language__(350) + " = " + BASE_URL_INTER, \
+									__language__(351) + " = " + BASE_URL_INVOS, \
+									yesButton=__language__(350), noButton=__language__(351)):
 						host = BASE_URL_INTER
 					else:
 						host = BASE_URL_INVOS
@@ -2209,7 +2209,7 @@ class ManageOnlineCollection:
 					try:
 						aliasData = [user, host]
 						users.index(aliasData)
-						messageOK(__language__(440), __language__(311), user, host)
+						messageOK(__language__(240), __language__(111), user, host)
 					except:
 						users.append(aliasData)
 						self.save(users)
@@ -2220,7 +2220,7 @@ class ManageOnlineCollection:
 			elif selectedPos >= 0:				# select
 				user, host = users[selectedPos]
 				if isDelete:					# in delete mode
-					if dialogYesNo(__language__(404), user, host):
+					if dialogYesNo(__language__(204), user, host):
 						users.pop(selectedPos)
 						self.save(users)
 					isDelete = False
@@ -2276,7 +2276,7 @@ class Filters(xbmcgui.WindowDialog):
 		xpos = panelX +10
 		ypos = panelY
 		self.addControl(xbmcgui.ControlLabel(xpos, ypos, 0, titleH,
-										__language__(443), FONT14, '0xFFFFFF00'))
+										__language__(243), FONT14, '0xFFFFFF00'))
 
 		# GENRES
 		ypos += titleH
@@ -2381,12 +2381,12 @@ class Filters(xbmcgui.WindowDialog):
 	##############################################################################################
 	def updateTagsHeading(self):
 		enabledCount = self.tagsDict.values().count(True)			# count enabled
-		self.tagsHeading.setLabel(__language__(444) + str(enabledCount) + '\\' + str(len(self.tagsDict)))
+		self.tagsHeading.setLabel(__language__(244) + str(enabledCount) + '\\' + str(len(self.tagsDict)))
 
 	##############################################################################################
 	def updateGenresHeading(self):
 		enabledCount = self.genresDict.values().count(True)			# count enabled
-		self.genresHeading.setLabel(__language__(445) + str(enabledCount) + '\\' + str(len(self.genresDict)))
+		self.genresHeading.setLabel(__language__(245) + str(enabledCount) + '\\' + str(len(self.genresDict)))
 
 	##############################################################################################
 	def setupList(self, controlList, dataDict):
@@ -2399,9 +2399,9 @@ class Filters(xbmcgui.WindowDialog):
 		sortList = dataDict.keys()
 		sortList.sort()
 		controlList.addItem(xbmcgui.ListItem(__language__(690)))
-		controlList.addItem(xbmcgui.ListItem(__language__(446)))
-		controlList.addItem(xbmcgui.ListItem(__language__(447)))
-		controlList.addItem(xbmcgui.ListItem(__language__(448)))  # cancels in both filters
+		controlList.addItem(xbmcgui.ListItem(__language__(246)))
+		controlList.addItem(xbmcgui.ListItem(__language__(247)))
+		controlList.addItem(xbmcgui.ListItem(__language__(248)))  # cancels in both filters
 
 		for key in sortList:
 			if dataDict[key]:
