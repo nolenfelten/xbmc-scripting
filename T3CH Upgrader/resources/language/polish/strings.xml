@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 01/16/2008-->
+<!--Date of translation: 01/23/2008-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -28,7 +28,7 @@
   <string id="311">Źródłowy plik/katalog nie istnieje!</string>
   <string id="312">Przynajmniej jeden plik lub katalog nie został wypakowany![CR][CR]Niestety jest to błąd w XBMC, rozpocznij wszystko od nowa.</string>
   <string id="313">Plik lub katalog zastrzeżony!</string>
-  <string id="314">Docelowy katalog wypakowywania już istnieje!</string>
+  <string id="314">Docelowy katalog wypakowywania już istnieje![CR]Czy napewno chcesz nadpisać?</string>
   <string id="400">Pobierz</string>
   <string id="401">Pomiń</string>
   <string id="402">Tak</string>
@@ -105,8 +105,6 @@
   <string id="1007">Przetwarzanie zapytania:</string>
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
-  <string id="1010">Nowa wersja zapisana w:</string>
-  <string id="1011">Użyj Eksploratora do kasowania starych wersji</string>
   <string id="1030">Żadna nowa oficjalna wersja nie jest dostępna!</string>
   <string id="1031">Wystąpił błąd podczas aktualizacji!</string>
 </strings>
