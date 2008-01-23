@@ -9,21 +9,28 @@
  21/03/07 - Fixed due to site changes, also enhanced and rearranged.
  07/07/07 - Version that doesnt use latest bbbLib globals setup
  11/12/07 - tweaked layout
+ 21/01/08 - Uses DIR_CACHE from USERDATA
 
 """
 
-import sys,os.path
+import sys,os,os.path
 import xbmc, xbmcgui
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "IMDbWin"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '11-12-2007'
+__date__ = '22-01-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
-DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
-DIR_GFX = sys.modules[ "__main__" ].DIR_GFX
-DIR_IMG_CACHE = sys.modules[ "__main__" ].DIR_IMG_CACHE
+DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA           # should be in default.py
+DIR_CACHE = sys.modules[ "__main__" ].DIR_CACHE                 # should be in default.py
+
+try:
+    DIR_GFX = sys.modules[ "__main__" ].DIR_GFX                 # should be in default.py
+except:
+    DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
+    DIR_GFX = os.path.join(DIR_RESOURCES,'gfx')
+
 
 from bbbLib import *
 from IMDbLib import IMDb, IMDbSearch, IMDbGallery
@@ -37,7 +44,7 @@ except:
 	messageOK("Image.py Library Missing","Install a XBMC build that contains it.")
 
 IMDB_LOGO_FILENAME = os.path.join(DIR_GFX ,'imdb_logo.png')
-dialog = xbmcgui.DialogProgress()
+dialogProgress = xbmcgui.DialogProgress()
 
 #################################################################################################################
 class IMDbWin(xbmcgui.WindowDialog):
@@ -68,6 +75,9 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.galleryImgIDX = 0
 		self.largeImage = False
 		self.movie = None
+
+		mkdir(DIR_USERDATA)
+		mkdir(DIR_CACHE)   
 
 		debug("< IMDbWin()._init_")
 
@@ -115,9 +125,9 @@ class IMDbWin(xbmcgui.WindowDialog):
 		debug("> findTitle()")
 		url = None
 
-		dialog.create("Searching IMDb Titles", title)
+		dialogProgress.create("Searching IMDb Titles", title)
 		imdbSearch = IMDbSearch(title)
-		dialog.close()
+		dialogProgress.close()
 		if not imdbSearch.SearchResults:
 			if dialogYesNo("IMDb Search Failed", title, "Edit title name and try again ?"):
 				url = ''		# will cause manual entry
@@ -130,8 +140,8 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 			# popup dialog to select choice
 			selectDialog = DialogSelect()
-			selectDialog.setup("Select A Title:", width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
-			selectedPos,action = selectDialog.ask(menu)
+			selectdialogProgress.setup("Select A Title:", width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
+			selectedPos,action = selectdialogProgress.ask(menu)
 			selectedPos -= 1 # allow for extra 'manual entry' item 
 			if selectedPos == -1:		# manual entry
 				url = ''
@@ -141,11 +151,11 @@ class IMDbWin(xbmcgui.WindowDialog):
 			year, title, url = imdbSearch.SearchResults[0]
 
 		if url:
-			dialog.create("Searching IMDb Information",title + ' ' + year)
+			dialogProgress.create("Searching IMDb Information",title + ' ' + year)
 			self.movie = IMDb(url)
 			if not self.movie:
 				url = None		# failed to parse movie info
-			dialog.close()
+			dialogProgress.close()
 		debug("< findTitle()")
 		return url
 
@@ -162,12 +172,12 @@ class IMDbWin(xbmcgui.WindowDialog):
 				url = self.imdbGallery.getThumbURL(self.galleryIDX, self.galleryImgIDX)
 
 		if url:
-			fn = os.path.join(DIR_IMG_CACHE, self.IMDB_PREFIX + os.path.basename(url))
+			fn = os.path.join(DIR_CACHE, self.IMDB_PREFIX + os.path.basename(url))
 			exists = fileExist(fn)
 			if not exists:
-				dialog.create("Downloading Image", "Please wait ...", os.path.basename(url))
+				dialogProgress.create("Downloading Image", "Please wait ...", os.path.basename(url))
 				success = fetchURL(url, fn, isImage=True)
-				dialog.close()
+				dialogProgress.close()
 				exists = fileExist(fn)
 
 #		self.picFrameCB.setEnabled(exists)
@@ -388,11 +398,11 @@ class IMDbWin(xbmcgui.WindowDialog):
 	def deleteCacheImages(self):
 		debug("> deleteCacheImages()")
 
-		files = os.listdir(DIR_IMG_CACHE)
+		files = os.listdir(DIR_CACHE)
 		for file in files:
 			fn, ext = os.path.splitext(file)
 			if ext == '.jpg' and fn.startswith(self.IMDB_PREFIX):
-				deleteFile(os.path.join(DIR_IMG_CACHE, file))
+				deleteFile(os.path.join(DIR_CACHE, file))
 		debug("< deleteCacheImages()")
 
 	# setup next/prev and image frame states

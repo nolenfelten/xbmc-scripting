@@ -5,62 +5,69 @@
     <!-- Browse dialog headings -->
 
     <!-- Error messages -->
-    <string id="300">There was an error saving your settings!</string>
-    <string id="301">Startup SMB Failed!</string>
-    <string id="302">Collection not retrieved or XML export file is empty ?</string>
-    <string id="303">Local Collection file missing/empty. Manually ftp to:</string>
-    <string id="304">SMB Setup Incomplete!</string>
-    <string id="305">Please configure or Disable SMB</string>
-    <string id="306">SMB Connection Failed</string>
-    <string id="307">SMB Fetch Collection Failed</string>
-    <string id="308">Invalid IP Format</string>
-    <string id="309">Unknown Online Alias: </string>
-    <string id="310">Empty Online Collection: </string>
-    <string id="311">Duplicate Alias!</string>
+    <string id="100">There was an error saving your settings!</string>
+    <string id="101">Startup SMB Failed!</string>
+    <string id="102">Collection not retrieved or XML export file is empty ?</string>
+    <string id="103">Local Collection file missing/empty. Manually ftp to:</string>
+    <string id="104">SMB Setup Incomplete!</string>
+    <string id="105">Please configure or Disable SMB</string>
+    <string id="106">SMB Connection Failed</string>
+    <string id="107">SMB Fetch Collection Failed</string>
+    <string id="108">Invalid IP Format</string>
+    <string id="109">Unknown Online Alias: </string>
+    <string id="110">Empty Online Collection: </string>
+    <string id="111">Duplicate Alias!</string>
 
     <!-- Status messages -->
-    <string id="400">Please wait ...</string>
-    <string id="401">Success</string>
-    <string id="402">Failed</string>
-    <string id="403">Complete</string>
-    <string id="404">Confirm Deletion ?</string>
-    <string id="410">Movie Playback</string>
-    <string id="411">Media Location not stored in XML</string>
-    <string id="412">Failed to play from location:</string>
-    <string id="413">Start Mode Menu</string>
-    <string id="414">Re-configure SMB ?</string>
-    <string id="415">SMB Fetch Collection</string>
-    <string id="416">Fetching Online Cover</string>
-    <string id="417">Fetching All Covers</string>
-    <string id="418">Enter PC IP:</string>
-    <string id="419">Enter remote PC IP</string>
-    <string id="420">Enter DVDProfiler XML export filename</string>
-    <string id="421">Enter Collection sub folder:</string>
-    <string id="422">Enter Images sub folder:</string>
-    <string id="423">Delete local cover images ?</string>
-    <string id="424">Delete local collection files ?</string>
-    <string id="425">XML Collection Initializing</string>
-    <string id="426">Loading File, Keys and Filters</string>
-    <string id="427">Creating Flat File from XML (3/4 mins on large collections)</string>
-    <string id="428">Saving Keys and Filters</string>
-    <string id="429">Online Collection</string>
-    <string id="430">Finding Alias: </string>
-    <string id="431">Fetching Online Collection: </string>
-    <string id="440">Manage Online Collection</string>
-    <string id="441">Enter collection ALIAS</string>
-    <string id="442">Online Collection Host ?</string>
-    <string id="443">Filters - (Select item to turn ON/OFF)</string>
-    <string id="444">Tags: </string>
-    <string id="445">Genres: </string>
-    <string id="446">Select All</string>
-    <string id="447">Select None</string>
-    <string id="448">Turn OFF BOTH Filters</string>
+    <string id="200">Please wait ...</string>
+    <string id="201">Success</string>
+    <string id="202">Failed</string>
+    <string id="203">Complete</string>
+    <string id="204">Confirm Deletion ?</string>
+    <string id="210">Movie Playback</string>
+    <string id="211">Media Location not stored in XML</string>
+    <string id="212">Failed to play from location:</string>
+    <string id="213">Start Mode Menu</string>
+    <string id="214">Re-configure SMB ?</string>
+    <string id="215">SMB Fetch Collection</string>
+    <string id="216">Fetching Online Cover</string>
+    <string id="217">Fetching All Covers</string>
+    <string id="218">Enter PC IP:</string>
+    <string id="219">Enter remote PC IP</string>
+    <string id="220">Enter DVDProfiler XML export filename</string>
+    <string id="221">Enter Collection sub folder:</string>
+    <string id="222">Enter Images sub folder:</string>
+    <string id="223">Delete local cover images ?</string>
+    <string id="224">Delete local collection files ?</string>
+    <string id="225">XML Collection Initializing</string>
+    <string id="226">Loading File, Keys and Filters</string>
+    <string id="227">Creating Flat File from XML (3/4 mins on large collections)</string>
+    <string id="228">Saving Keys and Filters</string>
+    <string id="229">Online Collection</string>
+    <string id="230">Finding Alias: </string>
+    <string id="231">Fetching Online Collection: </string>
+    <string id="240">Manage Online Collection</string>
+    <string id="241">Enter collection ALIAS</string>
+    <string id="242">Online Collection Host ?</string>
+    <string id="243">Filters - (Select item to turn ON/OFF)</string>
+    <string id="244">Tags: </string>
+    <string id="245">Genres: </string>
+    <string id="246">Select All</string>
+    <string id="247">Select None</string>
+    <string id="248">Turn OFF BOTH Filters</string>
+
+    <!-- script common messages -->
+    <string id="300">Please wait ...</string>
+    <string id="301">Success</string>
+    <string id="302">Failed</string>
+    <string id="303">Downloading ...</string>
 
     <!-- Yes/No buttons -->
-    <string id="500">Yes</string>
-    <string id="501">No</string>
-    <string id="502">Folder</string>
-    <string id="503">File</string>
+    <string id="350">Yes</string>
+    <string id="351">No</string>
+    <string id="352">Folder</string>
+    <string id="353">File</string>
+    <string id="354">Download</string>
 
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
