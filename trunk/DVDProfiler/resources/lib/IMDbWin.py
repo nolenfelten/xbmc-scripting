@@ -32,8 +32,9 @@ except:
     DIR_GFX = os.path.join(DIR_RESOURCES,'gfx')
 
 
-from bbbLib import *
 from IMDbLib import IMDb, IMDbSearch, IMDbGallery
+from bbbLib import *
+from bbbGUILib import *
 
 try: Emulating = xbmcgui.Emulating
 except: Emulating = False
@@ -45,6 +46,10 @@ except:
 
 IMDB_LOGO_FILENAME = os.path.join(DIR_GFX ,'imdb_logo.png')
 dialogProgress = xbmcgui.DialogProgress()
+
+# rez GUI defined in
+REZ_W = 720
+REZ_H = 576
 
 #################################################################################################################
 class IMDbWin(xbmcgui.WindowDialog):
@@ -76,8 +81,8 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.largeImage = False
 		self.movie = None
 
-		mkdir(DIR_USERDATA)
-		mkdir(DIR_CACHE)   
+		makeDir(DIR_USERDATA)
+		makeDir(DIR_CACHE)
 
 		debug("< IMDbWin()._init_")
 
@@ -140,8 +145,8 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 			# popup dialog to select choice
 			selectDialog = DialogSelect()
-			selectdialogProgress.setup("Select A Title:", width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
-			selectedPos,action = selectdialogProgress.ask(menu)
+			selectDialog.setup("Select A Title:", width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
+			selectedPos,action = selectDialog.ask(menu)
 			selectedPos -= 1 # allow for extra 'manual entry' item 
 			if selectedPos == -1:		# manual entry
 				url = ''

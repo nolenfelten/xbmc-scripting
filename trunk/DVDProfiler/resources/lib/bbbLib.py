@@ -1,7 +1,7 @@
 """
- bbbLib.py - DVDProfiler
+ bbbLib.py
 
- General functions.
+ General functions, no GUI funcs
  
 """
 
@@ -10,7 +10,9 @@ import xbmc, xbmcgui
 import os, re, unicodedata, traceback
 import urllib, urllib2, socket
 from string import strip, replace, find, rjust
-# cookie stuff
+import sgmllib
+from threading import Thread
+from xml.dom.minidom import parse, parseString
 import cookielib
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -944,9 +946,9 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 	def _report_hook( count, blocksize, totalsize ):
 		# just update every x%
 		if count:
-		percent = int( float( count * blocksize * 100) / totalsize )
-		if (percent % 5) == 0:
-			dialogProgress.update( percent )
+			percent = int( float( count * blocksize * 100) / totalsize )
+			if (percent % 5) == 0:
+				dialogProgress.update( percent )
 		if ( dialogProgress.iscanceled() ): raise
 
 	data = None

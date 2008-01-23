@@ -22,18 +22,19 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-01-2008'
+__date__ = '22-01-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
 DIR_HOME = os.getcwd().replace( ";", "" )
 DIR_RESOURCES = os.path.join( DIR_HOME , "resources" )
 DIR_RESOURCES_LIB = os.path.join( DIR_RESOURCES , "lib" )
-DIR_GFX = os.path.join( DIR_RESOURCES , "gfx" )
 DIR_USERDATA = os.path.join( "T:\\script_data", __scriptname__ )
+
+DIR_GFX = os.path.join( DIR_RESOURCES , "gfx" )             
 DIR_IMG_CACHE = os.path.join(DIR_USERDATA, "images")
-DIR_DATA_CACHE = os.path.join(DIR_USERDATA, "cache")
-sys.path.insert(0, DIR_GFX)
+DIR_CACHE = os.path.join(DIR_USERDATA, "cache")
+
 sys.path.insert(0, DIR_RESOURCES_LIB)
 
 # Custom libs
@@ -42,13 +43,14 @@ __language__ = language.Language().localized
 
 import update                                       # script update module
 from bbbLib import *								# requires __language__ to be defined
+from bbbGUILib import *
 from IMDbWin import IMDbWin
 from smbLib import *
 import time
 
 # GLOBALS
-KEYS_FILE = os.path.join( DIR_DATA_CACHE , 'keys.dat' )
-COLLECTION_FLAT_FILE = os.path.join( DIR_DATA_CACHE, 'collection.dat' )
+KEYS_FILE = os.path.join( DIR_CACHE , 'keys.dat' )
+COLLECTION_FLAT_FILE = os.path.join( DIR_CACHE, 'collection.dat' )
 BASE_URL_INTER = "www.intervocative.com"
 BASE_URL_INVOS = "www.invelos.com"
 
@@ -242,11 +244,11 @@ class DVDProfiler(xbmcgui.Window):
 		self.selectedGenres = {}
 		self.selectedTags = {}
 		self.settings = {}
-		self.localCollectionFilename = os.path.join(DIR_DATA_CACHE,"collection.xml")
+		self.localCollectionFilename = os.path.join(DIR_CACHE,"collection.xml")
 
 		makeScriptDataDir() 
 		makeDir(DIR_IMG_CACHE)
-		makeDir(DIR_DATA_CACHE)
+		makeDir(DIR_CACHE)
 
 		self._initSettings(forceReset=False)
 
@@ -1569,11 +1571,11 @@ class DVDProfiler(xbmcgui.Window):
 				makeDir( DIR_IMG_CACHE )
 
 			if dialogYesNo(title, __language__(224)):
-				debug("rmtree " + DIR_DATA_CACHE)
-				rmtree( DIR_DATA_CACHE )
+				debug("rmtree " + DIR_CACHE)
+				rmtree( DIR_CACHE )
 				time.sleep(1)
-				debug("makeDir " + DIR_DATA_CACHE)
-				makeDir( DIR_DATA_CACHE )
+				debug("makeDir " + DIR_CACHE)
+				makeDir( DIR_CACHE )
 		except:
 			handleException()
 		else:
@@ -1991,8 +1993,8 @@ class DVDCollectionOnline:
 		self.URL = aliasURL + "/DVDCollection.aspx/"
 		self.URL_TITLES = aliasURL + "/onlinecollections/dvd/PlumPeachy/List.aspx?type=a&Sort=ta"
 		self.URL_DVD = aliasURL + "/onlinecollections/dvd/PlumPeachy/DVD.aspx?U="
-		self.FILENAME_ONLINE_COLLECTION = os.path.join(DIR_DATA_CACHE, 'online_titles.html')
-		self.FILENAME_DVD = os.path.join(DIR_DATA_CACHE , 'online_dvd.html')
+		self.FILENAME_ONLINE_COLLECTION = os.path.join(DIR_CACHE, 'online_titles.html')
+		self.FILENAME_DVD = os.path.join(DIR_CACHE , 'online_dvd.html')
 
 		self.dvdDict = {}
 		self.keys = {}
