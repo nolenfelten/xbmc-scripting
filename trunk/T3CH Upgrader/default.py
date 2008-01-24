@@ -1,5 +1,4 @@
 # T3CH Upgrader - Update your current T3CH Build to latest release.
-# T3CH Upgrader - Update your current T3CH Build to latest release.
 #
 # Process:
 # Find & DL & unrar new build (keeping T3CH build name)
@@ -32,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '21-01-2008'
-__version__ = "1.3"
+__date__ = '24-01-2008'
+__version__ = "1.3.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -44,7 +43,8 @@ sys.path.append( DIR_RESOURCES )
 sys.path.append( DIR_LIB )
 
 import language
-__language__ = language.Language().localized
+mylanguage = language.Language()
+__language__ = mylanguage.localized
 import update
 
 socket.setdefaulttimeout( 15 )
@@ -318,7 +318,9 @@ class Main:
 				dlOpt = "%s  %s"  % (__language__(612), remote_rar_name)			# download w/ rar name
 			else:
 				dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
-			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ),__language__( 618 ),__language__(616), __language__(617), __language__(619), __language__(610) ]
+			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ), \
+						__language__( 618 ),__language__(616), __language__(617), \
+						__language__(619), __language__(610) ]
 
 			# if we have a local T3CH rar, add option to install from it
 			local_rar_name = ''
@@ -654,6 +656,33 @@ class Main:
 			del tbd
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
+
+	######################################################################################
+	def _view_script_doc( self, readmeORchangelog):
+		xbmc.output( "_view_script_doc() readmeORchangelog=" +str(readmeORchangelog))
+		if readmeORchangelog:		# readme
+			title = "%s: %s" % (__language__(0), __language__(414))
+
+			# determine language path
+			base_path = mylanguage.get_base_path()
+			language = xbmc.getLanguage().lower()
+			fn = os.path.join( base_path, language, "readme.txt" )
+			if ( not fileExist( fn ) ):
+				fn = os.path.join( base_path, "english", "readme.txt" )
+		else:
+			title = "%s: %s" % (__language__(0), __language__(415))
+			fn = os.path.join(DIR_RESOURCES, "changelog.txt")
+
+		xbmc.output("fn=" + fn)
+		# read and display
+		if not fileExist(fn):
+			doc = "File is missing!"
+		else:
+			doc = file(fn).read()
+
+		tbd = TextBoxDialogXML(TEXTBOX_XML_FILENAME, DIR_RESOURCES, "Default")
+		tbd.ask(title, doc)
+		del tbd
 
 	######################################################################################
 	def _copy_user_data(self, unrar_path):
@@ -1212,7 +1241,8 @@ class Main:
 						"%s -> %s" %(__language__(635),self.settings[self.SETTING_XFER_USERDATA]),
 						"%s -> %s" %(__language__(638),self.settings[self.SETTING_PROMPT_DEL_RAR]),
 						"%s" % (__language__(636)),
-						"%s" % (__language__(637))
+						"%s" % (__language__(637)),
+						"%s" % (__language__(639))
 						]
 			return options
 
@@ -1259,6 +1289,14 @@ class Main:
 			elif selected == 9:															# reset incl & excl
 				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
 					self._init_includes_excludes(forceReset=True)
+
+			elif selected == 10:														# readme/changelog
+				if dialogYesNo(__language__( 0 ), __language__( 639 ), \
+								yesButton=__language__( 414 ), noButton=__language__( 415 )):
+					self._view_script_doc(True)			# readme
+				else:
+					self._view_script_doc(False)		# changelog
+
 		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
 
 
