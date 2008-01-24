@@ -1232,8 +1232,8 @@ class Main:
 
 
 		def _make_menu(settings):
-			options = [__language__(639),
-						__language__(650),
+			options = [__language__(650),
+						__language__(639),
 						"%s -> %s" %(__language__(630),self.settings[self.SETTING_SHORTCUT_DRIVE]),
 						"%s -> %s" %(__language__(631),self.settings[self.SETTING_SHORTCUT_NAME]),
 						"%s -> %s" %(__language__(632),self.settings[self.SETTING_UNRAR_PATH]),
