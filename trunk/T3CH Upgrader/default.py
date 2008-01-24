@@ -1232,7 +1232,8 @@ class Main:
 
 
 		def _make_menu(settings):
-			options = [ __language__(650),
+			options = [__language__(639),
+						__language__(650),
 						"%s -> %s" %(__language__(630),self.settings[self.SETTING_SHORTCUT_DRIVE]),
 						"%s -> %s" %(__language__(631),self.settings[self.SETTING_SHORTCUT_NAME]),
 						"%s -> %s" %(__language__(632),self.settings[self.SETTING_UNRAR_PATH]),
@@ -1240,9 +1241,8 @@ class Main:
 						"%s -> %s" %(__language__(634),self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]),
 						"%s -> %s" %(__language__(635),self.settings[self.SETTING_XFER_USERDATA]),
 						"%s -> %s" %(__language__(638),self.settings[self.SETTING_PROMPT_DEL_RAR]),
-						"%s" % (__language__(636)),
-						"%s" % (__language__(637)),
-						"%s" % (__language__(639))
+						__language__(636),
+						__language__(637)
 						]
 			return options
 
@@ -1255,47 +1255,46 @@ class Main:
 				break
 
 			# match option name to settings key
-			if selected == 1:															# shortcut drive
-				value = self._pick_shortcut_drive()
-				if value:
-					self.settings[self.SETTING_SHORTCUT_DRIVE] = value
-
-			elif selected == 2:															# shortcut name
-				value = self._browse_dashname(self.settings[self.SETTING_SHORTCUT_NAME])
-				if value:
-					self.settings[self.SETTING_SHORTCUT_NAME] = value
-
-			elif selected == 3:															# unrar path
-				value = self._browse_for_path( __language__( 200 ), self.settings[self.SETTING_UNRAR_PATH] )
-				if value and value[0] != "Q":
-					self.settings[self.SETTING_UNRAR_PATH] = value
-
-			elif selected == 4:															# notify when not new
-				_set_yes_no(self.SETTING_NOTIFY_NOT_NEW, __language__( 633 ))
-
-			elif selected == 5:															# check for update
-				_set_yes_no(self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP, __language__( 634 ))
-
-			elif selected == 6:															# xfer userdata
-				_set_yes_no(self.SETTING_XFER_USERDATA, __language__( 635 ))
-
-			elif selected == 7:															# prompt del rar
-				_set_yes_no(self.SETTING_PROMPT_DEL_RAR, __language__( 638 ))
-
-			elif selected == 8:															# reset settings
-				if dialogYesNo(__language__(0), __language__( 636 ) + " ?"):
-					self._set_default_settings(forceReset=True)
-
-			elif selected == 9:															# reset incl & excl
-				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
-					self._init_includes_excludes(forceReset=True)
-
-			elif selected == 10:														# readme/changelog
+			if selected == 1:														# readme/changelog
 				if dialogYesNo(__language__( 0 ), __language__( 639 ), \
 								yesButton=__language__( 414 ), noButton=__language__( 415 )):
 					self._view_script_doc(True)			# readme
 				else:
 					self._view_script_doc(False)		# changelog
+			if selected == 2:															# shortcut drive
+				value = self._pick_shortcut_drive()
+				if value:
+					self.settings[self.SETTING_SHORTCUT_DRIVE] = value
+
+			elif selected == 3:															# shortcut name
+				value = self._browse_dashname(self.settings[self.SETTING_SHORTCUT_NAME])
+				if value:
+					self.settings[self.SETTING_SHORTCUT_NAME] = value
+
+			elif selected == 4:															# unrar path
+				value = self._browse_for_path( __language__( 200 ), self.settings[self.SETTING_UNRAR_PATH] )
+				if value and value[0] != "Q":
+					self.settings[self.SETTING_UNRAR_PATH] = value
+
+			elif selected == 5:															# notify when not new
+				_set_yes_no(self.SETTING_NOTIFY_NOT_NEW, __language__( 633 ))
+
+			elif selected == 6:															# check for update
+				_set_yes_no(self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP, __language__( 634 ))
+
+			elif selected == 7:															# xfer userdata
+				_set_yes_no(self.SETTING_XFER_USERDATA, __language__( 635 ))
+
+			elif selected == 8:															# prompt del rar
+				_set_yes_no(self.SETTING_PROMPT_DEL_RAR, __language__( 638 ))
+
+			elif selected == 9:															# reset settings
+				if dialogYesNo(__language__(0), __language__( 636 ) + " ?"):
+					self._set_default_settings(forceReset=True)
+
+			elif selected == 10:														# reset incl & excl
+				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
+					self._init_includes_excludes(forceReset=True)
 
 		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
 
