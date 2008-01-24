@@ -44,6 +44,8 @@
     <string id="411">T3CH</string>
     <string id="412">Löschen</string>
     <string id="413">Abbrechen</string>
+    <string id="414">Readme</string>
+    <string id="415">Changelog</string>
 
     <!-- Status messages -->
     <string id="500">Aktuelles T3CH Build:</string>
@@ -101,6 +103,7 @@
     <string id="636">Einstellungen zurücksetzen</string>
     <string id="637">Lösch- und Kopierlisten zurücksetzen</string>
     <string id="638">Vor dem Löschen der RAR nachfragen?</string>
+    <string id="639">Skript Readme/Changelog anzeigen</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Beenden</string>
