@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Upgrader</string>
 
@@ -44,6 +44,8 @@
     <string id="411">T3CH</string>
     <string id="412">Delete</string>
     <string id="413">Cancel</string>
+    <string id="414">Readme</string>
+    <string id="415">Changelog</string>
 
     <!-- Status messages -->
     <string id="500">The current T3CH build is:</string>
@@ -101,6 +103,7 @@
     <string id="636">Reset Settings</string>
     <string id="637">Reset Custom Copy and Delete Lists</string>
     <string id="638">Prompt Before Deleting RAR?</string>
+    <string id="639">View Script Readme/Changelog</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Exit</string>
