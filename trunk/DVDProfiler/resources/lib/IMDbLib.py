@@ -61,7 +61,7 @@ creatorsReg   = re.compile(r'.*?Creator.*')
 
 in_directorsReg = re.compile(r'href="/name/.*?>(.*?)</')
 in_writersReg   = re.compile(r'href="/name/.*?>(.*?)</')
-in_castReg   = re.compile(r'href="/name/[nm0-9]*/">(.*?)<.*?(?:/character/|"char").*?>(.*?)<')	# 18/01/08
+in_castReg   = re.compile(r'href="/name/[nm0-9]*/">(.*?)<.*?(?:/character/|"char").*?>(.*?)(?:</a|</t)')	# 25/01/08
 in_creatorsReg = re.compile(r'href="/name/.*?>(.*?)</')
 
 # gallery RE
