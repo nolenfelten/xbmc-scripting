@@ -563,7 +563,7 @@ class Main:
 			if os.path.exists(unrar_path):
 				# ask to overwrite 
 				if not dialogYesNo(__language__( 0 ), __language__( 314 ), unrar_path, \
-								yesButton=__language__( 411 ), noButton=__language__( 410 )):
+								yesButton=__language__( 402 ), noButton=__language__( 403 )):
 					return False
 
 			# use a new dialog cos an update shows an empty bar that ppl expect to move
