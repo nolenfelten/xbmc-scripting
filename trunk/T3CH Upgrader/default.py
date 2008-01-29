@@ -77,6 +77,8 @@ class Main:
 		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
 
+		self.isPartialDownload = False			# used to indicate that last download was cancelled, so rar might be partial
+
 		# init settings folder
 		makeDir("T:\\script_data")
 		makeDir(self.SCRIPT_DATA_DIR)
@@ -322,12 +324,13 @@ class Main:
 						__language__( 618 ),__language__(616), __language__(617), \
 						__language__(619), __language__(610) ]
 
-			# if we have a local T3CH rar, add option to install from it
+			# if we have a local T3CH rar, add option to install from it.
+			# Only include found rar if not a result of a previous cancelled download, as may be partial.
 			local_rar_name = ''
 			local_short_build_name = ''
 			menuOptOffset = 0
 			local_rar_file = self._get_local_rar_filename()
-			if local_rar_file:
+			if not self.isPartialDownload and local_rar_file:
 				try:
 					local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
 					options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
@@ -335,7 +338,7 @@ class Main:
 				except:
 					local_rar_name = '' # failed parsing local rar, don't add to menu
 
-
+			# show menu
 			if not self.isSilent:
 				selected = selectDialog.select( heading, options )
 			else:
@@ -352,7 +355,7 @@ class Main:
 				else:
 					self._view_xbmc_changelog()
 			elif (selected == 2 and remote_rar_name) or (selected == 3 and local_rar_name):	# install
-				if selected == 2:														# local rar install
+				if selected == 2:														
 					self.rar_name = remote_rar_name
 					self.short_build_name = remote_short_build_name
 				else:
@@ -380,6 +383,10 @@ class Main:
 			elif selected == (8  + menuOptOffset):										# settings
 				self._check_settings(forceSetup=True)
 
+		# last attempt to delete cancelled download partial rar
+		if self.isPartialDownload and local_rar_file:
+			unrar_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file + '.rar' )
+			deleteFile(local_rar_file, True)
 
 	def _get_local_rar_filename(self):
 		""" return latest T3CH rar found in install dir """
@@ -443,10 +450,11 @@ class Main:
 
 				# del rar according to del setting
 				if fileExist(unrar_file):
-					if self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
+					# always del if no prompt reqd or isSilent
+					if self.isSilent or self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
 						dialogYesNo( __language__( 0 ), __language__( 528 ), unrar_file, \
 									yesButton=__language__( 412 ), noButton=__language__( 413 )):
-						deleteFile(unrar_file)									# remove RAR
+						deleteFile(unrar_file)					# remove RAR
 		except:
 			handleException("process()")
 		return success
@@ -543,13 +551,14 @@ class Main:
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
 		else:
 			success = True
+			self.isPartialDownload = False
 
 		urllib.urlcleanup()
 		if not success:
-			print "delete rar", file_name
-			deleteFile(file_name)			# remove RAR, might be a partial DL
+			# mark as partial download if delete fails due to OSError file locked
+			self.isPartialDownload = not deleteFile(file_name,self.isSilent)		# remove RAR, might be a partial DL
 #		success = True						# DEV ONLY !!
-		xbmc.output( "_fetch_current_build() success=" + str(success) )
+		xbmc.output("_fetch_current_build() success=" + str(success) + " isPartialDownload=" + str(self.isPartialDownload))
 		return success
 
 	######################################################################################
@@ -1403,22 +1412,26 @@ def makeDir( dir ):
 	except: pass
 
 #################################################################################################################
-def deleteFile( file_name ):
+def deleteFile( file_name, isSilent=False ):
 	if fileExist(file_name):
-		deleted = False
+		success = False
 		for count in range(5):
 			try:
 				os.remove( file_name )
 				xbmc.output( "file deleted: " + file_name )
-				deleted = True
+				success = True
 				break
 			except OSError:
 				os.utime(file_name, None)			# touch to try and unlock file
 				time.sleep(0.2)
-			except: pass
+			except:
+				break
 
-		if not deleted:
+		if not success and not isSilent:
 			dialogOK(__language__(0) + ": OSError", "Delete file Permission Denied.", file_name)
+	else:
+		success = True
+	return success
 
 #################################################################################################################
 def searchRegEx(data, regex, flags=re.IGNORECASE):
