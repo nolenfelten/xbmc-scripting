@@ -1,6 +1,9 @@
 T3CH Upgrader Changelog:
 ========================
 
+v1.3.2 28/01/08 Change: If download cancelled, partial rar can remain locked, inform user of OSError. Will need manual ftp delete.
+                Change: After extraction, if you choose not to do 'Copying' stage, will now be prompted to do 'Update Shortcuts' stage, instead of just ending all processing.
+                New: German translation of Readme.txt included. (thanks bootsy) more translations required ...
 v1.3.1 24/01/08 New: Skin xTv (thanks to smuto)
                 New: Settings option 'View Script Readme/Changelog'
                      Readme is language dependant, fallback is english.

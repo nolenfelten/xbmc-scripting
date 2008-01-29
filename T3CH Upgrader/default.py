@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '24-01-2008'
-__version__ = "1.3.1"
+__date__ = '29-01-2008'
+__version__ = "1.3.2"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -420,7 +420,7 @@ class Main:
 			if have_file:
 				if self._extract_rar( unrar_file, unrar_path ):
 
-					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):		# switch to new build ?
+					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):
 
 						if not self.isSilent:
 							dialogProgress.create( __language__( 0 ) )
@@ -434,14 +434,18 @@ class Main:
 						# do Custom Deletes
 						self._delete_excludes()
 
+						if not self.isSilent:
+							dialogProgress.close()
+
+					# update shortcuts ?
+					if self.isSilent or dialogYesNo( __language__(0), __language__(529), yesButton=__language__( 402 ), noButton=__language__( 403 )):
 						success = self._update_shortcut(unrar_path)		# create shortcut
 
-					if not self.isSilent:
-						dialogProgress.close()
-
-					# del rar according to del setting
+				# del rar according to del setting
+				if fileExist(unrar_file):
 					if self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
-						dialogYesNo( __language__( 0 ), __language__( 528 ), yesButton=__language__( 412 ), noButton=__language__( 413 )):
+						dialogYesNo( __language__( 0 ), __language__( 528 ), unrar_file, \
+									yesButton=__language__( 412 ), noButton=__language__( 413 )):
 						deleteFile(unrar_file)									# remove RAR
 		except:
 			handleException("process()")
@@ -533,13 +537,16 @@ class Main:
 
 			if not self.isSilent:
 				dialogProgress.close()
-			success = True
 		except:
 			if not self.isSilent:
 				dialogProgress.close()
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
+		else:
+			success = True
 
+		urllib.urlcleanup()
 		if not success:
+			print "delete rar", file_name
 			deleteFile(file_name)			# remove RAR, might be a partial DL
 #		success = True						# DEV ONLY !!
 		xbmc.output( "_fetch_current_build() success=" + str(success) )
@@ -548,10 +555,11 @@ class Main:
 	######################################################################################
 	def _report_hook( self, count, blocksize, totalsize ):
 		if not self.isSilent:
-			# just update every x%
-			percent = int( float( count * blocksize * 100) / totalsize )
-			if percent % 5 == 0:
-				dialogProgress.update( percent, self.reporthook_msg1, self.reporthook_msg2 )
+			if count:
+				# just update every x%
+				percent = int( float( count * blocksize * 100) / totalsize )
+				if percent % 5 == 0:
+					dialogProgress.update( percent, self.reporthook_msg1, self.reporthook_msg2 )
 			if ( dialogProgress.iscanceled() ): raise
 
 	######################################################################################
@@ -616,7 +624,6 @@ class Main:
 		# unrar path not found
 		if not success:
 			xbmc.output("extract failed, clean up")
-#			deleteFile(file_name)			# remove RAR, might be a partial DL
 			try:
 				rmtree( unrar_path, ignore_errors=True )	# remove partial extract
 				xbmc.output("extract failed, extract path rmtree done")
@@ -1397,10 +1404,21 @@ def makeDir( dir ):
 
 #################################################################################################################
 def deleteFile( file_name ):
-	try:
-		os.remove( file_name )
-		xbmc.output( "file deleted: " + file_name )
-	except: pass
+	if fileExist(file_name):
+		deleted = False
+		for count in range(5):
+			try:
+				os.remove( file_name )
+				xbmc.output( "file deleted: " + file_name )
+				deleted = True
+				break
+			except OSError:
+				os.utime(file_name, None)			# touch to try and unlock file
+				time.sleep(0.2)
+			except: pass
+
+		if not deleted:
+			dialogOK(__language__(0) + ": OSError", "Delete file Permission Denied.", file_name)
 
 #################################################################################################################
 def searchRegEx(data, regex, flags=re.IGNORECASE):

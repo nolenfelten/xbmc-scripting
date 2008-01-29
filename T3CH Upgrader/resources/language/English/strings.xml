@@ -61,7 +61,6 @@
     <string id="510">Removing T3CH UserData ...</string>
     <string id="511">Transferring your UserData to T3CH ...</string>
     <string id="512">Installation Complete.  Reboot Now ?</string>
-    <string id="513">Setup incomplete.  Enter now ?</string>
     <string id="514">Updating dash boot Shortcuts ...</string>
     <string id="515">Copying:</string>
     <string id="516">Deleting:</string>
@@ -77,6 +76,7 @@
     <string id="526">New Path Exists ?</string>
     <string id="527">New XBE Exists ?</string>
     <string id="528">Delete RAR ?</string>
+    <string id="529">Backup and Update XBMC boot shortcuts ?[CR](Required to boot to new build)</string>
 
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
