@@ -61,7 +61,6 @@
     <string id="510">Entferne T3CH UserData...</string>
     <string id="511">Übertrage deine UserData zum T3CH...</string>
     <string id="512">Installation vollständig.  Jetzt neustarten?</string>
-    <string id="513">Setup unvollständig.  Jetzt ansehen?</string>
     <string id="514">Aktualisiere Dash Boot Verknüpfungen...</string>
     <string id="515">Kopiere:</string>
     <string id="516">Lösche:</string>
@@ -77,6 +76,7 @@
     <string id="526">Neuer Pfad vorhanden?</string>
     <string id="527">Neue XBE vorhanden?</string>
     <string id="528">RAR löschen?</string>
+    <string id="529">Backup und Update der XBMC Bootverknüpfung erstellen ?[CR](Erforderlich um das neue Build zu starten)</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
