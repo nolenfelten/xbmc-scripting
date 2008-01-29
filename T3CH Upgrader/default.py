@@ -47,7 +47,7 @@ mylanguage = language.Language()
 __language__ = mylanguage.localized
 import update
 
-socket.setdefaulttimeout( 15 )
+#socket.setdefaulttimeout( 15 )
 dialogProgress = xbmcgui.DialogProgress()
 
 EXIT_SCRIPT = ( 9, 10, 247, 275, 61467, )
@@ -103,12 +103,11 @@ class Main:
 		self._check_settings()
 		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
-			scriptUpdated = self._update_script(True) # silent
+			scriptUpdated = self._update_script(True)								# silent
 
 		if not scriptUpdated:
 			url = self._get_latest_version()										# discover latest build
 	#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
-			
 			if url:
 				remote_rar_name, remote_short_build_name = self._check_build_date( url )
 			else:
@@ -330,13 +329,20 @@ class Main:
 			local_short_build_name = ''
 			menuOptOffset = 0
 			local_rar_file = self._get_local_rar_filename()
-			if not self.isPartialDownload and local_rar_file:
-				try:
-					local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
-					options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
-					menuOptOffset += 1
-				except:
-					local_rar_name = '' # failed parsing local rar, don't add to menu
+			if local_rar_file:
+				# assume local rars under 50meg are partial downloads and delete them
+				rar_filepath = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file)
+				fsize = os.path.getsize(rar_filepath)
+				if self.isPartialDownload or fsize < 50000000:
+					xbmc.output("suspected incompleted rar, fsize="+str(fsize))
+					deleteFile(rar_filepath)
+				else:
+					try:
+						local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
+						options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
+						menuOptOffset += 1
+					except:
+						local_rar_name = '' # failed parsing local rar, don't add to menu
 
 			# show menu
 			if not self.isSilent:
@@ -383,25 +389,23 @@ class Main:
 			elif selected == (8  + menuOptOffset):										# settings
 				self._check_settings(forceSetup=True)
 
-		# last attempt to delete cancelled download partial rar
-		if self.isPartialDownload and local_rar_file:
-			unrar_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file + '.rar' )
-			deleteFile(local_rar_file, True)
-
+	######################################################################################
 	def _get_local_rar_filename(self):
 		""" return latest T3CH rar found in install dir """
 
 		rar_file = ""
 		flist = []
-		files = os.listdir( self.settings[ self.SETTING_UNRAR_PATH ] )
-		for f in files:
-			if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?.rar)'):
-				flist.append(f)
+		try:
+			files = os.listdir( self.settings[ self.SETTING_UNRAR_PATH ] )
+			for f in files:
+				if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?.rar)'):
+					flist.append(f)
 
-		if flist:
-			flist.sort()
-			flist.reverse()
-			rar_file = flist[0]
+			if flist:
+				flist.sort()
+				flist.reverse()
+				rar_file = flist[0]
+		except: pass
 		xbmc.output("_get_local_rar_filename() " + rar_file)
 		return rar_file
 
@@ -409,6 +413,7 @@ class Main:
 	# if given local unrar_file, no DL needed
 	######################################################################################
 	def _process( self, url='' ):
+		""" Perfom T3CH upgrade """
 		xbmc.output( "_process() url=" + url)
 
 		success = False
@@ -503,7 +508,7 @@ class Main:
 
 	######################################################################################
 	def _get_latest_version( self ):
-		xbmc.output( "_get_latest_version" )
+		xbmc.output( "_get_latest_version()" )
 
 		url = ""
 		for baseUrl in self.BASE_URL_LIST:
@@ -551,25 +556,24 @@ class Main:
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
 		else:
 			success = True
-			self.isPartialDownload = False
 
 		urllib.urlcleanup()
-		if not success:
-			# mark as partial download if delete fails due to OSError file locked
-			self.isPartialDownload = not deleteFile(file_name,self.isSilent)		# remove RAR, might be a partial DL
-#		success = True						# DEV ONLY !!
+		self.isPartialDownload = not success
 		xbmc.output("_fetch_current_build() success=" + str(success) + " isPartialDownload=" + str(self.isPartialDownload))
 		return success
 
 	######################################################################################
 	def _report_hook( self, count, blocksize, totalsize ):
 		if not self.isSilent:
-			if count:
-				# just update every x%
+			# just update every x%
+			if count and totalsize > 0:
 				percent = int( float( count * blocksize * 100) / totalsize )
-				if percent % 5 == 0:
-					dialogProgress.update( percent, self.reporthook_msg1, self.reporthook_msg2 )
-			if ( dialogProgress.iscanceled() ): raise
+			else:
+				percent = 0
+			if count == 0 or (percent and percent % 5 == 0):
+				dialogProgress.update( percent, self.reporthook_msg1, self.reporthook_msg2 )
+			if ( dialogProgress.iscanceled() ):
+				raise
 
 	######################################################################################
 	def _extract_rar( self, file_name, unrar_path ):
@@ -1216,9 +1220,9 @@ class Main:
 
 		updated = False
 		up = update.Update(__language__, __scriptname__)
-		version = up.getLatestVersion()
+		version = up.getLatestVersion(isSilent)
 		xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
-		if version != "-1":
+		if version != "-1":				# check for err
 			if __version__ < version:
 				if ( dialogYesNo( __language__(0), \
 					  "%s %s %s." % ( __language__( 1006 ), version, __language__( 1002 ), ), __language__( 1003 ),\
@@ -1229,8 +1233,8 @@ class Main:
 					up.issueUpdate(version)
 			elif not isSilent:
 				dialogOK(__language__(0), __language__(1000))
-		elif not isSilent:
-			dialogOK(__language__(0), __language__(1030))
+#		elif not isSilent:
+#			dialogOK(__language__(0), __language__(1030))
 
 #		del up
 		xbmc.output( "< _update_script() updated="+str(updated))
@@ -1412,9 +1416,10 @@ def makeDir( dir ):
 	except: pass
 
 #################################################################################################################
-def deleteFile( file_name, isSilent=False ):
+def deleteFile( file_name ):
 	if fileExist(file_name):
 		success = False
+		urllib.urlcleanup()
 		for count in range(3):
 			try:
 				os.remove( file_name )
@@ -1423,9 +1428,6 @@ def deleteFile( file_name, isSilent=False ):
 				break
 			except:
 				xbmc.sleep(1000)
-
-		if not success and not isSilent:
-			dialogOK(__language__(0) + ": OSError", "Delete file Permission Denied.", file_name)
 	else:
 		success = True
 	return success
@@ -1506,6 +1508,7 @@ try:
 		raise
 except:
 	runMode = RUNMODE_NORMAL
+
 
 Main(runMode)
 
