@@ -1415,17 +1415,14 @@ def makeDir( dir ):
 def deleteFile( file_name, isSilent=False ):
 	if fileExist(file_name):
 		success = False
-		for count in range(5):
+		for count in range(3):
 			try:
 				os.remove( file_name )
 				xbmc.output( "file deleted: " + file_name )
 				success = True
 				break
-			except OSError:
-				os.utime(file_name, None)			# touch to try and unlock file
-				time.sleep(0.2)
 			except:
-				break
+				xbmc.sleep(1000)
 
 		if not success and not isSilent:
 			dialogOK(__language__(0) + ": OSError", "Delete file Permission Denied.", file_name)
