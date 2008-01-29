@@ -771,7 +771,7 @@ class Main:
 		# backup CFG shortcut
 		if fileExist( shortcut_cfg_file ):
 			copy( shortcut_cfg_file, shortcut_cfg_file + "_old" )
-			xbmc.output( "shortcut_cfg _old made" )
+			xbmc.output( "backup of cfg made to _old" )
 
 		# if shortcutname has dir prefix, ensure it exists
 		prefix_dir = os.path.dirname(shortcut_xbe_file)
@@ -779,35 +779,35 @@ class Main:
 		if prefix_dir and not os.path.isdir(prefix_dir):
 			makeDir(prefix_dir)
 
-		# copy TEAM XBMC dash XBE shortcut to root - only if diff and backup first
-		try:
-			do_copy = False
-			src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
-			if fileExist( shortcut_xbe_file ):
-				# DOES EXIST, check if diff
-				if not filecmp.cmp( src_xbe_file, shortcut_xbe_file ):
-					copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
-					do_copy = True
-					xbmc.output( "xbe diff to TEAM XBMC, shortcut_xbe _old made" )
+		# check if TEAM XBMC shortcut needs copying
+		copy_xbe = True
+		src_xbe_file = os.path.join( DIR_RESOURCES, "SHORTCUT by TEAM XBMC.xbe" )
+		if fileExist( shortcut_xbe_file ):
+			# DOES EXIST, check if diff
+			if not filecmp.cmp( src_xbe_file, shortcut_xbe_file ):
+				copy( shortcut_xbe_file, shortcut_xbe_file + "_old" )
+				xbmc.output( "backup of XBE made to _old" )
 			else:
-				do_copy = True
-			if do_copy:
-				copy(src_xbe_file, shortcut_xbe_file)
-				xbmc.output( "TEAM XBMC xbe copied" )
-		except:
-			handleException("_update_shortcut()", "error copying 'SHORTCUT by TEAM XBMC' to " + shortcut_drive)
+				copy_xbe = False		# same file, no copy reqd
 
 		try:
-			# create shortcut cfg - this points to the new T3CH XBMC build
+			# create new shortcut cfg path - this points to the new T3CH XBMC build xbe
 			boot_path = os.path.join( unrar_path, "XBMC", "default.xbe" )
-			xbmc.output( "boot_path= " + boot_path )
+			xbmc.output( "new cfg boot_path= " + boot_path )
 			# write new cfg to CFG_NEW
 			shortcut_cfg_file_new = shortcut_cfg_file + "_new" 
 			file(shortcut_cfg_file_new,'w').write(boot_path)
+			xbmc.output( "new cfg created= " + shortcut_cfg_file_new )
 
 			# switch to new cfg now ?
 			if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 519 ), __language__( 520 ),__language__( 521  ),yesButton=__language__( 404 ), noButton=__language__(405) ):
+				# copy TEAM XBMC shorcut xbe into place (if reqd)
+				if copy_xbe:
+					copy(src_xbe_file, shortcut_xbe_file)
+					xbmc.output( "TEAM XBMC xbe copied" )
+
 				copy(shortcut_cfg_file_new, shortcut_cfg_file)
+				xbmc.output( "new cfg copied live" )
 				time.sleep(1)
 				success = True
 		except:
