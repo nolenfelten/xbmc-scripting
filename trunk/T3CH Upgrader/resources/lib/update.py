@@ -20,7 +20,7 @@ import re
 import traceback
 from shutil import copytree, rmtree
 
-socket.setdefaulttimeout( 10 )
+#socket.setdefaulttimeout( 10 )
 
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
@@ -83,10 +83,11 @@ class Update:
 
 	def getLatestVersion( self, quiet=True ):
 		""" checks for latest tag version """
+		xbmc.output( "> Update().getLatestVersion() quiet="+str(quiet) )
 		version = "-1"
 		try:
 			if not quiet:
-				self.dialog.create( self.self._(0), self.self._( 1001 ) )
+				self.dialog.create( self._(0), self._( 1001 ) )
 
 			# get version tags
 			htmlsource = self.getHTMLSource( self.tags_url )
@@ -100,7 +101,7 @@ class Update:
 			xbmcgui.Dialog().ok( self._(0), self._( 1031 ) )
 		self.dialog.close()
 
-		xbmc.output( "Update().getLatestVersion() new version="+str(version) )
+		xbmc.output( "< Update().getLatestVersion() new version="+str(version) )
 		return version
 
 	def makeBackup( self ):
