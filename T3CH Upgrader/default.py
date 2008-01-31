@@ -47,9 +47,8 @@ mylanguage = language.Language()
 __language__ = mylanguage.localized
 import update
 import zipstream
+import SFVCheck
 
-
-#socket.setdefaulttimeout( 15 )
 dialogProgress = xbmcgui.DialogProgress()
 
 EXIT_SCRIPT = ( 9, 10, 247, 275, 61467, )
@@ -78,6 +77,7 @@ class Main:
 
 		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
+		self.FTP_BASE_URL = "http://ftp1.srv.endpoint.nu/pub/repository/t3ch/"
 
 		self.isPartialDownload = False		# indicate that last download was cancelled, rar might be partial
 
@@ -109,7 +109,7 @@ class Main:
 
 		if not scriptUpdated:
 			url = self._get_latest_version()										# discover latest build
-#			url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
+#			url = "http://somehost/XBMC-SVN_2008-01-27_rev11426-T3CH.rar"			# DEV ONLY!!, saves DL it
 			if url:
 				remote_archive_name, remote_short_build_name = self._check_build_date( url )
 			else:
@@ -283,7 +283,7 @@ class Main:
 	######################################################################################
 	# parse local file or url to get build info
 	def _get_archive_info(self, filename):
-		xbmc.output( "_get_archive_info()" )
+		xbmc.output( "_get_archive_info() %s" % filename)
 		filenameInfo = ()
 		try:
 			archive_name = os.path.basename( filename )       # with ext
@@ -360,7 +360,7 @@ class Main:
 				else:
 					self._view_xbmc_changelog()
 			elif (selected == 2 and remote_archive_name) or (selected == 3 and local_archive_name):	# install
-				if selected == 2:														
+				if selected == 2:
 					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
 				else:
@@ -410,6 +410,25 @@ class Main:
 		xbmc.output("_get_local_archive() archive_file=" + archive_file)
 		return archive_file
 
+
+	######################################################################################
+	def _check_sfv(self, archive_filepath):
+		xbmc.output( "> _check_sfv() %s" % archive_filepath )
+		success = False
+		entry_filename = os.path.basename( archive_filepath )
+		(entry_name, ext) = os.path.splitext( entry_filename )
+
+		url = "%s%s.sfv" % (self.FTP_BASE_URL, entry_name)
+		doc = readURL( url, __language__( 502 ), self.isSilent )
+		if doc:
+			sfv = SFVCheck.SFVCheck(sfvDoc=doc)
+			success = sfv.check(entry_filename, archive_filepath)
+
+		if not success:
+			dialogOK( __language__( 0 ), __language__(315) )
+		xbmc.output( "< _check_sfv() success=%s" % success)
+		return success
+
 	######################################################################################
 	# if given local archive_file, no DL needed
 	######################################################################################
@@ -426,7 +445,7 @@ class Main:
 			xbmc.output( "archive_file= " + archive_file )
 
 			if url:
-				have_file = self._fetch_current_build( url, archive_file )
+				have_file = ( self._fetch_current_build( url, archive_file ) and self._check_sfv(archive_file) )
 			else:
 				have_file = fileExist(archive_file)
 
@@ -537,7 +556,7 @@ class Main:
 
 	######################################################################################
 	def _fetch_current_build( self, url, file_name ):
-		xbmc.output( "_fetch_current_build() " + url +" " + file_name )
+		xbmc.output( "> _fetch_current_build() " + url +" " + file_name )
 		success = False
 		try:
 			self.reporthook_msg1 = __language__( 503 )
@@ -552,15 +571,14 @@ class Main:
 			if not self.isSilent:
 				dialogProgress.close()
 		except:
-			if not self.isSilent:
-				dialogProgress.close()
+			dialogProgress.close()
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
 		else:
 			success = True
 
 		urllib.urlcleanup()
 		self.isPartialDownload = not success
-		xbmc.output("_fetch_current_build() success=" + str(success) + " isPartialDownload=" + str(self.isPartialDownload))
+		xbmc.output("< _fetch_current_build() success=" + str(success) + " isPartialDownload=" + str(self.isPartialDownload))
 		return success
 
 	######################################################################################
@@ -644,13 +662,25 @@ class Main:
 			self._dialog_update( __language__(0), __language__( 522 ))
 
 		# loop to check if extract path appears
-		check_path = os.path.join(extract_path, 'XBMC','UserData' )
-		check_file = os.path.join(extract_path, 'XBMC','default.xbe' )
+		check_base_path = os.path.join(extract_path, 'XBMC')
+		check_path_list = [os.path.join(check_base_path,'UserData'),
+							os.path.join(check_base_path,'system'),
+							os.path.join(check_base_path,'skin'),
+							os.path.join(check_base_path,'media'),
+							os.path.join(check_base_path,'language'),
+							os.path.join(check_base_path,'sounds')
+						]
+		check_file = os.path.join(check_base_path,'default.xbe' )
 		time.sleep(2)
-		MAX = 35
+		MAX = 40
 		for count in range(MAX):
 			isFile = fileExist(check_file)
-			isPath = os.path.isdir(check_path)
+			isPath = True
+			for p in check_path_list:
+				isPath = os.path.isdir(p)
+				xbmc.output("%s %s" % (p, isPath))
+				if not isPath:
+					break
 			xbmc.output("checkCount=" + str(count) + " isPath="+str(isPath) + " isFile="+str(isFile))
 
 			if not isFile or not isPath:
@@ -675,7 +705,7 @@ class Main:
 	def _view_t3ch_changelog( self, ):
 		xbmc.output( "_view_t3ch_changelog()" )
 		doc = ""
-		url = 'http://ftp1.srv.endpoint.nu/pub/repository/t3ch/T3CH-README_1ST.txt'
+		url = self.FTP_BASE_URL + 'T3CH-README_1ST.txt'
 		doc = readURL( url, __language__( 502 ), self.isSilent )
 		if doc:
 			title = "T3CH Changelog"
@@ -1471,7 +1501,8 @@ def readURL( url, msg='', isSilent=False):
 	xbmc.output( "readURL() " + url )
 
 	if not isSilent:
-		dialogProgress.create( __language__(0), msg, url )
+		root, name = os.path.split(url)
+		dialogProgress.create( __language__(0), msg, root, name )
 
 	doc = None
 	try:
@@ -1479,7 +1510,7 @@ def readURL( url, msg='', isSilent=False):
 		doc = sock.read()
 		sock.close()
 	except:
-		print sys.exc_info()[ 1 ]
+		traceback.print_exc()
 
 	if not isSilent:
 		dialogProgress.close()

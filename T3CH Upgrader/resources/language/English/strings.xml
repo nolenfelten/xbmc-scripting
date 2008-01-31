@@ -28,6 +28,7 @@
     <string id="312">Extraction path does not exist!  Retry.</string>
     <string id="313">Restricted File or Folder!</string>
     <string id="314">Extract folder already exists, Overwrite ?</string>
+    <string id="315">RAR failed SFV checksum![CR]May be corrupt, please re-download.</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -75,7 +76,7 @@
     <string id="525">Select File or Folder ?</string>
     <string id="526">New Path Exists ?</string>
     <string id="527">New XBE Exists ?</string>
-    <string id="528">Delete RAR ?</string>
+    <string id="528">Delete T3CH Archive?</string>
     <string id="529">Backup and Update XBMC boot shortcuts ?[CR](Required to boot to new build)</string>
 
     <!-- Menu Titles -->
@@ -91,7 +92,7 @@
     <string id="617">Delete An Old T3CH</string>
     <string id="618">Maintain Delete Data List</string>
     <string id="619">Update Script</string>
-    <string id="620">Install From Local RAR:</string>
+    <string id="620">Install From Local:</string>
 
     <!-- Settings Options -->
     <string id="630">Dash Shortcut Drive:</string>
@@ -102,7 +103,7 @@
     <string id="635">Transfer UserData to T3CH?</string>
     <string id="636">Reset Settings</string>
     <string id="637">Reset Custom Copy and Delete Lists</string>
-    <string id="638">Prompt Before Deleting RAR?</string>
+    <string id="638">Prompt Before Deleting T3CH Archive file?</string>
     <string id="639">View Script Readme/Changelog</string>
 
     <!-- Misc Menu Options Options -->
