@@ -28,6 +28,7 @@
     <string id="312">Entpackungspfad nicht vorhanden!  Wiederholen.</string>
     <string id="313">Eingeschränkte Datei oder Ordner!</string>
     <string id="314">Entpackungsordner bereits vorhanden, überschreiben?</string>
+    <string id="315">RAR SFV Checksum falsch![CR]Evtl. fehlerhaft, bitte erneut runterladen.</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
