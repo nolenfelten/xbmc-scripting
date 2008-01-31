@@ -18,21 +18,21 @@ import xbmc
 import xbmcgui
 import urllib
 from sgmllib import SGMLParser
-import socket
 import traceback
 from string import lower, capwords
 from shutil import copytree, rmtree, copy
 import filecmp
 import time
 import re
+import zipfile
 
 # Script constants
 __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '29-01-2008'
-__version__ = "1.3.2"
+__date__ = '31-01-2008'
+__version__ = "1.4"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -46,6 +46,8 @@ import language
 mylanguage = language.Language()
 __language__ = mylanguage.localized
 import update
+import zipstream
+
 
 #socket.setdefaulttimeout( 15 )
 dialogProgress = xbmcgui.DialogProgress()
@@ -77,7 +79,7 @@ class Main:
 		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
 
-		self.isPartialDownload = False			# used to indicate that last download was cancelled, so rar might be partial
+		self.isPartialDownload = False		# indicate that last download was cancelled, rar might be partial
 
 		# init settings folder
 		makeDir("T:\\script_data")
@@ -102,21 +104,21 @@ class Main:
 
 		self._check_settings()
 		scriptUpdated = False
-		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
-			scriptUpdated = self._update_script(True)								# silent
+#		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
+#			scriptUpdated = self._update_script(True)								# silent
 
 		if not scriptUpdated:
-			url = self._get_latest_version()										# discover latest build
-	#		url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
+#			url = self._get_latest_version()										# discover latest build
+			url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
 			if url:
-				remote_rar_name, remote_short_build_name = self._check_build_date( url )
+				remote_archive_name, remote_short_build_name = self._check_build_date( url )
 			else:
-				remote_rar_name = ""
+				remote_archive_name = ""
 				remote_short_build_name = ""
 
 			# empty short_build_name indicates No New Build found.
 			if self.runMode == RUNMODE_NORMAL or (remote_short_build_name and self.runMode == RUNMODE_SILENT):
-				self._menu( url, remote_rar_name, remote_short_build_name )
+				self._menu( url, remote_archive_name, remote_short_build_name )
 
 		xbmc.output("__init__() done")
 
@@ -132,7 +134,7 @@ class Main:
 	######################################################################################
 	def _set_default_settings( self, forceReset=False ):
 		""" set settings to default values if not exist """
-		xbmc.output( "_set_default_settings() forceReset="+str(forceReset) )
+		xbmc.output( "> _set_default_settings() forceReset="+str(forceReset) )
 		success = True
 
 		items = {
@@ -152,7 +154,7 @@ class Main:
 					xbmc.output( "bad setting: " + key )
 					success = False
 
-		xbmc.output( "_set_default_settings() success=" +str(success))
+		xbmc.output( "< _set_default_settings() success=" +str(success))
 		return success
 		
 	######################################################################################
@@ -256,18 +258,18 @@ class Main:
 	def _check_build_date( self, url ):
 		xbmc.output( "> _check_build_date() " + url )
 
-		rar_name = ''
+		archive_name = ''
 		short_build_name = ''
 		try:
 			# get system build date and convert into YYYY-MM-DD
 			curr_build_date_secs, curr_build_date = self._get_current_build_info()
 
 			# extract new build date from name
-			rar_name, found_build_date, found_build_date_secs, short_build_name = self._parse_rar_filename(url)
+			archive_name, found_build_date, found_build_date_secs, short_build_name = self._get_archive_info(url)
 
 			if curr_build_date_secs >= found_build_date_secs:							# No new build
 				short_build_name = ''
-				rar_name = ''
+				archive_name = ''
 				if self.settings[self.SETTING_NOTIFY_NOT_NEW] == __language__(402):		# YES, show notification
 					dialogOK( __language__( 0 ), __language__( 517 ), isSilent=True )	# always use xbmc.notification
 			elif self.runMode != RUNMODE_NORMAL:										# new build
@@ -276,35 +278,32 @@ class Main:
 			traceback.print_exc()
 
 		xbmc.output("< _check_build_date() new available = " +str(short_build_name != ""))
-		return (rar_name, short_build_name)
+		return (archive_name, short_build_name)
 
 	######################################################################################
 	# parse local file or url to get build info
-	def _parse_rar_filename(self, filename):
-		xbmc.output( "_parse_rar_filename()" )
+	def _get_archive_info(self, filename):
+		xbmc.output( "_get_archive_info()" )
 		filenameInfo = ()
 		try:
-			rar_name = os.path.splitext( os.path.basename( filename ) )[0]       # removes ext
-			found_build_date = searchRegEx(rar_name, '(\d+-\d+-\d+)') 
+			archive_name = os.path.basename( filename )       # with ext
+			found_build_date = searchRegEx(archive_name, '(\d+-\d+-\d+)') 
 			found_build_date_secs = time.mktime( time.strptime(found_build_date,"%Y-%m-%d") )
 			short_build_name = "T3CH_%s" % (found_build_date)
-			xbmc.output( "rar_name= " + rar_name)
-			xbmc.output( "found_build_date= " + found_build_date)
-			xbmc.output( "found_build_date_secs= " + str(found_build_date_secs ))
-			xbmc.output( "short_build_name= " + short_build_name)
-			filenameInfo = (rar_name, found_build_date, found_build_date_secs, short_build_name)
+			filenameInfo = (archive_name, found_build_date, found_build_date_secs, short_build_name)
 		except:
 			xbmc.output("exception parsing filename")
 			traceback.print_exc()
 
 		if not filenameInfo:
 			dialogOK(__language__(0), "Unable to parse filename.", \
-					 "EG.: XBMC-SVN_2007-12-23_rev11071-T3CH.rar", rar_name)
+					 "EG.: XBMC-SVN_2007-12-23_rev11071-T3CH.rar", archive_name)
 
+		xbmc.output(str(filenameInfo))
 		return filenameInfo
 
 	######################################################################################
-	def _menu( self, url, remote_rar_name="", remote_short_build_name="" ):
+	def _menu( self, url, remote_archive_name="", remote_short_build_name="" ):
 		xbmc.output( "_menu() url=" + url )
 
 		selectDialog = xbmcgui.Dialog()
@@ -315,8 +314,8 @@ class Main:
 
 		while True:
 			# build menu
-			if remote_rar_name:
-				dlOpt = "%s  %s"  % (__language__(612), remote_rar_name)			# download w/ rar name
+			if remote_archive_name:
+				dlOpt = "%s  %s"  % (__language__(612), remote_archive_name)			# download w/ rar name
 			else:
 				dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
 			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ), \
@@ -325,10 +324,10 @@ class Main:
 
 			# if we have a local T3CH rar, add option to install from it.
 			# Only include found rar if not a result of a previous cancelled download, as may be partial.
-			local_rar_name = ''
+			local_archive_name = ''
 			local_short_build_name = ''
 			menuOptOffset = 0
-			local_rar_file = self._get_local_rar_filename()
+			local_rar_file = self._get_local_archive()
 			if local_rar_file:
 				# assume local rars under 50meg are partial downloads and delete them
 				rar_filepath = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file)
@@ -338,11 +337,11 @@ class Main:
 					deleteFile(rar_filepath)
 				else:
 					try:
-						local_rar_name, found_build_date, found_build_date_secs, local_short_build_name = self._parse_rar_filename(local_rar_file)
-						options.insert(3, "%s  %s" % (__language__(620), local_rar_name))
+						local_archive_name, found_build_date, found_build_date_secs, local_short_build_name = self._get_archive_info(local_rar_file)
+						options.insert(3, "%s  %s" % (__language__(620), local_archive_name))
 						menuOptOffset += 1
 					except:
-						local_rar_name = '' # failed parsing local rar, don't add to menu
+						local_archive_name = '' # failed parsing local rar, don't add to menu
 
 			# show menu
 			if not self.isSilent:
@@ -360,12 +359,12 @@ class Main:
 					self._view_t3ch_changelog()
 				else:
 					self._view_xbmc_changelog()
-			elif (selected == 2 and remote_rar_name) or (selected == 3 and local_rar_name):	# install
+			elif (selected == 2 and remote_archive_name) or (selected == 3 and local_archive_name):	# install
 				if selected == 2:														
-					self.rar_name = remote_rar_name
+					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
 				else:
-					self.rar_name = local_rar_name
+					self.archive_name = local_archive_name
 					self.short_build_name = local_short_build_name
 					url = ''
 
@@ -383,54 +382,56 @@ class Main:
 			elif selected == (6 + menuOptOffset):										# delete old t3ch
 				self._delete_old_t3ch()
 			elif selected == (7 + menuOptOffset):										# update script
-				if self._update_script(False):						# never silent from config menu
+				if self._update_script(False):											# never silent from config menu
 					xbmc.output("script updating ... closing current instance")
 					break									# stop script if updated
 			elif selected == (8  + menuOptOffset):										# settings
 				self._check_settings(forceSetup=True)
 
 	######################################################################################
-	def _get_local_rar_filename(self):
-		""" return latest T3CH rar found in install dir """
+	def _get_local_archive(self):
+		""" return latest T3CH archive found in install dir """
 
-		rar_file = ""
+		archive_file = ""
 		flist = []
 		try:
 			files = os.listdir( self.settings[ self.SETTING_UNRAR_PATH ] )
 			for f in files:
-				if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?.rar)'):
+				if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?(?:.rar|.zip))'):
 					flist.append(f)
 
+			# sort to get latest
 			if flist:
 				flist.sort()
 				flist.reverse()
-				rar_file = flist[0]
-		except: pass
-		xbmc.output("_get_local_rar_filename() " + rar_file)
-		return rar_file
+				archive_file = flist[0]
+		except:
+			traceback.print_exc()
+		xbmc.output("_get_local_archive() archive_file=" + archive_file)
+		return archive_file
 
 	######################################################################################
-	# if given local unrar_file, no DL needed
+	# if given local archive_file, no DL needed
 	######################################################################################
 	def _process( self, url='' ):
-		""" Perfom T3CH upgrade """
+		""" Extract and Install new T3CH build """
 		xbmc.output( "_process() url=" + url)
 
 		success = False
 		try:
 			# create work paths
-			unrar_path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name)
-			xbmc.output( "unrar_path= " + unrar_path )
-			unrar_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.rar_name + '.rar' )
-			xbmc.output( "unrar_file= " + unrar_file )
+			extract_path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name)
+			xbmc.output( "extract_path= " + extract_path )
+			archive_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.archive_name )
+			xbmc.output( "archive_file= " + archive_file )
 
 			if url:
-				have_file = self._fetch_current_build( url, unrar_file )
+				have_file = self._fetch_current_build( url, archive_file )
 			else:
-				have_file = fileExist(unrar_file)
+				have_file = fileExist(archive_file)
 
 			if have_file:
-				if self._extract_rar( unrar_file, unrar_path ):
+				if self._extract( archive_file, extract_path ):
 
 					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):
 
@@ -438,7 +439,7 @@ class Main:
 							dialogProgress.create( __language__( 0 ) )
 
 						if self.settings[self.SETTING_XFER_USERDATA] == __language__(402):
-							self._copy_user_data(unrar_path)
+							self._copy_user_data(extract_path)
 
 						# do Custom Copies
 						self._copy_includes()
@@ -450,16 +451,16 @@ class Main:
 							dialogProgress.close()
 
 					# update shortcuts ?
-					if self.isSilent or dialogYesNo( __language__(0), __language__(529), yesButton=__language__( 402 ), noButton=__language__( 403 )):
-						success = self._update_shortcut(unrar_path)		# create shortcut
+#					if self.isSilent or dialogYesNo( __language__(0), __language__(529), yesButton=__language__( 402 ), noButton=__language__( 403 )):
+					success = self._update_shortcut(extract_path)		# create shortcut
 
 				# del rar according to del setting
-				if fileExist(unrar_file):
+				if fileExist(archive_file):
 					# always del if no prompt reqd or isSilent
 					if self.isSilent or self.settings[self.SETTING_PROMPT_DEL_RAR] == __language__(403) or \
-						dialogYesNo( __language__( 0 ), __language__( 528 ), unrar_file, \
+						dialogYesNo( __language__( 0 ), __language__( 528 ), archive_file, \
 									yesButton=__language__( 412 ), noButton=__language__( 413 )):
-						deleteFile(unrar_file)					# remove RAR
+						deleteFile(archive_file)					# remove RAR
 		except:
 			handleException("process()")
 		return success
@@ -499,7 +500,7 @@ class Main:
 
 	######################################################################################
 	def _hardcoded_excludes(self):
-		""" Additional files/folders for post installation deleting. All relative to unrar_path\\XBMC """
+		""" Additional files/folders for post installation deleting. All relative to extract_path\\XBMC """
 		xbmc.output("_hardcoded_excludes()")
 		srcList = [ "..\\_tools", "..\\win32", "..\\Changelog.txt", "..\\copying.txt", "..\\keymapping.txt" ]
 		for src in srcList:
@@ -576,74 +577,98 @@ class Main:
 				raise
 
 	######################################################################################
-	def _extract_rar( self, file_name, unrar_path ):
-		xbmc.output( "_extract_rar() file_name=" + file_name + " unrar_path=" + unrar_path )
+	def _extract( self, file_name, extract_path ):
+		xbmc.output( "> _extract() file_name=" + file_name + " extract_path=" + extract_path )
 		success = False
+
+		# check extract destination folder doesnt exist
+		if os.path.exists(extract_path):
+			# ask to overwrite 
+			if not dialogYesNo(__language__( 0 ), __language__( 314 ), extract_path, \
+							yesButton=__language__( 402 ), noButton=__language__( 403 )):
+				return False
+
+		# use a new dialog cos an update shows an empty bar that ppl expect to move
+		if not self.isSilent:
+			dialogProgress.create( __language__( 0 ), __language__( 504 ), extract_path )
+		else:
+			showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), extract_path), 60 )
+
+		time.sleep(1)
+		# determine which extract to do, RAR (xbmc builtin) or ZIP (Python module)
 		try:
-			# check extract destination folder doesnt exist
-			if os.path.exists(unrar_path):
-				# ask to overwrite 
-				if not dialogYesNo(__language__( 0 ), __language__( 314 ), unrar_path, \
-								yesButton=__language__( 402 ), noButton=__language__( 403 )):
-					return False
-
-			# use a new dialog cos an update shows an empty bar that ppl expect to move
-			if not self.isSilent:
-				dialogProgress.create( __language__( 0 ), __language__( 504 ), unrar_path )
+			if file_name.endswith("rar"):
+				xbmc.output("extracting RAR ...")
+				xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_name, extract_path, ), )
 			else:
-				showNotification(__language__( 0 ), "%s %s" % (__language__( 504 ), unrar_path), 60 )
+				# unpack ZIP, then rename to reqd short path name
+				success, installed_path = unzip(self.settings[ self.SETTING_UNRAR_PATH ], file_name, self.isSilent, __language__(504))
+				if success:
+					if os.path.isdir(extract_path):
+						os.rmdir(extract_path)
+						xbmc.output("removed existing dir we wish to rename too " + extract_path)
 
-			time.sleep(2)
-			result = xbmc.executebuiltin( "XBMC.extract(%s,%s)" % ( file_name, unrar_path, ), )
-
-			# inform user of os path checking
-			if not self.isSilent:
-				self._dialog_update( __language__(0), __language__( 522 ))
-
-			# loop to check if unrar path appears
-			userdata_path = os.path.join(unrar_path, 'XBMC','UserData' )
-			newXBE = os.path.join(unrar_path, 'XBMC','default.xbe' )
-			time.sleep(2)
-			MAX = 35
-			for count in range(MAX):
-				isNewXBE = fileExist(newXBE)
-				isUserDataPath = os.path.isdir( userdata_path )
-				xbmc.output("checkCount=" + str(count) + " isUserDataPath="+str(isUserDataPath) + " isNewXBE="+str(isNewXBE))
-
-				if not isNewXBE or not isUserDataPath:
-					if count < MAX-1:
-						if not self.isSilent:
-							percent = int( count * 100.0 / MAX )
-							msg1 = "%s (%d/%d)" % (__language__( 522 ), count, MAX)
-							msg2 = "%s  %s" % (__language__(526), str(isUserDataPath))
-							msg3 = "%s  %s" % (__language__(527), str(isNewXBE))
-							dialogProgress.update( percent, msg1, msg2, msg3)
-							if ( dialogProgress.iscanceled() ): break
-						time.sleep(2)
-					else:
-						xbmc.output("check max reached")
-				else:
-					xbmc.output("checks successful")
-					success = True
-					break
-
-			if not self.isSilent:
-				dialogProgress.close()
+					for retry in range(3):
+						try:
+							time.sleep(2)
+							os.rename(installed_path, extract_path)
+							xbmc.output("installation dir renamed to " + extract_path)
+							break
+						except:
+							traceback.print_exc()
 		except:
-			if not self.isSilent:
-				dialogProgress.close()
-			handleException( "_extract_rar()" )
+			dialogProgress.close()
+			traceback.print_exc()
+			dialogOK( __language__( 0 ), __language__( 304 ))
+		else:
+			success = self._check_extract(extract_path)
+			dialogProgress.close()
+			if not success:
+				# remove partial extract
+				try:
+					rmtree( extract_path, ignore_errors=True )
+					xbmc.output("extract failed, extract path rmtree done")
+				except: pass
+				dialogOK( __language__( 0 ), __language__( 312 ), extract_path )
 
-		# unrar path not found
-		if not success:
-			xbmc.output("extract failed, clean up")
-			try:
-				rmtree( unrar_path, ignore_errors=True )	# remove partial extract
-				xbmc.output("extract failed, extract path rmtree done")
-			except: pass
-			dialogOK( __language__( 0 ), __language__( 312 ), unrar_path )
+		xbmc.output( "< _extract() success=" + str(success) )
+		return success
 
-		xbmc.output( "_extract_rar() success=" + str(success) )
+	######################################################################################
+	def _check_extract(self, extract_path):
+		xbmc.output( "> _check_extract() extract_path=" + extract_path)
+		success = False
+
+		# inform user of os path checking
+		if not self.isSilent:
+			self._dialog_update( __language__(0), __language__( 522 ))
+
+		# loop to check if extract path appears
+		check_path = os.path.join(extract_path, 'XBMC','UserData' )
+		check_file = os.path.join(extract_path, 'XBMC','default.xbe' )
+		time.sleep(2)
+		MAX = 35
+		for count in range(MAX):
+			isFile = fileExist(check_file)
+			isPath = os.path.isdir(check_path)
+			xbmc.output("checkCount=" + str(count) + " isPath="+str(isPath) + " isFile="+str(isFile))
+
+			if not isFile or not isPath:
+				if count < MAX-1:
+					if not self.isSilent:
+						percent = int( count * 100.0 / MAX )
+						msg1 = "%s (%d/%d)" % (__language__( 522 ), count, MAX)
+						msg2 = "%s  %s" % (__language__(526), str(isPath))
+						msg3 = "%s  %s" % (__language__(527), str(isFile))
+						dialogProgress.update( percent, msg1, msg2, msg3)
+						if ( dialogProgress.iscanceled() ): break
+					time.sleep(2)
+			else:
+				success = True
+				break
+
+		dialogProgress.close()
+		xbmc.output( "< _check_extract() success=" + str(success) )
 		return success
 
 	######################################################################################
@@ -705,8 +730,8 @@ class Main:
 		del tbd
 
 	######################################################################################
-	def _copy_user_data(self, unrar_path):
-		xbmc.output( "_copy_user_data() " + unrar_path )
+	def _copy_user_data(self, extract_path):
+		xbmc.output( "_copy_user_data() " + extract_path )
 
 		try:
 			# compare keymapping.xml, always copy, but make backups
@@ -715,7 +740,7 @@ class Main:
 			curr_build_userdata_file = os.path.join( "T:\\", keymapFilename)
 			xbmc.output( "curr_build_userdata_file= " + curr_build_userdata_file )
 
-			new_build_userdata_path = os.path.join( unrar_path, "XBMC", "UserData")
+			new_build_userdata_path = os.path.join( extract_path, "XBMC", "UserData")
 			new_build_userdata_file = os.path.join( new_build_userdata_path, keymapFilename)
 			xbmc.output( "new_build_userdata_file= " + new_build_userdata_file )
 
@@ -759,8 +784,8 @@ class Main:
 
 
 	######################################################################################
-	def _update_shortcut(self, unrar_path):
-		xbmc.output( "_update_shortcut() " +unrar_path )
+	def _update_shortcut(self, extract_path):
+		xbmc.output( "_update_shortcut() " +extract_path )
 
 		success = False
 		# get users prefered booting dash name eg. XBMC.xbe
@@ -796,7 +821,7 @@ class Main:
 
 		try:
 			# create new shortcut cfg path - this points to the new T3CH XBMC build xbe
-			boot_path = os.path.join( unrar_path, "XBMC", "default.xbe" )
+			boot_path = os.path.join( extract_path, "XBMC", "default.xbe" )
 			xbmc.output( "new cfg boot_path= " + boot_path )
 			# write new cfg to CFG_NEW
 			shortcut_cfg_file_new = shortcut_cfg_file + "_new" 
@@ -869,14 +894,14 @@ class Main:
 
 		TOTAL = len(self.includes)
 		count = 0
-		unrar_path = self.settings[self.SETTING_UNRAR_PATH]
+		extract_path = self.settings[self.SETTING_UNRAR_PATH]
 		for path in self.includes:
 			try:
 				if not path.startswith("Q:\\"): 
 					src_path = os.path.join("Q:\\", path)
 				else:
 					src_path = path
-				dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
+				dest_path = os.path.join( extract_path, self.short_build_name, "XBMC", path )
 				if not self.isSilent:
 					percent = int( count * 100.0 / TOTAL )
 					self._dialog_update( __language__(0), __language__( 515 ), src_path, pct=percent )
@@ -893,14 +918,14 @@ class Main:
 
 		TOTAL = len(self.excludes)
 		count = 0
-		unrar_path = self.settings[self.SETTING_UNRAR_PATH]
+		extract_path = self.settings[self.SETTING_UNRAR_PATH]
 		for path in self.excludes:
 			try:
 				if path.startswith(".."):
 					path = path.replace("..\\","").replace("../","")
-					dest_path = os.path.join( unrar_path, self.short_build_name, path )
+					dest_path = os.path.join( extract_path, self.short_build_name, path )
 				else:
-					dest_path = os.path.join( unrar_path, self.short_build_name, "XBMC", path )
+					dest_path = os.path.join( extract_path, self.short_build_name, "XBMC", path )
 
 				if not self.isSilent:
 					percent = int( count * 100.0 / TOTAL )
@@ -1492,6 +1517,64 @@ class TextBoxDialogXML( xbmcgui.WindowXML ):
 		self.text = text
 
 		self.doModal()		# causes window to be drawn
+
+#################################################################################################################
+def unzip(extract_path, filename, silent=False, msg=""):
+	""" unzip an archive, using ChunkingZipFile to write large files as chunks if necessery """
+	xbmc.output("> unzip() extract_path=" + extract_path + " filename=" + filename)
+	success = False
+	cancelled = False
+	installed_path = ""
+
+	zip=zipstream.ChunkingZipFile(filename, 'r')
+	namelist = zip.namelist()
+	names=zip.namelist()
+	infos=zip.infolist()
+	max_files = len(namelist)
+	xbmc.output("max_files=%s" % max_files)
+
+	for file_count, entry in enumerate(namelist):
+		info = infos[file_count]
+
+		if not silent:
+			percent = int( file_count * 100.0 / max_files )
+			root, name = os.path.split(entry)
+			dialogProgress.update( percent, msg, root, name)
+			if ( dialogProgress.iscanceled() ):
+				cancelled = True
+				break
+
+		filePath = os.path.join(extract_path, entry)
+		if filePath.endswith('/'):
+			if not os.path.isdir(filePath):
+				os.makedirs(filePath)
+		elif (info.file_size + info.compress_size) > 25000000:
+			xbmc.output( "LARGE FILE: f sz=%s  c sz=%s  reqd sz=%s %s" % (info.file_size, info.compress_size, (info.file_size + info.compress_size), entry ))
+			outfile=file(filePath, 'wb')
+			fp=zip.readfile(entry)
+			fread=fp.read
+			ftell=fp.tell
+			owrite=outfile.write
+			size=info.file_size
+
+			# write out in chunks
+			while ftell() < size:
+				hunk=fread(4096)
+				owrite(hunk)
+
+			outfile.flush()
+			outfile.close()
+		else:
+			file(filePath, 'wb').write(zip.read(entry))
+
+	if not cancelled:
+		success = True
+		installed_path = os.path.join(extract_path, namelist[0][0:-1])
+	
+	zip.close()
+	del zip
+	xbmc.output("< unzip() success=" + str(success) + " installed_path=" + installed_path)
+	return success, installed_path
 
 
 #################################################################################################################
