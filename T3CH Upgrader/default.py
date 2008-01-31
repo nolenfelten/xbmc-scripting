@@ -104,12 +104,12 @@ class Main:
 
 		self._check_settings()
 		scriptUpdated = False
-#		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
-#			scriptUpdated = self._update_script(True)								# silent
+		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
+			scriptUpdated = self._update_script(True)								# silent
 
 		if not scriptUpdated:
-#			url = self._get_latest_version()										# discover latest build
-			url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
+			url = self._get_latest_version()										# discover latest build
+#			url = "http://somehost/XBMC-SVN_2007-12-23_rev11071-T3CH.rar"			# DEV ONLY!!, saves DL it
 			if url:
 				remote_archive_name, remote_short_build_name = self._check_build_date( url )
 			else:
