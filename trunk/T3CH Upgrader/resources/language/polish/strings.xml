@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 01/27/2008-->
+<!--Date of translation: 01/31/2008-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -15,7 +15,7 @@
   <string id="206">Usuń starą wersję T3CH:</string>
   <string id="207">Wprowadź nazwę pliku:</string>
   <string id="300">Błąd podczas zapisywania ustawień.</string>
-  <string id="301">Nie znalazłem żadnej wersji T3CH!</string>
+  <string id="301">Nie ma dostępnej nowszej wersji T3CH!</string>
   <string id="302">Błąd podczas pobierania info danych o wersji!</string>
   <string id="303">Pobieranie anulowane!</string>
   <string id="304">Wystąpił błąd podczas wypakowywania!</string>
@@ -29,6 +29,7 @@
   <string id="312">Przynajmniej jeden plik lub katalog nie został wypakowany![CR][CR]Niestety jest to błąd w XBMC, rozpocznij wszystko od nowa.</string>
   <string id="313">Plik lub katalog zastrzeżony!</string>
   <string id="314">Docelowy katalog wypakowywania już istnieje![CR][CR]Czy napewno chcesz nadpisać?</string>
+  <string id="315">Nieprawidłowość sum kontrolnych SFV[CR]Plik rar uszkodzony, konieczne ponowne ściąganie </string>
   <string id="400">Pobierz</string>
   <string id="401">Pomiń</string>
   <string id="402">Tak</string>
@@ -58,7 +59,6 @@
   <string id="510">Usuwanie T3CH UserData ...</string>
   <string id="511">Twój UserData kopiowany do T3CH ...</string>
   <string id="512">Instalacja zakończona. Uruchomić ponownie?</string>
-  <string id="513">Niekompletne ustawienia. Wprowadzisz teraz?</string>
   <string id="514">Aktualizacja ustawień pliku startowego dasha ...</string>
   <string id="515">Kopiowanie:</string>
   <string id="516">Usuwanie:</string>
@@ -71,9 +71,10 @@
   <string id="523">Naprawdę usunąć tą wersję T3CH?</string>
   <string id="524">Proszę czekać ...</string>
   <string id="525">Wybierz plik lub katalog?</string>
-  <string id="526">Sprawdzam czy istnieją nowe ścieżki?</string>
-  <string id="527">Sprawdzam czy istnieje nowy XBE?</string>
-  <string id="528">Usunąć pobrane archiwum rar ?</string>
+  <string id="526">Sprawdzam czy istnieją ścieżki ..</string>
+  <string id="527">Sprawdzam czy istnieje XBE..</string>
+  <string id="528">Usunąć archiwum T3CH z dysku ?</string>
+  <string id="529">Zaktualizować ustawienia pliku startowego dasha  ?[CR](wymagane jeżeli chcesz się przełączyć na nową wersję)</string>
   <string id="600">Menu</string>
   <string id="601">Opcje ustawień</string>
   <string id="610">Ustawienia</string>
@@ -84,14 +85,14 @@
   <string id="617">Usuń starą wersję T3CH</string>
   <string id="618">Lista plików, które zawsze usuwasz </string>
   <string id="619">Aktualizuj skrypt</string>
-  <string id="620">Instaluj z RAR-a zapisanego na dysku:</string>
+  <string id="620">Instaluj z zapisanego na dysku:</string>
   <string id="630">Dysk z plikiem startowym dasha:</string>
   <string id="631">Nazwa pliku startowego dasha:</string>
   <string id="632">Ścieżka instalacji:</string>
-  <string id="633">Powiadamiaj, gdy nie ma nowej wersji T3CH?</string>
-  <string id="634">Sprawdź aktualizacje skryptu na starcie</string>
-  <string id="635">Skopiować UserData do nowej wersji T3CH?</string>
-  <string id="636">Usuń wszystkie ustawienia</string>
+  <string id="633">Powiadamiaj, gdy nie ma nowej wersji T3CH</string>
+  <string id="634">Sprawdzaj aktualizacje skryptu na starcie</string>
+  <string id="635">Kopiuj UserData do nowej wersji T3CH</string>
+  <string id="636">Wyczyść wszystkie ustawienia</string>
   <string id="637">Wyczyść listy kopiowanych i kasowanych plików</string>
   <string id="638">Zawsze pytaj zanim usuniesz archiwum .rar</string>
   <string id="639">Przeczytaj zanim zaczniesz</string>
@@ -99,15 +100,15 @@
   <string id="651">Dodaj nowe</string>
   <string id="652">Użyj klawiatury</string>
   <string id="1000">Używasz najnowszej wersji.</string>
-  <string id="1001">Sprawdzam dostępną oficjalną wersję...</string>
+  <string id="1001">Sprawdzam  możliwość aktualizacji...</string>
   <string id="1002">jest nowsza od tej którą używasz</string>
   <string id="1003">Chcesz zaktualizować?</string>
-  <string id="1004">Przesyłanie listy potrzebnych plików...</string>
+  <string id="1004">Przetwarzanie zapytania...</string>
   <string id="1005">Proszę czekać...</string>
   <string id="1006">Wersja</string>
-  <string id="1007">Przetwarzanie zapytania:</string>
+  <string id="1007">Pobieram:</string>
   <string id="1008">Ścieżka:</string>
   <string id="1009">Plik:</string>
-  <string id="1030">Żadna nowa oficjalna wersja nie jest dostępna!</string>
+  <string id="1030">Nie ma nowej oficjalnej wersji !</string>
   <string id="1031">Wystąpił błąd podczas aktualizacji!</string>
 </strings>
