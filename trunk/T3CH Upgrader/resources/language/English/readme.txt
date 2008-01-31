@@ -61,7 +61,7 @@ If all is well after reboot, you will be now running the latest T3CH build!
 
 Local Installation:
 -------------------
-If you ftp a T3CH build rar to the designed rar download location (eg. E:\apps\) the Main Menu will give you the option to do an installation from that.
+If you ftp a T3CH build archive (RAR or ZIP) to the designed rar download location (eg. E:\apps\) the Main Menu will give you the option to do an installation from that.
 
 
 Auto startup with XBMC Startup:
