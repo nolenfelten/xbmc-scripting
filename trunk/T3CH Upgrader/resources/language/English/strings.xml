@@ -93,6 +93,7 @@
     <string id="618">Maintain Delete Data List</string>
     <string id="619">Update Script</string>
     <string id="620">Install From Local:</string>
+    <string id="621">Install Old Build From Web</string>
 
     <!-- Settings Options -->
     <string id="630">Dash Shortcut Drive:</string>

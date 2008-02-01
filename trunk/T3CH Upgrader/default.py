@@ -31,7 +31,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '31-01-2008'
+__date__ = '01-02-2008'
 __version__ = "1.4"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -78,6 +78,7 @@ class Main:
 		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
 		self.FTP_BASE_URL = "http://ftp1.srv.endpoint.nu/pub/repository/t3ch/"
+		self.ARCHIVE_URL = "http://ftp.endpoint.nu/pub/repository/t3ch/ARCHIVE/"
 
 		self.isPartialDownload = False		# indicate that last download was cancelled, rar might be partial
 
@@ -261,7 +262,7 @@ class Main:
 		archive_name = ''
 		short_build_name = ''
 		try:
-			# get system build date and convert into YYYY-MM-DD
+			# get system build date info
 			curr_build_date_secs, curr_build_date = self._get_current_build_info()
 
 			# extract new build date from name
@@ -281,8 +282,8 @@ class Main:
 		return (archive_name, short_build_name)
 
 	######################################################################################
-	# parse local file or url to get build info
 	def _get_archive_info(self, filename):
+		""" parse local file or url to get build info """
 		xbmc.output( "_get_archive_info() %s" % filename)
 		filenameInfo = ()
 		try:
@@ -377,7 +378,7 @@ class Main:
 			elif selected == (4 + menuOptOffset):										# delete excludes
 				self._maintain_excludes()
 			elif selected == (5 + menuOptOffset):										# change to another t3ch
-				if self._downgrade():
+				if self._switch_builds_menu():
 					break
 			elif selected == (6 + menuOptOffset):										# delete old t3ch
 				self._delete_old_t3ch()
@@ -388,10 +389,43 @@ class Main:
 			elif selected == (8  + menuOptOffset):										# settings
 				self._check_settings(forceSetup=True)
 
+	#####################################################################################
+	def _switch_builds_menu(self):
+		xbmc.output( "> _switch_builds_menu() ")
+
+		reboot = False
+		selectedBuildName = ''
+
+		while not selectedBuildName:
+			# find all LOCAL installed t3ch builds dirs
+			buildsList = self._find_local_t3ch_dirs()
+			buildsList.insert(0, __language__( 621 ))	# web builds - 2nd option
+			buildsList.insert(0, __language__( 650 ))	# exit - 1st option
+			
+			# select
+			selectDialog = xbmcgui.Dialog()
+			selected = selectDialog.select( __language__( 205 ), buildsList )
+			if selected <= 0:						# quit
+				break
+			
+			if selected == 1:						# web build archive
+				self._web_builds_menu()
+			else:
+				selectedBuildName = buildsList[selected]
+				# do build switch by writing path into Shortcut
+				path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], selectedBuildName)
+				if self._update_shortcut(path):
+					if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
+						reboot = True
+						xbmc.executebuiltin( "XBMC.Reboot" )
+
+		xbmc.output( "< _switch_builds_menu() ")
+		return reboot
+
+
 	######################################################################################
 	def _get_local_archive(self):
 		""" return latest T3CH archive found in install dir """
-
 		archive_file = ""
 		flist = []
 		try:
@@ -413,6 +447,7 @@ class Main:
 
 	######################################################################################
 	def _check_sfv(self, archive_filepath):
+		""" Download SFV for latest T3CH build, then check against RAR """
 		xbmc.output( "> _check_sfv() %s" % archive_filepath )
 		success = False
 		entry_filename = os.path.basename( archive_filepath )
@@ -430,10 +465,8 @@ class Main:
 		return success
 
 	######################################################################################
-	# if given local archive_file, no DL needed
-	######################################################################################
-	def _process( self, url='' ):
-		""" Extract and Install new T3CH build """
+	def _process( self, url='', useSFV=True ):
+		""" Extract and Install new T3CH build, from a url or local archive """
 		xbmc.output( "_process() url=" + url)
 
 		success = False
@@ -445,7 +478,12 @@ class Main:
 			xbmc.output( "archive_file= " + archive_file )
 
 			if url:
-				have_file = ( self._fetch_current_build( url, archive_file ) and self._check_sfv(archive_file) )
+				# download build
+				have_file = False
+				if self._fetch_current_build( url, archive_file ):
+					# check against SFV if reqd
+					if not useSFV or self._check_sfv(archive_file):
+						have_file = True
 			else:
 				have_file = fileExist(archive_file)
 
@@ -529,7 +567,6 @@ class Main:
 	######################################################################################
 	def _get_latest_version( self ):
 		xbmc.output( "_get_latest_version()" )
-
 		url = ""
 		for baseUrl in self.BASE_URL_LIST:
 			doc = readURL( baseUrl, __language__( 502 ), self.isSilent )
@@ -540,7 +577,6 @@ class Main:
 		if not url:
 			dialogOK( __language__( 0 ), __language__( 301 ), isSilent=self.isSilent)
 		return url
-
 
 	######################################################################################
 	def _parse_html_source( self, htmlsource ):
@@ -568,13 +604,12 @@ class Main:
 
 			urllib.urlretrieve( url , file_name, self._report_hook )
 
-			if not self.isSilent:
-				dialogProgress.close()
+			dialogProgress.close()
+			success = fileExist(file_name)
 		except:
+			traceback.print_exc()
 			dialogProgress.close()
 			dialogOK( __language__( 0 ), __language__( 303 ), isSilent=self.isSilent )
-		else:
-			success = True
 
 		urllib.urlcleanup()
 		self.isPartialDownload = not success
@@ -1020,8 +1055,6 @@ class Main:
 		except:
 			handleException("_maintain_includes()")
 
-
-
 	######################################################################################
 	def _maintain_excludes(self):
 		xbmc.output( "_maintain_excludes() ")
@@ -1190,37 +1223,13 @@ class Main:
 			msg = ("%s %s %s" % (line1, line2, line3)).strip()
 			showNotification(title, msg, time)
 
-	#####################################################################################
-	def _downgrade(self):
-		xbmc.output( "_downgrade() ")
-
-		reboot = False
-		# find all t3ch builds
-		oldBuilds = self._find_t3ch_dirs()
-		oldBuilds.insert(0, __language__( 650 ))
-
-		# select
-		selectDialog = xbmcgui.Dialog()
-		selected = selectDialog.select( __language__( 205 ), oldBuilds )
-		if selected > 0:						# quit
-			selectedBuildName = oldBuilds[selected]
-
-			# do downgrade by writing old path into Shortcut
-			path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], selectedBuildName)
-			if self._update_shortcut(path):
-				if dialogYesNo( __language__( 0 ), __language__( 512 )):				# reboot ?
-					reboot = True
-					xbmc.executebuiltin( "XBMC.Reboot" )
-
-		return reboot
-
 
 	#####################################################################################
 	def _delete_old_t3ch(self):
 		xbmc.output( "_delete_old_t3ch() ")
 
 		# find all t3ch builds
-		oldBuilds = self._find_t3ch_dirs()
+		oldBuilds = self._find_local_t3ch_dirs()
 		oldBuilds.insert(0, __language__( 650 ))
 
 		# select
@@ -1244,8 +1253,8 @@ class Main:
 					handleException("_delete_old_t3ch()")
 
 	#####################################################################################
-	def _find_t3ch_dirs(self):
-		xbmc.output( "_find_t3ch_dirs() ")
+	def _find_local_t3ch_dirs(self):
+		xbmc.output( "> _find_local_t3ch_dirs() ")
 		dirList = []
 
 		# get curr build name
@@ -1257,7 +1266,64 @@ class Main:
 			if buildName and buildName != curr_build_date:
 				dirList.append(buildName)
 
+		xbmc.output( "< _find_local_t3ch_dirs() dir count=%s" % len(dirList))
 		return dirList
+	
+	#####################################################################################
+	def _find_web_builds(self):
+		xbmc.output( "> _find_web_builds() ")
+		buildList = []
+		reList = []
+		for baseUrl in self.BASE_URL_LIST:
+			doc = readURL( baseUrl, __language__( 502 ), self.isSilent )
+#			doc = file(os.path.join(DIR_HOME, "t3ch.yi.se.htm")).read()
+			if doc:
+				# do regex on section
+				findRe = re.compile('<option value="(XBMC-SVN_.*?)"', re.DOTALL + re.MULTILINE + re.IGNORECASE)
+				reList = findRe.findall(doc)
+				break
+
+		if reList:
+			# remove current running build from list
+			curr_build_date_secs, curr_build_date = self._get_current_build_info()
+			for filename in reList:
+				try:
+					archive_name, build_date, build_date_secs, short_build_name = self._get_archive_info(filename)
+					if curr_build_date != short_build_name:
+						buildList.append(filename)
+				except: pass
+
+		xbmc.output( "< _find_web_builds() build count=%s" % len(buildList))
+		return buildList
+
+	#####################################################################################
+	def _web_builds_menu(self):
+		""" Find web old archive, show in a menu, select and download archive """
+		xbmc.output( "> _web_builds_menu() ")
+
+		buildsList = self._find_web_builds()
+		buildsList.insert(0, __language__( 650 ))	# exit - 1st option
+
+		while True:
+			# select
+			selectDialog = xbmcgui.Dialog()
+			selected = selectDialog.select( __language__( 205 ), buildsList )
+			if selected <= 0:						# quit
+				break
+
+			# extract new build date from name
+			filename = buildsList[selected]
+			info = self._get_archive_info(filename)
+			if info:
+				archive_name, found_build_date, found_build_date_secs, short_build_name = info
+				self.archive_name = archive_name
+				self.short_build_name = short_build_name
+				url = "%s%s" % (self.ARCHIVE_URL, filename)
+				if self._process(url, useSFV=False):
+					if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
+						xbmc.executebuiltin( "XBMC.Reboot" )
+
+		xbmc.output("< _web_builds_menu()")
 
 	#####################################################################################
 	def _get_current_build_info(self):
