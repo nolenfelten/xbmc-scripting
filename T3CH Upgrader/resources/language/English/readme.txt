@@ -59,9 +59,20 @@ The following will happen;
 
 If all is well after reboot, you will be now running the latest T3CH build!
 
+
 Local Installation:
 -------------------
-If you ftp a T3CH build archive (RAR or ZIP) to the designed rar download location (eg. E:\apps\) the Main Menu will give you the option to do an installation from that.
+If you ftp a T3CH build archive (RAR or ZIP) to the designed rar download location (eg. E:\apps\) the Main Menu will show an option to install from that.
+
+
+Switch To Another Build
+-----------------------
+The Menu option 'Switch to Another T3CH Build' will allow to either;
+1) Switch to an existing local T3CH installation.
+or
+2) Select from the web archive of old T3CH builds, download, then install.
+
+NB. Although the presented lists of available builds should have had the current build date removed, take caution not to overwrite current build!
 
 
 Auto startup with XBMC Startup:
