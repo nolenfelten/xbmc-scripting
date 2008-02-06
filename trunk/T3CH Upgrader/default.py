@@ -1354,10 +1354,10 @@ class Main:
 					up.issueUpdate(version)
 			elif not isSilent:
 				dialogOK(__language__(0), __language__(1000))
-#		elif not isSilent:
-#			dialogOK(__language__(0), __language__(1030))
+		elif not isSilent:
+			dialogOK(__language__(0), __language__(1030))
 
-#		del up
+		del up
 		xbmc.output( "< _update_script() updated="+str(updated))
 		return updated
 
