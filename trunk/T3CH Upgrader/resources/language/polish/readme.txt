@@ -50,7 +50,7 @@ Z czasem w katalogu roboczym bêdziemy mieli parê wersji XBMC, najnowsza nie znac
 Dysk nie jest z gumy, w koñcu skoñczy siê na nim miejsce. Jak ju¿ nazbieramy parê wersji to warto siê zdecydowaæ na usuniêcie niektórych z nich. Skrypt robi to znacznie szybciej ni¿ eksplorator w XBMC.
 
 6) "Aktualizuj skrypt"
-Nawet jak mamy w³±czon± opcjê o informowaniu nas o nowych wersjach skryptu, to niestety sam siê nie zaktualizuje. Aktualizacjê skryptu trzeba aktywowaæ rêcznie.
+Aktualizacjê skryptu mo¿na aktywowaæ rêcznie i takie ustawienia s± domy¶lne. Osobi¶cie polecam w³±czenie opcji automatycznej aktualizacji, trzeba tylko pamiêtaæ, ¿e skrypt bêdzie siê za ka¿dym razem (na starcie) ³±czy³ i sprawdza³ dostêpno¶æ.
 
 ========================================================================================================
 Jak dzia³a skrypt i jak zachowywaæ siê podczas instalacji
@@ -80,7 +80,8 @@ Skrypt mo¿e pracowaæ w trzech trybach:
 
 Tak jest mo¿liwe, aby skrypt instalowa³ nowe wersje bez ¿adnego pytania nas o zgodê - tzn. bez przesady na koñcu zapyta siê czy ma wykonaæ restart. S± dwie opcje takiej zaawansowanej pracy i obie wymagaj± dodatkowej edycji plików np. przy u¿yciu notepada:
 
-1) edycja pliku Q:\scripts\autoexec.py
+1) po przekopiowaniu do³±czonego autoexec.py do Q:\scripts\
+edycja pliku Q:\scripts\autoexec.py
 wymieniamy argument NOTIFY na SILENT - skrypt zamiast nas powiadamiaæ o dostêpnej nowej wersji to j± instaluje na starcie konsoli
 ------------------------------------------------------------------------------------------------------
 xbmc.executebuiltin("XBMC.RunScript(Q:\\scripts\\T3CH Upgrader\\default.py, SILENT)")
@@ -89,8 +90,8 @@ xbmc.executebuiltin("XBMC.RunScript(Q:\\scripts\\T3CH Upgrader\\default.py, SILE
 2) po dodaniu skryptu do ulubionych
 edycja pliku \UserData\favourites.xml dodajemy argument SILENT i mamy mo¿liwo¶æ odpalenia trybu w tle wtedy, gdy chcemy.
 ------------------------------------------------------------------------------------------------------
-<favourite name="T3CH Upgrader" thumb="c:\xbmc\userdata\Thumbnails\Programs\e4649b7c.tbn">RunScript(Q:\scripts\T3CH Upgrader\default.py, SILENT)</favourite>
-</favourites>
+<favourite name="T3CH Upgrader" thumb="c:\xbmc\userdata\Thumbnails\Programs\e4649b7c.tbn">
+RunScript(Q:\scripts\T3CH Upgrader\default.py, SILENT)</favourite>
 ------------------------------------------------------------------------------------------------------
 
 Znane problemy:
