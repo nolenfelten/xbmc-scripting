@@ -912,39 +912,39 @@ class GUI( xbmcgui.WindowXML ):
 
     def onAction( self, action ):
         try:
-            if ( action.getButtonCode() in EXIT_SCRIPT ):
+            if ( action.getButtonCode() in EXIT_SCRIPT or action in ACTION_EXIT_SCRIPT ):
                 self.exitScript()
-            elif ( action.getButtonCode() in TOGGLE_DISPLAY ):
+            elif ( action.getButtonCode() in TOGGLE_DISPLAY or action in ACTION_TOGGLE_DISPLAY ):
                 self.setCategory( self.current_display[ self.list_category == 0 ][ 0 ], self.current_display[ self.list_category == 0 ][ 1 ] )
             else:
                 if ( self.CONTROL_TRAILER_LIST_START <= self.controlId <= self.CONTROL_TRAILER_LIST_END ):
-                    if ( action.getButtonCode() in CONTEXT_MENU ):
+                    if ( action.getButtonCode() in CONTEXT_MENU or action in ACTION_CONTEXT_MENU ):
                         self.showContextMenu()
-                    elif ( action.getButtonCode() in SELECT_ITEM ):
+                    elif ( action.getButtonCode() in SELECT_ITEM or action in ACTION_SELECT_ITEM ):
                         self.playTrailer()
                     ###############################################################
-                    elif ( action.getButtonCode() in MOVEMENT + ( 262, 263, ) ):
+                    elif ( action.getButtonCode() in MOVEMENT + ( 262, 263, ) or action in ACTION_MOVEMENT ):
                         self.showTrailerInfo()
                     ###############################################################
                 elif ( self.CONTROL_TRAILER_LIST_PAGE_START <= self.controlId <= self.CONTROL_TRAILER_LIST_PAGE_END ):
-                    if ( action.getButtonCode() in MOVEMENT ):
+                    if ( action.getButtonCode() in MOVEMENT or action in ACTION_MOVEMENT ):
                         self.showTrailerInfo()
                 elif ( self.controlId == self.CONTROL_CATEGORY_LIST ):
-                    if ( action.getButtonCode() in CONTEXT_MENU ):
+                    if ( action.getButtonCode() in CONTEXT_MENU or action in ACTION_CONTEXT_MENU ):
                         self.showContextMenu()
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getTrailerGenre()
-                    elif ( action.getButtonCode() in MOVEMENT_UP + MOVEMENT_DOWN ):
+                    elif ( action.getButtonCode() in MOVEMENT_UP + MOVEMENT_DOWN or action in ACTION_MOVEMENT_UP + ACTION_MOVEMENT_DOWN ):
                         choice = self._set_count_label( self.CONTROL_CATEGORY_LIST )
                 elif ( self.controlId == self.CONTROL_CATEGORY_LIST_PAGE ):
-                    if ( action.getButtonCode() in MOVEMENT_UP + MOVEMENT_DOWN ):
+                    if ( action.getButtonCode() in MOVEMENT_UP + MOVEMENT_DOWN or action in ACTION_MOVEMENT_UP + ACTION_MOVEMENT_DOWN ):
                         self._set_count_label( self.CONTROL_CATEGORY_LIST )
                 elif ( self.controlId == self.CONTROL_CAST_LIST ):
-                    if ( action.getButtonCode() in CONTEXT_MENU ):
+                    if ( action.getButtonCode() in CONTEXT_MENU or action in ACTION_CONTEXT_MENU ):
                         self.showContextMenu()
-                elif ( ( self.CONTROL_TRAILER_LIST_PAGE_GROUP_START <= self.controlId <= self.CONTROL_TRAILER_LIST_PAGE_GROUP_END ) and action.getButtonCode() in SELECT_ITEM ):
+                elif ( ( self.CONTROL_TRAILER_LIST_PAGE_GROUP_START <= self.controlId <= self.CONTROL_TRAILER_LIST_PAGE_GROUP_END ) and ( action.getButtonCode() in SELECT_ITEM or action in ACTION_SELECT_ITEM ) ):
                     self.showTrailerInfo()
-                elif ( self.controlId in self.CONTROL_CATEGORY_LIST_PAGE_GROUP and action.getButtonCode() in SELECT_ITEM ):
+                elif ( self.controlId in self.CONTROL_CATEGORY_LIST_PAGE_GROUP and ( action.getButtonCode() in SELECT_ITEM or action in ACTION_SELECT_ITEM ) ):
                     self._set_count_label( self.CONTROL_CATEGORY_LIST )
                     #elif ( action.getButtonCode() in SELECT_ITEM ):
                     #    self.getActorChoice()
