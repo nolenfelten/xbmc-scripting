@@ -200,18 +200,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onFocus( self, controlId ):
-        self.controlId = controlId
+        xbmc.sleep( 5 )
+        self.controlId = self.getFocusId()
+        #self.controlId = controlId
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in EXIT_SCRIPT ):
+        if ( action in ACTION_EXIT_SCRIPT ):
             self.exit_script()
-        elif ( action.getButtonCode() in SETTINGS_MENU ):
+        elif ( action in ACTION_SETTINGS_MENU ):
             self.change_settings()
         #elif ( action.getButtonCode() in SHOW_CREDITS ):
         #    self._show_credits()
-        elif ( self.allow_exception and ( action.getButtonCode() in GET_EXCEPTION ) ):
+        elif ( self.allow_exception and action in ACTION_GET_EXCEPTION ):
             self.get_exception()
-        elif ( self.controlId == 120 and action.getButtonCode() in SELECT_ITEM ):
+        elif ( self.controlId == 120 and action in ACTION_SELECT_ITEM ):
             self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
     def get_artist_from_filename( self, filename ):
