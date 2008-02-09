@@ -1,3 +1,6 @@
+version 0.96a:
+- added: MC360 skin support
+
 version 0.96:
 - added: scrollbar to trainerlist
 - added: version # in script
