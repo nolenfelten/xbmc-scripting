@@ -331,5 +331,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in CANCEL_DIALOG ):
+        if ( action in ACTION_CANCEL_DIALOG ):
             self._close_dialog()
