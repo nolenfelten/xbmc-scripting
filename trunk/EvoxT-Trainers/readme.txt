@@ -1,5 +1,5 @@
 
-Version: 0.96
+Version: 0.96a
 
 Release notes:
 EvoxT-Trainers is a Xbox trainer downloader script for XBMC. It grabs all
@@ -7,11 +7,14 @@ content from www.xboxtrainers.net and lists it.
 The script displays the trainers, the nfo's and it downloads\unzips\installs
 to a specified trainerpath.
 
+Build:
+1. Doubleclick 'Build.bat'.
+2. The script is located in 'EvoxT-Trainers\BUILD'.
+(this step is only needed when you download the script via svn)
+
 Install:
-1. build script. doubleclick the "Build.bat"
-2. copy/ftp "EvoxT-Trainers" folder from "BUILD"
-   to your xbmc script dir ("q:\scripts\")
-3. Done!
+1. copy/ftp "EvoxT-Trainers" folder to your xbmc script dir ("q:\scripts\")
+2. Done!
 
 (q:\ = XBMC homedir)
 
