@@ -8,9 +8,9 @@ The script displays the trainers, the nfo's and it downloads\unzips\installs
 to a specified trainerpath.
 
 Build:
+(only needed if you download the script via svn)
 1. Doubleclick 'Build.bat'.
 2. The script is located in 'EvoxT-Trainers\BUILD'.
-(this step is only needed when you download the script via svn)
 
 Install:
 1. copy/ftp "EvoxT-Trainers" folder to your xbmc script dir ("q:\scripts\")
