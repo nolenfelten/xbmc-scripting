@@ -32,7 +32,7 @@ __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
 __date__ = '01-02-2008'
-__version__ = "1.4"
+__version__ = "1.4.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -190,7 +190,7 @@ class Main:
 		xbmc.output( "_browse_for_path() default_path=" + default_path + " dialog_type="+str(dialog_type) )
 		dialog = xbmcgui.Dialog()
 		skinName = xbmc.getSkinDir()
-		if skinName.find("Project Mayhem") == -1:		# not PMIII, show dialog
+		if skinName.find("MC360") >= 0:		# for just MC360
 			dialogOK( __language__( 0 ), heading )
 		return dialog.browse( dialog_type, heading, "files", '', False, False, default_path)
 
@@ -313,21 +313,48 @@ class Main:
 												xbmc.getInfoLabel('System.BuildDate'), \
 												__language__( 600 ))
 
-		while True:
-			# build menu
+		def _make_menu(local_archive_name=''):
+			self.opt_exit = __language__(650)
+			self.opt_view_logs = __language__(611)
 			if remote_archive_name:
-				dlOpt = "%s  %s"  % (__language__(612), remote_archive_name)			# download w/ rar name
+				self.opt_download = "%s  %s"  % (__language__(612), remote_archive_name)			# download w/ rar name
 			else:
-				dlOpt = "%s  %s"  % (__language__(612),__language__(517))			# no new build
-			options = [ __language__(650), __language__( 611 ), dlOpt,__language__( 615 ), \
-						__language__( 618 ),__language__(616), __language__(617), \
-						__language__(619), __language__(610) ]
+				self.opt_download = "%s  %s"  % (__language__(612),__language__(517))			# no new build
+			self.opt_maint_copy = __language__(615)
+			self.opt_maint_del = __language__(618)
+			self.opt_switch = __language__(616)
+			self.opt_del_build = __language__(617)
+			self.opt_update_script = __language__(619)
+			self.opt_settings = __language__(610)
+			self.opt_local = "%s  %s" % (__language__(620), local_archive_name)
 
+			options = [self.opt_exit,
+					   self.opt_view_logs,
+					   self.opt_download,
+					   self.opt_local,
+					   self.opt_maint_copy,
+					   self.opt_maint_del,
+					   self.opt_switch,
+					   self.opt_del_build,
+					   self.opt_update_script,
+					   self.opt_settings
+					   ]
+
+			# remove local install opt if no archive found
+			if not local_archive_name:
+				options.remove(self.opt_local)
+
+			# remove Update Script option if check enabled done startup
+			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402): # yes
+				options.remove(self.opt_update_script)
+
+			return options
+
+		while True:
 			# if we have a local T3CH rar, add option to install from it.
 			# Only include found rar if not a result of a previous cancelled download, as may be partial.
 			local_archive_name = ''
 			local_short_build_name = ''
-			menuOptOffset = 0
 			local_rar_file = self._get_local_archive()
 			if local_rar_file:
 				# assume local rars under 50meg are partial downloads and delete them
@@ -339,54 +366,60 @@ class Main:
 				else:
 					try:
 						local_archive_name, found_build_date, found_build_date_secs, local_short_build_name = self._get_archive_info(local_rar_file)
-						options.insert(3, "%s  %s" % (__language__(620), local_archive_name))
-						menuOptOffset += 1
 					except:
 						local_archive_name = '' # failed parsing local rar, don't add to menu
 
+			# build menu
+			options = _make_menu(local_archive_name)
+
 			# show menu
 			if not self.isSilent:
-				selected = selectDialog.select( heading, options )
+				selectedIdx = selectDialog.select( heading, options )
 			else:
-				selected = 2										# do process
-			xbmc.output("menu selected="+ str(selected))
+				selectedIdx = 2															# do process
+			xbmc.output("menu selectedIdx="+ str(selectedIdx))
 
-			if selected <= 0:										# quit
+			# translate option idx into option text then match
+			selectedOpt = options[selectedIdx]
+
+			if selectedOpt == self.opt_exit:
 				break
-
-			if selected == 1:										# view logs (XBMC or T3CH)
+			elif selectedOpt == self.opt_view_logs:										# view logs (XBMC or T3CH)
 				if dialogYesNo( __language__( 0 ), __language__( 611 ), \
 								yesButton=__language__( 411 ), noButton=__language__( 410 )):
 					self._view_t3ch_changelog()
 				else:
 					self._view_xbmc_changelog()
-			elif (selected == 2 and remote_archive_name) or (selected == 3 and local_archive_name):	# install
-				if selected == 2:
+			elif selectedOpt == self.opt_download:
+				if remote_archive_name:													# new build remote install
 					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
-				else:
+					if self._process(url, True):
+						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
+							xbmc.executebuiltin( "XBMC.Reboot" )
+						break															# stop
+			elif selectedOpt == self.opt_local:
+				if local_archive_name:													# local archive install
 					self.archive_name = local_archive_name
 					self.short_build_name = local_short_build_name
-					url = ''
-
-				if self._process(url):
-					if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
-						xbmc.executebuiltin( "XBMC.Reboot" )
-					break											# stop
-			elif selected == (3 + menuOptOffset):										# copy includes
+					if self._process('', False):
+						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
+							xbmc.executebuiltin( "XBMC.Reboot" )
+						break															# stop
+			elif selectedOpt == self.opt_maint_copy:									# copy includes
 				self._maintain_includes()
-			elif selected == (4 + menuOptOffset):										# delete excludes
+			elif selectedOpt == self.opt_maint_del:										# delete excludes
 				self._maintain_excludes()
-			elif selected == (5 + menuOptOffset):										# change to another t3ch
+			elif selectedOpt == self.opt_switch:										# change to another t3ch
 				if self._switch_builds_menu():
 					break
-			elif selected == (6 + menuOptOffset):										# delete old t3ch
+			elif selectedOpt == self.opt_del_build:										# delete old t3ch
 				self._delete_old_t3ch()
-			elif selected == (7 + menuOptOffset):										# update script
+			elif selectedOpt == self.opt_update_script:									# update script
 				if self._update_script(False):											# never silent from config menu
 					xbmc.output("script updating ... closing current instance")
-					break									# stop script if updated
-			elif selected == (8  + menuOptOffset):										# settings
+					break											# stop script if updated
+			elif selectedOpt == self.opt_settings:										# settings
 				self._check_settings(forceSetup=True)
 
 	#####################################################################################

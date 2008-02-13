@@ -1,6 +1,8 @@
 T3CH Upgrader Changelog:
 ========================
 
+v1.4.1 13/02/08 Change: 'Update Script (renamed to 'Check For Script Update') only shown on Menu if Setting 'Check for Script Update at Startup' is disabled
+                Change: Browse for local archive only shows pre listing dialog if MC360 skin in use. Other skins displays Dialog Headings, it doesn't.
 v1.4   31/01/08 Change: After extraction, if you choose not to do 'UserData/Scripts ... Copying' stage, 'Update Shortcuts' can still be done.
                 Change: Updating of shortcuts doesn't copy 'TEAM XBMC Shortcut xbe' over existing until after user prompt to do so.  _old & _new always made.
                 Change: Better recognition and deletion of partial rars from cancelled downloads.
