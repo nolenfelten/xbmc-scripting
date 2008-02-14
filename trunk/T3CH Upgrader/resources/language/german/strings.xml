@@ -91,7 +91,7 @@
     <string id="616">Zu einem anderen T3CH wechseln</string>
     <string id="617">Ein altes T3CH löschen</string>
     <string id="618">Zu löschende Daten verwalten</string>
-    <string id="619">Script aktualisieren</string>
+    <string id="619">Nach Script-Updates suchen</string>
     <string id="620">Installiere lokale RAR:</string>
     <string id="621">Installiere altes Build aus dem Web</string>
 
@@ -105,7 +105,7 @@
     <string id="636">Einstellungen zurücksetzen</string>
     <string id="637">Lösch- und Kopierlisten zurücksetzen</string>
     <string id="638">Vor dem Löschen der RAR nachfragen?</string>
-    <string id="639">Skript Readme/Changelog anzeigen</string>
+    <string id="639">Script Readme/Changelog anzeigen</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Beenden</string>
