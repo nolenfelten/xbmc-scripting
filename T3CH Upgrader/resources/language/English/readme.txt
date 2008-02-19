@@ -90,8 +90,7 @@ The required mode needs to be edited into autoexec.py executebuiltin.  The scrip
 
 Knonw Problems:
 ---------------
-*sometimes* the newly extracted rar folder strcture doesnt appear to exist, and the script won't continue.
-This is known problem and the best thing to do is, reboot and try again, your existing XBMC installation has not been touched.
+XBMC free RAM of less than 30mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution.
 
 If you're stuck, post in the appropiate forum at http://www.xboxmediacenter.com/forum/
 

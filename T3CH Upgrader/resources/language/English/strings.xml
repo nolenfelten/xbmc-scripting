@@ -29,6 +29,8 @@
     <string id="313">Restricted File or Folder!</string>
     <string id="314">Extract folder already exists, Overwrite ?</string>
     <string id="315">RAR failed SFV checksum![CR]May be corrupt, please re-download.</string>
+    <string id="316">Not enough freespace on installation drive!</string>
+    <string id="317">Free RAM less than recommended, unrar may fail.</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -78,6 +80,10 @@
     <string id="527">New XBE Exists ?</string>
     <string id="528">Delete T3CH Archive?</string>
     <string id="529">Backup and Update XBMC boot shortcuts ?[CR](Required to boot to new build)</string>
+    <string id="530">Drive=%s  Freespace=%sMB  Required=%sMB</string>
+    <string id="531">Freemem=%sMB  Recommended=%sMB</string>
+    <string id="532">Continue ?</string>
+  
 
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
@@ -107,7 +113,7 @@
     <string id="638">Prompt Before Deleting T3CH Archive file?</string>
     <string id="639">View Script Readme/Changelog</string>
 
-    <!-- Misc Menu Options Options -->
+    <!-- Misc Menu Options/Prompts -->
     <string id="650">Exit</string>
     <string id="651">Add New</string>
     <string id="652">Use Keyboard</string>
