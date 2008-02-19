@@ -31,7 +31,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '01-02-2008'
+__date__ = '19-02-2008'
 __version__ = "1.4.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -106,7 +106,9 @@ class Main:
 		self._check_settings()
 		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
-			scriptUpdated = self._update_script(True)								# silent
+#			if self.isSilent:
+#				showNotification(__language__(0), __language__(619), 3)
+			scriptUpdated = self._update_script(self.isSilent)
 
 		if not scriptUpdated:
 			url = self._get_latest_version()										# discover latest build
@@ -306,6 +308,8 @@ class Main:
 	######################################################################################
 	def _menu( self, url, remote_archive_name="", remote_short_build_name="" ):
 		xbmc.output( "_menu() url=" + url )
+		xbmc.output( "remote_archive_name=" + remote_archive_name)
+		xbmc.output( "remote_short_build_name=" + remote_short_build_name)
 
 		selectDialog = xbmcgui.Dialog()
 		heading = "%s v%s (XBMC: %s %s): %s" % (__language__( 0 ), __version__, \
@@ -355,19 +359,20 @@ class Main:
 			# Only include found rar if not a result of a previous cancelled download, as may be partial.
 			local_archive_name = ''
 			local_short_build_name = ''
-			local_rar_file = self._get_local_archive()
-			if local_rar_file:
-				# assume local rars under 50meg are partial downloads and delete them
-				rar_filepath = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file)
-				fsize = os.path.getsize(rar_filepath)
-				if self.isPartialDownload or fsize < 50000000:
-					xbmc.output("suspected incompleted rar, fsize="+str(fsize))
-					deleteFile(rar_filepath)
-				else:
-					try:
-						local_archive_name, found_build_date, found_build_date_secs, local_short_build_name = self._get_archive_info(local_rar_file)
-					except:
-						local_archive_name = '' # failed parsing local rar, don't add to menu
+			if not self.isSilent:
+				local_rar_file = self._get_local_archive()
+				if local_rar_file:
+					# assume local rars under 50meg are partial downloads and delete them
+					rar_filepath = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], local_rar_file)
+					fsize = os.path.getsize(rar_filepath)
+					if self.isPartialDownload or fsize < 50000000:
+						xbmc.output("suspected incompleted rar, fsize=%s self.isPartialDownload=%s" % (fsize, self.isPartialDownload))
+						deleteFile(rar_filepath)
+					else:
+						try:
+							local_archive_name, found_build_date, found_build_date_secs, local_short_build_name = self._get_archive_info(local_rar_file)
+						except:
+							local_archive_name = '' # failed parsing local rar, don't add to menu
 
 			# build menu
 			options = _make_menu(local_archive_name)
@@ -375,12 +380,10 @@ class Main:
 			# show menu
 			if not self.isSilent:
 				selectedIdx = selectDialog.select( heading, options )
+				xbmc.output("menu selectedIdx="+ str(selectedIdx))
+				selectedOpt = options[selectedIdx]
 			else:
-				selectedIdx = 2															# do process
-			xbmc.output("menu selectedIdx="+ str(selectedIdx))
-
-			# translate option idx into option text then match
-			selectedOpt = options[selectedIdx]
+				selectedOpt = self.opt_download											# force process
 
 			if selectedOpt == self.opt_exit:
 				break
@@ -390,22 +393,24 @@ class Main:
 					self._view_t3ch_changelog()
 				else:
 					self._view_xbmc_changelog()
-			elif selectedOpt == self.opt_download:
-				if remote_archive_name:													# new build remote install
+			elif selectedOpt == self.opt_download:										# new build remote install
+				if remote_archive_name:
 					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
 					if self._process(url, True):
 						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
 							xbmc.executebuiltin( "XBMC.Reboot" )
-						break															# stop
-			elif selectedOpt == self.opt_local:
-				if local_archive_name:													# local archive install
+						break																# stop
+					else:
+						self.isSilent = False											# failed, show menu
+			elif selectedOpt == self.opt_local:											# local archive install
+				if local_archive_name:
 					self.archive_name = local_archive_name
 					self.short_build_name = local_short_build_name
 					if self._process('', False):
 						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
 							xbmc.executebuiltin( "XBMC.Reboot" )
-						break															# stop
+						break																# stop
 			elif selectedOpt == self.opt_maint_copy:									# copy includes
 				self._maintain_includes()
 			elif selectedOpt == self.opt_maint_del:										# delete excludes
@@ -474,7 +479,7 @@ class Main:
 				archive_file = flist[0]
 		except:
 			traceback.print_exc()
-		xbmc.output("_get_local_archive() archive_file=" + archive_file)
+		xbmc.output("> _get_local_archive() archive_file=" + archive_file)
 		return archive_file
 
 
@@ -498,9 +503,47 @@ class Main:
 		return success
 
 	######################################################################################
+	# remoteInstall: if downloading requires DL space + unrar space, else just unrar space
+	######################################################################################
+	def _check_free_mem(self, remoteInstall=True):
+		""" check installation drive has enough freespace and enough free ram """
+		xbmc.output( "> _check_free_mem() remoteInstall="+str(remoteInstall))
+
+		success = False
+		if remoteInstall:
+			driveSpaceRequiredMb = 180		# Mb, rar + install space
+		else:
+			driveSpaceRequiredMb = 120		# Mb, install only space
+			
+		drive = os.path.splitdrive( self.settings[self.SETTING_UNRAR_PATH] )[0][0]	# eg C from (C:, path)
+		drive_freespace_info = xbmc.getInfoLabel('System.Freespace(%s)' % drive)
+		xbmc.output( "drive_freespace_info=%s" % drive_freespace_info)
+
+		# convert info to MB
+		drive_freespaceMb = int(searchRegEx(drive_freespace_info, '(\d+)'))		# extract space number
+		xbmc.output("Drive=%s  Freespace=%sMB  Required=%sMB" % (drive, drive_freespaceMb, driveSpaceRequiredMb))
+
+		if drive_freespaceMb < driveSpaceRequiredMb:
+			msg = __language__(530)  % (drive, drive_freespaceMb, driveSpaceRequiredMb)
+			dialogOK(__language__(0), __language__(316), msg, isSilent=self.isSilent, time=5)
+		else:
+			# check free mem, warn if low, but can try installation
+			freememMb = xbmc.getFreeMem()
+			freeMemRecMb = 30
+			xbmc.output( "Freemem=%sMb  Recommended=%sMb" % ( freememMb, freeMemRecMb ) )
+			if freememMb < freeMemRecMb:
+				msg = __language__(531) % ( freememMb, freeMemRecMb )
+				success = xbmcgui.Dialog().yesno( __language__( 0 ), __language__(317), msg, __language__(532) )
+			else:
+				success = True
+
+		xbmc.output( "< _check_free_mem() success="+str(success))
+		return success
+
+	######################################################################################
 	def _process( self, url='', useSFV=True ):
 		""" Extract and Install new T3CH build, from a url or local archive """
-		xbmc.output( "_process() url=" + url)
+		xbmc.output( "> _process() url=" + url)
 
 		success = False
 		try:
@@ -509,6 +552,12 @@ class Main:
 			xbmc.output( "extract_path= " + extract_path )
 			archive_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.archive_name )
 			xbmc.output( "archive_file= " + archive_file )
+
+			# check enough hdd & ram space
+			remoteInstall = (url != '')
+			if not self._check_free_mem(remoteInstall):
+				xbmc.output("< _process() success=False")
+				return False
 
 			if url:
 				# download build
@@ -520,6 +569,7 @@ class Main:
 			else:
 				have_file = fileExist(archive_file)
 
+			xbmc.output( "have_file="+str(have_file))
 			if have_file:
 				if self._extract( archive_file, extract_path ):
 
@@ -553,6 +603,7 @@ class Main:
 						deleteFile(archive_file)					# remove RAR
 		except:
 			handleException("process()")
+		xbmc.output("< _process() success=" +str(success))
 		return success
 
 	######################################################################################
@@ -633,7 +684,7 @@ class Main:
 			if not self.isSilent:
 				dialogProgress.create( __language__( 0 ), self.reporthook_msg1, self.reporthook_msg2 )
 			else:
-				showNotification(__language__(0), "%s %s" % (__language__( 503 ), file_name), 240)
+				showNotification(__language__(0), "%s -> %s" % (__language__( 503 ), file_name), 240)
 
 			urllib.urlretrieve( url , file_name, self._report_hook )
 
