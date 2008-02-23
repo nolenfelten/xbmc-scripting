@@ -64,6 +64,16 @@ Lokale Installation:
 Wenn man ein T3CH Build .rar per FTP in den angegebenen .rar Downloadpfad (z.B. E:\apps\) kopiert, wird im Hauptmenü eine Option zum installieren der .rar angezeigt.
 
 
+Zu einem anderen T3CH wechseln
+------------------------------
+Die Option 'Zu einem anderen T3CH wechseln' ermöglichst folgendes:
+1) Zu einen bereits lokal installierten T3CH Build wechseln.
+oder
+2) Aus dem Webarchiv ein altes T3CH Build wählen, runterladen und anschließend installieren.
+
+Anmerkung: Falls bei älteren T3CH Builds das Erstellungsdatum entfernt wurde, muss drauf geachtet werden, dass das aktuelle Build nicht überschrieben wird!
+
+
 Auto Start mit XBMC Start:
 --------------------------
 Es ist möglich das Skript mit Start des XBMC zu starten. Dazu verwendet man die autoexec.py.
@@ -79,8 +89,7 @@ Der gewünschte Mode muss in der autoexec.py angegeben werden.  Das Skript hat st
 
 Bekannte Probleme:
 -------------------
-*manchmal* wird der neu erstellte rar Ordner nicht erkannt, somit macht das Skript nicht weiter.
-Dies ist ein bekanntes Problem und man kann nur eines probieren: neustarten und nochmal versuchen. Die bestehende XBMC Installation wird dabei nicht verändert.
+Wenn das XBMC weniger als 30MB freien Speicher hat, *kann* es zu unrar-Problemen kommen. Falls dies passiert, probiere es mit einer geringeren Bildschirmauflösung (480p).
 
 Wenn du nicht mehr weiterkommst, melde dich im dafür vorgesehenen Forum: http://www.xboxmediacenter.com/forum/
 

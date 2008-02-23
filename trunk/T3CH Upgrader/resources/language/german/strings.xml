@@ -29,6 +29,8 @@
     <string id="313">Eingeschränkte Datei oder Ordner!</string>
     <string id="314">Entpackungsordner bereits vorhanden, überschreiben?</string>
     <string id="315">RAR SFV Checksum falsch![CR]Evtl. fehlerhaft, bitte erneut runterladen.</string>
+    <string id="316">Nicht genug freier Speicher auf dem Installations-Laufwerk vorhanden!</string>
+    <string id="317">Freier RAM weniger als empfohlen, das Entpacken könnte fehlschlagen.</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
@@ -78,6 +80,9 @@
     <string id="527">Neue XBE vorhanden?</string>
     <string id="528">RAR löschen?</string>
     <string id="529">Backup und Update der XBMC Bootverknüpfung erstellen ?[CR](Erforderlich um das neue Build zu starten)</string>
+    <string id="530">Laufwerk=%s  Freier Speicher=%sMB  Benötigt=%sMB</string>
+    <string id="531">Freemem=%sMB  Empfohlen=%sMB</string>
+    <string id="532">Fortfahren?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>

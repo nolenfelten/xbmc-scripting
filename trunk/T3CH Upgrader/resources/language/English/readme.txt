@@ -88,7 +88,7 @@ It can startup in three modes:
 The required mode needs to be edited into autoexec.py executebuiltin.  The script comes with it set to NOTIFY
 
 
-Knonw Problems:
+Known Problems:
 ---------------
 XBMC free RAM of less than 30mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution.
 
