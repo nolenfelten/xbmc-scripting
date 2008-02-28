@@ -40,9 +40,17 @@ class TextBoxDialogXML( xbmcgui.WindowXML ):
 		if actionID in EXIT_CODES or buttonCode in EXIT_CODES:
 			self.close()
 
-	def ask(self, title, text ):
-		xbmc.output("TextBoxDialogXML.ask()")
+	def ask(self, title="", text="", fn=None ):
+		xbmc.output("> TextBoxDialogXML.ask()")
 		self.title = title
-		self.text = text
+		if fn:
+			try:
+				self.text = file(fn).read()
+			except:
+				self.text = "Failed to load file: %s" % fn
+		else:
+			self.text = text
+
 		self.doModal()		# causes window to be drawn
+		xbmc.output("< TextBoxDialogXML.ask()")
 

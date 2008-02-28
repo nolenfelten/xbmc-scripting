@@ -87,6 +87,7 @@ class GUI(xbmcgui.WindowXML):
 	def __init__(self, *args, **kwargs):
 		debug("> __init__")
 
+		self.startup = True
 		# check for script update on SVN
 		self.scriptUpdated = update_script(False, False)
 		if not self.scriptUpdated:
@@ -96,34 +97,36 @@ class GUI(xbmcgui.WindowXML):
 
 	#################################################################################################################
 	def onInit( self ):
-		debug("> onInit() ")
-		xbmcgui.lock()
-		self.getControl(self.CI_COMIC).setVisible(False)
-		self.getControl( self.CLBL_VERSION ).setLabel( "v" + __version__ )
-		self.clearAll()
-		xbmcgui.unlock()
+		debug("> onInit() startup=%s" % self.startup)
+		if self.startup:
+			self.startup = False
+			xbmcgui.lock()
+			self.getControl(self.CI_COMIC).setVisible(False)
+			self.getControl( self.CLBL_VERSION ).setLabel( "v" + __version__ )
+			self.clearAll()
+			xbmcgui.unlock()
 
-		if not self.scriptUpdated:
-			# get comic image display area
-			image_control = self.getControl( self.CI_COMIC )
-			x, y = image_control.getPosition()
-			w = image_control.getWidth()
-			h = image_control.getHeight()
-			self.imageNormalScreenDims = (x, y, w, h)
+			if not self.scriptUpdated:
+				# get comic image display area
+				image_control = self.getControl( self.CI_COMIC )
+				x, y = image_control.getPosition()
+				w = image_control.getWidth()
+				h = image_control.getHeight()
+				self.imageNormalScreenDims = (x, y, w, h)
 
-			# get w h of area being rendered into that windowXML thinks its using, not actual screen rez
-			self.displayW = self.getControl(self.CI_BACKGROUND).getWidth()
-			self.displayH = self.getControl(self.CI_BACKGROUND).getHeight()
-			while not self.ready:
-				if not self.selectSource():
-					debug("close()")
-					self.close()
-					break
-				else:
-					self.ready = self.switchSource()
-		else:
-			print "script updating, close script"
-			self.close()
+				# get w h of area being rendered into that windowXML thinks its using, not actual screen rez
+				self.displayW = self.getControl(self.CI_BACKGROUND).getWidth()
+				self.displayH = self.getControl(self.CI_BACKGROUND).getHeight()
+				while not self.ready:
+					if not self.selectSource():
+						debug("onInit() close()")
+						self.close()
+						break
+					else:
+						self.ready = self.switchSource()
+			else:
+				print "script updating, close script"
+				self.close()
 
 		debug("< onInit() self.ready="+str(self.ready))
 
@@ -278,10 +281,11 @@ class GUI(xbmcgui.WindowXML):
 		debug("> mainMenu()")
 
 		options = [__language__(500), __language__(503), __language__(504)]
-		selectDialog = xbmcgui.Dialog()
 		while True:
+			selectDialog = xbmcgui.Dialog()
 			selectedPos = selectDialog.select( __language__(501), options )
-			if selectedPos <= 0:				# exit selected
+			del selectDialog
+			if selectedPos <= 0:
 				break
 			elif selectedPos == 1:
 				title = "%s: %s" % (__language__(0), __language__(503))
@@ -291,7 +295,7 @@ class GUI(xbmcgui.WindowXML):
 				fn = os.path.join( DIR_HOME, "changelog.txt" )
 
 			tbd = TextBoxDialogXML("script-bbb-fullscreen-textbox.xml", DIR_RESOURCES, "Default")
-			tbd.ask(title, doc)
+			tbd.ask(title, fn=fn)
 			del tbd
 
 		debug ("< mainMenu()")

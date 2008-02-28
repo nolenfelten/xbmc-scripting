@@ -110,13 +110,14 @@ KEYBOARD_NUM_PLUS       = 61547
 KEYBOARD_NUM_MINUS      = 61549
 KEYBOARD_ESC            = 61467
 KEYBOARD_RETURN         = 61453
+KEYBOARD_HOME           = 61476
 
 
 # ACTION CODE GROUPS
 SELECT_ITEM = ( ACTION_A, BUTTON_A, KEYBOARD_A, KEYBOARD_RETURN, )
 EXIT_SCRIPT = ( ACTION_BACK, BUTTON_BACK, REMOTE_BACK, KEYBOARD_ESC, )
 CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, BUTTON_B, REMOTE_BACK, KEYBOARD_B, )
-CONTEXT_MENU = ( ACTION_WHITE, BUTTON_WHITE, 61533, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_STOP, )
+CONTEXT_MENU = ( ACTION_WHITE, BUTTON_WHITE, 61533, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_STOP, KEYBOARD_HOME, )
 MOVEMENT_RIGHT_STICK = (BUTTON_RIGHT_STICK_UP, BUTTON_RIGHT_STICK_DOWN, BUTTON_RIGHT_STICK_LEFT, BUTTON_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
 MOVEMENT_LEFT_STICK = (BUTTON_LEFT_STICK_UP, BUTTON_LEFT_STICK_DOWN, BUTTON_LEFT_STICK_LEFT, BUTTON_LEFT_STICK_RIGHT, )
 MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, BUTTON_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, BUTTON_LEFT_TRIGGER, )
@@ -1440,10 +1441,13 @@ def isIP(host):
 
 #################################################################################################################
 def getReadmeFilename(mylanguage):
+    debug("> getReadmeFilename()")
     base_path = mylanguage.get_base_path()
     language = xbmc.getLanguage().lower()
+    debug("language= %s " % language)
     fn = os.path.join( base_path, language, "readme.txt" )
     if ( not fileExist( fn ) ):
         fn = os.path.join( base_path, "english", "readme.txt" )
 
+    debug("< getReadmeFilename() %s" % fn)
     return fn
