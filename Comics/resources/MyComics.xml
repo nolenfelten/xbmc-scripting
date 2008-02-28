@@ -1,0 +1,14 @@
+<MyComics>
+	<feed>
+		<title>Ctrl+Alt+Del</title>
+		<link>http://www.cad-comic.com/rss/rss-comics.xml</link>
+		<description>Tragically l337</description>
+		<reImage><![CDATA[<img src="(/comics/.+?\.jpg)"]]></reImage>
+	</feed>
+       <feed>
+               <title>Questionable Content</title>
+               <link>http://www.questionablecontent.net/QCRSS.xml</link>
+               <reImage><![CDATA[<img src="(/comics/.+?\.png)"]]></reImage>
+               <description>Questionable Content</description>
+       </feed>
+</MyComics>
