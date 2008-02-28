@@ -1,6 +1,6 @@
  Ver    Date        Change
- 1.5    18/02/08    Change: Changed to new folder structure
-                    New: Language support - only english suppied - Can you help translate the strings.xml ?
+ 1.5    28/02/08    New: Skinned
+                    New: Language support  (english, german, swedish suppied) - Can you help translate the strings.xml ?
  1.4a   18/02/08    Fix: Display PNG images.
                     Change: Removed Funnies as a source, defunct website.
                     Change: Starts with Comic Source selection menu.

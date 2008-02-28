@@ -13,19 +13,33 @@ Python XBMC script to view comics from RSS Feeds and/or HTML pages.
  2) (optional) Add additional RSS feeds and/or HTML pages to MyComics.xml 
        - I've preloaded some as examples.
 
- See readme.txt for extra info on how to add your own feeds.
 
  USAGE: 
-   Left list shows Comics (RSS Feeds)
-   Right list shows Editions (RSS Items)
-   Button A		- Select Comic / Edition - Image will be fetched and displayed. (remote ENTER)
-   Button X		- Toggles Display fullscreen. (remote DISPLAY)
-   Button WHITE	- Toggle data source between Tapestry & Comics.com (remote TITLE)
-   DPAD            - Move image in fullscreen view. (remote Cursor keys)
-   Triggers        - Zoom image in/out in fullscreen view. (remote SKIP- and SKIP+)  
+   1) On startup select Comic data source
+   2) Select Feed from left list - this will fetch all comics and show a 2nd list of 'Comic Editions'
+   3) Select 'Comic Edition' - Will either display an image or a 3rd list of available images for selection.
 
-# Written By BigBellyBilly	 - Thanks to others if I've used code from your scripts.
-# bigbellybilly AT gmail DOT com - bugs, comments, ideas ...
+   To view image fullscreen press X.
+     Once in fullscreen view:
+         Left Thumb Stick to move image.
+         Right Thumb Stick or Triggers to Zoom image.
+         X, B or BACK to return from fullscreen view
+
+   Select a different DataSource: Y Button
+
+   View Main Menu: White Buttton
+
+   Exit script:  BACK Button
+
+
+Notes:
+  Script checks for an update on startup follow onscreeninstructions if new release found.
+
+Contact me if you wish to provide additional Language translations or new Skin.
+
+Written By BigBellyBilly	 - Thanks to others if I've used code from your scripts.
+bigbellybilly AT gmail DOT com - bugs, comments, ideas ...
+
 
 Additional RSS feeds can be placed into MyComics.xml
 

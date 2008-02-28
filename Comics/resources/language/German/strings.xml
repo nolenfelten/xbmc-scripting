@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+ï»¿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">Comics</string>
 
     <!-- Error messages -->
     <string id="100">Fehler!</string>
-    <string id="101">Datei öffnen fehlgeschlagen!</string>
+    <string id="101">Datei Ã¶ffnen fehlgeschlagen!</string>
     <string id="102">Download fehlgeschlagen!</string>
     <string id="103">Bild zu klein. Vielleicht eine Web-Grafik?</string>
     <string id="104">Keine Feeds gefunden!</string>
     <string id="105">Keine Bild-Links im Feed!</string>
     <string id="106">Keine Comics in der Quelle!</string>
-    <string id="107">Keine Editionen für Comic verfügbar!</string>
+    <string id="107">Keine Editionen fÃ¼r Comic verfÃ¼gbar!</string>
     <string id="108">Kein Bild gefunden!</string>
 
     <!-- Status messages -->
@@ -34,14 +34,30 @@
 
     <!-- menu options -->
     <string id="500">Exit</string>
-    <string id="501">Menü</string>
+    <string id="501">MenÃ¼</string>
     <string id="503">Script Readme zeigen</string>
     <string id="504">Script ChangeLog zeigen</string>
 
     <!-- misc menu/prompts -->
-    <string id="560">Comic Quelle wählen</string>
-    <string id="561">Quelle wählen</string>
+    <string id="560">Comic Quelle wÃ¤hlen</string>
+    <string id="561">Quelle wÃ¤hlen</string>
     <string id="562">Vollbild</string>
-    <string id="563">Auswählen</string>
+    <string id="563">AuswÃ¤hlen</string>
+
+    <!-- Update Menu -->
+    <string id="1000">Deine Version ist aktuell.</string>
+    <string id="1001">Momentan markierte Versionen prÃ¼fen...</string>
+    <string id="1002">ist neuer</string>
+    <string id="1003">MÃ¶chtest du aktualisieren?</string>
+    <string id="1004">Dateiliste wird geladen...</string>
+    <string id="1005">Bitte warten...</string>
+    <string id="1006">Version</string>
+    <string id="1007">Laden:</string>
+    <string id="1008">Pfad:</string>
+    <string id="1009">Datei:</string>
+
+    <!-- Update Error Msgs -->
+    <string id="1030">Keine neueren Versionen verfÃ¼gbar!</string>
+    <string id="1031">Fehler beim Aktualisieren des Scripts!</string>
 
 </strings>

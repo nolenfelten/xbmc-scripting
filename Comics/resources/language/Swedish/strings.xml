@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+ï»¿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">Serier</string>
 
     <!-- Error messages -->
     <string id="100">Fel!</string>
-    <string id="101">Kunde inte öppna filen!</string>
+    <string id="101">Kunde inte Ã¶ppna filen!</string>
     <string id="102">Kunde inte ladda ner filen!</string>
-    <string id="103">Bilden för liten. Antagligen en hemsidebild</string>
+    <string id="103">Bilden fÃ¶r liten. Antagligen en hemsidebild</string>
     <string id="104">Hittade inga feeds!</string>
     <string id="105">Inga bilder funna i feeden!</string>
-    <string id="106">Inga serier i källan!</string>
-    <string id="107">Inga upplagor tillgängliga för serien!</string>
+    <string id="106">Inga serier i kÃ¤llan!</string>
+    <string id="107">Inga upplagor tillgÃ¤ngliga fÃ¶r serien!</string>
     <string id="108">Hittade inga bilder!</string>
 
     <!-- Status messages -->
@@ -21,7 +21,7 @@
     <string id="204">Upplaga: </string>
 
     <!-- script common messages -->
-    <string id="300">Vänligen vänta ...</string>
+    <string id="300">VÃ¤nligen vÃ¤nta ...</string>
     <string id="301">Lyckades</string>
     <string id="302">Laddar ner ...</string>
 
@@ -30,7 +30,7 @@
     <string id="351">Nej</string>
 
     <!-- Dialog titles -->
-    <string id="400">Källa: </string>
+    <string id="400">KÃ¤lla: </string>
 
     <!-- menu options -->
     <string id="500">Avsluta</string>
@@ -39,9 +39,27 @@
     <string id="504">Visa Script ChangeLog</string>
 
     <!-- misc menu/prompts -->
-    <string id="560">Välj seriekälla</string>
-    <string id="561">Välj helskärm</string>
-    <string id="562">Helskärm</string>
-    <string id="563">Välj</string>
+    <string id="560">VÃ¤lj seriekÃ¤lla</string>
+    <string id="561">VÃ¤lj helskÃ¤rm</string>
+    <string id="562">HelskÃ¤rm</string>
+    <string id="563">VÃ¤lj</string>
+
+    <!-- Update messages -->
+    <string id="1000">Din version Ã¤r aktuell.</string>
+    <string id="1001">HÃ¤mtar nuvarande taggade versioner...</string>
+    <string id="1002">Ã¤r nyare</string>
+    <string id="1003">Vill du uppgradera?</string>
+    <string id="1004">HÃ¤mtar fillista...</string>
+    <string id="1005">Var god vÃ¤nta...</string>
+    <string id="1006">Version</string>
+    <string id="1007">HÃ¤mtar:</string>
+    <string id="1008">SÃ¶kvÃ¤g:</string>
+    <string id="1009">Fil:</string>
+    <string id="1010">Din nya version sparades som:</string>
+    <string id="1011">AnvÃ¤nd filhanteraren fÃ¶r att ta bort gamla versioner</string>
+
+    <!-- Update error messages -->
+    <string id="1030">Inga taggade versioner hittades!</string>
+    <string id="1031">Ett fel uppstod vid uppdatering av skriptet!</string>
 
 </strings>
