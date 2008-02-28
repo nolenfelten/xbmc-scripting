@@ -390,7 +390,7 @@ class DVDProfiler(xbmcgui.Window):
 
 			# report failure reason
 			if not success:
-				if xbmcgui.Dialog.yesno(title, __language__(214)):
+				if xbmcgui.Dialog().yesno(title, __language__(214)):
 					forceConfig = True
 				else:
 					self.settings[self.SETTING_SMB_USE] = False
@@ -1387,7 +1387,7 @@ class DVDProfiler(xbmcgui.Window):
 			if selectedOpt == OPT_CONFIG_SMB:
 				self.configSMB()
 			elif selectedOpt == OPT_UPDATE_SCRIPT_CHECK_STARTUP:
-				self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = xbmcgui.Dialog.yesno( __language__(0), OPT_UPDATE_SCRIPT_CHECK_STARTUP )
+				self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = xbmcgui.Dialog().yesno( __language__(0), OPT_UPDATE_SCRIPT_CHECK_STARTUP )
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 			elif selectedOpt == OPT_UPDATE_SCRIPT:
 				if self._update_script(False):							# never silent from config menu
@@ -1500,7 +1500,7 @@ class DVDProfiler(xbmcgui.Window):
 				changed = True
 
 			elif key == MENU_OPT_SMB_USE:
-				self.settings[self.SETTING_SMB_USE] = xbmcgui.Dialog.yesno(__language__(603), MENU_OPT_SMB_USE)
+				self.settings[self.SETTING_SMB_USE] = xbmcgui.Dialog().yesno(__language__(603), MENU_OPT_SMB_USE)
 				changed = True
 
 			elif key == MENU_OPT_SMB_DVDPRO_SHARE:
@@ -1537,14 +1537,14 @@ class DVDProfiler(xbmcgui.Window):
 		success = False
 		try:
 			title = __language__(631).replace('?','')
-			if xbmcgui.Dialog.yesno(title, __language__(223)):
+			if xbmcgui.Dialog().yesno(title, __language__(223)):
 				debug("rmtree " + DIR_IMG_CACHE)
 				rmtree( DIR_IMG_CACHE )
 				time.sleep(1)
 				debug("makeDir " + DIR_IMG_CACHE)
 				makeDir( DIR_IMG_CACHE )
 
-			if xbmcgui.Dialog.yesno(title, __language__(224)):
+			if xbmcgui.Dialog().yesno(title, __language__(224)):
 				debug("rmtree " + DIR_CACHE)
 				rmtree( DIR_CACHE )
 				time.sleep(1)
@@ -2173,7 +2173,7 @@ class ManageOnlineCollection:
 
 				# HOST URL
 				if user:
-					if xbmcgui.Dialog.yesno(__language__(242), \
+					if xbmcgui.Dialog().yesno(__language__(242), \
 									__language__(350) + " = " + BASE_URL_INTER, \
 									__language__(351) + " = " + BASE_URL_INVOS):
 						host = BASE_URL_INTER
@@ -2195,7 +2195,7 @@ class ManageOnlineCollection:
 			elif selectedPos >= 0:				# select
 				user, host = users[selectedPos]
 				if isDelete:					# in delete mode
-					if xbmcgui.Dialog.yesno(__language__(204), user, host):
+					if xbmcgui.Dialog().yesno(__language__(204), user, host):
 						users.pop(selectedPos)
 						self.save(users)
 					isDelete = False
@@ -2424,7 +2424,7 @@ def update_script(quite=False, notifyNotFound=False):
 	xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
 	if version != "-1":
 		if __version__ < version:
-			if xbmcgui.Dialog.yesno( __language__(0), \
+			if xbmcgui.Dialog().yesno( __language__(0), \
 								"%s %s %s." % ( __language__(1006), version, __language__(1002) ), \
 								__language__(1003 )):
 				updated = True
