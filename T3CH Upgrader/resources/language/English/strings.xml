@@ -119,7 +119,7 @@
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>
-    <string id="1001">Fetching current tagged versions...</string>
+    <string id="1001">Checking for script update...</string>
     <string id="1002">is newer</string>
     <string id="1003">Would you like to update?</string>
     <string id="1004">Fetching file list...</string>

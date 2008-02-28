@@ -9,6 +9,7 @@ Changes:
  Changed to use YES/NO string ids.
 02-01-2008 Fixed error in downloadVersion()
 06-02-2008 Changed to update into same folder
+28-02-2008 removed a syntax error when not isSilent
 """
 
 import sys
@@ -20,7 +21,7 @@ import re
 import traceback
 from shutil import copytree, rmtree
 
-#socket.setdefaulttimeout( 10 )
+socket.setdefaulttimeout( 10 )
 
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
@@ -83,7 +84,6 @@ class Update:
 
 	def getLatestVersion( self, quiet=True ):
 		""" checks for latest tag version """
-		xbmc.output( "> Update().getLatestVersion() quiet="+str(quiet) )
 		version = "-1"
 		try:
 			if not quiet:
@@ -101,7 +101,7 @@ class Update:
 			xbmcgui.Dialog().ok( self._(0), self._( 1031 ) )
 		self.dialog.close()
 
-		xbmc.output( "< Update().getLatestVersion() new version="+str(version) )
+		xbmc.output( "Update().getLatestVersion() new version="+str(version) )
 		return version
 
 	def makeBackup( self ):
