@@ -9,6 +9,7 @@ Changes:
  Changed to use YES/NO string ids.
 02-01-2008 Fixed error in downloadVersion()
 06-02-2008 Changed to update into same folder
+28-02-2008 removed a syntax error when not isSilent
 """
 
 import sys
@@ -86,7 +87,7 @@ class Update:
 		version = "-1"
 		try:
 			if not quiet:
-				self.dialog.create( self.self._(0), self.self._( 1001 ) )
+				self.dialog.create( self._(0), self._( 1001 ) )
 
 			# get version tags
 			htmlsource = self.getHTMLSource( self.tags_url )

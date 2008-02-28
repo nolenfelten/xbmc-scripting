@@ -46,107 +46,6 @@ try: Emulating = xbmcgui.Emulating
 except: Emulating = False
 
 
-#######################################################################################################
-class AdjustOverscan(xbmcgui.Window):
-	def __init__(self):
-		if Emulating: xbmcgui.Window.__init__(self)
-		debug("> AdjustOverscan() init()")
-
-		OVERSCAN_TL_FILENAME = os.path.join(DIR_GFX,'overscan_tl.png')
-		OVERSCAN_BR_FILENAME = os.path.join(DIR_GFX,'overscan_br.png')
-		BLANK_BACKGROUND_FILENAME = os.path.join(DIR_GFX, 'blank_background.png')
-
-		setResolution(self)
-		self.isTL = True
-		self.backg = xbmcgui.ControlImage(0,0, REZ_W, REZ_H, BLANK_BACKGROUND_FILENAME)
-		self.info = xbmcgui.ControlTextBox(150, 150, 400, 300, 'font12')
-		self.tlCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_TL_FILENAME)
-		self.brCB = xbmcgui.ControlButton(0, 0, 0, 0, 'Adjust', focusTexture=OVERSCAN_BR_FILENAME)
-
-		debug("< AdjustOverscan() init()")
-
-	###################################################################################################
-	def onAction(self, action):
-		if action == ACTION_PREVIOUS_MENU:
-			self.close()
-		elif action == ACTION_SELECT_ITEM:
-			self.isTL = not self.isTL
-			self.draw()
-		elif action in (ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT, ACTION_MOVE_UP, ACTION_MOVE_DOWN):
-			if action == ACTION_MOVE_LEFT:
-				if self.isTL:
-					self.overscanL -= 1
-				else:
-					self.overscanR += 1
-			elif action == ACTION_MOVE_RIGHT:
-				if self.isTL:
-					self.overscanL += 1
-				else:
-					self.overscanR -= 1
-			elif action == ACTION_MOVE_UP:
-				if self.isTL:
-					self.overscanT -= 1
-				else:
-					self.overscanB += 1
-			elif action == ACTION_MOVE_DOWN:
-				if self.isTL:
-					self.overscanT += 1
-				else:
-					self.overscanB -= 1
-			self.draw()
-
-	###################################################################################################
-	def onControl(self, control):
-		pass
-
-	##############################################################################################
-	def draw(self):
-		xbmcgui.lock()
-		text = 'To Adjust Overscan:\n\nDPAD = Move corner.  A Button = Change corner.  BACK = Exit.\n\nAdjusting: '
-		if self.isTL:
-			text +=  'TOP LEFT'
-		else:
-			text += 'BOTTOM RIGHT'
-		text += '\n\nOverscan TOP: ' + str(self.overscanT) + \
-			   '\nOverscan LEFT: ' + str(self.overscanL) + \
-			   '\nOverscan BOTTOM: ' + str(self.overscanB) + \
-			   '\nOverscan RIGHT: ' + str(self.overscanR)
-		self.info.setText(text)
-
-		self.brCB.setEnabled(not self.isTL)
-		self.brCB.setVisible(not self.isTL)
-		self.tlCB.setEnabled(self.isTL)
-		self.tlCB.setVisible(self.isTL)
-
-		if self.isTL:
-			self.tlCB.setPosition(self.overscanL, self.overscanT)
-			self.setFocus(self.tlCB)
-		else:
-			x = REZ_W - self.overscanR - 57	# img w
-			y = REZ_H - self.overscanB - 57 # img h
-			self.brCB.setPosition(x, y)
-			self.setFocus(self.brCB)
-
-		xbmcgui.unlock()
-
-	##############################################################################################
-	def ask(self, top=5, left=5, bottom=5, right=5):
-		debug("> ask()")
-		# OVERSCAN
-		self.overscanT = top
-		self.overscanL = left
-		self.overscanB = bottom
-		self.overscanR = right
-		self.addControl(self.backg)
-		self.addControl(self.info)
-		self.addControl(self.tlCB)
-		self.addControl(self.brCB)
-		self.draw()
-		self.doModal()
-		debug("< ask()")
-		return self.overscanT, self.overscanL, self.overscanB, self.overscanR
-
-
 #################################################################################################################
 # Dialog with options
 #################################################################################################################
@@ -156,7 +55,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 
 		setResolution(self)
 
-		self.selectedPos = -1		# EXIT option
+		self.selectedPos = 0
 		self.panelCI = None
 		self.menuCL = None
 		self.lastAction = 0
@@ -260,7 +159,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 	def onAction(self, action):
 		if action == 0:
 			return
-		debug("DialogSelect.onAction()")
+#		debug("DialogSelect.onAction()")
 		self.lastAction = action
 		if action in [ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR]:
 			self.selectedPos = -1
@@ -279,7 +178,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 	def setMenu(self, menu, icons=[]):
 		debug("> DialogSelect.setMenu()")
 		self.menuCL.reset()
-		self.menuCL.addItem("Exit")
+#		self.menuCL.addItem("Exit")
 		if menu:
 			for idx in range(len(menu)):
 				opt = menu[idx]
@@ -308,18 +207,19 @@ class DialogSelect(xbmcgui.WindowDialog):
 
 			if self.selectedPos > len(menu):
 				self.selectedPos = len(menu)-1
+			elif self.selectedPos < 0:
+				self.selectedPos = 0
 			self.menuCL.selectItem(self.selectedPos)
 		debug("< DialogSelect.setMenu()")
 
 	# show this dialog and wait until it's closed
-	def ask(self, menu, selectIdx=-1, icons=[]):
+	def ask(self, menu, selectIdx=0, icons=[]):
 		debug ("> DialogSelect().ask() selectIdx=" +str(selectIdx))
 
-		self.selectedPos = selectIdx+1	# allow for exit option
+		self.selectedPos = selectIdx
 		self.setMenu(menu, icons)
 		self.setFocus(self.menuCL)
 		self.doModal()
-		self.selectedPos -= 1
 
 		debug ("< DialogSelect.ask() selectedPos: " + str(self.selectedPos) + " lastAction: " + str(self.lastAction))
 		return self.selectedPos, self.lastAction
@@ -342,8 +242,8 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 
 		xpos += 25
 		ypos += 10
-		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '', \
-											FONT14, "0xFFFFFF99", alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
+		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '', FONT14, \
+											"0xFFFFFF99", alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.titleCL)
 		ypos += 25
 		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-85, FONT10, '0xFFFFFFEE')
