@@ -1182,6 +1182,7 @@ def update_script(quite=False, notifyNotFound=False):
 	xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
 	if version != "-1":
 		if __version__ < version:
+			# do update ?
 			if xbmcgui.Dialog().yesno( __language__(0), 
 								"%s %s %s." % ( __language__(1006), version, __language__(1002) ), \
 								__language__(1003)):
@@ -1189,7 +1190,7 @@ def update_script(quite=False, notifyNotFound=False):
 				up.makeBackup()
 				up.issueUpdate(version)
 		elif notifyNotFound:
-			dialogOK(__language__(0), __language__(1000))
+			dialogOK(__language__(0), __language__(1000))           # upto date
 #	elif not quite:
 #		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
 
@@ -1203,7 +1204,8 @@ def update_script(quite=False, notifyNotFound=False):
 #############################################################################################
 makeDir(DIR_CACHE)
 comics = GUI("script-Comics-main.xml", DIR_RESOURCES)
-comics.doModal()
+if not comics.scriptUpdated:
+    comics.doModal()
 del comics
 
 debug("exiting script, housekeeping ...")
