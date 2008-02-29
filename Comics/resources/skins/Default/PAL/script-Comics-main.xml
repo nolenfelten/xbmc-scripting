@@ -19,7 +19,7 @@
 		<posy>50</posy>
 		<width>720</width>
 		<height>390</height>
-        	<visible>true</visible>
+        <visible>true</visible>
 	</control>
 
 	<control type="image" id=120">
@@ -27,8 +27,8 @@
 		<posx>120r</posx>
 		<posy>520</posy>
 		<texture>comics-fullscreen-guide.png</texture>
-        	<visible>!Control.IsVisible(1000)</visible>
-        	<animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>
+        <visible>!Control.IsVisible(1000)</visible>
+        <animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>
 	</control>
 
     <!-- GROUP HEADER -->
@@ -38,9 +38,9 @@
 		<posy>0</posy>
 		<visible>true</visible> 
 		<animation effect="slide" time="200" start="0,-50" end="0,0" acceleration="-1.1">WindowOpen</animation>
-		<animation effect="slide" time="200" end="0,-50" acceleration="1.1">WindowClose</animation>
-        	<animation effect="slide" time="200" start="0,-50" acceleration="-1.1" condition="Control.IsVisible(1000)">conditional</animation>
-        	<animation effect="slide" time="200" end="0,-50" acceleration="1.1" condition="!Control.IsVisible(1000)">conditional</animation>
+        <animation effect="slide" time="200" end="0,-50" acceleration="1.1">WindowClose</animation>
+        <animation effect="slide" time="200" start="0,-50" acceleration="-1.1" condition="Control.IsVisible(1000)">conditional</animation>
+        <animation effect="slide" time="200" end="0,-50" acceleration="1.1" condition="!Control.IsVisible(1000)">conditional</animation>
 
 		<control type="image" id="1001">
 			<description>background header image</description>
@@ -124,84 +124,15 @@
 			<texture>bbb-footer.png</texture>
 		</control>
 
-        <!--  BUTTONS GROUP -->
-        <control type="group" id="2400">
-    		<description>group footer buttons</description>
-            <posx>120r</posx>
-            <posy>10</posy>
-<!--    		<visible>Control.IsVisible(2000)</visible> -->
-            <control type="image" id="2410">
-                <description>Y image</description>
-                <posy>0</posy>
-                <width>25</width>
-                <height>25</height>
-                <texture>ybutton.png</texture>
-                <aspectratio>keep</aspectratio>
-            </control>
-            <control type="label" id="2411">
-                <description>Y image label</description>
-                <posx>27</posx>
-                <posy>5</posy>
-                <align>left</align>
-                <label>Switch Source</label>
-                <textcolor>white</textcolor>
-                <font>font10</font>
-            </control>
-
-            <control type="image" id="2420">
-                <description>X image</description>
-                <posy>25</posy>
-                <width>25</width>
-                <height>25</height>
-                <texture>xbutton.png</texture>
-                <aspectratio>keep</aspectratio>
-            </control>
-            <control type="label" id="2421">
-                <description>X image label</description>
-                <posx>27</posx>
-                <posy>30</posy>
-                <align>left</align>
-                <label>Fullscreen</label>
-                <textcolor>white</textcolor>
-                <font>font10</font>
-            </control>
-
-            <control type="image" id="2430">
-                <description>A image</description>
-                <posy>50</posy>
-                <width>25</width>
-                <height>25</height>
-                <texture>abutton.png</texture>
-                <aspectratio>keep</aspectratio>
-            </control>
-            <control type="label" id="2431">
-                <description>A image label</description>
-                <posx>27</posx>
-                <posy>55</posy>
-                <align>left</align>
-                <label>Select</label>
-                <textcolor>white</textcolor>
-                <font>font10</font>
-            </control>
-
-            <control type="image" id="2440">
-                <description>white image</description>
-                <posy>75</posy>
-                <width>25</width>
-                <height>25</height>
-                <texture>whitebutton.png</texture>
-                <aspectratio>keep</aspectratio>
-            </control>
-            <control type="label" id="2441">
-                <description>white image label</description>
-                <posx>27</posx>
-                <posy>80</posy>
-                <align>left</align>
-                <label>Menu</label>
-                <textcolor>white</textcolor>
-                <font>font10</font>
-            </control>
-        </control>
+		<control type="image" id="2400">
+			<description>guide image</description>
+			<posx>120r</posx>
+			<posy>15</posy>
+			<width>124</width>
+			<height>97</height>
+			<texture>comics-guide.png</texture>
+			<aspectratio>keep</aspectratio>
+		</control>
 
         <!--  FEEDS list -->
         <control type="group" id="2100">
@@ -275,7 +206,7 @@
             
             <!-- SCROLL BAR LISTS -->
             <control type="button">
-                <posx>165</posx>
+                <posx>155</posx>
                 <posy>0</posy>
                 <width>16</width>
                 <height>16</height>
@@ -285,7 +216,7 @@
                 <visible>Control.IsVisible(2111)</visible>
             </control>
             <control type="scrollbar" id="2111">
-                <posx>165</posx>
+                <posx>155</posx>
                 <posy>16</posy>
                 <width>16</width>
                 <height>83</height>
