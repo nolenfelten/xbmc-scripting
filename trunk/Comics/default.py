@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "Comics"
 __version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '28-02-2008'
+__date__ = '29-02-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -73,7 +73,7 @@ class GUI(xbmcgui.WindowXML):
 	CLST_ITEMS = 2210
 	CGROUP_LIST_ITEM_IMAGES = 2300
 	CLST_ITEM_IMAGES = 2310
-	CGROUP_BTNS = 2400
+	CI_GUIDE = 2400
 	CLBL_Y_BTN = 2411
 	CLBL_X_BTN = 2421
 	CLBL_A_BTN = 2431
@@ -89,7 +89,7 @@ class GUI(xbmcgui.WindowXML):
 
 		self.startup = True
 		# check for script update on SVN
-		self.scriptUpdated = update_script(False, False)
+		self.scriptUpdated = update_script(True, False)
 		if not self.scriptUpdated:
 			self.reset()
 
@@ -124,6 +124,11 @@ class GUI(xbmcgui.WindowXML):
 						break
 					else:
 						self.ready = self.switchSource()
+
+# uncomment during dev only!
+#				self.filename = os.path.join(DIR_HOME, "comic.jpg")
+#				imageX, imageY, imageW, imageH = self.calcImageDims()
+#				self.showImage(imageX, imageY, imageW, imageH)
 			else:
 				print "script updating, close script"
 				self.close()
@@ -147,8 +152,8 @@ class GUI(xbmcgui.WindowXML):
 		if actionID in CONTEXT_MENU:
 			self.mainMenu()
 		elif actionID == ACTION_X or buttonCode == KEYBOARD_X:
-			if self.comicImage:
-				self.toggleFullscreen()
+#			if self.comicImage:
+			self.toggleFullscreen()
 		elif actionID in CANCEL_DIALOG and self.IS_FULLSCREEN:
 			self.toggleFullscreen()
 		elif actionID in [ACTION_Y, BUTTON_Y, ACTION_REMOTE_PAUSE] or buttonCode == KEYBOARD_Y:
@@ -311,13 +316,15 @@ class GUI(xbmcgui.WindowXML):
 			self.getControl( self.CGROUP_HEADER ).setVisible(False)
 			self.getControl( self.CGROUP_FOOTER ).setVisible(False)
 
-		imageX, imageY, imageW, imageH = self.calcImageDims()
-		self.showImage(imageX, imageY, imageW, imageH)
+		try:
+			imageX, imageY, imageW, imageH = self.calcImageDims()
+			self.showImage(imageX, imageY, imageW, imageH)
+		except: pass
 
 		if not self.IS_FULLSCREEN:
 			self.getControl( self.CGROUP_HEADER ).setVisible(True)
 			self.getControl( self.CGROUP_FOOTER ).setVisible(True)
-			self.setFocus(self.getControl( self.CLST_ITEMS ))
+		self.setFocus(self.getControl( self.CLST_ITEMS ))
 		debug("< toggleFullscreen()")
 
 
@@ -1207,7 +1214,7 @@ def update_script(quite=False, notifyNotFound=False):
 # BEGIN !
 #############################################################################################
 makeDir(DIR_CACHE)
-comics = GUI("script-Comics-main.xml", DIR_RESOURCES)
+comics = GUI("script-Comics-main.xml", DIR_RESOURCES, "Default")
 if not comics.scriptUpdated:
     comics.doModal()
 del comics

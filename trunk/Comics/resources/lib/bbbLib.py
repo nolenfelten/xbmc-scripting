@@ -20,7 +20,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '28-02-2008'
+__date__ = '29-02-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 # setup cookiejar
@@ -102,7 +102,7 @@ KEYBOARD_PLUS          = 61627
 KEYBOARD_PG_UP         = 61473 
 KEYBOARD_PG_DOWN        = 61474
 KEYBOARD_INSERT         = 61485
-KEYBOARD_X              = 61524
+KEYBOARD_X              = 61528
 KEYBOARD_A              = 61505
 KEYBOARD_B              = 61506
 KEYBOARD_Y              = 61529
@@ -117,7 +117,7 @@ KEYBOARD_HOME           = 61476
 SELECT_ITEM = ( ACTION_A, BUTTON_A, KEYBOARD_A, KEYBOARD_RETURN, )
 EXIT_SCRIPT = ( ACTION_BACK, BUTTON_BACK, REMOTE_BACK, KEYBOARD_ESC, )
 CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, BUTTON_B, REMOTE_BACK, KEYBOARD_B, )
-CONTEXT_MENU = ( ACTION_WHITE, BUTTON_WHITE, 61533, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_STOP, KEYBOARD_HOME, )
+CONTEXT_MENU = ( ACTION_WHITE, BUTTON_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_INFO, KEYBOARD_HOME, )
 MOVEMENT_RIGHT_STICK = (BUTTON_RIGHT_STICK_UP, BUTTON_RIGHT_STICK_DOWN, BUTTON_RIGHT_STICK_LEFT, BUTTON_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
 MOVEMENT_LEFT_STICK = (BUTTON_LEFT_STICK_UP, BUTTON_LEFT_STICK_DOWN, BUTTON_LEFT_STICK_LEFT, BUTTON_LEFT_STICK_RIGHT, )
 MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, BUTTON_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, BUTTON_LEFT_TRIGGER, )
@@ -1302,7 +1302,8 @@ class RSSParser2:
 		else:
 			debug("parseString from DOC")
 
-		success = self.__parseString(doc)
+		if doc:
+			success = self.__parseString(doc)
 
 		debug("< RSSParser2().feed() success: " + str(success))
 		return success
