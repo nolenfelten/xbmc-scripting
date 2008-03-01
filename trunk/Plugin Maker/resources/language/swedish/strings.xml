@@ -1,5 +1,8 @@
-ï»¿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-<!-- Finnish 13.11.2007 -->
-    <string id="30000">SÃ¶kvÃ¤g eller kÃ¤lla till filmer  a</string>
+    <string id="30000">Sökväg eller utdelning till media</string>
+    <string id="30010">Innehållstyp</string>
+    <string id="30011">Filmer</string>
+    <string id="30012">Musik</string>
+    <string id="30013">TV Serier</string>
 </strings>
