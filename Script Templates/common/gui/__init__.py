@@ -1,14 +1,14 @@
 # official python modules
-import os
+import os, sys
 # official xbmc modules
 import xbmcgui
 # script modules
-import language, codes
+import codes
 
 # script variables
-__scriptname__ = os.path.split( os.getcwd()[:-1] )[-1].replace( '_', ' ' )
-RESPATH = os.path.join( os.getcwd()[:-1], 'resources' )
-_ = language.Language().localized
+common = sys.modules['common']
+# language localization 'macro'
+_ = common.localize
 
 class BaseScriptWindow( xbmcgui.WindowXML ):
     def __init__( self, xmlFile = '', resourcePath = '', defaultName = 'Default', forceFallback = False ):
@@ -37,14 +37,15 @@ class BaseScriptWindow( xbmcgui.WindowXML ):
                     BaseScriptWindow()
         '''
         if not len( xmlFile ):
-            xmlFile = 'script-%s-window.xml' % __scriptname__.replace( ' ', '_' )
+            xmlFile = 'script-%s-window.xml' % common.scriptname.replace( ' ', '_' )
         if not len( resourcePath ):
-            resourcePath = RESPATH
+            resourcePath = common.resource_path
         if not hasattr( self, 'controls_map' ):
             self.controls_map = {
                 # id: {
                 #   'onClick': callback,
                 #   'onFocus': callback,
+                #   'label': str(),
                 # },
             }
         xbmcgui.WindowXML.__init__( self, xmlFile, resourcePath, defaultName, forceFallback )
@@ -53,8 +54,30 @@ class BaseScriptWindow( xbmcgui.WindowXML ):
         '''
             sets each control to it's corresponding label from strings.xml
         '''
-        for id in self.controls_map.keys():
-            self.getControl( id ).setLabel( _( id ) )
+        for id, callbacks in self.controls_map.iteritems():
+            try:
+                callback = callbacks['label']
+            except: callback = None
+            if callback:
+                # callback is a string or variable (see below) 
+                #   for the label
+                try:
+                    # there may be data in strings.xml also
+                    label = _( id, strict = True )
+                except:
+                    # nothing in strings.xml
+                    label = ''
+                try:
+                    # try to use the data from strings.xml as a format for
+                    #   assigning data from the callback variable
+                    label = label % callback
+                except:
+                    # if that doesn't work, treat callback as a string and
+                    #   concatenate to the data from strings.xml
+                    label = label + callback
+                self.getControl( id ).setLabel( label )
+            else:
+                self.getControl( id ).setLabel( _( id ) )
  
     def onAction( self, action ):
         for i in [ action.getId(), action.getButtonCode() ]:
