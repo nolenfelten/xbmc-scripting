@@ -1274,7 +1274,7 @@ try:
 	del dialogProgress
 except: pass
 
-# goto xbmc home window
-#try:
-#	xbmc.executebuiltin('XBMC.ReplaceWindow(0)')
-#except: pass
+ goto xbmc home window
+try:
+	xbmc.executebuiltin('XBMC.ReplaceWindow(0)')
+except: pass
