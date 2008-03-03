@@ -49,6 +49,7 @@
 			<posy>43</posy>
 			<align>right</align>
 			<font>special12</font>
+            <label>$LOCALIZE[9]</label>
 		</control>
 		<control type="label" id="2">
 			<description>script name</description>

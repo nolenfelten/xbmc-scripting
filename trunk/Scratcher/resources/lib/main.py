@@ -8,21 +8,17 @@ import common
 class ScriptWindow( common.gui.BaseScriptWindow ):
     def __init__( self, xmlFile, resourcePath ):
         self.controls_map = {
-            # LABEL: xbox media center
-            1: None,
-            # LABEL: script name
-            2: {
+            2: { # LABEL: script name
                 'label': common.scriptname,
             },
-            # BUTTON: open
-            101: {
+            101: { # BUTTON: open
                 'onClick': self.open_new_file,
             },
         }
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
     def open_new_file( self ):
         # get a path to the file 
-        filepath = common.gui.get_browse_dialog( heading = common.localize( 1001 ) )
+        filepath = common.gui.show_browse_dialog( heading = common.localize( 1001 ) )
         filehandle = open( filepath, 'r' )
         # clear the list before adding new items
         self.clearList()
@@ -41,6 +37,11 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         # close the file
         filehandle.close()
 
+# construct the xml filename
 xmlFile = 'script-%s-window.xml' % common.scriptname.replace( ' ', '_' )
+# init the window instance
 window = ScriptWindow( xmlFile, common.resource_path )
+# browse for a file to open
+window.open_new_file()
+# turn over control to the window
 window.doModal()
