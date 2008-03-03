@@ -3,7 +3,7 @@
 	<allowoverlays>false</allowoverlays>
 	<controls>
 
-	<control type="image"id=100">
+	<control type="image"id="100">
 		<description>background image - used to give me skin rez as opposed to screen rez</description>
 		<posx>0</posx>
 		<posy>0</posy>
@@ -13,7 +13,7 @@
         <visible>false</visible>
 	</control>
 
-	<control type="image" id=110">
+	<control type="image" id="110">
 		<description>windowed comic image</description>
 		<posx>0</posx>
 		<posy>50</posy>
@@ -24,24 +24,24 @@
         <animation effect="zoom" end="0" center="auto" time="200">WindowClose</animation>
 	</control>	
 
-	<control type="image" id=120">
+	<control type="image" id="120">
 		<description>fullscreen guide image</description>
 		<posx>120r</posx>
-		<posy>520</posy>
+		<posy>516</posy>
 		<texture>comics-fullscreen-guide.png</texture>
         <visible>!Control.IsVisible(1000)</visible>
         <animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>
 	</control>
 
 	<control type="label" id="130">
-		<description>version label</description>
+		<description>fullscreen navigation title label</description>
 		<posx>10</posx>
 		<posy>2</posy>
 		<align>left</align>
         <visible>!Control.IsVisible(1000)</visible>
 		<label></label>
 		<textcolor>FFFFFFF99</textcolor>
-		<font>special11</font>
+		<font>font10</font>
 	</control>
 
     <!-- GROUP HEADER -->
@@ -50,7 +50,7 @@
 		<posx>0</posx>
 		<posy>0</posy>
 		<visible>true</visible> 
-		<animation effect="slide" time="200" start="0,-50" end="0,0" acceleration="-1.1">WindowOpen</animation>
+		<animation effect="slide" time="200" start="0,-50" acceleration="-1.1">WindowOpen</animation>
         <animation effect="slide" time="200" end="0,-50" acceleration="1.1">WindowClose</animation>
         <animation effect="slide" time="200" start="0,-50" acceleration="-1.1" condition="Control.IsVisible(1000)">conditional</animation>
         <animation effect="slide" time="200" end="0,-50" acceleration="1.1" condition="!Control.IsVisible(1000)">conditional</animation>
@@ -82,7 +82,7 @@
 			<align>right</align>
 			<label></label>
 			<textcolor>grey</textcolor>
-			<font>font10</font>
+			<font>font11</font>
 		</control>
 		<control type="label" id="22">
 			<description>source label</description>
@@ -91,7 +91,7 @@
 			<align>right</align>
 			<label></label>
 			<textcolor>white</textcolor>
-			<font>font11</font>
+			<font>font12</font>
 		</control>
 		<control type="label" id="23">
 			<description>title label</description>
@@ -100,8 +100,8 @@
 			<align>left</align>
 			<label></label>
 			<width>545</width>
-			<textcolor>white</textcolor>
-			<font>font10</font>
+			<textcolor>FFFFFF66</textcolor>
+			<font>font14</font>
 			<wrapmultiline>false</wrapmultiline>
 			<scroll>true</scroll>
 		</control>
@@ -113,7 +113,7 @@
 			<label></label>
 			<width>545</width>
 			<textcolor>FFFFFFF99</textcolor>
-			<font>special10</font>
+			<font>font12</font>
 			<wrapmultiline>false</wrapmultiline>
 			<scroll>true</scroll>
 		</control>
@@ -127,10 +127,10 @@
 		<height>136</height>
 		<width>720</width>
 		<visible>true</visible>
-		<animation effect="slide" time="200" start="0,136" end="0,0" acceleration="-1.1">WindowOpen</animation>
+		<animation effect="slide" time="200" start="0,136" acceleration="-1.1">WindowOpen</animation>
 		<animation effect="slide" time="200" end="0,136" acceleration="1.1">WindowClose</animation>
         <animation effect="slide" time="200" start="0,136" acceleration="-1.1" condition="Control.IsVisible(2000)">conditional</animation>
-        <animation effect="slide" time="200" start="0,0" end="0,136" acceleration="-1.1" condition="!Control.IsVisible(2000)">conditional</animation>
+        <animation effect="slide" time="200" end="0,136" acceleration="-1.1" condition="!Control.IsVisible(2000)">conditional</animation>
 
         <control type="image" id="2001">
 			<description>background footer image</description>
@@ -152,7 +152,7 @@
             <posx>5</posx>
             <posy>5</posy>
             <animation effect="slide" time="200" start="0,136" end="0,0" acceleration="-1.1" condition="Control.IsVisible(2100)">conditional</animation>
-	    <visible>true</visible>
+			<visible>true</visible>
 
             <control type="list" id="2110">
                 <width>165</width>
@@ -163,7 +163,7 @@
                 <ondown>2110</ondown>
                 <viewtype label="list">list</viewtype>
                 <scrolltime>200</scrolltime>
-		<pagecontrol>2111</pagecontrol>
+				<pagecontrol>2111</pagecontrol>
                 <itemlayout height="29">
                     <control type="image">
                         <posx>0</posx>
@@ -261,7 +261,7 @@
             <posx>185</posx>
             <posy>5</posy>
             <animation effect="slide" time="200" start="0,136" end="0,0" acceleration="-1.1" condition="Control.IsVisible(2200)">conditional</animation>
-	    <visible>true</visible>
+	    	<visible>true</visible>
 
             <control type="list" id="2210">
                 <width>210</width>
@@ -272,7 +272,7 @@
                 <ondown>2210</ondown>
                 <viewtype label="list">list</viewtype>
                 <scrolltime>200</scrolltime>
-		<pagecontrol>2211</pagecontrol>
+				<pagecontrol>2211</pagecontrol>
                 <itemlayout height="29">
                     <control type="image">
                         <posx>0</posx>
@@ -370,7 +370,7 @@
             <posx>420</posx>
             <posy>5</posy>
             <animation effect="slide" time="200" start="0,136" end="0,0" acceleration="-1.1" condition="Control.IsVisible(2300)">conditional</animation>
-	    <visible>true</visible>
+	    		<visible>true</visible>
 
             <control type="list" id="2310">
                 <width>165</width>
@@ -381,7 +381,7 @@
                 <ondown>2310</ondown>
                 <viewtype label="list">list</viewtype>
                 <scrolltime>200</scrolltime>
-		<pagecontrol>2311</pagecontrol>
+				<pagecontrol>2311</pagecontrol>
                 <itemlayout height="29">
                     <control type="image">
                         <posx>0</posx>

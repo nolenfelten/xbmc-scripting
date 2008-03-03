@@ -3,8 +3,8 @@
 	<allowoverlays>false</allowoverlays>
 	<controls>
 
-	<control type="image"id=100">
-		<description>background image</description>
+	<control type="image"id="100">
+		<description>background image - used to give me skin rez as opposed to screen rez</description>
 		<posx>0</posx>
 		<posy>0</posy>
 		<texture>background.png</texture>
@@ -13,22 +13,35 @@
         <visible>true</visible>
 	</control>
 
-	<control type="image" id=110">
-		<description>normal comic image max display area</description>
+	<control type="image" id="110">
+		<description>windowed comic image</description>
 		<posx>70</posx>
 		<posy>70</posy>
 		<width>650</width>
 		<height>420</height>
+		<aspectratio>keep</aspectratio>
         <visible>true</visible>
+        <animation effect="zoom" end="0" center="auto" time="200">WindowClose</animation>
 	</control>
 
-	<control type="image" id=120">
+	<control type="image" id="120">
 		<description>fullscreen guide image</description>
-		<posx>124r</posx>
+		<posx>120r</posx>
 		<posy>516</posy>
 		<texture>comics-fullscreen-guide.png</texture>
         <visible>!Control.IsVisible(1000)</visible>
         <animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>
+	</control>
+
+	<control type="label" id="130">
+		<description>fullscreen navigation title label</description>
+		<posx>10</posx>
+		<posy>2</posy>
+		<align>left</align>
+        <visible>!Control.IsVisible(1000)</visible>
+		<label></label>
+		<textcolor>FFFFFFF99</textcolor>
+		<font>font10</font>
 	</control>
 
     <!-- GROUP HEADER -->
@@ -43,7 +56,6 @@
         <animation effect="slide" time="200" end="0,-70" acceleration="1.1" condition="!Control.IsVisible(1000)">conditional</animation>
 
 		<!-- HEADER BLADE IMAGES -->
-
         <control type="group" id="901">
             <description>group header</description>
             <control type="image">
@@ -86,9 +98,8 @@
 			<posx>2r</posx>
 			<posy>2</posy>
 			<align>right</align>
-			<width>30</width>
 			<label></label>
-			<textcolor>EFFFFFFF</textcolor>
+			<textcolor>7FFFFFFF</textcolor>
 			<font>font11</font>
 		</control>
 		<control type="label" id="22">
@@ -108,7 +119,7 @@
 			<label></label>
 			<width>545</width>
 			<textcolor>FFFFFF66</textcolor>
-			<font>special14</font>
+			<font>font14</font>
 			<wrapmultiline>false</wrapmultiline>
 			<scroll>true</scroll>
 		</control>
@@ -120,7 +131,7 @@
 			<label></label>
 			<width>545</width>
 			<textcolor>FFFFFFF99</textcolor>
-			<font>special13</font>
+			<font>font12</font>
 			<wrapmultiline>false</wrapmultiline>
 			<scroll>true</scroll>
 		</control>
