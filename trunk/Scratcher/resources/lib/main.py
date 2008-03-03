@@ -1,5 +1,7 @@
 # official python modules
 import os
+# official xbmc modules
+import xbmcgui
 # script modules
 import common
 
@@ -30,8 +32,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             for char in end_of_line_chars: line = line.replace( char, '' )
             return line
         # add a new item to the list for each line of text in the file
+        line_number = 0
         for line in filehandle:
-            self.addItem( line_cleanup( line ) )
+            line = line_cleanup( line )
+            line_number = line_number + 1
+            item = xbmcgui.ListItem( line, str( line_number ) )
+            self.addItem( item )
         # close the file
         filehandle.close()
 
