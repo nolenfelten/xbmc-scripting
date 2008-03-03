@@ -10,7 +10,7 @@ common = sys.modules['common']
 # language localization 'macro'
 _ = common.localize
 
-def get_keyboard( default = '', heading = '', hidden = False ):
+def show_keyboard( default = '', heading = '', hidden = False ):
     '''Shows a keyboard and returns a value'''
     keyboard = xbmc.Keyboard( default, heading, hidden )
     keyboard.doModal()
@@ -18,7 +18,7 @@ def get_keyboard( default = '', heading = '', hidden = False ):
         return keyboard.getText()
     return default
 
-def get_numeric_dialog( default = '', heading = '', dlg_type = 3 ):
+def show_numeric_dialog( default = '', heading = '', dlg_type = 3 ):
     '''
     Shows a numeric dialog and returns a value
         - 0 : ShowAndGetNumber		(default format: #)
@@ -30,7 +30,7 @@ def get_numeric_dialog( default = '', heading = '', dlg_type = 3 ):
     value = dialog.numeric( type, heading, default )
     return value
 
-def get_browse_dialog( default = '', heading = '', dlg_type = 1, shares = 'files', mask = '', use_thumbs = False, treat_as_folder = False ):
+def show_browse_dialog( default = '', heading = '', dlg_type = 1, shares = 'files', mask = '', use_thumbs = False, treat_as_folder = False ):
     '''
     Shows a browse dialog and returns a value
         - 0 : ShowAndGetDirectory
