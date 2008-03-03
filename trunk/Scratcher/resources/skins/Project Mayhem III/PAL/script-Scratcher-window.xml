@@ -1,0 +1,121 @@
+<window>
+    <allowoverlay>no</allowoverlay>
+    <defaultcontrol always="false">101</defaultcontrol>
+    <coordinates>
+        <system>1</system>
+        <posx>0</posx>
+        <posy>0</posy>
+    </coordinates>
+	<controls>
+		<control type="image">
+			<description>background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>720</width>
+			<height>88</height>
+			<texture>background-apps.png</texture>
+		</control>
+		<control type="image">
+			<description>background image</description>
+			<posx>0</posx>
+			<posy>88</posy>
+			<width>720</width>
+			<height>488</height>
+			<texture>background-bottom.png</texture>
+		</control>
+		<control type="image" id="0">
+			<description>contentpanel slice</description>
+			<posx>-64</posx>
+			<posy>88</posy>
+			<width>64</width>
+			<height>510</height>
+			<texture>contentpanel_left.png</texture>
+			<animation effect="slide" time="200" start="204,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="204,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+		<control type="image" id="0">
+			<description>contentpanel slice</description>
+			<posx>0</posx>
+			<posy>88</posy>
+			<width>720</width>
+			<height>510</height>
+			<texture>contentpanel.png</texture>
+			<animation effect="slide" time="200" start="204,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="slide" time="200" start="0,0" end="204,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+		</control>
+		<control type="label" id="1">
+			<description>xbox media center label</description>
+			<posx>200</posx>
+			<posy>43</posy>
+			<align>right</align>
+			<font>special12</font>
+		</control>
+		<control type="label" id="2">
+			<description>script name</description>
+			<posx>207</posx>
+			<posy>43</posy>
+			<align>left</align>
+			<font>special13</font>
+		</control>
+        <control type="group" id="9000">
+            <control type="button" id="101">
+                <description>Open</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <onleft>50</onleft>
+                <onright>50</onright>
+            </control>
+        </control>
+		<control type="list" id="50">
+			<description>textarea</description>
+			<posx>30</posx>
+			<posy>100</posy>
+			<width>660</width>
+			<height>420</height>
+			<onleft>9000</onleft>
+			<onright>60</onright>
+			<onup>50</onup>
+			<ondown>50</ondown>
+			<viewtype label="535">list</viewtype>
+			<pagecontrol>60</pagecontrol>
+			<scrolltime>200</scrolltime>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<itemlayout height="22">
+				<control type="label">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>620</width>
+					<height>22</height>
+					<font>font13</font>
+					<aligny>center</aligny>
+					<selectedcolor>green</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="22">
+				<control type="image">
+					<width>630</width>
+					<height>29</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<visible>Control.HasFocus(50)</visible>
+					<texture>list-focus.png</texture>
+				</control>
+				<control type="label">
+					<posx>5</posx>
+					<posy>3</posy>
+					<width>620</width>
+					<height>22</height>
+					<font>font13</font>
+					<aligny>center</aligny>
+					<selectedcolor>green</selectedcolor>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+			</focusedlayout>
+		</control>
+        <include>AllViewCommonPageControls</include>
+    </controls>
+</window>
