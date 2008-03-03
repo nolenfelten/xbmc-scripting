@@ -30,8 +30,8 @@
 			<width>64</width>
 			<height>510</height>
 			<texture>contentpanel_left.png</texture>
-			<animation effect="slide" time="200" start="204,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-			<animation effect="slide" time="200" start="0,0" end="204,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 		<control type="image" id="0">
 			<description>contentpanel slice</description>
@@ -40,8 +40,8 @@
 			<width>720</width>
 			<height>510</height>
 			<texture>contentpanel.png</texture>
-			<animation effect="slide" time="200" start="204,0" end="0,0" acceleration="-1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-			<animation effect="slide" time="200" start="0,0" end="204,0" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<animation effect="fade" start="0" end="100" delay="200" time="100" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 		</control>
 		<control type="label" id="1">
 			<description>xbox media center label</description>
@@ -83,9 +83,21 @@
 			<animation effect="fade" start="100" end="0" delay="0" time="100" condition="!Skin.HasSetting(animated)">WindowClose</animation>
 			<itemlayout height="22">
 				<control type="label">
-					<posx>5</posx>
-					<posy>3</posy>
-					<width>620</width>
+                    <description>line number</description>
+					<posx>35</posx>
+					<posy>0</posy>
+					<width>35</width>
+					<height>22</height>
+					<font>font13</font>
+					<aligny>center</aligny>
+					<selectedcolor>green</selectedcolor>
+					<align>right</align>
+                    <label>[B]$INFO[ListItem.Label2][/B]</label>
+				</control>
+				<control type="label">
+					<posx>45</posx>
+					<posy>0</posy>
+					<width>595</width>
 					<height>22</height>
 					<font>font13</font>
 					<aligny>center</aligny>
@@ -96,17 +108,29 @@
 			</itemlayout>
 			<focusedlayout height="22">
 				<control type="image">
-					<width>630</width>
-					<height>29</height>
-					<posx>0</posx>
+					<posx>40</posx>
 					<posy>0</posy>
+					<width>605</width>
+					<height>22</height>
 					<visible>Control.HasFocus(50)</visible>
 					<texture>list-focus.png</texture>
 				</control>
 				<control type="label">
-					<posx>5</posx>
-					<posy>3</posy>
-					<width>620</width>
+                    <description>line number</description>
+					<posx>35</posx>
+					<posy>0</posy>
+					<width>35</width>
+					<height>22</height>
+					<font>font13</font>
+					<aligny>center</aligny>
+					<selectedcolor>green</selectedcolor>
+					<align>right</align>
+                    <label>[B]$INFO[ListItem.Label2][/B]</label>
+				</control>
+				<control type="label">
+					<posx>45</posx>
+					<posy>0</posy>
+					<width>595</width>
 					<height>22</height>
 					<font>font13</font>
 					<aligny>center</aligny>
