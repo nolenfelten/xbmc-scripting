@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "Comics"
 __version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '29-02-2008'
+__date__ = '01-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -67,6 +67,7 @@ class GUI(xbmcgui.WindowXML):
 	CI_BACKGROUND = 100
 	CI_COMIC = 110
 	CI_FS_GUIDE = 120
+	CLBL_FS_TITLE = 130
 	CGROUP_LIST_FEEDS = 2100
 	CLST_FEEDS = 2110
 	CGROUP_LIST_ITEMS = 2200
@@ -107,16 +108,21 @@ class GUI(xbmcgui.WindowXML):
 			xbmcgui.unlock()
 
 			if not self.scriptUpdated:
-				# get comic image display area
+				# display area windowed
 				image_control = self.getControl( self.CI_COMIC )
 				x, y = image_control.getPosition()
 				w = image_control.getWidth()
 				h = image_control.getHeight()
-				self.imageNormalScreenDims = (x, y, w, h)
+				windowedDisplayDims = (x, y, w, h)
 
-				# get w h of area being rendered into that windowXML thinks its using, not actual screen rez
-				self.displayW = self.getControl(self.CI_BACKGROUND).getWidth()
-				self.displayH = self.getControl(self.CI_BACKGROUND).getHeight()
+				# display area fullscreen
+				fullscreenDisplayDims = (0, 0, self.getControl(self.CI_BACKGROUND).getWidth(), \
+											  self.getControl(self.CI_BACKGROUND).getHeight())
+
+				self.displayAreaDims = { False : windowedDisplayDims,
+										 True : fullscreenDisplayDims }
+				debug("disp dims=%s" % self.displayAreaDims)
+
 				while not self.ready:
 					if not self.selectSource():
 						debug("onInit() close()")
@@ -127,8 +133,7 @@ class GUI(xbmcgui.WindowXML):
 
 # uncomment during dev only!
 #				self.filename = os.path.join(DIR_HOME, "comic.jpg")
-#				imageX, imageY, imageW, imageH = self.calcImageDims()
-#				self.showImage(imageX, imageY, imageW, imageH)
+#				self.showImage()
 			else:
 				print "script updating, close script"
 				self.close()
@@ -152,8 +157,8 @@ class GUI(xbmcgui.WindowXML):
 		if actionID in CONTEXT_MENU:
 			self.mainMenu()
 		elif actionID == ACTION_X or buttonCode == KEYBOARD_X:
-#			if self.comicImage:
-			self.toggleFullscreen()
+			if self.comicImage:
+				self.toggleFullscreen()
 		elif actionID in CANCEL_DIALOG and self.IS_FULLSCREEN:
 			self.toggleFullscreen()
 		elif actionID in [ACTION_Y, BUTTON_Y, ACTION_REMOTE_PAUSE] or buttonCode == KEYBOARD_Y:
@@ -161,8 +166,11 @@ class GUI(xbmcgui.WindowXML):
 				self.switchSource()
 		elif actionID in EXIT_SCRIPT and not self.IS_FULLSCREEN:
 			self.close()
-		elif actionID in MOVEMENT_LEFT_STICK + MOVEMENT_RIGHT_STICK and self.IS_FULLSCREEN:
-			self.moveImage(actionID)
+		elif self.IS_FULLSCREEN:
+			if actionID in MOVEMENT_LEFT_STICK + MOVEMENT_RIGHT_STICK:
+				self.moveImage(actionID)
+			elif actionID in MOVEMENT_DPAD:
+				self.onActionFullscreen(actionID)
 
 		self.ready = True
 
@@ -243,7 +251,7 @@ class GUI(xbmcgui.WindowXML):
 		debug("clearComicImage()")
 		try:
 			self.comicImage.setVisible(False)
-			self.removeControl(self.comicImage)
+#			self.removeControl(self.comicImage)
 			self.getControl(self.CI_COMIC).setVisible(False)
 			self.comicImage = None
 			self.loadedImageSize = ()
@@ -316,10 +324,7 @@ class GUI(xbmcgui.WindowXML):
 			self.getControl( self.CGROUP_HEADER ).setVisible(False)
 			self.getControl( self.CGROUP_FOOTER ).setVisible(False)
 
-		try:
-			imageX, imageY, imageW, imageH = self.calcImageDims()
-			self.showImage(imageX, imageY, imageW, imageH)
-		except: pass
+		self.showImage()
 
 		if not self.IS_FULLSCREEN:
 			self.getControl( self.CGROUP_HEADER ).setVisible(True)
@@ -329,11 +334,11 @@ class GUI(xbmcgui.WindowXML):
 
 
 	############################################################################################################
-	def getImageDisplayedDims(self):
+	def getImageDims(self):
 		x, y = self.comicImage.getPosition()
 		w =  self.comicImage.getWidth()
 		h =  self.comicImage.getHeight()
-		debug ("getImageDisplayedDims() X=%s Y=%s W=%s H=%s" % (x, y, w, h))
+		debug ("getImageDims() X=%s Y=%s W=%s H=%s" % (x, y, w, h))
 		return x, y, w, h
 
 	############################################################################################################
@@ -344,9 +349,10 @@ class GUI(xbmcgui.WindowXML):
 		move = 40
 		minBorder = 10
 
-		imageX, imageY, imageW, imageH = self.getImageDisplayedDims()
+		displayX, displayY, displayW, displayH = self.displayAreaDims[self.IS_FULLSCREEN]
+		imageX, imageY, imageW, imageH = self.getImageDims()
 		if code in (BUTTON_LEFT_STICK_RIGHT, REMOTE_RIGHT, KEYBOARD_RIGHT):
-			if (imageX + move) < self.displayW-minBorder:
+			if (imageX + move) < displayW-minBorder:
 				imageX += move
 				redraw = True
 		elif code in (BUTTON_LEFT_STICK_LEFT, REMOTE_LEFT, KEYBOARD_LEFT):
@@ -358,7 +364,7 @@ class GUI(xbmcgui.WindowXML):
 				imageY -= move
 				redraw = True
 		elif code in (BUTTON_LEFT_STICK_DOWN, REMOTE_DOWN, KEYBOARD_DOWN):
-			if (imageY + move) < (self.displayH - minBorder):
+			if (imageY + move) < (displayH - minBorder):
 				imageY += move
 				redraw = True
 		elif code in MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN + MOVEMENT_RIGHT_STICK:
@@ -383,88 +389,121 @@ class GUI(xbmcgui.WindowXML):
 
 
 	############################################################################################################
-	def showImage(self, imageX, imageY, imageW, imageH):
-		debug("> showImage() X=%s Y=%s W=%s H=%s" % (imageX, imageY, imageW, imageH))
-		if self.comicImage:
-			debug("update control image")
-			self.comicImage.setPosition(int(imageX), int(imageY))
-			self.comicImage.setWidth(int(imageW))
-			self.comicImage.setHeight(int(imageH))
-		else:
+	def showImage(self):
+		debug("> showImage() IS_FULLSCREEN=%s" % self.IS_FULLSCREEN)
+
+		imageX, imageY, imageW, imageH = self.displayAreaDims[self.IS_FULLSCREEN]
+		debug("displayAreaDims X=%s Y=%s W=%s H=%s" % (imageX, imageY, imageW, imageH))
+
+		if not self.comicImage:
 			debug("create new control image")
-			self.comicImage = xbmcgui.ControlImage(int(imageX), int(imageY), int(imageW), int(imageH), self.filename)
-			self.addControl(self.comicImage)
-			self.comicImage.setAnimations([('WindowClose', 'effect=zoom end=0 center=auto time=200'),
-										   ('visible', 'effect=zoom start=0 end=100 center=auto time=200'),
-										   ('hidden', 'effect=zoom end=0 center=auto time=200')
-										   ])
+			self.comicImage = self.getControl(self.CI_COMIC)
+			self.comicImage.setImage(self.filename)
+
+		debug("update control image positions")
+		self.comicImage.setPosition(int(imageX), int(imageY))
+		self.comicImage.setWidth(int(imageW))
+		self.comicImage.setHeight(int(imageH))
 		self.comicImage.setVisible(True)
-		self.getControl(self.CI_FS_GUIDE).setVisible(self.IS_FULLSCREEN)
+		self.getControl(self.CI_COMIC).setVisible(True)
+
+		# update full screen title
 		if self.IS_FULLSCREEN:
-			self.setFocus(self.comicImage)
+			self.onActionFullscreen()
 		debug("< showImage()")
+	
 
+	##############################################################################################
+	def getListsSelected(self):
+		debug("> getListsSelected()")
 
-	############################################################################################################
-	def calcImageDims(self):
-		debug("> calcImageDims()  image file=" + self.filename)
-		dims = ()
+		info = {}
+		label = self.getControl(self.CLST_FEEDS).getSelectedItem().getLabel()
+		pos = self.getControl(self.CLST_FEEDS).getSelectedPosition()
+		size = self.getControl(self.CLST_FEEDS).size()
+		info[self.CLST_FEEDS] = (label, pos, size)
 
-		if not self.comicImage or not self.loadedImageSize:
-			try:
-#				fn, ext = os.path.splitext(self.filename)
-				self.loadedImageSize = Image.open( self.filename ).size
-			except:
-				debug("unable to determine image size")
-				self.loadedImageSize = (0,0)
+		label = self.getControl(self.CLST_ITEMS).getSelectedItem().getLabel()
+		pos = self.getControl(self.CLST_ITEMS).getSelectedPosition()
+		size = self.getControl(self.CLST_ITEMS).size()
+		info[self.CLST_ITEMS] = (label, pos, size)
 
-		imageW, imageH = self.loadedImageSize
-		debug( "imageSize=%s, %s" % (imageW, imageH))
-		# make screen size
-		if self.IS_FULLSCREEN:
-			debug ("  setup FULLSCREEN display dims")
-			# setup full scr dims
-			imgDisplayX = 0
-			imgDisplayY = 0
-			# get w h of area being rendered into that windowXML thinks its using, not actual screen rez
-			imgDisplayW = self.displayW
-			imgDisplayH = self.displayH
-		else:
-			debug ("  setup WINDOWED display dims")
-			imgDisplayX, imgDisplayY, imgDisplayW, imgDisplayH = self.imageNormalScreenDims
+		try:
+			label = self.getControl(self.CLST_ITEM_IMAGES).getSelectedItem().getLabel()
+			pos = self.getControl(self.CLST_ITEM_IMAGES).getSelectedPosition()
+			size = self.getControl(self.CLST_ITEM_IMAGES).size()
+			info[self.CLST_ITEM_IMAGES] = (label, pos, size)
+		except: pass
 
-		# determine scaling
-		if imageW != 0 and imageH != 0:
-			# determine shortest scale side to fit display area
-			imgScaleH = float(imgDisplayH / float(imageH))
-			imgScaleW = float(imgDisplayW / float(imageW))
-			debug("  imgScaleW: " + str(imgScaleW) + "  imgScaleH: " + str(imgScaleH))
+		debug("< getListsSelected() list info=%s" % info)
+		return info
 
-			if (imgScaleH < imgScaleW):			# use height expansion scale
-				debug("  Using height expansion scale")
-				imageH = imageH*imgScaleH
-				imageW = imageW*imgScaleH
-			else:								# use width expansion scale
-				debug("  Using width expansion scale")
-				imageH = imageH*imgScaleW
-				imageW = imageW*imgScaleW
-			
-			# calc X from center of display area
-			displayHalfX = imgDisplayX + (imgDisplayW /2)
-			imageX = displayHalfX - (imageW /2)
+	##############################################################################################
+	def onActionFullscreen(self, actionID=0):
+		debug("> onActionFullscreen() actionID=%s" % actionID)
 
-			# find center Y pos of display area in relation to screen
-			displayHalfY = imgDisplayY + (imgDisplayH /2)
-			# image Y in relation to center of display area Y
-			imageY = displayHalfY - (imageH /2)
-		else:
-			debug("img of unknown size")
-			imageX = imgDisplayX
-			imageY = imgDisplayY
+		if actionID:
+			# FORCE NAVIGATION OF ITEM AND?OR IMAGE LISTS
+			listsInfo = self.getListsSelected()
+			itemsLabel, itemsPos, itemsCount = listsInfo[self.CLST_ITEMS]
+			imagesLabel, imagesPos, imagesCount = listsInfo[self.CLST_ITEM_IMAGES]
+			if actionID == ACTION_MOVE_RIGHT:			# next image
+				debug( "ACTION_MOVE_RIGHT" )
+				if imagesPos + 1 < imagesCount:
+					imagesPos += 1
+					self.getControl(self.CLST_ITEM_IMAGES).selectItem(imagesPos)
+					self.itemImageSelected()
+					self.showImage()
+				else:
+					actionID = ACTION_MOVE_DOWN
 
-		dims = (imageX, imageY, imageW, imageH)
-		debug("< calcImageDims()")
-		return dims
+			elif actionID == ACTION_MOVE_LEFT:			# prev image
+				debug( "ACTION_MOVE_LEFT" )
+				if imagesPos > 0:
+					imagesPos -= 1
+					self.getControl(self.CLST_ITEM_IMAGES).selectItem(imagesPos)
+					self.itemImageSelected()
+					self.showImage()
+				else:
+					# force prev item action
+					actionID = ACTION_MOVE_UP
+
+			if actionID == ACTION_MOVE_UP:
+				debug( "ACTION_MOVE_UP" )
+				if itemsPos > 0:
+					itemsPos -= 1
+				else:
+					itemsPos = itemsCount-1			# goto last item in list
+					
+				self.getControl(self.CLST_ITEMS).selectItem(itemsPos)
+				self.itemSelected()
+				self.itemImageSelected(0)
+				self.showImage()
+
+			if actionID == ACTION_MOVE_DOWN:
+				debug( "ACTION_MOVE_DOWN" )
+				if itemsPos + 1 < itemsCount:
+					itemsPos += 1
+				else:
+					itemsPos = 0						# goto first item in list
+
+				self.getControl(self.CLST_ITEMS).selectItem(itemsPos)
+				self.itemSelected()
+				self.itemImageSelected(0)
+				self.showImage()
+
+		# get new lists selected labels, pos and size
+		listsInfo = self.getListsSelected()
+		label, pos, size = listsInfo[self.CLST_FEEDS]
+		title = "%s (%s/%s)" % (label, pos+1, size)
+		label, pos, size = listsInfo[self.CLST_ITEMS]
+		title += " -> %s (%s/%s)" % (label, pos+1, size)
+		try:
+			label, pos, size = listsInfo[self.CLST_ITEM_IMAGES]
+			title += " -> %s (%s/%s)" % (label, pos+1, size)
+		except: pass # no image
+		self.getControl(self.CLBL_FS_TITLE).setLabel(title)
+		debug("< onActionFullscreen()")
 
 	##############################################################################################
 	def selectSource(self):
@@ -661,11 +700,10 @@ class GUI(xbmcgui.WindowXML):
 	#		success = fetchCookieURL(imageURL, self.filename, isImage=True, newRequest=self.newURLRequest)
 			dialogProgress.close()
 		else:
-			debug("image filename exists")
+			debug("image filename already exists")
 
 		if success:
-			imageX, imageY, imageW, imageH = self.calcImageDims()
-			self.showImage(imageX, imageY, imageW, imageH)
+			self.showImage()
 			self.newURLRequest = False
 		debug("< getImage() success="+str(success))
 		return success
@@ -891,6 +929,7 @@ class Tapestry:
 					desc = rssItem.getElement(ELEMENT_DESC)
 					imgURL = isImageURL(desc)
 
+				title = decodeEntities(cleanHTML(title))
 				if imgURL:
 					self.items.append(Items(title, imgURL))					# store title and link
 				else:

@@ -4,23 +4,25 @@
 	<controls>
 
 	<control type="image"id=100">
-		<description>background image</description>
+		<description>background image - used to give me skin rez as opposed to screen rez</description>
 		<posx>0</posx>
 		<posy>0</posy>
-		<texture>bbb-blank-background.png</texture>
+		<texture>background.png</texture>
 		<width>720</width>
 		<height>576</height>
-        <visible>true</visible>
+        <visible>false</visible>
 	</control>
 
 	<control type="image" id=110">
-		<description>normal comic image max display area</description>
+		<description>windowed comic image</description>
 		<posx>0</posx>
 		<posy>50</posy>
 		<width>720</width>
 		<height>390</height>
+		<aspectratio>keep</aspectratio>
         <visible>true</visible>
-	</control>
+        <animation effect="zoom" end="0" center="auto" time="200">WindowClose</animation>
+	</control>	
 
 	<control type="image" id=120">
 		<description>fullscreen guide image</description>
@@ -29,6 +31,17 @@
 		<texture>comics-fullscreen-guide.png</texture>
         <visible>!Control.IsVisible(1000)</visible>
         <animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>
+	</control>
+
+	<control type="label" id="130">
+		<description>version label</description>
+		<posx>10</posx>
+		<posy>2</posy>
+		<align>left</align>
+        <visible>!Control.IsVisible(1000)</visible>
+		<label></label>
+		<textcolor>FFFFFFF99</textcolor>
+		<font>special11</font>
 	</control>
 
     <!-- GROUP HEADER -->
@@ -87,8 +100,8 @@
 			<align>left</align>
 			<label></label>
 			<width>545</width>
-			<textcolor>FFFFFF66</textcolor>
-			<font>special13</font>
+			<textcolor>white</textcolor>
+			<font>font10</font>
 			<wrapmultiline>false</wrapmultiline>
 			<scroll>true</scroll>
 		</control>
@@ -155,14 +168,14 @@
                     <control type="image">
                         <posx>0</posx>
                         <posy>0</posy>
-                        <width>165</width>
+                        <width>155</width>
                         <height>29</height>
                         <texture>bbb-list-nofocus.png</texture>
                     </control>
                     <control type="label">
                         <posx>5</posx>
                         <posy>0</posy>
-                        <width>165</width>
+                        <width>155</width>
                         <height>29</height>
                         <font>special12</font>
                         <aligny>center</aligny>
@@ -176,7 +189,7 @@
                     <control type="image">
                         <posx>0</posx>
                         <posy>0</posy>
-                        <width>165</width>
+                        <width>155</width>
                         <height>29</height>
                         <visible>!Control.HasFocus(2110)</visible>
                         <texture>bbb-list-nofocus.png</texture>
@@ -184,7 +197,7 @@
                     <control type="image">
                         <posx>0</posx>
                         <posy>0</posy>
-                        <width>165</width>
+                        <width>155</width>
                         <height>29</height>
                         <visible>Control.HasFocus(2110)</visible>
                         <texture>bbb-list-focus2.png</texture>
@@ -192,7 +205,7 @@
                     <control type="label">
                         <posx>5</posx>
                         <posy>0</posy>
-                        <width>165</width>
+                        <width>155</width>
                         <height>29</height>
                         <font>special12</font>
                         <aligny>center</aligny>
@@ -231,7 +244,7 @@
                 <orientation>vertical</orientation>
             </control>
             <control type="button">
-                <posx>165</posx>
+                <posx>155</posx>
                 <posy>97</posy>
                 <width>16</width>
                 <height>16</height>
@@ -245,7 +258,7 @@
 
         <!--  ITEMS list -->
         <control type="group" id="2200">
-            <posx>190</posx>
+            <posx>185</posx>
             <posy>5</posy>
             <animation effect="slide" time="200" start="0,136" end="0,0" acceleration="-1.1" condition="Control.IsVisible(2200)">conditional</animation>
 	    <visible>true</visible>
