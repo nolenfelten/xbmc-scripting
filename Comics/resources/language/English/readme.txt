@@ -21,8 +21,9 @@ Python XBMC script to view comics from RSS Feeds and/or HTML pages.
 
    To view image fullscreen press X.
      Once in fullscreen view:
-         Left Thumb Stick to move image.
-         Right Thumb Stick or Triggers to Zoom image.
+         Left Thumb Stick                 = Move image.
+         Right Thumb Stick or Triggers    = Zoom image.
+         Click Left Thumb Stick           = Reset image.
          X, B or BACK to return from fullscreen view
 
    Select a different DataSource: Y Button
