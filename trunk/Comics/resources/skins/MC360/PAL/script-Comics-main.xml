@@ -26,8 +26,8 @@
 
 	<control type="image" id="120">
 		<description>fullscreen guide image</description>
-		<posx>120r</posx>
-		<posy>516</posy>
+		<posx>190r</posx>
+		<posy>514</posy>
 		<texture>comics-fullscreen-guide.png</texture>
         <visible>!Control.IsVisible(1000)</visible>
         <animation effect="rotate" start="180" end="0" center="720,576" time="200">VisibleChange</animation>

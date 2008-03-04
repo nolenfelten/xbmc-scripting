@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "Comics"
 __version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '01-03-2008'
+__date__ = '04-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -161,13 +161,13 @@ class GUI(xbmcgui.WindowXML):
 				self.toggleFullscreen()
 		elif actionID in CANCEL_DIALOG and self.IS_FULLSCREEN:
 			self.toggleFullscreen()
-		elif actionID in [ACTION_Y, BUTTON_Y, ACTION_REMOTE_PAUSE] or buttonCode == KEYBOARD_Y:
+		elif actionID in [ACTION_Y, PAD_Y, ACTION_REMOTE_PAUSE] or buttonCode == KEYBOARD_Y:
 			if self.selectSource():
 				self.switchSource()
 		elif actionID in EXIT_SCRIPT and not self.IS_FULLSCREEN:
 			self.close()
 		elif self.IS_FULLSCREEN:
-			if actionID in MOVEMENT_LEFT_STICK + MOVEMENT_RIGHT_STICK:
+			if actionID in MOVEMENT_LEFT_STICK + MOVEMENT_RIGHT_STICK + LEFT_STICK_CLICK:
 				self.moveImage(actionID)
 			elif actionID in MOVEMENT_DPAD:
 				self.onActionFullscreen(actionID)
@@ -176,6 +176,7 @@ class GUI(xbmcgui.WindowXML):
 
 	#################################################################################################################
 	def onClick(self, controlID):
+		debug( "onClick() self.ready=%s" % self.ready )
 		if not controlID or not self.ready:
 			return
 		debug( "onclick(): control %i" % controlID )
@@ -214,7 +215,6 @@ class GUI(xbmcgui.WindowXML):
 		self.lastFeedsPos = -1				# saves last item list pos
 		self.lastItemsPos = -1				# saves last item list pos
 		self.lastItemImagesPos = -1			# saves last item list pos
-		self.loadedImageSize = []
 #		self.zoom = 0
 		self.comicImage = None					# control to hold image
 		self.ready = False
@@ -251,11 +251,8 @@ class GUI(xbmcgui.WindowXML):
 		debug("clearComicImage()")
 		try:
 			self.comicImage.setVisible(False)
-#			self.removeControl(self.comicImage)
 			self.getControl(self.CI_COMIC).setVisible(False)
 			self.comicImage = None
-			self.loadedImageSize = ()
-#			deleteFile(self.filename)
 		except: pass
 
 	####################################################################################################################
@@ -343,48 +340,53 @@ class GUI(xbmcgui.WindowXML):
 
 	############################################################################################################
 	def moveImage(self, code):
-		debug("> moveImage() code: " + str(code))
+		debug("> moveImage() code: %s" %code)
 
-		redraw = False
+		doMOve = False
 		move = 40
 		minBorder = 10
 
-		displayX, displayY, displayW, displayH = self.displayAreaDims[self.IS_FULLSCREEN]
 		imageX, imageY, imageW, imageH = self.getImageDims()
-		if code in (BUTTON_LEFT_STICK_RIGHT, REMOTE_RIGHT, KEYBOARD_RIGHT):
-			if (imageX + move) < displayW-minBorder:
-				imageX += move
-				redraw = True
-		elif code in (BUTTON_LEFT_STICK_LEFT, REMOTE_LEFT, KEYBOARD_LEFT):
-			if (imageX + imageW) - move > minBorder:
-				imageX -= move
-				redraw = True
-		elif code in (BUTTON_LEFT_STICK_UP, REMOTE_UP, KEYBOARD_UP):
-			if (imageY + imageH) - move > minBorder:
-				imageY -= move
-				redraw = True
-		elif code in (BUTTON_LEFT_STICK_DOWN, REMOTE_DOWN, KEYBOARD_DOWN):
-			if (imageY + move) < (displayH - minBorder):
-				imageY += move
-				redraw = True
+		if code in LEFT_STICK_CLICK:	# reset
+			self.showImage()
+
+		elif code in MOVEMENT_LEFT_STICK:
+			displayX, displayY, displayW, displayH = self.displayAreaDims[self.IS_FULLSCREEN]
+			origX = imageX
+			origY = imageY
+			if code in (PAD_LEFT_STICK_RIGHT, REMOTE_RIGHT, KEYBOARD_RIGHT):
+				if (imageX + move) < displayW-minBorder:
+					imageX += move
+			elif code in (PAD_LEFT_STICK_LEFT, REMOTE_LEFT, KEYBOARD_LEFT):
+				if (imageX + imageW) - move > minBorder:
+					imageX -= move
+			elif code in (PAD_LEFT_STICK_UP, REMOTE_UP, KEYBOARD_UP):
+				if (imageY + imageH) - move > minBorder:
+					imageY -= move
+			elif code in (PAD_LEFT_STICK_DOWN, REMOTE_DOWN, KEYBOARD_DOWN):
+				if (imageY + move) < (displayH - minBorder):
+					imageY += move
+
+			if origX != imageX or origY != imageY:
+				self.comicImage.setPosition(imageX, imageY)
 		elif code in MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN + MOVEMENT_RIGHT_STICK:
+			debug("zoom requested")
+			x, y, w, h = self.displayAreaDims[self.IS_FULLSCREEN]
 			# get 10% of orig image dims
-			w, h = self.loadedImageSize
 			value = int((w / 100) * 10)
 
 			if code in MOVEMENT_SCROLL_UP + \
-				   (BUTTON_RIGHT_STICK_DOWN, BUTTON_RIGHT_STICK_LEFT) + \
+				   (PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT) + \
 				   (ACTION_RIGHT_STICK_DOWN, ACTION_RIGHT_STICK_LEFT):
+				print "zoom down"
 				value *= -1		# make neg
 
 			imageW += value
 			imageH += value
-			redraw = True
+			self.comicImage.setWidth(imageW)
+			self.comicImage.setHeight(imageH)
 
-		if redraw:
-			self.showImage(imageX, imageY, imageW, imageH)
-			time.sleep(.05)
-
+		time.sleep(.05)
 		debug("< moveImage()")
 
 
@@ -393,7 +395,6 @@ class GUI(xbmcgui.WindowXML):
 		debug("> showImage() IS_FULLSCREEN=%s" % self.IS_FULLSCREEN)
 
 		imageX, imageY, imageW, imageH = self.displayAreaDims[self.IS_FULLSCREEN]
-		debug("displayAreaDims X=%s Y=%s W=%s H=%s" % (imageX, imageY, imageW, imageH))
 
 		if not self.comicImage:
 			debug("create new control image")
@@ -1274,7 +1275,7 @@ try:
 	del dialogProgress
 except: pass
 
- goto xbmc home window
+# goto xbmc home window
 try:
 	xbmc.executebuiltin('XBMC.ReplaceWindow(0)')
 except: pass
