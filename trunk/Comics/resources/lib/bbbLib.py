@@ -111,26 +111,27 @@ KEYBOARD_NUM_MINUS      = 61549
 KEYBOARD_ESC            = 61467
 KEYBOARD_RETURN         = 61453
 KEYBOARD_HOME           = 61476
+KEYBOARD_DEL_BACK       = 61448
 
 
 # ACTION CODE GROUPS
 SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
 EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
 CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, REMOTE_BACK, KEYBOARD_B, )
-CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_INFO, KEYBOARD_HOME, )
+CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, )
 MOVEMENT_DPAD = ( ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT, ACTION_MOVE_UP, ACTION_MOVE_DOWN, )
 MOVEMENT_RIGHT_STICK = (PAD_RIGHT_STICK_UP, PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT, PAD_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
 MOVEMENT_LEFT_STICK = (PAD_LEFT_STICK_UP, PAD_LEFT_STICK_DOWN, PAD_LEFT_STICK_LEFT, PAD_LEFT_STICK_RIGHT, )
-MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, PAD_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, PAD_LEFT_TRIGGER, )
-MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, PAD_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, PAD_RIGHT_TRIGGER, )
+MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, PAD_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, PAD_LEFT_TRIGGER, ACTION_REMOTE_PREV_ITEM, )
+MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, PAD_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, PAD_RIGHT_TRIGGER, ACTION_REMOTE_NEXT_ITEM, )
 MOVEMENT_SCROLL = MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN
 MOVEMENT_KEYBOARD = ( KEYBOARD_LEFT, KEYBOARD_UP, KEYBOARD_RIGHT, KEYBOARD_DOWN, KEYBOARD_PG_UP, KEYBOARD_PG_DOWN, )
-MOVEMENT_REMOTE = ( REMOTE_LEFT, REMOTE_RIGHT, REMOTE_UP, REMOTE_DOWN, )
+MOVEMENT_REMOTE = ( REMOTE_LEFT, REMOTE_RIGHT, REMOTE_UP, REMOTE_DOWN, ACTION_REMOTE_NEXT_ITEM, ACTION_REMOTE_PREV_ITEM, )
 MOVEMENT_UP = ( ACTION_MOVE_UP, PAD_LEFT_STICK_UP, PAD_RIGHT_STICK_UP, PAD_DPAD_UP, KEYBOARD_UP, REMOTE_UP, ACTION_RIGHT_STICK_UP,)
 MOVEMENT_DOWN = ( ACTION_MOVE_DOWN, PAD_LEFT_STICK_DOWN,PAD_RIGHT_STICK_DOWN, PAD_DPAD_DOWN, KEYBOARD_DOWN, REMOTE_DOWN, ACTION_RIGHT_STICK_DOWN,)
 MOVEMENT_LEFT = ( ACTION_MOVE_LEFT, PAD_LEFT_STICK_LEFT, PAD_RIGHT_STICK_LEFT,PAD_DPAD_LEFT, KEYBOARD_LEFT, REMOTE_LEFT, ACTION_RIGHT_STICK_LEFT,)
 MOVEMENT_RIGHT = (  ACTION_MOVE_RIGHT, PAD_LEFT_STICK_RIGHT, PAD_RIGHT_STICK_RIGHT, PAD_DPAD_RIGHT, KEYBOARD_RIGHT, REMOTE_RIGHT, ACTION_RIGHT_STICK_RIGHT, )
-MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT + MOVEMENT_SCROLL + MOVEMENT_KEYBOARD
+MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT + MOVEMENT_SCROLL + MOVEMENT_KEYBOARD + MOVEMENT_REMOTE
 
 XBFONT_LEFT       = 0x00000000
 XBFONT_RIGHT      = 0x00000001
@@ -200,9 +201,10 @@ def handleException(txt=''):
 
 #################################################################################################################
 def makeScriptDataDir():
-	# make userdata script_data location
 	try:
-		os.makedirs(os.path.join("T:\script_data", __scriptname__))
+		scriptPath = os.path.join("T:\script_data", __scriptname__)
+		os.makedirs(scriptPath)
+		debug("makeScriptDataDir() created=%s" % scriptPath )
 	except: pass
 
 #############################################################################################################
@@ -345,24 +347,27 @@ def cleanHTML(data):
 
 #################################################################################################################
 def ErrorCode(e):
+	debug("> ErrorCode()")
+	print "except=%s" % e
 	if hasattr(e, 'code'):
-		code = str(e.code)
+		code = e.code
 	else:
 		try:
-			code = str(e[0])
+			code = e[0]
 		except:
 			code = 'Unknown'
-	title = 'Error, Code: ' + code
+	title = 'Error, Code: %s' % code
 
 	if hasattr(e, 'reason'):
 		txt = e.reason
 	else:
 		try:
-			txt = str(e[1])
+			txt = e[1]
 		except:
 			txt = 'Unknown reason'
-	print "error code: %s %s" % (code, txt)
-	messageOK(title, txt)
+	print "%s = %s" % (title, txt)
+	messageOK(title, str(txt))
+	debug("< ErrorCode()")
 
 #################################################################################################################
 # Class to return a char or string pixel length. Thanks to madtw.
@@ -1147,7 +1152,7 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 #############################################################################################################
 def safeFilename(path):
 	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=]', '_', tail))
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
 
 #################################################################################################################
 # Does a direct image URL exist in string ?
