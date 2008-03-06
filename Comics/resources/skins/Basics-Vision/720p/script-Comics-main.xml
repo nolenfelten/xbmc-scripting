@@ -83,8 +83,8 @@
         </control>    
         <control type="image" id=120">
             <description>fullscreen guide image</description>
-            <posx>120r</posx>
-            <posy>520</posy>
+            <posx>190r</posx>
+            <posy>650</posy>
             <texture>comics-fullscreen-guide.png</texture>
             <visible>!Control.IsVisible(1000)</visible>
         </control>
