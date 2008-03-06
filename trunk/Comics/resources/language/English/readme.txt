@@ -92,3 +92,9 @@ RSS Feeds:
 	Minumim requirment is are  <Title> and <link> elements.
 
 
+Special thanks to smuto for providing some skins.
+Thanks to all others who've contributed language translations.
+Thanks to those who've help beta test.
+
+Much appreciated!
+BBB
