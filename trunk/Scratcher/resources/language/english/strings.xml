@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="1">xbox media center</string>
     <string id="101">Open</string>
+    <string id="102">Save</string>
     <string id="1001">Open a file to edit:</string>
 </strings>
