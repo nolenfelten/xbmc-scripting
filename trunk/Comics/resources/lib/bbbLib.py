@@ -156,6 +156,12 @@ FONT12 = 'font12'
 FONT13 = 'font13'
 FONT14 = 'font14'
 FONT18 = 'font18'
+FONT_SPECIAL_10 = 'special10'
+FONT_SPECIAL_11 = 'special11'
+FONT_SPECIAL_12 = 'special12'
+FONT_SPECIAL_13 = 'special13'
+FONT_SPECIAL_14 = 'special14'
+ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPECIAL_11,FONT_SPECIAL_12,FONT_SPECIAL_13,FONT_SPECIAL_14,)
 
 REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
 
@@ -262,6 +268,7 @@ def isFileNewer(oldFilename, newFilename):
 
 ##############################################################################################
 def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
+	debug("doKeyboard() kbType=%s" % kbType)
 	if currentValue == None:
 		currentValue = ''
 	value = currentValue
@@ -381,7 +388,8 @@ class FontAttr:
 	def __init__(self):
 		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
 		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
-		self.adjust = {'font10':-3, 'font11':-3, 'font12':-2, 'font13':-1, 'font14':0, 'font18':4}
+		self.adjust = {'font10':-3, 'font11':-2, 'font12':-1, 'font13':-1, 'font14':0, 'font18':4, \
+					   'special10':-3, 'special11':-2, 'special12':-1, 'special13':0, 'special14':2}
 
 		# base widths based on font14
 		self.width = [ \
@@ -410,27 +418,29 @@ class FontAttr:
 			9,  9,  8,  9,  7,  9, 14
 		]
 
-	def getWidth( self, c, font = 'font14' ):
+	def getWidth( self, c, font ):
 		try:
 			w = self.width[ord(c)] + self.adjust[font]
 		except:
 			w = 14			# unknown ch, use avg width
 		return w
 
-	def getTextWidth(self, txt, font = 'font14'):
+	def getTextWidth(self, txt, font):
 		len = 0
 		for c in txt:
-			len += self.getWidth(c, font)
+			len += self.getWidth(c, font) +1
 		return len
 
-	def truncate(self, maxWidth, text, font = 'font14', rez = 6):
-		sz = len(text)
+	def truncate(self, maxWidth, text, font, rez = 6):
+		chCount = len(text)
+		maxWidth = int(maxWidth)
+		font = font.lower()
 		try:
 			maxWidth *= self.rezAdjust[rez]
 		except: pass
 			
 		newText = ''
-		for i in range(sz, 0, -1):
+		for i in range(chCount, 0, -1):
 			if self.getTextWidth(text[0:i], font) <= maxWidth:
 				newText = text[0:i]
 				break
@@ -1206,7 +1216,7 @@ def saveFileObj( filename, saveObj ):
 
 #################################################################################################################
 def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=False):
-	debug("> bbbLib.listDir() path=" + path)
+	debug("> bbbLib.listDir() path=%s ext=%s full=%s lower=%s upper=%s" % (path, ext, getFullFilename, lower, upper))
 
 	fileList = []
 	if ext:
@@ -1219,19 +1229,17 @@ def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=Fal
 		for f in files:
 			fn, ex = os.path.splitext(f)
 			if not ext or ex.lower() == ext:
-				found = False
+				found = True
 				if fnRE:
 					matches = re.search(fnRE, fn)
-					if matches:
-						found = True
-				else:
-					found = True
+					if not matches:
+						found = False
 
 				if found:
-					if not getFullFilename:
-						filename = fn
-					else:
+					if getFullFilename:
 						filename = f
+					else:
+						filename = fn
 
 					if lower:
 						fileList.append(filename.lower())
@@ -1462,3 +1470,9 @@ def getReadmeFilename(mylanguage):
 
     debug("< getReadmeFilename() %s" % fn)
     return fn
+
+#######################################################################################################################    
+def prefixDirPath(fn, dirPath):
+	if not fn.startswith(dirPath):
+		return os.path.join(dirPath, fn)
+	return fn
