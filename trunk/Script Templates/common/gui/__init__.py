@@ -56,28 +56,45 @@ class BaseScriptWindow( xbmcgui.WindowXML ):
         '''
         for id, callbacks in self.controls_map.iteritems():
             try:
-                callback = callbacks['label']
-            except: callback = None
-            if callback:
-                # callback is a string or variable (see below) 
-                #   for the label
+                # get the control object for this id
+                control = self.getControl( id )
                 try:
-                    # there may be data in strings.xml also
-                    label = _( id, strict = True )
-                except:
-                    # nothing in strings.xml
-                    label = ''
-                try:
-                    # try to use the data from strings.xml as a format for
-                    #   assigning data from the callback variable
-                    label = label % callback
-                except:
-                    # if that doesn't work, treat callback as a string and
-                    #   concatenate to the data from strings.xml
-                    label = label + callback
-                self.getControl( id ).setLabel( label )
-            else:
-                self.getControl( id ).setLabel( _( id ) )
+                    # see if there is a label set in the code
+                    #   callback is a string or variable (see below) 
+                    #   for the label
+                    callback = callbacks['label']
+                except: callback = None
+                if callback:
+                    try:
+                        # there may be data in strings.xml also, check with
+                        #   a strict (error throwing) lookup
+                        label = _( id, strict = True )
+                    except:
+                        # nothing in strings.xml
+                        label = ''
+                    try:
+                        # try to use the data from strings.xml as a format for
+                        #   assigning data from the callback variable
+                        label = label % callback
+                    except:
+                        # if that doesn't work, treat callback as a string and
+                        #   concatenate to the data from strings.xml
+                        label = label + callback
+                else:
+                    # no label information was set in the code, so use the 
+                    #   strings.xml lookup alone
+                    label = _( id )
+                if hasattr( control, 'setLabel' ):
+                    # make sure that this control can even accept a label!
+                    control.setLabel( label )
+                # explicitly delete the control object for the next loop pass
+                del control
+            except:
+                # something horrible occurred
+                import traceback
+                print '-' * 79
+                print 'error setting label for', id
+                traceback.print_exc()
  
     def onAction( self, action ):
         for i in [ action.getId(), action.getButtonCode() ]:
