@@ -28,7 +28,26 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
 
     def change_line( self ):
-        print 'change'
+        try:
+            # find the current id and ListItem object
+            id = self.getCurrentListPosition()
+            item = self.getListItem( id )
+            try:
+                # get text from the ListItem
+                original_text = item.getLabel()
+            except:
+                # text missing, default to empty string
+                original_text = str()
+            # show keyboard for user to change the text
+            new_text = common.gui.dialog.keyboard( original_text, 'Edit this text:' )
+            if new_text is not original_text:
+                try:
+                    item.setLabel( new_text )
+                    self.changed_lines[id] = new_text
+                except:
+                    print 'unable to set the new text'
+        except:
+            print 'error changing the line of text'
 
     def close( self ):
         # close the file
