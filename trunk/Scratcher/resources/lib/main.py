@@ -8,6 +8,7 @@ import common
 class ScriptWindow( common.gui.BaseScriptWindow ):
     def __init__( self, xmlFile, resourcePath ):
         self.file = None
+        self.file_write_access = False
         self.changed_lines = {
             # line_num: new_text,
         }
@@ -28,32 +29,48 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
 
     def change_line( self ):
-        try:
-            # find the current id and ListItem object
-            id = self.getCurrentListPosition()
-            item = self.getListItem( id )
+        if not self.check_access():
+            # file is read-only, don't allow line changes
+            dialog = xbmcgui.Dialog()
+            dialog.ok(
+                os.path.split( self.file.name )[-1],
+                common.localize( 1002 ),
+                common.localize( 1003 )
+            )
+        else:
             try:
-                # get text from the ListItem
-                original_text = item.getLabel()
-            except:
-                # text missing, default to empty string
-                original_text = str()
-            # show keyboard for user to change the text
-            new_text = common.gui.dialog.keyboard( original_text, 'Edit this text:' )
-            if new_text is not original_text:
+                # find the current id and ListItem object
+                id = self.getCurrentListPosition()
+                item = self.getListItem( id )
                 try:
-                    item.setLabel( new_text )
-                    self.changed_lines[id] = new_text
+                    # get text from the ListItem
+                    original_text = item.getLabel()
                 except:
-                    print 'unable to set the new text'
-        except:
-            print 'error changing the line of text'
+                    # text missing, default to empty string
+                    original_text = str()
+                # show keyboard for user to change the text
+                new_text = common.gui.dialog.keyboard( original_text, common.localize( 1004 ) )
+                if new_text is not original_text:
+                    try:
+                        item.setLabel( new_text )
+                        self.changed_lines[id] = new_text
+                    except:
+                        print 'unable to set the new text'
+            except:
+                print 'error changing the line of text'
 
     def close( self ):
         # close the file
         self.file.close()
         # close the window
         common.gui.BaseScriptWindow.close( self )
+
+    def check_access( self ):
+        # FIXME: why is this always true?
+        result = os.access( self.file.name, os.W_OK )
+        if result: print 'you have access'
+        else: print 'no access'
+        return result
 
     def open_new_file( self ):
         # get a path to the file 
