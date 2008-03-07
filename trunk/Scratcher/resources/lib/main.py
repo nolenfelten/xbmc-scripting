@@ -15,6 +15,9 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             1: { # LABEL: script name
                 'label': common.scriptname,
             },
+            50: { # LIST: text area
+                'onClick': self.change_line,
+            },
             101: { # BUTTON: open
                 'onClick': self.open_new_file,
             },
@@ -23,6 +26,15 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             },
         }
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
+
+    def change_line( self ):
+        print 'change'
+
+    def close( self ):
+        # close the file
+        self.file.close()
+        # close the window
+        common.gui.BaseScriptWindow.close( self )
 
     def open_new_file( self ):
         # get a path to the file 
@@ -48,12 +60,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 line_number = line_number + 1
                 item = xbmcgui.ListItem( line, str( line_number ) )
                 self.addItem( item )
-
-    def close( self ):
-        # close the file
-        self.file.close()
-        # close the window
-        common.gui.BaseScriptWindow.close( self )
 
 # construct the xml filename
 xmlFile = 'script-%s-window.xml' % common.scriptname.replace( ' ', '_' )
