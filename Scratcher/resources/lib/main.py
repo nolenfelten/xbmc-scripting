@@ -21,7 +21,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
     def open_new_file( self ):
         # get a path to the file 
-        filepath = common.gui.show_browse_dialog( heading = common.localize( 1001 ) )
+        filepath = common.gui.dialog.browse( heading = common.localize( 1001 ) )
         if len( filepath ):
             filehandle = open( filepath, 'r' )
             # clear the list before adding new items
