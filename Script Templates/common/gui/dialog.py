@@ -12,10 +12,10 @@ def keyboard( default = '', heading = '', hidden = False ):
 def numeric( default = '', heading = '', dlg_type = 3 ):
     '''
     Shows a numeric dialog and returns a value
-        - 0 : ShowAndGetNumber		(default format: #)
-        - 1 : ShowAndGetDate			(default format: DD/MM/YYYY)
-        - 2 : ShowAndGetTime			(default format: HH:MM)
-        - 3 : ShowAndGetIPAddress	(default format: #.#.#.#)
+        - 0 : ShowAndGetNumber        (default format: #)
+        - 1 : ShowAndGetDate          (default format: DD/MM/YYYY)
+        - 2 : ShowAndGetTime          (default format: HH:MM)
+        - 3 : ShowAndGetIPAddress     (default format: #.#.#.#)
     '''
     dialog = xbmcgui.Dialog()
     value = dialog.numeric( type, heading, default )
