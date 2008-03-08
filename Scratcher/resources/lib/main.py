@@ -29,7 +29,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
 
     def change_line( self ):
-        if not self.check_access():
+        if not self.check_access( self.file.name ):
             # file is read-only, don't allow line changes
             dialog = xbmcgui.Dialog()
             dialog.ok(
@@ -65,12 +65,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         # close the window
         common.gui.BaseScriptWindow.close( self )
 
-    def check_access( self ):
-        # FIXME: why is this always true?
-        result = os.access( self.file.name, os.W_OK )
-        if result: print 'you have access'
-        else: print 'no access'
-        return result
+    def check_access( self, filepath ):
+        return os.access( filepath, os.W_OK )
 
     def open_new_file( self ):
         # get a path to the file 
