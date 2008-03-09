@@ -6,7 +6,7 @@ import xbmcgui
 import common
 
 class ScriptWindow( common.gui.BaseScriptWindow ):
-    def __init__( self, xmlFile, resourcePath ):
+    def __init__( self ):
         self.file = None
         self.file_write_access = False
         self.changed_lines = {
@@ -26,7 +26,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 'onClick': None,
             },
         }
-        common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
+        common.gui.BaseScriptWindow.__init__( self )
 
     def change_line( self ):
         if not self.check_access( self.file.name ):
@@ -40,8 +40,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         else:
             try:
                 # find the current id and ListItem object
-                id = self.getCurrentListPosition()
-                item = self.getListItem( id )
+                id = self.window.getCurrentListPosition()
+                item = self.window.getListItem( id )
                 try:
                     # get text from the ListItem
                     original_text = item.getLabel()
@@ -79,7 +79,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             # TODO: if not blank already, ask to save changes to last file
             self.changed_lines = dict()
             # clear the list before adding new items
-            self.clearList()
+            self.window.clearList()
             # function to beautify each line of text for display
             def line_cleanup( line ):
                 end_of_line_chars = [ '\r', '\n' ]
@@ -91,13 +91,11 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 line = line_cleanup( line )
                 line_number = line_number + 1
                 item = xbmcgui.ListItem( line, str( line_number ) )
-                self.addItem( item )
+                self.window.addItem( item )
 
-# construct the xml filename
-xmlFile = 'script-%s-window.xml' % common.scriptname.replace( ' ', '_' )
 # init the window instance
-window = ScriptWindow( xmlFile, common.resource_path )
+window = ScriptWindow()
 # browse for a file to open
 window.open_new_file()
 # turn over control to the window
-window.doModal()
+window.show()
