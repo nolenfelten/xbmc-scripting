@@ -6,6 +6,8 @@
 
     <!-- User Messages -->
     <string id="100">Exception for</string>
+    <string id="101">File</string>
+    <string id="102">Embedded</string>
 
     <!-- Settings labels -->
     <string id="201">Scraper</string>

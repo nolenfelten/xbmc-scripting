@@ -17,7 +17,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.5", )
+SETTINGS_VERSIONS = ( "1.5.5", "1.5.6", )
 # base paths
 BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
 BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
@@ -37,7 +37,7 @@ ACTION_EXIT_SCRIPT = ( 10, )
 ACTION_CANCEL_DIALOG = ACTION_EXIT_SCRIPT + ( 9, )
 ACTION_GET_EXCEPTION = ( 0, )
 ACTION_SETTINGS_MENU = ( 117, )
-SHOW_CREDITS = ( 122, )
+ACTION_SHOW_CREDITS = ( 122, )
 ACTION_MOVEMENT_UP = ( 3, )
 ACTION_MOVEMENT_DOWN = ( 4, )
 # Log status codes
@@ -87,7 +87,7 @@ def LOG( status, format, *args ):
 
 def show_credits():
     """ shows a credit window """
-    import credits
+    import resources.lib.credits as credits
     c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
     c.doModal()
     del c
@@ -164,5 +164,5 @@ class Settings:
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (ver: %s) Settings::save_settings [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
