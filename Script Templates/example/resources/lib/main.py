@@ -4,7 +4,7 @@ import os
 import common
 
 class ExampleScriptWindow( common.gui.BaseScriptWindow ):
-    def __init__( self, xmlFile, resourcePath ):
+    def __init__( self ):
         self.controls_map = {
             # LABEL: xbox media center
             1: None,
@@ -17,8 +17,7 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
                 'onClick': self.close,
             },
         }
-        common.gui.BaseScriptWindow.__init__( self, xmlFile, resourcePath )
+        common.gui.BaseScriptWindow.__init__( self )
 
-xmlFile = 'script-%s-window.xml' % common.scriptname.replace( ' ', '_' )
-window = ExampleScriptWindow( xmlFile, common.resource_path )
-window.doModal()
+window = ExampleScriptWindow()
+window.show()
