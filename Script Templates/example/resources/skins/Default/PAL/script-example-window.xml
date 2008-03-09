@@ -7,23 +7,25 @@
         <posy>0</posy>
     </coordinates>
 	<controls>
-		<control type="label" id="1">
+		<control type="label">
 			<description>xbox media center</description>
 			<posx>0</posx>
 			<posy>0</posy>
+            <label>9</label>
 		</control>
-		<control type="label" id="2">
+		<control type="label" id="1">
 			<description>Script Name</description>
 			<posx>0</posx>
 			<posy>20</posy>
 		</control>
-		<control type="group">
+		<control type="grouplist">
 			<posx>0</posx>
 			<posy>100</posy>
             <control type="button" id="101">
+                <description>Popup Menu</description>
+            </control>
+            <control type="button" id="110">
                 <description>Quit</description>
-                <posx>0</posx>
-                <posy>0</posy>
             </control>
         </control>
     </controls>
