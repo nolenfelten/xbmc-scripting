@@ -111,7 +111,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def get_lyrics_from_file( self, artist, song ):
         try:
-            xbmc.sleep( 10 )
+            xbmc.sleep( 20 )
             if ( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ) ):
                 return unicode( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ), "utf-8" ), True, False
             self.song_path = make_legal_filepath( unicode( os.path.join( self.settings[ "lyrics_path" ], artist.replace( "\\", "_" ).replace( "/", "_" ), song.replace( "\\", "_" ).replace( "/", "_" ) + ( "", ".txt", )[ self.settings[ "use_extension" ] ] ), "utf-8" ), self.settings[ "compatible" ], self.settings[ "use_extension" ] )
