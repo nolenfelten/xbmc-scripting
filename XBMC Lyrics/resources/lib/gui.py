@@ -18,10 +18,12 @@ import xbmc
 import xbmcgui
 import threading
 
-from utilities import *
+from resources.lib.utilities import *
 
-try: current_dlg_id = xbmcgui.getCurrentWindowDialogId()
-except: current_dlg_id = 0
+try:
+    current_dlg_id = xbmcgui.getCurrentWindowDialogId()
+except:
+    current_dlg_id = 0
 current_win_id = xbmcgui.getCurrentWindowId()
 
 _ = sys.modules[ "__main__" ].__language__
@@ -32,7 +34,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
-        pass
+        xbmcgui.WindowXMLDialog.__init__( self )
 
     def onInit( self ):
         self.setup_all()#Start( function=self.setup_all ).start()
@@ -49,10 +51,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.settings = Settings().get_settings()
         
     def get_scraper( self ):
-        sys.path.append( os.path.join( BASE_RESOURCE_PATH, "scrapers", self.settings[ "scraper" ] ) )
-        import lyricsScraper
+        exec "import resources.scrapers.%s.lyricsScraper as lyricsScraper" % ( self.settings[ "scraper" ], )
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
-        self.getControl( 200 ).setLabel( lyricsScraper.__title__ )
+        self.scraper_title = lyricsScraper.__title__
 
     def setup_variables( self ):
         self.artist = None
@@ -73,21 +74,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 110 ).setVisible( controlId == 110 )
         self.getControl( 120 ).setVisible( controlId == 120 )
         page_control = ( controlId == 100 )
-        try: self.setFocus( self.getControl( controlId + page_control ) )
-        except: self.setFocus( self.getControl( controlId ) )
+        try:
+            self.setFocus( self.getControl( controlId + page_control ) )
+        except:
+            self.setFocus( self.getControl( controlId ) )
 
     def get_lyrics(self, artist, song):
+        self.getControl( 200 ).setLabel( "" )
         self.menu_items = []
         self.reset_controls()
         self.allow_exception = False
         current_song = self.song
-        lyrics = self.get_lyrics_from_file( artist, song )
+        lyrics, kind, save = self.get_lyrics_from_file( artist, song )
         if ( lyrics is not None ):
             if ( current_song == self.song ):
-                self.show_lyrics( lyrics )
+                self.show_lyrics( lyrics, save )
                 self.getControl( 200 ).setEnabled( False )
+                self.getControl( 200 ).setLabel( _( 101 + kind ) )
         else:
             self.getControl( 200 ).setEnabled( True )
+            self.getControl( 200 ).setLabel( self.scraper_title )
             lyrics = self.LyricsScraper.get_lyrics( artist, song )
             if ( current_song == self.song ):
                 if ( isinstance( lyrics, basestring ) ):
@@ -95,6 +101,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 elif ( isinstance( lyrics, list ) and lyrics ):
                     self.show_choices( lyrics )
                 else:
+                    self.getControl( 200 ).setEnabled( False )
                     self.show_lyrics( _( 631 ) )
                     self.allow_exception = True
 
@@ -104,27 +111,35 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def get_lyrics_from_file( self, artist, song ):
         try:
+            xbmc.sleep( 10 )
             if ( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ) ):
-                return unicode( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ), "utf-8" )
+                return unicode( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ), "utf-8" ), True, False
             self.song_path = make_legal_filepath( unicode( os.path.join( self.settings[ "lyrics_path" ], artist.replace( "\\", "_" ).replace( "/", "_" ), song.replace( "\\", "_" ).replace( "/", "_" ) + ( "", ".txt", )[ self.settings[ "use_extension" ] ] ), "utf-8" ), self.settings[ "compatible" ], self.settings[ "use_extension" ] )
-            #self.song_path = xbmc.makeLegalFilename( os.path.join( self.settings[ "lyrics_path" ], artist, song + ".txt".encode( "utf-8" ) ) )
             lyrics_file = open( self.song_path, "r" )
-            lyrics = lyrics_file.read()#unicode( , "utf-8", "ignore" )
+            lyrics_text = lyrics_file.read()
             lyrics_file.close()
-            return lyrics
+            lyrics = eval( lyrics_text ).encode( "utf-8" )
+            return lyrics, False, False
+        except IOError:
+            return None, False, False
+        # TODO: Remove this when support for old lyrics file format ends
+        except ( SyntaxError, NameError, ):
+            return lyrics_text, False, True
         except:
-            return None
+            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            return None, False, False
 
     def save_lyrics_to_file( self, lyrics ):
         try:
             if ( not os.path.isdir( os.path.dirname( self.song_path ) ) ):
                 os.makedirs( os.path.dirname( self.song_path ) )
             lyrics_file = open( self.song_path, "w" )
-            lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
+            lyrics_file.write( repr( lyrics ) )
+            #lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
             return True
         except:
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::save_lyrics_to_file [%s]", __scriptname__, __svn_revision__, sys.exc_info()[ 1 ], )
+            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
 
     def show_lyrics( self, lyrics, save=False ):
@@ -160,7 +175,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 120 ).reset()
         
     def change_settings( self ):
-        import settings
+        import resources.lib.settings as settings
         settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
         settings.doModal()
         ok = False
@@ -236,7 +251,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     song = os.path.splitext( basename )[ 0 ].split( " ", 1 )[ 1 ]
         except:
             # invalid format selected
-            LOG( LOG_ERROR, "%s (rev: %s) GUI::get_artist_from_filename [Invalid file format]", __scriptname__, __svn_revision__, )
+            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         return artist, song
 
     # getDummyTimer() and self.Timer are currently used for the Player() subclass so when an onPlayback* event occurs, 

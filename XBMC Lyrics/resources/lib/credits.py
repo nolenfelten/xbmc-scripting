@@ -7,7 +7,7 @@ Nuka1195
 import sys
 import xbmcgui
 
-from utilities import *
+from resources.lib.utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -18,14 +18,14 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
-        xbmcgui.lock()
+        xbmcgui.WindowXMLDialog.__init__( self )
 
     def onInit( self ):
         self._show_credits()
-        xbmcgui.unlock()
 
     def _show_credits( self ):
         try:
+            xbmcgui.lock()
             #team credits
             self.getControl( 20 ).setLabel( __scriptname__ )
             self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
@@ -51,6 +51,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 903 ).setLabel( _( 903 ) )
         except:
             pass
+        xbmcgui.unlock()
 
     def _close_dialog( self ):
         self.close()

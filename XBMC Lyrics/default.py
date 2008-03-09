@@ -10,13 +10,12 @@ __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Lyrics"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.5.5"
+__version__ = "1.5.6"
 __svn_revision__ = 0
 
 # Shared resources 
 BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
-sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-import language
+import resources.lib.language as language
 __language__ = language.Language().localized
 
 # Main team credits 
@@ -39,10 +38,10 @@ __add_credits_r3__ = __language__( 2 )#"Translators name"
 # Start the main gui or settings gui 
 if ( __name__ == "__main__" ):
     if ( xbmc.Player().isPlayingAudio() ):
-        import gui
+        import resources.lib.gui as gui
         window = "main"
     else:
-        import settings as gui
+        import resources.lib.settings as gui
         window = "settings"
     ui = gui.GUI( "script-%s-%s.xml" % ( __scriptname__.replace( " ", "_" ), window, ), BASE_RESOURCE_PATH, "Default" )
     ui.doModal()

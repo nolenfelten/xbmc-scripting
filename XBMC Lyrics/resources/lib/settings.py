@@ -9,7 +9,7 @@ import os
 import xbmc
 import xbmcgui
 
-from utilities import *
+from resources.lib.utilities import *
 
 _ = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -20,7 +20,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
-        pass
+        xbmcgui.WindowXMLDialog.__init__( self )
 
     def onInit( self ):
         self._get_settings()
@@ -206,7 +206,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     
     def _update_script( self ):
         """ checks for updates to the script """
-        import update
+        import resources.lib.update as update
         updt = update.Update()
         del updt
 
@@ -220,7 +220,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._save_settings()
         else:
             self._close_dialog()
-        import playlist
+        import resources.lib.playlist as playlist
         playlist = playlist.create_playlist( ( self.settings[ "music_path" ], ), self.settings[ "shuffle" ] )
         xbmc.Player().play( playlist )
         xbmc.executebuiltin( "RunScript(%s)" % os.path.join( os.getcwd().replace( ";", "" ), "default.py" ) )
