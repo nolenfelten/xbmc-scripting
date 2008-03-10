@@ -13,15 +13,17 @@ __author__ = "Nuka1195/EnderW/Killarny"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Changelog"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.1"
+__version__ = "1.1.1"
 
 resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 
 
 class GUI( xbmcgui.WindowXML ):
+    ACTION_EXIT_SCRIPT = ( 9, 10, )
+
     def __init__( self, *args, **kwargs ):
+        xbmcgui.WindowXML.__init__( self )
         base_url = "http://appliedcuriosity.cc/xbox/changelog.txt"
-        self.exit_script = ( 247, 275, 61467, )
         self._fetch_changelog( base_url )
 
     def onInit( self ):
@@ -48,7 +50,7 @@ class GUI( xbmcgui.WindowXML ):
         pass
 
     def onAction( self, action ):
-        if ( action.getButtonCode() in self.exit_script ):
+        if ( action in self.ACTION_EXIT_SCRIPT ):
             self.close()
 
 if ( __name__ == "__main__" ):
