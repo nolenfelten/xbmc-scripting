@@ -90,7 +90,7 @@ The required mode needs to be edited into autoexec.py executebuiltin.  The scrip
 
 Known Problems:
 ---------------
-XBMC free RAM of less than 30mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution.
+XBMC free RAM of less than ~ 32mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution.
 
 If you're stuck, post in the appropiate forum at http://www.xboxmediacenter.com/forum/
 

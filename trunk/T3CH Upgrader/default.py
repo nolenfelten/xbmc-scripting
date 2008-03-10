@@ -31,7 +31,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '19-02-2008'
+__date__ = '09-03-2008'
 __version__ = "1.5"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -108,7 +108,7 @@ class Main:
 		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402):	# check for update ?
 #			if self.isSilent:
 #				showNotification(__language__(0), __language__(619), 3)
-			scriptUpdated = self._update_script(self.isSilent)
+			scriptUpdated = self._update_script(True)
 
 		if not scriptUpdated:
 			url = self._get_latest_version()										# discover latest build
@@ -517,7 +517,6 @@ class Main:
 			
 		drive = os.path.splitdrive( self.settings[self.SETTING_UNRAR_PATH] )[0][0]	# eg C from (C:, path)
 		drive_freespace_info = xbmc.getInfoLabel('System.Freespace(%s)' % drive)
-		xbmc.output( "drive_freespace_info=%s" % drive_freespace_info)
 
 		# convert info to MB
 		drive_freespaceMb = int(searchRegEx(drive_freespace_info, '(\d+)'))		# extract space number
@@ -525,14 +524,14 @@ class Main:
 
 		if drive_freespaceMb < driveSpaceRequiredMb:
 			msg = __language__(530)  % (drive, drive_freespaceMb, driveSpaceRequiredMb)
-			dialogOK(__language__(0), __language__(316), msg, isSilent=self.isSilent, time=5)
+			dialogOK(__language__(0), __language__(316), msg, isSilent=False, time=5)
 		else:
-			# check free mem, warn if low, but can try installation
+			# check free mem, warn if low, but can continue if OK'd
 			freememMb = xbmc.getFreeMem()
-			freeMemRecMb = 30
-			xbmc.output( "Freemem=%sMb  Recommended=%sMb" % ( freememMb, freeMemRecMb ) )
+			freeMemRecMb = 32		# above 40mb is a much better figure ! eg. 480p 16:9 == 42mb
+			xbmc.output( "Freemem=%sMB  Recommended=%sMB" % ( freememMb, freeMemRecMb ) )
 			if freememMb < freeMemRecMb:
-				msg = __language__(531) % ( freememMb, freeMemRecMb )
+				msg = __language__( 531 ) % (freememMb, freeMemRecMb)
 				success = xbmcgui.Dialog().yesno( __language__( 0 ), __language__(317), msg, __language__(532) )
 			else:
 				success = True
@@ -715,7 +714,7 @@ class Main:
 
 	######################################################################################
 	def _extract( self, file_name, extract_path ):
-		xbmc.output( "> _extract() file_name=" + file_name + " extract_path=" + extract_path )
+		xbmc.output( "> _extract() file_name=%s extract_path=%s"  % (file_name, extract_path))
 		success = False
 
 		# check extract destination folder doesnt exist
