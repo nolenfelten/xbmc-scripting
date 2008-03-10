@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-    <string id="101">Open</string>
-    <string id="102">Save</string>
-    <string id="1001">Open a file to edit:</string>
-    <string id="1002">You can not make changes to this file,</string>
-    <string id="1003">because you do not have write access.</string>
-    <string id="1004">Edit this text:</string>
-</strings>

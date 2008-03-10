@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-    <string id="101">Öppna</string>
-    <string id="102">Spara</string>
-    <string id="1001">Öppna en fil att redigera:</string>
-    <string id="1002">Du kan inte göra ändringar i denna fil,</string>
-    <string id="1003">för du har ingen behörighet att skriva till den.</string>
-    <string id="1004">Ändra denna text:</string>
-</strings>
