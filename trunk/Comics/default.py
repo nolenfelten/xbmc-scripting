@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "Comics"
 __version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '04-03-2008'
+__date__ = '10-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -378,7 +378,6 @@ class GUI(xbmcgui.WindowXML):
 			if code in MOVEMENT_SCROLL_UP + \
 				   (PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT) + \
 				   (ACTION_RIGHT_STICK_DOWN, ACTION_RIGHT_STICK_LEFT):
-				print "zoom down"
 				value *= -1		# make neg
 
 			imageW += value
