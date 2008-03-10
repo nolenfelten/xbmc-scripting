@@ -3,6 +3,15 @@ import os
 # script modules
 import common
 
+class ExampleScriptDialog( common.gui.BaseScriptDialog ):
+    def __init__( self ):
+        self.controls_map = {
+            110: { # BUTTON: close
+                'onClick': self.close,
+            },
+        }
+        common.gui.BaseScriptDialog.__init__( self )
+
 class ExampleScriptWindow( common.gui.BaseScriptWindow ):
     def __init__( self ):
         self.controls_map = {
@@ -18,7 +27,20 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
         }
         common.gui.BaseScriptWindow.__init__( self )
     def popup( self ):
-        print 'popup goes here'
+        items = {
+            1: {
+                'label': 'item 1',
+                'onClick': self.test,
+            },
+            2: {
+                'label': 'item 2',
+                'onClick': self.test,
+            },
+        }
+        popupmenu = common.gui.dialog.popupmenu( items )
+        popupmenu.show()
+    def test( self ):
+        print 'balha'
 
 window = ExampleScriptWindow()
 window.show()
