@@ -1,5 +1,12 @@
+# official python modules
+import sys
 # official xbmc modules
 import xbmc, xbmcgui
+# script modules
+import base, dialog
+
+# script variables
+common = sys.modules['common']
 
 def keyboard( default = '', heading = '', hidden = False ):
     '''Shows a keyboard and returns a value'''
@@ -32,3 +39,21 @@ def browse( default = '', heading = '', dlg_type = 1, shares = 'files', mask = '
     dialog = xbmcgui.Dialog()
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
+
+class popupmenu:
+    '''
+        Shows a popup dialog with the specified list items automatically added.
+    '''
+    def __init__( self, menuItems, xmlFile = '', resourcePath = '', defaultName = 'Default', forceFallback = False ):
+        if not len( xmlFile ):
+            xmlFile = 'script-%s-popupmenu.xml' % common.scriptname.replace( ' ', '_' )
+        if not len( resourcePath ):
+            resourcePath = common.resource_path
+        self.controls_map = menuItems
+        self.window = base.__internal_base_classPopupMenu__( xmlFile, resourcePath, defaultName, forceFallback, parentClass = self )
+
+    def close( self ):
+        self.window.close()
+
+    def show( self ):
+        self.window.doModal()
