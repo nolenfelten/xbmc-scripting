@@ -19,21 +19,31 @@
 			<description>xbox media center</description>
 			<posx>0</posx>
 			<posy>0</posy>
+            <textcolor>ff000000</textcolor>
             <label>9</label>
 		</control>
 		<control type="label" id="1">
 			<description>Script Name</description>
 			<posx>0</posx>
 			<posy>20</posy>
+            <textcolor>ff000000</textcolor>
 		</control>
 		<control type="grouplist">
 			<posx>0</posx>
 			<posy>100</posy>
             <control type="button" id="101">
                 <description>Popup Menu</description>
+                <texturenofocus>script-button.png</texturenofocus>
+                <texturefocus>script-button-focus.png</texturefocus>
+                <pulseonselect>false</pulseonselect>
+                <textcolor>ff000000</textcolor>
             </control>
             <control type="button" id="110">
                 <description>Quit</description>
+                <texturenofocus>script-button.png</texturenofocus>
+                <texturefocus>script-button-focus.png</texturefocus>
+                <pulseonselect>false</pulseonselect>
+                <textcolor>ff000000</textcolor>
             </control>
         </control>
     </controls>

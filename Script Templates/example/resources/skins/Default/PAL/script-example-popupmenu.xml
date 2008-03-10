@@ -3,22 +3,22 @@
     <defaultcontrol always="false">50</defaultcontrol>
     <coordinates>
         <system>1</system>
-        <posx>0</posx>
-        <posy>0</posy>
+        <posx>300</posx>
+        <posy>250</posy>
     </coordinates>
 	<controls>
         <control type="image">
             <posx>0</posx>
             <posy>0</posy>
-            <width>250</width>
+            <width>150</width>
             <height>5</height>
             <texture>script-popupmenu-top.png</texture>
         </control>
 		<control type="list" id="50">
 			<posx>0</posx>
-			<posy>0</posy>
-            <width>250</width>
-            <height>300</height>
+			<posy>5</posy>
+            <width>150</width>
+            <height>200</height>
 			<onleft>50</onleft>
 			<onright>50</onright>
 			<onup>50</onup>
@@ -27,14 +27,14 @@
                 <control type="image">
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>250</width>
+                    <width>150</width>
                     <height>20</height>
                     <texture>script-popupmenu-item.png</texture>
                 </control>
                 <control type="label">
                     <posx>5</posx>
                     <posy>0</posy>
-                    <width>240</width>
+                    <width>140</width>
                     <info>ListItem.Label</info>
                 </control>
             </itemlayout>
@@ -42,22 +42,22 @@
                 <control type="image">
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>250</width>
+                    <width>150</width>
                     <height>20</height>
                     <texture>script-popupmenu-item-focus.png</texture>
                 </control>
                 <control type="label">
                     <posx>5</posx>
                     <posy>0</posy>
-                    <width>240</width>
+                    <width>140</width>
                     <info>ListItem.Label</info>
                 </control>
             </focusedlayout>
         </control>
         <control type="image">
             <posx>0</posx>
-            <posy>300</posy>
-            <width>250</width>
+            <posy>200</posy>
+            <width>150</width>
             <height>5</height>
             <texture>script-popupmenu-bottom.png</texture>
         </control>
