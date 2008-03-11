@@ -2,6 +2,8 @@
 <strings>
     <string id="101">Öppna</string>
     <string id="102">Spara</string>
+    <string id="501">Redigera</string>
+    <string id="502">Ta bort</string>
     <string id="1001">Öppna en fil att redigera:</string>
     <string id="1002">Du kan inte göra ändringar i denna fil,</string>
     <string id="1003">för du har ingen behörighet att skriva till den.</string>
