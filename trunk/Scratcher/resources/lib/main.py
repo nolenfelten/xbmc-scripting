@@ -12,6 +12,9 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         self.changed_lines = {
             # line_num: new_text,
         }
+        self.deleted_lines = {
+            # line_num: old_text,
+        }
         self.controls_map = {
             1: { # LABEL: script name
                 'label': common.scriptname,
@@ -48,15 +51,44 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 except:
                     # text missing, default to empty string
                     original_text = str()
-                # show keyboard for user to change the text
-                new_text = common.gui.dialog.keyboard( original_text, common.localize( 1004 ) )
-                if new_text is not original_text:
+                def edit():
+                    new_text = None
+                    # show keyboard for user to change the text
+                    new_text = common.gui.dialog.keyboard( original_text, common.localize( 1004 ) )
+                    # perform the changes, assuming that the new text is not blank
+                    #   or the same as the old text
+                    if new_text and new_text is not original_text:
+                        try:
+                            item.setThumbnailImage( 'script-line-changed.png' )
+                            item.setLabel( new_text )
+                            self.changed_lines[id] = new_text
+                        except:
+                            print 'unable to set the new text'
+                def delete():
+                    # flag the line for removal
                     try:
-                        item.setLabel( new_text )
-                        self.changed_lines[id] = new_text
+                        item.setThumbnailImage( 'script-line-deleted.png' )
+                        self.deleted_lines[id] = original_text
                     except:
-                        print 'unable to set the new text'
+                        print 'unable to delete the line'
+                # menu items
+                items = {
+                    1: {
+                        'label': 'Edit',
+                        'thumb': 'script-line-changed.png',
+                        'onClick': edit,
+                    },
+                    2: {
+                        'label': 'Delete',
+                        'thumb': 'script-line-deleted.png',
+                        'onClick': delete,
+                    },
+                }
+                # show the menu
+                menu = common.gui.dialog.popupmenu( items )
             except:
+                import traceback
+                traceback.print_exc()
                 print 'error changing the line of text'
 
     def close( self ):
