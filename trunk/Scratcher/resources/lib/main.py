@@ -8,12 +8,13 @@ import common
 class ScriptWindow( common.gui.BaseScriptWindow ):
     def __init__( self ):
         self.file = None
+        self.eol = str() # end of line string used by file
         self.file_write_access = False
         self.changed_lines = {
-            # line_num: new_text,
+            # line_num: ( original_text, new_text ),
         }
         self.deleted_lines = {
-            # line_num: old_text,
+            # line_num: original_text,
         }
         self.controls_map = {
             1: { # LABEL: script name
@@ -61,7 +62,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                         try:
                             item.setThumbnailImage( 'script-line-changed.png' )
                             item.setLabel( new_text )
-                            self.changed_lines[id] = new_text
+                            self.changed_lines[id] = ( original_text, new_text )
                         except:
                             print 'unable to set the new text'
                 def delete():
@@ -71,19 +72,39 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                         self.deleted_lines[id] = original_text
                     except:
                         print 'unable to delete the line'
+                def restore():
+                    # unflag the line for removal or editing
+                    if id in self.deleted_lines.keys():
+                        try:
+                            item.setThumbnailImage( '' )
+                            item.setLabel( self.deleted_lines[id] )
+                            self.deleted_lines.pop( id )
+                        except: pass
+                    if id in self.changed_lines.keys():
+                        try:
+                            item.setThumbnailImage( '' )
+                            item.setLabel( self.changed_lines[id][0] )
+                            self.changed_lines.pop( id )
+                        except: pass
                 # menu items
-                items = {
-                    1: {
-                        'label': common.localize( 501 ), # Edit
-                        'thumb': 'script-line-changed.png',
-                        'onClick': edit,
-                    },
-                    2: {
+                items = dict()
+                if id in self.deleted_lines.keys() or id in self.changed_lines.keys():
+                    items[1] = {
+                        'label': 'Restore',
+                        'thumb': None,
+                        'onClick': restore,
+                    }
+                items[2] = {
+                    'label': common.localize( 501 ), # Edit
+                    'thumb': 'script-line-changed.png',
+                    'onClick': edit,
+                }
+                if id not in self.deleted_lines.keys():
+                    items[2] = {
                         'label': common.localize( 502 ), # Delete
                         'thumb': 'script-line-deleted.png',
                         'onClick': delete,
-                    },
-                }
+                    }
                 # show the menu
                 menu = common.gui.dialog.popupmenu( items )
             except:
@@ -104,26 +125,79 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         # get a path to the file 
         filepath = common.gui.dialog.browse( heading = common.localize( 1001 ) )
         if len( filepath ):
-            # open the file in read only mode
-            # TODO: check for write access here?
-            self.file = open( filepath, 'r' )
-            # ensure that the changed_lines dictionary is blank
-            # TODO: if not blank already, ask to save changes to last file
-            self.changed_lines = dict()
-            # clear the list before adding new items
-            self.window.clearList()
-            # function to beautify each line of text for display
-            def line_cleanup( line ):
+            try:
+                # open the file in read only mode
+                # TODO: check for write access here?
+                self.file = open( filepath, 'rb' )
+                # determine file EOL character string
                 end_of_line_chars = [ '\r', '\n' ]
-                for char in end_of_line_chars: line = line.replace( char, '' )
-                return line
-            # add a new item to the list for each line of text in the file
-            line_number = 0
-            for line in self.file:
-                line = line_cleanup( line )
-                line_number = line_number + 1
-                item = xbmcgui.ListItem( line, str( line_number ) )
-                self.window.addItem( item )
+                # read single line out of file
+                line_one = self.file.readline()
+                # reset the seek position for later reads
+                self.file.seek(0)
+                # reset self.eol
+                self.eol = str()
+                # look at last two characters in the line
+                if len( line_one ) < 2:
+                    eol = line_one
+                else:
+                    eol = line_one[-2:]
+                for char in eol:
+                    # we don't want any characters that aren't actually EOL to be
+                    #   considered as such
+                    if char in end_of_line_chars:
+                        self.eol = self.eol + char
+                # readline() splits on '\n', so mac files won't split
+                #   note that the code above will not always result in self.eol
+                #   being an empty string, for example, if mac file ends in 
+                #   multiple empty lines, self.eol would be '\r\r' and valid to
+                #   the above code - need to check for that here too
+                file_len = int( os.stat( self.file.name ).st_size )
+                # if the file ended without a newline, see if this is mac file
+                if len( line_one ) == file_len:
+                    # if a mac file ends in multiple newlines, set self.eol 
+                    #   to only one EOL character
+                    if len( self.eol ) > 1:
+                        if self.eol[-1] == '\r':
+                            self.eol = '\r'
+                    # file had no EOL at the end of line_one, so check the
+                    #   string to be sure that there aren't any mac EOL chars
+                    if not len( self.eol ):
+                        if line_one.find( '\r' ) > -1:
+                            self.eol = '\r'
+                # still no eol encountered in this file, so set to default
+                if not len( self.eol ):
+                    self.eol = os.linesep
+                print 'eol:', repr( self.eol )
+                # ensure that the changed_lines dictionary is blank
+                # TODO: if not blank already, ask to save changes to last file
+                self.changed_lines = dict()
+                # clear the list before adding new items
+                self.window.clearList()
+                # add a new item to the list for each line of text in the file
+                line_number = 0
+                def line_cleanup( line ):
+                    # strip all EOL characters out of the line for display
+                    for char in self.eol:
+                        line = line.replace( char, '' )
+                    return line
+                if self.eol == '\r':
+                    # mac line endings aren't recognized by readline()
+                    #   but, don't do it this way unless it's required, 
+                    #   because it is slower than using the for line in 
+                    #   self.file method
+                    lines = self.file.read( file_len ).split( self.eol )
+                else:
+                    lines = self.file
+                # cleanup and add the lines as ListItems
+                for line in lines:
+                    line = line_cleanup( line )
+                    line_number = line_number + 1
+                    item = xbmcgui.ListItem( line, str( line_number ) )
+                    self.window.addItem( item )
+            except:
+                import traceback
+                traceback.print_exc()
 
 # init the window instance
 window = ScriptWindow()
