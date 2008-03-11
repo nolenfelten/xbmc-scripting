@@ -30,16 +30,18 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
         items = {
             1: {
                 'label': 'item 1',
-                'onClick': self.test,
+                'onClick': self.item1,
             },
             2: {
                 'label': 'item 2',
-                'onClick': self.test,
+                'onClick': self.item2,
             },
         }
         popupmenu = common.gui.dialog.popupmenu( items )
-    def test( self ):
-        print 'balha'
+    def item1( self ):
+        print 'item 1 selected'
+    def item2( self ):
+        print 'item 2 selected'
 
 window = ExampleScriptWindow()
 window.show()
