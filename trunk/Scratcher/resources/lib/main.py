@@ -74,12 +74,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 # menu items
                 items = {
                     1: {
-                        'label': 'Edit',
+                        'label': common.localize( 501 ), # Edit
                         'thumb': 'script-line-changed.png',
                         'onClick': edit,
                     },
                     2: {
-                        'label': 'Delete',
+                        'label': common.localize( 502 ), # Delete
                         'thumb': 'script-line-deleted.png',
                         'onClick': delete,
                     },
