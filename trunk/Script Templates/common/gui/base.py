@@ -132,6 +132,15 @@ class __internal_base_classPopupMenu__( xbmcgui.WindowXMLDialog ):
         '''
             adds menu items to the window list according to values provided
         '''
+        # get the controls from the skin xml
+        background = self.getControl(999)
+        background_top = self.getControl(997)
+        background_bottom = self.getControl(998)
+        popuplist = self.getControl(1000)
+        # determine center screen coords
+        center_screen_x = self.getWidth() / 2
+        center_screen_y = self.getHeight() / 2
+        # add the menu items
         for id, callbacks in self.parent_class.controls_map.iteritems():
             try:
                 try: # get the label, or blank string
@@ -150,21 +159,62 @@ class __internal_base_classPopupMenu__( xbmcgui.WindowXMLDialog ):
                 item = xbmcgui.ListItem( label, label2, icon, thumb )
                 # add it to the window list
                 self.addItem( item )
+                # add it to the special ControlList
+                popuplist.addItem( item )
             except:
                 # something horrible occurred
                 import traceback
                 print '-' * 79
                 print 'error setting label for', id
                 traceback.print_exc()
+        # determine height in screen pixels of list
+        # height of each item multiplied by number of items
+        list_height = popuplist.getHeight() * self.getListSize()
+        # figure out where the list position should be
+        list_position = (
+            # x pos is center screen minus half the width of the background 
+            #   image
+            center_screen_x - ( background.getWidth() / 2 ),
+            # y pos is center screen minus half the height of the list
+            center_screen_y - ( list_height / 2 )
+        )
+        # add any xml positioning values to the list position, allowing 
+        #   controls to be offset
+        # background top
+        temp_position = (
+            list_position[0] + background_top.getPosition()[0],
+            list_position[1] + background_top.getPosition()[1],
+        )
+        background_top.setPosition( int( temp_position[0] ), int( temp_position[1] ) )
+        # background
+        temp_position = (
+            list_position[0] + background.getPosition()[0],
+            list_position[1] + background.getPosition()[1],
+        )
+        background.setPosition( int( temp_position[0] ), int( temp_position[1] ) )
+        background.setHeight( list_height )
+        # popuplist
+        temp_position = (
+            list_position[0] + popuplist.getPosition()[0],
+            list_position[1] + popuplist.getPosition()[1],
+        )
+        popuplist.setPosition( int( temp_position[0] ), int( temp_position[1] ) )
+        popuplist.setHeight( list_height )
+        # background bottom
+        temp_position = (
+            list_position[0] + background_bottom.getPosition()[0],
+            list_position[1] + background_bottom.getPosition()[1] + list_height,
+        )
+        background_bottom.setPosition( int( temp_position[0] ), int( temp_position[1] ) )
     def onAction( self, action ):
         return __internal_base_onAction__( self, action )
     def onClick( self, controlID ):
         # we need to get the current list position instead of using the 
         #   controlID passed to us
-        controlID = self.getCurrentListPosition() + 1 # zero-based
+        controlID = self.getControl(1000).getSelectedPosition() + 1 # zero-based
         return __internal_base_onClick__( self, controlID )
     def onFocus( self, controlID ):
         # we need to get the current list position instead of using the 
         #   controlID passed to us
-        controlID = self.getCurrentListPosition() + 1 # zero-based
+        controlID = self.getControl(1000).getSelectedPosition() + 1 # zero-based
         return __internal_base_onFocus__( self, controlID )

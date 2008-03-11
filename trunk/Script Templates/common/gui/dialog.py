@@ -51,9 +51,7 @@ class popupmenu:
             resourcePath = common.resource_path
         self.controls_map = menuItems
         self.window = base.__internal_base_classPopupMenu__( xmlFile, resourcePath, defaultName, forceFallback, parentClass = self )
+        self.window.doModal()
 
     def close( self ):
         self.window.close()
-
-    def show( self ):
-        self.window.doModal()
