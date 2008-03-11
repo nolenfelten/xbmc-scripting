@@ -132,14 +132,16 @@ class __internal_base_classPopupMenu__( xbmcgui.WindowXMLDialog ):
         '''
             adds menu items to the window list according to values provided
         '''
+        # set the coordinate resolution for all positioning commands below
+        self.setCoordinateResolution( 6 )
         # get the controls from the skin xml
         background = self.getControl(999)
         background_top = self.getControl(997)
         background_bottom = self.getControl(998)
         popuplist = self.getControl(1000)
-        # determine center screen coords
-        center_screen_x = self.getWidth() / 2
-        center_screen_y = self.getHeight() / 2
+        # determine center screen coords; resolution 6 is 720x576
+        center_screen_x = 720 / 2
+        center_screen_y = 576 / 2
         # add the menu items
         for id, callbacks in self.parent_class.controls_map.iteritems():
             try:
