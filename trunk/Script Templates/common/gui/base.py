@@ -216,6 +216,8 @@ class __internal_base_classPopupMenu__( xbmcgui.WindowXMLDialog ):
         # we need to get the current list position instead of using the 
         #   controlID passed to us
         controlID = self.getControl(1000).getSelectedPosition() + 1 # zero-based
+        # close the window before returning
+        self.close()
         return __internal_base_onClick__( self, controlID )
     def onFocus( self, controlID ):
         # we need to get the current list position instead of using the 
