@@ -38,7 +38,6 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
             },
         }
         popupmenu = common.gui.dialog.popupmenu( items )
-        popupmenu.show()
     def test( self ):
         print 'balha'
 
