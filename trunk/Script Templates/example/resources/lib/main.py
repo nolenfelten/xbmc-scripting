@@ -17,12 +17,18 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
         self.controls_map = {
             1: { # LABEL: script name
                 'label': common.scriptname,
+                'onClick': None,
+                'onFocus': None,
             },
             101: { # BUTTON: show popup menu
+                'label': None,
                 'onClick': self.popup,
+                'onFocus': None,
             },
             110: { # BUTTON: quit
+                'label': None,
                 'onClick': self.close,
+                'onFocus': None,
             },
         }
         common.gui.BaseScriptWindow.__init__( self )
@@ -30,11 +36,19 @@ class ExampleScriptWindow( common.gui.BaseScriptWindow ):
         items = {
             1: {
                 'label': 'item 1',
+                'label2': None,
+                'icon': None,
+                'thumb': None,
                 'onClick': self.item1,
+                'onFocus': None,
             },
             2: {
                 'label': 'item 2',
+                'label2': None,
+                'icon': None,
+                'thumb': None,
                 'onClick': self.item2,
+                'onFocus': None,
             },
         }
         popupmenu = common.gui.dialog.popupmenu( items )
