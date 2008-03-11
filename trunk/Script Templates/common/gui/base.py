@@ -145,15 +145,19 @@ class __internal_base_classPopupMenu__( xbmcgui.WindowXMLDialog ):
             try:
                 try: # get the label, or blank string
                     label = callbacks['label']
+                    if not label: raise
                 except: label = str()
                 try: # get label2, or blank string
                     label2 = callbacks['label2']
+                    if not label: raise
                 except: label2 = str()
                 try: # get icon image, or blank string
                     icon = callbacks['icon']
+                    if not label: raise
                 except: icon = str()
                 try: # get thumbnail image, or blank string
                     thumb = callbacks['thumb']
+                    if not label: raise
                 except: thumb = str()
                 # create the ListItem
                 item = xbmcgui.ListItem( label, label2, icon, thumb )
