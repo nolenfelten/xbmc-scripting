@@ -85,10 +85,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.reset_controls()
         self.allow_exception = False
         current_song = self.song
-        lyrics, kind, save = self.get_lyrics_from_file( artist, song )
+        lyrics, kind = self.get_lyrics_from_file( artist, song )
         if ( lyrics is not None ):
             if ( current_song == self.song ):
-                self.show_lyrics( lyrics, save )
+                self.show_lyrics( lyrics )
                 self.getControl( 200 ).setEnabled( False )
                 self.getControl( 200 ).setLabel( _( 101 + kind ) )
         else:
@@ -111,34 +111,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def get_lyrics_from_file( self, artist, song ):
         try:
-            xbmc.sleep( 20 )
+            xbmc.sleep( 60 )
             if ( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ) ):
-                return unicode( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ), "utf-8" ), True, False
+                return unicode( xbmc.getInfoLabel( "MusicPlayer.Lyrics" ), "utf-8" ), True
             self.song_path = make_legal_filepath( unicode( os.path.join( self.settings[ "lyrics_path" ], artist.replace( "\\", "_" ).replace( "/", "_" ), song.replace( "\\", "_" ).replace( "/", "_" ) + ( "", ".txt", )[ self.settings[ "use_extension" ] ] ), "utf-8" ), self.settings[ "compatible" ], self.settings[ "use_extension" ] )
             lyrics_file = open( self.song_path, "r" )
-            lyrics_text = lyrics_file.read()
+            lyrics = lyrics_file.read()
             lyrics_file.close()
-            lyrics = eval( lyrics_text ).encode( "utf-8" )
-            return lyrics, False, False
+            return unicode( lyrics, "utf-8" ), False
         except IOError:
-            return None, False, False
-        # TODO: Remove this when support for old lyrics file format ends
-        except ( SyntaxError, NameError, ):
-            return lyrics_text, False, True
-        except:
-            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
-            return None, False, False
+            return None, False
 
     def save_lyrics_to_file( self, lyrics ):
         try:
             if ( not os.path.isdir( os.path.dirname( self.song_path ) ) ):
                 os.makedirs( os.path.dirname( self.song_path ) )
             lyrics_file = open( self.song_path, "w" )
-            lyrics_file.write( repr( lyrics ) )
-            #lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
+            lyrics_file.write( lyrics.encode( "utf-8", "ignore" ) )
             lyrics_file.close()
             return True
-        except:
+        except IOError:
             LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
 
@@ -148,10 +140,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 100 ).setText( _( 632 ) )
             self.getControl( 110 ).addItem( _( 632 ) )
         else:
-            if ( "\r\n" in lyrics ): sep = "\r\n"
+            if ( "\r\n" in lyrics ):
+                sep = "\r\n"
+            elif ( "\r" in lyrics ):
+                sep = "\r"
             else:
                 sep = "\n"
-                lyrics = lyrics.replace( "\r", "\n" )
             self.getControl( 100 ).setText( lyrics )
             for x in lyrics.split( sep ):
                 self.getControl( 110 ).addItem( x )
