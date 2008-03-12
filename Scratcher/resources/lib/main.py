@@ -80,6 +80,16 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     try:
                         item.setThumbnailImage( 'script-line-deleted.png' )
                         self.deleted_lines[id] = original_text
+##                        # reorganize the line numbers
+##                        for i in range( self.window.getListSize() ):
+##                            if i >= id:
+##                                self.window.getListItem( i ).setLabel2( str( i ) )
+##                        # remove the item from display
+##                        self.window.removeItem( id )
+##                        # if item was last in the list, set current item to 
+##                        #   new last item
+##                        if id >= self.window.getListSize():
+##                            self.window.setCurrentListPosition( id - 1 )
                     except:
                         print 'unable to delete the line'
                 def restore():
