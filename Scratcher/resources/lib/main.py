@@ -52,13 +52,23 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 except:
                     # text missing, default to empty string
                     original_text = str()
+                # set up some functions for line state checks
+                def isdeleted():
+                    if id in self.deleted_lines.keys():
+                        return True
+                    return False
+                def isedited():
+                    if id in self.changed_lines.keys():
+                        return True
+                    return False
+                # set up functions to perform menu item selections
                 def edit():
                     new_text = None
                     # show keyboard for user to change the text
                     new_text = common.gui.dialog.keyboard( original_text, common.localize( 1004 ) )
                     # perform the changes, assuming that the new text is not blank
                     #   or the same as the old text
-                    if new_text and new_text is not original_text:
+                    if len( new_text ) and ( new_text != original_text ):
                         try:
                             item.setThumbnailImage( 'script-line-changed.png' )
                             item.setLabel( new_text )
@@ -74,13 +84,13 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                         print 'unable to delete the line'
                 def restore():
                     # unflag the line for removal or editing
-                    if id in self.deleted_lines.keys():
+                    if isdeleted():
                         try:
                             item.setThumbnailImage( '' )
                             item.setLabel( self.deleted_lines[id] )
                             self.deleted_lines.pop( id )
                         except: pass
-                    if id in self.changed_lines.keys():
+                    if isedited():
                         try:
                             item.setThumbnailImage( '' )
                             item.setLabel( self.changed_lines[id][0] )
@@ -88,19 +98,19 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                         except: pass
                 # menu items
                 items = dict()
-                if id in self.deleted_lines.keys() or id in self.changed_lines.keys():
-                    items[1] = {
+                if isdeleted() or isedited():
+                    items[len(items.keys())+1] = {
                         'label': 'Restore',
                         'thumb': None,
                         'onClick': restore,
                     }
-                items[2] = {
-                    'label': common.localize( 501 ), # Edit
-                    'thumb': 'script-line-changed.png',
-                    'onClick': edit,
-                }
-                if id not in self.deleted_lines.keys():
-                    items[2] = {
+                if not isdeleted():
+                    items[len(items.keys())+1] = {
+                        'label': common.localize( 501 ), # Edit
+                        'thumb': 'script-line-changed.png',
+                        'onClick': edit,
+                    }
+                    items[len(items.keys())+1] = {
                         'label': common.localize( 502 ), # Delete
                         'thumb': 'script-line-deleted.png',
                         'onClick': delete,
@@ -168,7 +178,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 # still no eol encountered in this file, so set to default
                 if not len( self.eol ):
                     self.eol = os.linesep
-                print 'eol:', repr( self.eol )
                 # ensure that the changed_lines dictionary is blank
                 # TODO: if not blank already, ask to save changes to last file
                 self.changed_lines = dict()
