@@ -4,6 +4,7 @@
     <string id="102">Save</string>
     <string id="501">Edit</string>
     <string id="502">Delete</string>
+    <string id="503">Insert</string>
     <string id="1001">Open a file to edit:</string>
     <string id="1002">You can not make changes to this file,</string>
     <string id="1003">because you do not have write access.</string>
