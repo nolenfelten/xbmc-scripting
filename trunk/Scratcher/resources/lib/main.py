@@ -10,12 +10,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         self.file = None
         self.eol = str() # end of line string used by file
         self.file_write_access = False
-        self.changed_lines = {
-            # line_num: ( original_text, new_text ),
-        }
-        self.deleted_lines = {
-            # line_num: original_text,
-        }
+        self.changed = False
         self.controls_map = {
             1: { # LABEL: script name
                 'label': common.scriptname,
@@ -52,15 +47,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 except:
                     # text missing, default to empty string
                     original_text = str()
-                # set up some functions for line state checks
-                def isdeleted():
-                    if id in self.deleted_lines.keys():
-                        return True
-                    return False
-                def isedited():
-                    if id in self.changed_lines.keys():
-                        return True
-                    return False
+                def renumber_lines( line_number ):
+                    # renumbers lines starting from line_number
+                    for i in range( self.window.getListSize() ):
+                        if i >= line_number:
+                            # for pretty line numbers, increase by one for display
+                            self.window.getListItem( i ).setLabel2( str( i + 1 ) )
                 # set up functions to perform menu item selections
                 def edit():
                     new_text = None
@@ -69,62 +61,51 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     # perform the changes, assuming that the new text is not blank
                     #   or the same as the old text
                     if len( new_text ) and ( new_text != original_text ):
-                        try:
-                            item.setThumbnailImage( 'script-line-changed.png' )
-                            item.setLabel( new_text )
-                            self.changed_lines[id] = ( original_text, new_text )
-                        except:
-                            print 'unable to set the new text'
+                        item.setLabel( new_text )
+                        self.changed = True
+                def insert():
+                    # make line number for new item
+                    new_id = id - 1
+                    if new_id < 0:
+                        new_id = 0
+                    # insert the new item
+                    item = xbmcgui.ListItem( '', str( new_id + 1 ) )
+                    self.window.addItem( item, new_id )
+                    # reorganize line numbers
+                    renumber_lines( new_id )
+                    # select the new inserted line
+                    self.window.setCurrentItem( new_id )
+                    # make sure we've got the handle to the proper 
+                    #   ListItem still
+                    item = self.window.getListItem( new_id )
+                    new_text = None
+                    # show keyboard for user to change the text
+                    new_text = common.gui.dialog.keyboard( '', common.localize( 1004 ) )
+                    if len( new_text ):
+                        item.setLabel( new_text )
+                    self.changed = True
                 def delete():
-                    # flag the line for removal
-                    try:
-                        item.setThumbnailImage( 'script-line-deleted.png' )
-                        self.deleted_lines[id] = original_text
-##                        # reorganize the line numbers
-##                        for i in range( self.window.getListSize() ):
-##                            if i >= id:
-##                                self.window.getListItem( i ).setLabel2( str( i ) )
-##                        # remove the item from display
-##                        self.window.removeItem( id )
-##                        # if item was last in the list, set current item to 
-##                        #   new last item
-##                        if id >= self.window.getListSize():
-##                            self.window.setCurrentListPosition( id - 1 )
-                    except:
-                        print 'unable to delete the line'
-                def restore():
-                    # unflag the line for removal or editing
-                    if isdeleted():
-                        try:
-                            item.setThumbnailImage( '' )
-                            item.setLabel( self.deleted_lines[id] )
-                            self.deleted_lines.pop( id )
-                        except: pass
-                    if isedited():
-                        try:
-                            item.setThumbnailImage( '' )
-                            item.setLabel( self.changed_lines[id][0] )
-                            self.changed_lines.pop( id )
-                        except: pass
+                    self.window.removeItem( id )
+                    # reorganize the line numbers
+                    renumber_lines( id )
+                    self.changed = True
                 # menu items
                 items = dict()
-                if isdeleted() or isedited():
-                    items[len(items.keys())+1] = {
-                        'label': 'Restore',
-                        'thumb': None,
-                        'onClick': restore,
-                    }
-                if not isdeleted():
-                    items[len(items.keys())+1] = {
-                        'label': common.localize( 501 ), # Edit
-                        'thumb': 'script-line-changed.png',
-                        'onClick': edit,
-                    }
-                    items[len(items.keys())+1] = {
-                        'label': common.localize( 502 ), # Delete
-                        'thumb': 'script-line-deleted.png',
-                        'onClick': delete,
-                    }
+                items[len(items.keys())+1] = {
+                    'label': common.localize( 501 ), # Edit
+                    'thumb': 'script-line-changed.png',
+                    'onClick': edit,
+                }
+                items[len(items.keys())+1] = {
+                    'label': common.localize( 503 ), # Insert
+                    'thumb': 'script-line-inserted.png',
+                    'onClick': insert,
+                }
+                items[len(items.keys())+1] = {
+                    'label': common.localize( 502 ), # Delete
+                    'thumb': 'script-line-deleted.png',
+                    'onClick': delete,
+                }
                 # show the menu
                 menu = common.gui.dialog.popupmenu( items )
             except:
@@ -149,48 +130,50 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 # open the file in read only mode
                 # TODO: check for write access here?
                 self.file = open( filepath, 'rb' )
-                # determine file EOL character string
-                end_of_line_chars = [ '\r', '\n' ]
-                # read single line out of file
-                line_one = self.file.readline()
-                # reset the seek position for later reads
-                self.file.seek(0)
-                # reset self.eol
-                self.eol = str()
-                # look at last two characters in the line
-                if len( line_one ) < 2:
-                    eol = line_one
-                else:
-                    eol = line_one[-2:]
-                for char in eol:
-                    # we don't want any characters that aren't actually EOL to be
-                    #   considered as such
-                    if char in end_of_line_chars:
-                        self.eol = self.eol + char
-                # readline() splits on '\n', so mac files won't split
-                #   note that the code above will not always result in self.eol
-                #   being an empty string, for example, if mac file ends in 
-                #   multiple empty lines, self.eol would be '\r\r' and valid to
-                #   the above code - need to check for that here too
-                file_len = int( os.stat( self.file.name ).st_size )
-                # if the file ended without a newline, see if this is mac file
-                if len( line_one ) == file_len:
-                    # if a mac file ends in multiple newlines, set self.eol 
-                    #   to only one EOL character
-                    if len( self.eol ) > 1:
-                        if self.eol[-1] == '\r':
-                            self.eol = '\r'
-                    # file had no EOL at the end of line_one, so check the
-                    #   string to be sure that there aren't any mac EOL chars
+                def determine_eol():
+                    # determine file EOL character string
+                    end_of_line_chars = [ '\r', '\n' ]
+                    # read single line out of file
+                    line_one = self.file.readline()
+                    # reset the seek position for later reads
+                    self.file.seek(0)
+                    # reset self.eol
+                    self.eol = str()
+                    # look at last two characters in the line
+                    if len( line_one ) < 2:
+                        eol = line_one
+                    else:
+                        eol = line_one[-2:]
+                    for char in eol:
+                        # we don't want any characters that aren't actually EOL to be
+                        #   considered as such
+                        if char in end_of_line_chars:
+                            self.eol = self.eol + char
+                    # readline() splits on '\n', so mac files won't split
+                    #   note that the code above will not always result in self.eol
+                    #   being an empty string, for example, if mac file ends in 
+                    #   multiple empty lines, self.eol would be '\r\r' and valid to
+                    #   the above code - need to check for that here too
+                    file_len = int( os.stat( self.file.name ).st_size )
+                    # if the file ended without a newline, see if this is mac file
+                    if len( line_one ) == file_len:
+                        # if a mac file ends in multiple newlines, set self.eol 
+                        #   to only one EOL character
+                        if len( self.eol ) > 1:
+                            if self.eol[-1] == '\r':
+                                self.eol = '\r'
+                        # file had no EOL at the end of line_one, so check the
+                        #   string to be sure that there aren't any mac EOL chars
+                        if not len( self.eol ):
+                            if line_one.find( '\r' ) > -1:
+                                self.eol = '\r'
+                    # still no eol encountered in this file, so set to default
                     if not len( self.eol ):
-                        if line_one.find( '\r' ) > -1:
-                            self.eol = '\r'
-                # still no eol encountered in this file, so set to default
-                if not len( self.eol ):
-                    self.eol = os.linesep
-                # ensure that the changed_lines dictionary is blank
-                # TODO: if not blank already, ask to save changes to last file
-                self.changed_lines = dict()
+                        self.eol = os.linesep
+                # self.changed will be True if the last opened file was edited
+                # TODO: ask to save changes to last opened file
+                if self.changed:
+                    pass
                 # clear the list before adding new items
                 self.window.clearList()
                 # add a new item to the list for each line of text in the file
@@ -200,6 +183,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     for char in self.eol:
                         line = line.replace( char, '' )
                     return line
+                # figure out the EOL format
+                determine_eol()
                 if self.eol == '\r':
                     # mac line endings aren't recognized by readline()
                     #   but, don't do it this way unless it's required, 
