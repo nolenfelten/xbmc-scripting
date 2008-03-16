@@ -22,7 +22,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 'onClick': self.open_new_file,
             },
             102: { # BUTTON: save
-                'onClick': None,
+                'onClick': self.save_current_file,
             },
         }
         common.gui.BaseScriptWindow.__init__( self )
@@ -40,47 +40,79 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             try:
                 # find the current id and ListItem object
                 id = self.window.getCurrentListPosition()
-                item = self.window.getListItem( id )
-                try:
-                    # get text from the ListItem
-                    original_text = item.getLabel()
-                except:
-                    # text missing, default to empty string
-                    original_text = str()
+                item = None
+                if id >= 0:
+                    item = self.window.getListItem( id )
+                original_text = str()
+                if item:
+                    try:
+                        # get text from the ListItem
+                        original_text = item.getLabel()
+                    except:
+                        pass
                 def renumber_lines( line_number ):
                     # renumbers lines starting from line_number
                     for i in range( self.window.getListSize() ):
                         if i >= line_number:
                             # for pretty line numbers, increase by one for display
-                            self.window.getListItem( i ).setLabel2( str( i + 1 ) )
+                            self.window.getListItem( i ).setLabel2( 
+                                str( i + 1 )
+                            )
                 # set up functions to perform menu item selections
                 def edit():
                     new_text = None
                     # show keyboard for user to change the text
-                    new_text = common.gui.dialog.keyboard( original_text, common.localize( 1004 ) )
+                    new_text = common.gui.dialog.keyboard( 
+                        original_text, 
+                        common.localize( 1004 )
+                    )
                     # perform the changes, assuming that the new text is not blank
                     #   or the same as the old text
                     if len( new_text ) and ( new_text != original_text ):
                         item.setLabel( new_text )
                         self.changed = True
                 def insert():
-                    # make line number for new item
-                    new_id = id - 1
+                    new_id = -1
+                    def before():
+                        new_id = id
+                        print id, new_id
+                        print 'before'
+                    def after():
+                        new_id = id + 1
+                        print 'after'
+                    # menu items
+                    items = dict()
+                    items[len(items.keys())+1] = {
+                        'label': 'Insert before..',
+                        'thumb': None,
+                        'onClick': before,
+                    }
+                    items[len(items.keys())+1] = {
+                        'label': 'Insert after..',
+                        'thumb': None,
+                        'onClick': after,
+                    }
+                    # show the menu
+                    menu = common.gui.dialog.popupmenu( items )
+                    print 'insert new item at position', new_id
                     if new_id < 0:
-                        new_id = 0
+                        return
                     # insert the new item
                     item = xbmcgui.ListItem( '', str( new_id + 1 ) )
                     self.window.addItem( item, new_id )
                     # reorganize line numbers
                     renumber_lines( new_id )
                     # select the new inserted line
-                    self.window.setCurrentItem( new_id )
+                    self.window.setCurrentListPosition( new_id )
                     # make sure we've got the handle to the proper 
                     #   ListItem still
                     item = self.window.getListItem( new_id )
                     new_text = None
                     # show keyboard for user to change the text
-                    new_text = common.gui.dialog.keyboard( '', common.localize( 1004 ) )
+                    new_text = common.gui.dialog.keyboard( 
+                        '', 
+                        common.localize( 1004 )
+                    )
                     if len( new_text ):
                         item.setLabel( new_text )
                     self.changed = True
@@ -91,21 +123,23 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     self.changed = True
                 # menu items
                 items = dict()
-                items[len(items.keys())+1] = {
-                    'label': common.localize( 501 ), # Edit
-                    'thumb': 'script-line-changed.png',
-                    'onClick': edit,
-                }
+                if item:
+                    items[len(items.keys())+1] = {
+                        'label': common.localize( 501 ), # Edit
+                        'thumb': 'script-line-changed.png',
+                        'onClick': edit,
+                    }
                 items[len(items.keys())+1] = {
                     'label': common.localize( 503 ), # Insert
                     'thumb': 'script-line-inserted.png',
                     'onClick': insert,
                 }
-                items[len(items.keys())+1] = {
-                    'label': common.localize( 502 ), # Delete
-                    'thumb': 'script-line-deleted.png',
-                    'onClick': delete,
-                }
+                if item:
+                    items[len(items.keys())+1] = {
+                        'label': common.localize( 502 ), # Delete
+                        'thumb': 'script-line-deleted.png',
+                        'onClick': delete,
+                    }
                 # show the menu
                 menu = common.gui.dialog.popupmenu( items )
             except:
@@ -114,15 +148,39 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 print 'error changing the line of text'
 
     def close( self ):
-        # close the file
-        self.file.close()
+        # self.changed will be True if the last opened file was edited
+        # TODO: ask to save changes to last opened file
+        if self.changed:
+            savefirst = xbmcgui.Dialog().yesno( 
+                self.file.name, 
+                'Do you want to save this file before exiting?' 
+            )
+            if savefirst:
+                self.save_current_file()
         # close the window
         common.gui.BaseScriptWindow.close( self )
 
     def check_access( self, filepath ):
-        return os.access( filepath, os.W_OK )
+        # return os.access( filepath, os.W_OK )
+        try:
+            open( filepath, 'wb' )
+            return True
+        except IOError:
+            return False
 
     def open_new_file( self ):
+        # self.changed will be True if the last opened file was edited
+        # TODO: ask to save changes to last opened file
+        if self.changed:
+            savefirst = xbmcgui.Dialog().yesno( 
+                self.file.name, 
+                'Do you want to save this file before opening a new file?' 
+            )
+            if savefirst:
+                self.save_current_file()
+        # close the old file
+        if self.file:
+            self.file.close()
         # get a path to the file 
         filepath = common.gui.dialog.browse( heading = common.localize( 1001 ) )
         if len( filepath ):
@@ -170,10 +228,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     # still no eol encountered in this file, so set to default
                     if not len( self.eol ):
                         self.eol = os.linesep
-                # self.changed will be True if the last opened file was edited
-                # TODO: ask to save changes to last opened file
-                if self.changed:
-                    pass
                 # clear the list before adding new items
                 self.window.clearList()
                 # add a new item to the list for each line of text in the file
@@ -199,9 +253,45 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     line_number = line_number + 1
                     item = xbmcgui.ListItem( line, str( line_number ) )
                     self.window.addItem( item )
+                # close the file
+                if self.file:
+                    self.file.close()
             except:
                 import traceback
                 traceback.print_exc()
+
+    def save_current_file( self ):
+        if not self.changed:
+            # nothing to do
+            xbmcgui.Dialog().ok( self.file.name, 'No changes made yet!' )
+            return
+        try:
+            writeable_file = open( self.file.name, 'wb' )
+        except IOError:
+            xbmcgui.Dialog().ok( 
+                self.file.name, 'Unable to save file. Access denied.'
+            )
+            return
+        for i in range( self.window.getListSize() ):
+            text = self.window.getListItem( i ).getLabel()
+            if i:
+                writeable_file.write( self.eol + text )
+                writeable_file.flush()
+            else:
+                writeable_file.write( text )
+                writeable_file.flush()
+                try:
+                    writeable_file = open( self.file.name, 'ab' )
+                except IOError:
+                    xbmcgui.Dialog().ok( self.file.name, 
+                        os.linesep.join(
+                            'Unable to save file. Access denied.',
+                            'Your file is corrupted!'
+                        )
+                    )
+                    return
+        writeable_file.close()
+        self.changed = False
 
 # init the window instance
 window = ScriptWindow()
