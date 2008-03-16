@@ -61,7 +61,10 @@ def __internal_base_onAction__( self, action ):
             # if i in codes.EXIT_SCRIPT:
             for j in codes.EXIT_SCRIPT:
                 if i == j:
-                    self.close()
+                    if hasattr( self.parent_class, 'close' ):
+                        self.parent_class.close()
+                    else:
+                        self.close()
                     break
 
 def __internal_base_onClick__( self, controlID ):
