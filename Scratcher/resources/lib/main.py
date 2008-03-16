@@ -72,14 +72,22 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                         item.setLabel( new_text )
                         self.changed = True
                 def insert():
+                    global new_id
                     new_id = -1
                     def before():
-                        new_id = id
-                        print id, new_id
-                        print 'before'
+                        global new_id
+                        if id < 0:
+                            # trying to insert to an empty file
+                            new_id = 0
+                        else:
+                            new_id = id
                     def after():
-                        new_id = id + 1
-                        print 'after'
+                        global new_id
+                        if id < 0:
+                            # trying to insert to an empty file
+                            new_id = 0
+                        else:
+                            new_id = id + 1
                     # menu items
                     items = dict()
                     items[len(items.keys())+1] = {
@@ -94,12 +102,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     }
                     # show the menu
                     menu = common.gui.dialog.popupmenu( items )
-                    print 'insert new item at position', new_id
                     if new_id < 0:
                         return
                     # insert the new item
                     item = xbmcgui.ListItem( '', str( new_id + 1 ) )
                     self.window.addItem( item, new_id )
+                    self.changed = True
                     # reorganize line numbers
                     renumber_lines( new_id )
                     # select the new inserted line
@@ -115,7 +123,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     )
                     if len( new_text ):
                         item.setLabel( new_text )
-                    self.changed = True
                 def delete():
                     self.window.removeItem( id )
                     # reorganize the line numbers
@@ -291,6 +298,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     )
                     return
         writeable_file.close()
+        xbmcgui.Dialog().ok( self.file.name, 'All changed saved.' )
         self.changed = False
 
 # init the window instance
