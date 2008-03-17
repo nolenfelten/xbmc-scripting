@@ -46,6 +46,8 @@
     <string id="366">SELECT ITEM</string>
     <string id="367">SELECT A PHOTO GALLERY</string>
     <string id="368">(Profile available)</string>
+    <string id="369">Select Competition</string>
+    <string id="370">Select Table</string>
 
     <!-- menu options -->
     <string id="500">Exit</string>
@@ -58,7 +60,8 @@
     <string id="520">Clear League Teams</string>
     <string id="521">View Script Readme</string>
     <string id="522">View Script ChangeLog</string>
-    <string id="523">Change DataSource</string>
+    <string id="523">Select DataSource</string>
+    <string id="524">Check For Script Update On Startup</string>
 
     <!-- misc menu/prompts -->
     <string id="530">Live Videprinter</string>
