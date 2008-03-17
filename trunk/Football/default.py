@@ -24,7 +24,7 @@ from threading import Thread
 __scriptname__ = "Football"
 __version__ = '1.4'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '13-03-2008'
+__date__ = '17-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -71,30 +71,31 @@ class Football(xbmcgui.Window):
 
 		setResolution(self)
 
+		self.SETTINGS_LEAGUES_FILENAME = os.path.join( DIR_USERDATA, "league_%s.txt" )
 		self.SETTINGS_FILENAME = os.path.join( DIR_USERDATA, "settings.txt" )
 		# settings keys
 		self.SETTING_START_MODE = "start_mode"
-		self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP = "check_script_update_startup"
+		self.SETTING_CHECK_UPDATE = "check_update"
 		# setting default values
 		self.SETTING_VALUE_START_MODE_MENU = "MENU"
 		# settings defaults
 		self.SETTINGS_DEFAULTS = {
-			self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP : False,	# No
+			self.SETTING_CHECK_UPDATE : False,	# No
 			self.SETTING_START_MODE : self.SETTING_VALUE_START_MODE_MENU,
 			}
 
+		self.ready = False
 		self.settings = {}
 		self._initSettings(forceReset=False)
 
-		self.SETTINGS_LEAGUES_FILENAME = os.path.join( DIR_USERDATA, "league_%s.txt" )
 
 		# check for script update
 		scriptUpdated = False
-		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]:	# check for update ?
-			scriptUpdated = update_script(False, False)
+		if self.settings[self.SETTING_CHECK_UPDATE]:	# check for update ?
+			scriptUpdated = updateScript(False, False)
 
 		if scriptUpdated:
-			self.close()
+			self.exit()
 			return
 
 		self.DATASOURCE_BBC = __language__(330)
@@ -114,7 +115,6 @@ class Football(xbmcgui.Window):
 		self.contentFocusIdx = 0			# which control to focus on when switching to content
 		self.contentData = []				# extra data store for content use
 		self.focusNavLists = True
-		self.loadLeagueTeamsConfig()		# load known team in leagues
 
 		self.CONTENT_REC_CONTROL = 0		# rec of contentControls [ctrl, data]
 		self.CONTENT_REC_DATA = 1
@@ -182,7 +182,6 @@ class Football(xbmcgui.Window):
 		self.MAINMENU_OPT_CONFIG_MENU = __language__(505)
 		self.MAINMENU_URL = {
 			self.MAINMENU_OPT_PHOTO_GALLERY:'http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/photo_galleries/rss.xml',
-#			self.MAINMENU_OPT_FFOCUS:'http://news.bbc.co.uk/sport1/hi/football/football_focus/default.stm',
 			self.MAINMENU_OPT_FFOCUS:'http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/football_focus/rss.xml',
 			self.MAINMENU_OPT_INTERVIEWS:'http://news.bbc.co.uk/sol/ukfs_sport/hi/av/football/bb_wm_default.stm',
 			self.MAINMENU_OPT_MOTD_INTERVIEWS:'http://news.bbc.co.uk/sol/ukfs_sport/hi/av/match_of_the_day/bb_wm_default.stm',
@@ -412,7 +411,9 @@ class Football(xbmcgui.Window):
 		self.loadNavList(self.TEAM_VIEW_KEY)
 		self.setupNavListsNav()
 		self.getNavListDictValue(self.LEAGUES_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(True)
+		self.getNavListDictValue(self.LEAGUES_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(True)
 		self.getNavListDictValue(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(True)
+		self.getNavListDictValue(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(True)
 		self.setLeagueLogo()
 		self.toggleNavListFocus(True)		# switch to nav lists
 
@@ -527,6 +528,8 @@ class Football(xbmcgui.Window):
 		elif self.dataSource == self.DATASOURCE_SOCSTND:						# SOCER
 			self.sourceSoccerStand()
 
+		self.loadLeagueTeamsConfig()		# load known team in leagues
+
 		# dict of nav lists - which can only be done after datasource selected
 		self.setupNavListDict()
 		self.setupDisplay()
@@ -541,7 +544,7 @@ class Football(xbmcgui.Window):
 		dataSource = self.settings[self.SETTING_START_MODE]
 		if dataSource == self.SETTING_VALUE_START_MODE_MENU:
 			selectDialog = DialogSelect()
-			selectDialog.setup("Select Data Source:", width=300, rows=len(menu),banner=LOGO_FILENAME)
+			selectDialog.setup(__language__(523), width=300, rows=len(menu),banner=LOGO_FILENAME)
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
 			if selectedPos == 0:
 				dataSource = None
@@ -620,8 +623,8 @@ class Football(xbmcgui.Window):
 			LEAGUE_SHIGHL : ['scot_div_1','highland_lge_tab','highland_lge_fix','highland_lge_res',None,False,True],
 			LEAGUE_WELSH : ['league_of_wales','table','fixtures','results',None,False,True],
 			LEAGUE_IRISH : ['irish','irish_prem_tables','irish_prem_fix','irish_prem_res',None,False,True],
-			LEAGUE_SCOT_CUP : ['scot_cups',None,'scottish_cup_fix','scottish_cup_res',None,True,True],
-			LEAGUE_SCOT_LEAGUE_CUP : ['scot_cups',None,'league_cup_fix','league_cup_res',None,True,True],
+			LEAGUE_SCOT_CUP : ['scot_cups','','scottish_cup_fix','scottish_cup_res',None,True,True],
+			LEAGUE_SCOT_LEAGUE_CUP : ['scot_cups','','league_cup_fix','league_cup_res',None,True,True],
 			self.LEAGUE_INTL : ['internationals','tables','fixtures','results',None,True,True],
 			LEAGUE_CHAMPIONSL : ['europe','champions_league_tables','champions_league_fixtures','champions_league_results',None,True,True],
 			self.LEAGUE_UEFA_CUP : ['europe','uefa_cup_tables','uefa_cup_fixtures','uefa_cup_results',None,True,True],
@@ -662,13 +665,13 @@ class Football(xbmcgui.Window):
 
 		# TEAMS
 		self.TEAMS_DATA = {
-					self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''] #name,x,y,w,h,selectedItem
+					self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''] # x,y,w,h,selectedItem
 					}
 
 		TEAM_VIEWS_MENU = [self.TEAM_VIEW_NEWS,self.TEAM_VIEW_FIX,self.TEAM_VIEW_RES,
 						   self.TEAM_VIEW_LIVE_TEXT,self.TEAM_VIEW_SQUAD]
 		self.TEAM_VIEW_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,self.TEAM_VIEW_NEWS], #name,x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,self.TEAM_VIEW_NEWS], # x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : TEAM_VIEWS_MENU,
 			self.TEAM_VIEW_NEWS : 'http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/football/teams/$AZ/$TEAM/rss.xml',
 			self.TEAM_VIEW_FIX : 'http://news.bbc.co.uk/sport1/hi/football/teams/$AZ/$TEAM/fixtures/default.stm',
@@ -686,64 +689,52 @@ class Football(xbmcgui.Window):
 		debug("> sourceSoccerStand()")
 		self.dataSource = self.DATASOURCE_SOCSTND
 
-		# LEAGUES with different page names to display name
-		CZECH = 'Czech Republic'
-		SERB = 'Serbia'
-		TOTOCUP = 'Intertoto Cup'
-		EUROCUP = 'Euro Cup'
-		WORLDCUP = 'World Cup'
-		AFRICANCUP = 'African Cup'
-		CHAMPCUP = 'Champions League'
-		UEFACUP = 'UEFA Cup'
-		ASIANCUP = 'Asian Cup'
-		COPACUP = 'Copa Libertadores'
+		# find all id's
+		html = fetchURL('http://www.soccerstand.com')
+		if not validWebPage(html):
+			return False
 
-		# this is the order that the menu items will appear in
-		LEAGUES_MENU = ['Argentina','Austria','Belgium','Belarus','Brazil','Croatia',CZECH,'Denmark','England',
-			'Finland','France' ,'Germany','Greece','Holland','Iceland','Ireland','Italy','Japan','Mexico','Norway',
-			'Portugal','Poland','Romania','Russia','Scotland',SERB,'Slovakia','Slovenia','Spain','Sweden',
-			'Switzerland','Turkey','Ukraine','USA',
-			EUROCUP, TOTOCUP, WORLDCUP, AFRICANCUP,CHAMPCUP,UEFACUP,ASIANCUP,COPACUP
-			]
+		matches = parseDocList(html, "tsOPN\('(.*?)'\)\">(.*?)<")
+		if not matches:
+			messageOK(__langauge__(331), __language__(102))
+			return False
+
+		teamsDict = {}
+		for match in matches:
+			teamsDict[match[1]] = match[0]		# name = id
 
 		# LEAGUES data store
+		menu = teamsDict.keys()
+		menu.sort()
 		self.LEAGUES_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 160, 120, 'Argentina'], # name,x,y,w,h,selectedItem
-			self.NAV_LIST_MENU : LEAGUES_MENU
+			self.NAV_LIST_ATTRIBS : [0, 0, 160, 120, ''],	# name,x,y,w,h,selectedItem
+			self.NAV_LIST_MENU : menu			# menu of names
 			}
 
-		for team in LEAGUES_MENU:
-			self.LEAGUES_DATA[team] = [team, '', '', '///', '', False, False]
+		# store team name and id
+		for name, id in teamsDict.items():
+			self.LEAGUES_DATA[name] = [id, '', '', id, '', False, False]
 
-		# alter leagueID for a few whos webpage isnt same
-		self.LEAGUES_DATA[CZECH] = ['czech', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[SERB] = ['yug', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[EUROCUP] = ['euro', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[TOTOCUP] = ['intertoto', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[WORLDCUP] = ['wc', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[AFRICANCUP] = ['nationcup', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[CHAMPCUP] = ['liga', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[UEFACUP] = ['uefa', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[ASIANCUP] = ['cup', '', '', '///', '', False, False]
-		self.LEAGUES_DATA[COPACUP] = ['libertadores', '', '', '///', '', False, False]
-			
-		# this is the order that the menu items will appear in
-		self.LEAGUE_VIEW_MENU = [self.LEAGUE_VIEW_RES]
+		# LEAGUES VIEW MENU & DATA
+		self.LEAGUE_VIEW_MENU = [self.LEAGUE_VIEW_RES]		# limited menu just of results
 		self.LEAGUE_VIEW_DATA = {
 			self.NAV_LIST_ATTRIBS : [0, 0, 150, 120, ''],	# name,x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : [],						# created according to league selected
-			self.LEAGUE_VIEW_RES :  'http://www4.soccerstand.com/$LEAGUE.php'
+			self.LEAGUE_VIEW_RES :  'http://www.soccerstand.com/cache/soccer.live.d$RES.xml'
 			}
 
 		# TEAMS
 		self.TEAMS_DATA = {
-					self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''] #name,x,y,w,h,selectedItem
+					self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''], # x,y,w,h,selectedItem
+					self.NAV_LIST_MENU : []
 					}
 
+		# TEAMS VIEW
 		self.TEAM_VIEW_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,self.TEAM_VIEW_NEWS], #name,x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''], # x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : []
 			}
+
 
 		debug("< sourceSoccerStand()")
 
@@ -881,6 +872,7 @@ class Football(xbmcgui.Window):
 							self.setNavListAttrib(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_DATA_REC_SELECTED, self.LEAGUE_VIEW_TEAMS)
 							self.setNavListAttrib(self.TEAMS_KEY, self.NAV_LISTS_DATA_REC_SELECTED, teamName)
 							ctrl.setVisible(True)
+							ctrl.setEnabled(True)
 							self.navListSelected()
 							self.setLeagueLogo()
 							self.toggleNavListFocus(True)	# navlists
@@ -935,6 +927,7 @@ class Football(xbmcgui.Window):
 		if timerthread.isCountDownRunning():
 			timerthread.disableCountDown()
 			self.liveTextCL.setVisible(False)
+			self.liveTextCL.setEnabled(False)
 
 		dataMissing = False
 		xbmcgui.lock()
@@ -1002,9 +995,9 @@ class Football(xbmcgui.Window):
 					success = self.loadNavListTeams(leagueDictKey)
 					if not success and self.getTable(url):
 						self.storeLeagueTeams(leagueDictKey)				# save to mem
-						if leagueSelectedItem != self.LEAGUE_INTL:	# dont save from intl table
-							self.writeLeagueTeamsConfig(leagueDictKey)	# write to config
-						success = self.loadNavListTeams(leagueDictKey)	# load navlist TEAMS
+						if leagueSelectedItem != self.LEAGUE_INTL:			# dont save from intl table
+							self.writeLeagueTeamsConfig(leagueDictKey)		# write to config
+						success = self.loadNavListTeams(leagueDictKey)		# load navlist TEAMS
 
 					if success:
 						self.selectedNavListKey = self.TEAMS_KEY			# set to next navlist
@@ -1186,6 +1179,7 @@ class Football(xbmcgui.Window):
 			control.setPageControlVisible(False)
 		except: pass
 		control.setVisible(False)
+		control.setEnabled(False)
 
 		# save controllist to nav list dict
 		self.setNavListDictValue(navListKey, self.NAV_LISTS_VALUE_CONTROL, control)
@@ -1210,7 +1204,7 @@ class Football(xbmcgui.Window):
 
 	########################################################################################################################
 	def updateNavListLeagueViews(self, leagueSelectedItem):
-		debug("> updateNavListLeagueViews()")
+		debug("> updateNavListLeagueViews() leagueSelectedItem=%s" % leagueSelectedItem)
 
 		leagueViewCL = self.getNavListDictValue(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL)
 		leagueViewCL.reset()
@@ -1460,6 +1454,7 @@ class Football(xbmcgui.Window):
 			try:
 				self.liveTextCL.reset()
 				self.liveTextCL.setVisible(False)
+				self.liveTextCL.setEnabled(False)
 			except: pass
 			xbmcgui.unlock()
 		debug("< clearContentControls()")
@@ -1558,11 +1553,54 @@ class Football(xbmcgui.Window):
 			return False
 
 		self.contentData = []
-		tablesDict = {}
 		sections = parseDocList(html, self.RE_SUB_SECTION)
 		debug("html sections=%s " % len(sections))
 
+		# could be that its a page of links to tables
+		if not sections:
+			matches = findAllRegEx(html, '<!-- S ILIN -->.*?href="(.*?)">(.*?)<')
+			if matches:
+				tablesDict = {}
+				for link, name in matches:
+					if link and name:
+						if not link.startswith('http'):
+							link = self.BBC_NEWS_URL_PREFIX + link
+						elif not link.startswith(self.BBC_NEWS_URL_PREFIX):	# ignore external site
+							continue
+						tablesDict[decodeEntities(name)] = link
+
+				menu = tablesDict.keys()
+				if len(menu) > 1:
+					menu.sort()
+					menu.insert(0, __language__(500))
+					selectDialog = DialogSelect()
+					selectDialog.setup(__language__(369), width=400, rows=len(menu))
+					selectedPos, action = selectDialog.ask(menu)
+				else:
+					selectedPos = 0
+
+				name = menu[selectedPos]
+				if name == __language__(500):		# exit
+					matches = None
+				else:
+					link = tablesDict[name]
+
+					# fetch actual table page
+					dialogProgress.create(__language__(302), title, name)
+					html = fetchURL(link)
+					dialogProgress.close()
+
+			if not matches or not validWebPage(html):
+				debug("< getTable() no data")
+				return False
+			else:
+				# now get table sections
+				sections = parseDocList(html, self.RE_SUB_SECTION)
+				debug("html sections=%s " % len(sections))
+
+		tablesDict = {}
 		reTableDets = 'fulltableHeader"><b>(.*?)<.*?br>(.*?)<'	# 13/03/08
+		reTableDetsGroups = 'class="mxb"><b>(.*?)</.*?class="mxb">(.*?)<'
 		reShortTable = '()c1">\d+<.*?c2">(.*?)</td.*?c3">(.*?)</td.*?c4">(.*?)</td.*?c5">(.*?)</td.*?c6">(.*?)</td.*?c7">(.*?)</td.*?c8">(.*?)</td.*?c9">(.*?)</td.*?c10">(.*?)</td'
 		reFullTable = '()c1">\d+<.*?c2">(.*?)</td.*?c3">(.*?)</td.*?c4">(.*?)</td.*?c5">(.*?)</td.*?c6">(.*?)</td.*?c7">(.*?)</td.*?c8">(.*?)</td.*?c9">(.*?)</td.*?c10">(.*?)</td.*?c11">(.*?)</td.*?c12">(.*?)</td.*?c13">(.*?)</td.*?c14">(.*?)</td.*?c15">(.*?)</td'
 		for section in sections:
@@ -1574,6 +1612,13 @@ class Football(xbmcgui.Window):
 			if matches:
 				tableName = capwords(matches.group(1).replace('\n','').strip())
 				tableDate = matches.group(2).replace('\n','').strip()
+			else:
+				matches = re.search(reTableDetsGroups, section, re.DOTALL+re.MULTILINE+re.IGNORECASE)
+				if matches:
+					tableName = capwords(matches.group(1).replace('\n','').strip())
+					tableDate = matches.group(2).replace('\n','').strip()
+
+			debug("tableName=%s tableDate=%s" % (tableName, tableDate))
 
 			# TABLE SIZE, determines team row regex
 			isFullTable = (find(section, 'fulltable') != -1)
@@ -1581,6 +1626,7 @@ class Football(xbmcgui.Window):
 				reRow = reFullTable
 			else:
 				reRow = reShortTable
+			debug("isFullTable=%s" % isFullTable)
 
 			# save table Details
 			tableData.append([tableName, tableDate, isFullTable])
@@ -1600,15 +1646,15 @@ class Football(xbmcgui.Window):
 		if len(tablesDict) > 1:
 			menu = tablesDict.keys()
 			menu.sort()
+			menu.insert(0,__language__(500))
 			selectDialog = DialogSelect()
-			selectDialog.setup("Select Table To View", rows=len(menu), width=400)
+			selectDialog.setup(__language__(370), rows=len(menu), width=450)
 			selectedPos, action = selectDialog.ask(menu)
-			if selectedPos >= 0:				# exit selected
+			if selectedPos > 0:				# exit selected
 				self.contentData = tablesDict[menu[selectedPos]]
 		elif len(tablesDict) == 1:
 			self.contentData = tablesDict[tableName]
 
-		print self.contentData
 		sz = len(self.contentData)
 		if not sz:
 			messageNoInfo()
@@ -1946,55 +1992,38 @@ class Football(xbmcgui.Window):
 		html = fetchURL(url)
 		dialogProgress.close()
 		if not validWebPage(html):
-			debug("< getLeagueResults() no data")
+			debug("< getLeagueResultsSOCSTND() no data")
 			return False
 
 		# split into sections
-		splits = html.split('</table>')
-		if splits:
+		tableSections = html.split('class="tstbl"')
+		totalTableSections = len(tableSections)
+		debug("tableSections=%s" % totalTableSections)
+		if totalTableSections:
 			self.contentData = []
-			totalSplits = len(splits)
 			dialogProgress.create(__language__(302), __language__(300))
-			# get fixtures within each date
-			regexDate = 'class=date>(.*?)<'
-			regexLeague = '<td>.*?<b>(.*?)</B>(.*?)</td>'
-			regexResults = '<tr.*?<td.*?>(.*?)</td.*?<td.*?>(.*?)</td.*?<td.*?>(.*?)</td.*?<td.*?>(.*?)</td.*?<td.*?>(.*?)</td'
-			for splitIDX in range(totalSplits):
-				
-				split = splits[splitIDX]
-				# LEAGUE
-				matches = parseDocList(split, regexLeague)
-				if matches:
-					try:
-						resultLeague = "%s %s" % (cleanHTML(matches[0][0]), cleanHTML(matches[0][1]))
-						self.contentData.append([decodeEntities(resultLeague),''])
-						continue
-					except: pass
 
-				# DATE
-				resultDate = cleanHTML(searchRegEx(split, regexDate, re.MULTILINE+re.IGNORECASE+re.DOTALL))
-				if resultDate:
-					self.contentData.append(['',resultDate])
-					continue
+			# get fixtures within each date
+			regex=''
+			regexLeague = 'class="snh">(.*?)</td>'
+			regexResults = 'etd1.*?">(.*?)<.*?title="(.*?)".*?etd3">(.*?)<.*?etd4">(.*?)</td.*?etd5">(.*?)<'
+			for splitIDX in range(totalTableSections):
+				
+				section = tableSections[splitIDX]
+				# LEAGUE name
+				leagueName = searchRegEx(section, regexLeague, re.MULTILINE+re.IGNORECASE+re.DOTALL)
+				if leagueName:
+					self.contentData.append(['',decodeEntities(leagueName)])
+
+				pct=int(splitIDX*100.0/totalTableSections)
+				if pct:
+					dialogProgress.update(pct, leagueName)
 
 				# RESULT DETAILS
-				found = False
-				matches = parseDocList(split, regexResults)
+				matches = findAllRegEx(section, regexResults)
 				for match in matches:
-					try:
-						if match[0] and match[1] and match[2] and match[3]:
-							text = "%s %s %s %s %s" % (cleanHTML(match[0]),cleanHTML(match[1]),cleanHTML(match[2]),cleanHTML(match[3]),cleanHTML(match[4]))
-							self.contentData.append([decodeEntities(text),''])
-							found = True
-					except: pass
-
-				if found and splitIDX < totalSplits-1:
-					self.contentData.append(['',''])
-
-				pct=int(splitIDX*100.0/totalSplits)
-				# just update every x%
-				if pct and (pct % 10 == 0):
-					dialogProgress.update(pct, resultDate)
+					text = cleanHTML(decodeEntities(' '.join(match)))
+					self.contentData.append([text,''])
 
 			dialogProgress.close()
 
@@ -2002,7 +2031,7 @@ class Football(xbmcgui.Window):
 		if not success:
 			messageNoInfo()
 
-		debug("< getLeagueResultsSOCSTND() success: " + str(success))
+		debug("< getLeagueResultsSOCSTND() success=%s" % success)
 		return success
 
 ########################################################################################################################
@@ -2644,7 +2673,6 @@ class Football(xbmcgui.Window):
 			debug("leagueKey not found")
 			success = False
 		else:
-			print teamsDict
 			ctrl = self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL)
 			ctrl.reset()
 			teamNameList = teamsDict.keys()
@@ -2655,6 +2683,7 @@ class Football(xbmcgui.Window):
 			# only make visible if requested
 			if visible:
 				ctrl.setVisible(True)
+				ctrl.setEnabled(True)
 				self.setFocus(ctrl)
 			success = True
 
@@ -2692,7 +2721,6 @@ class Football(xbmcgui.Window):
 				matches = parseDocList(section, regex)
 				if matches:
 					for match in matches:
-						print match
 						if len(match) == 2:
 							squadno = decodeEntities(match[0]).strip()
 							name = decodeEntities(match[1]).strip()
@@ -2719,7 +2747,7 @@ class Football(xbmcgui.Window):
 
 ########################################################################################################################
 	def resetLeagueTeams(self, clear=False):
-		debug("> resetLeagueTeams() clear="+str(clear))
+		debug("> resetLeagueTeams() clear=%s" % clear)
 		success = False
 
 		try:
@@ -2728,6 +2756,7 @@ class Football(xbmcgui.Window):
 			ctrl = self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL)
 			ctrl.reset()
 			ctrl.setVisible(False)
+			ctrl.setEnabled(False)
 			success = True
 		except: pass
 		try:
@@ -2735,6 +2764,7 @@ class Football(xbmcgui.Window):
 			self.setNavListAttrib(self.TEAM_VIEW_KEY, self.NAV_LISTS_DATA_REC_SELECTED, '')
 			ctrl = self.getNavListDictValue(self.TEAM_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL)
 			ctrl.setVisible(False)
+			ctrl.setEnabled(False)
 			ctrl.selectItem(0)
 			success = True
 		except: pass
@@ -2918,7 +2948,7 @@ class Football(xbmcgui.Window):
 		selectedItem = ''
 		selectedPos = -1
 		reInit = INIT_NONE
-		while True:
+		while reInit != INIT_FULL:
 			optReInit = INIT_NONE
 			selectDialog = DialogSelect()
 			selectDialog.setup(__language__(501), rows=len(self.MAINMENU), width=300)
@@ -2987,19 +3017,21 @@ class Football(xbmcgui.Window):
 		OPT_VIEW_README = __language__(521)
 		OPT_VIEW_CHANGELOG = __language__(522)
 		OPT_DATASOURCE = __language__(523)
+		OPT_CHECK_UPDATE_STARTUP = __language__(524)
 
 		menu = [__language__(500),
 				OPT_CLEAR_TEAMS,
 				OPT_VIEW_README,
 				OPT_VIEW_CHANGELOG,
-				OPT_DATASOURCE]
+				OPT_DATASOURCE,
+				OPT_CHECK_UPDATE_STARTUP]
 
 		selectedPos = 0
 		reInit = INIT_NONE
-		while True:
+		while reInit != INIT_FULL:
 			optReInit = INIT_NONE
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(505), width=300, rows=len(menu))
+			selectDialog.setup(__language__(505), width=320, rows=len(menu))
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
 			if selectedPos <= 0:				# exit selected
 				break
@@ -3018,8 +3050,13 @@ class Football(xbmcgui.Window):
 				textBoxDialog = TextBoxDialog()
 				textBoxDialog.ask(title=OPT_VIEW_CHANGELOG, file=fn, panel=DIALOG_PANEL)
 			elif selectedItem == OPT_DATASOURCE:
-				if self.startupMenu():
+				dataSource = self.startupMenu()
+				if dataSource:
+					self.dataSource = dataSource
 					optReInit = INIT_FULL
+			elif selectedItem == OPT_CHECK_UPDATE_STARTUP:
+				self.settings[self.SETTING_CHECK_UPDATE] = xbmcgui.Dialog().yesno(__language__(505), OPT_CHECK_UPDATE_STARTUP + " ?")
+				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 
 			if optReInit > reInit:
 				reInit = optReInit	# save highest reinit level
@@ -3262,8 +3299,35 @@ def playMedia(filename):
 			success = False
 	return success
 
+######################################################################################
 def messageNoInfo(msg=''):
 	messageOK(__language__(100), __language__(102), msg)
+
+######################################################################################
+def updateScript(quite=False, notifyNotFound=False):
+	xbmc.output( "> updateScript() quite=%s" %quite)
+
+	updated = False
+	up = update.Update(__language__, __scriptname__)
+	version = up.getLatestVersion(quite)
+	xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
+	if version != "-1":
+		if __version__ < version:
+			# do update ?
+			if xbmcgui.Dialog().yesno( __language__(0), 
+								"%s %s %s." % ( __language__(1006), version, __language__(1002) ), \
+								__language__(1003)):
+				updated = True
+				up.makeBackup()
+				up.issueUpdate(version)
+		elif notifyNotFound:
+			dialogOK(__language__(0), __language__(1000))           # upto date
+#	elif not quite:
+#		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
+
+	del up
+	xbmc.output( "< _updateScript() updated=%s" % updated)
+	return updated
 
 #######################################################################################################################    
 # BEGIN !
@@ -3274,7 +3338,7 @@ if myscript.isReady():
 	myscript.doModal()
 del myscript
 
-xbmcgui.output("exiting script ...")
+debug("exiting script ...")
 # housekeep on exit
 deleteFile("temp.xml")
 deleteFile("temp.html")
