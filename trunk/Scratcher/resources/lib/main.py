@@ -152,7 +152,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             except:
                 import traceback
                 traceback.print_exc()
-                print 'error changing the line of text'
 
     def close( self ):
         # self.changed will be True if the last opened file was edited
@@ -164,13 +163,16 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             )
             if savefirst:
                 self.save_current_file()
+        # close the file
+        if self.file:
+            self.file.close()
         # close the window
         common.gui.BaseScriptWindow.close( self )
 
     def check_access( self, filepath ):
         # return os.access( filepath, os.W_OK )
         try:
-            open( filepath, 'wb' )
+            open( filepath, 'ab' )
             return True
         except IOError:
             return False
