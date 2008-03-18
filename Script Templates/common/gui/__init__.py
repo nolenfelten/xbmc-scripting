@@ -25,7 +25,7 @@ class BaseScriptWindow:
     def close( self ):
         self.window.close()
 
-    def show( self ):
+    def display( self ):
         self.window.doModal()
 
 class BaseScriptDialog:
@@ -47,5 +47,5 @@ class BaseScriptDialog:
     def close( self ):
         self.window.close()
 
-    def show( self ):
+    def display( self ):
         self.window.doModal()
