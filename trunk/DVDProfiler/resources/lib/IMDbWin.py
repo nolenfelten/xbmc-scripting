@@ -19,18 +19,20 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "IMDbWin"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '22-01-2008'
+__date__ = '18-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA           # should be in default.py
 DIR_CACHE = sys.modules[ "__main__" ].DIR_CACHE                 # should be in default.py
 
 try:
-    DIR_GFX = sys.modules[ "__main__" ].DIR_GFX                 # should be in default.py
+	DIR_HOME = sys.modules[ "__main__" ].DIR_HOME     # should be in default.py
+	DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
+	__language__ = sys.modules[ "__main__" ].__language__
+	DIR_GFX = sys.modules[ "__main__" ].DIR_GFX                 # should be in default.py
 except:
-    DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
+    DIR_RESOURCES = os.path.join(DIR_HOME,'resources')     # should be in default.py
     DIR_GFX = os.path.join(DIR_RESOURCES,'gfx')
-
 
 from IMDbLib import IMDb, IMDbSearch, IMDbGallery
 from bbbLib import *
@@ -88,7 +90,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 	################################################################################
 	def onAction(self, action):
-		if action == ACTION_PREVIOUS_MENU or action == ACTION_PARENT_DIR:
+		if action == ACTION_BACK or action == ACTION_B:
 			if self.largeImage:
 				self.largeImage = False
 				self.fetchImage()
@@ -130,33 +132,31 @@ class IMDbWin(xbmcgui.WindowDialog):
 		debug("> findTitle()")
 		url = None
 
-		dialogProgress.create("Searching IMDb Titles", title)
+		dialogProgress.create(__language__(982), title)
 		imdbSearch = IMDbSearch(title)
 		dialogProgress.close()
 		if not imdbSearch.SearchResults:
-			if dialogYesNo("IMDb Search Failed", title, "Edit title name and try again ?"):
+			if xbmcgui.Dialog().yesno(__language__(980), title, __language__(984)):
 				url = ''		# will cause manual entry
 		elif len(imdbSearch.SearchResults) > 1:
 			# make menu list
-			menu = []
-			menu.append(xbmcgui.ListItem('Manual Search'))
+			menu = [xbmcgui.ListItem(__language__(500)), xbmcgui.ListItem(__language__(981))]
 			for year, title, titleurl in imdbSearch.SearchResults:
 				menu.append(xbmcgui.ListItem(title, label2=year))
 
 			# popup dialog to select choice
 			selectDialog = DialogSelect()
-			selectDialog.setup("Select A Title:", width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
+			selectDialog.setup(__language__(985), width=600, rows=len(menu), banner=IMDB_LOGO_FILENAME)
 			selectedPos,action = selectDialog.ask(menu)
-			selectedPos -= 1 # allow for extra 'manual entry' item 
-			if selectedPos == -1:		# manual entry
+			if selectedPos == 1:		# manual entry
 				url = ''
-			elif selectedPos >= 0:		# title selected
-				year, title, url = imdbSearch.SearchResults[selectedPos]
+			elif selectedPos > 1:		# title selected
+				year, title, url = imdbSearch.SearchResults[selectedPos-2]	# allow for exit & Manual
 		else:
 			year, title, url = imdbSearch.SearchResults[0]
 
 		if url:
-			dialogProgress.create("Searching IMDb Information",title + ' ' + year)
+			dialogProgress.create(__language__(982),title + ' ' + year)
 			self.movie = IMDb(url)
 			if not self.movie:
 				url = None		# failed to parse movie info
@@ -180,7 +180,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 			fn = os.path.join(DIR_CACHE, self.IMDB_PREFIX + os.path.basename(url))
 			exists = fileExist(fn)
 			if not exists:
-				dialogProgress.create("Downloading Image", "Please wait ...", os.path.basename(url))
+				dialogProgress.create(__language__(986), os.path.basename(url))
 				success = fetchURL(url, fn, isImage=True)
 				dialogProgress.close()
 				exists = fileExist(fn)
@@ -235,13 +235,15 @@ class IMDbWin(xbmcgui.WindowDialog):
 		debug("< showImage()")
 
 	#################################################################################################
-	def display(self):
+	def display(self, panel=''):
 		debug("> display()")
 
 		xbmcgui.lock()
 		# BACKGROUND PANEL
 		try:
-			self.panelCI = xbmcgui.ControlImage(self.xpos, self.ypos, self.backgW, self.backgH, DIALOG_PANEL)
+			if not panel:
+				panel = DIALOG_PANEL
+			self.panelCI = xbmcgui.ControlImage(self.xpos, self.ypos, self.backgW, self.backgH, panel)
 			self.addControl(self.panelCI)
 		except: pass
 
@@ -344,9 +346,9 @@ class IMDbWin(xbmcgui.WindowDialog):
 #		except: pass
 
 		try:
-			print "self.movie.Cast=", self.movie.Cast
+#			print "self.movie.Cast=", self.movie.Cast
 			for actor,role in self.movie.Cast:
-				print actor,role
+#				print actor,role
 				castCL.addItem(xbmcgui.ListItem(decodeEntities(actor), decodeEntities(role)))
 		except:
 			castCL.addItem(xbmcgui.ListItem('No Cast Details'))
@@ -435,7 +437,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 				url = self.findTitle(title)
 
 			if url == '':
-				title = doKeyboard(title)
+				title = doKeyboard(title, __language__(981))
 				if not title:
 					break
 			elif url == None:

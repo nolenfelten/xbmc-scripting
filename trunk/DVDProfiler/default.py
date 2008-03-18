@@ -8,7 +8,10 @@
 
  Please don't alter or re-publish this script without authors persmission.
 
- CHANGELOG see changelog.txt
+	CHANGELOG: see changelog.txt or view throu Settings Menu
+	README: see ..\resources\language\<language>\readme.txt or view throu Settings Menu
+
+    Additional support may be found on xboxmediacenter forum.	
 """
 
 # Python 2.4 libs
@@ -22,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '22-01-2008'
+__date__ = '28-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -30,16 +33,15 @@ DIR_HOME = os.getcwd().replace( ";", "" )
 DIR_RESOURCES = os.path.join( DIR_HOME , "resources" )
 DIR_RESOURCES_LIB = os.path.join( DIR_RESOURCES , "lib" )
 DIR_USERDATA = os.path.join( "T:\\script_data", __scriptname__ )
-
 DIR_GFX = os.path.join( DIR_RESOURCES , "gfx" )             
 DIR_IMG_CACHE = os.path.join(DIR_USERDATA, "images")
 DIR_CACHE = os.path.join(DIR_USERDATA, "cache")
-
 sys.path.insert(0, DIR_RESOURCES_LIB)
 
 # Custom libs
 import language
-__language__ = language.Language().localized
+mylanguage = language.Language()
+__language__ = mylanguage.localized
 
 import update                                       # script update module
 from bbbLib import *								# requires __language__ to be defined
@@ -80,26 +82,26 @@ class DVDProfiler(xbmcgui.Window):
 		self.SETTING_SMB_DVDPRO_SHARE = "smb_dvdpro_share"
 		self.SETTING_SMB_MOVIES_SHARE = "smb_movies_share"
 		self.SETTING_START_MODE = "start_mode"
-		self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP = "check_script_update_startup"
+		self.SETTING_CHECK_UPDATE = "check_script_update_startup"
 
 		# default values
 		self.SETTINGS_FILENAME = os.path.join( DIR_USERDATA, "settings.txt" )
-		self.START_MODE_MENU = __language__(604)
-		self.START_MODE_SMB = __language__(650)
-		self.START_MODE_LOCAL = __language__(651)
-		self.START_MODE_ONLINE = __language__(652)
+		self.START_MODE_SMB = __language__(550)
+		self.START_MODE_LOCAL = __language__(551)
+		self.START_MODE_ONLINE = __language__(552)
+		self.START_MODE_MENU = __language__(553)
 
 		self.SETTINGS_DEFAULTS = {
 			self.SETTING_SMB_USE : True,
 			self.SETTING_SMB_PATH : "smb://user:pass@OFFICE",
 			self.SETTING_SMB_PC_IP : "",		# empty so smb details incomplete by default
 			self.SETTING_SMB_FILENAME :  "collection.xml",
-			self.SETTING_START_MODE : "MENU",
+			self.SETTING_START_MODE : self.START_MODE_MENU,
 			self.SETTING_SMB_COLLECTION_DIR : "EXPORT",
 			self.SETTING_SMB_IMAGES_DIR : "IMAGES",
 			self.SETTING_SMB_DVDPRO_SHARE : "DVD Profiler",
 			self.SETTING_SMB_MOVIES_SHARE : "My Videos",
-			self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP : False,	# No
+			self.SETTING_CHECK_UPDATE : False,	# No
 			}
 
 		# SETTINGS
@@ -136,22 +138,26 @@ class DVDProfiler(xbmcgui.Window):
 
 	###################################################################################################
 	def onAction(self, action):
-
-		if action == ACTION_PREVIOUS_MENU:
-			debug("ACTION_PREVIOUS_MENU")
-			self.close()
-
-		elif not self.ready or action == 0:
+		debug ("onAction() action=%s" % action)
+		if not action or not self.ready:
 			return
 
 		self.ready = False
-		if action == ACTION_SHOW_INFO or action == ACTION_REMOTE_INFO or action == ACTION_STOP:
-			debug("ACTION_SHOW_INFO or ACTION_REMOTE_INFO or ACTION_STOP")
+		if action == ACTION_BACK:
+			debug("ACTION_BACK")
+			self.close()
+
+		elif action in CONTEXT_MENU:
+			debug("CONTEXT_MENU")
 			if self.mainMenu():             # restart ?
 				if not self.startup():
-					self.reset()
-		elif action == ACTION_X_BUTTON or action == ACTION_STOP:
-			debug("ACTION_X_BUTTON")
+					if self.onlineAliasData:		# gforce back from online alias
+						self.ready = True
+						self.onAction(ACTION_B)
+					else:
+						self.reset()
+		elif action in (ACTION_X, ACTION_REMOTE_STOP):
+			debug("ACTION_X")
 			if self.isOnlineOnly or self.onlineAliasData:
 				aliasData = ManageOnlineCollection().ask()
 				if aliasData:							# only action/save if alias selected
@@ -160,8 +166,8 @@ class DVDProfiler(xbmcgui.Window):
 						self.reset()
 			elif not self.onlineAliasData:
 				self.doFilters()
-		elif action == ACTION_Y_BUTTON or action == ACTION_PAUSE:
-			debug("ACTION_Y_BUTTON")
+		elif action in (ACTION_Y, ACTION_REMOTE_PAUSE):
+			debug("ACTION_Y")
 			if not self.onlineAliasData:
 				colNo = self.lastCollNo
 			else:
@@ -169,10 +175,10 @@ class DVDProfiler(xbmcgui.Window):
 			title = self.dvdCollection.getDVDKey(colNo)[self.dvdCollection.KEYS_DATA_SORTTITLE]
 			win = IMDbWin().ask(title)
 			del win
-		elif action == ACTION_SELECT_ITEM:
-			debug("ACTION_A_BUTTON")
-		elif action == ACTION_PARENT_DIR:			# B btn
-			debug("ACTION_PARENT_DIR")
+		elif action == ACTION_A:
+			debug("ACTION_A")
+		elif action == ACTION_B:			        # B btn
+			debug("ACTION_B")
 			if not self.isOnlineOnly:
 				if self.selectedGenres or self.selectedTags:
 					self.selectedGenres = []
@@ -246,16 +252,12 @@ class DVDProfiler(xbmcgui.Window):
 		self.settings = {}
 		self.localCollectionFilename = os.path.join(DIR_CACHE,"collection.xml")
 
-		makeScriptDataDir() 
-		makeDir(DIR_IMG_CACHE)
-		makeDir(DIR_CACHE)
-
 		self._initSettings(forceReset=False)
 
 		# check for script update
 		scriptUpdated = False
-		if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]:	# check for update ?
-			scriptUpdated = update_script(False, False)
+		if self.settings[self.SETTING_CHECK_UPDATE]:	# check for update ?
+			scriptUpdated = updateScript(True, False)
 
 		if not scriptUpdated and self.startupMenu():
 			self.ready = True
@@ -268,7 +270,7 @@ class DVDProfiler(xbmcgui.Window):
 	def startupMenu(self):
 		debug("> startupMenu()")
 		success = False
-		menu = [ self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
+		menu = [ __language__(500), self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
 
 		selectedPos = 0
 		startupMode = self.settings[self.SETTING_START_MODE]
@@ -278,9 +280,9 @@ class DVDProfiler(xbmcgui.Window):
 
 			if startupMode == self.START_MODE_MENU:
 				selectDialog = DialogSelect()
-				selectDialog.setup(__language__(213), width=300, rows=len(menu),banner=LOGO_FILENAME)
+				selectDialog.setup(__language__(553), width=300, rows=len(menu),banner=LOGO_FILENAME)
 				selectedPos, action = selectDialog.ask(menu, selectedPos)
-				if selectedPos < 0:
+				if selectedPos <= 0:
 					break
 				startupMode = menu[selectedPos]
 			
@@ -434,7 +436,7 @@ class DVDProfiler(xbmcgui.Window):
 				self.addControl(xbmcgui.ControlImage(92, 0, 628, REZ_H, 'background-overlay-whitewash-centertile.png'))
 				self.addControl(xbmcgui.ControlImage(-61, 0, 128, REZ_H, 'blades-runner-left.png'))
 				self.addControl(xbmcgui.ControlImage(18, 0, 80, REZ_H, 'blades-size4-header.png'))
-				self.addControl(xbmcgui.ControlLabel(75, (200),0, 0, __language__(0), \
+				self.addControl(xbmcgui.ControlLabel(75, 200, 0, 0, __language__(0), \
 													 font=FONT18,textColor='0xFF000000',angle=270))
 			except:
 				xbmcgui.unlock()
@@ -1253,7 +1255,7 @@ class DVDProfiler(xbmcgui.Window):
 	def fetchAllImages(self):
 		debug("> fetchAllImages()")
 
-		dialogProgress.create(__language__(17))
+		dialogProgress.create(__language__(303))
 		MAX = self.dvdCollection.getCollectionSize()
 		count = float(1.0)
 		for collNum, data in self.dvdCollection.keys.items():
@@ -1273,26 +1275,23 @@ class DVDProfiler(xbmcgui.Window):
 		debug("> mainMenu()")
 
 		# menu choices
-		MENU_VIEW_IMDB = "View IMDb Of Current Title"
-		MENU_VIEW_ONLINE = "View An Online Collection"
-		MENU_VIEW_OWN = "View Own Collection"
-		MENU_FILTERS = "Filters"
-		MENU_FETCH_COLL = "Fetch Collection From SMB"
-		MENU_CONFIG_MENU = "Config Menu"
-		MENU_FETCH_ALL_IMAGES = "Fetch All Images"
-		MENU_VIEW_README = "View Script Readme"
-		MENU_VIEW_CHANGELOG = "View Script ChangeLog"
+		MENU_VIEW_IMDB = __language__(503)
+		MENU_VIEW_ONLINE = __language__(504)
+		MENU_VIEW_OWN = __language__(505)
+		MENU_FILTERS = __language__(506)
+		MENU_FETCH_COLL = __language__(507)
+		MENU_FETCH_ALL_IMAGES = __language__(508)
+		MENU_CONFIG_MENU = __language__(502)
 
 		menuOptions = [
+			__language__(500),	# exit
 			MENU_VIEW_IMDB,
 			MENU_VIEW_ONLINE,
 			MENU_VIEW_OWN,
 			MENU_FILTERS,
 			MENU_FETCH_COLL,
 			MENU_FETCH_ALL_IMAGES,
-			MENU_CONFIG_MENU,
-			MENU_VIEW_README,
-			MENU_VIEW_CHANGELOG
+			MENU_CONFIG_MENU
 			]
 
 		if self.isOnlineOnly or not self.onlineAliasData:
@@ -1305,12 +1304,12 @@ class DVDProfiler(xbmcgui.Window):
 
 		# show this dialog and wait until it's closed
 		restart = False
-		selectedPos = -1	# start on exit
+		selectedPos = 0	# start on exit
 		while not restart:
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(600), width=310, rows=len(menuOptions))
+			selectDialog.setup(__language__(501), width=310, rows=len(menuOptions),banner=LOGO_FILENAME)
 			selectedPos, action = selectDialog.ask(menuOptions, selectedPos)
-			if selectedPos < 0:				# exit selected
+			if selectedPos <= 0:				# exit selected
 				break
 
 			if menuOptions[selectedPos] == MENU_VIEW_IMDB:
@@ -1338,12 +1337,7 @@ class DVDProfiler(xbmcgui.Window):
 				restart = self.configMenu()
 			elif menuOptions[selectedPos] == MENU_FETCH_ALL_IMAGES:
 				self.fetchAllImages()
-			elif menuOptions[selectedPos] == MENU_VIEW_README:
-				textBoxDialog = TextBoxDialog()
-				textBoxDialog.ask(file=README_FILENAME, title="Readme")
-			elif menuOptions[selectedPos] == MENU_VIEW_CHANGELOG:
-				textBoxDialog = TextBoxDialog()
-				textBoxDialog.ask(file=CHANGELOG_FILENAME, title="ChangeLog")
+
 		debug ("< mainMenu() restart: " + str(restart))
 		return restart
 
@@ -1353,23 +1347,27 @@ class DVDProfiler(xbmcgui.Window):
 		debug("> configMenu() init()")
 
 		# menu choices
-		OPT_CONFIG_SMB = __language__(603)
-		OPT_UPDATE_SCRIPT = __language__(631)
-		OPT_UPDATE_SCRIPT_CHECK_STARTUP = __language__(632)
-		OPT_CLEAR_CACHE = __language__(633)
-		OPT_START_MODE = __language__(634)
+		OPT_VIEW_README = __language__(521)
+		OPT_VIEW_CHANGELOG = __language__(522)
+		OPT_UPDATE_SCRIPT = __language__(523)
+		OPT_CHECK_SCRIPT_UPDATE = __language__(524)
+		OPT_CLEAR_CACHE = __language__(525)
+		OPT_START_MODE = __language__(526)
+		OPT_CONFIG_SMB = __language__(527)
 
 		def _makeMenu():
-			menu = []
+			menu = [__language__(500)]	# exit
 			menu.append(xbmcgui.ListItem(OPT_CONFIG_SMB))
-			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP]:
+			if self.settings[self.SETTING_CHECK_UPDATE]:
 				value = __language__(350)
 			else:
 				value = __language__(351)
-			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT_CHECK_STARTUP, value))
+			menu.append(xbmcgui.ListItem(OPT_CHECK_SCRIPT_UPDATE, value))
 			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT))
 			menu.append(xbmcgui.ListItem(OPT_CLEAR_CACHE))
 			menu.append(xbmcgui.ListItem(OPT_START_MODE, self.settings[self.SETTING_START_MODE]))
+			menu.append(xbmcgui.ListItem(OPT_VIEW_README)),
+			menu.append(xbmcgui.ListItem(OPT_VIEW_CHANGELOG))
 			return menu
 
 		# show this dialog and wait until it's closed
@@ -1378,19 +1376,19 @@ class DVDProfiler(xbmcgui.Window):
 		while True:
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
-			selectDialog.setup("Config Menu",width=350, rows=len(menu))
+			selectDialog.setup(__language__(502),width=350, rows=len(menu), banner=LOGO_FILENAME)
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
-			if selectedPos < 0:				# exit selected
+			if selectedPos <= 0:				# exit selected
 				break
 
 			selectedOpt = menu[selectedPos].getLabel()
 			if selectedOpt == OPT_CONFIG_SMB:
 				self.configSMB()
-			elif selectedOpt == OPT_UPDATE_SCRIPT_CHECK_STARTUP:
-				self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] = xbmcgui.Dialog().yesno( __language__(0), OPT_UPDATE_SCRIPT_CHECK_STARTUP )
+			elif selectedOpt == OPT_CHECK_SCRIPT_UPDATE:
+				self.settings[self.SETTING_CHECK_UPDATE] = xbmcgui.Dialog().yesno( __language__(502), OPT_CHECK_SCRIPT_UPDATE )
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 			elif selectedOpt == OPT_UPDATE_SCRIPT:
-				if self._update_script(False):							# never silent from config menu
+				if updateScript(False, True):							# never silent from config menu
 					dialogOK(__language__(0),__language__(1010))
 					# restart script after update
 					xbmc.executebuiltin('XBMC.RunScript(%s)'%(os.path.join(DIR_HOME, 'default.py')))
@@ -1398,13 +1396,21 @@ class DVDProfiler(xbmcgui.Window):
 			elif selectedOpt == OPT_CLEAR_CACHE:
 				restart = self.clearCache()
 			elif selectedOpt == OPT_START_MODE:
-				menu = [ self.START_MODE_MENU, self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
+				menu = [ __language__(500), self.START_MODE_MENU, self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
 				selectDialogStartMode = DialogSelect()
-				selectDialogStartMode.setup(__language__(601),width=350, rows=len(menu))
+				selectDialogStartMode.setup(__language__(527),width=350, rows=len(menu))
 				selectedPos, action = selectDialogStartMode.ask(menu)
-				if selectedPos >= 0:
+				if selectedPos > 0:
 					self.settings[self.SETTING_START_MODE] = menu[selectedPos]
 					saveFileObj(self.SETTINGS_FILENAME, self.settings)
+			elif selectedOpt == OPT_VIEW_README:
+				fn = getReadmeFilename(mylanguage)
+				textBoxDialog = TextBoxDialog()
+				textBoxDialog.ask(title=OPT_VIEW_README, file=fn, panel=DIALOG_PANEL)
+			elif selectedOpt == OPT_VIEW_CHANGELOG:
+				fn = os.path.join(DIR_HOME, "Changelog.txt")
+				textBoxDialog = TextBoxDialog()
+				textBoxDialog.ask(title=OPT_VIEW_CHANGELOG, file=fn, panel=DIALOG_PANEL)
 
 		debug ("< configMenu().ask() restart="+str(restart))
 		return restart
@@ -1415,23 +1421,23 @@ class DVDProfiler(xbmcgui.Window):
 	def configSMB(self):
 		debug("> configSMB()")
 
-		MENU_OPT_SMB_USE = __language__(640)
-		MENU_OPT_SMB_PATH = __language__(641)
-		MENU_OPT_SMB_PC_IP = __language__(642)
-		MENU_OPT_SMB_DVDPRO_SHARE = __language__(643)
-		MENU_OPT_SMB_MOVIES_SHARE = __language__(644)
-		MENU_OPT_SMB_FILENAME = __language__(645)
-		MENU_OPT_SMB_COLLECTION_DIR = __language__(646)
-		MENU_OPT_SMB_IMAGES_DIR = __language__(647)
-		MENU_OPT_SMB_CONN_CHECK = __language__(648)
+		MENU_OPT_SMB_USE = __language__(540)
+		MENU_OPT_SMB_PATH = __language__(541)
+		MENU_OPT_SMB_PC_IP = __language__(542)
+		MENU_OPT_SMB_DVDPRO_SHARE = __language__(543)
+		MENU_OPT_SMB_MOVIES_SHARE = __language__(544)
+		MENU_OPT_SMB_FILENAME = __language__(545)
+		MENU_OPT_SMB_COLLECTION_DIR = __language__(546)
+		MENU_OPT_SMB_IMAGES_DIR = __language__(547)
+		MENU_OPT_SMB_CONN_CHECK = __language__(548)
 
 		def _makeMenu():
 			debug("_makeMenu()")
-			menu = []
+			menu = [__language__(500)]
 			if self.settings[self.SETTING_SMB_USE]:
-				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(350)))
+				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(350)))	# yes
 			else:
-				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(351)))
+				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(351)))	# no
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_PATH, self.settings[self.SETTING_SMB_PATH]))
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_PC_IP, self.settings[self.SETTING_SMB_PC_IP]))
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_DVDPRO_SHARE, self.settings[self.SETTING_SMB_DVDPRO_SHARE]))
@@ -1442,14 +1448,14 @@ class DVDProfiler(xbmcgui.Window):
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_CONN_CHECK))
 			return menu
 
-		selectedPos = -1	# start on exit
+		selectedPos = 0	# start on exit
 		while True:
 			changed = False
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(603), width=620, rows=len(menu))
+			selectDialog.setup(__language__(527), width=620, rows=len(menu))
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
-			if selectedPos < 0:
+			if selectedPos <= 0:
 				break # exit selected
 
 			# get menu selected value
@@ -1500,7 +1506,7 @@ class DVDProfiler(xbmcgui.Window):
 				changed = True
 
 			elif key == MENU_OPT_SMB_USE:
-				self.settings[self.SETTING_SMB_USE] = xbmcgui.Dialog().yesno(__language__(603), MENU_OPT_SMB_USE)
+				self.settings[self.SETTING_SMB_USE] = xbmcgui.Dialog().yesno(__language__(527), MENU_OPT_SMB_USE)
 				changed = True
 
 			elif key == MENU_OPT_SMB_DVDPRO_SHARE:
@@ -1523,7 +1529,7 @@ class DVDProfiler(xbmcgui.Window):
 				smbPath = "%s/%s" % (self.settings[self.SETTING_SMB_PATH], self.settings[self.SETTING_SMB_DVDPRO_SHARE])
 				remote, remoteInfo = smbConnect(self.settings[self.SETTING_SMB_PC_IP],smbPath)
 				if remote and remoteInfo:
-					messageOK(__language__(648),__language__(201), smbPath)
+					messageOK(MENU_OPT_SMB_CONN_CHECK,__language__(201), smbPath)
 
 			if changed:
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
@@ -1536,19 +1542,15 @@ class DVDProfiler(xbmcgui.Window):
 		debug("> clearCache()")
 		success = False
 		try:
-			title = __language__(631).replace('?','')
+			title = __language__(526)
 			if xbmcgui.Dialog().yesno(title, __language__(223)):
-				debug("rmtree " + DIR_IMG_CACHE)
 				rmtree( DIR_IMG_CACHE )
 				time.sleep(1)
-				debug("makeDir " + DIR_IMG_CACHE)
 				makeDir( DIR_IMG_CACHE )
 
 			if xbmcgui.Dialog().yesno(title, __language__(224)):
-				debug("rmtree " + DIR_CACHE)
 				rmtree( DIR_CACHE )
 				time.sleep(1)
-				debug("makeDir " + DIR_CACHE)
 				makeDir( DIR_CACHE )
 		except:
 			handleException()
@@ -2116,7 +2118,7 @@ class ManageOnlineCollection:
 		debug("> ManageOnlineCollection() init()")
 
 		self.ONLINE_FILENAME = os.path.join( DIR_USERDATA, 'online_users.dat' )
-		self.TITLE = __language__(240)
+		self.TITLE = __language__(504)
 
 		debug("< ManageOnlineCollection() init()")
 
@@ -2149,24 +2151,25 @@ class ManageOnlineCollection:
 	def ask(self):
 		debug("> ManageOnlineCollection().ask()")
 
-		selectedPos = -1	# start on exit
+		selectedPos = 0	# start on exit
 		users = self.load()
 		isDelete = False
 		while True:
 			aliasData = []
 			selectDialog = DialogSelect()
 			if isDelete:
-				title = "%s (%s)" % (self.TITLE,  __language__(694))
+				title = "%s" % __language__(566)
 			else:
-				title = "%s - (A = %s, Y = %s, X = %s)" % (self.TITLE,__language__(696),__language__(691),__language__(694))
-			selectDialog.setup(title=title, width=450, rows=len(users), \
+				title = "%s - (A=%s, Y=%s, X=%s)" % \
+						(self.TITLE,__language__(565),__language__(560),__language__(563))
+			selectDialog.setup(title=title, width=500, rows=len(users), \
 								isDelete=isDelete, useX=True, useY=True)
 			users.sort()
 
 			selectedPos, action = (selectDialog.ask(users, selectedPos))
-			if action == ACTION_PREVIOUS_MENU or action == ACTION_PARENT_DIR:
+			if action in CANCEL_DIALOG or selectedPos < 0:
 				break
-			elif action == ACTION_Y_BUTTON: 	# add new
+			elif action == ACTION_Y: 	# add new
 				debug("add user")
 				# ALIAS
 				user = doKeyboard("",__language__(241))
@@ -2189,19 +2192,15 @@ class ManageOnlineCollection:
 						users.append(aliasData)
 						self.save(users)
 
-			elif action == ACTION_X_BUTTON: 	# delete
-				if len(users):
-					isDelete = not isDelete
+			elif action == ACTION_X: 	# delete
+				user, host = users[selectedPos]
+				if xbmcgui.Dialog().yesno(__language__(304), user, host):
+					del users[selectedPos]
+					self.save(users)
 			elif selectedPos >= 0:				# select
 				user, host = users[selectedPos]
-				if isDelete:					# in delete mode
-					if xbmcgui.Dialog().yesno(__language__(204), user, host):
-						users.pop(selectedPos)
-						self.save(users)
-					isDelete = False
-				else:
-					aliasData = [user, host]
-					break
+				aliasData = [user, host]
+				break
 			elif selectedPos < 0:				# exit
 				break
 
@@ -2293,7 +2292,7 @@ class Filters(xbmcgui.WindowDialog):
 
 	##############################################################################################
 	def onAction(self, action):
-		if action == ACTION_PREVIOUS_MENU or action == ACTION_PARENT_DIR:
+		if action in CANCEL_DIALOG:
 			self.close()
 
 	##############################################################################################
@@ -2373,15 +2372,15 @@ class Filters(xbmcgui.WindowDialog):
 
 		sortList = dataDict.keys()
 		sortList.sort()
-		controlList.addItem(xbmcgui.ListItem(__language__(690)))
-		controlList.addItem(xbmcgui.ListItem(__language__(246)))
-		controlList.addItem(xbmcgui.ListItem(__language__(247)))
-		controlList.addItem(xbmcgui.ListItem(__language__(248)))  # cancels in both filters
+		controlList.addItem(xbmcgui.ListItem(__language__(500)))	# exit
+		controlList.addItem(xbmcgui.ListItem(__language__(246)))	# select all
+		controlList.addItem(xbmcgui.ListItem(__language__(247)))	# select none
+		controlList.addItem(xbmcgui.ListItem(__language__(248)))	# turn off all filters
 
 		for key in sortList:
 			if dataDict[key]:
 				if not Emulating:
-					controlList.addItem(xbmcgui.ListItem(key, thumbnailImage=TICK_FILENAME))
+					controlList.addItem(xbmcgui.ListItem(key, iconImage=TICK_FILENAME,thumbnailImage=TICK_FILENAME))
 				else:
 					controlList.addItem(xbmcgui.ListItem(key, 'X'))
 			else:
@@ -2415,8 +2414,8 @@ class Filters(xbmcgui.WindowDialog):
 		return selectedGenres, selectedTags
 
 ######################################################################################
-def update_script(quite=False, notifyNotFound=False):
-	xbmc.output( "> update_script() quite=%s" %quite)
+def updateScript(quite=False, notifyNotFound=False):
+	xbmc.output( "> updateScript() quite=%s" %quite)
 
 	updated = False
 	up = update.Update(__language__, __scriptname__)
@@ -2436,18 +2435,27 @@ def update_script(quite=False, notifyNotFound=False):
 #		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
 
 	del up
-	xbmc.output( "< _update_script() updated=%s" % updated)
+	xbmc.output( "< updateScript() updated=%s" % updated)
 	return updated
 
 #############################################################################################
 # BEGIN !
 #############################################################################################
-dvdpro = DVDProfiler()
-if dvdpro.isReady():
-	dvdpro.doModal()
-del dvdpro
+makeScriptDataDir() 
+makeDir(DIR_IMG_CACHE)
+makeDir(DIR_CACHE)
 
-moduleList = ['dvdproLib', 'bbbLib', 'smbLib', 'IMDbWin', 'IMDbLib']
+myscript = DVDProfiler()
+if myscript.isReady():
+	myscript.doModal()
+del myscript
+
+debug("exiting script ...")
+# housekeep on exit
+deleteFile(os.path.join(DIR_HOME, "temp.xml"))
+deleteFile(os.path.join(DIR_HOME, "temp.html"))
+
+moduleList = ['bbbLib', 'bbbGUILib', 'smbLib', 'IMDbWin', 'IMDbLib']
 for m in moduleList:
 	try:
 		del sys.modules[m]
@@ -2457,9 +2465,6 @@ for m in moduleList:
 # remove other globals
 try:
 	del dialogProgress
-except: pass
-try:
-	del __language__
 except: pass
 
 # goto xbmc home window

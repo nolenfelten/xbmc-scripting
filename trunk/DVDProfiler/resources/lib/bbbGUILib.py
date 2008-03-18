@@ -21,8 +21,10 @@ except:
 
 # GFX - for library funcs
 BACKGROUND_FILENAME = os.path.join(DIR_GFX,'background.png')
-HEADER_FILENAME = os.path.join(DIR_GFX,'header.png')
-FOOTER_FILENAME = os.path.join(DIR_GFX,'footer.png')
+PANEL_HEADER_NAME = 'header.png'
+HEADER_FILENAME = os.path.join(DIR_GFX, PANEL_HEADER_NAME)
+PANEL_FOOTER_NAME = 'footer.png'
+FOOTER_FILENAME = os.path.join(DIR_GFX, PANEL_FOOTER_NAME)
 LOGO_FILENAME = os.path.join(DIR_GFX,'logo.png')
 BTN_A_FILENAME = os.path.join(DIR_GFX,'abutton.png')
 BTN_B_FILENAME = os.path.join(DIR_GFX,'bbutton.png')
@@ -34,8 +36,10 @@ LIST_HIGHLIGHT_FILENAME = os.path.join(DIR_GFX,'list_highlight.png')
 FRAME_FOCUS_FILENAME = os.path.join(DIR_GFX,'frame_focus.png')
 FRAME_NOFOCUS_FILENAME = os.path.join(DIR_GFX,'frame_nofocus.png')
 FRAME_NOFOCUS_LRG_FILENAME = os.path.join(DIR_GFX,'frame_nofocus_large.png')
-PANEL_FILENAME = os.path.join(DIR_GFX,'dialog-panel.png')
-PANEL_FILENAME_MC360 = os.path.join(DIR_GFX,'dialog-panel_mc360.png')
+DIALOG_PANEL_NAME = 'dialog-panel.png'
+PANEL_FILENAME = os.path.join(DIR_GFX, DIALOG_PANEL_NAME)
+DIALOG_PANEL_NAME_MC360 = 'dialog-panel_mc360.png'
+PANEL_FILENAME_MC360 = os.path.join(DIR_GFX, DIALOG_PANEL_NAME_MC360)
 MENU_FILENAME = os.path.join(DIR_GFX,'menu.png')
 
 # rez GUI defined in
@@ -60,13 +64,14 @@ class DialogSelect(xbmcgui.WindowDialog):
 		self.menuCL = None
 		self.lastAction = 0
 
-	def setup(self, title='',width=430, height=450, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
-			  imageWidth=0,imageHeight=22, itemHeight=22, rows=0, \
+	def setup(self, title='',width=430, height=490, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
+			  imageWidth=0,imageHeight=22, itemHeight=25, rows=0, \
 			  useY=False, useX=False, isDelete=False, panel='', banner=''):
-		debug("> DialogSelect().setup() useY="+str(useY) + " useX=" + str(useX) + " isDelete=" + str(isDelete))
+		debug("> DialogSelect().setup() useY=%s useX=%s isDelete=%s" % (useY,useX,isDelete))
 
 		if not panel:
 			panel = DIALOG_PANEL
+		debug("panel=%s" % panel)
 		self.useY = useY
 		self.useX = useX
 		self.isDelete = isDelete
@@ -118,9 +123,6 @@ class DialogSelect(xbmcgui.WindowDialog):
 			self.addControl(self.panelCI)
 		except: pass
 
-		if isDelete:
-			title += " (Delete: Highlight & Press A)"
-
 		if title:
 			self.titleCL = xbmcgui.ControlLabel(xpos+offsetLabelX, titleY, listW, titleH, \
 												title, FONT13, '0xFFFFFF00', alignment=XBFONT_CENTER_X)
@@ -137,6 +139,11 @@ class DialogSelect(xbmcgui.WindowDialog):
 			except:
 				debug("failed to place banner")
 
+		if imageWidth > 0:
+			rowSpace = 1
+		else:
+			rowSpace = 0
+
 		try:
 			self.removeControl(self.menuCL)
 		except: pass
@@ -145,13 +152,13 @@ class DialogSelect(xbmcgui.WindowDialog):
 											listW, listH, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, \
-											itemTextXOffset=0, space=0, alignmentY=XBFONT_CENTER_Y)
+											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
 		else:
 			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
 											listW, listH, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, buttonFocusTexture=LIST_HIGHLIGHT_FILENAME, \
-											itemTextXOffset=0, space=0, alignmentY=XBFONT_CENTER_Y)
+											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(self.menuCL)
 		self.menuCL.setPageControlVisible(False)
 		debug("< DialogSelect().setup()")
@@ -161,11 +168,11 @@ class DialogSelect(xbmcgui.WindowDialog):
 			return
 #		debug("DialogSelect.onAction()")
 		self.lastAction = action
-		if action in [ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR]:
+		if action in [ACTION_BACK, ACTION_B]:
 			self.selectedPos = -1
 			self.close()
-		elif (self.useY and action == ACTION_Y_BUTTON) or \
-			 (self.useX and action == ACTION_X_BUTTON):
+		elif (self.useY and action == ACTION_Y) or \
+			 (self.useX and action == ACTION_X):
 			self.selectedPos = self.menuCL.getSelectedPosition()
 			self.close()
 
@@ -178,9 +185,9 @@ class DialogSelect(xbmcgui.WindowDialog):
 	def setMenu(self, menu, icons=[]):
 		debug("> DialogSelect.setMenu()")
 		self.menuCL.reset()
-#		self.menuCL.addItem("Exit")
 		if menu:
-			for idx in range(len(menu)):
+			menuSZ = len(menu)
+			for idx in range(menuSZ):
 				opt = menu[idx]
 				try:
 					img = icons[idx]
@@ -194,7 +201,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 						opt.setThumbnailImage(img)
 					self.menuCL.addItem(opt)
 				elif isinstance(opt, list) or isinstance(opt, tuple):
-					# option is itself a list [lbl1, lbl2]
+					# option is itself a list/tuple
 					l1 = opt[0].strip()
 					try:
 						l2 = opt[1].strip()
@@ -205,8 +212,8 @@ class DialogSelect(xbmcgui.WindowDialog):
 					# single string value
 					self.menuCL.addItem(xbmcgui.ListItem(opt.strip(), '', img, img))
 
-			if self.selectedPos > len(menu):
-				self.selectedPos = len(menu)-1
+			if self.selectedPos > menuSZ:
+				self.selectedPos = menuSZ-1
 			elif self.selectedPos < 0:
 				self.selectedPos = 0
 			self.menuCL.selectItem(self.selectedPos)
@@ -227,6 +234,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 #################################################################################################################
 class TextBoxDialog(xbmcgui.WindowDialog):
 	def __init__(self):
+		debug("TextBoxDialog().__init__")
 		if Emulating: xbmcgui.WindowDialog.__init__(self)
 		setResolution(self)
 
@@ -237,33 +245,40 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 		ypos = int((REZ_H /2) - (height /2))
 
 		try:
-			self.addControl(xbmcgui.ControlImage(xpos, ypos, width, height, DIALOG_PANEL))
+			self.addControl(xbmcgui.ControlImage(xpos, ypos, width, height, self.panel))
 		except: pass
 
 		xpos += 25
 		ypos += 10
-		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '', FONT14, \
-											"0xFFFFFF99", alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
+		self.titleCL = xbmcgui.ControlLabel(xpos, ypos, width-35, 30, '', \
+											FONT14, "0xFFFFFF99", alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.titleCL)
 		ypos += 25
 		self.descCTB = xbmcgui.ControlTextBox(xpos, ypos, width-44, height-85, FONT10, '0xFFFFFFEE')
 		self.addControl(self.descCTB)
 
-	def ask(self, title, text="", file=None, width=685, height=560):
+	def ask(self, title, text="", file=None, width=685, height=560, panel=""):
 		debug( "> TextBoxDialog().ask()" )
+		if not panel:
+			self.panel = DIALOG_PANEL
+		else:
+			self.panel = panel
 		self._setupDisplay(width, height)
 		if not title and file:
+			print "file=" + file
 			head, title = os.path.split(file)
+			print head, title
 		self.titleCL.setLabel(title)
 		if file:
 			text = readFile(file)
+			print "text=", text
 		self.descCTB.setText(text)
 		self.setFocus(self.descCTB)
 		self.doModal()
 		debug( "< TextBoxDialog().ask()" )
 
 	def onAction(self, action):
-		if action in [ACTION_PREVIOUS_MENU, ACTION_PARENT_DIR]:
+		if action in [ACTION_BACK, ACTION_B]:
 			self.close()
 
 	def onControl(self, control):
@@ -272,7 +287,11 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 
 ######################################################################################
 # establish default panel to use for dialogs
-if isMC360():
-	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME_MC360)
-else:
-	DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME)
+try:
+    DIALOG_PANEL = sys.modules[ "__main__" ].DIALOG_PANEL
+except:
+    if isMC360():
+        DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME_MC360)
+    else:
+        DIALOG_PANEL = os.path.join(DIR_GFX, PANEL_FILENAME)
+debug("bbbGUILib() DIALOG_PANEL=%s" % DIALOG_PANEL)
