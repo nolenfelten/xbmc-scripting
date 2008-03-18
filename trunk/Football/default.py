@@ -92,7 +92,7 @@ class Football(xbmcgui.Window):
 		# check for script update
 		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_UPDATE]:	# check for update ?
-			scriptUpdated = updateScript(False, False)
+			scriptUpdated = updateScript(True, False)
 
 		if scriptUpdated:
 			self.exit()
@@ -244,23 +244,22 @@ class Football(xbmcgui.Window):
 	########################################################################################################################
 	def setupDisplay(self):
 		debug("> setupDisplay()")
-		self.screenH = REZ_H
-		self.screenW = REZ_W
 
 		mc360 = isMC360()
 		if mc360:
 			self.headerH = 70
 			self.footerH = 80
+			self.contentX = 90
 		else:
 			self.headerH = 70
 			self.footerH = 100
+			self.contentX = 0
 		self.footerY = REZ_H -self.footerH
 
 		# DRAW AREA DIMS
-		self.contentX = 0
 		self.contentY = self.headerH + 1
 		self.contentH = REZ_H - (self.contentY + self.footerH)
-		self.contentW = REZ_W
+		self.contentW = REZ_W - self.contentX
 		debug("self.contentX: " + str(self.contentX) + "  self.contentY: " + str(self.contentY) \
 			+ "  self.contentH: " + str(self.contentH) + "  self.contentW: " + str(self.contentW))
 		debug("self.headerH="+str(self.headerH) + " self.footerH="+str(self.footerH))
@@ -297,7 +296,7 @@ class Football(xbmcgui.Window):
 				self.addControl(xbmcgui.ControlImage(92,0, 628, REZ_H, 'background-overlay-whitewash-centertile.png'))
 				self.addControl(xbmcgui.ControlImage(-61,0, 128, REZ_H, 'blades-runner-left.png'))
 				self.addControl(xbmcgui.ControlImage(18,0, 80, REZ_H, 'blades-size4-header.png'))
-				self.addControl(xbmcgui.ControlLabel(75,200,0, 0, __language(0),
+				self.addControl(xbmcgui.ControlLabel(75,200,0, 0, __language__(0),
 													font=FONT18,textColor='0xFF000000',angle=270))
 			except:
 				xbmcgui.unlock()
@@ -347,7 +346,7 @@ class Football(xbmcgui.Window):
 		ypos = 0
 		self.clockLbl = xbmcgui.ControlLabel(xpos, ypos, 0, 0, \
 							time.strftime("%H:%M:%S",time.localtime()), \
-							FONT12, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
+							FONT10, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
 		self.addControl(self.clockLbl)
 		self.clockLbl.setAnimations([('WindowOpen', self.animHeaderWO),
 									 ('WindowClose', self.animHeaderWC)])
@@ -369,7 +368,7 @@ class Football(xbmcgui.Window):
 		except: pass
 		ypos += 20
 		self.datasourceLbl = xbmcgui.ControlLabel(xpos, ypos, 0, 0, self.dataSource, \
-							FONT12, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
+							FONT10, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
 		self.addControl(self.datasourceLbl)
 		self.datasourceLbl.setAnimations([('WindowOpen', self.animHeaderWO),
 										('WindowClose', self.animHeaderWC)])
@@ -564,7 +563,7 @@ class Football(xbmcgui.Window):
 			selectDialog = DialogSelect()
 			selectDialog.setup(__language__(523), width=300, rows=len(menu),banner=LOGO_FILENAME)
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
-			if selectedPos == 0:
+			if selectedPos <= 0:
 				dataSource = None
 			else:
 				dataSource = menu[selectedPos]
@@ -577,6 +576,7 @@ class Football(xbmcgui.Window):
 	def sourceBBC(self):
 		debug("> sourceBBC()")
 		self.dataSource = self.DATASOURCE_BBC
+		self.SOURCE_LOGO = os.path.join(DIR_GFX, "bbc_logo.png")
 
 		# LEAGUES
 		LEAGUE_PREM = __language__(557)
@@ -627,7 +627,7 @@ class Football(xbmcgui.Window):
 
 		# LEAGUES data store
 		self.LEAGUES_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 160, 120, LEAGUE_PREM], # name,x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 180, 120, LEAGUE_PREM], # name,x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : LEAGUES_MENU,
 			LEAGUE_PREM : ['eng_prem','table','fixtures','results','top_scorers',True,True],
 			LEAGUE_CHAMP : ['eng_div_1','table','fixtures','results','top_scorers',True,True],
@@ -670,7 +670,7 @@ class Football(xbmcgui.Window):
 							self.LEAGUE_VIEW_FIX, self.LEAGUE_VIEW_RES, self.LEAGUE_VIEW_LIVE_SCORES,
 							self.LEAGUE_VIEW_TOP_SCORERS]
 		self.LEAGUE_VIEW_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 150, 120, ''],	# name,x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 150, 120, ''],	# x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : [],						# created according to league selected
 			self.LEAGUE_VIEW_TABLE : 'http://news.bbc.co.uk/sport1/hi/football/$LEAGUE/$TABLE/default.stm',
 			self.LEAGUE_VIEW_TEAMS : 'http://news.bbc.co.uk/sport1/hi/football/$LEAGUE/$TABLE/default.stm',
@@ -706,6 +706,7 @@ class Football(xbmcgui.Window):
 	def sourceSoccerStand(self):
 		debug("> sourceSoccerStand()")
 		self.dataSource = self.DATASOURCE_SOCSTND
+		self.SOURCE_LOGO = os.path.join(DIR_GFX, "soccerstand_logo.png")
 
 		# find all id's
 		html = fetchURL('http://www.soccerstand.com')
@@ -725,7 +726,7 @@ class Football(xbmcgui.Window):
 		menu = teamsDict.keys()
 		menu.sort()
 		self.LEAGUES_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 160, 120, ''],	# name,x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 180, 120, ''],	# name,x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : menu			# menu of names
 			}
 
@@ -1183,14 +1184,14 @@ class Football(xbmcgui.Window):
 		attribs = data[self.NAV_LIST_ATTRIBS]
 
 		# get list dims
-		xpos = attribs[self.NAV_LISTS_DATA_REC_X]
+		xpos = self.contentX + attribs[self.NAV_LISTS_DATA_REC_X]
 		ypos = attribs[self.NAV_LISTS_DATA_REC_Y]
 		width = attribs[self.NAV_LISTS_DATA_REC_W]
 		height = attribs[self.NAV_LISTS_DATA_REC_H]
 
 		# create list with items
 		control = xbmcgui.ControlList(xpos, ypos, width, height, itemTextXOffset=0, \
-							itemHeight=24,selectedColor='0xFFFFFF99', \
+							itemHeight=22,selectedColor='0xFFFFFFFF', space=1, \
 							buttonFocusTexture=BUTTON_FOCUS, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(control)
 		control.setAnimations([('WindowOpen', self.animFooterWO),
@@ -1354,16 +1355,16 @@ class Football(xbmcgui.Window):
 		if self.dataSource == self.DATASOURCE_SOCSTND:
 			imgW = 115		# country flags
 		else:
-			imgW = 160		# league logos
+			imgW = 120		# league logos
 		leagueName = self.getNavListAttrib(self.LEAGUES_KEY, self.NAV_LISTS_DATA_REC_SELECTED)
 		filenameLeague = os.path.join(DIR_TEAM_GFX,leagueName+'.jpg')
 		if not fileExist(filenameLeague):
-			filenameLeague = LOGO_FILENAME
+			filenameLeague = self.SOURCE_LOGO
 		debug("LEAGUES filename: " + filenameLeague)
 
 		# set league logo
 		try:
-			xpos = 0
+			xpos = self.contentX
 			ypos = 0
 			imgH = self.headerH-2
 			self.logoLeagueCI = xbmcgui.ControlImage(xpos, ypos, imgW, imgH, \
@@ -1374,8 +1375,7 @@ class Football(xbmcgui.Window):
 											 ('VisibleChange', 'effect=rotate start=90 center=0,0 time=%s' % self.animTimeOn)
 											 ])
 			xpos += imgW + 10
-		except:
-			handleException()
+		except: pass
 
 		# get team logo filename
 		teamName = self.getNavListAttrib(self.TEAMS_KEY, self.NAV_LISTS_DATA_REC_SELECTED)
@@ -1396,8 +1396,7 @@ class Football(xbmcgui.Window):
 												('WindowClose', self.animHeaderWC),
 												('VisibleChange', self.animZoomWC) ])
 				xpos += imgW + 5
-			except:
-				handleException()
+			except: pass
 
 		# append TEAM_VIEW to label
 		leagueViewSelectedItem = self.getNavListAttrib(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_DATA_REC_SELECTED)
@@ -1409,7 +1408,7 @@ class Football(xbmcgui.Window):
 		if teamName:
 			leagueName += '; ' + teamName
 		self.logoLeagueCLbl = xbmcgui.ControlLabel(xpos, ypos, 0, labelH, leagueName, \
-												FONT14, "0xFFFFFF00")
+												FONT_SPECIAL_14, "0xFFFFFF00")
 		self.addControl(self.logoLeagueCLbl)
 		self.logoLeagueCLbl.setAnimations([('WindowOpen', self.animHeaderWO),
 										  ('WindowClose', self.animHeaderWC)])
@@ -1584,11 +1583,13 @@ class Football(xbmcgui.Window):
 			debug("< getTable() no data")
 			return False
 
+		# look for table sections
 		self.contentData = []
 		sections = parseDocList(html, self.RE_SUB_SECTION)
 		debug("html sections=%s " % len(sections))
 
-		# could be that its a page of links to tables
+		# if no table sections, check if aa page of links to tables
+		# select link, then re-check for sections
 		if not sections:
 			matches = findAllRegEx(html, '<!-- S ILIN -->.*?href="(.*?)">(.*?)<')
 			if matches:
@@ -1601,6 +1602,7 @@ class Football(xbmcgui.Window):
 							continue
 						tablesDict[decodeEntities(name)] = link
 
+				name = ''
 				menu = tablesDict.keys()
 				if len(menu) > 1:
 					menu.sort()
@@ -1608,16 +1610,16 @@ class Football(xbmcgui.Window):
 					selectDialog = DialogSelect()
 					selectDialog.setup(__language__(369), width=400, rows=len(menu))
 					selectedPos, action = selectDialog.ask(menu)
-				else:
-					selectedPos = 0
+					if selectedPos >= 0:
+						name = menu[selectedPos]
+				elif len(menu) == 1:
+					name = menu[0]
 
-				name = menu[selectedPos]
-				if name == __language__(500):		# exit
+				if not name:
 					matches = None
 				else:
+					# fetch linked too table page
 					link = tablesDict[name]
-
-					# fetch actual table page
 					dialogProgress.create(__language__(302), title, name)
 					html = fetchURL(link)
 					dialogProgress.close()
@@ -1686,10 +1688,10 @@ class Football(xbmcgui.Window):
 				self.contentData = tablesDict[menu[selectedPos]]
 		elif len(tablesDict) == 1:
 			self.contentData = tablesDict[tableName]
+		else:
+			messageNoInfo()
 
 		sz = len(self.contentData)
-		if not sz:
-			messageNoInfo()
 		debug("< getTable() teamCount=%s " % sz)
 		return sz
 
@@ -1818,7 +1820,7 @@ class Football(xbmcgui.Window):
 				for col in range(1, len(colHeaders)):
 					text = self.contentData[row][col+1]	# col; allow for url stored at idx 0
 					colW = colWidths[col]
-					ctrl = xbmcgui.ControlLabel(rowX, y, colW, rowH, text, 'font14', \
+					ctrl = xbmcgui.ControlLabel(rowX, y, colW, rowH, text, FONT14, \
 												textColor='0xFF000000',alignment=XBFONT_CENTER_Y)
 					self.contentControls.append([ctrl,None])
 					self.addControl(ctrl)
@@ -3090,7 +3092,7 @@ class Football(xbmcgui.Window):
 					self.dataSource = dataSource
 					optReInit = INIT_FULL
 			elif selectedItem == OPT_CHECK_UPDATE_STARTUP:
-				self.settings[self.SETTING_CHECK_UPDATE] = xbmcgui.Dialog().yesno(__language__(505), OPT_CHECK_UPDATE_STARTUP + " ?")
+				self.settings[self.SETTING_CHECK_UPDATE] = xbmcgui.Dialog().yesno(__language__(505), OPT_CHECK_UPDATE_STARTUP)
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 
 			if optReInit > reInit:
