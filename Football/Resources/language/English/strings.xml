@@ -61,7 +61,7 @@
     <string id="521">View Script Readme</string>
     <string id="522">View Script ChangeLog</string>
     <string id="523">Select DataSource</string>
-    <string id="524">Check For Script Update On Startup</string>
+    <string id="524">Check For Script Update On Startup?</string>
 
     <!-- misc menu/prompts -->
     <string id="530">Live Videprinter</string>
