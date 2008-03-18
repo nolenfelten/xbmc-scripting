@@ -272,6 +272,13 @@ class Football(xbmcgui.Window):
 		self.contentCenterX = int(self.contentW/2)
 		self.contentCenterY = self.headerH + int(self.contentH/2)
 		debug("contentCenterX: " + str(self.contentCenterX) + " contentCenterY: " + str(self.contentCenterY))
+		self.animTimeOn = "250"
+		self.animTimeOff = "200"
+		self.animHeaderWO = 'effect=slide start=0,-%s acceleration=-1.1 time=%s' % (self.headerH, self.animTimeOn)
+		self.animHeaderWC = 'effect=slide end=0,-%s acceleration=-1.1 time=%s' % (self.headerH, self.animTimeOff)
+		self.animFooterWO = 'effect=slide start=0,%s acceleration=-1.1 time=%s' % (self.footerH, self.animTimeOn)
+		self.animFooterWC = 'effect=slide end=0,%s acceleration=1.1 time=%s' % (self.footerH, self.animTimeOff)
+		self.animZoomWC = 'effect=zoom end=0 center=auto time=%s' % self.animTimeOff
 
 		xbmcgui.lock()
 
@@ -297,7 +304,7 @@ class Football(xbmcgui.Window):
 				messageOK("MC360 Skin Error","Failed loading graphic files.","Ensure XBMC is using MC360 skin.")
 		else:
 			# NON MC360
-			# HEADER
+			# BACKGROUND
 			try:
 				self.removeControl(self.backgroundCI)
 			except: pass
@@ -313,6 +320,9 @@ class Football(xbmcgui.Window):
 			try:
 				self.headerCI = xbmcgui.ControlImage(0, 0, REZ_W, self.headerH, HEADER_FILENAME)
 				self.addControl(self.headerCI)
+				self.headerCI.setAnimations([('WindowOpen', self.animHeaderWO),
+											 ('WindowClose', self.animHeaderWC)])
+
 			except: pass
 
 			# FOOTER
@@ -322,6 +332,8 @@ class Football(xbmcgui.Window):
 			try:
 				self.footerCI = xbmcgui.ControlImage(0, self.footerY, self.contentW, self.footerH, FOOTER_FILENAME)
 				self.addControl(self.footerCI)
+				self.footerCI.setAnimations([('WindowOpen', self.animFooterWO),
+											('WindowClose', self.animFooterWC) ])
 			except: pass
 
 		# remove content controls & other stuff
@@ -337,6 +349,8 @@ class Football(xbmcgui.Window):
 							time.strftime("%H:%M:%S",time.localtime()), \
 							FONT12, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
 		self.addControl(self.clockLbl)
+		self.clockLbl.setAnimations([('WindowOpen', self.animHeaderWO),
+									 ('WindowClose', self.animHeaderWC)])
 
 		# VERSION
 		try:
@@ -346,7 +360,8 @@ class Football(xbmcgui.Window):
 		self.versionLbl = xbmcgui.ControlLabel(xpos, ypos, 0, 0, "v"+__version__, \
 							FONT10, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
 		self.addControl(self.versionLbl)
-
+		self.versionLbl.setAnimations([('WindowOpen', self.animHeaderWO),
+									 ('WindowClose', self.animHeaderWC)])
 
 		# DATASOURCE
 		try:
@@ -356,7 +371,8 @@ class Football(xbmcgui.Window):
 		self.datasourceLbl = xbmcgui.ControlLabel(xpos, ypos, 0, 0, self.dataSource, \
 							FONT12, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
 		self.addControl(self.datasourceLbl)
-
+		self.datasourceLbl.setAnimations([('WindowOpen', self.animHeaderWO),
+										('WindowClose', self.animHeaderWC)])
 
 		# LIVE TEXT LIST - created seperatly so the update thread can add data to it.
 		# seperate class timer can create controls and add them to self.
@@ -368,6 +384,7 @@ class Football(xbmcgui.Window):
 							buttonFocusTexture=BUTTON_FOCUS_LONG, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(self.liveTextCL)
 		self.liveTextCL.setVisible(False)
+		self.liveTextCL.setAnimations([('WindowClose', self.animZoomWC)])
 		try:
 			self.liveTextCL.setPageControlVisible(False)
 		except: pass
@@ -423,6 +440,7 @@ class Football(xbmcgui.Window):
 ########################################################################################################################
 	def exit(self):
 		debug ("exit()")
+		self.clearContentControls()
 		global timerthread
 		if not Emulating and timerthread:
 			timerthread.stop()
@@ -1175,6 +1193,8 @@ class Football(xbmcgui.Window):
 							itemHeight=24,selectedColor='0xFFFFFF99', \
 							buttonFocusTexture=BUTTON_FOCUS, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(control)
+		control.setAnimations([('WindowOpen', self.animFooterWO),
+							   ('WindowClose', self.animFooterWC)])
 		try:
 			control.setPageControlVisible(False)
 		except: pass
@@ -1347,10 +1367,15 @@ class Football(xbmcgui.Window):
 			ypos = 0
 			imgH = self.headerH-2
 			self.logoLeagueCI = xbmcgui.ControlImage(xpos, ypos, imgW, imgH, \
-													filenameLeague) # , aspectRatio=2
+													filenameLeague, aspectRatio=2)
 			self.addControl(self.logoLeagueCI)
+			self.logoLeagueCI.setAnimations([('WindowOpen', 'effect=rotate start=90 center=0,0 time=%s' % self.animTimeOn),
+											('WindowClose', 'effect=rotate end=90 center=0,0 time=%s' % self.animTimeOff),
+											 ('VisibleChange', 'effect=rotate start=90 center=0,0 time=%s' % self.animTimeOn)
+											 ])
 			xpos += imgW + 10
-		except: pass
+		except:
+			handleException()
 
 		# get team logo filename
 		teamName = self.getNavListAttrib(self.TEAMS_KEY, self.NAV_LISTS_DATA_REC_SELECTED)
@@ -1365,11 +1390,14 @@ class Football(xbmcgui.Window):
 			try:
 				# use headerH for w & h  to give a square area - aspectRatio sorts it out
 				imgW = 60
-				self.logoTeamCI = xbmcgui.ControlImage(xpos, ypos, imgW, imgH,
-													fname, aspectRatio=2)
+				self.logoTeamCI = xbmcgui.ControlImage(xpos, ypos, imgW, imgH,fname, aspectRatio=2)
 				self.addControl(self.logoTeamCI)
+				self.logoTeamCI.setAnimations([('WindowOpen', self.animHeaderWO),
+												('WindowClose', self.animHeaderWC),
+												('VisibleChange', self.animZoomWC) ])
 				xpos += imgW + 5
-			except: pass
+			except:
+				handleException()
 
 		# append TEAM_VIEW to label
 		leagueViewSelectedItem = self.getNavListAttrib(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_DATA_REC_SELECTED)
@@ -1383,6 +1411,8 @@ class Football(xbmcgui.Window):
 		self.logoLeagueCLbl = xbmcgui.ControlLabel(xpos, ypos, 0, labelH, leagueName, \
 												FONT14, "0xFFFFFF00")
 		self.addControl(self.logoLeagueCLbl)
+		self.logoLeagueCLbl.setAnimations([('WindowOpen', self.animHeaderWO),
+										  ('WindowClose', self.animHeaderWC)])
 
 		# set view label.
 		# if team selected, display team view, otherwise display league view
@@ -1394,6 +1424,8 @@ class Football(xbmcgui.Window):
 		self.logoViewCLbl = xbmcgui.ControlLabel(xpos, ypos+labelH+5, self.contentW, 20, \
 												teamsViewText, FONT12, "0xFFFFFF00")
 		self.addControl(self.logoViewCLbl)
+		self.logoViewCLbl.setAnimations([('WindowOpen', self.animHeaderWO),
+										  ('WindowClose', self.animHeaderWC)])
 
 		debug("< setLeagueLogo()")
 
@@ -1800,6 +1832,7 @@ class Football(xbmcgui.Window):
 							itemTextXOffset=0, itemHeight=rowH, space=0, \
 							buttonFocusTexture=BUTTON_FOCUS)
 			self.addControl(teamCL)
+			teamCL.setAnimations([('WindowClose', self.animZoomWC)])
 			try:
 				teamCL.setPageControlVisible(False)
 			except: pass
@@ -1837,8 +1870,7 @@ class Football(xbmcgui.Window):
 
 		success = False
 		leagueSelectedItem = self.getNavListAttrib(self.LEAGUES_KEY, self.NAV_LISTS_DATA_REC_SELECTED)				
-		leagueViewSelectedItem = self.getNavListAttrib(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_DATA_REC_SELECTED)				
-		dialogProgress.create(__language__(302), leagueSelectedItem, leagueViewSelectedItem, title)
+		dialogProgress.create(__language__(302), leagueSelectedItem, title)
 		html = fetchURL(url)
 		dialogProgress.close()
 		if not validWebPage(html):
@@ -2838,6 +2870,7 @@ class Football(xbmcgui.Window):
 									itemHeight=itemHeight, buttonFocusTexture=btnFocusFile, \
 									alignmentY=XBFONT_CENTER_Y)
 				self.addControl(controlList)
+				controlList.setAnimations([('WindowClose', self.animZoomWC)])
 				self.contentControls.append([controlList,None])
 				try:
 					controlList.setPageControlVisible(False)
@@ -3019,16 +3052,18 @@ class Football(xbmcgui.Window):
 		OPT_DATASOURCE = __language__(523)
 		OPT_CHECK_UPDATE_STARTUP = __language__(524)
 
-		menu = [__language__(500),
-				OPT_CLEAR_TEAMS,
-				OPT_VIEW_README,
-				OPT_VIEW_CHANGELOG,
-				OPT_DATASOURCE,
-				OPT_CHECK_UPDATE_STARTUP]
+		def makeMenu():
+			return [xbmcgui.ListItem(__language__(500)),
+					xbmcgui.ListItem(OPT_CLEAR_TEAMS),
+					xbmcgui.ListItem(OPT_VIEW_README),
+					xbmcgui.ListItem(OPT_VIEW_CHANGELOG),
+					xbmcgui.ListItem(OPT_DATASOURCE),
+					xbmcgui.ListItem(OPT_CHECK_UPDATE_STARTUP, "%s" % self.settings[self.SETTING_CHECK_UPDATE])]
 
 		selectedPos = 0
 		reInit = INIT_NONE
 		while reInit != INIT_FULL:
+			menu = makeMenu()
 			optReInit = INIT_NONE
 			selectDialog = DialogSelect()
 			selectDialog.setup(__language__(505), width=320, rows=len(menu))
@@ -3036,7 +3071,7 @@ class Football(xbmcgui.Window):
 			if selectedPos <= 0:				# exit selected
 				break
 
-			selectedItem = menu[selectedPos]
+			selectedItem = menu[selectedPos].getLabel()
 
 			if selectedItem == OPT_CLEAR_TEAMS:
 				if self.resetLeagueTeams(True):
@@ -3340,8 +3375,8 @@ del myscript
 
 debug("exiting script ...")
 # housekeep on exit
-deleteFile("temp.xml")
-deleteFile("temp.html")
+deleteFile(os.path.join(DIR_HOME, "temp.xml"))
+deleteFile(os.path.join(DIR_HOME, "temp.html"))
 
 moduleList = ['bbbLib', 'bbbGUILib']
 for m in moduleList:
