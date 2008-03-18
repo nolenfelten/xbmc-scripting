@@ -20,7 +20,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '28-02-2008'
+__date__ = '29-02-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 # setup cookiejar
@@ -50,40 +50,42 @@ ACTION_Y 	            = 34	# Y
 ACTION_LEFT_TRIGGER		= 111	# trigger left
 ACTION_RIGHT_TRIGGER	= 112	# trigger right
 ACTION_WHITE	        = 117	# white button
+ACTION_LEFT_STICK       = 85   # left stick clicked in
+ACTION_RIGHT_STICK      = 122   # right stick clicked in
 ACTION_RIGHT_STICK_UP	= 88
 ACTION_RIGHT_STICK_DOWN	= 89
 ACTION_RIGHT_STICK_RIGHT= 124
 ACTION_RIGHT_STICK_LEFT	= 125
-ACTION_REMOTE_RECORD			= 2010  # record button on remote - assigned in keymap.xml
+ACTION_REMOTE_RECORD	= 2010  # record button on remote - assigned in keymap.xml
 
-BUTTON_A                = 256
-BUTTON_B                = 257
-BUTTON_X                = 258
-BUTTON_Y                = 259
-BUTTON_BLACK            = 260
-BUTTON_WHITE            = 261
-BUTTON_LEFT_TRIGGER     = 262
-BUTTON_RIGHT_TRIGGER    = 263
-BUTTON_LEFT_STICK         = 264
-BUTTON_RIGHT_STICK        = 265
-BUTTON_RIGHT_STICK_UP     = 266 # right thumb stick directions
-BUTTON_RIGHT_STICK_DOWN   = 267 # for defining different actions per direction
-BUTTON_RIGHT_STICK_LEFT   = 268
-BUTTON_RIGHT_STICK_RIGHT  = 269
-BUTTON_DPAD_UP           = 270
-BUTTON_DPAD_DOWN         = 271
-BUTTON_DPAD_LEFT         = 272
-BUTTON_DPAD_RIGHT        = 273
-BUTTON_START                = 274
-BUTTON_BACK                 = 275
-BUTTON_LEFT_THUMB_BUTTON    = 276
-BUTTON_RIGHT_THUMB_BUTTON   = 277
-BUTTON_LEFT_ANALOG_TRIGGER  = 278
-BUTTON_RIGHT_ANALOG_TRIGGER = 279
-BUTTON_LEFT_STICK_UP      = 280 # left thumb stick  directions
-BUTTON_LEFT_STICK_DOWN    = 281 # for defining different actions per direction
-BUTTON_LEFT_STICK_LEFT    = 282
-BUTTON_LEFT_STICK_RIGHT   = 283
+PAD_A                        = 256
+PAD_B                        = 257
+PAD_X                        = 258
+PAD_Y                        = 259
+PAD_BLACK                    = 260
+PAD_WHITE                    = 261
+PAD_LEFT_TRIGGER             = 262
+PAD_RIGHT_TRIGGER            = 263
+PAD_LEFT_STICK              = 264
+PAD_RIGHT_STICK             = 265
+PAD_RIGHT_STICK_UP          = 266 # right thumb stick directions
+PAD_RIGHT_STICK_DOWN        = 267 # for defining different actions per direction
+PAD_RIGHT_STICK_LEFT        = 268
+PAD_RIGHT_STICK_RIGHT       = 269
+PAD_DPAD_UP                  = 270
+PAD_DPAD_DOWN                = 271
+PAD_DPAD_LEFT                = 272
+PAD_DPAD_RIGHT               = 273
+PAD_START                    = 274
+PAD_BACK                     = 275
+PAD_LEFT_STICK          = 276
+PAD_RIGHT_STICK         = 277
+PAD_LEFT_ANALOG_TRIGGER      = 278
+PAD_RIGHT_ANALOG_TRIGGER= 279
+PAD_LEFT_STICK_UP           = 280 # left thumb stick  directions
+PAD_LEFT_STICK_DOWN         = 281 # for defining different actions per direction
+PAD_LEFT_STICK_LEFT         = 282
+PAD_LEFT_STICK_RIGHT        = 283
 
 REMOTE_LEFT             = 169
 REMOTE_RIGHT            = 168
@@ -110,25 +112,30 @@ KEYBOARD_NUM_PLUS       = 61547
 KEYBOARD_NUM_MINUS      = 61549
 KEYBOARD_ESC            = 61467
 KEYBOARD_RETURN         = 61453
+KEYBOARD_HOME           = 61476
+KEYBOARD_DEL_BACK       = 61448
 
 
 # ACTION CODE GROUPS
-SELECT_ITEM = ( ACTION_A, BUTTON_A, KEYBOARD_A, KEYBOARD_RETURN, )
-EXIT_SCRIPT = ( ACTION_BACK, BUTTON_BACK, REMOTE_BACK, KEYBOARD_ESC, )
-CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, BUTTON_B, REMOTE_BACK, KEYBOARD_B, )
-CONTEXT_MENU = ( ACTION_WHITE, BUTTON_WHITE, 61533, ACTION_REMOTE_INFO, REMOTE_INFO, ACTION_REMOTE_STOP, )
-MOVEMENT_RIGHT_STICK = (BUTTON_RIGHT_STICK_UP, BUTTON_RIGHT_STICK_DOWN, BUTTON_RIGHT_STICK_LEFT, BUTTON_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
-MOVEMENT_LEFT_STICK = (BUTTON_LEFT_STICK_UP, BUTTON_LEFT_STICK_DOWN, BUTTON_LEFT_STICK_LEFT, BUTTON_LEFT_STICK_RIGHT, )
-MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, BUTTON_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, BUTTON_LEFT_TRIGGER, )
-MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, BUTTON_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, BUTTON_RIGHT_TRIGGER, )
+SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
+EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
+CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, REMOTE_BACK, KEYBOARD_B, )
+CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, ACTION_REMOTE_STOP,)
+LEFT_STICK_CLICK = (ACTION_LEFT_STICK, PAD_LEFT_STICK, )
+RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
+MOVEMENT_DPAD = ( ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT, ACTION_MOVE_UP, ACTION_MOVE_DOWN, )
+MOVEMENT_RIGHT_STICK = (PAD_RIGHT_STICK_UP, PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT, PAD_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
+MOVEMENT_LEFT_STICK = (PAD_LEFT_STICK_UP, PAD_LEFT_STICK_DOWN, PAD_LEFT_STICK_LEFT, PAD_LEFT_STICK_RIGHT, )
+MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, PAD_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, PAD_LEFT_TRIGGER, ACTION_REMOTE_PREV_ITEM, )
+MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, PAD_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, PAD_RIGHT_TRIGGER, ACTION_REMOTE_NEXT_ITEM, )
 MOVEMENT_SCROLL = MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN
 MOVEMENT_KEYBOARD = ( KEYBOARD_LEFT, KEYBOARD_UP, KEYBOARD_RIGHT, KEYBOARD_DOWN, KEYBOARD_PG_UP, KEYBOARD_PG_DOWN, )
-MOVEMENT_REMOTE = ( REMOTE_LEFT, REMOTE_RIGHT, REMOTE_UP, REMOTE_DOWN, )
-MOVEMENT_UP = ( ACTION_MOVE_UP, BUTTON_LEFT_STICK_UP, BUTTON_RIGHT_STICK_UP, BUTTON_DPAD_UP, KEYBOARD_UP, REMOTE_UP, ACTION_RIGHT_STICK_UP,)
-MOVEMENT_DOWN = ( ACTION_MOVE_DOWN, BUTTON_LEFT_STICK_DOWN,BUTTON_RIGHT_STICK_DOWN, BUTTON_DPAD_DOWN, KEYBOARD_DOWN, REMOTE_DOWN, ACTION_RIGHT_STICK_DOWN,)
-MOVEMENT_LEFT = ( ACTION_MOVE_LEFT, BUTTON_LEFT_STICK_LEFT, BUTTON_RIGHT_STICK_LEFT,BUTTON_DPAD_LEFT, KEYBOARD_LEFT, REMOTE_LEFT, ACTION_RIGHT_STICK_LEFT,)
-MOVEMENT_RIGHT = (  ACTION_MOVE_RIGHT, BUTTON_LEFT_STICK_RIGHT, BUTTON_RIGHT_STICK_RIGHT, BUTTON_DPAD_RIGHT, KEYBOARD_RIGHT, REMOTE_RIGHT, ACTION_RIGHT_STICK_RIGHT, )
-MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT + MOVEMENT_SCROLL + MOVEMENT_KEYBOARD
+MOVEMENT_REMOTE = ( REMOTE_LEFT, REMOTE_RIGHT, REMOTE_UP, REMOTE_DOWN, ACTION_REMOTE_NEXT_ITEM, ACTION_REMOTE_PREV_ITEM, )
+MOVEMENT_UP = ( ACTION_MOVE_UP, PAD_LEFT_STICK_UP, PAD_RIGHT_STICK_UP, PAD_DPAD_UP, KEYBOARD_UP, REMOTE_UP, ACTION_RIGHT_STICK_UP,)
+MOVEMENT_DOWN = ( ACTION_MOVE_DOWN, PAD_LEFT_STICK_DOWN,PAD_RIGHT_STICK_DOWN, PAD_DPAD_DOWN, KEYBOARD_DOWN, REMOTE_DOWN, ACTION_RIGHT_STICK_DOWN,)
+MOVEMENT_LEFT = ( ACTION_MOVE_LEFT, PAD_LEFT_STICK_LEFT, PAD_RIGHT_STICK_LEFT,PAD_DPAD_LEFT, KEYBOARD_LEFT, REMOTE_LEFT, ACTION_RIGHT_STICK_LEFT,)
+MOVEMENT_RIGHT = (  ACTION_MOVE_RIGHT, PAD_LEFT_STICK_RIGHT, PAD_RIGHT_STICK_RIGHT, PAD_DPAD_RIGHT, KEYBOARD_RIGHT, REMOTE_RIGHT, ACTION_RIGHT_STICK_RIGHT, )
+MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT + MOVEMENT_SCROLL + MOVEMENT_KEYBOARD + MOVEMENT_REMOTE
 
 XBFONT_LEFT       = 0x00000000
 XBFONT_RIGHT      = 0x00000001
@@ -149,6 +156,12 @@ FONT12 = 'font12'
 FONT13 = 'font13'
 FONT14 = 'font14'
 FONT18 = 'font18'
+FONT_SPECIAL_10 = 'special10'
+FONT_SPECIAL_11 = 'special11'
+FONT_SPECIAL_12 = 'special12'
+FONT_SPECIAL_13 = 'special13'
+FONT_SPECIAL_14 = 'special14'
+ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPECIAL_11,FONT_SPECIAL_12,FONT_SPECIAL_13,FONT_SPECIAL_14,)
 
 REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
 
@@ -198,9 +211,10 @@ def handleException(txt=''):
 
 #################################################################################################################
 def makeScriptDataDir():
-	# make userdata script_data location
 	try:
-		os.makedirs(os.path.join("T:\script_data", __scriptname__))
+		scriptPath = os.path.join("T:\script_data", __scriptname__)
+		os.makedirs(scriptPath)
+		debug("makeScriptDataDir() created=%s" % scriptPath )
 	except: pass
 
 #############################################################################################################
@@ -254,6 +268,7 @@ def isFileNewer(oldFilename, newFilename):
 
 ##############################################################################################
 def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
+	debug("doKeyboard() kbType=%s" % kbType)
 	if currentValue == None:
 		currentValue = ''
 	value = currentValue
@@ -343,24 +358,27 @@ def cleanHTML(data):
 
 #################################################################################################################
 def ErrorCode(e):
+	debug("> ErrorCode()")
+	print "except=%s" % e
 	if hasattr(e, 'code'):
-		code = str(e.code)
+		code = e.code
 	else:
 		try:
-			code = str(e[0])
+			code = e[0]
 		except:
 			code = 'Unknown'
-	title = 'Error, Code: ' + code
+	title = 'Error, Code: %s' % code
 
 	if hasattr(e, 'reason'):
 		txt = e.reason
 	else:
 		try:
-			txt = str(e[1])
+			txt = e[1]
 		except:
 			txt = 'Unknown reason'
-	print "error code: %s %s" % (code, txt)
-	messageOK(title, txt)
+	print "%s = %s" % (title, txt)
+	messageOK(title, str(txt))
+	debug("< ErrorCode()")
 
 #################################################################################################################
 # Class to return a char or string pixel length. Thanks to madtw.
@@ -370,7 +388,8 @@ class FontAttr:
 	def __init__(self):
 		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
 		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
-		self.adjust = {'font10':-3, 'font11':-3, 'font12':-2, 'font13':-1, 'font14':0, 'font18':4}
+		self.adjust = {'font10':-3, 'font11':-2, 'font12':-1, 'font13':-1, 'font14':0, 'font18':4, \
+					   'special10':-3, 'special11':-2, 'special12':-1, 'special13':0, 'special14':2}
 
 		# base widths based on font14
 		self.width = [ \
@@ -399,27 +418,29 @@ class FontAttr:
 			9,  9,  8,  9,  7,  9, 14
 		]
 
-	def getWidth( self, c, font = 'font14' ):
+	def getWidth( self, c, font ):
 		try:
 			w = self.width[ord(c)] + self.adjust[font]
 		except:
 			w = 14			# unknown ch, use avg width
 		return w
 
-	def getTextWidth(self, txt, font = 'font14'):
+	def getTextWidth(self, txt, font):
 		len = 0
 		for c in txt:
-			len += self.getWidth(c, font)
+			len += self.getWidth(c, font) +1
 		return len
 
-	def truncate(self, maxWidth, text, font = 'font14', rez = 6):
-		sz = len(text)
+	def truncate(self, maxWidth, text, font, rez = 6):
+		chCount = len(text)
+		maxWidth = int(maxWidth)
+		font = font.lower()
 		try:
 			maxWidth *= self.rezAdjust[rez]
 		except: pass
 			
 		newText = ''
-		for i in range(sz, 0, -1):
+		for i in range(chCount, 0, -1):
 			if self.getTextWidth(text[0:i], font) <= maxWidth:
 				newText = text[0:i]
 				break
@@ -978,13 +999,6 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 		# create temp file if needed
 		file = os.path.join(os.getcwd().replace( ";", "" ), "temp.html")
 
-	if DEBUG:
-		print "safe_url=", safe_url
-		print "file=", file
-		print "params=", params
-		print "headers=", headers
-		print "isImage=", isImage
-
 	# remove destination file if exists already
 	deleteFile(file)
 
@@ -998,6 +1012,13 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 				headers['User-Agent'] = 'Mozilla/5.0'
 			for name, value  in headers.items():
 				opener.addheader(name, value)
+
+		if DEBUG:
+			print "safe_url=", safe_url
+			print "file=", file
+			print "params=", params
+			print "headers=", headers
+			print "isImage=", isImage
 
 		if params:
 			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
@@ -1087,7 +1108,8 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 				handle.fp._sock.recv=None # hacky avoidance of uncleared handles bug
 				handle.close()
 				del handle
-				data = True
+				if isImage:
+					data = True
 			except:
 				handleException()
 				data = None
@@ -1144,8 +1166,9 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 
 #############################################################################################################
 def safeFilename(path):
+	print "safeFilename() " + path
 	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=]', '_', tail))
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
 
 #################################################################################################################
 # Does a direct image URL exist in string ?
@@ -1167,7 +1190,7 @@ def isHTMLLink(url):
 	return searchRegEx(url, '(html|htm)$')
 
 ######################################################################################
-def loadFileObj( filename, dataType ):
+def loadFileObj( filename, dataType={} ):
     debug( "loadFileObj() " + filename)
     try:
         file_handle = open( filename, "r" )
@@ -1177,8 +1200,8 @@ def loadFileObj( filename, dataType ):
         # reset to empty according to dataType
         if isinstance(dataType, dict):
             loadObj = {}
-        elif isinstance(dataType, list):
-            loadObj = []
+        elif isinstance(dataType, list) or isinstance(dataType, tuple):
+            loadObj = ()
         else:
             loadObj = None
     return loadObj
@@ -1195,7 +1218,7 @@ def saveFileObj( filename, saveObj ):
 
 #################################################################################################################
 def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=False):
-	debug("> bbbLib.listDir() path=" + path)
+	debug("> bbbLib.listDir() path=%s ext=%s full=%s lower=%s upper=%s" % (path, ext, getFullFilename, lower, upper))
 
 	fileList = []
 	if ext:
@@ -1208,19 +1231,17 @@ def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=Fal
 		for f in files:
 			fn, ex = os.path.splitext(f)
 			if not ext or ex.lower() == ext:
-				found = False
+				found = True
 				if fnRE:
-					matches = re.search(fnRE, fn)
-					if matches:
-						found = True
-				else:
-					found = True
+					matches = re.search(fnRE, fn, re.IGNORECASE)
+					if not matches:
+						found = False
 
 				if found:
-					if not getFullFilename:
-						filename = fn
-					else:
+					if getFullFilename:
 						filename = f
+					else:
+						filename = fn
 
 					if lower:
 						fileList.append(filename.lower())
@@ -1301,7 +1322,8 @@ class RSSParser2:
 		else:
 			debug("parseString from DOC")
 
-		success = self.__parseString(doc)
+		if doc:
+			success = self.__parseString(doc)
 
 		debug("< RSSParser2().feed() success: " + str(success))
 		return success
@@ -1331,7 +1353,6 @@ class RSSParser2:
 	# parses RSS document items and returns an list of objects
 	def __parseElements(self, tagName, elements, elementDict):
 		debug("> RSSParser2().__parseElements() element count=%s" % len(elements))
-
 
 		# extract required attributes from element attribute
 		def _get_element_attributes(el, attrNameList):
@@ -1402,95 +1423,6 @@ class RSSParser2:
 		debug("< RSSParser2().parse()")
 		return parsedList
 
-
-# Parser that parses version 2.0 RSS documents
-class RSSParser2_old:
-	def __init__(self):
-		debug("RSSParser2().init()")
-
-	# feeds the xml document from given url or file to the parser
-	def feed(self, url="", file="", doc="", title=""):
-		debug("> RSSParser2().feed()")
-		success = False
-		self.dom = None
-
-		if url:
-			debug("parseString from URL")
-			if not file:
-				dir = os.getcwd().replace( ";", "" )
-				file = os.path.join( dir , "temp.xml" )
-			doc = fetchURL(url, file)
-		elif file:
-			debug("parseString from FILE")
-			doc = readFile(file)
-		else:
-			debug("parseString from DOC")
-
-		if doc:
-			try:
-				self.dom = parseString(doc)
-			except:
-				debug("parseString exception")
-
-			if not self.dom:
-				messageOK("XML Parser Failed","Empty/Bad XML file","Unable to parse data.")
-			else:
-				success = True
-
-		debug("< RSSParser2().feed() success: " + str(success))
-		return success
-
-
-	# parses RSS document items and returns an list of objects
-	def __parseElements(self, elements, elementList):
-		debug("> RSSParser2().__parseElements()")
-		if DEBUG:
-			print "elements count=", len(elements)
-			print "elementList=", elementList
-		
-		objectsList = []
-		for el in elements:
-			dict = {}
-			attrItems = el.attributes.items()
-			for elTagName in elementList:
-				data = ""
-				if attrItems:
-					try:
-						# find tag in element title tags
-						data = el.getAttribute( elTagName )
-						debug( "getAttribute: " + elTagName + " = " + data)
-					except: pass
-
-				if not data:
-					try:
-						data = el.getElementsByTagName(elTagName)[0].childNodes[0].data
-						debug( "childNodes[0]: " + elTagName + " = " + data)
-					except: pass
-
-#				debug(elTagName + "=" + data)
-				dict[elTagName] = data
-
-			objectsList.append(RSSNode(dict))
-
-		debug("< RSSParser2().__parseElements() objects : " + str(len(objectsList)))
-		return objectsList
-
-
-	# parses the RSS document
-	def parse(self, tagName, elementList):
-		debug("> RSSParser2().parse() tagName: " + tagName)
-
-		parsedList = None
-		if self.dom:
-			try:
-				elements = self.dom.getElementsByTagName(tagName)
-				parsedList = self.__parseElements(elements, elementList)
-			except:
-				debug("exception No parent elements found for tagName")
-
-		debug("< RSSParser2().parse()")
-		return parsedList
-
 #################################################################################################################
 class RSSNode:
 	def __init__(self, elements):
@@ -1529,10 +1461,59 @@ def isIP(host):
 
 #################################################################################################################
 def getReadmeFilename(mylanguage):
+    debug("> getReadmeFilename()")
     base_path = mylanguage.get_base_path()
     language = xbmc.getLanguage().lower()
+    debug("language= %s " % language)
     fn = os.path.join( base_path, language, "readme.txt" )
     if ( not fileExist( fn ) ):
         fn = os.path.join( base_path, "english", "readme.txt" )
 
+    debug("< getReadmeFilename() %s" % fn)
     return fn
+
+#######################################################################################################################    
+def prefixDirPath(fn, dirPath):
+	if not fn.startswith(dirPath):
+		return os.path.join(dirPath, fn)
+	return fn
+
+#############################################################################################################
+# pluginType = music, video, pictures
+def installPlugin(pluginType, name='', checkInstalled=False):
+	debug("> installPlugin() " + pluginType + " " + name + " checkInstalled=" + str(checkInstalled))
+	exists = False
+	if not name:
+		name = __scriptname__
+	name += " Plugin"
+
+	try:
+		copyFromPath = xbmc.translatePath( os.path.join( DIR_HOME, "Plugin" ) )
+		copyFromFile = os.path.join( copyFromPath, 'default.py')
+		copyToPath = xbmc.translatePath( os.path.join( "Q:\\", "plugins", pluginType, name ) )
+		copyToFile = os.path.join( copyToPath, 'default.py')
+
+		# set not exist if; path/file missing or previous installed is older
+		copyFromFileSecs = os.path.getmtime(copyFromFile)
+		copyToFileSecs = os.path.getmtime(copyToFile)
+		xbmc.output( "fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
+		exists = fileExist(copyToFile) and copyFromFileSecs <= copyToFileSecs
+	except:
+		# paths dont exist. This is OK if we're just checking
+		print "paths exception"
+
+	if not checkInstalled:
+		# not checking, do installation
+		try:
+			from shutil import copytree, rmtree
+			try:
+				rmtree( copyToPath )
+			except: pass
+			copytree( copyFromPath, copyToPath )
+			dialogOK(__language__(490), __language__(491))
+		except:
+			msg = "Plugin Failed\n" + str(sys.exc_info()[ 1 ])
+			dialogOK(__language__(0), msg)
+
+	debug("< installPlugin() exists="+str(exists))
+	return exists

@@ -419,7 +419,7 @@ def readPage(url, readLines=False):
 			page = sock.readlines()
 		sock.close()
 	except:
-		pass
+		log("urlopen() exception")
 
 	return page
 
