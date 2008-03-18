@@ -91,12 +91,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     # menu items
                     items = dict()
                     items[len(items.keys())+1] = {
-                        'label': 'Insert before..',
+                        'label': common.localize( 504 ), # Insert before..
                         'thumb': None,
                         'onClick': before,
                     }
                     items[len(items.keys())+1] = {
-                        'label': 'Insert after..',
+                        'label': common.localize( 505 ), # Insert after..
                         'thumb': None,
                         'onClick': after,
                     }
@@ -159,7 +159,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         if self.changed:
             savefirst = xbmcgui.Dialog().yesno( 
                 self.file.name, 
-                'Do you want to save this file before exiting?' 
+                common.localize( 1005 ) 
             )
             if savefirst:
                 self.save_current_file()
@@ -183,10 +183,11 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         if self.changed:
             savefirst = xbmcgui.Dialog().yesno( 
                 self.file.name, 
-                'Do you want to save this file before opening a new file?' 
+                common.localize( 1006 ) 
             )
             if savefirst:
                 self.save_current_file()
+            self.changed = False
         # close the old file
         if self.file:
             self.file.close()
@@ -272,13 +273,13 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
     def save_current_file( self ):
         if not self.changed:
             # nothing to do
-            xbmcgui.Dialog().ok( self.file.name, 'No changes made yet!' )
+            xbmcgui.Dialog().ok( self.file.name, common.localize( 1007 ) )
             return
         try:
             writeable_file = open( self.file.name, 'wb' )
         except IOError:
             xbmcgui.Dialog().ok( 
-                self.file.name, 'Unable to save file. Access denied.'
+                self.file.name, common.localize( 1008 ) # Access denied
             )
             return
         for i in range( self.window.getListSize() ):
@@ -294,13 +295,13 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 except IOError:
                     xbmcgui.Dialog().ok( self.file.name, 
                         os.linesep.join(
-                            'Unable to save file. Access denied.',
-                            'Your file is corrupted!'
+                            common.localize( 1008 ), # Access denied
+                            common.localize( 1009 )
                         )
                     )
                     return
         writeable_file.close()
-        xbmcgui.Dialog().ok( self.file.name, 'All changed saved.' )
+        xbmcgui.Dialog().ok( self.file.name, common.localize( 1010 ) )
         self.changed = False
 
 # init the window instance
