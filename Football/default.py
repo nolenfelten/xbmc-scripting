@@ -949,7 +949,7 @@ class Football(xbmcgui.Window):
 			self.liveTextCL.setEnabled(False)
 
 		dataMissing = False
-		xbmcgui.lock()
+#		xbmcgui.lock()
 
 		# LEAGUE or LEAGUE_VIEWS
 		if self.selectedNavListKey in [self.LEAGUES_KEY,self.LEAGUE_VIEW_KEY]:
@@ -1014,7 +1014,7 @@ class Football(xbmcgui.Window):
 					success = self.loadNavListTeams(leagueDictKey)
 					if not success and self.getTable(url):
 						self.storeLeagueTeams(leagueDictKey)				# save to mem
-						if leagueSelectedItem != self.LEAGUE_INTL:			# dont save from intl table
+						if leagueSelectedItem not in (self.LEAGUE_INTL,self.LEAGUE_UEFA_CUP): # dont save
 							self.writeLeagueTeamsConfig(leagueDictKey)		# write to config
 						success = self.loadNavListTeams(leagueDictKey)		# load navlist TEAMS
 
@@ -1029,7 +1029,7 @@ class Football(xbmcgui.Window):
 					url = url.replace('$TABLE',leagueTableID)
 					# change table location according to league
 					if self.getTable(url):
-						isLeagueIntl = (leagueSelectedItem == self.LEAGUE_INTL)
+						isLeagueIntl = (leagueSelectedItem in (self.LEAGUE_INTL,self.LEAGUE_UEFA_CUP))
 						if isLeagueIntl:									# clear intl saved teams
 							try:
 								del self.leagueTeams[leagueDictKey]
@@ -1169,7 +1169,7 @@ class Football(xbmcgui.Window):
 				else:
 					self.drawContentList(__language__(364),width=300)
 
-		xbmcgui.unlock()
+#		xbmcgui.unlock()
 		if dataMissing:
 			messageNoInfo()
 
@@ -1600,7 +1600,7 @@ class Football(xbmcgui.Window):
 							link = self.BBC_NEWS_URL_PREFIX + link
 						elif not link.startswith(self.BBC_NEWS_URL_PREFIX):	# ignore external site
 							continue
-						tablesDict[decodeEntities(name)] = link
+						tablesDict[name] = link
 
 				name = ''
 				menu = tablesDict.keys()
@@ -1612,6 +1612,7 @@ class Football(xbmcgui.Window):
 					selectedPos, action = selectDialog.ask(menu)
 					if selectedPos >= 0:
 						name = menu[selectedPos]
+					del selectDialog
 				elif len(menu) == 1:
 					name = menu[0]
 
