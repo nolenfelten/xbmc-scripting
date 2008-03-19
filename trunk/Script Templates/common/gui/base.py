@@ -15,7 +15,12 @@ def __internal_base_onInit__( self ):
     for id, callbacks in self.parent_class.controls_map.iteritems():
         try:
             # get the control object for this id
-            control = self.getControl( id )
+            try:
+                control = self.getControl( id )
+            except TypeError:
+                # usually occurs when the control is not supported in the 
+                #   current skin
+                continue
             try:
                 # see if there is a label set in the code
                 #   callback is a string or variable (see below) 
