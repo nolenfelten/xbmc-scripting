@@ -113,10 +113,10 @@ def smbFetchFile(smbPath, localPath, remote=None, hostIP='', silent=True):
 			messageOK("SMB Setup Incomplete","Invalid SMB path:",smbPath)
 		else:
 			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
-			remotePath = "%s%s" % (dirPath,fileName)
+			remotePath = "%s%s" % (dirPath, fileName)
 			debug("remotePath="+remotePath)
 			if not silent:
-				dialog.create("SMB Fetch File","From: " + remotePath,"To: " + localPath)
+				dialog.create("SMB Fetch File",remotePath, localPath)
 
 			try:
 				f = open(localPath, "wb")
@@ -128,7 +128,7 @@ def smbFetchFile(smbPath, localPath, remote=None, hostIP='', silent=True):
 				else:
 					debug("Remote file not found")
 			except:
-				messageOK("SMB Fetch Unknown Exception","From: " + remotePath, "To: " + localPath)
+				messageOK("smbFetchFile()",remotePath, localPath)
 				handleException()
 			else:
 				success = fileExist(localPath)
