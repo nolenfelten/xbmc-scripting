@@ -829,11 +829,11 @@ class SMB:
         tid = self.__connect_tree('\\\\' + self.__remote_name + '\\' + service, SERVICE_ANY, password, timeout)
         try:
             fid, attrib, lastwritetime, datasize, grantedaccess, filetype, devicestate, action, serverfid = self.__open_file(tid, filename, mode, SMB_ACCESS_READ | SMB_SHARE_DENY_WRITE)
-            print fid, attrib, lastwritetime, datasize, grantedaccess, filetype, devicestate, action, serverfid 
+#            print fid, attrib, lastwritetime, datasize, grantedaccess, filetype, devicestate, action, serverfid 
 
             #if not datasize:
             datasize = self.__query_file_info(tid, fid)
-            print datasize
+#            print datasize
 
             if self.__can_read_raw:
                 self.__raw_retr_file(tid, fid, offset, datasize, callback)

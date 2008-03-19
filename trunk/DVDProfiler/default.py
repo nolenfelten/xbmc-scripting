@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '28-03-2008'
+__date__ = '18-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -406,26 +406,34 @@ class DVDProfiler(xbmcgui.Window):
 		debug("> setupDisplay()")
 
 		# SKIN HEADER SZ
-		headerH = 40
+		mc360 = isMC360()
+		if mc360:
+			headerH = 70
+		else:
+			headerH = 40
 
 		# DRAW AREA DIMS
 		displayX = 1
 		displayY = headerH
 		displayH = (REZ_H - displayY)
 		displayW = REZ_W
-		debug("displayX: " + str(displayX) + "  displayY: " + str(displayY) \
-			+ "  displayH: " + str(displayH) + "  displayW: " + str(displayW))
+		debug("displayX=%s displayY=%s displayW=%s displayH=%s" % (displayX,displayY,displayW,displayH))
 
-		animAttrTime = "250"
-		
+		self.animTimeOn = "250"
+		self.animTimeOff = "200"
+		animHeaderWO = 'effect=slide start=0,-%s acceleration=-1.1 time=%s' % (headerH, self.animTimeOn)
+		animHeaderWC = 'effect=slide end=0,-%s acceleration=1.1 time=%s' % (headerH, self.animTimeOff)
+		animZoomWO = 'effect=zoom start=0 center=auto time=%s' % self.animTimeOn
+		animZoomWC = 'effect=zoom end=0 center=auto time=%s' % self.animTimeOff
+		animSlideRightWO = 'effect=slide start=%s,0 acceleration=-1.1 time=%s' % (REZ_W, self.animTimeOn)
+		animSlideRightWC = 'effect=slide end=%s,0 acceleration=1.1 time=%s' % (REZ_W, self.animTimeOff)
+
 		xbmcgui.lock()
 
-		if isMC360():
+		if mc360:
 			# gfx files come with actual MC360 installation
 			try:
-				debug("drawing mc360 specific gfx")
 				self.addControl(xbmcgui.ControlImage(0,0, REZ_W, REZ_H, 'background-blue.png'))
-#				self.addControl(xbmcgui.ControlImage(18,0, 720,REZ_H, xbmc.getInfoLabel('Skin.String(Media)')))
 				self.addControl(xbmcgui.ControlImage(70, 0, 16, 54, 'bkgd-whitewash-glass-top-left.png'))
 				self.addControl(xbmcgui.ControlImage(86, 0, 667, 54, 'bkgd-whitewash-glass-top-middle.png'))
 				self.addControl(xbmcgui.ControlImage(753, 0, 16, 54, 'bkgd-whitewash-glass-top-right.png'))
@@ -440,7 +448,7 @@ class DVDProfiler(xbmcgui.Window):
 													 font=FONT18,textColor='0xFF000000',angle=270))
 			except:
 				xbmcgui.unlock()
-				handleException("MC360 Skin")
+				messageOK("MC360 Skin Error","Failed loading graphic files.","Ensure XBMC is using MC360 skin.")
 		else:
 			# NON MC360
 			# BACKG
@@ -459,8 +467,8 @@ class DVDProfiler(xbmcgui.Window):
 			try:
 				self.headerCI = xbmcgui.ControlImage(0, 0,  displayW, headerH, HEADER_FILENAME)
 				self.addControl(self.headerCI)
-				self.headerCI.setAnimations([('WindowOpen', 'effect=slide start=0,-70 acceleration=-1.1 time='+animAttrTime),
-											 ('WindowClose', 'effect=slide end=0,-70 acceleration=-1.1 time='+animAttrTime)])
+				self.headerCI.setAnimations([('WindowOpen', animHeaderWO),
+											 ('WindowClose', animHeaderWC)])
 			except: pass
 
 		# LOGO
@@ -472,9 +480,19 @@ class DVDProfiler(xbmcgui.Window):
 		try:
 			self.logo = xbmcgui.ControlImage(0, 0, logoW, logoH, LOGO_FILENAME)#, aspectRatio=2)
 			self.addControl(self.logo)
-			self.logo.setAnimations([('WindowOpen', 'effect=rotate start=90 center=0,0 time='+animAttrTime),
-									 ('WindowClose', 'effect=rotate end=90 center=0,0 time='+animAttrTime)])
+			self.logo.setAnimations([('WindowOpen', 'effect=rotate start=90 center=0,0 time='+self.animTimeOn),
+									 ('WindowClose', 'effect=rotate end=90 center=0,0 time='+self.animTimeOn)])
 		except: pass
+
+		# VERSION
+		try:
+			self.removeControl(self.versionLbl)
+		except: pass
+		self.versionLbl = xbmcgui.ControlLabel(REZ_W, 0, 0, 0, "v"+__version__, \
+									FONT10, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
+		self.addControl(self.versionLbl)
+		self.versionLbl.setAnimations([('WindowOpen', animHeaderWO),
+									 ('WindowClose', animHeaderWC)])
 
 		# DATA SOURCE
 		try:
@@ -482,18 +500,17 @@ class DVDProfiler(xbmcgui.Window):
 		except: pass
 		if self.onlineAliasData:
 			user, host = self.onlineAliasData
-			text = user + ' (' + host	+ ')'	# url
+			text = "%s (%s)" % (user, host)
 		elif self.settings[self.SETTING_SMB_USE]:
 			text = self.settings[self.SETTING_SMB_PC_IP]
 		else:
-			text = 'Local Only'
+			text = self.START_MODE_LOCAL
 		dataSourceW = 210
-		self.datasourceCL = xbmcgui.ControlLabel(REZ_W, 0, dataSourceW, 10, text, \
+		self.datasourceCL = xbmcgui.ControlLabel(REZ_W, 20, dataSourceW, 10, text, \
 												FONT10, '0xFFFFFFCC', alignment=XBFONT_RIGHT)
 		self.addControl(self.datasourceCL)
-		animAttrStrWO = 'effect=slide start=%d,0 acceleration=-1.1 time=%s' % (REZ_W, animAttrTime)
-		animAttrStrWC = 'effect=slide end=%d,0 acceleration=-1.1 time=%s' % (REZ_W, animAttrTime)
-		self.datasourceCL.setAnimations([('WindowOpen', animAttrStrWO), ('WindowClose', animAttrStrWC) ])
+		self.datasourceCL.setAnimations([('WindowOpen', animHeaderWO),
+										('WindowClose', animHeaderWC)])
 
 		# TITLE
 		try:
@@ -503,8 +520,8 @@ class DVDProfiler(xbmcgui.Window):
 		w = displayW - x
 		self.title = xbmcgui.ControlLabel(x, 5, w, 25, 'Please wait ...', FONT14, '0xFFFFFF33')
 		self.addControl(self.title)
-		self.title.setAnimations([('WindowOpen', 'effect=slide start=0,-70 acceleration=-1.1 time='+animAttrTime),
-								  ('WindowClose', 'effect=slide end=0,-70 acceleration=-1.1 time='+animAttrTime)])
+		self.title.setAnimations([('WindowOpen', animHeaderWO),
+								('WindowClose', animHeaderWC)])
 
 		# IMAGE BACKG
 		try:
@@ -517,8 +534,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.coverBackCI = xbmcgui.ControlImage(displayX, ypos, \
 											imageW+4, imageH+4, FRAME_NOFOCUS_LRG_FILENAME)
 			self.addControl(self.coverBackCI)
-			self.coverBackCI.setAnimations([('WindowOpen', 'effect=zoom start=20 center=80,125 time='+animAttrTime),
-								  ('WindowClose', 'effect=zoom end=20 center=80,125 time='+animAttrTime)])
+			self.coverBackCI.setAnimations([('WindowOpene', animZoomWO),('WindowClose', animZoomWC)])
 		except: pass
 
 		# IMAGE
@@ -529,8 +545,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.coverCI = xbmcgui.ControlImage(displayX+2, ypos+2, \
 											imageW, imageH, FRAME_NOFOCUS_FILENAME,aspectRatio=2)
 			self.addControl(self.coverCI)
-			self.coverCI.setAnimations([('WindowOpen', 'effect=zoom start=20 center=80,125 time='+animAttrTime),
-									('WindowClose', 'effect=zoom end=0 center=80,125 time='+animAttrTime)])
+			self.coverCI.setAnimations([('WindowOpene', animZoomWO),('WindowClose', animZoomWC)])
 		except: pass
 
 		# TITLES LIST BACKG
@@ -547,8 +562,9 @@ class DVDProfiler(xbmcgui.Window):
 			self.titlesBackCI = xbmcgui.ControlImage(displayX, listY, listW, \
 											listH, FRAME_NOFOCUS_LRG_FILENAME)
 			self.addControl(self.titlesBackCI)
-			titlesAnim = [('WindowOpen', 'effect=slide start=-'+str(listW)+',0 acceleration=-1.1 time='+animAttrTime), 
-							('WindowClose', 'effect=slide end=-'+str(listW)+',0 acceleration=-1.1 time='+animAttrTime)]
+			animWO = 'effect=slide start=-%s,0 acceleration=-1.1 time=%s' % (listW, self.animTimeOn)
+			animWC = 'effect=slide end=-%s,0 acceleration=1.1 time=%s' % (listW, self.animTimeOff)
+			titlesAnim = [('WindowOpen', animWO), ('WindowClose', animWC)]
 			self.titlesBackCI.setAnimations(titlesAnim)
 		except: pass
 
@@ -576,8 +592,8 @@ class DVDProfiler(xbmcgui.Window):
 		self.sortColCB = xbmcgui.ControlButton(xpos, ypos, btnW, sortBtnH, '', \
 											   font=FONT10, alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.sortColCB)
-		bottomBtnAnim = [('WindowOpen', 'effect=slide start=0,15 acceleration=-1.1 time='+animAttrTime),
-							('WindowClose', 'effect=slide end=0,15 acceleration=-1.1 time='+animAttrTime)]
+		bottomBtnAnim = [('WindowOpen', 'effect=slide start=0,15 acceleration=-1.1 time=%s' % self.animTimeOn),
+							('WindowClose', 'effect=slide end=0,15 acceleration=1.1 time=%s' % self.animTimeOn)]
 		self.sortColCB.setAnimations(bottomBtnAnim)
 
 		# SORT DIRECTION
@@ -612,8 +628,7 @@ class DVDProfiler(xbmcgui.Window):
 		overviewLblH = 20
 		self.overviewLbl = xbmcgui.ControlLabel(xpos, ypos, overviewW, overviewLblH, 'Overview:', FONT10, '0xFFFFFFFF')
 		self.addControl(self.overviewLbl)
-		overviewAnim = [('WindowOpen', 'effect=slide start='+str(REZ_W)+',0 acceleration=-1.1 time='+animAttrTime),
-					('WindowClose', 'effect=slide end='+str(REZ_W)+',0 acceleration=-1.1 time='+animAttrTime)]
+		overviewAnim = [('WindowOpen', animSlideRightWO), ('WindowClose', animSlideRightWC)]
 		self.overviewLbl.setAnimations(overviewAnim)
 
 		# OVERVIEW - data
@@ -635,8 +650,7 @@ class DVDProfiler(xbmcgui.Window):
 		xpos = displayX + listW + 2
 		self.castBackCI = xbmcgui.ControlImage(xpos, ypos, listW, listH, FRAME_NOFOCUS_LRG_FILENAME)
 		self.addControl(self.castBackCI)
-		castAnim = [('WindowOpen', 'effect=slide start='+str(REZ_W)+',0 acceleration=-1.1 time='+animAttrTime),
-					('WindowClose', 'effect=slide end='+str(REZ_W)+',0 acceleration=-1.1 time='+animAttrTime)]
+		castAnim = [('WindowOpen', animSlideRightWO), ('WindowClose', animSlideRightWC)]
 		self.castBackCI.setAnimations(castAnim)
 
 		# CAST/CREDITS LIST
@@ -980,7 +994,7 @@ class DVDProfiler(xbmcgui.Window):
 			success = fileExist(self.localCollectionFilename)
 
 		if not success:
-			dialogProgress.create(__language__(215), __language__(100))
+			dialogProgress.create(__language__(215), __language__(200))
 			# remove any old parsed files
 			deleteFile(KEYS_FILE)
 			deleteFile(COLLECTION_FLAT_FILE)
@@ -1021,7 +1035,7 @@ class DVDProfiler(xbmcgui.Window):
 		self.clearControls()
 
 		# load data into controls
-		self.title.setLabel(__language__(100))
+		self.title.setLabel(__language__(200))
 		success = self.dvdCollection.parseDVD(collNum)
 		if not success:
 			debug ("< showDVD() failed to parseDVD")
@@ -1232,9 +1246,7 @@ class DVDProfiler(xbmcgui.Window):
 				else:
 					url = "%s/mpimages/%s/%s" % (aliasURL, coverFilename[:2],coverFilename)
 				dialogProgress.create(__language__(216), coverFilename)
-				if fetchCookieURL(url, localFile, isImage=True):
-					success = True
-
+				success = fetchCookieURL(url, localFile, isImage=True)
 				dialogProgress.close()
 			elif self.settings[self.SETTING_SMB_USE]:
 				smbPath = "%s/%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH],
@@ -1257,12 +1269,12 @@ class DVDProfiler(xbmcgui.Window):
 
 		dialogProgress.create(__language__(303))
 		MAX = self.dvdCollection.getCollectionSize()
-		count = float(1.0)
+		count = 0
 		for collNum, data in self.dvdCollection.keys.items():
 			dvdKeys = self.dvdCollection.getDVDKey(int(collNum))
 			id = dvdKeys[self.dvdCollection.KEYS_DATA_ID]
 			title = dvdKeys[self.dvdCollection.KEYS_DATA_SORTTITLE]
-			dialogProgress.update(int(int(100/MAX)*count), title)
+			dialogProgress.update(int(count*100.0/MAX), title)
 			self.fetchCover(id)
 			count += 1
 			if dialogProgress.iscanceled(): break
@@ -1744,7 +1756,7 @@ class DVDCollectionXML:
 #							print "save genres"
 							keyData = dvdDict[self.GENRE]
 							for value in keyData:
-								genreList = value.split(',')
+								genreList = value.split('~')
 								for split in genreList:
 									try:
 										self.filterGenres.index(split)
@@ -1786,20 +1798,20 @@ class DVDCollectionXML:
 		try:
 			f = open(KEYS_FILE,'w')
 			if self.filterGenres:
-				f.write('genres|'+(','.join(self.filterGenres))+'\n')
+				f.write('genres|'+('~'.join(self.filterGenres))+'\n')
 			if self.filterTags:
-				f.write('tags|'+(','.join(self.filterTags))+'\n')
+				f.write('tags|'+('~'.join(self.filterTags))+'\n')
 			if self.keys:
 				for key,value in self.keys.items():
 					if isinstance(value, str):
-						f.write('keys|'+str(key)+','+value+'\n')
+						f.write('keys|%s~%s\n' % (key,value))
 					else:
-						rec = 'keys|'+str(key)
+						rec = 'keys|%s' % key
 						for item in value:
 							if isinstance(item, str):
-								rec += ','+item
+								rec += '~'+item
 							else:
-								rec += ','+('^'.join(item))
+								rec += '~'+('^'.join(item))
 
 						f.write(rec+'\n')
 			f.close()
@@ -1815,12 +1827,12 @@ class DVDCollectionXML:
 			for line in open(KEYS_FILE,'r'):
 				rec = line.strip().split('|')
 				if rec[0] == 'genres':
-					self.filterGenres = rec[1].split(',')
+					self.filterGenres = rec[1].split('~')
 				elif rec[0] == 'tags':
-					self.filterTags = rec[1].split(',')
+					self.filterTags = rec[1].split('~')
 				elif rec[0] == 'keys':
 					# dict key is collnum. each rec pos +1 as prefixed by collnum
-					splits = rec[1].split(',')
+					splits = rec[1].split('~')
 					collnum = int(splits[0])
 					keysList = [splits[self.KEYS_DATA_SORTTITLE+1],
 								splits[self.KEYS_DATA_ID+1]]
