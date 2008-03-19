@@ -26,9 +26,11 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             },
             151: { # LABEL: (status area) currently open file name
             },
-            152: { # LABEL: (status area) currently open file name
+            152: { # LABEL: (status area) read only mode
             },
-            153: { # LABEL: (status area) currently open file name
+            153: { # LABEL: (status area) write mode
+            },
+            154: { # LABEL: (status area) EOL type
             },
         }
         common.gui.BaseScriptWindow.__init__( self )
@@ -325,15 +327,29 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 self.window.getControl( 151 ).setLabel( os.path.split( self.file.name )[-1] )
                 self.window.getControl( 152 ).setVisible( True ) # read access
                 self.window.getControl( 153 ).setVisible( self.check_access( self.file.name ) ) # write access
+                self.window.getControl( 154 ).setVisible( True ) # EOL type
+                if self.eol == '\r\n':
+                    eol_type = common.localize( 1541 )
+                elif self.eol == '\n':
+                    eol_type = common.localize( 1542 )
+                elif self.eol == '\r':
+                    eol_type = common.localize( 1543 )
+                else:
+                    eol_type = common.localize( 1544 )
+                self.window.getControl( 154 ).setLabel( eol_type ) # EOL type
             else:
                 self.window.getControl( 50 ).setEnabled( False )
                 self.window.getControl( 151 ).setLabel( common.localize( 151 ) )
                 self.window.getControl( 152 ).setVisible( False ) # read access
                 self.window.getControl( 153 ).setVisible( False ) # write access
+                self.window.getControl( 154 ).setVisible( False ) # EOL type
             if self.changed:
                 self.window.getControl( 102 ).setEnabled( True )
             else:
                 self.window.getControl( 102 ).setEnabled( False )
+        except TypeError:
+            # a control is not supported in the skin
+            pass
         except:
             import traceback
             traceback.print_exc()
