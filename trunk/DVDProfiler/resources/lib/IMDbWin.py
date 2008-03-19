@@ -10,6 +10,7 @@
  07/07/07 - Version that doesnt use latest bbbLib globals setup
  11/12/07 - tweaked layout
  21/01/08 - Uses DIR_CACHE from USERDATA
+ 18/03/08 - Changed to use changed imdbLib gallery
 
 """
 
@@ -41,12 +42,8 @@ from bbbGUILib import *
 try: Emulating = xbmcgui.Emulating
 except: Emulating = False
 
-try:
-	import Image
-except:
-	messageOK("Image.py Library Missing","Install a XBMC build that contains it.")
-
 IMDB_LOGO_FILENAME = os.path.join(DIR_GFX ,'imdb_logo.png')
+NOIMAGE_FILENAME = os.path.join(DIR_GFX ,'noimage.png')
 dialogProgress = xbmcgui.DialogProgress()
 
 # rez GUI defined in
@@ -80,7 +77,6 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.EMPTY = 'N/A'
 		self.galleryIDX = 0
 		self.galleryImgIDX = 0
-		self.largeImage = False
 		self.movie = None
 
 		makeDir(DIR_USERDATA)
@@ -91,38 +87,23 @@ class IMDbWin(xbmcgui.WindowDialog):
 	################################################################################
 	def onAction(self, action):
 		if action == ACTION_BACK or action == ACTION_B:
-			if self.largeImage:
-				self.largeImage = False
-				self.fetchImage()
-			else:
-				self.deleteCacheImages()
-				self.close()
+			self.deleteCacheImages()
+			self.close()
 
 	################################################################################
 	def onControl(self, control):
 
-		if control == self.picFrameCB:
-			if self.picCI:
-				self.largeImage = not self.largeImage
-				self.fetchImage()
-		elif control == self.photoRightCB:
+		if control == self.photoRightCB:
 			self.galleryImgIDX += 1
 			# get next img in gallery or move to next gallery first image
-			if self.galleryImgIDX >= self.imdbGallery.getGalleryImageCount(self.galleryIDX):
+			if self.galleryImgIDX >= self.imdbGallery.getGalleryImageCount():
 				self.galleryImgIDX = 0
-				self.galleryIDX += 1
-				if self.galleryIDX >= len(self.imdbGallery.galleries):
-					self.galleryIDX = 0
 
 			self.fetchImage()
 		elif control == self.photoLeftCB:
 			self.galleryImgIDX -= 1
 			if self.galleryImgIDX < 0:
-				self.galleryIDX -= 1
-				if self.galleryIDX < 0:
-					self.galleryIDX = len(self.imdbGallery.galleries) -1
-
-				self.galleryImgIDX = self.imdbGallery.getGalleryImageCount(self.galleryIDX)-1
+				self.galleryImgIDX = self.imdbGallery.getGalleryImageCount()-1
 
 			self.fetchImage()
 		self.setFocus(control)
@@ -167,78 +148,40 @@ class IMDbWin(xbmcgui.WindowDialog):
 	#################################################################################################
 	# fetch & show image
 	def fetchImage(self, url=''):
-		debug("> fetchImage()")
+		debug("> fetchImage() " + url)
 		exists = False
+		imgTitle = ''
 
 		if not url:
-			if self.largeImage:
-				url = self.imdbGallery.getLargeURL(self.galleryIDX, self.galleryImgIDX)
-			else:
-				url = self.imdbGallery.getThumbURL(self.galleryIDX, self.galleryImgIDX)
+			debug("using galleryImgIDX=%s" % self.galleryImgIDX)
+			imgTitle, url = self.imdbGallery.getThumb(self.galleryImgIDX)
 
 		if url:
-			fn = os.path.join(DIR_CACHE, self.IMDB_PREFIX + os.path.basename(url))
+			title = os.path.basename(url)
+			fn = safeFilename(os.path.join(DIR_CACHE, self.IMDB_PREFIX + title))
 			exists = fileExist(fn)
 			if not exists:
-				dialogProgress.create(__language__(986), os.path.basename(url))
-				success = fetchURL(url, fn, isImage=True)
+				dialogProgress.create(__language__(986), title)
+				exists = fetchURL(url, fn, isImage=True)
 				dialogProgress.close()
-				exists = fileExist(fn)
 
-#		self.picFrameCB.setEnabled(exists)
 		if exists:
-			self.showImage(fn)
+			self.picCI.setImage(fn)
+			if not imgTitle:
+				imgTitle = title
+			self.imageTitleCFL.reset()
+			self.imageTitleCFL.addLabel(imgTitle)
 
-		debug("< fetchImage() exists="+str(exists))
+		debug("< fetchImage() exists=%s" % exists)
 		return exists
-
-
-	def showImage(self, filename):
-		debug("> showImage() largeImage=" +str(self.largeImage))
-		debug("filename="+filename)
-
-		# show image
-		try:
-			self.removeControl(self.picCI)
-		except: pass
-
-		# set image sz
-		if not self.largeImage:
-			w = self.photoW
-			h = self.photoH
-			x = self.photoX
-			y = self.photoY
-			btnW = 15
-		else:
-			# most of screen area
-			w = int((self.backgW/10) *9)
-			h = int((self.backgH/10) *9)
-			# center on screen
-			x = int((REZ_W /2) - (w /2))
-			y = int((REZ_H /2) - (h /2))
-			btnW = 30
-
-		self.photoLeftCB.setPosition(x-10-btnW, y)
-		self.photoLeftCB.setWidth(btnW)
-		self.photoLeftCB.setHeight(h)
-		self.picFrameCB.setPosition(x-4, y-4)
-		self.picFrameCB.setWidth(w+8)
-		self.picFrameCB.setHeight(h+8)
-		self.photoRightCB.setPosition(x+w+10, y)
-		self.photoRightCB.setWidth(btnW)
-		self.photoRightCB.setHeight(h)
-
-		try:
-			self.picCI = xbmcgui.ControlImage(x, y, w, h, filename, aspectRatio=2)
-			self.addControl(self.picCI)
-		except: pass
-		debug("< showImage()")
 
 	#################################################################################################
 	def display(self, panel=''):
 		debug("> display()")
 
 		xbmcgui.lock()
+		imageTitleH = 15
+		
 		# BACKGROUND PANEL
 		try:
 			if not panel:
@@ -335,7 +278,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		# CAST LIST
 		x = self.xpos+20
-		y = self.photoY + self.photoH + 15
+		y = self.photoY + self.photoH + imageTitleH + 5
 		h = self.backgH - y
 		w = COL1_X - x
 		castCL = xbmcgui.ControlList(x, y, w, h, font=fontLabel, space=0,itemHeight=20, \
@@ -346,9 +289,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 #		except: pass
 
 		try:
-#			print "self.movie.Cast=", self.movie.Cast
 			for actor,role in self.movie.Cast:
-#				print actor,role
 				castCL.addItem(xbmcgui.ListItem(decodeEntities(actor), decodeEntities(role)))
 		except:
 			castCL.addItem(xbmcgui.ListItem('No Cast Details'))
@@ -363,8 +304,14 @@ class IMDbWin(xbmcgui.WindowDialog):
 										FRAME_FOCUS_FILENAME, FRAME_NOFOCUS_FILENAME)
 		self.addControl(self.picFrameCB)
 
+		# image
+		self.picCI = xbmcgui.ControlImage(self.photoX, self.photoY, self.photoW, self.photoH, \
+										  NOIMAGE_FILENAME, aspectRatio=2)
+		self.addControl(self.picCI)
+
 		# PHOTO MOVE LEFT
 		x -= (self.border*2 + IMG_NAV_BTN_W)
+		imageTitleX = x
 		self.photoLeftCB = xbmcgui.ControlButton(x, self.photoY, IMG_NAV_BTN_W, self.photoH, '<', \
 												  alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.photoLeftCB)
@@ -374,6 +321,13 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.photoRightCB = xbmcgui.ControlButton(x, self.photoY, IMG_NAV_BTN_W, self.photoH, '>', \
 												  alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.photoRightCB)
+
+		# image title
+		imageTitleY = self.photoY + self.photoH +1
+		imageTitleW = (IMG_NAV_BTN_W *2) + self.photoW
+		self.imageTitleCFL = xbmcgui.ControlFadeLabel(imageTitleX, imageTitleY, imageTitleW, imageTitleH, \
+												 FONT10, '0xFFFFFFCC')
+		self.addControl(self.imageTitleCFL)
 
 		# NAV
 		self.picFrameCB.controlDown(castCL)
@@ -415,17 +369,11 @@ class IMDbWin(xbmcgui.WindowDialog):
 	# setup next/prev and image frame states
 	def setImageNav(self):
 		debug("setImageNav()")
-		if self.imdbGallery.galleries:
-			state = True
-		else:
-			state = False
-
-		self.photoLeftCB.setVisible(state)
-		self.photoRightCB.setVisible(state)
-		try:
-			self.photoLeftCB.setEnabled(state)
-			self.photoRightCB.setEnabled(state)
-		except: pass # newer xbmc builds only
+		visible = (self.imdbGallery.getGalleryImageCount() > 0)
+		self.photoLeftCB.setVisible(visible)
+		self.photoRightCB.setVisible(visible)
+		self.photoLeftCB.setEnabled(visible)
+		self.photoRightCB.setEnabled(visible)
 
 
 	def ask(self, title=''):
@@ -445,12 +393,20 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		if self.movie and url:
 			self.display()
+#			dialogProgress.create(__language__(987))
 			self.imdbGallery = IMDbGallery(url)
-			self.fetchImage(self.movie.PosterURL)
+#			dialogProgress.close()
+			self.fetchImage()
 			self.setImageNav()
 			self.setFocus(self.picFrameCB)
 			self.doModal()
 		debug("< IMDbWin.ask()")
+
+#############################################################################################################
+def safeFilename(path):
+	head, tail = os.path.split(path.replace( "\\", "/" ))
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
+
 
 #win = IMDbWin()
 #win.ask('star wars (1977)')

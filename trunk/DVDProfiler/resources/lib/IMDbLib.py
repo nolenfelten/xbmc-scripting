@@ -65,8 +65,11 @@ in_castReg   = re.compile(r'href="/name/[nm0-9]*/">(.*?)<.*?(?:/character/|"char
 in_creatorsReg = re.compile(r'href="/name/.*?>(.*?)</')
 
 # gallery RE
-galleriesRE = re.compile('href="photogallery(-.*?)"',reFlags)
-galleryRE = re.compile('<a href="/gallery.*? src="(.*?)".*?(?:width|height)="(\d+)".*?(?:width|height)="(\d+)".*?</a>',reFlags)
+#galleriesRE = re.compile('href="photogallery(-.*?)"',reFlags)
+#galleryRE = re.compile('<a href="/gallery.*? src="(.*?)".*?(?:width|height)="(\d+)".*?(?:width|height)="(\d+)".*?</a>',reFlags)
+galleryThumbsRE = re.compile('img alt="(.*?)".*?src="(.*?)"') # 18/03/08
+galleryPageCountRE = re.compile(r'page=(\d+)', reFlags)
+
 
 class IMDb:
 	def __init__(self,url):
@@ -276,7 +279,6 @@ class IMDbSearch:
 		url = 'http://www.imdb.com/find?s=tt&q=' + lookupStr
 		page = readPage(url)
 		if not page:
-			print "page not found: ", url
 			return
 
 		if string.find(page, 'No Matches') != -1:
@@ -325,91 +327,77 @@ class IMDbSearch:
 
 
 ###########################################################################################################
+# http://www.imdb.com/title/tt0076759/mediaindex
+###########################################################################################################
 class IMDbGallery:
 	def __init__(self, url):
-		log("IMDbGallery() " + url)
 
 		if url[-1] != '/': url += '/'
-		self.baseURL = url + 'photogallery'
+		self.baseURL = url + 'mediaindex'
+		log("IMDbGallery() " + self.baseURL)
 
-		self.posterURL = None
-		self.galleries = []
-		self.galleyThumbs = {}
-		self.THUMB_ATTR_IMG = 0
-		self.THUMB_ATTR_X = 1
-		self.THUMB_ATTR_Y = 2
+		self.galleyThumbs = []	# [[url title], [url title], ... ]
+		self.pageCount = 1
 
-		# FETCH PHOTOGALLERY
-		self.page = readPage(self.baseURL)
-		if self.page:
-			# GET POSTER URL
-			matches = re.search(posterURLReg, self.page, reFlags)
-			if matches:
-				self.posterURL = matches.group(1)
+		page = readPage(self.baseURL)
+		if not page:
+			return
 
-			# GET GALLERY URLS
-			self.galleries = self.getGalleries()
+		# how many pages ?
+		matches = galleryPageCountRE.findall(page)
+		if matches:
+			# finds them twice, so half the count
+			self.pageCount = int(len(matches) /2)
+		else:
+			self.pageCount = 1
+		log("pageCount=%s" % self.pageCount)
 
-			# fetch thumb url for each image in gallery
-			for gURL in self.galleries:
-				self.galleyThumbs[gURL]= self.getGalleryThumbs(gURL)
+		# get thumb urls from each page
+		for pageIdx in range(1, self.pageCount+1):
+			log("fetching pageIdx=%s" % pageIdx)
+			if pageIdx > 1:
+				url = self.baseURL + '?page=%s' % pageIdx
+				urlList = self.getGalleryThumbs(url)
+			else:
+				urlList = self.getGalleryThumbs(doc=page)
+			if urlList:
+				self.galleyThumbs += urlList
 
-		if DEBUG:
-			print "baseURL=", self.baseURL
-			print "posterURL=", self.posterURL
-			print "galleries=", len(self.galleries)
-			print "galleyThumbs=", len(self.galleyThumbs)
-
-			for key, value in self.galleyThumbs.items():
-				print key, " count=", len(self.galleyThumbs[key])
-
-	def getThumbAttr(self, thumbInfo, attr):
-		return thumbInfo[attr]
-
-	def getThumbURL(self, galleryIDX, galleyImgIdx):
-		try:
-			gURL = self.galleries[galleryIDX]
-			thumbInfo = self.galleyThumbs[gURL][galleyImgIdx]
-			return self.getThumbAttr(thumbInfo, self.THUMB_ATTR_IMG)
-		except:
-			return None
-
-	# alter URL to point to large image
-	def getLargeURL(self, galleryIDX, galleyImgIdx):
-		url = self.getThumbURL(galleryIDX, galleyImgIdx)
-		if url:
-			url = url.replace('th-','/')
-		return url
-
-	def getGalleryImageCount(self, galleryIDX):
-		try:
-			gURL = self.galleries[galleryIDX]
-			return len(self.galleyThumbs[gURL])
-		except:
-			return 0
-
-	def getGalleries(self):
-		galleries = []
-		matches = galleriesRE.findall(self.page)
-		for match in matches:
-			try:
-				url = self.baseURL + match
-				galleries.index(url)
-			except:
-				galleries.append(url)
-		return galleries
+#		print self.galleyThumbs
+		log("galleyThumbs count=%s" % len(self.galleyThumbs))
 
 	# GET GALLERY THUMB IMAGES
-	def getGalleryThumbs(self, url):
-		page = readPage(url)
-		if page:
-			return galleryRE.findall(page)
+	def getGalleryThumbs(self, url='', doc=''):
+		if url:
+			doc = readPage(url)
+		if doc:
+			return galleryThumbsRE.findall(doc)
 		return None
 
+	def getGalleryImageCount(self):
+		return len(self.galleyThumbs)
+
+	def getThumb(self, idx):
+		try:
+			return self.galleyThumbs[idx]
+		except:
+			return ('','')
+
+	def getThumbTitle(self, idx):
+		try:
+			return self.getThumb(idx)[0]
+		except:
+			return ''
+
+	def getThumbURL(self, idx):
+		try:
+			return self.getThumb(idx)[1]
+		except:
+			return ''
 
 ###########################################################################################################
 def readPage(url, readLines=False):
-	log("readPage() readLines=" + str(readLines) + " " +url)
+	log("readPage() readLines=%s %s " % (readLines, url))
 	page = None
 	try:
 		sock = urllib.urlopen(url)
@@ -418,6 +406,8 @@ def readPage(url, readLines=False):
 		else:
 			page = sock.readlines()
 		sock.close()
+		if not page:
+			log("page not found")
 	except:
 		log("urlopen() exception")
 
