@@ -24,6 +24,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             102: { # BUTTON: save
                 'onClick': self.save_current_file,
             },
+            151: { # LABEL: (status area) currently open file name
+            },
+            152: { # LABEL: (status area) currently open file name
+            },
+            153: { # LABEL: (status area) currently open file name
+            },
         }
         common.gui.BaseScriptWindow.__init__( self )
 
@@ -149,6 +155,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     }
                 # show the menu
                 menu = common.gui.dialog.popupmenu( items )
+                # update status area
+                self.update_controls()
             except:
                 import traceback
                 traceback.print_exc()
@@ -191,6 +199,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         # close the old file
         if self.file:
             self.file.close()
+        # update status area
+        self.update_controls()
         # get a path to the file 
         filepath = common.gui.dialog.browse( heading = common.localize( 1001 ) )
         if len( filepath ):
@@ -269,6 +279,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             except:
                 import traceback
                 traceback.print_exc()
+        # update status area
+        self.update_controls()
 
     def save_current_file( self ):
         if not self.changed:
@@ -303,10 +315,34 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         writeable_file.close()
         xbmcgui.Dialog().ok( self.file.name, common.localize( 1010 ) )
         self.changed = False
+        # update status area
+        self.update_controls()
+
+    def update_controls( self ):
+        try:
+            if self.file:
+                self.window.getControl( 50 ).setEnabled( True )
+                self.window.getControl( 151 ).setLabel( os.path.split( self.file.name )[-1] )
+                self.window.getControl( 152 ).setVisible( True ) # read access
+                self.window.getControl( 153 ).setVisible( self.check_access( self.file.name ) ) # write access
+            else:
+                self.window.getControl( 50 ).setEnabled( False )
+                self.window.getControl( 151 ).setLabel( common.localize( 151 ) )
+                self.window.getControl( 152 ).setVisible( False ) # read access
+                self.window.getControl( 153 ).setVisible( False ) # write access
+            if self.changed:
+                self.window.getControl( 102 ).setEnabled( True )
+            else:
+                self.window.getControl( 102 ).setEnabled( False )
+        except:
+            import traceback
+            traceback.print_exc()
 
 # init the window instance
 window = ScriptWindow()
+# show the window to fully initialize the controls
+window.window.show()
 # browse for a file to open
 window.open_new_file()
 # turn over control to the window
-window.show()
+window.display()

@@ -2,6 +2,9 @@
 <strings>
     <string id="101">Open</string>
     <string id="102">Save</string>
+    <string id="151">No file</string>
+    <string id="152">Read</string>
+    <string id="153">Write</string>
     <string id="501">Edit</string>
     <string id="502">Delete</string>
     <string id="503">Insert</string>
