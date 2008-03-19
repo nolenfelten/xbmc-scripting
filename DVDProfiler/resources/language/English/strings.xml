@@ -125,6 +125,7 @@
     <string id="984">Edit title ?</string>
     <string id="985">Select Title</string>
     <string id="986">Downloading Image ...</string>
+    <string id="987">Downloading Photo Links ...</string>
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>

@@ -1166,7 +1166,6 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 
 #############################################################################################################
 def safeFilename(path):
-	print "safeFilename() " + path
 	head, tail = os.path.split(path.replace( "\\", "/" ))
 	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
 
