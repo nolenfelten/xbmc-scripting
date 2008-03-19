@@ -9,7 +9,6 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
     def __init__( self ):
         self.file = None
         self.eol = str() # end of line string used by file
-        self.file_write_access = False
         self.changed = False
         self.controls_map = {
             1: { # LABEL: script name
