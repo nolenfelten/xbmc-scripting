@@ -101,12 +101,12 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     items = dict()
                     items[len(items.keys())+1] = {
                         'label': common.localize( 504 ), # Insert before..
-                        'thumb': None,
+                        'thumb': 'script-line-inserted-before.png',
                         'onClick': before,
                     }
                     items[len(items.keys())+1] = {
                         'label': common.localize( 505 ), # Insert after..
-                        'thumb': None,
+                        'thumb': 'script-line-inserted-after.png',
                         'onClick': after,
                     }
                     # show the menu
