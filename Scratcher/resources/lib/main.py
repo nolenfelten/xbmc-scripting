@@ -31,6 +31,8 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
             },
             154: { # LABEL: (status area) EOL type
             },
+            155: { # LABEL: (status area) number of lines
+            },
         }
         common.gui.BaseScriptWindow.__init__( self )
 
@@ -200,6 +202,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
         # close the old file
         if self.file:
             self.file.close()
+            self.file = None
         # update status area
         self.update_controls()
         # get a path to the file 
@@ -336,12 +339,18 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 else:
                     eol_type = common.localize( 1544 )
                 self.window.getControl( 154 ).setLabel( eol_type ) # EOL type
+                self.window.getControl( 155 ).setVisible( True )
+                self.window.getControl( 155 ).setLabel( ' '.join( (
+                    str( len( range( self.window.getListSize() ) ) ),
+                    common.localize( 155 )
+                ) ) )
             else:
                 self.window.getControl( 50 ).setEnabled( False )
                 self.window.getControl( 151 ).setLabel( common.localize( 151 ) )
                 self.window.getControl( 152 ).setVisible( False ) # read access
                 self.window.getControl( 153 ).setVisible( False ) # write access
                 self.window.getControl( 154 ).setVisible( False ) # EOL type
+                self.window.getControl( 155 ).setVisible( False )
             if self.changed:
                 self.window.getControl( 102 ).setEnabled( True )
             else:
