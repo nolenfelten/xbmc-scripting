@@ -5,6 +5,10 @@
     <string id="151">No file</string>
     <string id="152">R</string>
     <string id="153">W</string>
+    <string id="1541">DOS\Windows</string>
+    <string id="1542">Unix</string>
+    <string id="1543">Mac</string>
+    <string id="1544">Unknown</string>
     <string id="501">Edit</string>
     <string id="502">Delete</string>
     <string id="503">Insert</string>

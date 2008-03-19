@@ -193,7 +193,7 @@
                 <posy>8</posy>
                 <width>20</width>
                 <height>20</height>
-                <texture>script-statusarea-mode-background.png</texture>
+                <texture>script-statusarea-field-background.png</texture>
                 <visible>Control.IsVisible(152)</visible>
             </control>
             <control type="label" id="152">
@@ -212,7 +212,7 @@
                 <posy>8</posy>
                 <width>20</width>
                 <height>20</height>
-                <texture>script-statusarea-mode-background.png</texture>
+                <texture>script-statusarea-field-background.png</texture>
                 <visible>Control.IsVisible(153)</visible>
             </control>
             <control type="label" id="153">
@@ -233,6 +233,25 @@
                 <height>36</height>
                 <aligny>center</aligny>
                 <align>left</align>
+                <textcolor>ff000000</textcolor>
+            </control>
+            <control type="image">
+                <description>mode background</description>
+                <posx>590</posx>
+                <posy>8</posy>
+                <width>120</width>
+                <height>20</height>
+                <texture>script-statusarea-field-background.png</texture>
+                <visible>Control.IsVisible(154)</visible>
+            </control>
+            <control type="label" id="154">
+                <description>currently open filename</description>
+                <posx>590</posx>
+                <posy>0</posy>
+                <width>120</width>
+                <height>36</height>
+                <aligny>center</aligny>
+                <align>center</align>
                 <textcolor>ff000000</textcolor>
             </control>
         </control>
