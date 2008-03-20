@@ -70,6 +70,43 @@
     <string id="353">File</string>
     <string id="354">Download</string>
 
+    <!-- Headings -->
+    <string id="400">Overview</string>
+    <string id="401">Additional Information</string>
+    <string id="402">Rating</string>
+    <string id="403">Runtime</string>
+    <string id="404">Region</string>
+    <string id="405">Prod Year</string>
+    <string id="406">Released</string>
+    <string id="407">Genre</string>
+    <string id="408">AspectRatio</string>
+    <string id="409">Standard</string>
+    <string id="410">16x9</string>
+    <string id="411">Audio Language</string>
+    <string id="412">Studios</string>
+    <string id="413">Reviews (F/V/A/E)</string>
+    <string id="414">Features</string>
+    <string id="415">Easter Eggs</string>
+    <string id="416">Media Location</string>
+    <string id="417">CAST</string>
+    <string id="418">ACTOR</string>
+    <string id="419">ROLE</string>
+    <string id="420">CREW</string>
+    <string id="421">NAME</string>
+    <string id="422">POSITION</string>
+    <string id="423">Sort By #</string>
+    <string id="424">Sort By Title</string>
+    <string id="425">Descending</string>
+    <string id="426">Ascending</string>
+    <string id="427">Select</string>
+    <string id="428">Play</string>
+    <string id="429">No Filters</string>
+    <string id="430">My Profile</string>
+    <string id="431">Menu</string>
+    <string id="432">IMDb</string>
+    <string id="433">Alias</string>
+    <string id="434">Filters</string>
+
     <!-- Main Menu options -->
     <string id="500">Exit</string>
     <string id="501">Main Menu</string>

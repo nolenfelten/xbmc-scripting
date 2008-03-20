@@ -11,7 +11,6 @@ import os, re, unicodedata, traceback
 import urllib, urllib2
 from string import strip, replace, find, rjust
 import sgmllib
-from threading import Thread
 from xml.dom.minidom import parse, parseString
 import cookielib
 #import socket
@@ -20,7 +19,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '29-02-2008'
+__date__ = '20-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 # setup cookiejar
@@ -994,6 +993,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 				dialogProgress.update( percent )
 		if ( dialogProgress.iscanceled() ): raise
 
+	success = False
 	data = None
 	if not file:
 		# create temp file if needed
@@ -1041,7 +1041,10 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 		else:
 			data = fileExist(file)		# check image file exists
 
-	debug( "< fetchURL success=" + str(data != None))
+		if data:
+			success = True
+
+	debug( "< fetchURL success=%s" % success)
 	return data
 
 #################################################################################################################
