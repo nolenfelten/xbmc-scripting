@@ -10,7 +10,7 @@
  07/07/07 - Version that doesnt use latest bbbLib globals setup
  11/12/07 - tweaked layout
  21/01/08 - Uses DIR_CACHE from USERDATA
- 18/03/08 - Changed to use changed imdbLib gallery
+ 20/03/08 - Changed to use changed imdbLib gallery
 
 """
 
@@ -20,7 +20,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "IMDbWin"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-03-2008'
+__date__ = '20-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA           # should be in default.py
@@ -151,24 +151,27 @@ class IMDbWin(xbmcgui.WindowDialog):
 		debug("> fetchImage() " + url)
 		exists = False
 		imgTitle = ''
+		fn = ''
 
 		if not url:
 			debug("using galleryImgIDX=%s" % self.galleryImgIDX)
 			imgTitle, url = self.imdbGallery.getThumb(self.galleryImgIDX)
 
 		if url:
-			title = os.path.basename(url)
-			fn = safeFilename(os.path.join(DIR_CACHE, self.IMDB_PREFIX + title))
+			basenameTitle = os.path.basename(url)
+			fn = safeFilename(os.path.join(DIR_CACHE, self.IMDB_PREFIX + basenameTitle))
 			exists = fileExist(fn)
 			if not exists:
-				dialogProgress.create(__language__(986), title)
+				dialogProgress.create(__language__(986), basenameTitle)
 				exists = fetchURL(url, fn, isImage=True)
 				dialogProgress.close()
 
 		if exists:
+			if not fn:
+				fn = NOIMAGE_FILENAME
 			self.picCI.setImage(fn)
 			if not imgTitle:
-				imgTitle = title
+				imgTitle = basenameTitle
 			self.imageTitleCFL.reset()
 			self.imageTitleCFL.addLabel(imgTitle)
 
@@ -253,7 +256,6 @@ class IMDbWin(xbmcgui.WindowDialog):
 			self.addControl(self.tagCL)
 			self.tagCL.addLabel(decodeEntities(self.movie.Tagline))
 
-
 		# PLACE LABEL + DATA
 		y = self.photoY
 		for label, data in labelData:
@@ -304,7 +306,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 										FRAME_FOCUS_FILENAME, FRAME_NOFOCUS_FILENAME)
 		self.addControl(self.picFrameCB)
 
-		# image
+		# THUMBNAIL IMAGE
 		self.picCI = xbmcgui.ControlImage(self.photoX, self.photoY, self.photoW, self.photoH, \
 										  NOIMAGE_FILENAME, aspectRatio=2)
 		self.addControl(self.picCI)
@@ -371,8 +373,8 @@ class IMDbWin(xbmcgui.WindowDialog):
 		debug("setImageNav()")
 		visible = (self.imdbGallery.getGalleryImageCount() > 0)
 		self.photoLeftCB.setVisible(visible)
-		self.photoRightCB.setVisible(visible)
 		self.photoLeftCB.setEnabled(visible)
+		self.photoRightCB.setVisible(visible)
 		self.photoRightCB.setEnabled(visible)
 
 

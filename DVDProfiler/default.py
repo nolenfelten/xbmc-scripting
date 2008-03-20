@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-03-2008'
+__date__ = '20-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -489,7 +489,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.removeControl(self.versionLbl)
 		except: pass
 		self.versionLbl = xbmcgui.ControlLabel(REZ_W, 0, 0, 0, "v"+__version__, \
-									FONT10, "0xFFFFFFCC",alignment=XBFONT_RIGHT)
+									FONT10, "0xFFC0C0C0",alignment=XBFONT_RIGHT)
 		self.addControl(self.versionLbl)
 		self.versionLbl.setAnimations([('WindowOpen', animHeaderWO),
 									 ('WindowClose', animHeaderWC)])
@@ -518,7 +518,7 @@ class DVDProfiler(xbmcgui.Window):
 		except: pass
 		x = displayX + logoW + 5
 		w = displayW - x
-		self.title = xbmcgui.ControlLabel(x, 5, w, 25, 'Please wait ...', FONT14, '0xFFFFFF33')
+		self.title = xbmcgui.ControlLabel(x, 5, w, 25, '', FONT14, '0xFFFFFF33')
 		self.addControl(self.title)
 		self.title.setAnimations([('WindowOpen', animHeaderWO),
 								('WindowClose', animHeaderWC)])
@@ -534,7 +534,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.coverBackCI = xbmcgui.ControlImage(displayX, ypos, \
 											imageW+4, imageH+4, FRAME_NOFOCUS_LRG_FILENAME)
 			self.addControl(self.coverBackCI)
-			self.coverBackCI.setAnimations([('WindowOpene', animZoomWO),('WindowClose', animZoomWC)])
+			self.coverBackCI.setAnimations([('WindowOpen', animZoomWO),('WindowClose', animZoomWC)])
 		except: pass
 
 		# IMAGE
@@ -545,7 +545,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.coverCI = xbmcgui.ControlImage(displayX+2, ypos+2, \
 											imageW, imageH, FRAME_NOFOCUS_FILENAME,aspectRatio=2)
 			self.addControl(self.coverCI)
-			self.coverCI.setAnimations([('WindowOpene', animZoomWO),('WindowClose', animZoomWC)])
+			self.coverCI.setAnimations([('WindowOpen', animZoomWO),('WindowClose', animZoomWC)])
 		except: pass
 
 		# TITLES LIST BACKG
@@ -626,7 +626,7 @@ class DVDProfiler(xbmcgui.Window):
 		ypos = displayY +10
 		overviewW = REZ_W - xpos
 		overviewLblH = 20
-		self.overviewLbl = xbmcgui.ControlLabel(xpos, ypos, overviewW, overviewLblH, 'Overview:', FONT10, '0xFFFFFFFF')
+		self.overviewLbl = xbmcgui.ControlLabel(xpos, ypos, overviewW, overviewLblH, __language__(400), FONT10, '0xFFFFFFFF')
 		self.addControl(self.overviewLbl)
 		overviewAnim = [('WindowOpen', animSlideRightWO), ('WindowClose', animSlideRightWC)]
 		self.overviewLbl.setAnimations(overviewAnim)
@@ -637,7 +637,7 @@ class DVDProfiler(xbmcgui.Window):
 		except: pass
 		ypos += overviewLblH
 		overviewH = imageH - 30
-		self.overviewCTB = xbmcgui.ControlTextBox(xpos, ypos, overviewW, overviewH, FONT10, '0xFFFFFF66')
+		self.overviewCTB = xbmcgui.ControlTextBox(xpos, ypos, overviewW, overviewH, FONT10, '0xFFFFFFAA')
 		self.addControl(self.overviewCTB)
 		self.overviewCTB.setAnimations(bottomBtnAnim)
 		self.overviewCTB.setAnimations(overviewAnim)
@@ -683,7 +683,7 @@ class DVDProfiler(xbmcgui.Window):
 		except: pass
 		xpos += btnW +1
 		lblW = 38
-		self.whiteLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, 'Menu', \
+		self.whiteLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, __language__(431), \
 											FONT10, '0xFF00FFFF', alignment=XBFONT_CENTER_Y|XBFONT_LEFT)
 		self.addControl(self.whiteLbl)
 		self.whiteLbl.setAnimations(bottomBtnAnim)
@@ -701,7 +701,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.removeControl(self.yLbl)
 		except: pass
 		xpos += btnW +1
-		self.yLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, 'IMDb', \
+		self.yLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, __language__(432), \
 										FONT10, '0xFF00FFFF', alignment=XBFONT_CENTER_Y|XBFONT_LEFT)
 		self.addControl(self.yLbl)
 		self.yLbl.setAnimations(bottomBtnAnim)
@@ -721,9 +721,9 @@ class DVDProfiler(xbmcgui.Window):
 		xpos += btnW +1
 		lblW = 75
 		if self.isOnlineOnly or self.onlineAliasData:
-			text = 'Select'
+			text = __language__(427)    # select
 		else:
-			text = 'Select/Play'
+			text = __language__(428)    # play
 		self.aLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, text, \
 										FONT10, '0xFF00FFFF', alignment=XBFONT_CENTER_Y|XBFONT_LEFT)
 		self.addControl(self.aLbl)
@@ -742,11 +742,11 @@ class DVDProfiler(xbmcgui.Window):
 			self.removeControl(self.xLbl)
 		except: pass
 		xpos += btnW +1
-		lblW = 65
+		lblW = 60
 		if self.isOnlineOnly or self.onlineAliasData:
-			text = 'Alias'
+			text = __language__(433)    # alias
 		else:
-			text = 'Filters'
+			text = __language__(434)    # filters
 		self.xLbl = xbmcgui.ControlLabel(xpos, ypos, lblW, 10, text, \
 										FONT10, '0xFF00FFFF', alignment=XBFONT_CENTER_Y|XBFONT_LEFT)
 		self.addControl(self.xLbl)
@@ -825,20 +825,16 @@ class DVDProfiler(xbmcgui.Window):
 		debug("> setupTitles()")
 
 		if self.sortByTitle:
-			text = "Sort By #"
+			text = __language__(423)    # sort by #
 		else:
-			text = "Sort By Title"
-		try:
-			self.sortColCB.setLabel(text)
-		except: pass # old builds dont support this
+			text = __language__(424)    # sort by title
+		self.sortColCB.setLabel(text)
 
 		if self.sortAsc:
-			text = "Descending"
+			text = __language__(425)    # desc
 		else:
-			text = "Ascending"
-		try:
-			self.sortDirCB.setLabel(text)
-		except: pass # old builds dont support this
+			text = __language__(426)    # asc
+		self.sortDirCB.setLabel(text)
 
 		filterCount = self.loadTitlesCL(self.sortByTitle, self.sortAsc)
 		self.updateFilterBtn(filterCount)
@@ -850,16 +846,16 @@ class DVDProfiler(xbmcgui.Window):
 
 		# update A btn according to online status
 		if self.isOnlineOnly or self.onlineAliasData:
-			text = 'Select'
+			text = __language__(427)    # select
 		else:
-			text = 'Select/Play'
+			text = __language__(428)    # play
 		self.aLbl.setLabel(text)
 
 		# update B btn label
 		if self.selectedGenres or self.selectedTags:
-			text = 'Clear Filters'
+			text = __language__(429)    # clear filters
 		elif not self.isOnlineOnly and self.onlineAliasData:
-			text = 'My Profile'
+			text = __language__(430)    # My profile
 		else:
 			text = ''
 		self.bLbl.setLabel(text)
@@ -1066,8 +1062,8 @@ class DVDProfiler(xbmcgui.Window):
 		# cast list
 		debug("build cast list")
 		self.castCL.reset()
-		self.castCL.addItem(xbmcgui.ListItem('CAST:'))
-		self.castCL.addItem(xbmcgui.ListItem('ACTOR','ROLE'))
+		self.castCL.addItem(xbmcgui.ListItem(__language__(417)))
+		self.castCL.addItem(xbmcgui.ListItem(__language__(418),__language__(419)))
 		try:
 			for items in self.dvdCollection.getDVDData(self.dvdCollection.ACTORS):
 				if items:
@@ -1090,8 +1086,8 @@ class DVDProfiler(xbmcgui.Window):
 
 		# append credits
 		debug("build credits")
-		self.castCL.addItem(xbmcgui.ListItem('CREW:'))
-		self.castCL.addItem(xbmcgui.ListItem('NAME','POSITION'))
+		self.castCL.addItem(xbmcgui.ListItem(__language__(420)))
+		self.castCL.addItem(xbmcgui.ListItem(__language__(421),__language__(422)))
 		try:
 			for items in self.dvdCollection.getDVDData(self.dvdCollection.CREDITS):
 				if items:
@@ -1108,7 +1104,6 @@ class DVDProfiler(xbmcgui.Window):
 						role = ''
 					self.castCL.addItem(xbmcgui.ListItem(name, role))
 		except:
-			handleException()
 			self.castCL.addItem(xbmcgui.ListItem('N/A'))
 		else:
 			debug("credits done OK")
@@ -1121,14 +1116,14 @@ class DVDProfiler(xbmcgui.Window):
 			text += _getItemsText(self.dvdCollection.OVERVIEW)
 		except: text += "N/A"
 
-		text += '\n\nAdditional Information:'
+		text += '\n\n' + __language__(401)
 		try:
-			text += '\nRating:  '
+			text += '\n%s:  ' % __language__(402)
 			text += _getItemsText(self.dvdCollection.RATING)
 		except: text += "N/A"
 
 		try:
-			text += '\nRuntime:  '
+			text += '\n%s:  ' % __language__(403)
 			mins = _getItemsText(self.dvdCollection.RUNNINGTIME)
 			if mins and mins != 'N/A' and find(mins,'min') == -1:
 				mins += ' mins'
@@ -1136,49 +1131,44 @@ class DVDProfiler(xbmcgui.Window):
 		except: text += "N/A"
 
 		try:
-			text += '\nRegion:  '
+			text += '\n%s:  ' % __language__(404)
 			text += _getItemsText(self.dvdCollection.REGION)
 		except: text += "N/A"
 
 		try:
-			text += '\nProd Year:  ' 
+			text += '\n%s:  '  % __language__(405)
 			text += _getItemsText(self.dvdCollection.PRODYEAR)
 		except: text += "N/A"
 
 		try:
-			text += '\nReleased:  '
+			text += '\n%s:  ' % __language__(406)
 			text += _getItemsText(self.dvdCollection.RELEASED)
 		except: text += "N/A"
 
 		try:
-			text += '\nGenre:  '
+			text += '\n%s:  ' % __language__(407)
 			text += _getItemsText(self.dvdCollection.GENRE)
 		except: text += "N/A"
 
 		text += '\nVideo:  '
 		if not self.onlineAliasData:
 			try:
-				text += 'AspectRatio: '
+				text += '%s: ' % __language__(408)
 				text += _getItemsText(self.dvdCollection.VIDEOFORMAT_ASPECT)
 			except: text += "N/A"
 
 			try:
-				text += 'Standard: '
+				text += '%s: ' % __language__(409)
 				text += _getItemsText(self.dvdCollection.VIDEOFORMAT_STD)
 			except: text += "N/A"
 
 			try:
-				text += 'Standard: '
-				text += _getItemsText(self.dvdCollection.VIDEOFORMAT_STD)
-			except: text += "N/A"
-
-			try:
-				text += ' 16x9: '
+				text += ' %s: ' % __language__(410)
 				value = _getItemsText(self.dvdCollection.VIDEOFORMAT_IS16x9)
-				if value.lower() == 'false':
-					value = 'No'
-				elif value.lower() == 'true':
+				if value.lower() == 'true':
 					value = 'Yes'
+				else:
+					value = 'No'
 				text += value
 			except: text += "N/A"
 		else:
@@ -1187,32 +1177,32 @@ class DVDProfiler(xbmcgui.Window):
 			except: text += "N/A"
 
 		try:
-			text += '\nAudio Language:  '
+			text += '\n%s:  ' % __language__(411)
 			text += _getItemsText(self.dvdCollection.AUDIOFORMAT)
 		except: text += "N/A"
 
 		try:
-			text += '\nStudios:  '
+			text += '\n%s:  ' % __language__(412)
 			text += _getItemsText(self.dvdCollection.STUDIO)
 		except: text += "N/A"
 
 		try:
-			text += '\nReviews (F/V/A/E):  '
+			text += '\n%s:  ' % __language__(413)
 			text += _getItemsText(self.dvdCollection.REVIEW)
 		except: text += "N/A"
 
 		try:
-			text += '\nFeatures:  '
+			text += '\n%s:  ' % __language__(414)
 			text += _getItemsText(self.dvdCollection.FEATURES)
 		except: text += "N/A"
 
 		try:
-			text += '\nEaster Eggs:  '
+			text += '\n%s:  ' % __language__(415)
 			text += _getItemsText(self.dvdCollection.EASTEREGGS)
 		except: text += "N/A"
 
 		try:
-			text += '\nMedia Location:  '
+			text += '\n%s:  ' % __language__(416)
 			text += _getItemsText(self.dvdCollection.LOCATION)
 		except: text += "N/A"
 
