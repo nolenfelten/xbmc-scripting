@@ -3069,7 +3069,7 @@ class Football(xbmcgui.Window):
 			menu = makeMenu()
 			optReInit = INIT_NONE
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(505), width=320, rows=len(menu))
+			selectDialog.setup(__language__(505), width=375, rows=len(menu))
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
 			if selectedPos <= 0:				# exit selected
 				break

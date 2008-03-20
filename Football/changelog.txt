@@ -1,6 +1,6 @@
  Version     Date        Change
  v1.4       18-03-2008   Fix: Data retrieval in several areas (all datasources) caused by web site html changes.
-                         New: Language support (Translations wanted!)
+                         New: Language support (German, Swedish incl. - More translations wanted!)
                          New: Script update support
                          New: Saves settings to UserData
  v1.3a       20-04-06   New: Added Cups to dataSource SoccerStand.com 
