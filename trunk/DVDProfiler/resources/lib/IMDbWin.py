@@ -9,12 +9,12 @@
  21/03/07 - Fixed due to site changes, also enhanced and rearranged.
  07/07/07 - Version that doesnt use latest bbbLib globals setup
  11/12/07 - tweaked layout
- 21/01/08 - Uses DIR_CACHE from USERDATA
+ 21/01/08 - Uses DIR_IMDB_CACHE from USERDATA
  20/03/08 - Changed to use changed imdbLib gallery
 
 """
 
-import sys,os,os.path
+import sys,os,os.path, urlparse
 import xbmc, xbmcgui
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
@@ -24,13 +24,14 @@ __date__ = '20-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA           # should be in default.py
-DIR_CACHE = sys.modules[ "__main__" ].DIR_CACHE                 # should be in default.py
+#DIR_CACHE = sys.modules[ "__main__" ].DIR_CACHE                 # should be in default.py
+DIR_IMDB_CACHE = os.path.join(DIR_USERDATA, 'imdb')
 
 try:
 	DIR_HOME = sys.modules[ "__main__" ].DIR_HOME     # should be in default.py
-	DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
-	__language__ = sys.modules[ "__main__" ].__language__
+#	DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
 	DIR_GFX = sys.modules[ "__main__" ].DIR_GFX                 # should be in default.py
+	__language__ = sys.modules[ "__main__" ].__language__
 except:
     DIR_RESOURCES = os.path.join(DIR_HOME,'resources')     # should be in default.py
     DIR_GFX = os.path.join(DIR_RESOURCES,'gfx')
@@ -39,9 +40,6 @@ from IMDbLib import IMDb, IMDbSearch, IMDbGallery
 from bbbLib import *
 from bbbGUILib import *
 
-try: Emulating = xbmcgui.Emulating
-except: Emulating = False
-
 IMDB_LOGO_FILENAME = os.path.join(DIR_GFX ,'imdb_logo.png')
 NOIMAGE_FILENAME = os.path.join(DIR_GFX ,'noimage.png')
 dialogProgress = xbmcgui.DialogProgress()
@@ -49,6 +47,8 @@ dialogProgress = xbmcgui.DialogProgress()
 # rez GUI defined in
 REZ_W = 720
 REZ_H = 576
+try: Emulating = xbmcgui.Emulating
+except: Emulating = False
 
 #################################################################################################################
 class IMDbWin(xbmcgui.WindowDialog):
@@ -79,15 +79,15 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.galleryImgIDX = 0
 		self.movie = None
 
-		makeDir(DIR_USERDATA)
-		makeDir(DIR_CACHE)
+#		makeDir(DIR_USERDATA)
+		makeDir(DIR_IMDB_CACHE)
 
 		debug("< IMDbWin()._init_")
 
 	################################################################################
 	def onAction(self, action):
 		if action == ACTION_BACK or action == ACTION_B:
-			self.deleteCacheImages()
+			removeDir(DIR_IMDB_CACHE, force=True)
 			self.close()
 
 	################################################################################
@@ -98,15 +98,17 @@ class IMDbWin(xbmcgui.WindowDialog):
 			# get next img in gallery or move to next gallery first image
 			if self.galleryImgIDX >= self.imdbGallery.getGalleryImageCount():
 				self.galleryImgIDX = 0
-
 			self.fetchImage()
+			self.setFocus(control)
 		elif control == self.photoLeftCB:
 			self.galleryImgIDX -= 1
 			if self.galleryImgIDX < 0:
 				self.galleryImgIDX = self.imdbGallery.getGalleryImageCount()-1
-
 			self.fetchImage()
-		self.setFocus(control)
+			self.setFocus(control)
+		elif control == self.picFrameCB:
+			if self.slideshow():
+				self.close()
 
 	#################################################################################################
 	def findTitle(self, title=''):
@@ -152,26 +154,29 @@ class IMDbWin(xbmcgui.WindowDialog):
 		exists = False
 		imgTitle = ''
 		fn = ''
+		basename = ''
 
 		if not url:
 			debug("using galleryImgIDX=%s" % self.galleryImgIDX)
 			imgTitle, url = self.imdbGallery.getThumb(self.galleryImgIDX)
 
 		if url:
-			basenameTitle = os.path.basename(url)
-			fn = safeFilename(os.path.join(DIR_CACHE, self.IMDB_PREFIX + basenameTitle))
+			fn, basename = self.makeThumbFilename(url)
 			exists = fileExist(fn)
 			if not exists:
-				dialogProgress.create(__language__(986), basenameTitle)
-				exists = fetchURL(url, fn, isImage=True)
-				dialogProgress.close()
+				dialogProgress.update(0, basename)
+#				dialogProgress.create(__language__(986), basename)
+				exists = fetchURL(url, fn, encodeURL=False, isImage=True)
+#				dialogProgress.close()
 
 		if exists:
 			if not fn:
 				fn = NOIMAGE_FILENAME
+			debug("image fn=" + fn)
 			self.picCI.setImage(fn)
+			self.picCI.setVisible(True)
 			if not imgTitle:
-				imgTitle = basenameTitle
+				imgTitle = __language__(204)
 			self.imageTitleCFL.reset()
 			self.imageTitleCFL.addLabel(imgTitle)
 
@@ -313,7 +318,6 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		# PHOTO MOVE LEFT
 		x -= (self.border*2 + IMG_NAV_BTN_W)
-		imageTitleX = x
 		self.photoLeftCB = xbmcgui.ControlButton(x, self.photoY, IMG_NAV_BTN_W, self.photoH, '<', \
 												  alignment=XBFONT_CENTER_X|XBFONT_CENTER_Y)
 		self.addControl(self.photoLeftCB)
@@ -326,8 +330,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		# image title
 		imageTitleY = self.photoY + self.photoH +1
-		imageTitleW = (IMG_NAV_BTN_W *2) + self.photoW
-		self.imageTitleCFL = xbmcgui.ControlFadeLabel(imageTitleX, imageTitleY, imageTitleW, imageTitleH, \
+		self.imageTitleCFL = xbmcgui.ControlFadeLabel(self.photoX, imageTitleY, self.photoW, imageTitleH, \
 												 FONT10, '0xFFFFFFCC')
 		self.addControl(self.imageTitleCFL)
 
@@ -339,9 +342,13 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		self.photoLeftCB.controlLeft(self.photoRightCB)
 		self.photoLeftCB.controlRight(self.picFrameCB)
+		self.photoLeftCB.controlDown(castCL)
+		self.photoLeftCB.controlUp(plotTB)
 
 		self.photoRightCB.controlLeft(self.picFrameCB)
 		self.photoRightCB.controlRight(self.photoLeftCB)
+		self.photoRightCB.controlDown(castCL)
+		self.photoRightCB.controlUp(plotTB)
 
 		plotTB.controlDown(self.picFrameCB)
 		plotTB.controlUp(self.picFrameCB)
@@ -358,16 +365,6 @@ class IMDbWin(xbmcgui.WindowDialog):
 		xbmcgui.unlock()
 		debug("< display()")
 
-	def deleteCacheImages(self):
-		debug("> deleteCacheImages()")
-
-		files = os.listdir(DIR_CACHE)
-		for file in files:
-			fn, ext = os.path.splitext(file)
-			if ext == '.jpg' and fn.startswith(self.IMDB_PREFIX):
-				deleteFile(os.path.join(DIR_CACHE, file))
-		debug("< deleteCacheImages()")
-
 	# setup next/prev and image frame states
 	def setImageNav(self):
 		debug("setImageNav()")
@@ -377,6 +374,44 @@ class IMDbWin(xbmcgui.WindowDialog):
 		self.photoRightCB.setVisible(visible)
 		self.photoRightCB.setEnabled(visible)
 
+	def slideshow(self):
+		debug("> slideshow()")
+		MAX = self.imdbGallery.getGalleryImageCount()
+		if MAX:
+			dialogProgress.create(__language__(988))
+			for idx in range(MAX):
+				pct = int(idx*100.0/MAX)
+
+				small_url = self.imdbGallery.getThumbURL(idx)
+				small_fn, small_basename = self.makeThumbFilename(small_url)
+				large_fn = small_fn.replace(self.IMDB_PREFIX, self.IMDB_PREFIX + 'l_')
+				large_url = self.imdbGallery.getLargeThumbURL(idx)
+				dialogProgress.update(pct, "%s  (%s/%s)" % (os.path.basename(large_fn), idx, MAX))
+				# try to get large image, but save using modified small filename
+				if not fileExist(large_fn):
+					if not fetchURL(large_url, large_fn, isImage=True):
+						# delete bad large_fn
+						deleteFile(large_fn)
+						debug("no large, get small image")
+						if not fileExist(small_fn):
+							dialogProgress.update(pct, "%s  (%s/%s)" % (small_basename, idx, MAX))
+							fetchURL(small_url, small_fn, isImage=True)
+			dialogProgress.close()
+			xbmc.executebuiltin('XBMC.SlideShow(%s)'% DIR_IMDB_CACHE)
+		debug("< slideshow()")
+		return MAX
+		
+
+	# attempt to make filename more unique by using some of its subfolder names from url
+	# return full fn and basename
+	def makeThumbFilename(self, url):
+		split_info = urlparse.urlsplit(url)
+		basename = safeFilename(split_info[2]).replace('/media','').replace('/imdb','').replace('/','').replace('\\','').replace('_','')
+		# restrict length
+		l = len(basename)
+		if l > 30:
+			basename = basename[(l-30):]
+		return os.path.join(DIR_IMDB_CACHE, self.IMDB_PREFIX + basename), basename
 
 	def ask(self, title=''):
 		debug("> IMDbWin.ask()")
@@ -395,10 +430,10 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 		if self.movie and url:
 			self.display()
-#			dialogProgress.create(__language__(987))
+			dialogProgress.create(__language__(987))
 			self.imdbGallery = IMDbGallery(url)
-#			dialogProgress.close()
 			self.fetchImage()
+			dialogProgress.close()
 			self.setImageNav()
 			self.setFocus(self.picFrameCB)
 			self.doModal()
@@ -406,8 +441,10 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 #############################################################################################################
 def safeFilename(path):
-	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
+#	head, tail = os.path.split(path.replace( "\\", "/" ))
+	head, tail = os.path.split(path)
+	name, ext = os.path.splitext(tail)
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', '_', name) + ext)
 
 
 #win = IMDbWin()

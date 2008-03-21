@@ -36,3 +36,27 @@ Define all the above makes a complete smb path to all the required parts.
 
  USAGE: 
  run default.py
+
+ On startup you will be present with the 'Startup Menu' with options:
+   SMB			- Collection and images fetched from your SMB location.
+   Local Collection	- Collection.xml is expected to be in the UserData\DVDProfiler\cache folder.
+   Onlne Alias		- Looksup a collection from online using a user alias.
+
+   Your preferred StartUp method can be set from the Settings Menu, which will bypass the Startup Menu.
+
+ Once collection has been retrieved, it will be displayed.
+ Press A to select Film Title to display information.
+ Press A (again) to start film playback.  Only if file location stored using DVDProfiler v3
+ Press Y on a title to do a IMDb lookup for additional information, images and gallery slideshow.
+ Press X to select to Filter titles shown.  Press B to cancel Filters.
+ Press B to view an online alias collection.  Press B to return to your collection.
+ Press WHITE for Main Menu.  From here the several option and Settings Menu can be found.
+ Press BACK to exit script.
+
+ Available button options are displayed across bottom of screen and change according to current action/state.
+
+ A BigBellyBilly script.  Special thanks to beta testers and language translators.  Much appreciated.
+ Enjoy!
+
+ BBB
+
