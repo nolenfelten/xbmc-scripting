@@ -1612,9 +1612,9 @@ class DVDCollectionXML:
 		elif fileExist(self.localCollectionFilename):
 			dialogProgress.create(__language__(225),__language__(227))
 			self.saveFlatFile()
-			dialogProgress.update(50,__language__(228))
+			dialogProgress.update(33,__language__(228))
 			self.saveKeys()
-			dialogProgress.update(50,__language__(228))
+			dialogProgress.update(66,__language__(228))
 
 		if self.keys:
 			dialogProgress.update(100,__language__(203))	# success

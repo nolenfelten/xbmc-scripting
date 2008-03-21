@@ -19,7 +19,7 @@ Changelog:
 18/01/08 Fix: regex for Cast
 """
 
-import os,sys,re,urllib,string
+import os,sys,re,urllib,string, urlparse
 from string import find
 
 DEBUG = True
@@ -394,6 +394,31 @@ class IMDbGallery:
 			return self.getThumb(idx)[1]
 		except:
 			return ''
+
+	def getLargeThumbURL(self, idx):
+		url = self.getThumbURL(idx)
+#		url_info = urlparse.urlsplit(url)		# ( )
+#		print url_info
+#		urlpath = urlparse.urlsplit(url)[2]		# dir/dir/dir/name.ext
+#		head, tail = os.path.split(urlpath)		# dir/dir/dir/, name.ext
+#		name, ext = os.path.splitext(tail)		# name, ext
+#		url = "%s://%s%s" % (url_info[0],url_info[1], head + '/VM._SY400_SX600_' + ext)
+
+		head, tail = os.path.split(url)
+		name, ext = os.path.splitext(tail)
+
+		# try  reg repl of known fn format -
+		# eg /VM._CR0,0,255,255_SS80_.jpg   -> /VM._SY400_SX600_.jpg
+		# eg. _V1._CR0,0,216,216_SS80_.jpg  -> _V1._SY400_SX600_.jpg
+		result = re.sub(r"CR\d+,\d+,\d+,\d+_.*?_", 'SY400_SX600_', name)
+		if result != name:			# if sub done OK, will be diff
+			# re matched and replaced
+			url = head + '/' + result + ext
+		else:
+			# normal replace which works most of the time
+			url = head + '/VM._SY400_SX600_' + ext
+		log("getLargeThumbURL() " + url)
+		return url
 
 ###########################################################################################################
 def readPage(url, readLines=False):

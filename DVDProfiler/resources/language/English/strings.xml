@@ -23,7 +23,7 @@
     <string id="201">Success</string>
     <string id="202">Failed</string>
     <string id="203">Complete</string>
-    <string id="204">-</string>
+    <string id="204">Select image for slideshow</string>
     <string id="210">Movie Playback</string>
     <string id="211">Media Location not stored in XML</string>
     <string id="212">Failed to play from location:</string>
@@ -163,6 +163,7 @@
     <string id="985">Select Title</string>
     <string id="986">Downloading Image ...</string>
     <string id="987">Downloading Photo Links ...</string>
+    <string id="988">Downloading Slideshow ...</string>
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>
