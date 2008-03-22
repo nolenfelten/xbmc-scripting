@@ -2,6 +2,14 @@
 <strings>
     <string id="101">Öppna</string>
     <string id="102">Spara</string>
+    <string id="151">Ingen fil</string>
+    <string id="152">L</string>
+    <string id="153">S</string>
+    <string id="1541">DOS\Windows</string>
+    <string id="1542">Unix</string>
+    <string id="1543">Mac</string>
+    <string id="1544">Okänd</string>
+    <string id="155">Linje(r)</string>
     <string id="501">Redigera</string>
     <string id="502">Ta bort</string>
     <string id="503">Sätt in</string>
