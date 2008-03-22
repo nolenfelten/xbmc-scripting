@@ -60,6 +60,7 @@
     <string id="521">Script Readme zeigen</string>
     <string id="522">Script ChangeLog zeigen</string>
     <string id="523">Ändere DatenQuelle</string>
+    <string id="524">Beim Starten nach Updates suchen?</string>
 
     <!-- misc menu/prompts -->
     <string id="530">Live Videprinter</string>
