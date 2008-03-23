@@ -17,10 +17,10 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.5", "1.5.6", )
+SETTINGS_VERSIONS = ( "1.5.7", )
 # base paths
-BASE_DATA_PATH = os.path.join( "T:\\script_data", __scriptname__ )
-BASE_SETTINGS_PATH = os.path.join( "P:\\script_data", __scriptname__ )
+BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
+BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "settings.txt" ) )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special button codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -35,7 +35,7 @@ MOVEMENT_DOWN = ( 167, 271, 61480, )
 ACTION_SELECT_ITEM = ( 7, )
 ACTION_EXIT_SCRIPT = ( 10, )
 ACTION_CANCEL_DIALOG = ACTION_EXIT_SCRIPT + ( 9, )
-ACTION_GET_EXCEPTION = ( 0, )
+ACTION_GET_EXCEPTION = ( 0, 11 )
 ACTION_SETTINGS_MENU = ( 117, )
 ACTION_SHOW_CREDITS = ( 122, )
 ACTION_MOVEMENT_UP = ( 3, )
@@ -47,8 +47,8 @@ def _create_base_paths():
     """ creates the base folders """
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
-    if ( not os.path.isdir( BASE_SETTINGS_PATH ) ):
-        os.makedirs( BASE_SETTINGS_PATH )
+    if ( not os.path.isdir( os.path.dirname( BASE_SETTINGS_PATH ) ) ):
+        os.makedirs( os.path.dirname( BASE_SETTINGS_PATH ) )
 _create_base_paths()
 
 def get_keyboard( default="", heading="", hidden=False ):
@@ -125,22 +125,23 @@ def make_legal_filepath( path, compatible=False, extension=True ):
 class Settings:
     """ Settings class """
     def get_settings( self ):
-        """ read settings from a settings.txt file in BASE_SETTINGS_PATH """
+        """ read settings """
         try:
-            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "r" )
+            settings = {}
+            settings_file = open( BASE_SETTINGS_PATH, "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
                 raise
         except:
-            settings = self._use_defaults()
+            settings = self._use_defaults( settings )
         return settings
 
-    def _use_defaults( self, show_dialog=False ):
+    def _use_defaults( self, current_settings=None ):
         """ setup default values if none obtained """
         LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
-        settings = {
-            "version": __version__,
+        settings = {}
+        defaults = {  
             "scraper": "lyricwiki",
             "save_lyrics": True,
             "lyrics_path": os.path.join( BASE_DATA_PATH, "lyrics" ),
@@ -153,13 +154,17 @@ class Settings:
             "compatible": False,
             "use_extension": True,
             }
+        for key, value in defaults.items():
+            # add default values for missing settings
+            settings[ key ] = current_settings.get( key, defaults[ key ] )
+        settings[ "version" ] = __version__
         ok = self.save_settings( settings )
         return settings
 
     def save_settings( self, settings ):
-        """ save settings to a settings.txt file in BASE_SETTINGS_PATH """
+        """ save settings """
         try:
-            settings_file = open( os.path.join( BASE_SETTINGS_PATH, "settings.txt" ), "w" )
+            settings_file = open( BASE_SETTINGS_PATH, "w" )
             settings_file.write( repr( settings ) )
             settings_file.close()
             return True

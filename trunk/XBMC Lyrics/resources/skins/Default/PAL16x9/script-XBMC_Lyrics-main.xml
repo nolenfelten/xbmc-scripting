@@ -25,7 +25,7 @@
             <posx>240</posx>
             <posy>195</posy>
             <width>415</width>
-            <height>310</height>
+            <height>300</height>
             <onup>101</onup>
             <ondown>101</ondown>
             <onleft>101</onleft>
