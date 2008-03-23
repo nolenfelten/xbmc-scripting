@@ -770,7 +770,7 @@ class GUI( xbmcgui.WindowXML ):
     def refreshAllGenres( self ):
         self.sql = ""
         genres = range( len( self.genres ) )
-        self.trailers.refreshGenre( genres )
+        self.trailers.refreshGenre( genres, refresh_trailers=self.settings[ "refresh_trailers" ] )
         if ( self.category_id == GENRES ):
             sql = self.query[ "genre_category_list" ]
             genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
@@ -781,7 +781,7 @@ class GUI( xbmcgui.WindowXML ):
         genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
         if ( self.current_display[ 1 ][ 0 ] == genre ):
             self.sql = ""
-        self.trailers.refreshGenre( ( genre, ) )
+        self.trailers.refreshGenre( ( genre, ), refresh_trailers=self.settings[ "refresh_trailers" ] )
         self.sql_category = ""
         sql = self.query[ "genre_category_list" ]
         self.showCategories( sql, choice=genre, force_update=True )
@@ -791,7 +791,7 @@ class GUI( xbmcgui.WindowXML ):
     def refreshCurrentGenre( self ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         self.sql_category = ""
-        self.trailers.refreshGenre( ( self.category_id, ) )
+        self.trailers.refreshGenre( ( self.category_id, ), refresh_trailers=self.settings[ "refresh_trailers" ] )
         self.showTrailers( self.sql, params=self.params, choice=trailer, force_update=True )
 
     def refreshTrailerInfo( self ):

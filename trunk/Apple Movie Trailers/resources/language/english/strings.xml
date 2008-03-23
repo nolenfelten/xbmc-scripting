@@ -5,10 +5,12 @@
     <string id="2">Team AMT</string>
 
     <!-- Dialog Messages -->
+    <string id="37">Refreshing genre information...</string>
+    <string id="38">Refreshing genre and trailer information...</string>
     <string id="39">Play All</string>
     <string id="40">All info is fetched, search is available. (10 - 60 minutes)</string>
     <string id="41">Info is updated per genre. (1 - 5 minutes)</string>
-    <string id="42">Refreshing genre information...</string>
+    <string id="42"></string>
     <string id="43">committing records to database...</string>
     <string id="44">Database creation...</string>
     <string id="45">Removing old genre xml files...</string>
@@ -119,7 +121,7 @@
     <string id="215">Video player resolution</string>
     <string id="216">Showtimes location</string>
     <string id="217">Showtimes scraper</string>
-    <string id="220">Install plugins...</string>
+    <string id="218">Refresh trailers with genre</string>
     
     <!-- Settings choices -->
     <string id="2020">Low</string>
