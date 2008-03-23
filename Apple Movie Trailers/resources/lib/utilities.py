@@ -281,7 +281,7 @@ class Settings:
         for key, value in defaults.items():
             # add default values for missing settings
             settings[ key ] = current_settings.get( key, defaults[ key ] )
-        settings[ "version" ] == __version__
+        settings[ "version" ] = __version__
         ok = self.save_settings( settings )
         return settings
 
