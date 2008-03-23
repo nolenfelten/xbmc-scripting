@@ -179,7 +179,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( settings.restart ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
             if ( not ok ):
-                self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
+                self.show_control( ( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ), 120, )[ self.controlId == 120 ] )
                 self.show_viz_window( startup=False )
                 if ( settings.refresh ):
                     self.myPlayerChanged( 2, True )
@@ -264,8 +264,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.exit_script()
         else:
             for cnt in range( 5 ):
-                artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
                 song = xbmc.getInfoLabel( "MusicPlayer.Title" )
+                artist = xbmc.getInfoLabel( "MusicPlayer.Artist" )
                 if ( song and ( not artist or self.settings[ "use_filename" ] ) ):
                     artist, song = self.get_artist_from_filename( xbmc.Player().getPlayingFile() )
                 if ( song and ( self.song != song or self.artist != artist or force_update ) ):
