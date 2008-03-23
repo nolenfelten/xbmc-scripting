@@ -9,6 +9,9 @@ import os
 from sgmllib import SGMLParser
 import urllib
 
+if ( __name__ != "__main__" ):
+    import xbmc
+
 __title__ = "LyricWiki.org"
 __allow_exceptions__ = True
 
@@ -86,7 +89,8 @@ class LyricsFetcher:
             if ( __name__ == "__main__" ):
                 ex_path = os.path.join( os.getcwd().replace( ";", "" ), "exceptions.txt" )
             else:
-                ex_path = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, "scrapers", os.path.split( os.path.dirname( sys.modules[ "lyricsScraper" ].__file__ ) )[ 1 ], "exceptions.txt" )
+                name = __name__.replace( "resources.scrapers.", "" ).replace( ".lyricsScraper", "" )
+                ex_path = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, "scrapers", name, "exceptions.txt" ) )
             ex_file = open( ex_path, "r" )
             self.exceptions = eval( ex_file.read() )
             ex_file.close()

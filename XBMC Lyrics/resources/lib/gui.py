@@ -54,6 +54,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         exec "import resources.scrapers.%s.lyricsScraper as lyricsScraper" % ( self.settings[ "scraper" ], )
         self.LyricsScraper = lyricsScraper.LyricsFetcher()
         self.scraper_title = lyricsScraper.__title__
+        self.scraper_exceptions = lyricsScraper.__allow_exceptions__
 
     def setup_variables( self ):
         self.artist = None
@@ -74,15 +75,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 110 ).setVisible( controlId == 110 )
         self.getControl( 120 ).setVisible( controlId == 120 )
         page_control = ( controlId == 100 )
+        xbmcgui.unlock()
+        xbmc.sleep( 5 )
         try:
             self.setFocus( self.getControl( controlId + page_control ) )
         except:
             self.setFocus( self.getControl( controlId ) )
 
     def get_lyrics(self, artist, song):
+        self.reset_controls()
         self.getControl( 200 ).setLabel( "" )
         self.menu_items = []
-        self.reset_controls()
         self.allow_exception = False
         current_song = self.song
         lyrics, kind = self.get_lyrics_from_file( artist, song )
@@ -142,17 +145,16 @@ class GUI( xbmcgui.WindowXMLDialog ):
         else:
             if ( "\r\n" in lyrics ):
                 sep = "\r\n"
-            elif ( "\r" in lyrics ):
-                sep = "\r"
             else:
+                # XBMC textbox does not handle "\r", so replace it with "\n"
                 sep = "\n"
+                lyrics = lyrics.replace( "\r" , "\n" )
             self.getControl( 100 ).setText( lyrics )
             for x in lyrics.split( sep ):
                 self.getControl( 110 ).addItem( x )
             self.getControl( 110 ).selectItem( 0 )
             if ( self.settings[ "save_lyrics" ] and save ): success = self.save_lyrics_to_file( lyrics )
         self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
-        xbmcgui.unlock()
         
     def show_choices( self, choices ):
         xbmcgui.lock()
@@ -161,7 +163,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 120 ).selectItem( 0 )
         self.menu_items = choices
         self.show_control( 120 )
-        xbmcgui.unlock()
     
     def reset_controls( self ):
         self.getControl( 100 ).reset()
@@ -178,9 +179,8 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( settings.restart ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ) % ( __scriptname__, ), _( 256 ), _( 255 ) )
             if ( not ok ):
-                if ( self.controlId in ( 100, 101, 110, 111, ) ): 
-                    self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
-                self.show_viz_window( False )
+                self.show_control( 100 + ( self.settings[ "smooth_scrolling" ] * 10 ) )
+                self.show_viz_window( startup=False )
                 if ( settings.refresh ):
                     self.myPlayerChanged( 2, True )
             else: self.exit_script( True )
@@ -192,7 +192,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def get_exception( self ):
         """ user modified exceptions """
-        if ( sys.modules[ "lyricsScraper" ].__allow_exceptions__ ):
+        if ( self.scraper_exceptions ):
             artist = self.LyricsScraper._format_param( self.artist, False )
             alt_artist = get_keyboard( artist, "%s: %s" % ( _( 100 ), unicode( self.artist, "utf-8", "ignore" ), ) )
             if ( alt_artist != artist ):
@@ -206,24 +206,24 @@ class GUI( xbmcgui.WindowXMLDialog ):
         if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
 
     def onClick( self, controlId ):
-        pass
+        if ( controlId == 120 ):
+            self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
     def onFocus( self, controlId ):
-        xbmc.sleep( 5 )
-        self.controlId = self.getFocusId()
-        #self.controlId = controlId
+        #xbmc.sleep( 5 )
+        #self.controlId = self.getFocusId()
+        self.controlId = controlId
 
     def onAction( self, action ):
-        if ( action in ACTION_EXIT_SCRIPT ):
+        actionId = action.getId()
+        if ( actionId in ACTION_EXIT_SCRIPT ):
             self.exit_script()
-        elif ( action in ACTION_SETTINGS_MENU ):
+        elif ( actionId in ACTION_SETTINGS_MENU ):
             self.change_settings()
         #elif ( action.getButtonCode() in SHOW_CREDITS ):
         #    self._show_credits()
-        elif ( self.allow_exception and action in ACTION_GET_EXCEPTION ):
+        elif ( self.allow_exception and actionId in ACTION_GET_EXCEPTION ):
             self.get_exception()
-        elif ( self.controlId == 120 and action in ACTION_SELECT_ITEM ):
-            self.get_lyrics_from_list( self.getControl( 120 ).getSelectedPosition() )
 
     def get_artist_from_filename( self, filename ):
         try:
