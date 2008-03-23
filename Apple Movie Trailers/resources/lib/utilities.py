@@ -17,8 +17,8 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.99.2", "0.99.2", )
-SETTINGS_VERSIONS =  DATABASE_VERSIONS
+DATABASE_VERSIONS = ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", )
+SETTINGS_VERSIONS =  ( "pre-0.99.3", "0.99.3", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -244,19 +244,21 @@ class Settings:
     def get_settings( self ):
         """ read settings from BASE_SETTINGS_PATH """
         try:
+            settings = {}
             settings_file = open( BASE_SETTINGS_PATH, "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
                 raise
         except:
-            settings = self._use_defaults()
+            settings = self._use_defaults( settings )
         return settings
 
-    def _use_defaults( self, show_dialog=False ):
+    def _use_defaults( self, current_settings=None ):
         """ setup default values if none obtained """
         LOG( LOG_NOTICE, self.__class__.__name__, "[used default settings]" )
-        settings = {  
+        settings = {}
+        defaults = {  
             "version": __version__,
             "skin": "Default",
             "trailer_quality": 2,
@@ -275,7 +277,11 @@ class Settings:
             "showtimes_local": "33102",
             "showtimes_scraper": "Google",
             "auto_play_all": False,
+            "refresh_trailers": False,
             }
+        for key, value in defaults.items():
+            # add default values for missing settings
+            settings[ key ] = current_settings.get( key, defaults[ key ] )
         ok = self.save_settings( settings )
         return settings
 

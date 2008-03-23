@@ -170,6 +170,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 235 ).setLabel( self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
             self.getControl( 236 ).setLabel( self.settings[ "showtimes_local" ] )
             self.getControl( 237 ).setLabel( self.settings[ "showtimes_scraper" ] )
+            self.getControl( 238 ).setSelected( self.settings[ "refresh_trailers" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except: pass
         xbmcgui.unlock()
@@ -293,6 +294,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.current_showtimes_scraper = selection
             self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
             self._set_controls_values()
+
+    def _change_setting18( self ):
+        """ changes settings #18 """
+        self.settings[ "refresh_trailers" ] = not self.settings[ "refresh_trailers" ]
+        self._set_controls_values()
 
     def _install_plugin( self ):
         selection = self._get_chooser( ( _( 700 ), _( 704 ), ), -1, 0, 1, "%s %s" % ( _( 200 ), _( 713 ), ) )

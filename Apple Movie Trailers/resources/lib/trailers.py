@@ -79,7 +79,7 @@ class Trailers:
             from utilities import Settings
             settings = Settings().get_settings()
             if ( settings[ "refresh_newest" ] ):
-                self.refreshGenre( ( newest_genre, ), last_updated )
+                self.refreshGenre( ( newest_genre, ), last_updated, settings[ "refresh_trailers" ] )
 
     def ns( self, text ):
         base_ns = "{http://www.apple.com/itms/}"
@@ -118,20 +118,20 @@ class Trailers:
                 for url in self.movies[ trailer ].urls:
                     urls += [ self.base_url + url ]
                 self.removeXML( urls )
-                ok = records.update( "movies", ( 3, 4, ), ( None, self.movies[ trailer ].idMovie, ), "idMovie", True )
+                ok = records.update( "movies", ( "trailer_urls", "date_added", ), ( None, None, self.movies[ trailer ].idMovie, ), "idMovie", True )
             records.close()
             if ( len( trailers ) > 1 ):
                 _progress_dialog( -99 )
         except: traceback.print_exc()
 
-    def refreshGenre( self, genres, last_updated=False ):
+    def refreshGenre( self, genres, last_updated=False, refresh_trailers=False ):
         """
             Updates the xml for each genre in genres from the site.
         """
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0 ):
             if ( count is None ):
-                dialog.create( _( 42 ) )
+                dialog.create( _( 37 + refresh_trailers ) )
             else:
                 __line1__ =  "%s: %s - (%d of %d)" % ( _( 87 ), title, g_count + 1, len( genres ) )
                 if ( count == -1 ):
@@ -160,7 +160,6 @@ class Trailers:
                 idGenre = self.categories[ genre ].id
                 record = records.fetch( self.query[ "genre_urls_by_genre_id" ], ( idGenre, ) )
                 urls = eval( record[ 0 ] )
-
                 # fetch genre xml file and compare it to the current xml file
                 for url in urls:
                     original_filename = fetcher.make_cache_filename( url )
@@ -169,37 +168,50 @@ class Trailers:
                     # if the files are different flag it
                     new_trailers = not filecmp.cmp( filename, original_filename )
                     if ( new_trailers ):
-                        xbmc.executehttpapi("FileCopy(%s,%s)" % ( filename, original_filename, ) )
+                        xbmc.executehttpapi( "FileCopy(%s,%s)" % ( filename, original_filename, ) )
                         #shutil.copy( filename, original_filename )
                     os.remove( filename )
                 
-                if ( new_trailers ):
+                if ( new_trailers or refresh_trailers ):
                     _progress_dialog()
                     trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
                     if ( trailer_urls ):
                         idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
+                        #commit = 0
                         for cnt, url in enumerate( trailer_urls ):
                             if ( not _progress_dialog( cnt + 1 ) ): raise
+                            #commit += 1
                             record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ].upper(), ) )
                             if ( record is None ):
                                 idMovie = records.add( "movies", ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
                                 success = records.add( "genre_link_movie", ( idGenre, idMovie, ) )
                             else:
+                                # remove the trailer urls if refresh_trailers is true
+                                if ( refresh_trailers ):
+                                    urls = []
+                                    for url in record[ 1 ]:
+                                        urls += [ self.base_url + url ]
+                                    self.removeXML( urls )
+                                    ok = records.update( "movies", ( "trailer_urls", "date_added", ), ( None, None, record[ 0 ], ), "idMovie" )
                                 try:
-                                    idMovie_list.remove( record )
+                                    idMovie_list.remove( ( record[ 0 ], ) )
                                 except:
                                     success = records.add( "genre_link_movie", ( idGenre, record[ 0 ], ) )
+                            #if ( float( commit ) / 100 == int( commit / 100 ) ):
+                            #    success = records.commit()
+                            #    commit = 0
                         for record in idMovie_list:
                             success = records.delete( "genre_link_movie", ( "idGenre", "idMovie", ), ( idGenre, record[ 0 ], ) )
                         success = records.update( "genres", ( "urls", "trailer_urls", "updated", ), ( repr( genre_urls ), repr( trailer_urls), updated_date, idGenre, ), "idGenre" )
                 else:
                     success = records.update( "genres", ( "updated", ), ( updated_date, idGenre, ), "idGenre" )
                 success = records.commit()
-        except: pass
+        except:
+            pass
         success = records.commit()
         records.close()
         _progress_dialog( -99 )
-            
+
     def removeXML( self, urls ):
         for url in urls:
             try:
@@ -462,7 +474,7 @@ class Trailers:
                         if ( not url.startswith( "http://" ) ):
                             url = self.base_url + str( url )
                         break
-                # xml parsing. replace <b> and </b> for in theaters. remove if noticeably slower
+                # xml parsing. replace <b> and </b> for in theaters. TODO: remove if noticeably slower
                 source = fetcher.urlopen( url ).replace( "<b>", "" ).replace( "</b>", "" )
                 try:
                     element = ET.fromstring( source )
@@ -615,7 +627,7 @@ class Trailers:
                         info_missing = True
                     else: movie = _get_actor_and_studio( movie )
                     if ( info_missing ):
-                        if ( float( cnt + 1) / 100 == int( ( cnt + 1 ) / 100) or ( cnt + 1 ) == len( movie_list ) or not dialog_ok ):
+                        if ( float( cnt + 1 ) / 100 == int( ( cnt + 1 ) / 100 ) or ( cnt + 1 ) == len( movie_list ) or not dialog_ok ):
                             commit = True
                         dialog_ok = _progress_dialog( cnt + 1, commit )
                     if ( not full and movie is not None ):
