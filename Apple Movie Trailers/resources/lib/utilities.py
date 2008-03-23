@@ -259,7 +259,6 @@ class Settings:
         LOG( LOG_NOTICE, self.__class__.__name__, "[used default settings]" )
         settings = {}
         defaults = {  
-            "version": __version__,
             "skin": "Default",
             "trailer_quality": 2,
             "mode": 0,
