@@ -3,10 +3,12 @@
   <string id="0">Apple Movie Trailers</string>
   <string id="1">Xbox Media Center</string>
   <string id="2">blittan</string>
+  <string id="37">Uppdaterar genreinformation...</string>
+  <string id="38">Uppdaterar genre- och trailer-information...</string>
   <string id="39">Spela alla</string>
   <string id="40">All info hämtas, sökning är tillgänglig. (10 - 60 minuter)</string>
   <string id="41">Info uppdateras per genre. (1 - 5 minuter)</string>
-  <string id="42">Uppdatera genre information...</string>
+  <string id="42"></string>
   <string id="43">skriver register till databas...</string>
   <string id="44">Databasen skapas...</string>
   <string id="45">Tar bort gamla genre xml-filer...</string>
@@ -111,7 +113,7 @@
   <string id="215">Uppspelningsupplösning</string>
   <string id="216">Showtimes plats</string>
   <string id="217">Showtimes scraper</string>
-  <string id="220">Installera instick...</string>
+  <string id="218">Uppdatera trailers med genre</string>
   <string id="230">Ett fel uppstod vid sparande av inställningar!</string>
   <string id="231">*Skalberoende</string>
   <string id="240">Några inställningar kräver en omstart för att fungera.</string>
