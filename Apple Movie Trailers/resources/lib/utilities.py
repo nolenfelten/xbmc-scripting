@@ -242,7 +242,7 @@ def make_legal_filepath( path, compatible=False, extension=True, conf=True, save
 class Settings:
     """ Settings class """
     def get_settings( self ):
-        """ read settings from BASE_SETTINGS_PATH """
+        """ read settings """
         try:
             settings = {}
             settings_file = open( BASE_SETTINGS_PATH, "r" )
@@ -286,12 +286,12 @@ class Settings:
         return settings
 
     def save_settings( self, settings ):
-        """ save settings to BASE_SETTINGS_PATH """
+        """ save settings """
         try:
             settings_file = open( BASE_SETTINGS_PATH, "w" )
             settings_file.write( repr( settings ) )
             settings_file.close()
             return True
         except:
-            LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
+            LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
