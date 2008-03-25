@@ -1,7 +1,14 @@
 <window id="3000">
 	<defaultcontrol>5</defaultcontrol>
 	<controls>
-		<include>LiveBackGroundWhitewash</include>
+		<control type="group">
+			<visible>!Window.Previous(home)</visible>
+			<include>LiveBackGroundWhitewash</include>
+		</control>
+		<control type="group">
+			<visible>Window.Previous(home)</visible>
+			<include>MediaIconBackGroundWhiteWash</include>
+		</control>
 		<!-- Start Normal Window Controls -->
 		<control type="group">
 			<animation effect="fade" delay="100" time="250">WindowOpen</animation>
