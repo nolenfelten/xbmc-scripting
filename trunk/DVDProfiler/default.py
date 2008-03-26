@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '20-03-2008'
+__date__ = '26-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -59,6 +59,7 @@ BASE_URL_INVOS = "www.invelos.com"
 # GFX
 NOIMAGE_FILENAME = os.path.join( DIR_GFX , 'noimage.png' )
 TICK_FILENAME = os.path.join( DIR_GFX , 'tick.png' )
+FILM_FILENAME = os.path.join( DIR_GFX , 'film.png' )
 
 try: Emulating = xbmcgui.Emulating
 except: Emulating = False
@@ -83,6 +84,7 @@ class DVDProfiler(xbmcgui.Window):
 		self.SETTING_SMB_MOVIES_SHARE = "smb_movies_share"
 		self.SETTING_START_MODE = "start_mode"
 		self.SETTING_CHECK_UPDATE = "check_script_update_startup"
+		self.SETTING_LOCAL_MODE_MEDIA_LOC = "local_mode_media"
 
 		# default values
 		self.SETTINGS_FILENAME = os.path.join( DIR_USERDATA, "settings.txt" )
@@ -102,6 +104,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.SETTING_SMB_DVDPRO_SHARE : "DVD Profiler",
 			self.SETTING_SMB_MOVIES_SHARE : "My Videos",
 			self.SETTING_CHECK_UPDATE : False,	# No
+			self.SETTING_LOCAL_MODE_MEDIA_LOC : "F:\Videos"
 			}
 
 		# SETTINGS
@@ -138,7 +141,6 @@ class DVDProfiler(xbmcgui.Window):
 
 	###################################################################################################
 	def onAction(self, action):
-		debug ("onAction() action=%s" % action)
 		if not action or not self.ready:
 			return
 
@@ -202,23 +204,8 @@ class DVDProfiler(xbmcgui.Window):
 			debug("titlesCL")
 			# if selecting same title, attempt playback
 			colNo = self.titlesCL.getSelectedItem().getLabel2()
-			if colNo == self.lastCollNo or colNo == self.lastOnlineCollNo:
-				if not self.onlineAliasData:
-					debug("same colNo selcted, playback requesed, colNo: " + str(colNo))
-					try:
-						location = self.dvdCollection.getDVDData(self.dvdCollection.LOCATION)[0]
-						debug("location=" + location);
-						if not location: raise
-					except:
-						dialogOK(__language__(210),__language__(211))
-					else:
-						smbPath = "%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH], \
-												self.settings[self.SETTING_SMB_MOVIES_SHARE],
-												location)
-						debug(smbPath)
-						result = xbmc.Player().play(smbPath)
-						if not xbmc.Player().isPlaying():
-							dialogOK(__language__(210),__language__(212),smbPath)
+			if not self.onlineAliasData and colNo in [self.lastCollNo, self.lastOnlineCollNo]:
+				self.playback()
 			elif not self.showDVD():
 				self.reset()
 		elif control == self.sortColCB:				# sort by column btn
@@ -237,6 +224,39 @@ class DVDProfiler(xbmcgui.Window):
 
 		self.ready = True
 
+	###################################################################################################
+	def playback(self):
+		debug("> playback()")
+		playbackPath = ''
+
+		try:
+			location = self.dvdCollection.getDVDData(self.dvdCollection.LOCATION)[0]
+			debug("location=%s" % location);
+			if not location: raise
+		except:
+			dialogOK(__language__(210),__language__(211))
+		else:
+			if self.settings[self.SETTING_SMB_USE]:		# SMB enabled, playback from SMB
+				debug("use SMB for playback")
+				playbackPath = "%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH], \
+										self.settings[self.SETTING_SMB_MOVIES_SHARE],
+										location)
+			else:
+				# local only mode, assume location is a local path
+				debug("local playback")
+				playbackPath = os.path.join(self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC], location)
+				if not fileExist(playbackPath):
+					dialogOK(__language__(210),__language__(240), playbackPath)
+					playbackPath = ''
+
+		if playbackPath:
+			debug("playbackPath= " + playbackPath)
+			result = xbmc.Player().play(playbackPath)
+			if not xbmc.Player().isPlaying():
+				dialogOK(__language__(210),__language__(212), playbackPath)
+
+		debug("< playback()")
+	
 	###################################################################################################
 	def reset(self):
 		debug("> reset()")
@@ -848,7 +868,7 @@ class DVDProfiler(xbmcgui.Window):
 		if self.isOnlineOnly or self.onlineAliasData:
 			text = __language__(427)    # select
 		else:
-			text = __language__(428)    # play
+			text = "%s/%s" % (__language__(427),__language__(428))    # select/play
 		self.aLbl.setLabel(text)
 
 		# update B btn label
@@ -867,7 +887,7 @@ class DVDProfiler(xbmcgui.Window):
 
 	###################################################################################################
 	def loadTitlesCL(self, sortByTitles=True, sortAsc=True):
-		debug ("> loadTitlesCL() sortByTitles="+str(sortByTitles) + " sortAsc="+str(sortAsc))
+		debug ("> loadTitlesCL() sortByTitles=%s sortAsc=%s" % (sortByTitles, sortAsc))
 
 		def sortItemsAsc(x, y):
 			return cmp(x[1],y[1])
@@ -918,35 +938,47 @@ class DVDProfiler(xbmcgui.Window):
 					filterDict[int(key)] = data
 
 		if filterDict:
+			self.title.setLabel(__language__(249))
 			selectedPos = 0
 			if not sortByTitles:
 				sortList = filterDict.keys()
-				self.title.setLabel('Sorting by Collection Number ...')
 				sortList.sort()
 				if not sortAsc:
 					sortList.reverse()
 
-				# [(collNo, ['sorttitle','id',sorttitle,genres,tags)]
+				# [collNo]
 				for i in range(len(sortList)):
 					collNo = sortList[i]
 					title = self.dvdCollection.getDVDKey(collNo)[self.dvdCollection.KEYS_DATA_SORTTITLE]
-					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo)))
+					# check for Location in tags, then show icon
+					try:
+						tags = self.dvdCollection.getDVDKey(collNo)[self.dvdCollection.KEYS_DATA_TAGS]
+						idx = tags.index(self.dvdCollection.LOCATION)
+						img = FILM_FILENAME
+					except:
+						img = ''
+					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo), img, img))
 					if not self.onlineAliasData and collNo == self.lastCollNo:
 						selectedPos = i
 			else:
 				sortList = filterDict.items()
 				if sortAsc:
-					self.title.setLabel('Sorting by TITLE. Ascending ...')
 					sortList.sort(sortItemsAsc)
 				else:
-					self.title.setLabel('Sorting by TITLE. Descending ...')
 					sortList.sort(sortItemsDesc)
 
 				# [(collNo, ['sorttitle','id',title,genres,tags)]
 				for i in range(len(sortList)):
 					collNo = sortList[i][0]
 					title = sortList[i][1][self.dvdCollection.KEYS_DATA_SORTTITLE]
-					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo)))
+					# check for Location in tags, then show icon
+					try:
+						tags = sortList[i][1][self.dvdCollection.KEYS_DATA_TAGS]
+						idx = tags.index(self.dvdCollection.LOCATION)
+						img = FILM_FILENAME
+					except:
+						img = ''
+					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo), img, img))
 					if not self.onlineAliasData and collNo == self.lastCollNo:
 						selectedPos = i
 
@@ -1356,9 +1388,10 @@ class DVDProfiler(xbmcgui.Window):
 		OPT_CLEAR_CACHE = __language__(525)
 		OPT_START_MODE = __language__(526)
 		OPT_CONFIG_SMB = __language__(527)
+		OPT_LOCAL_MODE_MEDIA_LOC = __language__(528)
 
 		def _makeMenu():
-			menu = [__language__(500)]	# exit
+			menu = [xbmcgui.ListItem(__language__(500))]	# exit
 			menu.append(xbmcgui.ListItem(OPT_CONFIG_SMB))
 			if self.settings[self.SETTING_CHECK_UPDATE]:
 				value = __language__(350)
@@ -1368,7 +1401,8 @@ class DVDProfiler(xbmcgui.Window):
 			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT))
 			menu.append(xbmcgui.ListItem(OPT_CLEAR_CACHE))
 			menu.append(xbmcgui.ListItem(OPT_START_MODE, self.settings[self.SETTING_START_MODE]))
-			menu.append(xbmcgui.ListItem(OPT_VIEW_README)),
+			menu.append(xbmcgui.ListItem(OPT_LOCAL_MODE_MEDIA_LOC, self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC]))
+			menu.append(xbmcgui.ListItem(OPT_VIEW_README))
 			menu.append(xbmcgui.ListItem(OPT_VIEW_CHANGELOG))
 			return menu
 
@@ -1378,7 +1412,7 @@ class DVDProfiler(xbmcgui.Window):
 		while True:
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(502),width=350, rows=len(menu), banner=LOGO_FILENAME)
+			selectDialog.setup(__language__(502),width=350, rows=len(menu))
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
 			if selectedPos <= 0:				# exit selected
 				break
@@ -1413,6 +1447,12 @@ class DVDProfiler(xbmcgui.Window):
 				fn = os.path.join(DIR_HOME, "Changelog.txt")
 				textBoxDialog = TextBoxDialog()
 				textBoxDialog.ask(title=OPT_VIEW_CHANGELOG, file=fn, panel=DIALOG_PANEL)
+			elif selectedOpt == OPT_LOCAL_MODE_MEDIA_LOC:
+				value = self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC]
+				value = doKeyboard(value, OPT_LOCAL_MODE_MEDIA_LOC)
+				if value:
+					self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC] = value
+					saveFileObj(self.SETTINGS_FILENAME, self.settings)
 
 		debug ("< configMenu().ask() restart="+str(restart))
 		return restart
@@ -1435,7 +1475,7 @@ class DVDProfiler(xbmcgui.Window):
 
 		def _makeMenu():
 			debug("_makeMenu()")
-			menu = [__language__(500)]
+			menu = [xbmcgui.ListItem(__language__(500))]
 			if self.settings[self.SETTING_SMB_USE]:
 				menu.append(xbmcgui.ListItem(MENU_OPT_SMB_USE, __language__(350)))	# yes
 			else:
@@ -1621,7 +1661,7 @@ class DVDCollectionXML:
 		else:
 			dialogProgress.update(100,__language__(202))	# failed
 
-		if Emulating:
+		if DEBUG:
 			print "filterGenres=", self.filterGenres
 			print "filterTags=", self.filterTags
 
@@ -1655,7 +1695,8 @@ class DVDCollectionXML:
 						}
 
 			# different re for each version
-			if self.isV2XML():
+			self.isV2 = self.isV2XML()
+			if self.isV2:
 				self.regexDict[self.ACTORS] = '<Actor>.*?<FirstName>(.*?)</.*?<LastName>(.*?)</.*?(?:<Role>(.*?)|)</'
 				self.regexDict[self.CREDITS] =  '<Credit>.*?<FirstName>(.*?)<.*?<LastName>(.*?)<.*?<CreditSubtype>(.*?)<'
 				self.regexDict[self.TAG] =  '<FullyQualifiedName>(.*?)<'
@@ -1743,7 +1784,7 @@ class DVDCollectionXML:
 
 						# save genre, further split to individual unique genre list
 						if dvdDict.has_key(self.GENRE):
-#							print "save genres"
+#							debug("save genres")
 							keyData = dvdDict[self.GENRE]
 							for value in keyData:
 								genreList = value.split('~')
@@ -1753,9 +1794,23 @@ class DVDCollectionXML:
 									except:
 										self.filterGenres.append(split)
 
+						# save the tag as 'Location' if location contains data
+						if dvdDict.has_key(self.LOCATION):
+							if dvdDict[self.LOCATION]:
+								try:
+									self.filterTags.index(self.LOCATION)
+								except:
+									self.filterTags.append(self.LOCATION)
+								# add Location to this dvd's tags
+								try:
+									dvdDict[self.TAG].append(self.LOCATION)	# add to existing tags list
+								except:
+									dvdDict[self.TAG] = [self.LOCATION]		# start a tags list
+
+
 						# save tags
 						if dvdDict.has_key(self.TAG):
-#							print "save tags"
+#							debug("save tags")
 							keyData = dvdDict[self.TAG]
 							for value in keyData:
 								try:
@@ -1774,6 +1829,7 @@ class DVDCollectionXML:
 							rec.append(dvdDict[self.TAG])
 						except:
 							rec.append([])
+
 						self.keys[int(collnum)] = rec
 
 			f.close()
