@@ -1,7 +1,9 @@
 Version     Date        Change
- 1.6        07/01/08    Change: Removed ClientCookie.py by improving bbbLib to use python 2.4 cookieLib
+ 1.6        26/03/08    Change: Removed ClientCookie.py by using python 2.4 cookieLib instead.
                         Change: Self update rewritten to update to same path (after making backup)
-                        Fix: IMdb scrapping for Cast
+                        Change: Some minor tweaks and improvments.
+                        Fix: IMDb
+                        New: For V3 XML, titles with Location have icon displayed and can be filtered.
  1.5        22/12/07    Fix: Improved SMB setup and ironed out some quirks.
                         New: Checks for newer collection via SMB
                         New: Animation on Open/Close

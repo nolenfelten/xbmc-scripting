@@ -55,6 +55,14 @@ Define all the above makes a complete smb path to all the required parts.
 
  Available button options are displayed across bottom of screen and change according to current action/state.
 
+ SPECIAL NOTES:
+ ==============
+ DVDProfiler v3 allows you store a 'location' against each dvd.
+ If your SMB connected it will attempt to playback the media by joining the 'location' with your defined playback SMB.
+
+ If in local only mode, it joins the Settings Menu 'Local Model Media Location' path to the 'location'
+   'F\Videos'   + 'Cars.avi'  to make 'F\Videos\Cars.avi'
+
  A BigBellyBilly script.  Special thanks to beta testers and language translators.  Much appreciated.
  Enjoy!
 

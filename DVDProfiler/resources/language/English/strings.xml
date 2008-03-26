@@ -46,7 +46,7 @@
     <string id="229">Online Collection</string>
     <string id="230">Finding Alias: </string>
     <string id="231">Fetching Online Collection: </string>
-    <string id="240">-</string>
+    <string id="240">Media not found!</string>
     <string id="241">Enter collection ALIAS</string>
     <string id="242">Online Collection Host ?</string>
     <string id="243">Filters - (Select item to turn ON/OFF)</string>
@@ -55,6 +55,7 @@
     <string id="246">Select All</string>
     <string id="247">Select None</string>
     <string id="248">Turn OFF BOTH Filters</string>
+    <string id="249">Sorting ...</string>
 
     <!-- script common messages -->
     <string id="300">Please wait ...</string>
@@ -127,6 +128,7 @@
     <string id="525">Clear Cache</string>
     <string id="526">Startup Mode:</string>
     <string id="527">SMB Settings</string>
+    <string id="528">Local Mode Media Location</string>
 
     <!-- SMB Menu Options -->
     <string id="540">Use SMB Connection ?</string>
