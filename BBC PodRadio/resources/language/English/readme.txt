@@ -10,7 +10,7 @@ USAGE:
 
  PAD      - REMOTE      ACTION
  ---        ------      ------
- Y        - DISPLAY     Toggle between Lists on bottom and Content in middle of screen.
+ Y or X   - DISPLAY     Toggle between Lists on bottom and Content in middle of screen.
  A        - SELECT      Select an item
  DPAD     - ARROWS      Navigate lists and/or content
  WHITE    - TITLE/INFO  Main Menu

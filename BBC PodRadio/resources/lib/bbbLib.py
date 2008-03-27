@@ -1,31 +1,34 @@
 """
- bbbLib.py - For BBC PodRadio
-
- Uses language and update.
+ bbbLib.py
 
  General functions.
-
+ 
 """
 
 import sys, os.path
 import xbmc, xbmcgui
-import os, re, unicodedata, traceback, urllib
-from datetime import date
-from string import strip, replace, find, rjust, capwords
+import os, re, unicodedata, traceback
+import urllib, urllib2
+from string import strip, replace, find, rjust
+import sgmllib
 from xml.dom.minidom import parse, parseString
-import traceback
+from shutil import rmtree
+import cookielib
+#import socket
+#socket.setdefaulttimeout( 10 )
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '14-01-2008'
+__date__ = '27-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
-DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES
-DIR_RESOURCES_LIB = sys.modules[ "__main__" ].DIR_RESOURCES_LIB
-DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA
-__language__ = sys.modules[ "__main__" ].__language__
+
+# setup cookiejar
+cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
+urlopener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+urllib2.install_opener(urlopener)
 
 # KEYPAD CODES
 ACTION_UNKNOWN			= 0
@@ -35,61 +38,106 @@ ACTION_MOVE_UP		    = 3		# Dpad
 ACTION_MOVE_DOWN	    = 4		# Dpad
 ACTION_SCROLL_UP		= 5		# trigger up
 ACTION_SCROLL_DOWN		= 6		# trigger down
-ACTION_SELECT_ITEM	    = 7     # A
+ACTION_A	            = 7     # A
 ACTION_HIGHLIGHT_ITEM	= 8		#
-ACTION_PARENT_DIR	    = 9     # B
-ACTION_PREVIOUS_MENU	= 10	# back btn
+ACTION_B	            = 9     # B
+ACTION_BACK	            = 10	# back btn
 ACTION_REMOTE_INFO		= 11	# info on remote
-ACTION_PAUSE		    = 12	# remote
-ACTION_STOP		        = 13	# remote
-ACTION_NEXT_ITEM	    = 14	# remote Skip Next
-ACTION_PREV_ITEM	    = 15	# remote Skip Previous
-ACTION_X_BUTTON 	    = 18    # X
-ACTION_PAGE_UP		    = 111	# trigger left
-ACTION_PAGE_DOWN	    = 112	# trigger right
-ACTION_SHOW_INFO	    = 117	# white button
-ACTION_Y_BUTTON 	    = 34	# Y
+ACTION_REMOTE_PAUSE		= 12	# remote
+ACTION_REMOTE_STOP		= 13	# remote
+ACTION_REMOTE_NEXT_ITEM	= 14	# remote Skip Next
+ACTION_REMOTE_PREV_ITEM	= 15	# remote Skip Previous
+ACTION_X 	            = 18    # X
+ACTION_Y 	            = 34	# Y
+ACTION_LEFT_TRIGGER		= 111	# trigger left
+ACTION_RIGHT_TRIGGER	= 112	# trigger right
+ACTION_WHITE	        = 117	# white button
+ACTION_LEFT_STICK       = 85   # left stick clicked in
+ACTION_RIGHT_STICK      = 122   # right stick clicked in
+ACTION_RIGHT_STICK_UP	= 88
+ACTION_RIGHT_STICK_DOWN	= 89
+ACTION_RIGHT_STICK_RIGHT= 124
+ACTION_RIGHT_STICK_LEFT	= 125
+ACTION_REMOTE_RECORD	= 2010  # record button on remote - assigned in keymap.xml
 
-KEY_BUTTON_A                        = 256
-KEY_BUTTON_B                        = 257
-KEY_BUTTON_X                        = 258
-KEY_BUTTON_Y                        = 259
-KEY_BUTTON_BLACK                    = 260
-KEY_BUTTON_WHITE                    = 261
-KEY_BUTTON_LEFT_TRIGGER             = 262
-KEY_BUTTON_RIGHT_TRIGGER            = 263
-KEY_BUTTON_LEFT_THUMB_STICK         = 264
-KEY_BUTTON_RIGHT_THUMB_STICK        = 265
-KEY_BUTTON_RIGHT_THUMB_STICK_UP     = 266 # right thumb stick directions
-KEY_BUTTON_RIGHT_THUMB_STICK_DOWN   = 267 # for defining different actions per direction
-KEY_BUTTON_RIGHT_THUMB_STICK_LEFT   = 268
-KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT  = 269
-KEY_BUTTON_DPAD_UP                  = 270
-KEY_BUTTON_DPAD_DOWN                = 271
-KEY_BUTTON_DPAD_LEFT                = 272
-KEY_BUTTON_DPAD_RIGHT               = 273
-KEY_BUTTON_START                    = 274
-KEY_BUTTON_BACK                     = 275
-KEY_BUTTON_LEFT_THUMB_BUTTON        = 276
-KEY_BUTTON_RIGHT_THUMB_BUTTON       = 277
-KEY_BUTTON_LEFT_ANALOG_TRIGGER      = 278
-KEY_BUTTON_RIGHT_ANALOG_TRIGGER     = 279
-KEY_BUTTON_LEFT_THUMB_STICK_UP      = 280 # left thumb stick  directions
-KEY_BUTTON_LEFT_THUMB_STICK_DOWN    = 281 # for defining different actions per direction
-KEY_BUTTON_LEFT_THUMB_STICK_LEFT    = 282
-KEY_BUTTON_LEFT_THUMB_STICK_RIGHT   = 283
+PAD_A                        = 256
+PAD_B                        = 257
+PAD_X                        = 258
+PAD_Y                        = 259
+PAD_BLACK                    = 260
+PAD_WHITE                    = 261
+PAD_LEFT_TRIGGER             = 262
+PAD_RIGHT_TRIGGER            = 263
+PAD_LEFT_STICK              = 264
+PAD_RIGHT_STICK             = 265
+PAD_RIGHT_STICK_UP          = 266 # right thumb stick directions
+PAD_RIGHT_STICK_DOWN        = 267 # for defining different actions per direction
+PAD_RIGHT_STICK_LEFT        = 268
+PAD_RIGHT_STICK_RIGHT       = 269
+PAD_DPAD_UP                  = 270
+PAD_DPAD_DOWN                = 271
+PAD_DPAD_LEFT                = 272
+PAD_DPAD_RIGHT               = 273
+PAD_START                    = 274
+PAD_BACK                     = 275
+PAD_LEFT_STICK          = 276
+PAD_RIGHT_STICK         = 277
+PAD_LEFT_ANALOG_TRIGGER      = 278
+PAD_RIGHT_ANALOG_TRIGGER= 279
+PAD_LEFT_STICK_UP           = 280 # left thumb stick  directions
+PAD_LEFT_STICK_DOWN         = 281 # for defining different actions per direction
+PAD_LEFT_STICK_LEFT         = 282
+PAD_LEFT_STICK_RIGHT        = 283
+
+REMOTE_LEFT             = 169
+REMOTE_RIGHT            = 168
+REMOTE_UP               = 166   
+REMOTE_DOWN             = 167
+REMOTE_1                = 206
+REMOTE_4                = 203
+REMOTE_INFO             = 195
+REMOTE_BACK				= 216
+
+KEYBOARD_LEFT          = 61477 
+KEYBOARD_UP            = 61478 
+KEYBOARD_RIGHT         = 61479 
+KEYBOARD_DOWN          = 61480
+KEYBOARD_PLUS          = 61627 
+KEYBOARD_PG_UP         = 61473 
+KEYBOARD_PG_DOWN        = 61474
+KEYBOARD_INSERT         = 61485
+KEYBOARD_X              = 61524
+KEYBOARD_A              = 61505
+KEYBOARD_B              = 61506
+KEYBOARD_Y              = 61529
+KEYBOARD_NUM_PLUS       = 61547
+KEYBOARD_NUM_MINUS      = 61549
+KEYBOARD_ESC            = 61467
+KEYBOARD_RETURN         = 61453
+KEYBOARD_HOME           = 61476
+KEYBOARD_DEL_BACK       = 61448
+
 
 # ACTION CODE GROUPS
-SELECT_ITEM = ( ACTION_SELECT_ITEM, ACTION_REMOTE_INFO, KEY_BUTTON_A, 61453, )
-EXIT_SCRIPT = ( ACTION_PREVIOUS_MENU, 247, KEY_BUTTON_BACK, 61467, )
-CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_PARENT_DIR, 216, KEY_BUTTON_B, 61448, )
-TOGGLE_DISPLAY = ( 216, KEY_BUTTON_B, 61448, )
-CONTEXT_MENU = ( 229, KEY_BUTTON_WHITE, 61533, )
-MOVEMENT_UP = ( ACTION_MOVE_UP, KEY_BUTTON_LEFT_THUMB_STICK_UP, KEY_BUTTON_RIGHT_THUMB_STICK_UP, KEY_BUTTON_DPAD_UP, 61478, )
-MOVEMENT_DOWN = ( ACTION_MOVE_DOWN, KEY_BUTTON_LEFT_THUMB_STICK_DOWN,KEY_BUTTON_RIGHT_THUMB_STICK_DOWN, KEY_BUTTON_DPAD_DOWN, 61480, )
-MOVEMENT_LEFT = ( ACTION_MOVE_LEFT, KEY_BUTTON_LEFT_THUMB_STICK_LEFT, KEY_BUTTON_RIGHT_THUMB_STICK_LEFT,KEY_BUTTON_DPAD_LEFT, 61477, )
-MOVEMENT_RIGHT = (  ACTION_MOVE_RIGHT, KEY_BUTTON_LEFT_THUMB_STICK_RIGHT, KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT, KEY_BUTTON_DPAD_RIGHT, 61479, )
-MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT
+SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
+EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
+CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, KEYBOARD_B, )
+CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, ACTION_REMOTE_STOP,)
+LEFT_STICK_CLICK = (ACTION_LEFT_STICK, PAD_LEFT_STICK, )
+RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
+MOVEMENT_DPAD = ( ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT, ACTION_MOVE_UP, ACTION_MOVE_DOWN, )
+MOVEMENT_RIGHT_STICK = (PAD_RIGHT_STICK_UP, PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT, PAD_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
+MOVEMENT_LEFT_STICK = (PAD_LEFT_STICK_UP, PAD_LEFT_STICK_DOWN, PAD_LEFT_STICK_LEFT, PAD_LEFT_STICK_RIGHT, )
+MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, PAD_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, PAD_LEFT_TRIGGER, ACTION_REMOTE_PREV_ITEM, )
+MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, PAD_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, PAD_RIGHT_TRIGGER, ACTION_REMOTE_NEXT_ITEM, )
+MOVEMENT_SCROLL = MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN
+MOVEMENT_KEYBOARD = ( KEYBOARD_LEFT, KEYBOARD_UP, KEYBOARD_RIGHT, KEYBOARD_DOWN, KEYBOARD_PG_UP, KEYBOARD_PG_DOWN, )
+MOVEMENT_REMOTE = ( REMOTE_LEFT, REMOTE_RIGHT, REMOTE_UP, REMOTE_DOWN, ACTION_REMOTE_NEXT_ITEM, ACTION_REMOTE_PREV_ITEM, )
+MOVEMENT_UP = ( ACTION_MOVE_UP, PAD_LEFT_STICK_UP, PAD_RIGHT_STICK_UP, PAD_DPAD_UP, KEYBOARD_UP, REMOTE_UP, ACTION_RIGHT_STICK_UP,)
+MOVEMENT_DOWN = ( ACTION_MOVE_DOWN, PAD_LEFT_STICK_DOWN,PAD_RIGHT_STICK_DOWN, PAD_DPAD_DOWN, KEYBOARD_DOWN, REMOTE_DOWN, ACTION_RIGHT_STICK_DOWN,)
+MOVEMENT_LEFT = ( ACTION_MOVE_LEFT, PAD_LEFT_STICK_LEFT, PAD_RIGHT_STICK_LEFT,PAD_DPAD_LEFT, KEYBOARD_LEFT, REMOTE_LEFT, ACTION_RIGHT_STICK_LEFT,)
+MOVEMENT_RIGHT = (  ACTION_MOVE_RIGHT, PAD_LEFT_STICK_RIGHT, PAD_RIGHT_STICK_RIGHT, PAD_DPAD_RIGHT, KEYBOARD_RIGHT, REMOTE_RIGHT, ACTION_RIGHT_STICK_RIGHT, )
+MOVEMENT = MOVEMENT_UP + MOVEMENT_DOWN + MOVEMENT_LEFT + MOVEMENT_RIGHT + MOVEMENT_SCROLL + MOVEMENT_KEYBOARD + MOVEMENT_REMOTE
 
 XBFONT_LEFT       = 0x00000000
 XBFONT_RIGHT      = 0x00000001
@@ -110,13 +158,26 @@ FONT12 = 'font12'
 FONT13 = 'font13'
 FONT14 = 'font14'
 FONT18 = 'font18'
+FONT_SPECIAL_10 = 'special10'
+FONT_SPECIAL_11 = 'special11'
+FONT_SPECIAL_12 = 'special12'
+FONT_SPECIAL_13 = 'special13'
+FONT_SPECIAL_14 = 'special14'
+ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPECIAL_11,FONT_SPECIAL_12,FONT_SPECIAL_13,FONT_SPECIAL_14,)
 
-#dialogProgress = xbmcgui.DialogProgress()
+REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
+
+dialogProgress = xbmcgui.DialogProgress()
+try: Emulating = xbmcgui.Emulating 
+except: Emulating = False
+
+REZ_W = 720
+REZ_H = 576
 
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = True
+DEBUG = False
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -129,7 +190,6 @@ def debug( value ):
 		except:
 			print value
 
-
 #################################################################################################################
 def messageOK(title='', line1='', line2='',line3=''):
 	xbmcgui.Dialog().ok(title ,line1,line2,line3)
@@ -139,52 +199,47 @@ def dialogOK(title, line1='', line2='',line3=''):
 	xbmcgui.Dialog().ok(title ,line1,line2,line3)
 
 #################################################################################################################
-def dialogYesNo(title="", line1="", line2="",line3="", yesButton="", noButton=""):
-	if not title:
-		title = __language__( 0 )
-	if not yesButton:
-		yesButton= __language__( 500 )
-	if not noButton:
-		noButton= __language__( 501 )
-
-#################################################################################################################
 def handleException(txt=''):
 	try:
-		dialogProgress.close()
-	except: pass
-	try:
-		traceback.print_exc()
 		title = "EXCEPTION: " + txt
 		e=sys.exc_info()
 		list = traceback.format_exception(e[0],e[1],e[2],3)
 		text = ''
 		for l in list:
 			text += l
+		print text
 		messageOK(title, text)
 	except: pass
 
 #################################################################################################################
 def makeScriptDataDir():
-	# make userdata script_data location
-	dir = "T:\script_data"
-	makeDir(dir)
-	
-	dir = os.path.join(dir, __scriptname__)
-	makeDir(dir)
-
-#############################################################################################################
-def makeDir( dir ):
 	try:
-		os.mkdir( dir )
-		debug( "made dir: " + dir)
+		scriptPath = os.path.join("T:\script_data", __scriptname__)
+		os.makedirs(scriptPath)
+		debug("makeScriptDataDir() created=%s" % scriptPath )
 	except: pass
 
+#############################################################################################################
+def makeDir(dir):
+	try:
+		os.makedirs( dir )
+		debug("bbbLib.created dir: " + dir)
+	except: pass
+
+#############################################################################################################
+def removeDir(dir, title="", msg="", msg2="", force=False):
+	if force or xbmcgui.Dialog().yesno(title, msg, msg2):
+		try:
+			rmtree(dir,ignore_errors=True)
+			debug("removeDir() done %s" % dir)
+		except: pass
+	
 #################################################################################################################
 # delete a single file
 def deleteFile(filename):
 	try:
 		os.remove(filename)
-		debug("removing file: " + filename)
+		debug("bbbLib.file deleted: " + filename)
 	except: pass
 
 #################################################################################################################
@@ -200,23 +255,66 @@ def fileExist(filename):
 	try:
 		if os.path.isfile(filename) and os.path.getsize(filename) > 0:
 			exist = True
-	except:
-		pass
+	except: pass
 	return exist
 
 #################################################################################################################
 def isFileNewer(oldFilename, newFilename):
-	new = False
+	new = True
 	try:
 		# returns secs since epoch
 		oldFileTime = os.path.getmtime(oldFilename)
 		newFileTime = os.path.getmtime(newFilename)
-		if newFileTime > oldFileTime:
-			new = True
-	except:
-		new = True	# incase old doesnt exist
-
+		new = (newFileTime > oldFileTime)
+	except: pass
 	return new
+
+##############################################################################################
+def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
+	debug("doKeyboard() kbType=%s" % kbType)
+	if currentValue == None:
+		currentValue = ''
+	value = currentValue
+	if kbType == KBTYPE_ALPHA:
+		keyboard = xbmc.Keyboard(currentValue, heading)
+		keyboard.doModal()
+		if keyboard.isConfirmed:
+			value = keyboard.getText().strip()
+		else:
+			value = None
+	else:
+		d = xbmcgui.Dialog()
+		value = d.numeric(kbType, heading, currentValue)
+
+	return value
+
+##############################################################################################
+# if current and skinned resolutions differ and skinned resolution is not
+# 1080i or 720p (they have no 4:3), calculate widescreen offset
+##############################################################################################
+def setResolution(win):
+	try:
+		# '1080i'=0, '720p'=1, '480p'=2, '480p16x9'=3, 'ntsc'=4, 'ntsc16x9'=5, 'pal'=6, 'pal16x9'=7, 'pal60'=8, 'pal6016x9'=9}
+		rez = 6		# PAL
+		currRez = win.getResolution()
+		if (currRez != rez) and rez > 1:
+			# If resolutions differ calculate widescreen offset
+			# check if current resolution is 16x9
+			if (currRez == 0 or currRez % 2): iCur16x9 = 1
+			else: iCur16x9 = 0
+
+			# check if skinned resolution is 16x9
+			if (rez == 0 or rez % 2): iSkin16x9 = 1
+			else: iSkin16x9 = 0
+
+			# calculate offset
+			offset = iCur16x9 - iSkin16x9
+			rez += offset
+	except:
+		handleException()
+
+	win.setCoordinateResolution(rez)
+	debug("setResolution() curr Rez=" + str(currRez) + " new Rez="+str(rez))
 
 #######################################################################################################################    
 def parseDocList(doc, regex, startStr='', endStr=''):
@@ -262,24 +360,95 @@ def cleanHTML(data):
 		return data
 
 #################################################################################################################
-def HTTPErrorCode(e):
+def ErrorCode(e):
+	debug("> ErrorCode()")
+	print "except=%s" % e
 	if hasattr(e, 'code'):
-		code = str(e.code)
+		code = e.code
 	else:
 		try:
-			code = str(e[0])
+			code = e[0]
 		except:
 			code = 'Unknown'
-	title = 'HTTPError, Code: ' + code
+	title = 'Error, Code: %s' % code
 
 	if hasattr(e, 'reason'):
 		txt = e.reason
 	else:
 		try:
-			txt = str(e[1])
+			txt = e[1]
 		except:
 			txt = 'Unknown reason'
-	messageOK(title, txt)
+	print "%s = %s" % (title, txt)
+	messageOK(title, str(txt))
+	debug("< ErrorCode()")
+
+#################################################################################################################
+# Class to return a char or string pixel length. Thanks to madtw.
+# Until truncation of labels on ControlButtons is working.
+#################################################################################################################
+class FontAttr:
+	def __init__(self):
+		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
+		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
+		self.adjust = {'font10':-3, 'font11':-2, 'font12':-1, 'font13':-1, 'font14':0, 'font18':4, \
+					   'special10':-3, 'special11':-2, 'special12':-1, 'special13':0, 'special14':2}
+
+		# base widths based on font14
+		self.width = [ \
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			#       SP   !   "   #   $   %   &   '
+			0,  0,  6,  6,  8, 14, 10, 19, 13,  4,
+			#(   )   *   +   ,   -   .   /   0   1
+			7,  7, 24, 14,  6,  7,  6,  7, 10, 10,
+			#2   3   4   5   6   7   8   9   :  ;
+			10, 10, 10, 10, 10, 10, 10, 10,  7,  7,
+			#<   =   >   ?   @   A   B   C   D   E
+			14, 14, 14,  9, 17, 11, 11, 11, 13, 11,
+			#F   G   H   I   J   K   L   M   N   O
+			10, 13, 13,  7,  8, 11,  9, 15, 13, 13,
+			#P   Q   R   S   T   U   V   W   X   Y
+			10, 13, 12, 11, 11, 12, 11, 17, 11, 11,
+			#Z   [   \   ]   ^   _   `   a   b   c
+			11,  7,  7,  7, 14, 10, 10, 10, 11,  9,
+			#d   e   f   g   h   i   j   k   l   m
+			11, 10,  6, 11, 11,  4,  5,  9,  4, 16,
+			#n   o   p   q   r   s   t   u   v   w
+			11, 10, 11, 11,  7,  8,  6, 11,  9, 14,
+			#x   y   z   {   |   }   ~
+			9,  9,  8,  9,  7,  9, 14
+		]
+
+	def getWidth( self, c, font ):
+		try:
+			w = self.width[ord(c)] + self.adjust[font]
+		except:
+			w = 14			# unknown ch, use avg width
+		return w
+
+	def getTextWidth(self, txt, font):
+		len = 0
+		for c in txt:
+			len += self.getWidth(c, font) +1
+		return len
+
+	def truncate(self, maxWidth, text, font, rez = 6):
+		chCount = len(text)
+		maxWidth = int(maxWidth)
+		font = font.lower()
+		try:
+			maxWidth *= self.rezAdjust[rez]
+		except: pass
+			
+		newText = ''
+		for i in range(chCount, 0, -1):
+			if self.getTextWidth(text[0:i], font) <= maxWidth:
+				newText = text[0:i]
+				break
+
+		return newText
 
 #################################################################################################################
 # Convert a text string containing &#x<hex_value> to ascii ch
@@ -297,9 +466,8 @@ def urlTextToASCII(text):
 		for match in match_obj:
 			ch = chr(int(match[1]))
 			text = text.replace(match[0], ch)
-		debug("urlTextToASCII() DONE")
 	except:
-		debug("urlTextToASCII() exception")
+		debug("bbbLib.urlTextToASCII() exception")
 	return text
 
 
@@ -791,13 +959,197 @@ def decodeEntities(txt, removeNewLines=True):
 
 	return txt
 
+
+#################################################################################################################
+def isFloat(s):
+	try:
+		float(s)
+		return True
+	except:
+		return False
+
+#################################################################################################################
+def isInt(s):
+	try:
+		int(s)
+		return True
+	except:
+		return False
+
+#################################################################################################################
+# if success: returns the html page given in url as a string
+# else: return -1 for Exception None for HTTP timeout, '' for empty page otherwise page data
+#################################################################################################################
+def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True):
+	if encodeURL:
+		safe_url = urllib.quote_plus(url,'/:&?=+#@')
+	else:
+		safe_url = url
+	if not safe_url.startswith('http://'):
+		safe_url = 'http://' + safe_url
+	debug("> bbbLib.fetchURL()")
+
+	def _report_hook( count, blocksize, totalsize ):
+		# just update every x%
+		if count:
+			percent = int( float( count * blocksize * 100) / totalsize )
+			if (percent % 5) == 0:
+				dialogProgress.update( percent )
+		if ( dialogProgress.iscanceled() ): raise
+
+	success = False
+	data = None
+	if not file:
+		# create temp file if needed
+		file = os.path.join(os.getcwd().replace( ";", "" ), "temp.html")
+
+	# remove destination file if exists already
+	deleteFile(file)
+
+	# fetch from url
+	try:
+		opener = urllib.FancyURLopener()
+
+		# add headers if supplied
+		if headers:
+			if not headers.has_key('User-Agent'):
+				headers['User-Agent'] = 'Mozilla/5.0'
+			for name, value  in headers.items():
+				opener.addheader(name, value)
+
+		if DEBUG:
+			print "safe_url=", safe_url
+			print "file=", file
+			print "params=", params
+			print "headers=", headers
+			print "isImage=", isImage
+
+		if params:
+			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
+		else:
+			fn, resp = opener.retrieve(safe_url, file, _report_hook)
+
+		if DEBUG:
+			print resp
+			content_type = resp["Content-Type"].lower()
+			# fail if expecting an image but not corrent type returned
+			if isImage and find(content_type,"image") == -1:     # not found
+				raise "Not Image"
+
+		opener.close()
+		del opener
+		urllib.urlcleanup()
+	except IOError, errobj:
+		ErrorCode(errobj)
+	except "Not Image":
+		debug("Returned Non image content")
+		data = False
+		success = False
+	except:
+		handleException("fetchURL()")
+	else:
+		if not isImage:
+			data = readFile(file)		# read retrieved file
+		else:
+			data = fileExist(file)		# check image file exists
+
+		if data:
+			success = True
+
+	debug( "< fetchURL success=%s" % success)
+	return data
+
+#################################################################################################################
+# fetch using urllib2 and Cookies
+#################################################################################################################
+def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
+	debug("> bbbLib.fetchCookieURL() ")
+	if encodeURL:
+		safe_url = urllib.quote_plus(url,'/:&?=+#@')
+	else:
+		safe_url = url
+	if not safe_url.startswith('http://'):
+		safe_url = 'http://' + safe_url
+
+	data = None
+	handle = None
+	if fn:
+		deleteFile(fn)		# remove destination file if exists already
+
+	try:
+		if DEBUG:
+			print "safe_url=", safe_url
+			print "fn=", fn
+			print "params=", params
+			print "headers=", headers
+			print "isImage=", isImage
+
+		if newRequest:
+			debug("create new Request")
+			if not headers.has_key('User-Agent') and not headers.has_key('User-agent'):
+				headers['User-Agent'] = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+			req = urllib2.Request(safe_url, params, headers)       # create a request object
+			handle = urllib2.urlopen(req)
+		else:
+			handle = urllib2.urlopen(safe_url)					# open new url using existing req
+		debug("Request done")
+
+		if DEBUG:
+			print handle.info()
+			showCookies()
+
+		debug("reading from url ...")
+		data = handle.read()
+
+	except IOError, errobj:
+		ErrorCode(errobj)
+	except:
+		handleException("fetchCookieURL()")
+	else:
+		# write to file if required
+		if fn and data:
+			if isImage:
+				mode = "wb"
+			else:
+				mode = "w"
+			debug("writing to file, mode=%s ..." % mode)
+			try:
+				f = open(fn,mode)
+				f.write(data)
+				f.flush()
+				f.close()
+				del f
+
+				handle.fp._sock.recv=None # hacky avoidance of uncleared handles bug
+				handle.close()
+				del handle
+				if isImage:
+					data = True
+			except:
+				handleException()
+				data = None
+
+	success = (data != None and data != False)
+	debug("< bbbLib.fetchCookieURL() %s" % success)
+	return data
+
+
+#################################################################################################################
+def showCookies():
+	try:
+		for index, cookie in enumerate(cookiejar):
+			print index, '  :  ', cookie
+	except:
+		print "no cookiejar"
+
+
 #################################################################################################################
 # extract URL and name from data
 def extractURLName(data):
 	# URL and name
 	link = ''
 	name = ''
-	matches = re.search("href=[\"'](.*?)[\"'](?:.*?)>(.*?)<", data, re.IGNORECASE)
+	matches = re.search("href=[\"'](.*?)[\"'].*?>(.*?)<", data, re.IGNORECASE)
 	if matches:
 		link = matches.group(1)
 		name = matches.group(2)
@@ -829,80 +1181,323 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 
 #############################################################################################################
 def safeFilename(path):
-	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=]', '_', tail))
+#	head, tail = os.path.split(path.replace( "\\", "/" ))
+	head, tail = os.path.split(path)
+	name, ext = os.path.splitext(tail)
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', '_', name) + ext)
 
 #################################################################################################################
-# if success: returns the html page given in url as a string
-# else: return -1 for Exception None for HTTP timeout, '' for empty page otherwise page data
-#################################################################################################################
-def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True):
-	if encodeURL:
-		safe_url = urllib.quote_plus(url,'/:&?=+#@')
-	else:
-		safe_url = url
-	if not safe_url.startswith('http://'):
-		safe_url = 'http://' + safe_url
-	debug("> fetchURL() " + safe_url)
-
-	def _report_hook( count, blocksize, totalsize ):
-		# just update every x%
-		percent = int( float( count * blocksize * 100) / totalsize )
-		if (percent % 5) == 0:
-			dialogProgress.update( percent )
-		if ( dialogProgress.iscanceled() ): raise
-
-	data = None
-	# create temp file if needed
-	if not file:
-		file = os.path.join(DIR_USERDATA, "temp.html")
-	debug("file: " + file)
-
-	# remove destination file if exists already
-	deleteFile(file)
-
-	# fetch from url
+# Does a direct image URL exist in string ?
+def isImageURL(url):
+	match = re.search('([^"\'<>]+)(?<=(?:\.gif|\.jpg|\.bmp|\.png))', url, re.IGNORECASE)
 	try:
-		opener = urllib.FancyURLopener()
-
-		# add headers if supplied
-		if headers:
-			if not headers.has_key('User-Agent'):
-				headers['User-Agent'] = 'Mozilla/5.0'
-			for name, value  in headers.items():
-				opener.addheader(name, value)
-
-		if DEBUG:
-			print "params=", params
-			print "headers=", headers
-
-		if params:
-			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
-		else:
-			fn, resp = opener.retrieve(safe_url, file, _report_hook)
-		if DEBUG:
-			print fn
-			print resp
-		opener.close()
-		urllib.urlcleanup()
-	except IOError, errobj:
-		HTTPErrorCode(errobj)
+		url = match.group(1)
 	except:
-		handleException("fetchURL()")
-	else:
-		if not isImage:
-			data = readFile(file)		# read retrieved file
+		url = ''
+	debug("bbbLib.isImageURL() " + str(url != ''))
+	return url
+
+#################################################################################################################
+def isRSSLink(url):
+	return searchRegEx(url, '(rss|rdf|xml)$')
+
+#################################################################################################################
+def isHTMLLink(url):
+	return searchRegEx(url, '(html|htm)$')
+
+######################################################################################
+def loadFileObj( filename, dataType={} ):
+    debug( "loadFileObj() " + filename)
+    try:
+        file_handle = open( filename, "r" )
+        loadObj = eval( file_handle.read() )
+        file_handle.close()
+    except:
+        # reset to empty according to dataType
+        if isinstance(dataType, dict):
+            loadObj = {}
+        elif isinstance(dataType, list) or isinstance(dataType, tuple):
+            loadObj = ()
+        else:
+            loadObj = None
+    return loadObj
+
+######################################################################################
+def saveFileObj( filename, saveObj ):
+    debug( "saveFileObj() " + filename)
+    try:
+        file_handle = open( filename, "w" )
+        file_handle.write( repr( saveObj ) )
+        file_handle.close()
+    except:
+        handleException( "_save_file_obj()" )
+
+#################################################################################################################
+def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=False):
+	debug("> bbbLib.listDir() path=%s ext=%s full=%s lower=%s upper=%s" % (path, ext, getFullFilename, lower, upper))
+
+	fileList = []
+	if ext:
+		ext = ext.lower()
+		if ext[0] != '.':
+			ext = '.'+ext
+
+	if os.path.isdir(path):
+		files = os.listdir(path)
+		for f in files:
+			fn, ex = os.path.splitext(f)
+			if not ext or ex.lower() == ext:
+				found = True
+				if fnRE:
+					matches = re.search(fnRE, fn, re.IGNORECASE)
+					if not matches:
+						found = False
+
+				if found:
+					if getFullFilename:
+						filename = f
+					else:
+						filename = fn
+
+					if lower:
+						fileList.append(filename.lower())
+					elif upper:
+						fileList.append(filename.upper())
+					else:
+						fileList.append(filename)
+
+	sz = len(fileList)
+	debug("< bbbLib.listDir() file count="+str(sz))
+	return fileList
+
+
+#################################################################################################################
+# RSS Parser, copes with badly formed data
+# Thanks to www.xml.com
+#################################################################################################################
+class RSSParserSMGL(sgmllib.SGMLParser):
+	def reset(self):
+		self.items = []
+		self.currentTag = None
+		self.lastTag = None
+		self.currentValue = ''
+		self.initem = 0
+		sgmllib.SGMLParser.reset(self)
+
+	def start_item(self, attrs):
+		# set a flag that we're within an RSS item now
+		self.items.append({})
+		self.initem = 1
+
+	def end_item(self):
+		# OK, we're out of the RSS item
+		self.initem = 0
+
+	def unknown_starttag(self, tag, attrs):
+		self.currentTag = tag
+
+	def unknown_endtag(self, tag):
+		# if we're within an RSS item, save the data we've buffered
+		if self.initem:
+			# decode entities and strip whitespace
+			self.currentValue = decodeEntities(self.currentValue.strip())
+			self.items[-1][self.currentTag] = self.currentValue
+		self.currentValue = ''
+
+	def handle_data(self, data):
+		# buffer all text data
+#		self.currentValue += data
+		self.currentValue += data.decode('latin-1')
+
+	def handle_entityref(self, data):
+		# buffer all entities
+		self.currentValue += '&' + data
+	handle_charref = handle_entityref
+
+# Parser that parses version 2.0 RSS documents
+# enhanced to now find required name in tag attributes
+class RSSParser2:
+	def __init__(self):
+		debug("RSSParser2().init()")
+
+	# feeds the xml document from given url or file to the parser
+	def feed(self, url="", file="", doc="", title=""):
+		debug("> RSSParser2().feed()")
+		success = False
+		self.dom = None
+
+		if url:
+			debug("parseString from URL")
+			if not file:
+				dir = os.getcwd().replace(';','')
+				file = os.path.join(dir, "temp.xml")
+			doc = fetchURL(url, file)
+		elif file:
+			debug("parseString from FILE " + file)
+			doc = readFile(file)
 		else:
-			data = fileExist(file)		# check image file exists
+			debug("parseString from DOC")
 
-	debug( "< fetchURL success=" + str(data != None))
-	return data
+		if doc:
+			success = self.__parseString(doc)
 
+		debug("< RSSParser2().feed() success: " + str(success))
+		return success
+
+	def __parseString(self, xmlDocument):
+		debug("> RSSParser2().__parseString()")
+		success = True
+		try:
+			self.dom = parseString(xmlDocument.encode( "utf-8" ))
+		except UnicodeDecodeError:
+			try:
+				debug("__parseString() UnicodeDecodeError, try unicodeToAscii")
+				self.dom = parseString(unicodeToAscii(xmlDocument))
+			except:
+				debug("__parseString() unicodeToAscii failed")
+				self.dom = parseString(xmlDocument)
+		except:
+			success = False
+
+		if not self.dom:
+			messageOK("XML Parser Failed","Empty/Bad XML file","Unable to parse data.")
+
+		debug("< RSSParser2().__parseString() success: " + str(success))
+		return success
+
+
+	# parses RSS document items and returns an list of objects
+	def __parseElements(self, tagName, elements, elementDict):
+		debug("> RSSParser2().__parseElements() element count=%s" % len(elements))
+
+		# extract required attributes from element attribute
+		def _get_element_attributes(el, attrNameList):
+			attrDataList = {}
+			for attrName in attrNameList:
+				data = el.getAttribute( attrName )
+				if data:
+					attrDataList[attrName] = data
+			return attrDataList
+		
+		objectsList = []
+		for index, el in enumerate(elements):
+			dict = {}
+			# check element attributes
+			elAttrItems = el.attributes.items()
+
+			# get data from item with attributes
+			if elAttrItems and elementDict.has_key(tagName):
+				attrDataList= _get_element_attributes(el, elementDict[tagName])
+				if attrDataList:
+					dict[tagName] = attrDataList
+
+			# get data from item
+			for elTagName, attrNameList in elementDict.items():
+				if elTagName == tagName:
+					# skip element tagName - already processed it attributes
+					continue
+
+				data = None
+
+				try:
+					# get value for tag (without any attributes)
+					data = el.getElementsByTagName(elTagName)[0].childNodes[0].data
+				except:
+					try:
+						# get required attributes from tag
+						subEl = el.getElementsByTagName(elTagName)[0]
+						attrItems = subEl.attributes.items()
+						data = _get_element_attributes(subEl, attrNameList)
+					except: pass
+
+				if data:
+#					debug("Tag: %s = %s" % (elTagName, data)
+					dict[elTagName] = data
+#				else:
+#					debug("Tag: %s No Data found" % (elTagName, )
+
+			if DEBUG:
+				print "%s %s" % (index, dict)
+			objectsList.append(RSSNode(dict))
+
+		debug("< RSSParser2().__parseElements() No. objects= %s" % len(objectsList))
+		return objectsList
+
+
+	# parses the RSS document
+	def parse(self, tagName, elementDict):
+		debug("> RSSParser2().parse() tagName: %s %s" % (tagName,elementDict))
+
+		parsedList = None
+		if self.dom:
+			try:
+				elements = self.dom.getElementsByTagName(tagName)
+				parsedList = self.__parseElements(tagName, elements, elementDict)
+			except:
+				debug("exception No parent elements found for tagName")
+
+		debug("< RSSParser2().parse()")
+		return parsedList
+
+#################################################################################################################
+class RSSNode:
+	def __init__(self, elements):
+		self.elements = elements
+		
+	def getElement(self, element):
+		try:
+			return self.elements[element]
+		except:
+			return ""
+		
+	def getElementNames(self):
+		return self.elements.keys()
+		
+	def hasElement(self, element):
+		return self.elements.has_key(element)
+
+#############################################################################################################
+# detect if using MC360 style skin - any theme
+def isMC360():
+	skinName = getSkinName()
+	is360 = (find(skinName,'360') >= 0)
+	debug("bbbLib.isMC360() " +str(is360))
+	return is360
+
+#############################################################################################################
+def getSkinName():
+	skinName = os.path.basename(xbmc.getSkinDir())
+	debug("bbbLib.getSkinName() skinName="+skinName)
+	return skinName
+
+
+#################################################################################################################
+def isIP(host):
+	return re.match('^\d+\.\d+\.\d+\.\d+$', host)
+
+#################################################################################################################
+def getReadmeFilename(mylanguage):
+    debug("> getReadmeFilename()")
+    base_path = mylanguage.get_base_path()
+    language = xbmc.getLanguage().lower()
+    debug("language= %s " % language)
+    fn = os.path.join( base_path, language, "readme.txt" )
+    if ( not fileExist( fn ) ):
+        fn = os.path.join( base_path, "english", "readme.txt" )
+
+    debug("< getReadmeFilename() %s" % fn)
+    return fn
+
+#######################################################################################################################    
+def prefixDirPath(fn, dirPath):
+	if not fn.startswith(dirPath):
+		return os.path.join(dirPath, fn)
+	return fn
 
 #############################################################################################################
 # pluginType = music, video, pictures
-def installPlugin(pluginType, name='', checkInstalled=False):
-	debug("> installPlugin() " + pluginType + " " + name + " checkInstalled=" + str(checkInstalled))
+def installPlugin(pluginType, name='', checkOnly=True):
+	debug("> installPlugin() %s %s checkOnly=%s"  % (pluginType, name, checkOnly))
 	exists = False
 	if not name:
 		name = __scriptname__
@@ -917,140 +1512,23 @@ def installPlugin(pluginType, name='', checkInstalled=False):
 		# set not exist if; path/file missing or previous installed is older
 		copyFromFileSecs = os.path.getmtime(copyFromFile)
 		copyToFileSecs = os.path.getmtime(copyToFile)
-		xbmc.output( "fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
+		debug( "comparing fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
 		exists = fileExist(copyToFile) and copyFromFileSecs <= copyToFileSecs
 	except:
-		# paths dont exist. This is OK if we're just checking
-		print "paths exception"
+		debug( "paths dont exist. This is OK if we're just checking" )
 
-	if not checkInstalled:
-		# not checking, do installation
+	if not checkOnly:
+		# do installation
 		try:
 			from shutil import copytree, rmtree
 			try:
 				rmtree( copyToPath )
 			except: pass
 			copytree( copyFromPath, copyToPath )
-			dialogOK(__language__(490), __language__(491))
+			dialogOK(__scriptname__, "In plugins 'Add Source' to complete installation.", name)
 		except:
 			msg = "Plugin Failed\n" + str(sys.exc_info()[ 1 ])
-			dialogOK(__language__(0), msg)
+			dialogOK(__scriptname__, msg)
 
-	debug("< installPlugin() exists="+str(exists))
+	debug("< installPlugin() exists=%s" % exists)
 	return exists
-
-
-# Parser that parses version 2.0 RSS documents
-class RSSParser2:
-	def __init__(self):
-		debug("RSSParser2().init()")
-
-	# feeds the xml document from given url or file to the parser
-	def feed(self, url="", file="", doc="", title="Downloading XML"):
-		debug("> RSSParser2().feed()")
-		success = False
-		self.dom = None
-
-		dialog.create("XML Parser")
-		if url:
-			debug("parseString from URL")
-			dialog.update(0, "Downloading file ...")
-			if not file:
-				dir = os.getcwd().replace( ";", "" )
-				file = os.path.join( dir , "temp.xml" )
-			deleteFile(file)
-			doc = fetchURL(url, file)
-		elif file:
-			debug("parseString from FILE")
-			dialog.update(0, "Loading file ...")
-			doc = readFile(file)
-		else:
-			debug("parseString from DOC")
-
-		if doc and doc != -1:
-			dialog.update(0, "Parsing ...")
-			try:
-				self.dom = parseString(doc)
-				dialog.update(100, "Parsing ...", "Complete.")
-			except:
-				handleException("RSSParser2()")
-
-		dialog.close()
-		if not self.dom:
-			messageOK("XML Parser Failed","Empty or Bad XML file.")
-		else:
-			success = True
-
-		debug("< RSSParser2().feed() success: " + str(success))
-		return success
-
-
-	# parses RSS document items and returns an list of objects
-	def __parseElements(self, elements, elementList):
-		debug("> RSSParser2().__parseElements()")
-		if DEBUG:
-			print "elements count=", len(elements)
-			print "elementList=", elementList
-		
-		dialog.create("Parsing XML Elements")
-		objectsList = []
-		TOTAL = len(elements)
-		count = 0
-		for el in elements:
-			dict = {}
-			attrItems = el.attributes.items()
-			if not attrItems:
-				break
-			for elTagName in elementList:
-				data = ""
-				if attrItems:
-					# find tag in element title tags
-					data = el.getAttribute( elTagName )
-
-				if not data:
-					try:
-						data = el.getElementsByTagName(elTagName)[0].childNodes[0].data
-						debug( "elTagName childNodes[0]: " + elTagName + "  data: " + data)
-					except:
-						debug("no tagName/data for tag: " + elTagName)
-				else:
-					debug( "elTagName getAttribute: " + elTagName + "  data: " + data)
-				dict[elTagName] = data
-
-			objectsList.append(RSSNode(dict))
-			dialog.update(int((100 / TOTAL)) * count, str(TOTAL) + " Elements ...")
-			count += 1
-
-		debug("< RSSParser2().__parseElements() objects : " + str(len(objectsList)))
-		return objectsList
-
-
-	# parses the RSS document
-	def parse(self, tagName, elementList):
-		debug("> RSSParser2().parse() tagName: " + tagName)
-
-		parsedList = None
-		if self.dom:
-			try:
-				elements = self.dom.getElementsByTagName(tagName)
-				parsedList = self.__parseElements(elements, elementList)
-			except:
-				debug("exception No parent elements found for tagName")
-
-		debug("< RSSParser2().parse()")
-		return parsedList
-
-#################################################################################################################
-class RSSNode:
-	def __init__(self, elements):
-		self.elements = elements
-		
-	def getElement(self, element):
-		return self.elements[element]
-		
-	def getElementNames(self):
-		return self.elements.keys()
-		
-	def hasElement(self, element):
-		return self.elements.has_key(element)
-

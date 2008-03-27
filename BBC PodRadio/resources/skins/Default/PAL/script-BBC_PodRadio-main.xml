@@ -55,7 +55,7 @@
 			<posy>45</posy>
 			<align>right</align>
 			<label></label>
-			<textcolor>grey</textcolor>
+			<textcolor>FFFFFFEE</textcolor>
 			<font>font10</font>
 		</control>
 		<control type="label" id="22">
@@ -420,10 +420,10 @@
 			<scrolltime>200</scrolltime>
 			<visible>true</visible>
 			<pagecontrol>91</pagecontrol>
-			<itemlayout height="72">
+			<itemlayout height="55">
 				<control type="image">
 					<width>685</width>
-					<height>72</height>
+					<height>55</height>
 					<posx>0</posx>
 					<posy>0</posy>
 					<texture>bpr-list-nofocus.png</texture>
@@ -431,17 +431,17 @@
 				<control type="image">
 					<posx>5</posx>
 					<posy>2</posy>
-					<width>68</width>
-					<height>68</height>
+					<width>51</width>
+					<height>51</height>
 					<info>ListItem.Icon</info>
 				</control>
 				<control type="label">
-					<posx>75</posx>
+					<posx>60</posx>
 					<posy>0</posy>
-					<width>430</width>
-					<height>72</height>
+					<width>460</width>
+					<height>55</height>
 					<scroll>true</scroll>
-					<font>font11</font>
+					<font>font10</font>
 					<aligny>center</aligny>
                        			<selectedcolor>FFe2ff43</selectedcolor>
                        			<textcolor>DFFFFFFF</textcolor>
@@ -452,20 +452,20 @@
 					<posx>683</posx>
 					<posy>0</posy>
 					<width>210</width>
-					<height>72</height>
+					<height>55</height>
 					<scroll>false</scroll>
 					<font>font10</font>
 					<aligny>center</aligny>
 					<align>right</align>
                        			<selectedcolor>FFe2ff43</selectedcolor>
-                       			<textcolor>DFFFFFFF</textcolor>
+                       			<textcolor>DFFFFFEE</textcolor>
 					<info>ListItem.Label2</info>
 				</control>
 			</itemlayout>
-			<focusedlayout height="72">
+			<focusedlayout height="55">
 				<control type="image">
 					<width>685</width>
-					<height>72</height>
+					<height>55</height>
 					<posx>0</posx>
 					<posy>0</posy>
 					<visible>true</visible>
@@ -474,17 +474,17 @@
 				<control type="image">
 					<posx>5</posx>
 					<posy>2</posy>
-					<width>68</width>
-					<height>68</height>
+					<width>51</width>
+					<height>51</height>
 					<info>ListItem.Icon</info>
 				</control>
 				<control type="label">
-					<posx>75</posx>
+					<posx>60</posx>
 					<posy>0</posy>
-					<width>430</width>
-					<height>72</height>
+					<width>460</width>
+					<height>55</height>
 					<scroll>true</scroll>
-					<font>font11</font>
+					<font>font10</font>
 					<aligny>center</aligny>
                        			<selectedcolor>FFe2ff43</selectedcolor>
                        			<textcolor>FFFFFFFF</textcolor>
@@ -495,13 +495,13 @@
 					<posx>683</posx>
 					<posy>0</posy>
 					<width>210</width>
-					<height>72</height>
+					<height>55</height>
 					<scroll>false</scroll>
 					<font>font10</font>
 					<aligny>center</aligny>
 					<align>right</align>
                        			<selectedcolor>FFe2ff43</selectedcolor>
-                       			<textcolor>FFFFFFFF</textcolor>
+                       			<textcolor>FFFFFFEE</textcolor>
 					<info>ListItem.Label2</info>
 				</control>
 			</focusedlayout>

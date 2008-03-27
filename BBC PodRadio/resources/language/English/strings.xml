@@ -4,6 +4,8 @@
 
     <!-- Messages -->
     <string id="100">Select a Source</string>
+    <string id="101">Select a Stream to play</string>
+    <string id="102">Select a Station</string>
 
     <!-- menu options  -->
     <string id="200">Podcasts</string>
@@ -16,7 +18,6 @@
     <string id="207">Browse by music genre</string>
     <string id="208">Browse by speech genre</string>
     <string id="209">Browse by radio stations</string>
-    <string id="210"></string>
 
     <!-- Error messages -->
     <string id="300">Directory Category missing!</string>
@@ -24,11 +25,6 @@
     <string id="302">Stream Unavailable</string>
     <string id="303">There are no episodes available.</string>
     <string id="304">No media link found!</string>
-    <string id="305">-</string>
-    <string id="306">-</string>
-    <string id="307">-</string>
-    <string id="308">-</string>
-    <string id="309">-</string>
 
     <!-- Status messages -->
     <string id="400">Please wait ...</string>
@@ -41,11 +37,10 @@
     <string id="491">Categories for:</string>
     <string id="407">Streams for:</string>
 
-    <!-- Yes/No buttons -->
-    <string id="500">Yes</string>
-    <string id="501">No</string>
-    <string id="502">Folder</string>
-    <string id="503">File</string>
+    <!-- Main Menu -->
+    <string id="500">Menu</string>
+    <string id="501">View Script Readme</string>
+    <string id="502">View Script Changelog</string>
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>
