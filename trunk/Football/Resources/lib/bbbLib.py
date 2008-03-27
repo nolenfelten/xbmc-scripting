@@ -11,8 +11,8 @@ import os, re, unicodedata, traceback
 import urllib, urllib2
 from string import strip, replace, find, rjust
 import sgmllib
-from threading import Thread
 from xml.dom.minidom import parse, parseString
+from shutil import rmtree
 import cookielib
 #import socket
 #socket.setdefaulttimeout( 10 )
@@ -20,7 +20,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '29-02-2008'
+__date__ = '21-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 # setup cookiejar
@@ -220,15 +220,16 @@ def makeScriptDataDir():
 #############################################################################################################
 def makeDir(dir):
 	try:
-		os.mkdir( dir )
+		os.makedirs( dir )
 		debug("bbbLib.created dir: " + dir)
 	except: pass
 
 #############################################################################################################
-def removeDir(dir, title="", msg="", msg2=""):
-	if xbmcgui.Dialog().yesno(title, msg, msg2):
+def removeDir(dir, title="", msg="", msg2="", force=False):
+	if force or xbmcgui.Dialog().yesno(title, msg, msg2):
 		try:
-			os.path.rmdir(dir)
+			rmtree(dir,ignore_errors=True)
+			debug("removeDir() done %s" % dir)
 		except: pass
 	
 #################################################################################################################
@@ -994,6 +995,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 				dialogProgress.update( percent )
 		if ( dialogProgress.iscanceled() ): raise
 
+	success = False
 	data = None
 	if not file:
 		# create temp file if needed
@@ -1027,12 +1029,20 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 
 		if DEBUG:
 			print resp
+			content_type = resp["Content-Type"].lower()
+			# fail if expecting an image but not corrent type returned
+			if isImage and find(content_type,"image") == -1:     # not found
+				raise "Not Image"
 
 		opener.close()
 		del opener
 		urllib.urlcleanup()
 	except IOError, errobj:
 		ErrorCode(errobj)
+	except "Not Image":
+		debug("Returned Non image content")
+		data = False
+		success = False
 	except:
 		handleException("fetchURL()")
 	else:
@@ -1041,7 +1051,10 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 		else:
 			data = fileExist(file)		# check image file exists
 
-	debug( "< fetchURL success=" + str(data != None))
+		if data:
+			success = True
+
+	debug( "< fetchURL success=%s" % success)
 	return data
 
 #################################################################################################################
@@ -1166,9 +1179,10 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 
 #############################################################################################################
 def safeFilename(path):
-	print "safeFilename() " + path
-	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
+#	head, tail = os.path.split(path.replace( "\\", "/" ))
+	head, tail = os.path.split(path)
+	name, ext = os.path.splitext(tail)
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', '_', name) + ext)
 
 #################################################################################################################
 # Does a direct image URL exist in string ?
@@ -1477,3 +1491,43 @@ def prefixDirPath(fn, dirPath):
 	if not fn.startswith(dirPath):
 		return os.path.join(dirPath, fn)
 	return fn
+
+#############################################################################################################
+# pluginType = music, video, pictures
+def installPlugin(pluginType, name='', checkInstalled=False):
+	debug("> installPlugin() " + pluginType + " " + name + " checkInstalled=" + str(checkInstalled))
+	exists = False
+	if not name:
+		name = __scriptname__
+	name += " Plugin"
+
+	try:
+		copyFromPath = xbmc.translatePath( os.path.join( DIR_HOME, "Plugin" ) )
+		copyFromFile = os.path.join( copyFromPath, 'default.py')
+		copyToPath = xbmc.translatePath( os.path.join( "Q:\\", "plugins", pluginType, name ) )
+		copyToFile = os.path.join( copyToPath, 'default.py')
+
+		# set not exist if; path/file missing or previous installed is older
+		copyFromFileSecs = os.path.getmtime(copyFromFile)
+		copyToFileSecs = os.path.getmtime(copyToFile)
+		xbmc.output( "fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
+		exists = fileExist(copyToFile) and copyFromFileSecs <= copyToFileSecs
+	except:
+		# paths dont exist. This is OK if we're just checking
+		print "paths exception"
+
+	if not checkInstalled:
+		# not checking, do installation
+		try:
+			from shutil import copytree, rmtree
+			try:
+				rmtree( copyToPath )
+			except: pass
+			copytree( copyFromPath, copyToPath )
+			dialogOK(__language__(490), __language__(491))
+		except:
+			msg = "Plugin Failed\n" + str(sys.exc_info()[ 1 ])
+			dialogOK(__language__(0), msg)
+
+	debug("< installPlugin() exists="+str(exists))
+	return exists
