@@ -8,7 +8,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbGUILib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '21-01-2008'
+__date__ = '18-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 from bbbLib import *
@@ -122,9 +122,6 @@ class DialogSelect(xbmcgui.WindowDialog):
 			self.panelCI = xbmcgui.ControlImage(xpos, ypos, width, height, panel)
 			self.addControl(self.panelCI)
 		except: pass
-
-		if isDelete:
-			title += " (Delete: Highlight & Press A)"
 
 		if title:
 			self.titleCL = xbmcgui.ControlLabel(xpos+offsetLabelX, titleY, listW, titleH, \
@@ -268,13 +265,10 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 			self.panel = panel
 		self._setupDisplay(width, height)
 		if not title and file:
-			print "file=" + file
 			head, title = os.path.split(file)
-			print head, title
 		self.titleCL.setLabel(title)
 		if file:
 			text = readFile(file)
-			print "text=", text
 		self.descCTB.setText(text)
 		self.setFocus(self.descCTB)
 		self.doModal()
