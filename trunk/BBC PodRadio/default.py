@@ -1,31 +1,28 @@
-# A script to play BBC Podcasts (WindowXML version)
-#
-# NOTES:
-# - See readme.txt for indepth instructions/information.
-#
-# This was developed using xbmc_pc.exe
-#
-# Written By BigBellyBilly
-# bigbellybilly AT gmail DOT com	- bugs, comments, ideas ...
-#
-# THANKS:
-# To everyone who's ever helped in anyway, or if I've used code from your own scripts, MUCH APPRECIATED!
-#
-# CHANGELOG: see changelog.txt
-#
+"""
+ Python XBMC script to playback BBC radio and podcasts (also with music plugin)
 
+ THANKS:
+ To everyone who's ever helped in anyway, or if I've used code from your own scripts, MUCH APPRECIATED!
+
+ Please don't alter or re-publish this script without authors persmission.
+
+	CHANGELOG: see changelog.txt or view throu Settings Menu
+	README: see ..\resources\language\<language>\readme.txt or view throu Settings Menu
+
+    Additional support may be found on xboxmediacenter forum.	
+"""
 import xbmc, xbmcgui
 import sys, os, os.path
 from string import replace,split,find,capwords
 
-# Script constants
+# Script doc constants
 __scriptname__ = "BBC PodRadio"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/BBC%20PodRadio"
-__date__ = '13-01-2008'
-__version__ = "2.2"
-xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
+__date__ = '26-03-2008'
+__version__ = "2.1"
+xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
 DIR_HOME = os.getcwd().replace( ";", "" )
@@ -36,16 +33,15 @@ sys.path.insert(0, DIR_RESOURCES_LIB)
 
 # Custom libs
 import language
-__language__ = language.Language().localized
+mylanguage = language.Language()
+__language__ = mylanguage.localized
 
 from bbbLib import *
+from bbbSkinGUILib import TextBoxDialogXML
 import update
 
 # dialog object for the whole app
 dialogProgress = xbmcgui.DialogProgress()
-
-try: Emulating = xbmcgui.Emulating
-except: Emulating = False
 
 #################################################################################################################
 # MAIN
@@ -67,20 +63,22 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 	def __init__( self, *args, **kwargs ):
 		debug("> BBCPodRadio().__init__")
-		try:
-			if Emulating: xbmcgui.Window.__init__(self)
-		except: pass
 
 		self.startup = True
 		self.controlID = 0
 
 		self.IMG_PODCAST = "bpr-podcast.png"
 		self.IMG_RADIO = "bpr-radio.png"
+
+		self.URL_PAGE_LIVE = '/live.shtml'
+		self.URL_PAGE_AUDIOLIST = '/audiolist.shtml'
+		self.URL_PAGE_LIST = '/list.shtml'
 	
 		self.URL_HOME = 'http://www.bbc.co.uk/'
 		self.URL_POD_HOME = self.URL_HOME + 'radio/podcasts/directory/'
 		self.URL_RADIO_HOME = self.URL_HOME + 'radio/aod/index_noframes.shtml'		
-		self.URL_RADIO_LIVE_HOME = self.URL_HOME + 'radio/aod/networks/$STATION/live.shtml'		
+		self.URL_RADIO_LIVE_HOME = self.URL_HOME + 'radio/aod/networks/$STATION/' + self.URL_PAGE_LIVE
+		self.URL_PODCAST = 'http://downloads.bbc.co.uk/podcasts/$STATION/$PROG/rss.xml'
 
 		self.SOURCE_POD = __language__(200)
 		self.SOURCE_RADIO = __language__(201)
@@ -139,7 +137,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 	#################################################################################################################
 	def onInit( self ):
-		debug("> onInit() startup="+str(self.startup))
+		debug("> onInit() startup=%s" % self.startup)
 		if self.startup:
 			xbmcgui.lock()
 			self.startup = False
@@ -151,43 +149,50 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 			self.clearAll()
 			xbmcgui.unlock()
+			self.ready = True
 
 		debug("< onInit()")
 
 
 	#################################################################################################################
 	def onAction(self, action):
+		if not action or not self.ready:
+			return
 		buttonCode =  action.getButtonCode()
 		actionID   =  action.getId()
-		if not actionID:
+		debug( "onAction(): actionID=%i  buttonCode=%i" % (actionID, buttonCode) )
+		if not buttonCode or buttonCode in [1991528071, 11109936]:
 			return
-#		debug( "onAction(): actionID=%i buttonCode=%i controlID %i" % (actionID,buttonCode,self.controlID) )
+		if not actionID and buttonCode:
+			actionID = buttonCode
 
+		self.ready = False
 		if ( buttonCode in EXIT_SCRIPT or actionID in EXIT_SCRIPT):
 			self.close()
-		elif action == 0:
-			return
-		elif (action in MOVEMENT_UP or action in MOVEMENT_DOWN):
+		elif actionID in CONTEXT_MENU:
+			self.mainMenu()
+		elif (actionID in MOVEMENT_UP or actionID in MOVEMENT_DOWN):
 			debug("MOVEMENT_UP or MOVEMENT_DOWN")
-			if self.controlID == self.CLST_STREAM and self.streamDetails:
-				idx = self.getControl( self.CLST_STREAM ).getSelectedPosition()
-				desc = self.streamDetails[idx][self.STREAM_DETAILS_SHORTDESC]
-				self.getControl( self.CLBL_DESC ).setLabel(desc)
-		elif (action in MOVEMENT_LEFT or action in MOVEMENT_RIGHT):
+		elif (actionID in MOVEMENT_LEFT or actionID in MOVEMENT_RIGHT):
 			debug("MOVEMENT_LEFT or MOVEMENT_RIGHT")
 			self.isFocusNavLists = ( not self.controlID in (self.CLST_STREAM, self.CGROUP_LIST_STREAM) )
-		elif action == ACTION_PARENT_DIR:		# B button
-			debug("ACTION_PARENT_DIR")
+		elif actionID in CANCEL_DIALOG:			# B button
+			debug("CANCEL_DIALOG")
 			xbmc.Player().stop()
 			self.showNowPlaying(True)			# clears
-		elif action in (ACTION_Y_BUTTON, ACTION_X_BUTTON):
-			debug("ACTION_Y_BUTTON or ACTION_X_BUTTON")
+		elif actionID in (ACTION_Y, ACTION_X):
+			debug("ACTION_Y or ACTION_X")
 			if self.streamDetails:				# only toggle if streams available
 				self.toggleNavListFocus()
 
+		self.ready = True
+
 	#################################################################################################################
 	def onClick(self, controlID):
-#		debug( "onclick(): control %i" % controlID )
+		if not controlID or not self.ready:
+			return
+		debug( "onclick(): control %i" % controlID )
+		self.ready = False
 
 		if (controlID == self.CLST_SOURCE):
 			debug("CLST_SOURCE")
@@ -223,18 +228,14 @@ class BBCPodRadio(xbmcgui.WindowXML):
 				success = self.getStreamsRadioLive(directory, category)
 			if success:
 				self.showStreams()
-				# force play stream now if live radio
-				if self.source == self.SOURCE_RADIO_LIVE:
-					self.onClick(self.CLST_STREAM)
 
 		elif (controlID == self.CLST_STREAM):
 			debug("CLST_STREAM")
 			self.isFocusNavLists = False
 			self.showNowPlaying(True)	# clear
 			idx = self.getControl( self.CLST_STREAM ).getSelectedPosition()
-			title = self.streamDetails[idx][self.STREAM_DETAILS_TITLE]
-			self.getControl( self.CLBL_TITLE).setLabel(title)
-			self.getControl( self.CLBL_DESC).setLabel("Downloading stream,  please wait ...")
+			self.getControl( self.CLBL_DESC).setLabel(__language__(403))
+
 			if self.playStream(idx):
 				if self.source == self.SOURCE_RADIO:
 					# redraw stream list as we've got more info
@@ -242,10 +243,15 @@ class BBCPodRadio(xbmcgui.WindowXML):
 					self.getIcons(idx)
 					self.showStreams()
 					self.getControl( self.CLST_STREAM).selectItem(idx)
+				title = "%s %s" % (self.streamDetails[idx][self.STREAM_DETAILS_TITLE],
+								   self.streamDetails[idx][self.STREAM_DETAILS_STATION])
+				self.getControl( self.CLBL_TITLE).setLabel(title)
 				self.getControl( self.CLBL_DESC).setLabel(self.streamDetails[idx][self.STREAM_DETAILS_SHORTDESC])
 				self.showNowPlaying()
 			else:
-				self.getControl(self.CLBL_DESC).setLabel("")
+				self.getControl(self.CLBL_DESC).setLabel(__language__(304))
+
+		self.ready = True
 
 
 	###################################################################################################################
@@ -345,19 +351,28 @@ class BBCPodRadio(xbmcgui.WindowXML):
 		debug("> showStreams()")
 
 		if self.streamDetails:
+			self.streamDetails.sort()
 			for pcd in self.streamDetails:
-				label1 = "%s.  %s.  %s" % (pcd[self.STREAM_DETAILS_TITLE],
-										   pcd[self.STREAM_DETAILS_STATION],
-										   pcd[self.STREAM_DETAILS_SHORTDESC])
-				label2 = "%s  %s" % (pcd[self.STREAM_DETAILS_DATE], pcd[self.STREAM_DETAILS_DUR])
-				li = xbmcgui.ListItem(label1, label2, \
-									pcd[self.STREAM_DETAILS_IMG_FILENAME], \
-									pcd[self.STREAM_DETAILS_IMG_FILENAME])
-				self.getControl( self.CLST_STREAM ).addItem(li)
+				try:
+					if not pcd[self.STREAM_DETAILS_DATE] and not pcd[self.STREAM_DETAILS_DUR]:
+						label1 = "%s.  %s" % (unicodeToAscii(pcd[self.STREAM_DETAILS_TITLE]),
+												pcd[self.STREAM_DETAILS_STATION])
+						label2 = "%s" % unicodeToAscii(pcd[self.STREAM_DETAILS_SHORTDESC])
+					else:
+						label1 = "%s.  %s  %s" % (unicodeToAscii(pcd[self.STREAM_DETAILS_TITLE]),
+												   pcd[self.STREAM_DETAILS_STATION],
+												   unicodeToAscii(pcd[self.STREAM_DETAILS_SHORTDESC]))
+						label2 = "%s  %s" % (pcd[self.STREAM_DETAILS_DATE], pcd[self.STREAM_DETAILS_DUR])
+					li = xbmcgui.ListItem(label1, label2, \
+										pcd[self.STREAM_DETAILS_IMG_FILENAME], \
+										pcd[self.STREAM_DETAILS_IMG_FILENAME])
+					self.getControl( self.CLST_STREAM ).addItem(li)
+				except:
+					handleException()
 
 			self.getControl( self.CGROUP_LIST_STREAM ).setVisible(True)
 			self.getControl( self.CLST_STREAM ).selectItem(0)
-			self.getControl( self.CLBL_DESC ).setLabel("Select a Stream to play")
+			self.getControl( self.CLBL_DESC ).setLabel(__language__(101))	# select a stream
 			self.isFocusNavLists = False
 			self.setFocus(self.getControl( self.CLST_STREAM ))
 
@@ -380,9 +395,9 @@ class BBCPodRadio(xbmcgui.WindowXML):
 			doc = fetchURL(url)
 			if doc and doc != -1:
 				if self.source == self.SOURCE_POD:
-					startStr = '<h3>Browse podcasts'
+					startStr = '>Browse podcasts'
 					endStr = '</div'
-					regex = 'href="(.*?)">(.*?)<'
+					regex = '<a href="(.*?)">(.*?)<'
 				elif self.source == self.SOURCE_RADIO:
 					# all sections on one page. Just get relevant directory section
 					if directory == self.RADIO_DIR_OPT_BROWSE_RADIO:
@@ -392,27 +407,35 @@ class BBCPodRadio(xbmcgui.WindowXML):
 					elif directory == self.RADIO_DIR_OPT_BROWSE_SPEECH:
 						startStr = '>SPEECH:<'
 					endStr = '</ul>'
-					regex = 'href="(.*?)".*?>(.*?)<'
+					regex = '<a href="(.*?)".*?>(.*?)</'
 				elif self.source == self.SOURCE_RADIO_LIVE:
 					# PICK LIVE RADIO BY STATION
 					startStr = '>CHOOSE A RADIO STATION<'
 					endStr = '</ul>'
-					regex = 'href="(.*?)".*?>(.*?)<'
+					regex = '<a href="(.*?)".*?>(.*?)</'
 				else:
 					print "unknown source", self.source
 
 				matches = parseDocList(doc, regex, startStr, endStr)
 				if matches:
 					for match in matches:
+						if not match[0] or not match[1] or match[0] == '#':
+							continue
+						url = ''
 						if self.source == self.SOURCE_RADIO_LIVE:
-							station = match[0].split('/')[-2]
-							url = self.URL_RADIO_LIVE_HOME.replace('$STATION', station)
-						else:
-							url = self.URL_HOME + match[0]
+							# may be a link to a page of stations which needs futher selecting
+							# so dont translate url, just save orig url
+							# eg /radio/aod/networks/1xtra/audiolist.shtml - normal
+							# eg /radio/aod/networks/localradio/list.shtml - need futher selection
+							if match[0].endswith(self.URL_PAGE_AUDIOLIST):
+								url = self.URL_HOME + match[0].replace(self.URL_PAGE_AUDIOLIST, self.URL_PAGE_LIVE)
 
+						if not url:
+							url = self.URL_HOME + match[0]
 						title = cleanHTML(decodeEntities(match[1]))
 						categoryDict[title] = url
 
+					debug("categoryDict=%s" % categoryDict)
 					self.categoriesDict[self.source][directory] = categoryDict
 
 			dialogProgress.close()
@@ -425,79 +448,114 @@ class BBCPodRadio(xbmcgui.WindowXML):
 		debug("< getCategories() success="+str(success))
 		return success
 
+	############################################################################################################
+	# scrape a page of stations and convert links to LIVE links
+	############################################################################################################
+	def getStationsPage(self, category, url):
+		debug("> getStationsPage()")
+		self.streamDetails = []
+		stations = {}
+
+		dialogProgress.create(__language__(403), category)
+		doc = fetchURL(url)
+		dialogProgress.close()
+		if doc:
+			regex = 'href="(/radio/aod/networks/.*?)".*?>(.*?)<'
+			matches = parseDocList(doc, regex)
+			if matches:
+				for match in matches:
+					if match[0].endswith(self.URL_PAGE_AUDIOLIST):
+						if self.source == self.SOURCE_RADIO_LIVE:
+							# convert link to LIVE links
+							link = self.URL_HOME + match[0].replace(self.URL_PAGE_AUDIOLIST, self.URL_PAGE_LIVE)
+						else:
+							# store as found
+							link = self.URL_HOME + match[0]
+						title = cleanHTML(decodeEntities(match[1]))
+						stations[title] = link
+
+		# show menu of stations if reqd
+		if self.source == self.SOURCE_RADIO:
+			menu = stations.keys()
+			menu.sort()
+			selectDialog = xbmcgui.Dialog()
+			selected = selectDialog.select( __language__(102), menu )
+			if selected >= 0:
+				station = menu[selected]
+				link = stations[title]
+				self.streamDetails.append([station,link,'',self.IMG_RADIO,station,'','','',''])
+		else:
+			# fill streamDetails with all found as these are stream links
+			for title, link in stations.items():
+				# title, streamurl, imgurl, img_fn, station, shortdesc, dur, date, longdesc
+				self.streamDetails.append([title,link,'',self.IMG_RADIO,'','','','',''])
+
+		debug("streamDetails=%s" % self.streamDetails)
+		debug("< getStationsPage()")
 
 	############################################################################################################
 	def getStreamsPodcast(self, directory, category):
-		debug("> getStreamsPodcast() directory=" + directory + " category="+category)
-
-		success = False
+		debug("> getStreamsPodcast() directory=%s category=%s"  %(directory,category))
 		self.streamDetails = []
+		feedElementDict = {'description':[],'pubDate':[],'link':[],'itunes:duration':[]}
 
 		try:
 			url = self.categoriesDict[self.source][directory][category]
 		except:
 			messageOK(__language__(402),__language__(300),category)
 		else:
-			dialogProgress.create(__language__(403), __language__(407), directory + ' > ' + category)
+			dialogProgress.create(__language__(403), __language__(407), directory, category)
 			doc = fetchURL(url)
-			dialogProgress.close()
-			if doc and doc != -1:
+			if doc:
 				try:
-					# get XML url
-					xmlURL = searchRegEx(doc, 'feedurl=(.*?xml)')
-					if not xmlURL:
-						raise
-
-					# process html for img links
-					htmlInfoDict = {}
-					regex = '<h3>(.*?)</h3>.*?img src="(.*?)".*?alt="(.*?)"'
+					# station code, url, title, img src
+					regex = 'cell_(\w+).*?<h3><a href="(.*?)">(.*?)</.*?img src="(.*?)"'
 					matches = parseDocList(doc, regex, 'results_cells', 'begin footer')
 					for match in matches:
-						# make filename a combination of img alt and file ext
-						altName = decodeEntities(match[2]) + imgURL[-4:]
-						imgFilename = os.path.join(DIR_CACHE, xbmc.makeLegalFilename(altName))
-						print title,imgURL,altName,imgFilename
-						htmlInfoDict[ title ] = [imgURL,imgFilename]
+						station = match[0]
+						link = match[1]
+						if link[-1] == '/': link = link[:-1]
+						prog = link.split('/')[-1]		# eg /radio/podcasts/dancehall -> dancehall
+						rssLink = self.URL_PODCAST.replace('$STATION', station).replace('$PROG',prog)
+						title = cleanHTML(decodeEntities(match[2]))
+						imgURL = match[3]
+						fn = "%s_%s%s" % (station,prog,imgURL[-4:])
+						imgFilename = os.path.join(DIR_USERDATA, xbmc.makeLegalFilename(fn))
 
-					# fetch & process XML
-					feedElementList = ['title','description','pubDate','link','itunes:duration','itunes:author']
-					success = self.rssparser.feed(url=xmlURL)
-					if success:
-						rssItems = self.rssparser.parse("item", feedElementList)
-						for rssItem in rssItems:
-							title = rssItem.getElement(feedElementList[0])
-							longDesc = rssItem.getElement(feedElementList[1])
-							showDate = rssItem.getElement(feedElementList[2])
-							mediaURL = rssItem.getElement(feedElementList[3])
-							duration = rssItem.getElement(feedElementList[4])
-							station = rssItem.getElement(feedElementList[5])
-							shortDesc = longDesc[:40]
+						success = self.rssparser.feed(url=rssLink)
+						if success:
+							rssItems = self.rssparser.parse("item", feedElementDict)
+							for rssItem in rssItems:
+								longDesc = rssItem.getElement('description')
+								showDate = rssItem.getElement('pubDate')
+								shortDate = searchRegEx(showDate, '((.*?\d\d\d\d))')		# Thu, 20 Mar 2008
+								mediaURL = rssItem.getElement('link')
+								duration = "%smins" % searchRegEx(rssItem.getElement('itunes:duration'), '(\d+)')
+								shortDesc = longDesc[:40]
 
-							print title,station,shortDesc,duration,showDate,longDesc,mediaURL
-							# update stored details
-							if htmlInfoDict.has_key(title):
-								imgURL,imgFilename = htmlInfoDict[title]
-							else:
-								imgURL = ''
-								imgFilename = self.IMG_PODCAST
-							self.streamDetails.append([title,mediaURL,imgURL,imgFilename,station,shortDesc,duration,showDate,longDesc])
+								if DEBUG:
+									print station,prog,title,shortDesc,duration,shortDate,mediaURL,imgFilename
+								self.streamDetails.append([title,mediaURL,imgURL,imgFilename,station,shortDesc,duration,shortDate,longDesc])
+
+					# get thumb icons
+					if self.streamDetails:
+						self.getIcons()
 				except:
-					print sys.exc_info()[ 1 ]
-					print "bad scrape", match
+					print "bad scrape"
 
+				dialogProgress.close()
 				if not self.streamDetails:
-					messageOK(__language__(301), directory + " > " + category )
-				else:
-					success = True
+					messageOK(__language__(301), directory, category )
 
+		debug("streamDetails=%s" % self.streamDetails)
+		success = (self.streamDetails != [])
 		debug("< getStreamsPodcast() success="+str(success))
 		return success
 
 
 	############################################################################################################
 	def getStreamsRadio(self, directory, category):
-		debug("> getStreamsRadio() directory=" + directory + " category="+category)
-
+		debug("> getStreamsRadio() directory=%s category=%s" % (directory,category))
 		success = False
 		self.streamDetails = []
 
@@ -506,75 +564,89 @@ class BBCPodRadio(xbmcgui.WindowXML):
 		except:
 			messageOK(__language__(402),__language__(300),category)
 		else:
-			dialogProgress.create(__language__(403), __language__(407), directory + ' > ' + category)
-			doc = fetchURL(url)
-			if doc and doc != -1:
-				# some streams consist of a link, name, desc
-				# some also have multiple links. one per day.
+			if not url.endswith(self.URL_PAGE_AUDIOLIST):
+				# get next web page and find stations. will put a single rec into streamDetails of choosen station
+				self.getStationsPage(category, url)
+				try:
+					category = self.streamDetails[0][self.STREAM_DETAILS_STATION]
+					url = self.streamDetails[0][self.STREAM_DETAILS_STREAMURL]
+				except:
+					debug("no station chosen, stop")
+					url = ''
 
-				# Find stream block
-				startStr = 'ALL SHOWS'
-				endStr = '</ul>'
-				regexStreams = '<li>(.*?<)/li'
-				regexLinks = 'href="(.*?)".*?>(.*?)</a>(.*?)<'
+			if url:
+				debug("find all shows on page")
+				msg = "%s > %s > %s" % (self.source,directory,category)
+				self.getControl( self.CLBL_TITLE).setLabel(msg)
+				dialogProgress.create(__language__(403), __language__(407), directory, category)
+				doc = fetchURL(url)
+				if doc:
+					# some streams consist of a link, name, desc
+					# some also have multiple links. one per day.
 
-				streamMatches = parseDocList(doc, regexStreams, startStr, endStr)
-				MATCH_TOTAL = len(streamMatches)
-				count = 0
-				for streamMatch in streamMatches:
-					try:
-						streamTitle = ''
-						streamDesc = ''
+					# Find stream block
+					startStr = 'ALL SHOWS'
+					endStr = '</ul>'
+					regexStreams = '<li>(.*?<)/li'
+					regexLinks = 'href="(.*?)".*?>(.*?)</a>(.*?)<'
 
-						# get all links for stream
-						linkMatches = findAllRegEx(streamMatch, regexLinks)
-						MAX = len(linkMatches)
-						for idx in range(MAX):
-							linkMatch = linkMatches[idx]
-							mediaURL = self.URL_HOME + linkMatch[0]
-							title = cleanHTML(decodeEntities(linkMatch[1]))
-							shortDesc = cleanHTML(decodeEntities(linkMatch[2]))
-							# if mutliple links, get first match details to be used on other matches
-							if idx == 0 and MAX > 1:
-								streamTitle = title
-								streamDesc = shortDesc
-								continue
-							elif idx == 1:		# just put desc on first occurance
-								title = "%s (%s)" % (streamTitle, title)
-								shortDesc = streamDesc
-							elif idx > 1:
-								title = "%s (%s)" % (streamTitle, title)
+					streamMatches = parseDocList(doc, regexStreams, startStr, endStr)
+					MATCH_TOTAL = len(streamMatches)
+					count = 0
+					for streamMatch in streamMatches:
+						try:
+							streamTitle = ''
+							streamDesc = ''
 
-							self.streamDetails.append([title,mediaURL,'',self.IMG_RADIO,'',shortDesc,'','',''])
-					except:
-						print "getStreamsRadio() bad streamMatch", streamMatch
+							# get all links for stream
+							linkMatches = findAllRegEx(streamMatch, regexLinks)
+							MAX = len(linkMatches)
+							for idx in range(MAX):
+								linkMatch = linkMatches[idx]
+								mediaURL = self.URL_HOME + linkMatch[0]
+								title = cleanHTML(decodeEntities(linkMatch[1]))
+								shortDesc = cleanHTML(decodeEntities(linkMatch[2]))
+								# if mutliple links, get first match details to be used on other matches
+								if idx == 0 and MAX > 1:
+									streamTitle = title
+									streamDesc = shortDesc
+									continue
+								elif idx == 1:		# just put desc on first occurance
+									title = "%s (%s)" % (streamTitle, title)
+									shortDesc = streamDesc
+								elif idx > 1:
+									title = "%s (%s)" % (streamTitle, title)
 
-			dialogProgress.close()
-			if not self.streamDetails:
-				messageOK(__language__(301), directory + " > " + category )
-			else:
-				success = True
+								self.streamDetails.append([title,mediaURL,'',self.IMG_RADIO,'',shortDesc,'','',''])
+						except:
+							print "getStreamsRadio() bad streamMatch", streamMatch
 
-		debug("< getStreamsRadio() success="+str(success))
+				dialogProgress.close()
+				if not self.streamDetails:
+					messageOK(__language__(301), directory, category )
+
+		success = (self.streamDetails != [])
+		debug("< getStreamsRadio() success=%s" % success)
 		return success
 
 
 	############################################################################################################
 	def getStreamsRadioLive(self, directory, category):
-		debug("> getStreamsRadioLive() directory=" + directory + " category="+category)
-
-		success = False
+		debug("> getStreamsRadioLive() directory=%s category=%s" % (directory,category))
 		self.streamDetails = []
 
 		try:
 			url = self.categoriesDict[self.source][directory][category]
+			if not url.endswith(self.URL_PAGE_LIVE):
+				# if url not live link, get next web page and choose station
+				self.getStationsPage(category, url)
+			else:
+				self.streamDetails.append([category,url,'',self.IMG_RADIO,'','','','',''])
 		except:
-			messageOK(__language__(402),__language__(300),category)
-		else:
-			self.streamDetails.append([category + ' Live',url,'',self.IMG_RADIO,'','','','',''])
-			success = True
+			messageOK(__language__(402),__language__(300), category)
 
-		debug("< getStreamsRadioLive() success="+str(success))
+		success = (self.streamDetails != [])
+		debug("< getStreamsRadioLive() success=%s" % success)
 		return success
 
 
@@ -602,14 +674,14 @@ class BBCPodRadio(xbmcgui.WindowXML):
 	# 5. play rtsp URL
 	############################################################################################################
 	def playStream(self, idx):
-		debug("> playStream()")
-		debug("source=" + self.source)
+		debug("> playStream() source=" + self.source)
 
 		mediaURL = ''
 		rpmURL = ''
 		audioStream = ''
 		url = self.streamDetails[idx][self.STREAM_DETAILS_STREAMURL]
-		title = self.streamDetails[idx][self.STREAM_DETAILS_TITLE]
+		title = "%s %s" % (self.streamDetails[idx][self.STREAM_DETAILS_TITLE],
+						   self.streamDetails[idx][self.STREAM_DETAILS_STATION])
 		dialogProgress.create(__language__(403), __language__(407), title)
 		doc = fetchURL(url, encodeURL=False)		# prevents removal of ?
 		dialogProgress.close()
@@ -667,7 +739,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 					self.streamDetails[idx][self.STREAM_DETAILS_STATION] = capwords(station)
 					self.streamDetails[idx][self.STREAM_DETAILS_DATE] = txDate + ' ' + txTime
 					self.streamDetails[idx][self.STREAM_DETAILS_IMGURL] = imgURL
-					self.streamDetails[idx][self.STREAM_DETAILS_IMG_FILENAME] = os.path.join(DIR_CACHE, os.path.basename(imgURL))
+					self.streamDetails[idx][self.STREAM_DETAILS_IMG_FILENAME] = os.path.join(DIR_USERDATA, os.path.basename(imgURL))
 					self.streamDetails[idx][self.STREAM_DETAILS_LONGDESC] = longDesc
 
 				except:
@@ -698,7 +770,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 			if find(doc, "no episodes") != -1:
 				messageOK(__language__(302),__language__(303))
 			else:
-				messageOK(__language__(402),_language__(304))
+				messageOK(__language__(402),__language__(304))
 
 		if not xbmc.Player().isPlaying():
 			mediaURL = ''
@@ -737,7 +809,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 		if streamDetailsIdx == None:
 			# get all missing icons 
 			for pcd in self.streamDetails:
-				fn = pcd[self.STREAM_DETidxAILS_IMG_FILENAME]
+				fn = pcd[self.STREAM_DETAILS_IMG_FILENAME]
 				url = pcd[self.STREAM_DETAILS_IMGURL]
 				if not _getIcon(url, fn):
 					if self.source == self.SOURCE_POD:
@@ -756,31 +828,54 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 		debug("< getIcons()")
 
+	##############################################################################################
+	def mainMenu(self):
+		debug("> mainMenu()")
+
+		options = [ __language__(501), __language__(502)]
+		menuTitle = "%s - %s" % (__language__(0), __language__(500))
+		while True:
+			selectDialog = xbmcgui.Dialog()
+			selectedPos = selectDialog.select( menuTitle, options )
+			del selectDialog
+			if selectedPos < 0:
+				break
+			
+			title = "%s" % options[selectedPos]
+			if selectedPos == 0:
+				fn = getReadmeFilename(mylanguage)
+			elif selectedPos == 1:
+				fn = os.path.join( DIR_HOME, "changelog.txt" )
+
+			tbd = TextBoxDialogXML("script-bbb-fullscreen-textbox.xml", DIR_RESOURCES, "Default")
+			tbd.ask(title, fn=fn)
+			del tbd
+
+		debug ("< mainMenu()")
+
 ######################################################################################
-def updateScript(isSilent=True):
-	""" Check and update script from svn """
-	debug( "> updateScript() isSilent="+str(isSilent))
+def updateScript(quite=False, notifyNotFound=False):
+	xbmc.output( "> updateScript() quite=%s" %quite)
 
 	updated = False
 	up = update.Update(__language__, __scriptname__)
-	version = up.getLatestVersion()
+	version = up.getLatestVersion(quite)
 	xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
 	if version != "-1":
 		if __version__ < version:
-			if ( dialogYesNo( __language__(0), \
-				  "%s %s %s." % ( __language__( 1006 ), version, __language__( 1002 ), ), __language__( 1003 ),\
-				  "", noButton=__language__( 501 ), \
-				  yesButton=__language__( 500 ) ) ):
+			if xbmcgui.Dialog().yesno( __language__(0), \
+								"%s %s %s." % ( __language__(1006), version, __language__(1002) ), \
+								__language__(1003 )):
 				updated = True
 				up.makeBackup()
 				up.issueUpdate(version)
-		elif not isSilent:
+		elif notifyNotFound:
 			dialogOK(__language__(0), __language__(1000))
-	elif not isSilent:
-		dialogOK(__language__(0), __language__(1030))
+#	elif not quite:
+#		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
 
-#		del up
-	debug( "< updateScript() updated="+str(updated))
+	del up
+	xbmc.output( "< updateScript() updated=%s" % updated)
 	return updated
 
 #######################################################################################################################    
@@ -790,24 +885,32 @@ if __name__ == '__main__':
 	makeScriptDataDir() 
 
 	# check for script update
-	scriptUpdated = updateScript()
+#	scriptUpdated = False
+	scriptUpdated = updateScript(True)
 	if not scriptUpdated:
-		if not installPlugin('music', checkInstalled=True):
+		if not installPlugin('music', checkOnly=True):
 			installPlugin('music')
 
-		w = BBCPodRadio("script-BBC_PodRadio-main.xml", DIR_RESOURCES)
-		w.doModal()
-		del w 
+		myscript = BBCPodRadio("script-BBC_PodRadio-main.xml", DIR_RESOURCES)
+		myscript.doModal()
+		del myscript 
 
 # clean up on exit
-moduleList = ['bbbLib','update','language']
+debug("exiting script ...")
+deleteFile(os.path.join(DIR_HOME, "temp.xml"))
+deleteFile(os.path.join(DIR_HOME, "temp.html"))
+moduleList = ['bbbLib','bbbSkinGUILib']
 for m in moduleList:
 	try:
 		del sys.modules[m]
 	except: pass
 
-xbmc.output("script exit and housekeeping")
-# remove globals
+# remove other globals
 try:
 	del dialogProgress
 except: pass
+
+# goto xbmc home window
+#try:
+#	xbmc.executebuiltin('XBMC.ReplaceWindow(0)')
+#except: pass
