@@ -17,8 +17,8 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", )
-SETTINGS_VERSIONS =  ( "pre-0.99.3", "0.99.3", )
+DATABASE_VERSIONS = ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", "pre-0.99.4", "0.99.4", )
+SETTINGS_VERSIONS =  ( "pre-0.99.4", "0.99.4", )
 # special categories
 GENRES = -1
 STUDIOS = -2
@@ -61,6 +61,22 @@ LOG_ERROR, LOG_INFO, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 def _create_base_paths():
     """ creates the base folders """
     new = False
+    # copy the proper libraries
+    environment = os.environ.get( "OS", "xbox" )
+    if ( environment == "Linux" or environment == "OS X" ):
+        ext = ".so"
+    else:
+        environment = "win32"
+        ext = ".pyd"
+    pil_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib", "PIL", "_imaging" + ext ) )
+    sql_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib", "pysqlite2", "_sqlite" + ext ) )
+    if ( not os.path.isfile( pil_path ) or not os.path.isfile( sql_path ) ):
+        platform_pil_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "platform libraries", environment, "_imaging" + ext ) )
+        platform_sql_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "platform libraries", environment, "_sqlite" + ext ) )
+        from shutil import copyfile
+        copyfile( platform_pil_path, pil_path )
+        copyfile( platform_sql_path, sql_path )
+    # create the main cache and database paths
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
         new = True
@@ -104,11 +120,11 @@ def install_plugin( plugin=0 ):
             # get the cached thumb name
             cached_thumbnail = xbmc.getCacheThumbName( os.path.join( "Q:\\plugins", "video", title + "\\" ) )
             # cached thumb path (we delete the existing, so our plugin re-caches the new thumb)
-            cached_thumbnail_path = xbmc.translatePath( os.path.join( "Q:\\UserData", "Thumbnails", "Programs", cached_thumbnail ) )
+            cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", cached_thumbnail ) )
             # get the root cached thumb name
             root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/"+ title + "/" )
             # root cached thumb path (deleting does not work, so we overwrite the existing)
-            root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "Q:\\UserData", "Thumbnails", "Programs", root_cached_thumbnail ) )
+            root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", root_cached_thumbnail ) )
             # copy default.tbn
             copyfile( thumbnail_copy_path, thumbnail_install_path )
             # copy folder.jpg (probably not needed)
@@ -175,7 +191,8 @@ def get_custom_sql():
         file_object = open( os.path.join( BASE_DATA_PATH, "custom.sql" ), "r" )
         query = file_object.read()
         file_object.close()
-    except: pass
+    except:
+        LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
     return query
 
 def save_custom_sql( query ):
@@ -185,6 +202,7 @@ def save_custom_sql( query ):
         file_object.close()
         return True
     except:
+        LOG( LOG_ERROR, "%s (rev: %s) %s::%s (%d) [%s]", __scriptname__, __svn_revision__, self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         return False
 
 def make_legal_filepath( path, compatible=False, extension=True, conf=True, save_end=False ):
@@ -240,21 +258,21 @@ def make_legal_filepath( path, compatible=False, extension=True, conf=True, save
 
 
 class Settings:
-    """ Settings class """
-    def get_settings( self ):
+    def get_settings( self, defaults=False ):
         """ read settings """
         try:
             settings = {}
+            if ( defaults ): raise
             settings_file = open( BASE_SETTINGS_PATH, "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
                 raise
         except:
-            settings = self._use_defaults( settings )
+            settings = self._use_defaults( settings, save=( defaults == False ) )
         return settings
 
-    def _use_defaults( self, current_settings=None ):
+    def _use_defaults( self, current_settings=None, save=True ):
         """ setup default values if none obtained """
         LOG( LOG_NOTICE, self.__class__.__name__, "[used default settings]" )
         settings = {}
@@ -282,7 +300,8 @@ class Settings:
             # add default values for missing settings
             settings[ key ] = current_settings.get( key, defaults[ key ] )
         settings[ "version" ] = __version__
-        ok = self.save_settings( settings )
+        if ( save ):
+            ok = self.save_settings( settings )
         return settings
 
     def save_settings( self, settings ):
