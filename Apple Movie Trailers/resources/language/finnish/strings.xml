@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-   <!--  Finnish 21.11.2007 -->
+   <!--  Finnish 28.3.2008 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko 70</string>
     <!-- Dialog Messages -->
+  <string id="37">Päivitetään lajityyppi tietoja...</string>
+  <string id="38">Päivitetään lajityyppi ja esittely tietoja...</string>
   <string id="39">Toista kaikki</string>
   <string id="40">Kaikki tiedot noudetaan, kesto n.10 - 60 minuuttia</string>
   <string id="41">Päivitetään lajityypeittäin, kesto n.1 - 5 minuuttia</string>
-  <string id="42">Päivitetään lajityyppi tietoja...</string>
+  <string id="42"></string>
   <string id="43">Kirjataan tallenteet tietokantaan...</string>
   <string id="44">Tietokannan luonti...</string>
   <string id="45">Poistetaan vanhojen lajityyppien xml-tiedostoja...</string>
@@ -17,7 +19,7 @@
   <string id="48">Noudetaan tallenteita...</string>
   <string id="49">*Voit lopettaa tietokannan luomisen milloin vain.</string>
   <string id="50">Käynnistetään skriptiä:</string>
-  <string id="51">Ladataan osia &amp; asennetaan...</string>
+  <string id="51">Ladataan osia &amp; valmistellaan...</string>
   <string id="52">Osa:</string>
   <string id="53">Tietokantaversio on yhteensopimaton.</string>
   <string id="54">Sinun täytyy luoda tietokanta uudelleen.</string>
@@ -58,7 +60,7 @@
   <string id="89">Tietokannan luonnissa tapahtui virhe.</string>
   <string id="90">Elokuvan siirrossa tapahtui virhe!</string>
   <string id="91">Aikaa jäljellä</string>
-  <string id="92">*Arvostusta ei löydy</string>
+  <string id="92">*Ikärajoitusta ei löydy</string>
   <string id="93">Löytyneiden tallenteiden määrä</string>
   <string id="94">*Hakuehtoja ei ole määritelty</string>
   <string id="95">Anna hakusanat: Erilliset sanat ja ehdot and/or/not</string>
@@ -79,7 +81,7 @@
   <string id="113">Lajityyppi</string>
   <string id="114">Studio</string>
   <string id="115">Näyttelijä</string> 
-  <string id="116">Arvostus</string>
+  <string id="116">Ikäraja</string>
   <string id="117">Esittelyn laatu</string>
   <string id="118">Lisäasetukset</string>
      
@@ -119,7 +121,7 @@
   <string id="215">Videon toistoresoluutio</string>
   <string id="216">Teatteriesitysten sijainti</string>
   <string id="217">Teatteriesitysten hakupaikka</string>
-  <string id="220">Asenna lisäkkeet...</string> 
+  <string id="218">Päivitetään esittelyjä lajityypeittäin</string> 
 
   <!-- Settings choices -->
   <string id="2020">Matala</string>
@@ -147,6 +149,7 @@
   <string id="252">Päivitä</string>
   <string id="253">Tekijät</string>
   <string id="254">Asenna lisäke</string>
+  <string id="255">Oletukset</string>
   
    <!-- Search buttons -->
   <string id="257">Tallenna SQL</string>
