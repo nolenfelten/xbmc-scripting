@@ -177,7 +177,7 @@ REZ_H = 576
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = False
+DEBUG = True
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -1033,16 +1033,16 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			print resp
 			content_type = resp["Content-Type"].lower()
 			# fail if expecting an image but not corrent type returned
-			if isBinary and find(content_type,"image") == -1:     # not found
-				raise "Not Image"
+			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+				raise "Not Binary"
 
 		opener.close()
 		del opener
 		urllib.urlcleanup()
 	except IOError, errobj:
 		ErrorCode(errobj)
-	except "Not Image":
-		debug("Returned Non image content")
+	except "Not Binary":
+		debug("Returned Non Binary content")
 		data = False
 		success = False
 	except:

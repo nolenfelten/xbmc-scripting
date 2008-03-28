@@ -17,18 +17,11 @@
   <string id="207">Bläddra efter musikgenre</string>
   <string id="208">Bläddra efter talgenre</string>
   <string id="209">Bläddra efter radiostationer</string>
-  <string id="210">
-  </string>
   <string id="300">Mappkategori saknas!</string>
   <string id="301">Inga strömmar hittade!</string>
   <string id="302">Strömmen är inte tillgänglig</string>
   <string id="303">Inga avsnitt är tillgängliga.</string>
   <string id="304">Ingen medialänk hittad!</string>
-  <string id="305">-</string>
-  <string id="306">-</string>
-  <string id="307">-</string>
-  <string id="308">-</string>
-  <string id="309">-</string>
   <string id="400">Var god vänta...</string>
   <string id="401">Lyckades</string>
   <string id="402">Misslyckades</string>
@@ -38,10 +31,9 @@
   <string id="407">Strömmar för:</string>
   <string id="490">I instick 'Lägg till källa' för att slutföra installation.</string>
   <string id="491">Kategorier för:</string>
-  <string id="500">Ja</string>
-  <string id="501">Nej</string>
-  <string id="502">Mapp</string>
-  <string id="503">Fil</string>
+  <string id="500">Avsluta</string>
+  <string id="501">Visa Script Readme</string>
+  <string id="502">Visa Script ChangeLog</string>
   <string id="1000">Din version är aktuell.</string>
   <string id="1001">Hämtar nuvarande taggade versioner...</string>
   <string id="1002">är nyare</string>

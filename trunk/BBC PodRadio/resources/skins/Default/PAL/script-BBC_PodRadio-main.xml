@@ -388,8 +388,8 @@
 			<description>instructions image</description>
 			<posx>118r</posx>
 			<posy>-2</posy>
-			<width>118</width>
-			<height>88</height>
+			<width>124</width>
+			<height>115</height>
 			<texture>bpr-guide.png</texture>
 		</control>
 
