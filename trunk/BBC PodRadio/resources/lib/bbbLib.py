@@ -980,7 +980,7 @@ def isInt(s):
 # if success: returns the html page given in url as a string
 # else: return -1 for Exception None for HTTP timeout, '' for empty page otherwise page data
 #################################################################################################################
-def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True):
+def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True):
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
 	else:
@@ -1022,7 +1022,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 			print "file=", file
 			print "params=", params
 			print "headers=", headers
-			print "isImage=", isImage
+			print "isBinary=", isBinary
 
 		if params:
 			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
@@ -1033,7 +1033,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 			print resp
 			content_type = resp["Content-Type"].lower()
 			# fail if expecting an image but not corrent type returned
-			if isImage and find(content_type,"image") == -1:     # not found
+			if isBinary and find(content_type,"image") == -1:     # not found
 				raise "Not Image"
 
 		opener.close()
@@ -1048,7 +1048,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 	except:
 		handleException("fetchURL()")
 	else:
-		if not isImage:
+		if not isBinary:
 			data = readFile(file)		# read retrieved file
 		else:
 			data = fileExist(file)		# check image file exists
@@ -1062,7 +1062,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 #################################################################################################################
 # fetch using urllib2 and Cookies
 #################################################################################################################
-def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
+def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeURL=True, newRequest=True):
 	debug("> bbbLib.fetchCookieURL() ")
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
@@ -1082,7 +1082,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 			print "fn=", fn
 			print "params=", params
 			print "headers=", headers
-			print "isImage=", isImage
+			print "isBinary=", isBinary
 
 		if newRequest:
 			debug("create new Request")
@@ -1108,7 +1108,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 	else:
 		# write to file if required
 		if fn and data:
-			if isImage:
+			if isBinary:
 				mode = "wb"
 			else:
 				mode = "w"
@@ -1123,7 +1123,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 				handle.fp._sock.recv=None # hacky avoidance of uncleared handles bug
 				handle.close()
 				del handle
-				if isImage:
+				if isBinary:
 					data = True
 			except:
 				handleException()
