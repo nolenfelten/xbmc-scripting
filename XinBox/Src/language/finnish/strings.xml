@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
-<!-- English Strings v.1.1 -->
-<!--   Xinbox v.0.99.93   -->
-<!--  Finnish v.29.10.2007  -->
+<!-- English Strings v.1.2 -->
+<!--   Xinbox v.0.99.95   -->
+<!--  Finnish v.28.3.2008  -->
 
 <strings>
 	<!-- Main Menu Labels -->
@@ -169,7 +169,9 @@
   <string id="203">Aut. tarkastus</string>
   <string id="204">(Oletus)</string>
   <string id="205">Postin hyväksymisikkuna</string>	
-	<!-- Email Labels -->
+	
+	
+  <!-- Email Labels -->
   <string id="210">Saapuneet - </string>
   <string id="211">Kirjaudutaan...</string>
   <string id="212">Kirjautuminen onnistui</string>
@@ -185,8 +187,7 @@
   <string id="222">Päivitetään tietokantaa ...</string>
   <string id="223">%s uutta viestiä vastaanotettu.</string>
   <string id="224">Viestien vastaanotto epäonnistui.</string>
-  <string id="225">Viestit</string>
-
+  
 	<!-- MORE InBox Menu Labels -->
   <string id="240">Uuden viestin merkkiääni:</string>
   <string id="241">Valitse "Uusi viesti" merkkiääni:</string>
