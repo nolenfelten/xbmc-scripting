@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-<!--          Finnish 25.11.2007 -->
+<!--          Finnish 28.3.2008 -->
     <string id="30000">Haluttu esittelyn kuvanlaatu</string>
     <string id="30001">Matala</string>
     <string id="30002">Keski</string>
@@ -17,5 +17,19 @@
     <string id="30043">Lataa &amp; tallenna</string>
     <string id="30050">- Tallennuskansio</string>
     <string id="30060">Sopivat sanat ainoastaan</string>
+    <string id="30070">Merkitse katsomisen jälkeen esittelyt katsotuksi</string> 
+    <string id="30080">Soittimen runko</string>
+
+    <string id="30500">Esittelyn lataus</string>
+    <string id="30501">Anna avainsanat: Erilliset sanat ja ehdot and/or/not</string>
+    <string id="30502">Merkitään video katsotuksi</string>
+    <string id="30503">Odota hetki...</string>
+    <string id="30504">Esittely</string>
+
+    <string id="30600">Tietokantaa ei löydy!</string>
+    <string id="30601">Sinun täytyy asentaa ja käynnistää pääskripti.</string>
+    <string id="30602">Haluatko käynnistää pääskriptin?</string>
+    
+    <string id="30900">*Etsi videoita</string>
 
 </strings>
