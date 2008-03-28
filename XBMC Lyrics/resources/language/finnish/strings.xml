@@ -3,10 +3,12 @@
     <string id="0">XBMC Lyrics</string>
 	<string id="1">Xbox Media Center</string>
     <string id="2">Mikko</string>
-	<!-- 1.5.5          5.8.2007 Finnish -->
- 	<!-- update test version -->
+	<!-- 1.5.5          28.3.2008 Finnish -->
+ 	
     <!-- User Messages -->
     <string id="100">Poikkeus</string>
+    <string id="101">Tiedosto</string>
+    <string id="102">Sulautettu</string>
 
     <!-- Settings labels -->
     <string id="201">Hakupaikka</string>
