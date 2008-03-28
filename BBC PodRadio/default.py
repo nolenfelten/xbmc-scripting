@@ -364,7 +364,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 						label1 = "%s.  %s  %s" % (unicodeToAscii(pcd[self.STREAM_DETAILS_TITLE]),
 												   pcd[self.STREAM_DETAILS_STATION],
 												   unicodeToAscii(pcd[self.STREAM_DETAILS_SHORTDESC]))
-						label2 = "%s  %s" % (pcd[self.STREAM_DETAILS_DATE], pcd[self.STREAM_DETAILS_DUR])
+						label2 = "%s  %smins" % (pcd[self.STREAM_DETAILS_DATE], pcd[self.STREAM_DETAILS_DUR])
 					li = xbmcgui.ListItem(label1, label2, \
 										pcd[self.STREAM_DETAILS_IMG_FILENAME], \
 										pcd[self.STREAM_DETAILS_IMG_FILENAME])
@@ -460,7 +460,6 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 		dialogProgress.create(__language__(403), category)
 		doc = fetchURL(url)
-		dialogProgress.close()
 		if doc:
 			regex = 'href="(/radio/aod/networks/.*?)".*?>(.*?)<'
 			matches = parseDocList(doc, regex)
@@ -475,6 +474,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 							link = self.URL_HOME + match[0]
 						title = cleanHTML(decodeEntities(match[1]))
 						stations[title] = link
+		dialogProgress.close()
 
 		# show menu of stations if reqd
 		if self.source == self.SOURCE_RADIO:
@@ -583,18 +583,11 @@ class BBCPodRadio(xbmcgui.WindowXML):
 				dialogProgress.create(__language__(403), __language__(407), directory, category)
 				doc = fetchURL(url)
 				if doc:
-					# some streams consist of a link, name, desc
-					# some also have multiple links. one per day.
-
 					# Find stream block
-					startStr = 'ALL SHOWS'
-					endStr = '</ul>'
 					regexStreams = '<li>(.*?<)/li'
 					regexLinks = 'href="(.*?)".*?>(.*?)</a>(.*?)<'
 
-					streamMatches = parseDocList(doc, regexStreams, startStr, endStr)
-					MATCH_TOTAL = len(streamMatches)
-					count = 0
+					streamMatches = parseDocList(doc, regexStreams, 'ALL SHOWS', '</ul>')
 					for streamMatch in streamMatches:
 						try:
 							streamTitle = ''
@@ -608,6 +601,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 								mediaURL = self.URL_HOME + linkMatch[0]
 								title = cleanHTML(decodeEntities(linkMatch[1]))
 								shortDesc = cleanHTML(decodeEntities(linkMatch[2]))
+
 								# if mutliple links, get first match details to be used on other matches
 								if idx == 0 and MAX > 1:
 									streamTitle = title
@@ -684,7 +678,6 @@ class BBCPodRadio(xbmcgui.WindowXML):
 		rpmURL = ''
 		audioStream = ''
 		url = self.streamDetails[idx][self.STREAM_DETAILS_STREAMURL]
-		print "url=" + url
 		if url.lower().endswith('.mp3'):
 			dialogProgress.create(__language__(403), __language__(407), title)
 			if fetchURL(url, MP3_FILENAME, isBinary=True):
@@ -914,7 +907,7 @@ if __name__ == '__main__':
 	scriptUpdated = updateScript(True)
 	if not scriptUpdated:
 		if not installPlugin('music', checkOnly=True):
-			installPlugin('music')
+			installPlugin('music', checkOnly=False)
 
 		myscript = BBCPodRadio("script-BBC_PodRadio-main.xml", DIR_RESOURCES)
 		myscript.doModal()

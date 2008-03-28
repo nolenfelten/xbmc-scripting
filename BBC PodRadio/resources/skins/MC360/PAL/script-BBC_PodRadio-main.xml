@@ -471,8 +471,8 @@
 			<description>instructions image</description>
 			<posx>172r</posx>
 			<posy>0</posy>
-			<width>104</width>
-			<height>82</height>
+			<width>124</width>
+			<height>115</height>
 			<texture>bpr-guide.png</texture>
 			<aspectratio>keep</aspectratio>
 		</control>

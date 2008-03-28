@@ -33,9 +33,9 @@
     <string id="403">Downloading ...</string>
     <string id="404">Site may have changed ?</string>
     <string id="405">Plugin installed.</string>
+    <string id="407">Streams for:</string>
     <string id="490">In plugins 'Add Source' to complete installation.</string>
     <string id="491">Categories for:</string>
-    <string id="407">Streams for:</string>
 
     <!-- Main Menu -->
     <string id="500">Menu</string>
