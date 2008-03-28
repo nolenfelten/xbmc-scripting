@@ -40,6 +40,8 @@ from bbbLib import *
 from bbbSkinGUILib import TextBoxDialogXML
 import update
 
+MP3_FILENAME = os.path.join(DIR_USERDATA, "podcast.mp3")
+
 # dialog object for the whole app
 dialogProgress = xbmcgui.DialogProgress()
 
@@ -676,101 +678,106 @@ class BBCPodRadio(xbmcgui.WindowXML):
 	def playStream(self, idx):
 		debug("> playStream() source=" + self.source)
 
+		title = "%s %s" % (self.streamDetails[idx][self.STREAM_DETAILS_TITLE],
+						   self.streamDetails[idx][self.STREAM_DETAILS_STATION])
 		mediaURL = ''
 		rpmURL = ''
 		audioStream = ''
 		url = self.streamDetails[idx][self.STREAM_DETAILS_STREAMURL]
-		title = "%s %s" % (self.streamDetails[idx][self.STREAM_DETAILS_TITLE],
-						   self.streamDetails[idx][self.STREAM_DETAILS_STATION])
-		dialogProgress.create(__language__(403), __language__(407), title)
-		doc = fetchURL(url, encodeURL=False)		# prevents removal of ?
-		dialogProgress.close()
-		if doc:
-			if self.source == self.SOURCE_POD:
-				regex = 'class="description">(.*?)<.*?class="download".*?href="(.*?)"'
-				matches = findAllRegEx(doc, regex)
-				if matches:
-					# update long desc with better long desc from the subscriptions page
-					longDesc = cleanHTML(decodeEntities(matches[0][0]))
-					self.streamDetails[idx][self.STREAM_DETAILS_LONGDESC] = longDesc
-					mediaURL = matches[0][1]
-			elif self.source == self.SOURCE_RADIO:
-				if find(doc, 'aod/shows/images') != -1:
-					regex = 'AudioStream.*?"(.*?)".*?showtitle.*?txinfo.*?>(.*?)</span.*?img src="(.*?)".*?<td.*?>(.*?)<'
-				else:
-					regex = 'AudioStream.*?"(.*?)"'
-				matches = findAllRegEx(doc, regex)
-
-				try:
-					if not matches:
-						raise
-					match = matches[0]
-					dur = ''
-					station = ''
-					txDate =  ''
-					txTime = ''
-					imgURL = ''
-					longDesc = ''
-					if isinstance(match, str):
-						rpmURL = self.URL_HOME + match + '.rpm'
-						station = match.split('/')[-2]
+		print "url=" + url
+		if url.lower().endswith('.mp3'):
+			dialogProgress.create(__language__(403), __language__(407), title)
+			if fetchURL(url, MP3_FILENAME, isBinary=True):
+				mediaURL = MP3_FILENAME
+			dialogProgress.close()
+		else:
+			dialogProgress.create(__language__(403), __language__(407), title)
+			doc = fetchURL(url, encodeURL=False)		# prevents removal of ?
+			dialogProgress.close()
+			if doc:
+				if self.source == self.SOURCE_POD:
+					regex = 'class="description">(.*?)<.*?class="download".*?href="(.*?)"'
+					matches = findAllRegEx(doc, regex)
+					if matches:
+						# update long desc with better long desc from the subscriptions page
+						longDesc = cleanHTML(decodeEntities(matches[0][0]))
+						self.streamDetails[idx][self.STREAM_DETAILS_LONGDESC] = longDesc
+						mediaURL = matches[0][1]
+				elif self.source == self.SOURCE_RADIO:
+					if find(doc, 'aod/shows/images') != -1:
+						regex = 'AudioStream.*?"(.*?)".*?showtitle.*?txinfo.*?>(.*?)</span.*?img src="(.*?)".*?<td.*?>(.*?)<'
 					else:
-						rpmURL = self.URL_HOME + match[0] + '.rpm'
-						imgURL = self.URL_HOME + match[2]
-						longDesc = cleanHTML(decodeEntities(match[3]))
-						station = match[0].split('/')[-2]
+						regex = 'AudioStream.*?"(.*?)"'
+					matches = findAllRegEx(doc, regex)
 
-						# break down txinfo if possible
-						txinfo = match[1].replace('\n','')
-						txinfoMatches = findAllRegEx(txinfo, '(.*?)<.*?>.*?((?:Sat|Sun|Mon|Tue|Wed|Thu|Fri).*?)-(.*?)$')
-						if txinfoMatches:
-							debug("full txinfo")
-							dur = cleanHTML(txinfoMatches[0][0])
-							txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
-							txTime = cleanHTML(decodeEntities(txinfoMatches[0][2]))
+					try:
+						if not matches:
+							raise
+						match = matches[0]
+						dur = ''
+						station = ''
+						txDate =  ''
+						txTime = ''
+						imgURL = ''
+						longDesc = ''
+						if isinstance(match, str):
+							rpmURL = self.URL_HOME + match + '.rpm'
+							station = match.split('/')[-2]
 						else:
-							debug("minimal txinfo")
-							txinfoMatches = findAllRegEx(txinfo, '(.*?)<.*?>(.*?)$')
-							dur = cleanHTML(txinfoMatches[0][0])
-							txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
+							rpmURL = self.URL_HOME + match[0] + '.rpm'
+							imgURL = self.URL_HOME + match[2]
+							longDesc = cleanHTML(decodeEntities(match[3]))
+							station = match[0].split('/')[-2]
 
-#					print "txinfo split=", dur, station, txDate, txTime
-					self.streamDetails[idx][self.STREAM_DETAILS_DUR] = dur
-					self.streamDetails[idx][self.STREAM_DETAILS_STATION] = capwords(station)
-					self.streamDetails[idx][self.STREAM_DETAILS_DATE] = txDate + ' ' + txTime
-					self.streamDetails[idx][self.STREAM_DETAILS_IMGURL] = imgURL
-					self.streamDetails[idx][self.STREAM_DETAILS_IMG_FILENAME] = os.path.join(DIR_USERDATA, os.path.basename(imgURL))
-					self.streamDetails[idx][self.STREAM_DETAILS_LONGDESC] = longDesc
+							# break down txinfo if possible
+							txinfo = match[1].replace('\n','')
+							txinfoMatches = findAllRegEx(txinfo, '(.*?)<.*?>.*?((?:Sat|Sun|Mon|Tue|Wed|Thu|Fri).*?)-(.*?)$')
+							if txinfoMatches:
+								debug("full txinfo")
+								dur = cleanHTML(txinfoMatches[0][0])
+								txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
+								txTime = cleanHTML(decodeEntities(txinfoMatches[0][2]))
+							else:
+								debug("minimal txinfo")
+								txinfoMatches = findAllRegEx(txinfo, '(.*?)<.*?>(.*?)$')
+								dur = cleanHTML(txinfoMatches[0][0])
+								txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
 
-				except:
-					print "playStream() bad scrape"
+	#					print "txinfo split=", dur, station, txDate, txTime
+						self.streamDetails[idx][self.STREAM_DETAILS_DUR] = dur
+						self.streamDetails[idx][self.STREAM_DETAILS_STATION] = capwords(station)
+						self.streamDetails[idx][self.STREAM_DETAILS_DATE] = txDate + ' ' + txTime
+						self.streamDetails[idx][self.STREAM_DETAILS_IMGURL] = imgURL
+						self.streamDetails[idx][self.STREAM_DETAILS_IMG_FILENAME] = os.path.join(DIR_USERDATA, os.path.basename(imgURL))
+						self.streamDetails[idx][self.STREAM_DETAILS_LONGDESC] = longDesc
 
-				# download .rpm URL to extract rtsp URL
-				if rpmURL:
+					except:
+						print "playStream() bad scrape"
+
+					# download .rpm URL to extract rtsp URL
+					if rpmURL:
+						rtspDoc = fetchURL(rpmURL)
+						mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
+				else:
+					# RADIO LIVE - just find media link
+					matches = findAllRegEx(doc, 'AudioStream.*?"(.*?)"')
+					rpmURL = self.URL_HOME + matches[0] + '.rpm'
+
+					# download .rpm URL to extract rtsp URL
 					rtspDoc = fetchURL(rpmURL)
-					mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
-			else:
-				# RADIO LIVE - just find media link
-				matches = findAllRegEx(doc, 'AudioStream.*?"(.*?)"')
-				rpmURL = self.URL_HOME + matches[0] + '.rpm'
-
-				# download .rpm URL to extract rtsp URL
-				rtspDoc = fetchURL(rpmURL)
-				mediaURL = searchRegEx(rtspDoc, '(rtsp://rmlive.*?)\?')
-				if not mediaURL:
-					mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
+					mediaURL = searchRegEx(rtspDoc, '(rtsp://rmlive.*?)\?')
+					if not mediaURL:
+						mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
 
 		debug( "mediaURL=" + mediaURL)
 		if mediaURL:
-			try:
-				xbmc.Player().play(mediaURL)
-			except:
-				debug( "playback failed" )
+			if not playMedia(mediaURL):
+				mediaURL = ''
 		else:
 			if find(doc, "no episodes") != -1:
 				messageOK(__language__(302),__language__(303))
 			else:
-				messageOK(__language__(402),__language__(304))
+				messageOK(__language__(402),__language__(304))	# no media link found
 
 		if not xbmc.Player().isPlaying():
 			mediaURL = ''
@@ -800,7 +807,7 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 		def _getIcon(url, fn):
 			if not fileExist(fn):
-				result = fetchURL(url, fn, isImage=True)
+				result = fetchURL(url, fn, isBinary=True)
 			else:
 				result = True
 			debug("_getIcon=" + str(result))
@@ -853,6 +860,24 @@ class BBCPodRadio(xbmcgui.WindowXML):
 
 		debug ("< mainMenu()")
 
+##############################################################################################################    
+def playMedia(filename):
+	debug("> playMedia() " + filename)
+	success = True
+
+	try:
+		xbmc.Player().play(filename)
+	except:
+		debug('xbmc.Player().play() failed trying xbmc.PlayMedia() ')
+		try:
+			cmd = 'xbmc.PlayMedia(%s)' % filename
+			xbmc.executebuiltin(cmd)
+		except:
+			handleException('xbmc.PlayMedia()')
+			success = False
+	debug("< playMedia() success=%s" % success)
+	return success
+
 ######################################################################################
 def updateScript(quite=False, notifyNotFound=False):
 	xbmc.output( "> updateScript() quite=%s" %quite)
@@ -899,6 +924,7 @@ if __name__ == '__main__':
 debug("exiting script ...")
 deleteFile(os.path.join(DIR_HOME, "temp.xml"))
 deleteFile(os.path.join(DIR_HOME, "temp.html"))
+deleteFile(MP3_FILENAME)
 moduleList = ['bbbLib','bbbSkinGUILib']
 for m in moduleList:
 	try:
