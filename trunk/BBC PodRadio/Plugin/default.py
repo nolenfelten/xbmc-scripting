@@ -26,6 +26,7 @@ import sys, os.path
 import xbmc, xbmcgui, xbmcplugin
 import re, os, traceback, urllib, urllib2
 from string import replace,split,find,capwords
+from xml.dom.minidom import parse, parseString
 
 DIR_HOME= os.getcwd().replace(';','')
 DIR_USERDATA = os.path.join( "T:\\script_data", __plugin__ )
@@ -61,7 +62,10 @@ class BBCPodRadioPlugin:
 		self.PARAM_DIR = 'dir'
 		self.PARAM_CAT = 'cat'
 		self.PARAM_STREAM = 'stream'
+		self.PARAM_PLAY_URL = 'playurl'
 		self.PARAM_URL = 'url'
+
+		self.ICON_MUSIC = 'DefaultMusic.png'
 
 		xbmc.output( "argv[ 2 ]=%s " % sys.argv[ 2 ] )
 
@@ -88,10 +92,13 @@ class BBCPodRadioPlugin:
 						self.getMediaRadioLive(cat, url)	# RADIO LIVE
 				elif paramDict.has_key(self.PARAM_STREAM):	# stream, find media link
 					title = paramDict[self.PARAM_STREAM]
-#					if self.source == self.SOURCE_POD:
-#						self.getMediaPodcast(title, url)
-					if self.source == self.SOURCE_RADIO:
+					if self.source == self.SOURCE_POD:
+						url = self.getMediaPodcast(url)
+						if url:
+							self.playPodcast(title, url)
+					elif self.source == self.SOURCE_RADIO:
 						self.getMediaRadio(title, url)
+
 				else:
 					error = True
 			except:
@@ -160,13 +167,12 @@ class BBCPodRadioPlugin:
 
 		xbmc.output( "getCategories() %s %s %s" % (directory, url, self.source))
 		ok = False
-		dialogProgress.create("Downloading ...", "Categories for: ", directory)
-		doc = fetchURL(url)
-		dialogProgress.close()
-		if not doc:
-			return
-
 		try:
+			dialogProgress.create("Downloading ...", "Categories for: ", directory)
+			doc = fetchURL(url)
+			dialogProgress.close()
+			if not doc: raise
+
 			if self.source == self.SOURCE_POD:
 				startStr = '>Browse podcasts'
 				endStr = '</div'
@@ -230,72 +236,67 @@ class BBCPodRadioPlugin:
 		""" Discover a list of Streams within a Category for PODCASTS """
 
 		xbmc.output( "getStreamsPodcast() %s %s" % (category, url) )
-		dialogProgress.create("Downloading ...", "Podcast Streams for: ", category)
-		doc = fetchURL(url)
-		if doc:
-			try:
-				# station code, url, title, img src
-				regex = 'cell_(\w+).*?<h3><a href="(.*?)">(.*?)</.*?img src="(.*?)".*?<li>(.*?)</li>.*?<li>(.*?)</li>.*?Duration: (\d+).*?Episode: (.*?)</li>.*?<p>(.*?)</p>'
-				matches = parseDocList(doc, regex, 'results_cells', 'begin footer')
-				if not matches:
-					raise
+		try:
+			dialogProgress.create("Downloading ...", "Podcasts for: ", category)
+			doc = fetchURL(url)
+			dialogProgress.close()
+			if not doc: raise
+			
+			# station code, url, title, img src
+			regex = 'cell_(\w+).*?<h3><a href="(.*?)">(.*?)</.*?img src="(.*?)".*?<li>(.*?)</li>.*?<li>(.*?)</li>.*?Duration: (\d+).*?Episode: (.*?)</li>.*?<p>(.*?)</p>'
+			matches = parseDocList(doc, regex, 'results_cells', 'begin footer')
+			if not matches:
+				raise
 
-				MAX_MATCHES = len(matches)
-				count = 0
-				for match in matches:
-					count += 1
-					station = match[0]
-					link = match[1]
-					if link[-1] == '/': link = link[:-1]
-					prog = link.split('/')[-1]		# eg /radio/podcasts/dancehall -> dancehall
-					streamLink = self.URL_PODCAST.replace('$STATION', station).replace('$PROG',prog)
-					title = cleanHTML(decodeEntities(match[2])).replace('&','and')
-					imgURL = match[3]
-					fn = "%s_%s%s" % (station,prog,imgURL[-4:])
-					imgFilename = os.path.join(DIR_USERDATA, xbmc.makeLegalFilename(fn))
+			MAX_MATCHES = len(matches)
+			for match in matches:
+				station = match[0]
+				link = match[1]
+				if link[-1] == '/': link = link[:-1]
+				prog = link.split('/')[-1]		# eg /radio/podcasts/dancehall -> dancehall
+				streamLink = self.URL_PODCAST.replace('$STATION', station).replace('$PROG',prog)
+				title = cleanHTML(decodeEntities(match[2])).replace('&','and')
+				imgURL = match[3]
+				fn = "%s_%s%s" % (station,prog,imgURL[-4:])
+				imgFilename = os.path.join(DIR_USERDATA, xbmc.makeLegalFilename(fn))
 
-					# additional podcast details
-					stationName = cleanHTML(decodeEntities(match[4]))
-					shortDesc = cleanHTML(decodeEntities(match[5]))
-					duration = cleanHTML(decodeEntities(match[6]))
-					showDate = cleanHTML(decodeEntities(match[7]))
-					longDesc = cleanHTML(decodeEntities(match[8]))
-					year = showDate[-4:]
+				# additional podcast details
+				stationName = cleanHTML(decodeEntities(match[4]))
+				shortDesc = cleanHTML(decodeEntities(match[5]))
+				duration = cleanHTML(decodeEntities(match[6]))
+				showDate = cleanHTML(decodeEntities(match[7]))
+				longDesc = cleanHTML(decodeEntities(match[8]))
+				year = showDate[-4:]
 
-					# download icon if not exist
-					if not fileExist(imgFilename):
-						pct = int( float( count * 100) / MAX_MATCHES )
-						dialogProgress.update(pct, category, title)
-						if not fetchURL(imgURL, imgFilename, isBinary=True):
-							imgFilename = ''
+				# download icon if not exist
+				if not fileExist(imgFilename) and not fetchURL(imgURL, imgFilename, isBinary=True):
+					imgFilename = self.ICON_MUSIC
 
-					label1 = "%s.  %s  %s" % (unicodeToAscii(title),stationName,unicodeToAscii(shortDesc))
-					label2 = "%s  %smins" % (showDate, duration)
+				label1 = "%s. %s" % (unicodeToAscii(title), shortDesc)
+				li_url = "%s?%s=%s&%s=%s&%s=%s" % ( sys.argv[ 0 ],
+													self.PARAM_SOURCE, self.source, \
+													self.PARAM_STREAM, title, \
+													self.PARAM_URL, streamLink)
+				li = xbmcgui.ListItem(label1, '', imgFilename, imgFilename)
+				li.setInfo(type="Music", infoLabels={ "Duration": int(duration), \
+											"Size": MAX_MATCHES, \
+											"Genre": category, \
+											"Title" : title, \
+											"Date" : showDate, \
+											"Tagline" : shortDesc, \
+											"PlotOutline" : longDesc, \
+											"Artist" : stationName, \
+											"Album" : shortDesc, \
+											"Year" : year })
 
-					li_url = "%s?%s=%s&%s=%s&%s=%s" % ( sys.argv[ 0 ],
-														self.PARAM_SOURCE, self.source, \
-														self.PARAM_STREAM, title, \
-														self.PARAM_URL, streamLink)
-					li = xbmcgui.ListItem(label1, label2, imgFilename, imgFilename)
-					li.setInfo(type="Music", infoLabels={ "Duration": int(duration), "Size": itemCount, \
-												  "Genre": category, \
-												  "Title" : title, \
-												  "Date" : showDate, \
-												  "Tagline" : shortDesc, \
-												  "PlotOutline" : longDesc, \
-												  "Artist" : station, \
-												  "Album" : shortDesc, \
-												  "Year" : year })
+				ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
+							url=li_url, listitem=li, isFolder=False, totalItems=MAX_MATCHES )
 
-					ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
-								url=li_url, listitem=li, isFolder=False, totalItems=itemCount )
-
-					if ( not ok ): raise
-			except:
-				print traceback.print_exc()
-				messageOK("No Streams Found","No episodes available or","Site may have changed ?")
-			xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
-		dialogProgress.close()
+				if ( not ok ): raise
+		except:
+			print traceback.print_exc()
+			messageOK("No Streams Found","No episodes available or","Site may have changed ?")
+		xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
 
 
@@ -307,75 +308,73 @@ class BBCPodRadioPlugin:
 		ok = False
 		if not url.endswith(self.URL_PAGE_AUDIOLIST):
 			# need to pick a station name
-			links = self.getStationsPage(category, url)
 			try:
-				category, url = links[0]
+				category, url = self.getStationsPage(category, url)
 			except:
 				print "no station selected - stop"
 				return
 
-		dialogProgress.create("Downloading ...", "Radio Streams for: ", category)
-		doc = fetchURL(url)
-		if doc:
+		try:
+			dialogProgress.create("Downloading ...", "Radio Streams for: ", category)
+			doc = fetchURL(url)
+			dialogProgress.close()
+			if not doc: raise
+
 			# Find stream block
 			regexStreams = '<li>(.*?<)/li'
 			regexLinks = 'href="(.*?)".*?>(.*?)</a>(.*?)<'
+			streamMatches = parseDocList(doc, regexStreams, 'ALL SHOWS', '</ul>')
+			if not streamMatches:
+				raise
 
-			try:
-				streamMatches = parseDocList(doc, regexStreams, 'ALL SHOWS', '</ul>')
-				if not streamMatches:
-					raise
+			STREAMS_TOTAL = len(streamMatches)
+			for streamMatch in streamMatches:
+				try:
+					streamTitle = ''
+					streamDesc = ''
 
-				STREAMS_TOTAL = len(streamMatches)
-				count = 0
-				for streamMatch in streamMatches:
-					try:
-						streamTitle = ''
-						streamDesc = ''
+					# get all links for stream
+					linkMatches = findAllRegEx(streamMatch, regexLinks)
+					MAX = len(linkMatches)
+					for idx in range(MAX):
+						linkMatch = linkMatches[idx]
+						streamURL = self.URL_HOME + linkMatch[0]
+						title = cleanHTML(decodeEntities(linkMatch[1])).replace('&','and')
+						shortDesc = cleanHTML(decodeEntities(linkMatch[2]))
 
-						# get all links for stream
-						linkMatches = findAllRegEx(streamMatch, regexLinks)
-						MAX = len(linkMatches)
-						for idx in range(MAX):
-							linkMatch = linkMatches[idx]
-							streamURL = self.URL_HOME + linkMatch[0]
-							title = cleanHTML(decodeEntities(linkMatch[1])).replace('&','and')
-							shortDesc = cleanHTML(decodeEntities(linkMatch[2]))
+						# if mutliple links, get first match details to be used on other matches
+						if idx == 0 and MAX > 1:
+							streamTitle = unicodeToAscii(title)
+							streamDesc = shortDesc
+							continue
+						elif idx == 1:		# just put desc on first occurance
+							title = "%s (%s)" % (streamTitle, unicodeToAscii(title))
+							shortDesc = streamDesc
+						elif idx > 1:
+							title = "%s (%s)" % (streamTitle, unicodeToAscii(title))
 
-							# if mutliple links, get first match details to be used on other matches
-							if idx == 0 and MAX > 1:
-								streamTitle = unicodeToAscii(title)
-								streamDesc = shortDesc
-								continue
-							elif idx == 1:		# just put desc on first occurance
-								title = "%s (%s)" % (streamTitle, unicodeToAscii(title))
-								shortDesc = streamDesc
-							elif idx > 1:
-								title = "%s (%s)" % (streamTitle, unicodeToAscii(title))
+						label1 = "%s.  %s" % (title, unicodeToAscii(shortDesc))
+						li_url = "%s?%s=%s&%s=%s&%s=%s" % ( sys.argv[ 0 ],
+															self.PARAM_SOURCE, self.source, \
+															self.PARAM_STREAM, title, \
+															self.PARAM_URL, streamURL)
 
-							label1 = "%s.  %s" % (title, unicodeToAscii(shortDesc))
-							li_url = "%s?%s=%s&%s=%s&%s=%s" % ( sys.argv[ 0 ],
-																self.PARAM_SOURCE, self.source, \
-																self.PARAM_STREAM, title, \
-																self.PARAM_URL, streamURL)
+						li = xbmcgui.ListItem(label1)
+						li.setInfo(type="Music", infoLabels={"Genre": category, \
+													  "Title" : title, \
+													  "Tagline" : shortDesc, \
+													  "Album" : shortDesc })
 
-							li = xbmcgui.ListItem(label1)
-							li.setInfo(type="Music", infoLabels={"Genre": category, \
-														  "Title" : title, \
-														  "Tagline" : shortDesc, \
-														  "Album" : shortDesc })
+						ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
+									url=li_url, listitem=li, isFolder=True, totalItems=STREAMS_TOTAL )
 
-							ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
-										url=li_url, listitem=li, isFolder=True, totalItems=STREAMS_TOTAL )
-
-					except:
-						print "bad streamMatch", streamMatch
-					if ( not ok ): raise
-			except:
-				print traceback.print_exc()
-				messageOK("No Streams Found","No episodes available or","Site may have changed ?")
-			xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
-		dialogProgress.close()
+				except:
+					print "bad streamMatch", streamMatch
+			if ( not ok ): raise
+		except:
+			print traceback.print_exc()
+			messageOK("No Streams Found","No episodes available or","Site may have changed ?")
+		xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
 	############################################################################################################
 	# 1. download stream URL
@@ -391,120 +390,166 @@ class BBCPodRadioPlugin:
 
 		xbmc.output( "getMediaRadio()" )
 		ok = False
-		dialogProgress.create("Downloading ...", "Media link for Stream: ", title)
-		doc = fetchURL(url, encodeURL=False)
-		if doc:
-			try:
-				if find(doc, 'aod/shows/images') != -1:
-					regex = 'AudioStream.*?"(.*?)".*?showtitle.*?txinfo.*?>(.*?)</span.*?img src="(.*?)".*?<td.*?>(.*?)<'
+		try:
+			dialogProgress.create("Downloading ...", "Radio Stream: ", title)
+			doc = fetchURL(url, encodeURL=False)
+			dialogProgress.close()
+			if not doc: raise
+
+			if find(doc, 'aod/shows/images') != -1:
+				regex = 'AudioStream.*?"(.*?)".*?showtitle.*?txinfo.*?>(.*?)</span.*?img src="(.*?)".*?<td.*?>(.*?)<'
+			else:
+				regex = 'AudioStream.*?"(.*?)"'
+			matches = findAllRegEx(doc, regex)
+			if not matches: raise
+
+			match = matches[0]
+			dur = ''
+			durMins = 0
+			station = ''
+			txDate =  ''
+			txTime = ''
+			imgURL = ''
+			longDesc = ''
+			if isinstance(match, str):
+				rpmURL = self.URL_HOME + match + '.rpm'
+				station = match.split('/')[-2]
+			else:
+				rpmURL = self.URL_HOME + match[0] + '.rpm'
+				imgURL = self.URL_HOME + match[2]
+				imgPath = os.path.join(DIR_USERDATA,os.path.basename(imgURL))
+				longDesc = cleanHTML(decodeEntities(match[3]))
+				station = match[0].split('/')[-2]
+
+				# break down txinfo if possible
+				txinfo = match[1].replace('\n','')
+				txinfoMatches = searchRegEx(txinfo, '\((.*?)\)<.*?>(.*?)-(.*?)-(.*?)$')
+				if txinfoMatches:
+					print("full txinfo")
+					dur = cleanHTML(txinfoMatches[0][0])
+					txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
+					txTime = cleanHTML(decodeEntities(txinfoMatches[0][2]))
 				else:
-					regex = 'AudioStream.*?"(.*?)"'
-				matches = findAllRegEx(doc, regex)
-				if not matches:
-					raise
+					print("minimal txinfo")
+					txinfoMatches = findAllRegEx(txinfo, '\((.*?)\)<.*?>(.*?)$')
+					dur = cleanHTML(txinfoMatches[0][0])
+					txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
 
-				match = matches[0]
-				print "match=", match
-				dur = ''
-				durMins = 0
-				station = ''
-				txDate =  ''
-				txTime = ''
-				imgURL = ''
-				longDesc = ''
-				if isinstance(match, str):
-					rpmURL = self.URL_HOME + match + '.rpm'
-					station = match.split('/')[-2]
-				else:
-					rpmURL = self.URL_HOME + match[0] + '.rpm'
-					imgURL = self.URL_HOME + match[2]
-					imgPath = os.path.join(DIR_USERDATA,os.path.basename(imgURL))
-					longDesc = cleanHTML(decodeEntities(match[3]))
-					station = match[0].split('/')[-2]
+			# convert dur into mins
+#			print "txinfo split=", dur, station, txDate, txTime
+			durMins = self._convertDurToMins(dur)
 
-					# break down txinfo if possible
-					txinfo = match[1].replace('\n','')
-					print "txinfo=", txinfo
-					txinfoMatches = searchRegEx(txinfo, '\((.*?)\)<.*?>(.*?)-(.*?)-(.*?)$')
-					if txinfoMatches:
-						print("full txinfo")
-						dur = cleanHTML(txinfoMatches[0][0])
-						txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
-						txTime = cleanHTML(decodeEntities(txinfoMatches[0][2]))
-					else:
-						print("minimal txinfo")
-						txinfoMatches = findAllRegEx(txinfo, '\((.*?)\)<.*?>(.*?)$')
-						dur = cleanHTML(txinfoMatches[0][0])
-						txDate =  cleanHTML(decodeEntities(txinfoMatches[0][1]))
+			xbmc.output("download .rpm URL to extract rtsp URL")
+			rtspDoc = fetchURL(rpmURL)
+			mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
+			xbmc.output( "mediaURL=%s" % mediaURL)
+			if not mediaURL: raise
 
-				# convert dur into mins
-				print "txinfo split=", dur, station, txDate, txTime
-				durMins = self._convertDurToMins(dur)
+			# download icon
+			if not fileExist(imgPath) and not fetchURL(imgURL, imgPath, isBinary=True):
+				imgPath = self.ICON_MUSIC
 
-				# download .rpm URL to extract rtsp URL
-				rtspDoc = fetchURL(rpmURL)
-				mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
-				print "mediaURL=", mediaURL
-				if not mediaURL:
-					raise
+			li = xbmcgui.ListItem(title,'',imgPath,imgPath)
+			li.setInfo(type="Music", infoLabels={ "Size": 1, "Duration": int(durMins), \
+										  "Genre": self.source, \
+										  "Title" : title, \
+										  "Date" : txDate, \
+										  "PlotOutline" : longDesc, \
+										  "Artist" : capwords(station) })
 
-				# download icon
-				print "imgPath=", imgPath
-				if not fileExist(imgPath) and not fetchURL(imgURL, imgPath, isBinary=True):
-					imgPath = ''
+			ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
+								  url=mediaURL, listitem=li, isFolder=False )
 
-				li = xbmcgui.ListItem(title,'',imgPath,imgPath)
-				li.setInfo(type="Music", infoLabels={ "Size": 1, "Duration": int(durMins), \
-											  "Genre": self.source, \
-											  "Title" : title, \
-											  "Date" : txDate, \
-											  "PlotOutline" : longDesc, \
-											  "Artist" : capwords(station) })
-
-				ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
-									  url=mediaURL, listitem=li, isFolder=False )
-
-				if ( not ok ): raise
-			except:
-				print traceback.print_exc()
-				messageOK("Stream Failed","Media link not found.")
-			xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
-		dialogProgress.close()
+			if ( not ok ): raise
+		except:
+			print traceback.print_exc()
+			messageOK("Radio Stream Failed","Media link not found.")
+		xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
 
 	############################################################################################################
 	def getMediaRadioLive(self, title, url):
 		""" Discover media links from stream for RADIO LIVE """
 
-		xbmcgui.outut( "getMediaRadioLive()" )
+		xbmc.output( "getMediaRadioLive() %s %s" % (title,url))
 		ok = False
 		if not url.endswith(self.URL_PAGE_LIVE):
 			# if url not live link, get next web page and choose station
-			links = self.getStationsPage(title, url)
-		else:
-			links = [title, url]
+			try:
+				title, url = self.getStationsPage(title, url)
+			except:
+				print "no station selected - stop"
+				return
 
 		try:
-			if links:
-				for title, link in links:
-					li = xbmcgui.ListItem(title)
-					li.setInfo(type="Music", infoLabels={ "Size": 1 })
-					ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
-										  url=link, listitem=li, isFolder=False )
+			dialogProgress.create("Downloading ...", "Live Radio stream: ", title)
+			doc = fetchURL(url, encodeURL=False)
+			if not doc: raise
+
+			matches = findAllRegEx(doc, 'AudioStream.*?"(.*?)"')
+			rpmURL = self.URL_HOME + matches[0] + '.rpm'
+
+			xbmc.output("download .rpm URL to extract rtsp URL")
+			rtspDoc = fetchURL(rpmURL)
+			mediaURL = searchRegEx(rtspDoc, '(rtsp://rmlive.*?)\?')
+			if not mediaURL:
+				mediaURL = searchRegEx(rtspDoc, '(rtsp.*?)\?')
+			if not mediaURL:
+				raise
+
+			xbmc.output("found mediaURL=%s" % mediaURL)
+			li = xbmcgui.ListItem(title)
+			li.setInfo(type="Music", infoLabels={ "Size": 1 })
+			ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), \
+								  url=mediaURL, listitem=li, isFolder=False )
 
 			if ( not ok ): raise
 		except:
-			print traceback.print_exc()
 			messageOK("Live Radio","No Media links found!")
 		xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
+
+	############################################################################################################
+	def getMediaPodcast(self, url):
+		""" Discover media link from RSS for PODCAST """
+
+		xbmc.output( "getMediaPodcast()")
+		mediaURL = ''
+		try:
+			self.rssparser = RSSParser2()
+			success = self.rssparser.feed(url=url)
+			if not success: raise
+
+			feedElementDict = {'link':[]}
+			rssItems = self.rssparser.parse("item", feedElementDict)
+			if not rssItems: raise
+
+			mediaURL = rssItems[0].getElement('link')	# mp3 link
+		except:
+			print traceback.print_exc()
+			messageOK("Podcast Unavailable","Podcast file not found!")
+		return mediaURL
+
+	############################################################################################################
+	# download mp3 file before can be played
+	############################################################################################################
+	def playPodcast(self, title, url):
+		xbmc.output("> playPodcast()")
+
+		xbmc.Player().stop()
+		if fetchURL(url, MP3_FILENAME, isBinary=True):
+			playMedia(MP3_FILENAME)
+		else:
+			messageOK("Podcast Failed!", "Failed to download media to playback.",title, url)
+
+		xbmc.output("< playPodcast()")
 
 	############################################################################################################
 	# scrape a page of stations and convert links to LIVE links
 	############################################################################################################
 	def getStationsPage(self, category, url):
-		xbmc.output("> getStationsPage()")
-		stations = {}
-		links = []
+		xbmc.output("> getStationsPage() %s %s " % (category, url))
+		stations = []
+		info = ()
 
 		dialogProgress.create("Finding Stations ...", category)
 		doc = fetchURL(url)
@@ -520,25 +565,28 @@ class BBCPodRadioPlugin:
 						# store as found
 						link = self.URL_HOME + match[0]
 					title = cleanHTML(decodeEntities(match[1]))
-					stations[title] = link
+					stations.append((title, link))
 		dialogProgress.close()
 
+		print "stations=", stations
+
 		# show menu of stations if reqd
-		if self.source == self.SOURCE_RADIO:
-			menu = stations.keys()
-			menu.sort()
+		if len(stations) > 1:
+			stations.sort()
+			menu = []
+			for name, link in stations:
+				menu.append(name)
 			selectDialog = xbmcgui.Dialog()
 			selectedPos = selectDialog.select("Choose Station:", menu )
+			print "selectedPos=", selectedPos
 			if selectedPos >= 0:
-				title = menu[selectedPos]
-				link = stations[title]
-				links = [title, link]
-		else:
+				info = stations[selectedPos]
+		elif len(stations) == 1:
 			# return all radio live links found
-			links = stations.items()
+			info = stations[0]
 
 		xbmc.output("< getStationsPage()")
-		return links
+		return info
 
 	############################################################################################################
 	def _convertDurToMins(self, durStr):
@@ -589,9 +637,8 @@ def fetchURL(url, file='', isBinary=False, encodeURL=True):
 		opener = urllib.FancyURLopener()
 		fn, resp = opener.retrieve(safe_url, file, _report_hook)
 		opener.close()
-		if DEBUG:
-			print resp
-			# check correct content type
+		print resp
+		# check correct content type
 		content_type = resp["Content-Type"].lower()
 		if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
 			raise "Not Binary"
@@ -1219,6 +1266,164 @@ def unicodeToAscii(txt, charset='utf8'):
 		return newtxt
 	except:
 		return txt
+
+#################################################################################################################
+class RSSParser2:
+	def __init__(self):
+		xbmc.output("RSSParser2().init()")
+
+	# feeds the xml document from given url or file to the parser
+	def feed(self, url="", file="", doc="", title=""):
+		xbmc.output("> RSSParser2().feed()")
+		success = False
+		self.dom = None
+
+		if url:
+			xbmc.output("parseString from URL")
+			if not file:
+				dir = os.getcwd().replace(';','')
+				file = os.path.join(dir, "temp.xml")
+			doc = fetchURL(url, file)
+		elif file:
+			xbmc.output("parseString from FILE " + file)
+			doc = readFile(file)
+		else:
+			xbmc.output("parseString from DOC")
+
+		if doc:
+			success = self.__parseString(doc)
+
+		xbmc.output("< RSSParser2().feed() success: " + str(success))
+		return success
+
+	def __parseString(self, xmlDocument):
+		xbmc.output("> RSSParser2().__parseString()")
+		success = True
+		try:
+			self.dom = parseString(xmlDocument.encode( "utf-8" ))
+		except UnicodeDecodeError:
+			try:
+				xbmc.output("__parseString() UnicodeDecodeError, try unicodeToAscii")
+				self.dom = parseString(unicodeToAscii(xmlDocument))
+			except:
+				xbmc.output("__parseString() unicodeToAscii failed")
+				self.dom = parseString(xmlDocument)
+		except:
+			success = False
+
+		if not self.dom:
+			messageOK("XML Parser Failed","Empty/Bad XML file","Unable to parse data.")
+
+		xbmc.output("< RSSParser2().__parseString() success: " + str(success))
+		return success
+
+
+	# parses RSS document items and returns an list of objects
+	def __parseElements(self, tagName, elements, elementDict):
+		xbmc.output("> RSSParser2().__parseElements() element count=%s" % len(elements))
+
+		# extract required attributes from element attribute
+		def _get_element_attributes(el, attrNameList):
+			attrDataList = {}
+			for attrName in attrNameList:
+				data = el.getAttribute( attrName )
+				if data:
+					attrDataList[attrName] = data
+			return attrDataList
+		
+		objectsList = []
+		for index, el in enumerate(elements):
+			dict = {}
+			# check element attributes
+			elAttrItems = el.attributes.items()
+
+			# get data from item with attributes
+			if elAttrItems and elementDict.has_key(tagName):
+				attrDataList= _get_element_attributes(el, elementDict[tagName])
+				if attrDataList:
+					dict[tagName] = attrDataList
+
+			# get data from item
+			for elTagName, attrNameList in elementDict.items():
+				if elTagName == tagName:
+					# skip element tagName - already processed it attributes
+					continue
+
+				data = None
+
+				try:
+					# get value for tag (without any attributes)
+					data = el.getElementsByTagName(elTagName)[0].childNodes[0].data
+				except:
+					try:
+						# get required attributes from tag
+						subEl = el.getElementsByTagName(elTagName)[0]
+						attrItems = subEl.attributes.items()
+						data = _get_element_attributes(subEl, attrNameList)
+					except: pass
+
+				if data:
+#					xbmc.output("Tag: %s = %s" % (elTagName, data)
+					dict[elTagName] = data
+#				else:
+#					xbmc.output("Tag: %s No Data found" % (elTagName, )
+
+			if xbmc.output:
+				print "%s %s" % (index, dict)
+			objectsList.append(RSSNode(dict))
+
+		xbmc.output("< RSSParser2().__parseElements() No. objects= %s" % len(objectsList))
+		return objectsList
+
+
+	# parses the RSS document
+	def parse(self, tagName, elementDict):
+		xbmc.output("> RSSParser2().parse() tagName: %s %s" % (tagName,elementDict))
+
+		parsedList = None
+		if self.dom:
+			try:
+				elements = self.dom.getElementsByTagName(tagName)
+				parsedList = self.__parseElements(tagName, elements, elementDict)
+			except:
+				xbmc.output("exception No parent elements found for tagName")
+
+		xbmc.output("< RSSParser2().parse()")
+		return parsedList
+
+#################################################################################################################
+class RSSNode:
+	def __init__(self, elements):
+		self.elements = elements
+		
+	def getElement(self, element):
+		try:
+			return self.elements[element]
+		except:
+			return ""
+		
+	def getElementNames(self):
+		return self.elements.keys()
+		
+	def hasElement(self, element):
+		return self.elements.has_key(element)
+
+##############################################################################################################    
+def playMedia(filename):
+	xbmc.output("> playMedia() " + filename)
+	success = True
+
+	try:
+		xbmc.Player().play(filename)
+	except:
+		xbmc.output('xbmc.Player().play() failed trying xbmc.PlayMedia() ')
+		try:
+			cmd = 'xbmc.PlayMedia(%s)' % filename
+			xbmc.executebuiltin(cmd)
+		except:
+			success = False
+	xbmc.output("< playMedia() success=%s" % success)
+	return success
 
 #######################################################################################################################    
 # BEGIN !
