@@ -122,7 +122,7 @@
     <string id="1001">Momentan markierte Versionen prüfen...</string>
     <string id="1002">ist neuer</string>
     <string id="1003">Möchtest du aktualisieren?</string>
-    <string id="1004">Dateiliste wird geladen...</string>
+    <string id="1004">Abruf der Dateiliste...</string>
     <string id="1005">Bitte warten...</string>
     <string id="1006">Version</string>
     <string id="1007">Laden:</string>
@@ -130,7 +130,7 @@
     <string id="1009">Datei:</string>
 
     <!-- Update Error Msgs -->
-    <string id="1030">Keine neueren Versionen verfügbar!</string>
+    <string id="1030">Keine neuere Version verfügbar!</string>
     <string id="1031">Fehler beim Aktualisieren des Scripts!</string>
 
 </strings>
