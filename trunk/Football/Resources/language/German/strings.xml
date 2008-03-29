@@ -47,6 +47,8 @@
     <string id="366">Element auswählen</string>
     <string id="367">Wähle eine FOTO GALERIE</string>
     <string id="368">(Profil verfügbar)</string>
+    <string id="369">Wettbewerb auswählen</string>
+    <string id="370">Tabelle auswählen</string>
 
     <!-- menu options -->
     <string id="500">Beenden</string>
@@ -57,8 +59,8 @@
 
     <!-- settings options -->
     <string id="520">Ligen Teams leeren</string>
-    <string id="521">Script Readme zeigen</string>
-    <string id="522">Script ChangeLog zeigen</string>
+    <string id="521">Script Readme anzeigen</string>
+    <string id="522">Script ChangeLog anzeigen</string>
     <string id="523">Ändere DatenQuelle</string>
     <string id="524">Beim Starten nach Updates suchen?</string>
 
@@ -138,7 +140,7 @@
     <string id="1010">Script aktualisiert, Neustart folgt...</string>
 
     <!-- Update error messages -->
-    <string id="1030">Keine neueren Versionen gefunden!</string>
+    <string id="1030">Keine neuere Version gefunden!</string>
     <string id="1031">Es gab einen Fehler beim aktualisieren des Scripts!</string>
 
 </strings>
