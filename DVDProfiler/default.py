@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '26-03-2008'
+__date__ = '30-03-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -93,17 +93,20 @@ class DVDProfiler(xbmcgui.Window):
 		self.START_MODE_ONLINE = __language__(552)
 		self.START_MODE_MENU = __language__(553)
 
+		# order if important as a lookup index is used
+		self.startModeNames = [self.START_MODE_MENU, self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
+
 		self.SETTINGS_DEFAULTS = {
 			self.SETTING_SMB_USE : True,
 			self.SETTING_SMB_PATH : "smb://user:pass@OFFICE",
-			self.SETTING_SMB_PC_IP : "",		# empty so smb details incomplete by default
+			self.SETTING_SMB_PC_IP : "",						# empty so smb details incomplete by default
 			self.SETTING_SMB_FILENAME :  "collection.xml",
-			self.SETTING_START_MODE : self.START_MODE_MENU,
+			self.SETTING_START_MODE : 0,						# menu
 			self.SETTING_SMB_COLLECTION_DIR : "EXPORT",
 			self.SETTING_SMB_IMAGES_DIR : "IMAGES",
 			self.SETTING_SMB_DVDPRO_SHARE : "DVD Profiler",
 			self.SETTING_SMB_MOVIES_SHARE : "My Videos",
-			self.SETTING_CHECK_UPDATE : False,	# No
+			self.SETTING_CHECK_UPDATE : False,					# No
 			self.SETTING_LOCAL_MODE_MEDIA_LOC : "F:\Videos"
 			}
 
@@ -290,30 +293,29 @@ class DVDProfiler(xbmcgui.Window):
 	def startupMenu(self):
 		debug("> startupMenu()")
 		success = False
-		menu = [ __language__(500), self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
+		menu = [__language__(500)] + self.startModeNames[1:]      # excl Use Menu as we need to pick a mode
 
-		selectedPos = 0
-		startupMode = self.settings[self.SETTING_START_MODE]
+		startMode = self.settings[self.SETTING_START_MODE]
 		while not success:
 			self.isOnlineOnly = False
 			self.onlineAliasData = []
 
-			if startupMode == self.START_MODE_MENU:
+			if startMode == 0:                            		# self.START_MODE_MENU:
 				selectDialog = DialogSelect()
 				selectDialog.setup(__language__(553), width=300, rows=len(menu),banner=LOGO_FILENAME)
-				selectedPos, action = selectDialog.ask(menu, selectedPos)
-				if selectedPos <= 0:
+				startMode, action = selectDialog.ask(menu, startMode)
+				del selectDialog
+				if startMode <= 0:
 					break
-				startupMode = menu[selectedPos]
 			
 			# start according to startupMode
-			if startupMode == self.START_MODE_SMB:								# SMB
+			if startMode == 1:								    # SMB
 				self.settings[self.SETTING_SMB_USE] = True
 				success = self.startup()
-			elif startupMode == self.START_MODE_LOCAL:							# LOCAL
+			elif startMode == 2:							    # LOCAL
 				self.settings[self.SETTING_SMB_USE] = False
 				success = self.startup()
-			elif startupMode == self.START_MODE_ONLINE:							# ONLINE
+			elif startMode == 3:							    # ONLINE
 				self.settings[self.SETTING_SMB_USE] = False
 				self.isOnlineOnly = True
 				self.onlineAliasData = ManageOnlineCollection().ask()
@@ -321,7 +323,8 @@ class DVDProfiler(xbmcgui.Window):
 					success = self.startup()
 
 			if not success:
-				startupMode = self.START_MODE_MENU
+				startupMode = 0									# self.START_MODE_MENU
+
 
 		debug("< startupMenu() success="+str(success))
 		return success
@@ -1372,6 +1375,8 @@ class DVDProfiler(xbmcgui.Window):
 			elif menuOptions[selectedPos] == MENU_FETCH_ALL_IMAGES:
 				self.fetchAllImages()
 
+			del selectDialog
+
 		debug ("< mainMenu() restart: " + str(restart))
 		return restart
 
@@ -1400,7 +1405,9 @@ class DVDProfiler(xbmcgui.Window):
 			menu.append(xbmcgui.ListItem(OPT_CHECK_SCRIPT_UPDATE, value))
 			menu.append(xbmcgui.ListItem(OPT_UPDATE_SCRIPT))
 			menu.append(xbmcgui.ListItem(OPT_CLEAR_CACHE))
-			menu.append(xbmcgui.ListItem(OPT_START_MODE, self.settings[self.SETTING_START_MODE]))
+			# translate SETTING_START_MODE into a language name
+			name = self.startModeNames[self.settings[self.SETTING_START_MODE]]
+			menu.append(xbmcgui.ListItem(OPT_START_MODE, name))
 			menu.append(xbmcgui.ListItem(OPT_LOCAL_MODE_MEDIA_LOC, self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC]))
 			menu.append(xbmcgui.ListItem(OPT_VIEW_README))
 			menu.append(xbmcgui.ListItem(OPT_VIEW_CHANGELOG))
@@ -1432,13 +1439,16 @@ class DVDProfiler(xbmcgui.Window):
 			elif selectedOpt == OPT_CLEAR_CACHE:
 				restart = self.clearCache()
 			elif selectedOpt == OPT_START_MODE:
-				menu = [ __language__(500), self.START_MODE_MENU, self.START_MODE_SMB, self.START_MODE_LOCAL, self.START_MODE_ONLINE]
+				menuStartMode = [ __language__(500) ] + self.startModeNames
 				selectDialogStartMode = DialogSelect()
-				selectDialogStartMode.setup(__language__(527),width=350, rows=len(menu))
-				selectedPos, action = selectDialogStartMode.ask(menu)
-				if selectedPos > 0:
-					self.settings[self.SETTING_START_MODE] = menu[selectedPos]
+				selectDialogStartMode.setup(__language__(527),width=350, rows=len(menuStartMode))
+				selectedPosStartMode, action = selectDialogStartMode.ask(menuStartMode)
+				if selectedPosStartMode > 0:
+					# translate selectedPos into startMode
+					selectedPosStartMode -=1 # allow for exit opt
+					self.settings[self.SETTING_START_MODE] = selectedPosStartMode
 					saveFileObj(self.SETTINGS_FILENAME, self.settings)
+				del selectDialogStartMode
 			elif selectedOpt == OPT_VIEW_README:
 				fn = getReadmeFilename(mylanguage)
 				textBoxDialog = TextBoxDialog()
@@ -1453,6 +1463,8 @@ class DVDProfiler(xbmcgui.Window):
 				if value:
 					self.settings[self.SETTING_LOCAL_MODE_MEDIA_LOC] = value
 					saveFileObj(self.SETTINGS_FILENAME, self.settings)
+
+			del selectDialog
 
 		debug ("< configMenu().ask() restart="+str(restart))
 		return restart
@@ -1490,9 +1502,9 @@ class DVDProfiler(xbmcgui.Window):
 			menu.append(xbmcgui.ListItem(MENU_OPT_SMB_CONN_CHECK))
 			return menu
 
+		changed = False
 		selectedPos = 0	# start on exit
 		while True:
-			changed = False
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
 			selectDialog.setup(__language__(527), width=620, rows=len(menu))
@@ -1575,6 +1587,8 @@ class DVDProfiler(xbmcgui.Window):
 
 			if changed:
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
+
+			del selectDialog
 
 		debug ("< configSMB changed="+str(changed))
 		return changed
