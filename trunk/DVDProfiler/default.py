@@ -1271,7 +1271,7 @@ class DVDProfiler(xbmcgui.Window):
 				else:
 					url = "%s/mpimages/%s/%s" % (aliasURL, coverFilename[:2],coverFilename)
 				dialogProgress.create(__language__(216), coverFilename)
-				success = fetchCookieURL(url, localFile, isImage=True)
+				success = fetchCookieURL(url, localFile, isBinary=True)
 				dialogProgress.close()
 			elif self.settings[self.SETTING_SMB_USE]:
 				smbPath = "%s/%s/%s/%s" % (self.settings[self.SETTING_SMB_PATH],
