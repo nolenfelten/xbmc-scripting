@@ -20,8 +20,10 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '21-03-2008'
+__date__ = '27-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
+
+DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
 
 # setup cookiejar
 cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
@@ -119,7 +121,7 @@ KEYBOARD_DEL_BACK       = 61448
 # ACTION CODE GROUPS
 SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
 EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
-CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, REMOTE_BACK, KEYBOARD_B, )
+CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, KEYBOARD_B, )
 CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, ACTION_REMOTE_STOP,)
 LEFT_STICK_CLICK = (ACTION_LEFT_STICK, PAD_LEFT_STICK, )
 RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
@@ -175,7 +177,7 @@ REZ_H = 576
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = False
+DEBUG = True
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -978,7 +980,7 @@ def isInt(s):
 # if success: returns the html page given in url as a string
 # else: return -1 for Exception None for HTTP timeout, '' for empty page otherwise page data
 #################################################################################################################
-def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True):
+def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True):
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
 	else:
@@ -1020,7 +1022,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 			print "file=", file
 			print "params=", params
 			print "headers=", headers
-			print "isImage=", isImage
+			print "isBinary=", isBinary
 
 		if params:
 			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
@@ -1031,22 +1033,22 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 			print resp
 			content_type = resp["Content-Type"].lower()
 			# fail if expecting an image but not corrent type returned
-			if isImage and find(content_type,"image") == -1:     # not found
-				raise "Not Image"
+			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+				raise "Not Binary"
 
 		opener.close()
 		del opener
 		urllib.urlcleanup()
 	except IOError, errobj:
 		ErrorCode(errobj)
-	except "Not Image":
-		debug("Returned Non image content")
+	except "Not Binary":
+		debug("Returned Non Binary content")
 		data = False
 		success = False
 	except:
 		handleException("fetchURL()")
 	else:
-		if not isImage:
+		if not isBinary:
 			data = readFile(file)		# read retrieved file
 		else:
 			data = fileExist(file)		# check image file exists
@@ -1060,7 +1062,7 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 #################################################################################################################
 # fetch using urllib2 and Cookies
 #################################################################################################################
-def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
+def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeURL=True, newRequest=True):
 	debug("> bbbLib.fetchCookieURL() ")
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
@@ -1080,7 +1082,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 			print "fn=", fn
 			print "params=", params
 			print "headers=", headers
-			print "isImage=", isImage
+			print "isBinary=", isBinary
 
 		if newRequest:
 			debug("create new Request")
@@ -1106,7 +1108,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 	else:
 		# write to file if required
 		if fn and data:
-			if isImage:
+			if isBinary:
 				mode = "wb"
 			else:
 				mode = "w"
@@ -1121,7 +1123,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 				handle.fp._sock.recv=None # hacky avoidance of uncleared handles bug
 				handle.close()
 				del handle
-				if isImage:
+				if isBinary:
 					data = True
 			except:
 				handleException()
@@ -1494,8 +1496,8 @@ def prefixDirPath(fn, dirPath):
 
 #############################################################################################################
 # pluginType = music, video, pictures
-def installPlugin(pluginType, name='', checkInstalled=False):
-	debug("> installPlugin() " + pluginType + " " + name + " checkInstalled=" + str(checkInstalled))
+def installPlugin(pluginType, name='', checkOnly=True):
+	debug("> installPlugin() %s %s checkOnly=%s"  % (pluginType, name, checkOnly))
 	exists = False
 	if not name:
 		name = __scriptname__
@@ -1510,24 +1512,23 @@ def installPlugin(pluginType, name='', checkInstalled=False):
 		# set not exist if; path/file missing or previous installed is older
 		copyFromFileSecs = os.path.getmtime(copyFromFile)
 		copyToFileSecs = os.path.getmtime(copyToFile)
-		xbmc.output( "fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
+		debug( "comparing fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
 		exists = fileExist(copyToFile) and copyFromFileSecs <= copyToFileSecs
 	except:
-		# paths dont exist. This is OK if we're just checking
-		print "paths exception"
+		debug( "paths dont exist. This is OK if we're just checking" )
 
-	if not checkInstalled:
-		# not checking, do installation
+	if not checkOnly:
+		# do installation
 		try:
 			from shutil import copytree, rmtree
 			try:
 				rmtree( copyToPath )
 			except: pass
 			copytree( copyFromPath, copyToPath )
-			dialogOK(__language__(490), __language__(491))
+			dialogOK(__scriptname__, "In plugins 'Add Source' to complete installation.", name)
 		except:
 			msg = "Plugin Failed\n" + str(sys.exc_info()[ 1 ])
-			dialogOK(__language__(0), msg)
+			dialogOK(__scriptname__, msg)
 
-	debug("< installPlugin() exists="+str(exists))
+	debug("< installPlugin() exists=%s" % exists)
 	return exists

@@ -27,7 +27,7 @@ socket.setdefaulttimeout( 10 )
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
 	def __init__( self, language, script ):
-		xbmc.output( "Update().__init__ script=" + script )
+		xbmc.output( "Update().__init__" )
 		self._ = language
 		self.script = script.replace( ' ', '%20' )
 		self.base_url = "http://xbmc-scripting.googlecode.com/svn"

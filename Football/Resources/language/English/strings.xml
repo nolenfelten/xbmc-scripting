@@ -62,9 +62,10 @@
     <string id="522">View Script ChangeLog</string>
     <string id="523">Select DataSource</string>
     <string id="524">Check For Script Update On Startup?</string>
+    <string id="525">Content List Font</string>
 
     <!-- misc menu/prompts -->
-    <string id="530">Live Videprinter</string>
+    <string id="530">Live Results</string>
     <string id="531">Internationals</string>
     <string id="532">UEFA Cup</string>
     <string id="533">Teams</string>
