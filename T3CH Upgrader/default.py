@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '09-03-2008'
-__version__ = "1.5"
+__date__ = '02-04-2008'
+__version__ = "1.5.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -1688,14 +1688,14 @@ class TextBoxDialogXML( xbmcgui.WindowXML ):
 
 	def onAction( self, action ):
 #		print( "onAction(): actionID=%i buttonCode=%i " % ( action.getId(), action.getButtonCode()) )
-		if ( action.getButtonCode() in CANCEL_DIALOG or action.getId() in CANCEL_DIALOG):
-			self.close()
+		if action:
+			if action.getButtonCode() in CANCEL_DIALOG or action.getId() in CANCEL_DIALOG:
+				self.close()
 
 	def ask(self, title, text ):
 		xbmc.output("TextBoxDialogXML().ask()")
 		self.title = title
 		self.text = text
-
 		self.doModal()		# causes window to be drawn
 
 #################################################################################################################
