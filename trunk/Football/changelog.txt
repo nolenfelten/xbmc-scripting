@@ -1,9 +1,12 @@
  Version     Date        Change
- v1.4       18-03-2008   Fix: Data retrieval in several areas (all datasources) caused by web site html changes.
+ v1.4.1      30-03-2008  Fix: Large change for code to use language string ID's not the string itself as was causing hangs.
+                         New: Maltese language translation (thanks Michel)
+                         New: Setting option to set information font size.
+ v1.4        18-03-2008  Fix: Data retrieval in several areas (all datasources) caused by web site html changes.
                          New: Language support (German, Swedish incl. - More translations wanted!)
                          New: Script update support
                          New: Saves settings to UserData
- v1.3a       20-04-06   New: Added Cups to dataSource SoccerStand.com 
+ v1.3a       20-04-06    New: Added Cups to dataSource SoccerStand.com 
                          New: Added more countries to SoccerStand.com
                          New: Added African league to dataSource BBC
  v1.3        17-04-06    Change: Gossip & Transfers moved to MainMenu

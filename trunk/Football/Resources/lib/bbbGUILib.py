@@ -63,6 +63,8 @@ class DialogSelect(xbmcgui.WindowDialog):
 		self.panelCI = None
 		self.menuCL = None
 		self.lastAction = 0
+		self.useY = False
+		self.useX = False
 
 	def setup(self, title='',width=430, height=490, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
 			  imageWidth=0,imageHeight=22, itemHeight=25, rows=0, \
@@ -164,7 +166,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 		debug("< DialogSelect().setup()")
 
 	def onAction(self, action):
-		if action == 0:
+		if not action:
 			return
 #		debug("DialogSelect.onAction()")
 		self.lastAction = action
