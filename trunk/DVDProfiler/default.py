@@ -389,7 +389,7 @@ class DVDProfiler(xbmcgui.Window):
 		while not success:
 			if forceConfig or not self._checkSMBSettings():
 				if not forceConfig:
-					dialogOK(__language__(104),__language__(105))
+					dialogOK(__language__(959),__language__(105))
 				self.configSMB()
 				forceConfig = False
 				continue									# loop to re-check SMB setup
@@ -400,16 +400,14 @@ class DVDProfiler(xbmcgui.Window):
 			# check SMB
 			smbPath = "%s/%s" % (self.settings[self.SETTING_SMB_PATH], self.settings[self.SETTING_SMB_DVDPRO_SHARE])
 			self.remote, remoteInfo = smbConnect(self.settings[self.SETTING_SMB_PC_IP], smbPath)
-			if not self.remote or not remoteInfo:
-				title = __language__(106)
-			else:
+			if self.remote and remoteInfo:
 				smbPath = self.makeDVDProSMBPath()
 				if not fileExist(self.localCollectionFilename) or \
 						isNewSMBFile(smbPath, self.localCollectionFilename, \
 							self.remote, self.settings[self.SETTING_SMB_PC_IP]):
 					success = self.fetchCollectionSMB(True)
 					if not success:
-						title = __language__(107)
+						title = __language__(953)
 				else:
 					success = True
 
@@ -1518,8 +1516,6 @@ class DVDProfiler(xbmcgui.Window):
 			if value == None:
 				value = ''
 
-			debug("selected key = " + key)
-			debug("selected value = " + value)
 			if key == MENU_OPT_SMB_PATH:
 				# this is now just the SMB base path, no sharename on end
 				smbPath = doKeyboard(value, MENU_OPT_SMB_PATH, KBTYPE_ALPHA)
@@ -1534,7 +1530,7 @@ class DVDProfiler(xbmcgui.Window):
 			elif key == MENU_OPT_SMB_PC_IP:
 				ip = doKeyboard(value, __language__(218), KBTYPE_IP)	# IP dialog)
 				if not isIP(ip):
-					messageOK(__language__(108),__language__(219))
+					messageOK(MENU_OPT_SMB_PC_IP,__language__(975))
 				else:
 					self.settings[self.SETTING_SMB_PC_IP] = ip
 					changed = True

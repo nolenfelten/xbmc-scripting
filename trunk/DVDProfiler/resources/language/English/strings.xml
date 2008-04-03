@@ -9,11 +9,8 @@
     <string id="101">Startup Failed!</string>
     <string id="102">Collection not retrieved or[CR]XML export file is empty ?</string>
     <string id="103">Local Collection file missing</string>
-    <string id="104">SMB Setup Incomplete!</string>
+    <string id="104">-</string>
     <string id="105">Please configure or Disable SMB</string>
-    <string id="106">SMB Connection Failed</string>
-    <string id="107">SMB Fetch Collection Failed</string>
-    <string id="108">Invalid IP Format</string>
     <string id="109">Unknown Online Alias: </string>
     <string id="110">Empty Online Collection: </string>
     <string id="111">Duplicate Alias!</string>
@@ -155,6 +152,34 @@
     <string id="564">Edit</string>
     <string id="565">Select</string>
     <string id="566">(Delete: Highlight and Press A)</string>
+
+    <!-- smbLib -->
+    <string id="950">SMB Path and/or Host IP are missing!</string>
+    <string id="951">SMB Error!</string>
+    <string id="952">SMB connection failed!</string>
+    <string id="953">Check PCName and IP are correct</string>
+    <string id="954">SMB Login Failed!</string>
+    <string id="955">Use PCNAME not IP in SMB path!</string>
+    <string id="956">SMB Auto Discover IP Failed!</string>
+    <string id="957">SMB Fetch Error!</string>
+    <string id="958">SMB Send Error!</string>
+    <string id="959">SMB Setup Incomplete!</string>
+    <string id="960">SMB Connection ...</string>
+    <string id="961">SMB connection success</string>
+    <string id="962">SMB Fetching file ...</string>
+    <string id="963">SMB Sending file ...</string>
+    <string id="964">SMB Please wait ...</string>
+    <string id="965">Remote filename is missing!</string>
+    <string id="966">No remote connection!</string>
+    <string id="967">Checking for updated file ...</string>
+    <string id="968">Setup SMB now ?</string>
+    <string id="969">SMB Path:</string>
+    <string id="970">SMB IP:</string>
+    <string id="971">Select An Existing XBMC SMB Path</string>
+    <string id="972">Check SMB Connection</string>
+    <string id="973">Correct IP For PC Name: %s ?</string>
+    <string id="974">Invalid SMB path!</string>
+    <string id="975">Invalid IP Format!</string>
 
     <!-- imdbWin lib -->
     <string id="980">IMDB Lookup</string>
