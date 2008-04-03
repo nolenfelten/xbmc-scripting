@@ -10,19 +10,19 @@ Changes:
 02-01-2008 Fixed error in downloadVersion()
 06-02-2008 Changed to update into same folder
 28-02-2008 removed a syntax error when not isSilent
-20-02-2008 Altered to save script backup into Q:\\scripts\\backups subfolder. Makes the scripts folder cleaner.
+20-03-2008 Altered to save script backup into Q:\\scripts\\backups subfolder. Makes the scripts folder cleaner.
 """
 
 import sys
 import os
 import xbmcgui, xbmc
 import urllib
-import socket
+#import socket
 import re
 import traceback
 from shutil import copytree, rmtree
 
-socket.setdefaulttimeout( 10 )
+#socket.setdefaulttimeout( 10 )
 
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """

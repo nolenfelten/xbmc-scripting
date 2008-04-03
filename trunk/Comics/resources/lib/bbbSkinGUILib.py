@@ -17,7 +17,7 @@ TEXTBOX_DIALOG_XML = "script-bbb-fullscreen-textbox.xml"
 class TextBoxDialogXML( xbmcgui.WindowXML ):
 	""" Create a skinned textbox window """
 	def __init__( self, *args, **kwargs):
-		pass
+		self.EXIT_CODES = (9, 10, 216, 257, 275, 216, 61506, 61467,)
 		
 	def onInit( self ):
 		xbmc.output( "TextBoxDialogXML.onInit()" )
@@ -36,8 +36,7 @@ class TextBoxDialogXML( xbmcgui.WindowXML ):
 		buttonCode =  action.getButtonCode()
 		actionID   =  action.getId()
 #		print( "TextBoxDialogXML.onAction(): actionID=%i buttonCode=%i " % ( actionID, buttonCode) )
-		EXIT_CODES = (9, 10, 257, 275, 216, 61506, 61467)
-		if actionID in EXIT_CODES or buttonCode in EXIT_CODES:
+		if actionID in self.EXIT_CODES or buttonCode in self.EXIT_CODES:
 			self.close()
 
 	def ask(self, title="", text="", fn=None ):
