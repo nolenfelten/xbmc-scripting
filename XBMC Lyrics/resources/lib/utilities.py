@@ -17,7 +17,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.7", )
+SETTINGS_VERSIONS = ( "1.5.8", )
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
 BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "settings.txt" ) )
@@ -124,20 +124,21 @@ def make_legal_filepath( path, compatible=False, extension=True ):
 
 class Settings:
     """ Settings class """
-    def get_settings( self ):
+    def get_settings( self, defaults=False ):
         """ read settings """
         try:
             settings = {}
+            if ( defaults ): raise
             settings_file = open( BASE_SETTINGS_PATH, "r" )
             settings = eval( settings_file.read() )
             settings_file.close()
             if ( settings[ "version" ] not in SETTINGS_VERSIONS ):
                 raise
         except:
-            settings = self._use_defaults( settings )
+            settings = self._use_defaults( settings, save=( defaults == False ) )
         return settings
 
-    def _use_defaults( self, current_settings=None ):
+    def _use_defaults( self, current_settings=None, save=True ):
         """ setup default values if none obtained """
         LOG( LOG_NOTICE, "%s (ver: %s) used default settings", __scriptname__, __version__ )
         settings = {}
@@ -158,7 +159,8 @@ class Settings:
             # add default values for missing settings
             settings[ key ] = current_settings.get( key, defaults[ key ] )
         settings[ "version" ] = __version__
-        ok = self.save_settings( settings )
+        if ( save ):
+            ok = self.save_settings( settings )
         return settings
 
     def save_settings( self, settings ):

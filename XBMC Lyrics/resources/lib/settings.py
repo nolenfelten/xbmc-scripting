@@ -30,9 +30,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._set_restart_required()
         self._set_controls_values()
 
-    def _get_settings( self ):
+    def _get_settings( self, defaults=False ):
         """ reads settings """
-        self.settings = Settings().get_settings()
+        self.settings = Settings().get_settings( defaults=defaults )
 
     def _set_labels( self ):
         xbmcgui.lock()
@@ -44,11 +44,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 252 ).setLabel( _( 252 ) )
             self.getControl( 253 ).setLabel( _( 253 ) )
             self.getControl( 254 ).setLabel( _( 254 ) )
+            self.getControl( 255 ).setLabel( _( 255 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
-            for x in range( 1, len( self.settings ) ):
-                self.getControl( 200 + x ).setLabel( _( 200 + x ) )
+            #for x in range( 1, len( self.settings ) ):
+            #    self.getControl( 200 + x ).setLabel( _( 200 + x ) )
         except: pass
         xbmcgui.unlock()
 
@@ -59,6 +60,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.functions[ 252 ] = self._update_script
         self.functions[ 253 ] = self._show_credits
         self.functions[ 254 ] = self._play_music
+        self.functions[ 255 ] = self._get_defaults
         for x in range( 1, len( self.settings ) ):
             self.functions[ 200 + x ] = eval( "self._change_setting%d" % x )
 
@@ -75,16 +77,20 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.scrapers_title = []
         pattern = """__title__.*?["'](.*?)["']"""
         base_path = os.path.join( BASE_RESOURCE_PATH, "scrapers" )
-        self.scrapers = os.listdir( base_path )
-        for scraper in self.scrapers:
-            try:
-                file_object = open( os.path.join( base_path, scraper, "lyricsScraper.py" ), "r" )
-                file_data = file_object.read()
-                file_object.close()
-                title = re.findall( pattern, file_data )
-                if ( not title ): raise
-            except: title = [ scraper ]
-            self.scrapers_title += title
+        self.scrapers = []
+        scrapers = os.listdir( base_path )
+        for scraper in scrapers:
+            if ( os.path.isdir( os.path.join( base_path, scraper ) ) ):
+                try:
+                    self.scrapers += [ scraper ]
+                    file_object = open( os.path.join( base_path, scraper, "lyricsScraper.py" ), "r" )
+                    file_data = file_object.read()
+                    file_object.close()
+                    title = re.findall( pattern, file_data )
+                    if ( not title ): raise
+                except:
+                    title = [ scraper ]
+                self.scrapers_title += title
         try: self.current_scraper = self.scrapers.index( self.settings[ "scraper" ] )
         except: self.current_scraper = 0
 
@@ -103,22 +109,31 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.getControl( 221 ).setLabel( self.scrapers_title[ self.current_scraper ] )
-            self.getControl( 222 ).setSelected( self.settings[ "save_lyrics" ] )
+            self.getControl( 201 ).setLabel( _( 201 ), label2=self.scrapers_title[ self.current_scraper ] )
+            self.getControl( 202 ).setLabel( _( 202 ) )
+            self.getControl( 202 ).setSelected( self.settings[ "save_lyrics" ] )
+            self.getControl( 203 ).setLabel( _( 203 ), label2=self.settings[ "lyrics_path" ] )
             self.getControl( 203 ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.getControl( 223 ).setLabel( self.settings[ "lyrics_path" ] )
-            self.getControl( 223 ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.getControl( 224 ).setSelected( self.settings[ "smooth_scrolling" ] )
-            self.getControl( 225 ).setSelected( self.settings[ "show_viz" ] )
-            self.getControl( 226 ).setSelected( self.settings[ "use_filename" ] )
-            self.getControl( 227 ).setLabel( self.filename_format[ self.settings[ "filename_format" ] ] )
-            self.getControl( 228 ).setLabel( self.settings[ "music_path" ] )
-            self.getControl( 229 ).setSelected( self.settings[ "shuffle" ] )
-            self.getControl( 230 ).setSelected( self.settings[ "compatible" ] )
-            self.getControl( 231 ).setSelected( self.settings[ "use_extension" ] )
+            self.getControl( 204 ).setLabel( _( 204 ) )
+            self.getControl( 204 ).setSelected( self.settings[ "smooth_scrolling" ] )
+            self.getControl( 205 ).setLabel( _( 205 ) )
+            self.getControl( 205 ).setSelected( self.settings[ "show_viz" ] )
+            self.getControl( 206 ).setLabel( _( 206 ) )
+            self.getControl( 206 ).setSelected( self.settings[ "use_filename" ] )
+            self.getControl( 207 ).setLabel( _( 207 ), label2=self.filename_format[ self.settings[ "filename_format" ] ] )
+            self.getControl( 208 ).setLabel( _( 208 ), label2=self.settings[ "music_path" ] )
+            self.getControl( 209 ).setLabel( _( 209 ) )
+            self.getControl( 209 ).setSelected( self.settings[ "shuffle" ] )
+            self.getControl( 210 ).setLabel( _( 210 ) )
+            self.getControl( 210 ).setSelected( self.settings[ "compatible" ] )
+            self.getControl( 210 ).setEnabled( self.settings[ "save_lyrics" ] )
+            self.getControl( 211 ).setLabel( _( 211 ) )
+            self.getControl( 211 ).setSelected( self.settings[ "use_extension" ] )
+            self.getControl( 211 ).setEnabled( self.settings[ "save_lyrics" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
             self.getControl( 254 ).setEnabled( not xbmc.Player().isPlayingAudio() )
-        except: pass
+        except:
+            pass
         xbmcgui.unlock()
 
     def _change_setting1( self ):
@@ -225,6 +240,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmc.Player().play( playlist )
         xbmc.executebuiltin( "RunScript(%s)" % os.path.join( os.getcwd().replace( ";", "" ), "default.py" ) )
         
+    def _get_defaults( self ):
+        """ resets values to defaults """
+        self._get_settings( defaults=True )
+        self._set_controls_values()
+
     def _close_dialog( self, changed=False, restart=False, refresh=False ):
         """ closes this dialog window """
         self.changed = changed

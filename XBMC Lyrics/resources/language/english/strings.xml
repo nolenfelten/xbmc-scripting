@@ -40,8 +40,10 @@
     <string id="252">Update</string>
     <string id="253">Credits</string>
     <string id="254">Play Music</string>
-    <string id="255">Restart</string>
-    <string id="256">Later</string>
+    <string id="255">Defaults</string>
+
+    <string id="270">Restart</string>
+    <string id="271">Later</string>
     
     <!-- Special XBMC strings -->
     <string id="589">Party Mode</string>
