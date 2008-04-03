@@ -11,8 +11,8 @@ import os, re, unicodedata, traceback
 import urllib, urllib2
 from string import strip, replace, find, rjust
 import sgmllib
-from threading import Thread
 from xml.dom.minidom import parse, parseString
+from shutil import rmtree
 import cookielib
 #import socket
 #socket.setdefaulttimeout( 10 )
@@ -20,8 +20,10 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '29-02-2008'
+__date__ = '27-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
+
+DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
 
 # setup cookiejar
 cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
@@ -56,7 +58,7 @@ ACTION_RIGHT_STICK_UP	= 88
 ACTION_RIGHT_STICK_DOWN	= 89
 ACTION_RIGHT_STICK_RIGHT= 124
 ACTION_RIGHT_STICK_LEFT	= 125
-ACTION_REMOTE_RECORD			= 2010  # record button on remote - assigned in keymap.xml
+ACTION_REMOTE_RECORD	= 2010  # record button on remote - assigned in keymap.xml
 
 PAD_A                        = 256
 PAD_B                        = 257
@@ -66,26 +68,26 @@ PAD_BLACK                    = 260
 PAD_WHITE                    = 261
 PAD_LEFT_TRIGGER             = 262
 PAD_RIGHT_TRIGGER            = 263
-PAD_LEFT_STICK         = 264
-PAD_RIGHT_STICK        = 265
-PAD_RIGHT_STICK_UP     = 266 # right thumb stick directions
-PAD_RIGHT_STICK_DOWN   = 267 # for defining different actions per direction
-PAD_RIGHT_STICK_LEFT   = 268
-PAD_RIGHT_STICK_RIGHT  = 269
-PAD_DPAD_UP             = 270
-PAD_DPAD_DOWN           = 271
-PAD_DPAD_LEFT           = 272
-PAD_DPAD_RIGHT          = 273
-PAD_START               = 274
-PAD_BACK                = 275
+PAD_LEFT_STICK              = 264
+PAD_RIGHT_STICK             = 265
+PAD_RIGHT_STICK_UP          = 266 # right thumb stick directions
+PAD_RIGHT_STICK_DOWN        = 267 # for defining different actions per direction
+PAD_RIGHT_STICK_LEFT        = 268
+PAD_RIGHT_STICK_RIGHT       = 269
+PAD_DPAD_UP                  = 270
+PAD_DPAD_DOWN                = 271
+PAD_DPAD_LEFT                = 272
+PAD_DPAD_RIGHT               = 273
+PAD_START                    = 274
+PAD_BACK                     = 275
 PAD_LEFT_STICK          = 276
 PAD_RIGHT_STICK         = 277
-PAD_LEFT_ANALOG_TRIGGER = 278
+PAD_LEFT_ANALOG_TRIGGER      = 278
 PAD_RIGHT_ANALOG_TRIGGER= 279
-PAD_LEFT_STICK_UP      = 280 # left thumb stick  directions
-PAD_LEFT_STICK_DOWN    = 281 # for defining different actions per direction
-PAD_LEFT_STICK_LEFT    = 282
-PAD_LEFT_STICK_RIGHT   = 283
+PAD_LEFT_STICK_UP           = 280 # left thumb stick  directions
+PAD_LEFT_STICK_DOWN         = 281 # for defining different actions per direction
+PAD_LEFT_STICK_LEFT         = 282
+PAD_LEFT_STICK_RIGHT        = 283
 
 REMOTE_LEFT             = 169
 REMOTE_RIGHT            = 168
@@ -119,7 +121,7 @@ KEYBOARD_DEL_BACK       = 61448
 # ACTION CODE GROUPS
 SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
 EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
-CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, REMOTE_BACK, KEYBOARD_B, )
+CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, KEYBOARD_B, )
 CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, ACTION_REMOTE_STOP,)
 LEFT_STICK_CLICK = (ACTION_LEFT_STICK, PAD_LEFT_STICK, )
 RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
@@ -220,15 +222,16 @@ def makeScriptDataDir():
 #############################################################################################################
 def makeDir(dir):
 	try:
-		os.mkdir( dir )
+		os.makedirs( dir )
 		debug("bbbLib.created dir: " + dir)
 	except: pass
 
 #############################################################################################################
-def removeDir(dir, title="", msg="", msg2=""):
-	if xbmcgui.Dialog().yesno(title, msg, msg2):
+def removeDir(dir, title="", msg="", msg2="", force=False):
+	if force or xbmcgui.Dialog().yesno(title, msg, msg2):
 		try:
-			os.path.rmdir(dir)
+			rmtree(dir,ignore_errors=True)
+			debug("removeDir() done %s" % dir)
 		except: pass
 	
 #################################################################################################################
@@ -977,7 +980,7 @@ def isInt(s):
 # if success: returns the html page given in url as a string
 # else: return -1 for Exception None for HTTP timeout, '' for empty page otherwise page data
 #################################################################################################################
-def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True):
+def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True):
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
 	else:
@@ -994,17 +997,11 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 				dialogProgress.update( percent )
 		if ( dialogProgress.iscanceled() ): raise
 
+	success = False
 	data = None
 	if not file:
 		# create temp file if needed
 		file = os.path.join(os.getcwd().replace( ";", "" ), "temp.html")
-
-	if DEBUG:
-		print "safe_url=", safe_url
-		print "file=", file
-		print "params=", params
-		print "headers=", headers
-		print "isImage=", isImage
 
 	# remove destination file if exists already
 	deleteFile(file)
@@ -1020,6 +1017,13 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 			for name, value  in headers.items():
 				opener.addheader(name, value)
 
+		if DEBUG:
+			print "safe_url=", safe_url
+			print "file=", file
+			print "params=", params
+			print "headers=", headers
+			print "isBinary=", isBinary
+
 		if params:
 			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
 		else:
@@ -1027,27 +1031,38 @@ def fetchURL(url, file='', params='', headers={}, isImage=False, encodeURL=True)
 
 		if DEBUG:
 			print resp
+			content_type = resp["Content-Type"].lower()
+			# fail if expecting an image but not corrent type returned
+			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+				raise "Not Binary"
 
 		opener.close()
 		del opener
 		urllib.urlcleanup()
 	except IOError, errobj:
 		ErrorCode(errobj)
+	except "Not Binary":
+		debug("Returned Non Binary content")
+		data = False
+		success = False
 	except:
 		handleException("fetchURL()")
 	else:
-		if not isImage:
+		if not isBinary:
 			data = readFile(file)		# read retrieved file
 		else:
 			data = fileExist(file)		# check image file exists
 
-	debug( "< fetchURL success=" + str(data != None))
+		if data:
+			success = True
+
+	debug( "< fetchURL success=%s" % success)
 	return data
 
 #################################################################################################################
 # fetch using urllib2 and Cookies
 #################################################################################################################
-def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL=True, newRequest=True):
+def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeURL=True, newRequest=True):
 	debug("> bbbLib.fetchCookieURL() ")
 	if encodeURL:
 		safe_url = urllib.quote_plus(url,'/:&?=+#@')
@@ -1067,7 +1082,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 			print "fn=", fn
 			print "params=", params
 			print "headers=", headers
-			print "isImage=", isImage
+			print "isBinary=", isBinary
 
 		if newRequest:
 			debug("create new Request")
@@ -1093,7 +1108,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 	else:
 		# write to file if required
 		if fn and data:
-			if isImage:
+			if isBinary:
 				mode = "wb"
 			else:
 				mode = "w"
@@ -1108,7 +1123,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isImage=False, encodeURL
 				handle.fp._sock.recv=None # hacky avoidance of uncleared handles bug
 				handle.close()
 				del handle
-				if isImage:
+				if isBinary:
 					data = True
 			except:
 				handleException()
@@ -1166,8 +1181,10 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 
 #############################################################################################################
 def safeFilename(path):
-	head, tail = os.path.split(path.replace( "\\", "/" ))
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!]', '_', tail))
+#	head, tail = os.path.split(path.replace( "\\", "/" ))
+	head, tail = os.path.split(path)
+	name, ext = os.path.splitext(tail)
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', '_', name) + ext)
 
 #################################################################################################################
 # Does a direct image URL exist in string ?
@@ -1189,7 +1206,7 @@ def isHTMLLink(url):
 	return searchRegEx(url, '(html|htm)$')
 
 ######################################################################################
-def loadFileObj( filename, dataType ):
+def loadFileObj( filename, dataType={} ):
     debug( "loadFileObj() " + filename)
     try:
         file_handle = open( filename, "r" )
@@ -1199,8 +1216,8 @@ def loadFileObj( filename, dataType ):
         # reset to empty according to dataType
         if isinstance(dataType, dict):
             loadObj = {}
-        elif isinstance(dataType, list):
-            loadObj = []
+        elif isinstance(dataType, list) or isinstance(dataType, tuple):
+            loadObj = ()
         else:
             loadObj = None
     return loadObj
@@ -1232,7 +1249,7 @@ def listDir(path, ext='', fnRE='', getFullFilename=False, lower=False, upper=Fal
 			if not ext or ex.lower() == ext:
 				found = True
 				if fnRE:
-					matches = re.search(fnRE, fn)
+					matches = re.search(fnRE, fn, re.IGNORECASE)
 					if not matches:
 						found = False
 
@@ -1352,7 +1369,6 @@ class RSSParser2:
 	# parses RSS document items and returns an list of objects
 	def __parseElements(self, tagName, elements, elementDict):
 		debug("> RSSParser2().__parseElements() element count=%s" % len(elements))
-
 
 		# extract required attributes from element attribute
 		def _get_element_attributes(el, attrNameList):
@@ -1477,3 +1493,42 @@ def prefixDirPath(fn, dirPath):
 	if not fn.startswith(dirPath):
 		return os.path.join(dirPath, fn)
 	return fn
+
+#############################################################################################################
+# pluginType = music, video, pictures
+def installPlugin(pluginType, name='', checkOnly=True):
+	debug("> installPlugin() %s %s checkOnly=%s"  % (pluginType, name, checkOnly))
+	exists = False
+	if not name:
+		name = __scriptname__
+	name += " Plugin"
+
+	try:
+		copyFromPath = xbmc.translatePath( os.path.join( DIR_HOME, "Plugin" ) )
+		copyFromFile = os.path.join( copyFromPath, 'default.py')
+		copyToPath = xbmc.translatePath( os.path.join( "Q:\\", "plugins", pluginType, name ) )
+		copyToFile = os.path.join( copyToPath, 'default.py')
+
+		# set not exist if; path/file missing or previous installed is older
+		copyFromFileSecs = os.path.getmtime(copyFromFile)
+		copyToFileSecs = os.path.getmtime(copyToFile)
+		debug( "comparing fromSecs %d  toSecs %d"  % (copyFromFileSecs, copyToFileSecs))
+		exists = fileExist(copyToFile) and copyFromFileSecs <= copyToFileSecs
+	except:
+		debug( "paths dont exist. This is OK if we're just checking" )
+
+	if not checkOnly:
+		# do installation
+		try:
+			from shutil import copytree, rmtree
+			try:
+				rmtree( copyToPath )
+			except: pass
+			copytree( copyFromPath, copyToPath )
+			dialogOK(__scriptname__, "In plugins 'Add Source' to complete installation.", name)
+		except:
+			msg = "Plugin Failed\n" + str(sys.exc_info()[ 1 ])
+			dialogOK(__scriptname__, msg)
+
+	debug("< installPlugin() exists=%s" % exists)
+	return exists

@@ -696,8 +696,8 @@ class GUI(xbmcgui.WindowXML):
 		success = fileExist(self.filename)
 		if not success:
 			dialogProgress.create(title, __language__(202), msg)
-			success = fetchURL(imageURL, self.filename, isImage=True)
-	#		success = fetchCookieURL(imageURL, self.filename, isImage=True, newRequest=self.newURLRequest)
+			success = fetchURL(imageURL, self.filename, isBinary=True)
+	#		success = fetchCookieURL(imageURL, self.filename, isBinary=True, newRequest=self.newURLRequest)
 			dialogProgress.close()
 		else:
 			debug("image filename already exists")
