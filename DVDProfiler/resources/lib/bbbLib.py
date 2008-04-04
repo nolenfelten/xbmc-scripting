@@ -177,7 +177,7 @@ REZ_H = 576
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = False
+DEBUG = True
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -1532,3 +1532,11 @@ def installPlugin(pluginType, name='', checkOnly=True):
 
 	debug("< installPlugin() exists=%s" % exists)
 	return exists
+
+def validMAC(mac):
+    valid = False
+    if mac and len(mac) >= 11 and len(mac) <= 17:
+        if find(mac,':') != -1 and len(mac.split(':')) == 6:
+            valid = True
+    debug("validMAC=%s" % validMAC)
+    return valid
