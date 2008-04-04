@@ -17,6 +17,7 @@ Changelog:
 09/07/07 Fix: Seach for title. caused by site change
 11/12/07 Fix: Scraping regex (see date comments)
 18/01/08 Fix: regex for Cast
+04/04/08 Fix: looks for Popuar and Exact matches
 """
 
 import os,sys,re,urllib,string, urlparse
@@ -282,9 +283,9 @@ class IMDbSearch:
 			return
 
 		if string.find(page, 'No Matches') != -1:
-			log( "IMDbSearch no matches" )
-		elif string.find(page, '>Popular') != -1:
-			log( "search 'Popular'" )
+			log( "found 'No Matches'" )
+		elif string.find(page, '>Popular') != -1 or string.find(page, 'Exact Matches') != -1:
+			log( "found 'Popular' or 'Exact Matches'" )
 			# title code, title, year
 			search = re.compile('href="/title/([t0-9]*)/">(.*?)</a> *\(([0-9]*)')		# updated 11/12/2007
 			matches = search.findall(page)

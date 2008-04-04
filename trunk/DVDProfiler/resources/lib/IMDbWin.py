@@ -11,6 +11,7 @@
  11/12/07 - tweaked layout
  21/01/08 - Uses DIR_IMDB_CACHE from USERDATA
  20/03/08 - Changed to use changed imdbLib gallery
+ 04/04/08 - Fix to use changed fetchURL() params
 
 """
 
@@ -24,12 +25,10 @@ __date__ = '20-03-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_USERDATA = sys.modules[ "__main__" ].DIR_USERDATA           # should be in default.py
-#DIR_CACHE = sys.modules[ "__main__" ].DIR_CACHE                 # should be in default.py
 DIR_IMDB_CACHE = os.path.join(DIR_USERDATA, 'imdb')
 
 try:
 	DIR_HOME = sys.modules[ "__main__" ].DIR_HOME     # should be in default.py
-#	DIR_RESOURCES = sys.modules[ "__main__" ].DIR_RESOURCES     # should be in default.py
 	DIR_GFX = sys.modules[ "__main__" ].DIR_GFX                 # should be in default.py
 	__language__ = sys.modules[ "__main__" ].__language__
 except:
@@ -86,7 +85,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 
 	################################################################################
 	def onAction(self, action):
-		if action == ACTION_BACK or action == ACTION_B:
+		if action in CANCEL_DIALOG:
 			removeDir(DIR_IMDB_CACHE, force=True)
 			self.close()
 
@@ -166,7 +165,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 			if not exists:
 				dialogProgress.update(0, basename)
 #				dialogProgress.create(__language__(986), basename)
-				exists = fetchURL(url, fn, encodeURL=False, isImage=True)
+				exists = fetchURL(url, fn, encodeURL=False, isBinary=True)
 #				dialogProgress.close()
 
 		if exists:
@@ -389,13 +388,13 @@ class IMDbWin(xbmcgui.WindowDialog):
 				dialogProgress.update(pct, "%s  (%s/%s)" % (os.path.basename(large_fn), idx, MAX))
 				# try to get large image, but save using modified small filename
 				if not fileExist(large_fn):
-					if not fetchURL(large_url, large_fn, isImage=True):
+					if not fetchURL(large_url, large_fn, isBinary=True):
 						# delete bad large_fn
 						deleteFile(large_fn)
 						debug("no large, get small image")
 						if not fileExist(small_fn):
 							dialogProgress.update(pct, "%s  (%s/%s)" % (small_basename, idx, MAX))
-							fetchURL(small_url, small_fn, isImage=True)
+							fetchURL(small_url, small_fn, isBinary=True)
 			dialogProgress.close()
 			xbmc.executebuiltin('XBMC.SlideShow(%s)'% DIR_IMDB_CACHE)
 		debug("< slideshow()")
