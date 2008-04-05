@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH Päivitys</string>
-    <!--  Finnish v.26.11.2007 -->
+    <!--  Finnish v.5.4.2008 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
-    <string id="201">Anna boottaavan dashin nimi.</string>
+    <string id="201">Käynnistyvän dashin nimi.</string>
     <string id="202">Valitse käynnistyvä asema:</string>
     <string id="203">Valitse tiedosto:</string>
     <string id="204">Valitse polku:</string>
@@ -21,12 +21,16 @@
     <string id="305">Virhe paketin tietojen käsittelyssä!</string>
     <string id="306">Virhe UserData tietojen siirrossa!</string>
     <string id="307">Virhe dash käynnistyksen luonnissa!</string>
-    <string id="308">Virhe skriptin siirrossa!</string>
+    <string id="308">Virhe skriptien siirrossa!</string>
     <string id="309">Käynnistys dash nimi tarvitaan.</string>
     <string id="310">Muutoshistoriaa ei ole saatavilla.</string>
     <string id="311">Lähde tiedostoa/kansiota ei löydy!</string>
     <string id="312">Purkupolkua ei löydy! Yritä uudelleen.</string>
     <string id="313">Rajoitettu tiedosto tai kansio!</string>
+    <string id="314">Purku kansio on jo olemassa, kirjoitetaanko sen päälle ?</string>
+    <string id="315">RAR paketin SFV tarkistusluvussa on virhe![CR]Paketti on mahdollisesti vioittunut, yritä ladata se uudelleen.</string>
+    <string id="316">Asennus asemassa ei ole tarpeeksi tyhjää tilaa!</string>
+    <string id="317">Vapaata muistia on liian vähän, paketin purku saattaa epäonnistua.</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Lataa</string>
@@ -39,6 +43,12 @@
     <string id="407">Muokkaa</string>
     <string id="408">Kansio</string>
     <string id="409">Tiedosto</string>
+    <string id="410">XBMC</string>
+    <string id="411">T3CH</string>
+    <string id="412">Poista</string>
+    <string id="413">Peruuta</string>
+    <string id="414">Ohje</string>
+    <string id="415">Muutokset</string>
 
     <!-- Status messages -->
     <string id="500">Nykyinen T3CH paketti:</string>
@@ -54,7 +64,6 @@
     <string id="510">Poistetaan T3Ch UserData ...</string>
     <string id="511">Siirretään sinun UserData T3CH kansioon ...</string>
     <string id="512">Asennus valmis. Haluatko uudelleenkäynnistää ?</string>
-    <string id="513">Asennus ei ole valmis. Jatketaan silti?</string>
     <string id="514">Päivitetään dash käynnistysnimeä ...</string>
     <string id="515">Kopioidaan:</string>
     <string id="516">Poistetaan:</string>
@@ -67,13 +76,18 @@
     <string id="523">Poistetaanko vanha T3CH paketti ?</string>
     <string id="524">Odota hetki ...</string>
     <string id="525">Valitse tiedosto tai kansio ?</string>
-
+    <string id="526">Uusi Path sisältyy ?</string>
+    <string id="527">Uusi XBE sisältyy ?</string>
+    <string id="528">Poita T3CH varmuuskopio?</string>
+    <string id="529">Varmista ja päivitä XBMC käynnistys tiedot ?[CR](Vaaditaan uutta pakettia asennettaessa)</string>
+    <string id="530">Asemassa=%s  Tilaa=%sMB  Suositus=%sMB</string>
+    <string id="531">Muistia vapaana=%sMB  Suositus=%sMB</string>
+    <string id="532">Jatketaanko ?</string>
+    
     <!-- Menu Titles -->
     <string id="600">Päävalikko</string>
     <string id="601">Asetukset</string>
-    <string id="605">Kopioitavat tiedostot</string>
-    <string id="608">Poistettavat tiedostot</string>
-  
+    
     <!-- Menu options -->
     <string id="610">Asetukset</string>
     <string id="611">Näytä muutoshistoria</string>
@@ -83,6 +97,8 @@
     <string id="617">Poista vanha T3CH versio</string>
     <string id="618">Muuta poistettavien tiedostojen luetteloa</string>
     <string id="619">Päivitä skripti</string>
+    <string id="620">Asenna sijainnista:</string>
+    <string id="621">Asenna vanha paketti internetistä</string>
       
    <!-- Settings Options -->
     <string id="630">Dashin asema:</string>
@@ -92,6 +108,9 @@
     <string id="634">Tarkista päivitykset käynnistyessä?</string>
     <string id="635">Siirrä UserData T3CH:iin?</string>
     <string id="636">Oletus asetukset</string>
+    <string id="637">Nollaa omat tiedostonkopiointi ja -poisto luettelot</string>
+    <string id="638">Kysy ennen T3CH varmuuskopion poistoa?</string>
+    <string id="639">Näytä skriptin ohje/muutoshistoria</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Poistu</string>
