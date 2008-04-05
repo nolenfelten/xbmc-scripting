@@ -3,9 +3,8 @@
     <string id="0">XBMC Lyrics</string>
 	<string id="1">Xbox Media Center</string>
     <string id="2">Mikko</string>
-	<!-- 1.5.5          28.3.2008 Finnish -->
- 	
-    <!-- User Messages -->
+	<!-- 1.5.8          5.4.2008 Finnish -->
+ 	<!-- User Messages -->
     <string id="100">Poikkeus</string>
     <string id="101">Tiedosto</string>
     <string id="102">Sulautettu</string>
@@ -41,9 +40,11 @@
     <string id="252">Päivitä</string>
     <string id="253">Tekijät</string>
     <string id="254">Toista</string>
-    <string id="255">Käynnistä</string>
-    <string id="256">Ei</string>
-
+    <string id="255">Oletukset</string>
+  
+    <string id="270">Käynnistä</string>
+    <string id="271">Ei</string>
+    
     <!-- Special XBMC strings -->
     <string id="589">Jukeboksi</string>
     
