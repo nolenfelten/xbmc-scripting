@@ -23,7 +23,7 @@ Changelog:
 import os,sys,re,urllib,string, urlparse
 from string import find
 
-DEBUG = True
+DEBUG = False
 def log(s):
     if DEBUG:
         print s
