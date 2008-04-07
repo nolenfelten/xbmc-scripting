@@ -1,10 +1,10 @@
 T3CH Upgrader Changelog:
 ========================
-v1.5.1 02/04/08
-  Change: Script Update changed to use 'Q:\scripts\backups'. Makes the scripts folder less cluttered.
-  Change: Some skins tweaked (thanks to smuto)
-  Change: Some language strings (thanks to smuto, bootsy)
-  Change: Prevent possible hang when viewing TextBoxDialogXML.
+v1.5.1 07/04/08
+  Change: Self update changed to backup to subfolder 'Q:\scripts\backups'. Makes the scripts folder less cluttered.
+  Updated: Skins tweaked (thanks to smuto)
+  Updated: Most language files (thanks to smuto, bootsy, kottis)
+  Fix: TextBoxDialogXML() to prevent possible hang when viewing changelogs etcs.
 v1.5 28/02/08
   New: Checks if enough installation Drive space (stops) and Free RAM (prompt to continue).
   Change: 'Update Script (renamed to 'Check For Script Update') only shown on Menu if Setting 'Check for Script Update at Startup' is disabled
