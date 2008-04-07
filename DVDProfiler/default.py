@@ -363,7 +363,7 @@ class DVDProfiler(xbmcgui.Window):
 		if success:
 			self.setupDisplay()
 			self.setupTitles()
-		debug("< startup() success="+str(success))
+		debug("< startup() success=%s" % success)
 		return success
 
 	##############################################################################################
