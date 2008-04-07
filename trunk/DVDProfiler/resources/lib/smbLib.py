@@ -7,7 +7,7 @@
   12/01/07 - Updated, smbConnect(), parseSMBPath()
   12/02/07 - Added selectSMB(), updated other funcs
   10/05/07 - Added getSMBFileSize()
-  06/03/08 - Updated for myTV v1.18
+  07/04/08 - Updated with language strings
 
 """
 import sys,os.path
@@ -16,7 +16,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "smbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '06-03-2008'
+__date__ = '07-04-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 import smb, nmb
@@ -49,8 +49,7 @@ def smbConnect(hostIP, smbPath):
 		if not remoteInfo:
 			messageOK(__language__(951), smbPath)
 		else:
-#			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
-			domain,user,password,pcname,service,dirPath = remoteInfo
+			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
 			try:
 				remote = smb.SMB(pcname, hostIP)
 				debug("SMB connection established")
@@ -93,7 +92,7 @@ def getSMBFileSize(remote, remoteInfo, remoteFile):
         messageOK(__language__(957), __language__(966))
     else:
         if DEBUG: print remoteInfo
-        domain,user,password,pcname,service,dirPath = remoteInfo
+        domain,user,password,pcname,service,dirPath,fileName = remoteInfo
         remotePath = "%s%s" % (dirPath,remoteFile)
         try:
             fileSize = remote.list_path(service, remotePath)[0].get_filesize()
@@ -105,19 +104,28 @@ def getSMBFileSize(remote, remoteInfo, remoteFile):
 
 
 ###################################################################################################
-def smbFetchFile(remote, remoteInfo, localPath, remoteFile, silent=True):
-	debug("> smbFetchFile() localPath="+localPath + " remoteFile="+remoteFile)
+def smbFetchFile(smbPath, localPath, remote=None, hostIP='', silent=True):
+	debug("> smbFetchFile() smbPath="+smbPath + " localPath="+localPath)
 	success = False
 
-	if not remote or not remoteInfo:
+	smbPath = "smb://" + smbPath.replace('smb://','').replace('//','/').replace('\\','/')
+	debug( "new smbPath=" + smbPath )
+
+	# if no remote connection supplied, establish one now
+	if not remote:
+		remote, remoteInfo = smbConnect(hostIP, smbPath)
+
+	if not remote:
 		messageOK(__language__(957),__language__(966))
 	else:
-		domain,user,password,pcname,service,dirPath = remoteInfo
+		remoteInfo = parseSMBPath(smbPath)
 		if DEBUG: print remoteInfo
-		if not remoteFile:
+		if not remoteInfo:
 			messageOK(__language__(957), __language__(965))
 		else:
-			remotePath = "%s%s" % (dirPath,remoteFile)
+			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
+			remotePath = "%s%s" % (dirPath,fileName)
+			debug("remotePath="+remotePath)
 			if not silent:
 				dialogProgress.create(__language__(962), remotePath, localPath)
 
@@ -128,13 +136,14 @@ def smbFetchFile(remote, remoteInfo, localPath, remoteFile, silent=True):
 			except smb.SessionError, ex:
 				handleExceptionSMB(ex, __language__(951))
 			except:
-				messageOK(__language__(951), remotePath, localPath)
 				handleException()
 			else:
 				success = fileExist(localPath)
 
 			if not silent:
 				dialogProgress.close()
+			if not success:
+				deleteFile(localPath)
 
 	debug("< smbFetchFile() success="+str(success))
 	return success
@@ -173,25 +182,34 @@ def smbSendFile(remote, share, localPath, remotePath, silent=False):
 ###############################################################################################################
 # fetch a file from SMB if the remote file is newer than the local file
 ###############################################################################################################
-def isNewSMBFile(remote, remoteInfo, localPath, remoteFile, silent=True):
-	debug("> isNewSMBFile() localPath="+localPath + " remoteFile="+remoteFile)
+def isNewSMBFile(smbPath, localPath, remote=None, hostIP='', silent=False):
+	debug("> isNewSMBFile() smbPath=%s localPath=%s" % (smbPath, localPath))
 	remoteFileSecs = 0
 	localFileSecs = 0
 
-	if not remote or not remoteInfo:
+	smbPath = "smb://" + smbPath.replace('smb://','').replace('//','/').replace('\\','/')
+	debug( "new smbPath=" + smbPath )
+
+	# if no remote connection supplied, establish one now
+	if not remote:
+		remote, remoteInfo = smbConnect(hostIP, smbPath)
+
+	if not remote:
 		messageOK(__language__(951), __language__(966))
 	else:
-		domain,user,password,pcname,service,dirPath = remoteInfo
+		remoteInfo = parseSMBPath(smbPath)
 		if DEBUG: print remoteInfo
-		if not remoteFile:
+		if not remoteInfo:
 			messageOK(__language__(959),__language__(965))
 		else:
-			remotePath = "%s%s" % (dirPath,remoteFile)
+			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
+			remotePath = "%s%s" % (dirPath,fileName)
 			if not silent:
 				dialogProgress.create(__language__(967), remotePath)
 
-			if fileExist(localPath):
+			try:
 				localFileSecs = os.path.getmtime(localPath)
+			except: pass
 
 			# list files on SMB of remote filename, check modified timestamp
 			try:
@@ -210,21 +228,24 @@ def isNewSMBFile(remote, remoteInfo, localPath, remoteFile, silent=True):
 
 ###############################################################################################################
 def handleExceptionSMB(ex, title):
-	errCodeStr = "Err Codes: " + str(ex[1]) + ", " + str(ex[2])
-	if ex[1] == 1 and ex[2] == 2:			# file not found
-		messageOK(title,errCodeStr,"Remote file not found.")
-	elif ex[1] == 1 and ex[2] == 3:
-		messageOK(title,errCodeStr,"Directory invalid","Please correct SMB Path")
-	elif ex[1] == 1 and ex[2] == 5:			# Access denied
-		messageOK(title,errCodeStr,"Remote file Access Denied.","Check remote Permissions/User/Password are correct.")
-	elif ex[1] == 1 and ex[2] == 15:
-		messageOK(title,errCodeStr,"Invalid drive specified.","Please correct SMB Path.")
-	elif ex[1] == 1 and ex[2] == 32:
-		messageOK(title,errCodeStr,"Share mode can't be granted.","Please check remote share.")
-	elif ex[1] == 1 and ex[2] == 67:
-		messageOK(title,errCodeStr,"Invalid Share Name.","Please correct SMB Path.")
-	else:									# trap other SMB err
-		messageOK(title,errCodeStr, "UnTrapped error codes, Check smb.h for definition.")
+	try:
+		errCodeStr = "Err Codes: " + str(ex[1]) + ", " + str(ex[2])
+		if ex[1] == 1 and ex[2] == 2:			# file not found
+			messageOK(title,errCodeStr,"Remote file not found.")
+		elif ex[1] == 1 and ex[2] == 3:
+			messageOK(title,errCodeStr,"Directory invalid","Please correct SMB Path")
+		elif ex[1] == 1 and ex[2] == 5:			# Access denied
+			messageOK(title,errCodeStr,"Remote file Access Denied.","Check remote Permissions/User/Password are correct.")
+		elif ex[1] == 1 and ex[2] == 15:
+			messageOK(title,errCodeStr,"Invalid drive specified.","Please correct SMB Path.")
+		elif ex[1] == 1 and ex[2] == 32:
+			messageOK(title,errCodeStr,"Share mode can't be granted.","Please check remote share.")
+		elif ex[1] == 1 and ex[2] == 67:
+			messageOK(title,errCodeStr,"Invalid Share Name.","Please correct SMB Path.")
+		else:									# trap other SMB err
+			messageOK(title,errCodeStr, "UnTrapped error codes, Check smb.h for definition.")
+	except:
+		handleException("handleExceptionSMB()")
 
 
 #################################################################################################################
@@ -232,22 +253,35 @@ def parseSMBPath(path):
 	if not path:
 		return None
 	# smb://domain;user:pass@pcname/share/folder/filename
-#	m = re.match('^smb://(\w+);(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)([^/]*)$', path) # with fn
-	m = re.match('^smb://(\w+);(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)$', path) # without fn
+	m = re.match('^smb://(\w+);(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)([^/]*)$', path)
 	if m:
-		return m.groups() # 6 groups
+		xbmc.output("matches smb://domain;user:pass@pcname/share/folder/filename")
+		return m.groups()
 
 	# smb://user:pass@pcname/share/folder/filename
-#	m = re.match('^smb://(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)([^/]*)$', path)
-	m = re.match('^smb://(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)$', path)   # without fn
+	m = re.match('^smb://(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)([^/]*)$', path)
 	if m:
-		return '', m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
+		xbmc.output("matches smb://user:pass@pcname/share/folder/filename")
+		return '', m.group(1), m.group(2), m.group(3), m.group(4), m.group(5), m.group(6)
+
+	# smb://user:pass@pcname/share/folder/
+	m = re.match('^smb://(\w+):([^@]+)@([^/]+)/([^/]+)(/?.*?)$', path)
+	if m:
+		xbmc.output("matches smb://user:pass@pcname/share/folder/")
+		return '', m.group(1), m.group(2), m.group(3), m.group(4), m.group(5), ''
 
 	# smb://pcname/share/folder/filename
-#	m = re.match('^smb://([^/]+)/([^/]+)(/?.*?)([^/]*)$', path)
-	m = re.match('^smb://([^/]+)/([^/]+)(/?.*?)$', path)   # without fn
+	m = re.match('^smb://([^/]+)/([^/]+)(/?.*?)([^/]*)$', path)
 	if m:
-		return '', '', '', m.group(1), m.group(2), m.group(3)
+		xbmc.output("matches smb://pcname/share/folder/filename")
+		return '', '', '', m.group(1), m.group(2), m.group(3), m.group(4)
+
+	# smb://pcname/share/folder/
+	m = re.match('^smb://([^/]+)/([^/]+)(/?.*?)$', path)
+	if m:
+		xbmc.output("matches smb://pcname/share/folder/")
+		return '', '', '', m.group(1), m.group(2), m.group(3), ''
+
 	return None
 
 #################################################################################################################
@@ -258,9 +292,10 @@ def getIPFromName(pcname):
 	try:
 		ip = nmb.NetBIOS().gethostbyname(pcname)[0].get_ip()
 		dialogProgress.close()
-		if not xbmcgui.Dialog().yesno(__language__(546), __language__(601) % pcname, "IP: %s" % ip):
+		if not xbmcgui.Dialog().yesno(__language__(953), __language__(973) % pcname, "IP: %s" % ip):
 			ip = ''
 	except:
+		handleException()
 		dialogProgress.close()
 		messageOK(__language__(956), pcname)
 		ip=''
@@ -301,7 +336,7 @@ def selectSMB(currentValue=''):
 			currentIdx = 0
 		# select from list
 		selectDialog = DialogSelect()
-		selectDialog.setup(__language__(599), rows=len(menuList), width=620)
+		selectDialog.setup(__language__(971), rows=len(menuList), width=620)
 		selectedPos, action = selectDialog.ask(menuList, currentIdx)
 		if selectedPos >= 0:
 			returnValue = menuList[selectedPos]
@@ -379,7 +414,7 @@ class ConfigSMB:
 			messageOK(__language__(951), __language__(966))
 		else:
 			if smbPath[-1] != '/': smbPath += '/'
-			domain,user,password,pcname,share,dirPath = remoteInfo
+			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
 			self.config.action(self.configSection, self.KEY_SMB_PATH, \
 							   smbPath, self.config.configHelper.MODE_WRITE)
 			if find(pcname,'.') < 0:				# is a PCNAME?
@@ -465,8 +500,57 @@ class ConfigSMB:
 					ip, smbPath, remoteFile = smbDetails
 					remote, remoteInfo = smbConnect(ip, smbPath)
 					if remote and remoteInfo:
-						messageOK(__language__(546),__language__(217))
+						messageOK(self.MENU_OPT_SMB_CONN_CHECK,__language__(961))
 
 		debug("< ConfigSMB.ask() changed=%s" % changed)
 		return changed
+
+#################################################################################################################
+def isIP(host):
+	result = re.match('^\d+\.\d+\.\d+\.\d+$', host)
+	debug("isIP: " + host + " = " + str(result))
+	return result
+
+#################################################################################################################
+def getSMBPathIP(smbPath, isSMBBasePathOnly=False):
+	debug("> getSMBPathIP() %s" % smbPath)
+	success = False
+	ip = ""
+	if smbPath.endswith('/'): smbPath = smbPath[:-1]
+	if not isSMBBasePathOnly:
+		remoteInfo = parseSMBPath(smbPath)
+	else:
+		remoteInfo = parseSMBBasePath(smbPath)
+	if DEBUG: print remoteInfo
+
+	if remoteInfo and smbPath:
+#		if smbPath[-1] not in ["\\","/"]: smbPath += '/'
+		
+		domain,user,password,pcname,share,dirPath,fileName = remoteInfo
+		if not isIP(pcname):											# is a PCNAME
+			ip = getIPFromName(pcname)								# discover IP
+		else:
+			messageOK("Invalid SMB Path","Use PCNAME not IP in path.","EG: OFFICE")
+	else:
+		messageOK("Invalid SMB Path","Invalid path format")
+		smbPath = ""
+
+	debug("< getSMBPathIP()")
+	return smbPath, ip
+
+#################################################################################################################
+def parseSMBBasePath(path):
+	# smb://user:pass@pcname
+	m = re.match('^smb://(\w+):([^@]+)@([^/]+)$', path)
+	if m:
+		xbmc.output("matches smb://user:pass@pcname")
+		return ('', m.group(1), m.group(2), m.group(3), '', '', '')
+
+	# smb://pcname
+	m = re.match('^smb://([^/]+)$', path)
+	if m:
+		xbmc.output("matches smb://pcname")
+		return ('', '', '', m.group(1), '', '', '')
+
+	return None
 

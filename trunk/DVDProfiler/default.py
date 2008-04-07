@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '30-03-2008'
+__date__ = '07-04-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -207,7 +207,7 @@ class DVDProfiler(xbmcgui.Window):
 			debug("titlesCL")
 			# if selecting same title, attempt playback
 			colNo = self.titlesCL.getSelectedItem().getLabel2()
-			if not self.onlineAliasData and colNo in [self.lastCollNo, self.lastOnlineCollNo]:
+			if not self.onlineAliasData and colNo == self.lastCollNo:
 				self.playback()
 			elif not self.showDVD():
 				self.reset()
@@ -323,7 +323,7 @@ class DVDProfiler(xbmcgui.Window):
 					success = self.startup()
 
 			if not success:
-				startupMode = 0									# self.START_MODE_MENU
+				startMode = 0									# self.START_MODE_MENU
 
 
 		debug("< startupMenu() success="+str(success))
@@ -1142,16 +1142,15 @@ class DVDProfiler(xbmcgui.Window):
 			debug("credits done OK")
 
 
-		# overview (also incorperating additional information)
+		# overview (also incorp additional information)
 		self.overviewCTB.reset()
 		text = ''
 		try:
 			text += _getItemsText(self.dvdCollection.OVERVIEW)
 		except: text += "N/A"
 
-		text += '\n\n' + __language__(401)
 		try:
-			text += '\n%s:  ' % __language__(402)
+			text += '\n\n%s\n%s:  ' % (__language__(401), __language__(402))
 			text += _getItemsText(self.dvdCollection.RATING)
 		except: text += "N/A"
 
@@ -1240,7 +1239,6 @@ class DVDProfiler(xbmcgui.Window):
 		except: text += "N/A"
 
 		self.overviewCTB.setText(text)
-		debug('\n\n'+text)		
 
 		# cover image
 		id = self.dvdCollection.getDVDKey(int(collNum))[self.dvdCollection.KEYS_DATA_ID]

@@ -173,8 +173,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 		if action in [ACTION_BACK, ACTION_B]:
 			self.selectedPos = -1
 			self.close()
-		elif (self.useY and action == ACTION_Y) or \
-			 (self.useX and action == ACTION_X):
+		elif (action == ACTION_Y and self.useY) or (action == ACTION_X and self.useX):
 			self.selectedPos = self.menuCL.getSelectedPosition()
 			self.close()
 
