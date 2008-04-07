@@ -17,17 +17,14 @@ import sys
 import os
 import xbmcgui, xbmc
 import urllib
-import socket
 import re
 import traceback
 from shutil import copytree, rmtree
 
-socket.setdefaulttimeout( 10 )
-
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
 	def __init__( self, language, script ):
-		xbmc.output( "Update().__init__ script=" + script )
+		xbmc.output( "Update().__init__" )
 		self._ = language
 		self.script = script.replace( ' ', '%20' )
 		self.base_url = "http://xbmc-scripting.googlecode.com/svn"
