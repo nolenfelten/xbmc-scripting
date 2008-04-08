@@ -28,9 +28,6 @@ from bbbGUILib import *
 
 __language__ = sys.modules[ "__main__" ].__language__
 
-try: Emulating = xbmcgui.Emulating
-except: Emulating = False
-
 dialogProgress = xbmcgui.DialogProgress()
 
 ###################################################################################################
