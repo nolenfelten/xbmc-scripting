@@ -1,9 +1,12 @@
 Version     Date        Change
- 1.6        26/03/08    Change: Removed ClientCookie.py by using python 2.4 cookieLib instead.
-                        Change: Self update rewritten to update to same path (after making backup)
-                        Change: Some minor tweaks and improvments.
+ 1.6        08/04/08    Change: Removed ClientCookie.py by using python 2.4 cookieLib instead.
+                        Change: Self update improved.
                         Fix: IMDb
+                        New: German language strings.
+                        New: IMDb Slideshow of gallery images
+                        New: Filter of 'Location' - Show only films with a location stored in XML (DVDPro v3 only XML)
                         New: For V3 XML, titles with Location have icon displayed and can be filtered.
+                        New: Setting option to set startup mode (Menu,SMB,Local,Online)
  1.5        22/12/07    Fix: Improved SMB setup and ironed out some quirks.
                         New: Checks for newer collection via SMB
                         New: Animation on Open/Close

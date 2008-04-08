@@ -25,7 +25,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '07-04-2008'
+__date__ = '08-04-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -61,13 +61,9 @@ NOIMAGE_FILENAME = os.path.join( DIR_GFX , 'noimage.png' )
 TICK_FILENAME = os.path.join( DIR_GFX , 'tick.png' )
 FILM_FILENAME = os.path.join( DIR_GFX , 'film.png' )
 
-try: Emulating = xbmcgui.Emulating
-except: Emulating = False
-
 #################################################################################################################
 class DVDProfiler(xbmcgui.Window):
 	def __init__(self, *args, **kwargs):
-		if Emulating: xbmcgui.Window.__init__(self)
 		debug("> DVDProfiler().init")
 
 		self.ready = False
@@ -1069,10 +1065,6 @@ class DVDProfiler(xbmcgui.Window):
 		if not success:
 			debug ("< showDVD() failed to parseDVD")
 			return False
-
-		if Emulating:
-			for key, value in self.dvdCollection.dvdDict.items():
-				print key, '=', value
 
 		#######################################################
 		# extract text from object which could be a list of lists of strings etc
@@ -2280,7 +2272,6 @@ class ManageOnlineCollection:
 #######################################################################################################################    
 class Filters(xbmcgui.WindowDialog):
 	def __init__(self):
-		if Emulating: xbmcgui.WindowDialog.__init__(self)
 		debug("> Filters.init()")
 
 		setResolution(self)
@@ -2445,10 +2436,7 @@ class Filters(xbmcgui.WindowDialog):
 
 		for key in sortList:
 			if dataDict[key]:
-				if not Emulating:
-					controlList.addItem(xbmcgui.ListItem(key, iconImage=TICK_FILENAME,thumbnailImage=TICK_FILENAME))
-				else:
-					controlList.addItem(xbmcgui.ListItem(key, 'X'))
+				controlList.addItem(xbmcgui.ListItem(key, iconImage=TICK_FILENAME,thumbnailImage=TICK_FILENAME))
 			else:
 				controlList.addItem(xbmcgui.ListItem(key))
 
