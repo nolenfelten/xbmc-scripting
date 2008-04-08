@@ -35,7 +35,7 @@ dialogProgress = xbmcgui.DialogProgress()
 
 ###################################################################################################
 def smbConnect(hostIP, smbPath):
-	debug("> smbConnect()")
+	debug("> smbConnect() hostIP=%s smbPath=%s" % (hostIP, smbPath))
 	success = False
 	remote = None
 	remoteInfo = None
@@ -220,14 +220,15 @@ def isNewSMBFile(smbPath, localPath, remote=None, hostIP='', silent=False):
 			if not silent:
 				dialogProgress.close()
 
-	debug("local timestamp: " + str(localFileSecs) + " Remote timestamp: " + str(remoteFileSecs))
+	debug("local timestamp: %s  Remote timestamp: %s" % (localFileSecs,remoteFileSecs))
 	# check secs since epoch of files.
 	newFileFound = (remoteFileSecs > localFileSecs) # greater secs means newer
-	debug("< isNewSMBFile() newFileFound: "+str(newFileFound))
+	debug("< isNewSMBFile() newFileFound: %s" % newFileFound)
 	return newFileFound
 
 ###############################################################################################################
 def handleExceptionSMB(ex, title):
+	print "handleExceptionSMB()"
 	try:
 		errCodeStr = "Err Codes: " + str(ex[1]) + ", " + str(ex[2])
 		if ex[1] == 1 and ex[2] == 2:			# file not found
@@ -295,7 +296,6 @@ def getIPFromName(pcname):
 		if not xbmcgui.Dialog().yesno(__language__(953), __language__(973) % pcname, "IP: %s" % ip):
 			ip = ''
 	except:
-		handleException()
 		dialogProgress.close()
 		messageOK(__language__(956), pcname)
 		ip=''
@@ -346,166 +346,6 @@ def selectSMB(currentValue=''):
 
 
 #################################################################################################################
-# MENU ITEM - config SMB PC connection
-# fnTitle - Menu option title to use that represents Remote Filename
-#################################################################################################################
-class ConfigSMB:
-	def __init__(self, parentConfig, section="SMB", title="Setup SMB", \
-				fnTitle='Remote Filename:',fnDefaultValue='', pathDefaultValue='', ipDefaultValue='192.168.0.3'):
-		debug("> smbLib.ConfigSMB().__init__ section="+section)
-		
-
-		self.config = parentConfig
-		self.configSection = section
-		self.title = title
-		self.EXAMPLE_SMB_PATH = 'smb://user:pass@pcname/share/folder/'
-		if not pathDefaultValue:
-			pathDefaultValue = self.EXAMPLE_SMB_PATH
-
-		self.KEY_SMB_PATH = "smb_path"
-		self.KEY_SMB_IP = "smb_pc_ip"
-		self.KEY_SMB_FILE = "smb_filename"
-
-		self.MENU_OPT_SMB_PATH = __language__(969)
-		self.MENU_OPT_SMB_IP = __language__(970)
-		self.MENU_OPT_SMB_FILE = fnTitle
-		self.MENU_OPT_SMB_SETUP_FROM_EXIST = __language__(971)
-		self.MENU_OPT_SMB_CONN_CHECK = __language__(972)
-
-		self.menuOptions = [
-			[self.MENU_OPT_SMB_PATH, self.KEY_SMB_PATH, pathDefaultValue],
-			[self.MENU_OPT_SMB_IP, self.KEY_SMB_IP, ipDefaultValue],
-			[self.MENU_OPT_SMB_FILE, self.KEY_SMB_FILE, fnDefaultValue],
-			[self.MENU_OPT_SMB_SETUP_FROM_EXIST, None, None],
-			[self.MENU_OPT_SMB_CONN_CHECK, None, None]
-			]
-
-		self.TITLE = 0
-		self.CONFIG_KEY = 1
-		self.DEFAULT_VALUE = 2
-		self.NO_VALUE = '?'
-		self.menu = []
-
-		debug("< smbLib.ConfigSMB().__init__")
-
-	def createMenuList(self):
-		debug("> ConfigSMB.createMenuList()")
-		menu = []  # exit
-		for option, configKey, defaultValue in self.menuOptions:
-			if configKey == None:		# no config KEY
-				label2 = ''
-			else:
-				value = self.config.action(self.configSection, configKey)
-				if not value:		# nothing saved
-					label2 = self.NO_VALUE
-				else:
-					label2 = str(value)
-
-			menu.append(xbmcgui.ListItem(option, label2=label2))
-		debug("< ConfigSMB.createMenuList()")
-		return menu
-
-	def saveSMBPath(self, smbPath):
-		debug("> saveSMBPath() smbPath="+smbPath)
-		success = False
-		remoteInfo = parseSMBPath(smbPath)
-		if DEBUG: print "remoteInfo=", remoteInfo
-		if not remoteInfo:
-			messageOK(__language__(951), __language__(966))
-		else:
-			if smbPath[-1] != '/': smbPath += '/'
-			domain,user,password,pcname,service,dirPath,fileName = remoteInfo
-			self.config.action(self.configSection, self.KEY_SMB_PATH, \
-							   smbPath, self.config.configHelper.MODE_WRITE)
-			if find(pcname,'.') < 0:				# is a PCNAME?
-				success = True	                    # save & parse was OK
-				ip = getIPFromName(pcname)			# discover IP
-				if ip:
-					self.config.action(self.configSection, self.KEY_SMB_IP, ip, self.config.configHelper.MODE_WRITE)
-			else:
-				messageOK(__language__(959),__language__(955), self.EXAMPLE_SMB_PATH)
-
-		debug("< saveSMBPath() success="+str(success))
-		return success
-
-	def checkAll(self, silent=False):
-		debug("smbLib.checkAll()")
-		ip, path, fn = self.getSMBDetails()
-		if ip and path and fn:
-			debug("ConfigSMB.checkAll() True")
-			return (ip, path, fn)
-		else:
-			debug("ConfigSMB.checkAll() False")
-			if not silent:
-				messageOK(__language__(972), __language__(959))
-			return None
-
-	def getSMBDetails(self):
-		details = (self.config.action(self.configSection, self.KEY_SMB_IP), \
-				self.config.action(self.configSection, self.KEY_SMB_PATH), \
-				self.config.action(self.configSection, self.KEY_SMB_FILE))
-		return details
-
-	# show this dialog and wait until it's closed
-	def ask(self):
-		debug("> ConfigSMB.ask()")
-
-		selectedPos = 0 	# start on exit
-		changed = False
-		while True:
-			menu = self.createMenuList()
-			selectDialog = DialogSelect()
-			selectDialog.setup(self.title, width=620, rows=len(menu))
-			selectedPos, action = selectDialog.ask(menu, selectedPos)
-			if selectedPos < 0:
-				break # exit selected
-
-			# get menu selected value
-			key = menu[selectedPos].getLabel()
-			value = menu[selectedPos].getLabel2()
-			if not value or value == self.NO_VALUE:
-				defaultValue = self.menuOptions[selectedPos-1][self.DEFAULT_VALUE]
-				if defaultValue:
-					value = defaultValue
-				else:
-					value = ''
-
-			if key == self.MENU_OPT_SMB_PATH:
-				title = "%s eg. %s" % (self.MENU_OPT_SMB_PATH, self.EXAMPLE_SMB_PATH)
-				value = doKeyboard(value, title)
-				if value:
-					changed = self.saveSMBPath(value)
-
-			elif key == self.MENU_OPT_SMB_IP:
-				value = doKeyboard(value, self.MENU_OPT_SMB_IP, KBTYPE_IP)
-				if value:
-					self.config.action(self.configSection, self.KEY_SMB_IP, value, self.config.configHelper.MODE_WRITE)
-					changed = True
-
-			elif key == self.MENU_OPT_SMB_FILE:
-				value = doKeyboard(value, self.MENU_OPT_SMB_FILE)
-				if value:
-					self.config.action(self.configSection, self.KEY_SMB_FILE, value, self.config.configHelper.MODE_WRITE)
-					changed = True
-
-			elif key == self.MENU_OPT_SMB_SETUP_FROM_EXIST:
-				value = selectSMB(value)
-				if value:
-					changed = self.saveSMBPath(value)
-
-			elif key == self.MENU_OPT_SMB_CONN_CHECK:
-				success = False
-				smbDetails = self.checkAll()
-				if smbDetails:
-					ip, smbPath, remoteFile = smbDetails
-					remote, remoteInfo = smbConnect(ip, smbPath)
-					if remote and remoteInfo:
-						messageOK(self.MENU_OPT_SMB_CONN_CHECK,__language__(961))
-
-		debug("< ConfigSMB.ask() changed=%s" % changed)
-		return changed
-
-#################################################################################################################
 def isIP(host):
 	result = re.match('^\d+\.\d+\.\d+\.\d+$', host)
 	debug("isIP: " + host + " = " + str(result))
@@ -530,9 +370,9 @@ def getSMBPathIP(smbPath, isSMBBasePathOnly=False):
 		if not isIP(pcname):											# is a PCNAME
 			ip = getIPFromName(pcname)								# discover IP
 		else:
-			messageOK("Invalid SMB Path","Use PCNAME not IP in path.","EG: OFFICE")
+			messageOK(__language__(974),__language__(955),"eg. OFFICE")
 	else:
-		messageOK("Invalid SMB Path","Invalid path format")
+		messageOK(__language__(951), __language__(966))
 		smbPath = ""
 
 	debug("< getSMBPathIP()")
