@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '02-04-2008'
-__version__ = "1.5.1"
+__date__ = '10-04-2008'
+__version__ = "1.5.2"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -75,14 +75,15 @@ class Main:
 		self.isSilent = (runMode != RUNMODE_NORMAL)
 		xbmc.output("isSilent=" + str(self.isSilent))
 
-		self.BASE_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
-		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
-		self.FTP_BASE_URL = "http://ftp1.srv.endpoint.nu/pub/repository/t3ch/"
-		self.ARCHIVE_URL = "http://ftp.endpoint.nu/pub/repository/t3ch/ARCHIVE/"
+		self.HOME_URL_LIST = ("http://217.118.215.116/", "http://t3ch.yi.se/")
+		self.FTP_URL_LIST = ("http://ftp1.srv.endpoint.nu/", "http://ftp3.srv.endpoint.nu/")
+		self.FTP_REPOSITORY_URL = "pub/repository/t3ch/"
+		self.FTP_REPOSITORY_ARCHIVE_URL = self.FTP_REPOSITORY_URL + "ARCHIVE/"
 
 		self.isPartialDownload = False		# indicate that last download was cancelled, rar might be partial
 
 		# init settings folder
+		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
 		makeDir("T:\\script_data")
 		makeDir(self.SCRIPT_DATA_DIR)
 
@@ -299,10 +300,10 @@ class Main:
 			traceback.print_exc()
 
 		if not filenameInfo:
-			dialogOK(__language__(0), "Unable to parse filename.", \
+			dialogOK(__language__(0), "Unable to parse archive filename!", \
 					 "EG.: XBMC-SVN_2007-12-23_rev11071-T3CH.rar", archive_name)
-
-		xbmc.output(str(filenameInfo))
+		else:
+			xbmc.output(str(filenameInfo))
 		return filenameInfo
 
 	######################################################################################
@@ -491,8 +492,11 @@ class Main:
 		entry_filename = os.path.basename( archive_filepath )
 		(entry_name, ext) = os.path.splitext( entry_filename )
 
-		url = "%s%s.sfv" % (self.FTP_BASE_URL, entry_name)
-		doc = readURL( url, __language__( 502 ), self.isSilent )
+		for ftpUrl in self.FTP_URL_LIST:
+			url = "%s%s%s.sfv" % (ftpUrl, self.FTP_REPOSITORY_URL, entry_name)
+			doc = readURL( url, __language__( 502 ), self.isSilent )
+			if doc: break
+
 		if doc:
 			sfv = SFVCheck.SFVCheck(sfvDoc=doc)
 			success = sfv.check(entry_filename, archive_filepath)
@@ -651,7 +655,7 @@ class Main:
 	def _get_latest_version( self ):
 		xbmc.output( "_get_latest_version()" )
 		url = ""
-		for baseUrl in self.BASE_URL_LIST:
+		for baseUrl in self.HOME_URL_LIST:
 			doc = readURL( baseUrl, __language__( 502 ), self.isSilent )
 			if doc:
 				url = self._parse_html_source( doc )
@@ -823,12 +827,14 @@ class Main:
 	def _view_t3ch_changelog( self, ):
 		xbmc.output( "_view_t3ch_changelog()" )
 		doc = ""
-		url = self.FTP_BASE_URL + 'T3CH-README_1ST.txt'
-		doc = readURL( url, __language__( 502 ), self.isSilent )
+		for ftpUrl in self.FTP_URL_LIST:
+			url = "%s%sT3CH-README_1ST.txt" % (ftpUrl, self.FTP_REPOSITORY_URL)
+			doc = readURL( url, __language__( 502 ), self.isSilent )
+			if doc: break
+
 		if doc:
-			title = "T3CH Changelog"
 			tbd = TextBoxDialogXML(TEXTBOX_XML_FILENAME, DIR_RESOURCES, "Default")
-			tbd.ask(title, doc)
+			tbd.ask("T3CH Changelog", doc)
 			del tbd
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
@@ -838,14 +844,13 @@ class Main:
 		xbmc.output( "_view_xbmc_changelog()" )
 		doc = ""
 		# read from several home urls until get connection and doc
-		for url in self.BASE_URL_LIST:
+		for url in self.HOME_URL_LIST:
 			doc = readURL( os.path.join( url, "latest.txt" ), __language__( 502 ), self.isSilent )
 			if doc: break
 
 		if doc:
-			title = "XBMC Changelog"
 			tbd = TextBoxDialogXML(TEXTBOX_XML_FILENAME, DIR_RESOURCES, "Default")
-			tbd.ask(title, doc )
+			tbd.ask("XBMC Changelog", doc )
 			del tbd
 		else:
 			dialogOK( __language__( 0 ), __language__( 310 ))
@@ -1356,25 +1361,24 @@ class Main:
 	def _find_web_builds(self):
 		xbmc.output( "> _find_web_builds() ")
 		buildList = []
-		reList = []
-		for baseUrl in self.BASE_URL_LIST:
+		doc = ""
+		for baseUrl in self.HOME_URL_LIST:
 			doc = readURL( baseUrl, __language__( 502 ), self.isSilent )
-#			doc = file(os.path.join(DIR_HOME, "t3ch.yi.se.htm")).read()
-			if doc:
-				# do regex on section
-				findRe = re.compile('<option value="(XBMC-SVN_.*?)"', re.DOTALL + re.MULTILINE + re.IGNORECASE)
-				reList = findRe.findall(doc)
-				break
+			if doc: break
 
-		if reList:
-			# remove current running build from list
-			curr_build_date_secs, curr_build_date = self._get_current_build_info()
-			for filename in reList:
-				try:
-					archive_name, build_date, build_date_secs, short_build_name = self._get_archive_info(filename)
-					if curr_build_date != short_build_name:
-						buildList.append(filename)
-				except: pass
+		if doc:
+			# do regex on section
+			findRe = re.compile('<option value="(XBMC-SVN_.*?)"', re.DOTALL + re.MULTILINE + re.IGNORECASE)
+			reList = findRe.findall(doc)
+			if reList:
+				# remove current running build from list
+				curr_build_date_secs, curr_build_date = self._get_current_build_info()
+				for filename in reList:
+					try:
+						archive_name, build_date, build_date_secs, short_build_name = self._get_archive_info(filename)
+						if curr_build_date != short_build_name:
+							buildList.append(filename)
+					except: pass
 
 		xbmc.output( "< _find_web_builds() build count=%s" % len(buildList))
 		return buildList
@@ -1385,26 +1389,35 @@ class Main:
 		xbmc.output( "> _web_builds_menu() ")
 
 		buildsList = self._find_web_builds()
-		buildsList.insert(0, __language__( 650 ))	# exit - 1st option
+		if buildsList:
+			buildsList.insert(0, __language__( 650 ))	# exit - 1st option
+			while True:
+				# select
+				selectDialog = xbmcgui.Dialog()
+				selected = selectDialog.select( __language__( 205 ), buildsList )
+				if selected <= 0:						# quit
+					break
 
-		while True:
-			# select
-			selectDialog = xbmcgui.Dialog()
-			selected = selectDialog.select( __language__( 205 ), buildsList )
-			if selected <= 0:						# quit
-				break
+				# extract new build date from name
+				filename = buildsList[selected]
+				info = self._get_archive_info(filename)
+				if info:
+					doc = ""
+					url = ""
+					self.archive_name, found_build_date, found_build_date_secs, self.short_build_name = info
+					# check ftp server available by reading web page, if fails try next ftp address
+					for ftpUrl in self.FTP_URL_LIST:
+						url = "%s%s%s" % (ftpUrl, self.FTP_REPOSITORY_ARCHIVE_URL, filename)
+						doc = readURL(url, __language__( 502 ), self.isSilent )
+						if doc: break
 
-			# extract new build date from name
-			filename = buildsList[selected]
-			info = self._get_archive_info(filename)
-			if info:
-				archive_name, found_build_date, found_build_date_secs, short_build_name = info
-				self.archive_name = archive_name
-				self.short_build_name = short_build_name
-				url = "%s%s" % (self.ARCHIVE_URL, filename)
-				if self._process(url, useSFV=False):
-					if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
-						xbmc.executebuiltin( "XBMC.Reboot" )
+					if doc:
+						if self._process(url, useSFV=False):
+							if dialogYesNo( __language__( 0 ), __language__( 512 )):	# reboot ?
+								xbmc.executebuiltin( "XBMC.Reboot" )
+					else:
+						xbmcgui.Dialog().ok(__language__( 0 ), __language__( 318 ))		# all servers unavailable
+						break
 
 		xbmc.output("< _web_builds_menu()")
 
