@@ -31,6 +31,8 @@
     <string id="315">RAR failed SFV checksum![CR]May be corrupt, please re-download.</string>
     <string id="316">Not enough freespace on installation drive!</string>
     <string id="317">Free RAM less than recommended, unrar may fail.</string>
+    <string id="318">All FTP servers unavailable!</string>
+    <string id="319">No Web Builds found!</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
