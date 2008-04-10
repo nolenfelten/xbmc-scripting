@@ -32,6 +32,8 @@
     <string id="315">RAR SFV Checksum falsch![CR]Evtl. fehlerhaft, bitte erneut runterladen.</string>
     <string id="316">Nicht genug freier Speicher auf dem Installations-Laufwerk vorhanden!</string>
     <string id="317">Freier RAM weniger als empfohlen, das Entpacken könnte fehlschlagen.</string>
+    <string id="318">Alle FTP Server unerreichbar!</string>
+    <string id="319">Keine Web Builds gefunden!</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Download</string>
