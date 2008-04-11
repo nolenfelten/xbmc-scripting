@@ -11,4 +11,10 @@
                <reImage><![CDATA[<img src="(/comics/.+?\.png)"]]></reImage>
                <description>Questionable Content</description>
        </feed>
+       <feed>
+               <title>Little-Gamers</title>
+               <link>http://www.little-gamers.com/rss.xml</link>
+               <reImage><![CDATA[<img src="(http://www.little-gamers.com/comics/.+?\.gif)"]]></reImage>
+               <description>Hot swedish love</description>
+       </feed>
 </MyComics>

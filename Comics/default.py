@@ -23,9 +23,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "Comics"
-__version__ = '1.5'
+__version__ = '1.5.1'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '10-03-2008'
+__date__ = '11-04-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
