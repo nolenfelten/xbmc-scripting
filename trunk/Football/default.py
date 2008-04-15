@@ -58,15 +58,11 @@ BUTTON_FOCUS=os.path.join(DIR_GFX,'button-focus.jpg')
 global timerthread
 timerthread = None
 
-try: Emulating = xbmcgui.Emulating
-except: Emulating = False
-
 #################################################################################################################
 # MAIN
 #################################################################################################################
 class Football(xbmcgui.Window):
 	def __init__(self):
-		if Emulating: xbmcgui.Window.__init__(self)
 		debug("> Football()")
 
 		setResolution(self)
@@ -230,7 +226,7 @@ class Football(xbmcgui.Window):
 			# clock thread
 			global timerthread
 			timerthread=Timer(self)
-			if not Emulating and timerthread:
+			if timerthread:
 				timerthread.start()
 		else:
 			self.ready = False
@@ -260,17 +256,16 @@ class Football(xbmcgui.Window):
 		self.contentY = self.headerH + 1
 		self.contentH = REZ_H - (self.contentY + self.footerH)
 		self.contentW = REZ_W - self.contentX
-		debug("self.contentX: " + str(self.contentX) + "  self.contentY: " + str(self.contentY) \
-			+ "  self.contentH: " + str(self.contentH) + "  self.contentW: " + str(self.contentW))
-		debug("self.headerH="+str(self.headerH) + " self.footerH="+str(self.footerH))
+		debug("contentX=%s contentY=%s contentW=%s contentH=%s" % (self.contentX,self.contentY,self.contentW,self.contentH) )
+		debug("headerH=%s footerH=%s footerY=%s" % (self.headerH, self.footerH, self.footerY))
 
 		self.navListsH = self.footerH
 		self.navListsY = self.footerY + 1
-		debug("navListsY: " + str(self.navListsY) + " navListsH: "+ str(self.navListsH))
+		debug("navListsY=%s navListsH=%s" % (self.navListsY, self.navListsH))
 
 		self.contentCenterX = int(self.contentW/2)
 		self.contentCenterY = self.headerH + int(self.contentH/2)
-		debug("contentCenterX: " + str(self.contentCenterX) + " contentCenterY: " + str(self.contentCenterY))
+		debug("contentCenterX=%s contentCenterY=%s" % (self.contentCenterX, self.contentCenterY))
 		self.animTimeOn = "250"
 		self.animTimeOff = "200"
 		self.animHeaderWO = 'effect=slide start=0,-%s acceleration=-1.1 time=%s' % (self.headerH, self.animTimeOn)
@@ -383,6 +378,7 @@ class Football(xbmcgui.Window):
 							buttonFocusTexture=BUTTON_FOCUS_LONG, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(self.liveTextCL)
 		self.liveTextCL.setVisible(False)
+		self.liveTextCL.setEnabled(False)
 		self.liveTextCL.setAnimations([('WindowClose', self.animZoomWC)])
 		try:
 			self.liveTextCL.setPageControlVisible(False)
@@ -418,18 +414,20 @@ class Football(xbmcgui.Window):
 		# setup home screen
 		self.selectedNavListKey = self.LEAGUES_KEY
 		self.createNavList(self.LEAGUES_KEY)
-		self.loadNavList(self.LEAGUES_KEY)
+		self.loadNavListMenu(self.LEAGUES_KEY)
 		self.createNavList(self.LEAGUE_VIEW_KEY)
-		self.loadNavList(self.LEAGUE_VIEW_KEY)
 		self.createNavList(self.TEAMS_KEY)
-		self.loadNavList(self.TEAMS_KEY)
 		self.createNavList(self.TEAM_VIEW_KEY)
-		self.loadNavList(self.TEAM_VIEW_KEY)
+
 		self.setupNavListsNav()
 		self.getNavListDictValue(self.LEAGUES_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(True)
 		self.getNavListDictValue(self.LEAGUES_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(True)
 		self.getNavListDictValue(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(False)
 		self.getNavListDictValue(self.LEAGUE_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(False)
+		self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(False)
+		self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(False)
+		self.getNavListDictValue(self.TEAM_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setVisible(False)
+		self.getNavListDictValue(self.TEAM_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL).setEnabled(False)
 		self.setLeagueLogo()
 		self.toggleNavListFocus(True)		# switch to nav lists
 
@@ -441,7 +439,7 @@ class Football(xbmcgui.Window):
 		debug ("exit()")
 		self.clearContentControls()
 		global timerthread
-		if not Emulating and timerthread:
+		if timerthread:
 			timerthread.stop()
 		self.close()
 
@@ -501,6 +499,7 @@ class Football(xbmcgui.Window):
 			debug("NAV LIST CONTROL")
 			for key, data in self.navLists.items():
 				if control == data[self.NAV_LISTS_VALUE_CONTROL]:
+					debug("navlistkey=" + key)
 					self.MAINMENU_SELECTED = ''		# reset
 					self.selectedNavListKey = key
 					self.navListSelected()
@@ -688,10 +687,10 @@ class Football(xbmcgui.Window):
 					self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''] # x,y,w,h,selectedItem
 					}
 
-		TEAM_VIEWS_MENU = [self.TEAM_VIEW_NEWS,self.TEAM_VIEW_FIX,self.TEAM_VIEW_RES,
+		self.TEAM_VIEWS_MENU = [self.TEAM_VIEW_NEWS,self.TEAM_VIEW_FIX,self.TEAM_VIEW_RES,
 						   self.TEAM_VIEW_LIVE_TEXT,self.TEAM_VIEW_SQUAD]
 		self.TEAM_VIEW_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,self.TEAM_VIEW_NEWS], # x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''], # x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : [],
 			self.TEAM_VIEW_NEWS : 'http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/football/teams/$AZ/$TEAM/rss.xml',
 			self.TEAM_VIEW_FIX : 'http://news.bbc.co.uk/sport1/hi/football/teams/$AZ/$TEAM/fixtures/default.stm',
@@ -752,6 +751,7 @@ class Football(xbmcgui.Window):
 					}
 
 		# TEAMS VIEW
+		self.TEAM_VIEWS_MENU = []
 		self.TEAM_VIEW_DATA = {
 			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''], # x,y,w,h
 			self.NAV_LIST_MENU : []
@@ -939,13 +939,13 @@ class Football(xbmcgui.Window):
 	def getNavListSelected(self, navListKey):
 		debug("> getNavListSelected navListKey=%s" % navListKey)
 		pos = self.getNavListDictValue(navListKey, self.NAV_LISTS_VALUE_CONTROL).getSelectedPosition()
-		id, name = self.getNavListSelectedItem(navListKey, selectedPos)
+		id, name = self.getNavListSelectedItem(navListKey, pos)
 		debug("< getNavListSelected id=%s name=%s pos=%" % (id,name,pos))
 		return id, name, pos
 
 	########################################################################################################################
 	def getNavListSelectedItem(self, navListKey, selectedPos=-1):
-		debug("> getNavListSelectedItem() navListKey=%s" % navListKey)
+		debug("> getNavListSelectedItem() navListKey=%s selectedPos=%s" % (navListKey, selectedPos))
 		name = ''
 		id = ''
 		try:
@@ -953,7 +953,7 @@ class Football(xbmcgui.Window):
 #				ctrl = (self.navLists[navListKey])[self.NAV_LISTS_VALUE_CONTROL]
 				ctrl = self.getNavListDictValue(navListKey, self.NAV_LISTS_VALUE_CONTROL)
 				selectedPos = ctrl.getSelectedPosition()
-			debug("using selectedPos=%s" % selectedPos)
+				debug("actual selectedPos=%s" % selectedPos)
 			if selectedPos >= 0:
 				menu = self.getNavListDictValue(navListKey, self.NAV_LISTS_VALUE_DATA)[self.NAV_LIST_MENU]
 				debug("menu=%s" % menu)
@@ -962,8 +962,8 @@ class Football(xbmcgui.Window):
 					name = __language__(id)
 				else:
 					name = id
-		except:
-			handleException()
+		except: pass
+#			handleException()
 		debug("< getNavListSelectedItem() id=%s name=%s" % (id, name))
 		return id, name
 
@@ -975,6 +975,7 @@ class Football(xbmcgui.Window):
 		# cancel liveText timer thread if running
 		if timerthread.isCountDownRunning():
 			timerthread.disableCountDown()
+			self.liveTextCL.reset()
 			self.liveTextCL.setVisible(False)
 			self.liveTextCL.setEnabled(False)
 
@@ -986,7 +987,8 @@ class Football(xbmcgui.Window):
 		# LEAGUE or LEAGUE_VIEWS
 		if self.selectedNavListKey in [self.LEAGUES_KEY,self.LEAGUE_VIEW_KEY]:
 			debug("LEAGUES_KEY or LEAGUE_VIEWS_KEY - remove other lists etc")
-			self.resetNavListTeams(False)	# dont clear stored league/Team data, just lists
+			self.clearNavList(self.TEAMS_KEY)
+			self.clearNavList(self.TEAM_VIEW_KEY)
 
 		# GET NAV LIST SELECTED ITEMS
 		leagueSelectedID, leagueSelectedItem, = self.getNavListSelectedItem(self.LEAGUES_KEY)
@@ -1016,16 +1018,14 @@ class Football(xbmcgui.Window):
 
 		# LEAGUES
 		if self.selectedNavListKey == self.LEAGUES_KEY:
-			self.updateNavListLeagueViews(leagueSelectedID)			# rebuild leagueView menu
 			if leagueSelectedID == self.LEAGUE_VIDEPRINTER:
 				debug("LEAGUES_KEY - LEAGUE_VIDEPRINTER")
+				self.clearNavList(self.LEAGUE_VIEW_KEY)
 				self.liveTextUpdateURL = leagueID	# league ID in this case holds the url
-				if Emulating:
-					self.updateLiveText()
-				else:
-					timerthread.enableCountDown()
+				timerthread.enableCountDown()
 			else:
 				debug("LEAGUES_KEY - OTHER")
+				self.updateNavListLeagueViews(leagueSelectedID)			# rebuild leagueView menu
 				# all other options from LEAGUES need focus to move to LEAGUE_VIEWS
 				self.selectedNavListKey = self.LEAGUE_VIEW_KEY
 
@@ -1121,10 +1121,7 @@ class Football(xbmcgui.Window):
 				else:
 					self.liveTextUpdateURL = url
 				# start the countdown timer, does an update at startup
-				if Emulating:
-					self.updateLiveText()
-				else:
-					timerthread.enableCountDown()
+				timerthread.enableCountDown()
 
 			elif leagueViewSelectedID == self.LEAGUE_VIEW_TOP_SCORERS:
 				debug("LEAGUE_VIEWS_KEY - LEAGUE_VIEW_TOP_SCORERS")
@@ -1139,26 +1136,22 @@ class Football(xbmcgui.Window):
 
 		# TEAMS
 		if self.selectedNavListKey == self.TEAMS_KEY:
-			debug("TEAMS_KEY")
+			debug("TEAMS_KEY teamID=" + teamID)
 			if teamSelectedItem:
 				# prevent TEAM_VIEWS if no teamID, means theres no urls
-				ctrl = self.getNavListDictValue(self.TEAM_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL)
 				if teamID:
-					ctrl.setVisible(True)
-					ctrl.setEnabled(True)
-					self.setFocus(ctrl)
+					debug("load TEAMS_VIEW navlist with menu")
 					self.selectedNavListKey = self.TEAM_VIEW_KEY
+					self.setNavListMenu(self.TEAM_VIEW_KEY, self.TEAM_VIEWS_MENU)
 				else:
 					debug("no teamViews information")
+					ctrl = self.getNavListDictValue(self.TEAM_VIEW_KEY, self.NAV_LISTS_VALUE_CONTROL)
 					ctrl.setVisible(False)
 					ctrl.setEnabled(False)
-					self.selectedNavListKey = self.TEAMS_KEY
-					self.setFocus(self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL))
 
 		# TEAM VIEWS
-		if self.selectedNavListKey == self.TEAM_VIEW_KEY:
+		if self.selectedNavListKey == self.TEAM_VIEW_KEY and teamViewSelectedID and teamSelectedItem:
 			debug("TEAM_VIEWS_KEY")
-			print "teamSelectedItem=%s" % teamSelectedItem
 			# get URL from selected LEAGUE_VIEWS
 			url = self.getNavListItem(self.TEAM_VIEW_KEY, item=teamViewSelectedID)
 			url = url.replace('$AZ',teamSelectedItem[0]).replace('$TEAM',teamID)
@@ -1181,14 +1174,11 @@ class Football(xbmcgui.Window):
 					dataMissing = True
 			elif teamViewSelectedID == self.TEAM_VIEW_LIVE_TEXT:
 				debug("TEAM_VIEWS_KEY - TEAM_VIEW_LIVE_TEXT")
-				hasLiveScore = self.getNavListItem(self.LEAGUES_KEY, self.LEAGUE_ITEM_REC_HAS_LIVESCORE, teamViewSelectedID)
+				hasLiveScore = self.getNavListItem(self.LEAGUES_KEY, self.LEAGUE_ITEM_REC_HAS_LIVESCORE, leagueSelectedID)
 				if hasLiveScore:
 					# start the countdown timer, does an update at startup
 					self.liveTextUpdateURL = url
-					if Emulating:
-						self.updateLiveText()
-					else:
-						timerthread.enableCountDown()
+					timerthread.enableCountDown()
 				else:
 					messageOK(__language_(351),__language__(101))
 					self.liveTextUpdateURL = ''
@@ -1226,6 +1216,7 @@ class Football(xbmcgui.Window):
 		self.addControl(control)
 		control.setAnimations([('WindowOpen', self.animFooterWO),
 							   ('WindowClose', self.animFooterWC)])
+		control.selectItem(-1)
 		try:
 			control.setPageControlVisible(False)
 		except: pass
@@ -1238,8 +1229,8 @@ class Football(xbmcgui.Window):
 
 
 	########################################################################################################################
-	def loadNavList(self, navListKey):
-		debug("> loadNavList() navListKey: " + navListKey)
+	def loadNavListMenu(self, navListKey):
+		debug("> loadNavListMenu() navListKey: " + navListKey)
 
 		# add menu items
 		isVisible = False
@@ -1262,7 +1253,7 @@ class Football(xbmcgui.Window):
 
 		controlList.setVisible(isVisible)
 		controlList.setEnabled(isVisible)
-		debug("< loadNavList()")
+		debug("< loadNavListMenu()")
 
 	########################################################################################################################
 	def updateNavListLeagueViews(self, leagueSelectedID):
@@ -1312,10 +1303,18 @@ class Football(xbmcgui.Window):
 			handleException()
 
 		# save amended menu
-		(self.navLists[self.LEAGUE_VIEW_KEY])[self.NAV_LISTS_VALUE_DATA][self.NAV_LIST_MENU] = leagueViewMenu
-		self.loadNavList(self.LEAGUE_VIEW_KEY)
-
+		self.setNavListMenu(self.LEAGUE_VIEW_KEY, leagueViewMenu)
 		debug("< updateNavListLeagueViews()")
+
+	########################################################################################################################
+	def setNavListMenu(self, navListKey, menu=[]):
+		debug("setNavListMenu() navListKey=%s menu=%s" % (navListKey, menu))
+
+		(self.navLists[navListKey])[self.NAV_LISTS_VALUE_DATA][self.NAV_LIST_MENU] = menu
+		if menu:
+			self.loadNavListMenu(navListKey)
+
+		debug("< setNavListMenu()")
 
 	########################################################################################################################
 	def setupNavListDict(self):
@@ -1376,14 +1375,10 @@ class Football(xbmcgui.Window):
 			self.removeControl(self.logoViewCLbl)
 		except: pass
 
-		# get league logo filename
-		if self.dataSource == self.DATASOURCE_SOCSTND:
-			imgW = 115		# country flags
-		else:
-			imgW = 120		# league logos
-
+		imgW = 115		# country flags
 		xpos = self.contentX
 		ypos = 0
+		imgH = self.headerH-2
 
 		# LEAGUE
 		leagueSelectedID, leagueSelectedItem = self.getNavListSelectedItem(self.LEAGUES_KEY)
@@ -1403,7 +1398,6 @@ class Football(xbmcgui.Window):
 			try:
 				self.logoLeagueCI.setImage(fname)
 			except:
-				imgH = self.headerH-2
 				self.logoLeagueCI = xbmcgui.ControlImage(xpos, ypos, imgW, imgH, \
 														fname, aspectRatio=2)
 				self.addControl(self.logoLeagueCI)
@@ -1421,6 +1415,7 @@ class Football(xbmcgui.Window):
 		# TEAM
 		teamSelectedID, teamSelectedItem = self.getNavListSelectedItem(self.TEAMS_KEY)
 		if teamSelectedItem:
+			title += '; ' + teamSelectedItem
 			imgW = 60
 			fname = os.path.join(DIR_TEAM_GFX, teamSelectedItem.replace(' ','_').replace('&','and') + '.jpg')
 			debug("TEAMS fname: " + fname)
@@ -1440,9 +1435,10 @@ class Football(xbmcgui.Window):
 													('WindowClose', self.animHeaderWC),
 													('VisibleChange', self.animZoomWC) ])
 			xpos += imgW + 5
-
-		if teamSelectedItem:
-			title += '; ' + teamSelectedItem
+		else:
+			try:
+				self.logoTeamCI.setVisible(False)
+			except: pass
 
 		labelH = 30
 		self.logoLeagueCLbl = xbmcgui.ControlLabel(xpos, ypos, 0, labelH, title, FONT_SPECIAL_14, "0xFFFFFF00")
@@ -1450,7 +1446,7 @@ class Football(xbmcgui.Window):
 		self.logoLeagueCLbl.setAnimations([('WindowOpen', self.animHeaderWO), ('WindowClose', self.animHeaderWC)])
 
 		# TEAM_VIEW
-		teamViewSelectedID, teamViewSelectedItem = self.getNavListSelectedItem(self.TEAMS_KEY)
+		teamViewSelectedID, teamViewSelectedItem = self.getNavListSelectedItem(self.TEAM_VIEW_KEY)
 		self.logoViewCLbl = xbmcgui.ControlLabel(xpos, ypos+labelH+5, self.contentW, 20, \
 												teamViewSelectedItem, FONT12, "0xFFFFFF00")
 		self.addControl(self.logoViewCLbl)
@@ -1460,7 +1456,7 @@ class Football(xbmcgui.Window):
 
 ########################################################################################################################
 	def getNavListItem(self, navList, field=0, item=''):
-		debug("getNavListItem() navList=%s" % navList)
+		debug("getNavListItem() navList=%s field=%s item=%s" % (navList, field, item))
 		data = None
 		value = ''
 		if not item:
@@ -1470,7 +1466,7 @@ class Football(xbmcgui.Window):
 		try:
 			data = (self.navLists[navList])[self.NAV_LISTS_VALUE_DATA][item]
 		except:
-			debug("getNavListItem() data not found using itemName %s" % item)
+			debug("getNavListItem() data not found using item %s" % item)
 		else:
 			if data:
 				try:
@@ -1510,25 +1506,25 @@ class Football(xbmcgui.Window):
 ########################################################################################################################
 	def clearContentControls(self):
 		debug("> clearContentControls()")
+		xbmcgui.lock()
 		if self.contentControls:
-			xbmcgui.lock()
 			for ctrl,data in self.contentControls:
 				try:
 					self.removeControl(ctrl)
 				except: pass
 			self.contentControls = []
 
-			try:
-				self.liveTextCL.reset()
-				self.liveTextCL.setVisible(False)
-				self.liveTextCL.setEnabled(False)
-			except: pass
-			xbmcgui.unlock()
+		try:
+			self.liveTextCL.reset()
+			self.liveTextCL.setVisible(False)
+			self.liveTextCL.setEnabled(False)
+		except: pass
+		xbmcgui.unlock()
 		debug("< clearContentControls()")
 
 #######################################################################################################################    
 	def toggleNavListFocus(self, switchToNavLists=None, isLiveText=False):
-		debug("> toggleNavListFocus() switchToNavLists=" + str(switchToNavLists) + " isLiveText="+str(isLiveText))
+		debug("> toggleNavListFocus() switchToNavLists=%s isLiveText=%s" % (switchToNavLists, isLiveText))
 
 		if switchToNavLists == None:
 			# toggle
@@ -1547,12 +1543,12 @@ class Football(xbmcgui.Window):
 			else:
 				debug("set focus to CONTENT")
 				if self.contentControls:
-					debug("self.contentFocusIdx = " + str(self.contentFocusIdx))
+					debug("self.contentFocusIdx = %s" % self.contentFocusIdx)
 					self.setFocus(self.contentControls[self.contentFocusIdx][self.CONTENT_REC_CONTROL])		# [ctrl,data]
 				else:
 					# no content, go back to nav lists
 					self.focusNavLists = True
-		debug("< toggleNavListFocus() new state: " + str(self.focusNavLists))
+		debug("< toggleNavListFocus() new state=%s" % (self.focusNavLists))
 
 
 ########################################################################################################################
@@ -1958,7 +1954,7 @@ class Football(xbmcgui.Window):
 			self.contentData.append([__language__(353),""])
 
 		debug("< getGossip()")
-		return success
+		return True
 
 ########################################################################################################################
 	def getTransfers(self, url, title):
@@ -2123,8 +2119,7 @@ class Football(xbmcgui.Window):
 
 			# current score
 			score = searchRegEx(html, 'class="sh">(.*?)</d', re.DOTALL+re.MULTILINE+re.IGNORECASE)
-			if score:
-				self.contentData.append([__language__(350),cleanHTML(score)])
+			self.contentData.append([__language__(350), cleanHTML(score)])
 
 			# split into sections
 			debug("LIVE TEXT - get section")
@@ -2166,8 +2161,7 @@ class Football(xbmcgui.Window):
 				# DATE 
 				regex = 'noshade />.*?<b>(.*?)</b>'
 				theDate = cleanHTML(searchRegEx(subSections[1], regex, re.MULTILINE+re.IGNORECASE+re.DOTALL))
-				if theDate:
-					self.contentData.append([theDate,__language__(352)])
+				self.contentData.append([theDate,''])
 
 				# TABLES (EACH ONE A MATCH)
 				tables = parseDocList(subSections[1], '<table(.*?)</table>')
@@ -2224,7 +2218,7 @@ class Football(xbmcgui.Window):
 	def getVideprinter(self, url):
 		debug("> getVideprinter()")
 
-		self.contentData = []
+		self.contentData = [[__language__(351),__language__(352)]]
 		id, title = self.getNavListSelectedItem(self.LEAGUES_KEY)
 		dialogProgress.create(__language__(302), title)
 		html = fetchURL(url)
@@ -2234,15 +2228,16 @@ class Football(xbmcgui.Window):
 			# DATE
 			regex = 'day and the date.*?<B>(.*?)<'
 			theDate = searchRegEx(html, regex, re.MULTILINE+re.IGNORECASE+re.DOTALL)
-			if theDate:
-				self.contentData.append([theDate, __language__(352)])	# date
+			self.contentData.append([theDate, ''])	# date
 
 			# find start of relvant section - all matches
-			regex = '<!--Start of stat table-->(.*?)<!--End of stat table-->'
+#			regex = '<!--Start of stat table-->(.*?)<!--End of stat table-->'
+			regex= 'refreshes automatically.*?S IINC -->(.*?)<!-- E IINC'
 			section = searchRegEx(html, regex, re.MULTILINE+re.IGNORECASE+re.DOTALL)
 
 			# split into table sections - 1 per match
-			splits = section.split('<p>')
+			splits = section.split('<br/>')
+			debug("table sections count=%s" % len(splits))
 			for split in splits:
 				text = decodeEntities(cleanHTML(split)).strip()
 				if text:
@@ -2315,7 +2310,7 @@ class Football(xbmcgui.Window):
 	def getRSS(self, url, title=""):
 		debug("> getRSS()")
 
-		success = False
+		self.contentData = []
 		self.rssparser = RSSParser2()
 		ELEMENT_TITLE = 'title'
 		ELEMENT_LINK = 'link'
@@ -2327,7 +2322,6 @@ class Football(xbmcgui.Window):
 		if self.rssparser.feed(url):
 			feeds = self.rssparser.parse("item", tags)
 			if feeds:
-				self.contentData = []
 				for feed in feeds:
 					# store title, '', link, guid
 					title = feed.getElement(ELEMENT_TITLE)
@@ -2340,10 +2334,9 @@ class Football(xbmcgui.Window):
 		dialogProgress.close()
 		if not self.contentData:
 			self.contentData.append([__language__(353),""])
-			success = True
 
-		debug("< getRSS() success: " + str(success))
-		return success
+		debug("< getRSS()")
+		return True
 
 
 #######################################################################################################################    
@@ -2512,7 +2505,7 @@ class Football(xbmcgui.Window):
 
 	#######################################################################################################################    
 	def showFFocusItem(self, url, title):
-		debug("> showFFocusItem()")
+		debug("> showFFocusItem() %s" % url)
 		success = False
 
 		self.logoViewCLbl.setLabel(title)
@@ -2524,9 +2517,10 @@ class Football(xbmcgui.Window):
 				   "&%s.stm&news=1&nbwm=1&bbwm=1&bbram=1&bbcws=1&ms_multicast=false&ms_javascript=true" \
 				   "&ms_whitelist=0&ms_warning=0&throughput=" % (matches.group(1), matches.group(2))
 		except:
+			# embedded player
+			messageOK(__language__(100), __language__(103))
 			post = ''
-
-		if post:
+		else:
 			# fetch mediaplayer url
 			dialogProgress.create(__language__(302), title)
 			html = fetchURL(url, params=post,encodeURL=False)		# prevents removal of ?
@@ -2543,8 +2537,8 @@ class Football(xbmcgui.Window):
 					if mediaURL:
 						success = playMedia(mediaURL)
 
-		if not success:
-			messageNoInfo()
+				if not success:
+					messageNoInfo()
 
 		debug("< showFFocusItem() success=%s" % success)
 		return success
@@ -2666,18 +2660,9 @@ class Football(xbmcgui.Window):
 			debug("leagueKey not found")
 			success = False
 		else:
-			ctrl = self.getNavListDictValue(self.TEAMS_KEY, self.NAV_LISTS_VALUE_CONTROL)
-			ctrl.reset()
 			teamNameList = teamsDict.keys()
 			teamNameList.sort()				# sort internally, returns None
-			for teamName in teamNameList:
-				ctrl.addItem(capwords(teamName))
-
-			# only make visible if requested
-			if visible:
-				ctrl.setVisible(True)
-				ctrl.setEnabled(True)
-				self.setFocus(ctrl)
+			self.setNavListMenu(self.TEAMS_KEY, teamNameList)
 			success = True
 
 		debug("< loadNavListTeams() success=%s" % success)
@@ -2731,22 +2716,27 @@ class Football(xbmcgui.Window):
 		debug("< getTeamSquad()")
 		return True
 
-########################################################################################################################
-	def resetNavListTeams(self, clear=False):
-		debug("> resetNavListTeams() clear=%s" % clear)
+	########################################################################################################################
+	def clearNavList(self, navListKey):
+		debug("clearNavList() navListKey=%s" % navListKey)
+		try:
+			ctrl = self.getNavListDictValue(navListKey, self.NAV_LISTS_VALUE_CONTROL)
+			ctrl.reset()
+			ctrl.setVisible(False)
+			ctrl.setEnabled(False)
+		except: pass
+		# reset stored menu options
+		self.setNavListMenu(navListKey, [])
+
+	########################################################################################################################
+	def resetNavListTeams(self):
+		debug("> resetNavListTeams()")
 		success = True
 
-		keyList = (self.TEAMS_KEY, self.TEAM_VIEW_KEY)
-		for key in keyList:
-			try:
-				ctrl = self.getNavListDictValue(key, self.NAV_LISTS_VALUE_CONTROL)
-				ctrl.reset()
-				ctrl.setVisible(False)
-				ctrl.setEnabled(False)
-			except: pass
-			
+		self.clearNavList(self.TEAMS_KEY)
+		self.clearNavList(self.TEAM_VIEW_KEY)
 
-		if clear and xbmcgui.Dialog().yesno(__language__(520) + " ?",__language__(200)):
+		if xbmcgui.Dialog().yesno(__language__(520) + " ?",__language__(200)):
 			debug("reset gui, clearing all data")
 			try:
 				# delete leagues settings files
@@ -2858,6 +2848,7 @@ class Football(xbmcgui.Window):
 			self.liveTextCL.addItem(xbmcgui.ListItem(lbl1,label2=lbl2))
 
 		self.liveTextCL.setVisible(True)
+		self.liveTextCL.setEnabled(True)
 		debug("< drawLiveText()")
 
 #######################################################################################################################    
@@ -3005,8 +2996,8 @@ class Football(xbmcgui.Window):
 					xbmcgui.ListItem(OPT_VIEW_README),
 					xbmcgui.ListItem(OPT_VIEW_CHANGELOG),
 					xbmcgui.ListItem(OPT_DATASOURCE),
-					xbmcgui.ListItem(OPT_CHECK_UPDATE_STARTUP, self.settings[self.SETTING_CHECK_UPDATE]),
-					xbmcgui.ListItem(OPT_CONTENT_FONT, self.settings[self.SETTING_CONTENT_FONT])]
+					xbmcgui.ListItem(OPT_CHECK_UPDATE_STARTUP, str(self.settings[self.SETTING_CHECK_UPDATE])),
+					xbmcgui.ListItem(OPT_CONTENT_FONT, str(self.settings[self.SETTING_CONTENT_FONT]))]
 
 		selectedPos = 0
 		reInit = INIT_NONE
@@ -3022,7 +3013,7 @@ class Football(xbmcgui.Window):
 			selectedItem = menu[selectedPos].getLabel()
 
 			if selectedItem == OPT_CLEAR_TEAMS:
-				if self.resetNavListTeams(True):
+				if self.resetNavListTeams():
 					optReInit = INIT_FULL
 			elif selectedItem == OPT_VIEW_README:
 				fn = getReadmeFilename(mylanguage)
@@ -3042,9 +3033,12 @@ class Football(xbmcgui.Window):
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 
 			elif selectedItem == OPT_CONTENT_FONT:
-				menuContent = [__language__(500)] + ALL_FONTS	# defined in bbbLib
+				menuContent = [__language__(500)]
+				for font in ALL_FONTS:
+					menuContent.append(font)
+				print "menuContent=", menuContent
 				selectDialog = DialogSelect()
-				selectDialog.setup(OPT_CONTENT_FONT, rows=len(menuContent), width=300)
+				selectDialog.setup(selectedItem, rows=len(menuContent), width=300)
 				selectedPosContent, action = selectDialog.ask(menuContent)
 				if selectedPosContent > 0:
 					self.settings[self.SETTING_CONTENT_FONT] = menuContent[selectedPosContent]

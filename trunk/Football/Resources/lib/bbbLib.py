@@ -14,13 +14,11 @@ import sgmllib
 from xml.dom.minidom import parse, parseString
 from shutil import rmtree
 import cookielib
-#import socket
-#socket.setdefaulttimeout( 10 )
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '27-03-2008'
+__date__ = '08-04-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -168,8 +166,6 @@ ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPEC
 REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
 
 dialogProgress = xbmcgui.DialogProgress()
-try: Emulating = xbmcgui.Emulating 
-except: Emulating = False
 
 REZ_W = 720
 REZ_H = 576
@@ -288,33 +284,6 @@ def doKeyboard(currentValue='', heading='', kbType=KBTYPE_ALPHA):
 
 	return value
 
-##############################################################################################
-# if current and skinned resolutions differ and skinned resolution is not
-# 1080i or 720p (they have no 4:3), calculate widescreen offset
-##############################################################################################
-def setResolution(win):
-	try:
-		# '1080i'=0, '720p'=1, '480p'=2, '480p16x9'=3, 'ntsc'=4, 'ntsc16x9'=5, 'pal'=6, 'pal16x9'=7, 'pal60'=8, 'pal6016x9'=9}
-		rez = 6		# PAL
-		currRez = win.getResolution()
-		if (currRez != rez) and rez > 1:
-			# If resolutions differ calculate widescreen offset
-			# check if current resolution is 16x9
-			if (currRez == 0 or currRez % 2): iCur16x9 = 1
-			else: iCur16x9 = 0
-
-			# check if skinned resolution is 16x9
-			if (rez == 0 or rez % 2): iSkin16x9 = 1
-			else: iSkin16x9 = 0
-
-			# calculate offset
-			offset = iCur16x9 - iSkin16x9
-			rez += offset
-	except:
-		handleException()
-
-	win.setCoordinateResolution(rez)
-	debug("setResolution() curr Rez=" + str(currRez) + " new Rez="+str(rez))
 
 #######################################################################################################################    
 def parseDocList(doc, regex, startStr='', endStr=''):
@@ -995,7 +964,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			percent = int( float( count * blocksize * 100) / totalsize )
 			if (percent % 5) == 0:
 				dialogProgress.update( percent )
-		if ( dialogProgress.iscanceled() ): raise
+		if ( dialogProgress.iscanceled() ):
+			raise "Cancel"
 
 	success = False
 	data = None
@@ -1045,6 +1015,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 		debug("Returned Non Binary content")
 		data = False
 		success = False
+	except "Cancel":
+		debug("download cancelled")
 	except:
 		handleException("fetchURL()")
 	else:
@@ -1532,3 +1504,11 @@ def installPlugin(pluginType, name='', checkOnly=True):
 
 	debug("< installPlugin() exists=%s" % exists)
 	return exists
+
+def validMAC(mac):
+    valid = False
+    if mac and len(mac) >= 11 and len(mac) <= 17:
+        if find(mac,':') != -1 and len(mac.split(':')) == 6:
+            valid = True
+    debug("validMAC=%s" % validMAC)
+    return valid

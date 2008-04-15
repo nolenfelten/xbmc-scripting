@@ -6,6 +6,7 @@
     <string id="100">Error!</string>
     <string id="101">Option not available for this league!</string>
     <string id="102">No information.[CR]Web site may have changed!?</string>
+    <string id="103">BBC embedded media player not yet supported!</string>
 
     <!-- Prompt messages -->
     <string id="200">Updated leagues will be downloaded.</string>

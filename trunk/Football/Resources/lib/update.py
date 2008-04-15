@@ -17,12 +17,9 @@ import sys
 import os
 import xbmcgui, xbmc
 import urllib
-import socket
 import re
 import traceback
 from shutil import copytree, rmtree
-
-socket.setdefaulttimeout( 10 )
 
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
