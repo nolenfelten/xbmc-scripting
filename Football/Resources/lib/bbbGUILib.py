@@ -173,8 +173,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 		if action in [ACTION_BACK, ACTION_B]:
 			self.selectedPos = -1
 			self.close()
-		elif (self.useY and action == ACTION_Y) or \
-			 (self.useX and action == ACTION_X):
+		elif (action == ACTION_Y and self.useY) or (action == ACTION_X and self.useX):
 			self.selectedPos = self.menuCL.getSelectedPosition()
 			self.close()
 
@@ -283,6 +282,34 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 	def onControl(self, control):
 		pass
 
+##############################################################################################
+# if current and skinned resolutions differ and skinned resolution is not
+# 1080i or 720p (they have no 4:3), calculate widescreen offset
+##############################################################################################
+def setResolution(win):
+	try:
+		# '1080i'=0, '720p'=1, '480p'=2, '480p16x9'=3, 'ntsc'=4, 'ntsc16x9'=5, 'pal'=6, 'pal16x9'=7, 'pal60'=8, 'pal6016x9'=9}
+		rez = 6		# PAL
+		currRez = win.getResolution()
+		debug("currRez=%s" % currRez)
+		if currRez and (currRez != rez) and rez > 1:
+			# If resolutions differ calculate widescreen offset
+			# check if current resolution is 16x9
+			if (currRez == 0 or currRez % 2): iCur16x9 = 1
+			else: iCur16x9 = 0
+
+			# check if skinned resolution is 16x9
+			if (rez == 0 or rez % 2): iSkin16x9 = 1
+			else: iSkin16x9 = 0
+
+			# calculate offset
+			offset = iCur16x9 - iSkin16x9
+			rez += offset
+	except:
+		handleException("setResolution()")
+
+	win.setCoordinateResolution(rez)
+	debug("setResolution() curr Rez=" + str(currRez) + " new Rez="+str(rez))
 
 ######################################################################################
 # establish default panel to use for dialogs
