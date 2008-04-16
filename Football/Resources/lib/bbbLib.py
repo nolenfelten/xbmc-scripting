@@ -18,7 +18,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '08-04-2008'
+__date__ = '16-04-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -1001,10 +1001,12 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 
 		if DEBUG:
 			print resp
-			content_type = resp["Content-Type"].lower()
-			# fail if expecting an image but not corrent type returned
-			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
-				raise "Not Binary"
+			showCookies()
+
+		# fail if expecting an image but not corrent type returned
+		content_type = resp["Content-Type"].lower()
+		if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+			raise "Not Binary"
 
 		opener.close()
 		del opener
@@ -1101,7 +1103,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 				handleException()
 				data = None
 
-	success = (data != None and data != False)
+	success = (data != '' and data != None and data != False)
 	debug("< bbbLib.fetchCookieURL() %s" % success)
 	return data
 
