@@ -14,13 +14,11 @@ import sgmllib
 from xml.dom.minidom import parse, parseString
 from shutil import rmtree
 import cookielib
-#import socket
-#socket.setdefaulttimeout( 10 )
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '27-03-2008'
+__date__ = '16-04-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -168,8 +166,6 @@ ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPEC
 REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
 
 dialogProgress = xbmcgui.DialogProgress()
-try: Emulating = xbmcgui.Emulating 
-except: Emulating = False
 
 REZ_W = 720
 REZ_H = 576
@@ -192,6 +188,7 @@ def debug( value ):
 
 #################################################################################################################
 def messageOK(title='', line1='', line2='',line3=''):
+	debug("%s\n%s\n%s\n%s" % (title, line1,line2,line3))
 	xbmcgui.Dialog().ok(title ,line1,line2,line3)
 
 #################################################################################################################
@@ -995,7 +992,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			percent = int( float( count * blocksize * 100) / totalsize )
 			if (percent % 5) == 0:
 				dialogProgress.update( percent )
-		if ( dialogProgress.iscanceled() ): raise
+		if ( dialogProgress.iscanceled() ):
+			raise "Cancel"
 
 	success = False
 	data = None
@@ -1012,8 +1010,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 
 		# add headers if supplied
 		if headers:
-			if not headers.has_key('User-Agent'):
-				headers['User-Agent'] = 'Mozilla/5.0'
+			if not headers.has_key('User-Agent')  and not headers.has_key('User-agent'):
+				headers['User-Agent'] = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 			for name, value  in headers.items():
 				opener.addheader(name, value)
 
@@ -1031,6 +1029,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 
 		if DEBUG:
 			print resp
+			showCookies()
+
 			content_type = resp["Content-Type"].lower()
 			# fail if expecting an image but not corrent type returned
 			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
@@ -1045,6 +1045,8 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 		debug("Returned Non Binary content")
 		data = False
 		success = False
+	except "Cancel":
+		debug("download cancelled")
 	except:
 		handleException("fetchURL()")
 	else:
@@ -1112,7 +1114,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 				mode = "wb"
 			else:
 				mode = "w"
-			debug("writing to file, mode=%s ..." % mode)
+			debug("writing data to file, mode=%s ..." % mode)
 			try:
 				f = open(fn,mode)
 				f.write(data)
@@ -1331,7 +1333,7 @@ class RSSParser2:
 			if not file:
 				dir = os.getcwd().replace(';','')
 				file = os.path.join(dir, "temp.xml")
-			doc = fetchURL(url, file)
+			doc = fetchCookieURL(url, file)
 		elif file:
 			debug("parseString from FILE " + file)
 			doc = readFile(file)
@@ -1416,8 +1418,8 @@ class RSSParser2:
 #				else:
 #					debug("Tag: %s No Data found" % (elTagName, )
 
-			if DEBUG:
-				print "%s %s" % (index, dict)
+#			if DEBUG:
+#				print "%s %s" % (index, dict)
 			objectsList.append(RSSNode(dict))
 
 		debug("< RSSParser2().__parseElements() No. objects= %s" % len(objectsList))
@@ -1522,7 +1524,7 @@ def installPlugin(pluginType, name='', checkOnly=True):
 		try:
 			from shutil import copytree, rmtree
 			try:
-				rmtree( copyToPath )
+				rmtree( copyToPath,ignore_errors=True )
 			except: pass
 			copytree( copyFromPath, copyToPath )
 			dialogOK(__scriptname__, "In plugins 'Add Source' to complete installation.", name)
@@ -1532,3 +1534,30 @@ def installPlugin(pluginType, name='', checkOnly=True):
 
 	debug("< installPlugin() exists=%s" % exists)
 	return exists
+
+##############################################################################################################    
+def validMAC(mac):
+    valid = False
+    if mac and len(mac) >= 11 and len(mac) <= 17:
+        if find(mac,':') != -1 and len(mac.split(':')) == 6:
+            valid = True
+    debug("validMAC=%s" % validMAC)
+    return valid
+
+##############################################################################################################    
+def playMedia(filename):
+	debug("> playMedia() " + filename)
+	success = True
+
+	try:
+		xbmc.Player().play(filename)
+	except:
+		debug('xbmc.Player().play() failed trying xbmc.PlayMedia() ')
+		try:
+			cmd = 'xbmc.PlayMedia(%s)' % filename
+			xbmc.executebuiltin(cmd)
+		except:
+			handleException('xbmc.PlayMedia()')
+			success = False
+	debug("< playMedia() success=%s" % success)
+	return success
