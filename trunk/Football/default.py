@@ -32,6 +32,7 @@ DIR_HOME = os.getcwd().replace( ";", "" )
 DIR_RESOURCES = os.path.join( DIR_HOME , "resources" )
 DIR_RESOURCES_LIB = os.path.join( DIR_RESOURCES , "lib" )
 DIR_USERDATA = os.path.join( "T:\\script_data", __scriptname__ )
+DIR_CACHE = os.path.join(DIR_USERDATA, "cache")
 DIR_GFX = os.path.join(DIR_RESOURCES,'gfx')
 DIR_TEAM_GFX = os.path.join(DIR_RESOURCES,'team_gfx')
 sys.path.insert(0, DIR_RESOURCES_LIB)
@@ -779,11 +780,18 @@ class Football(xbmcgui.Window):
 			self.logoViewCLbl.setLabel(self.MAINMENU_SELECTED)
 			contentDataRec = self.contentData[contentSelectedPos]
 			try:
+				title = ''
+				lbl2 = ''
+				url = ''
+				desc = ''
+				guid = ''
+				imgUrl = ''
 				title = contentDataRec[0]
 				lbl2 = contentDataRec[1]
 				url = contentDataRec[2]
 				desc = contentDataRec[3]
 				guid = contentDataRec[4]
+				imgUrl = contentDataRec[5]	# optional
 			except:
 				debug("contentDataRec not fully unpacked")
 
@@ -795,7 +803,7 @@ class Football(xbmcgui.Window):
 					self.displayGalleryPhoto(url)
 				elif self.getGalleryPhotoLinks(guid):			# list of photos
 					self.clearContentControls()
-					self.drawContentList(__language__(358), width=300, font=FONT13, x=0)
+					self.drawContentList(__language__(358), width=350, font=FONT13, x=0)
 					# force selection of 1st photo
 					self.contentSelected()
 				try:
@@ -836,16 +844,16 @@ class Football(xbmcgui.Window):
 				debug("MAINMENU - MAINMENU_OPT_GOSSIP")
 				# extract data associated with this selected item
 				if find(title, 'gossip') != -1:
-					if self.getGossip(guid, title):
-						self.clearContentControls()
-						self.drawContentList(title)
+					success = self.getGossip(guid, title)
 				elif find(title, 'Transfers') != -1:
-					if self.getTransfers(guid, title):
-						self.clearContentControls()
-						self.drawContentList(title)
+					success = self.getTransfers(guid, title)
 				else:
-					debug("no further data")
-				self.toggleNavListFocus(False)	# content
+					success = False
+
+				if success:
+					self.clearContentControls()
+					self.drawContentList(title)
+					self.toggleNavListFocus(False)	# content
 
 			elif self.MAINMENU_SELECTED == self.MAINMENU_OPT_FFOCUS:			
 				debug("MAINMENU - MAINMENU_OPT_FFOCUS")
@@ -2316,7 +2324,8 @@ class Football(xbmcgui.Window):
 		ELEMENT_LINK = 'link'
 		ELEMENT_DESC = 'description'
 		ELEMENT_QUID = 'guid'
-		tags = {ELEMENT_TITLE:[], ELEMENT_LINK:[],ELEMENT_DESC:[],ELEMENT_QUID:[]}
+		ELEMENT_IMG_URL = 'media:thumbnail'
+		tags = {ELEMENT_TITLE:[], ELEMENT_LINK:[],ELEMENT_DESC:[],ELEMENT_QUID:[],ELEMENT_IMG_URL:['url']}
 
 		dialogProgress.create(__language__(302), __language__(305), title)
 		if self.rssparser.feed(url):
@@ -2328,8 +2337,12 @@ class Football(xbmcgui.Window):
 					link = feed.getElement(ELEMENT_LINK)
 					desc = feed.getElement(ELEMENT_DESC)
 					guid = feed.getElement(ELEMENT_QUID)
+					try:
+						imgUrl = feed.getElement(ELEMENT_IMG_URL)[0]
+					except:
+						imgUrl = ''
 					if title and link:
-						self.contentData.append([title,'',link, desc, guid])
+						self.contentData.append([title,'',link, desc, guid, imgUrl])
 
 		dialogProgress.close()
 		if not self.contentData:
@@ -2402,8 +2415,8 @@ class Football(xbmcgui.Window):
 	######################################################################################################################
 	def setup606(self):
 		debug("> setup606()")
-		success = False
 
+		success = False
 		if not self.teams606:
 			# download 606 section & store
 			self.get606(self.MAINMENU_URL[self.MAINMENU_OPT_606])
@@ -2411,24 +2424,24 @@ class Football(xbmcgui.Window):
 		if self.teams606:
 			self.contentData = []
 			self.clearContentControls()
-			self.logoViewCLbl.setLabel('606 Debates')
+			self.logoViewCLbl.setLabel(self.MAINMENU_OPT_606_THREAD)
 			items = self.teams606.items()
 			items.sort()
 			for team, phrase in items:
 				self.contentData.append([team, '', phrase, '', ''])
 
-			self.drawContentList(__language__(365), width=300, itemHeight=22)
+			self.drawContentList(__language__(365), width=300, itemHeight=23)
 			self.toggleNavListFocus(False)					# set focus to content
 
 			success = (len(self.contentData) > 0)
-		debug("< setup606() success: " +str(success))
+		debug("< setup606() success=%s" % success)
 		return success
 
 	######################################################################################################################
 	def get606(self, url):
 		debug("> get606()")
 
-		success = False
+		self.teams606 = {}
 		dialogProgress.create(__language__(302), self.MAINMENU_OPT_606)
 		html = fetchURL(url)
 		dialogProgress.close()
@@ -2438,16 +2451,13 @@ class Football(xbmcgui.Window):
 			section = searchRegEx(html, regex, re.MULTILINE+re.IGNORECASE+re.DOTALL)
 			if section:
 				matches = parseDocList(section, '<!-- S ILIN -->.*?phrase=(.*?)&.*?>(.*?)<')
-				if matches:
-					self.teams606 = {}
-					for phrase, team in matches:
-						self.teams606[team] = phrase
+				for phrase, team in matches:
+					self.teams606[team] = phrase
 
-					success = (len(self.teams606) > 0)
-
+		success = (len(self.teams606) > 0)
 		if not success:
 			messageNoInfo()
-		debug("< get606() success: " + str(success))
+		debug("< get606() success=%s" % success)
 		return success
 
 
@@ -2544,9 +2554,7 @@ class Football(xbmcgui.Window):
 		return success
 
 
-#######################################################################################################################    
-# passed url need preficing with BBC
-########################################################################################################################
+	#######################################################################################################################    
 	def getFFocusVideo(self):
 		debug("> getFFocusVideo()")
 
@@ -2562,9 +2570,7 @@ class Football(xbmcgui.Window):
 		return success
 
 
-#######################################################################################################################    
-# passed url need prefixing with BBC
-########################################################################################################################
+	#######################################################################################################################    
 	def getInterviewMediaLink(self, url):
 		debug("> getInterviewMediaLink()")
 
@@ -2625,11 +2631,10 @@ class Football(xbmcgui.Window):
 		debug("> displayGalleryPhoto()")
 
 		dialogProgress.create(__language__(302), os.path.basename(url))
-		filename = os.path.join(DIR_TEAM_GFX, 'gallery_photo.jpg')
-		deleteFile(filename)
-		fetchURL(url, filename)
+		filename = os.path.join(DIR_CACHE, 'gallery_photo.jpg')
+		success = fetchURL(url, filename, isBinary=True)
 		dialogProgress.close()
-		if fileExist(filename):
+		if success:
 			# remove last photo from contentControl
 			# contentCOntrol at this stahe will be TITLE, photos list - and maybe photo image
 			# remove image if exists
@@ -2821,7 +2826,19 @@ class Football(xbmcgui.Window):
 						lbl2 = ' '
 					if lbl1 == '':
 						lbl1 = ' '
-					controlList.addItem(xbmcgui.ListItem(lbl1,label2=lbl2))
+					try:
+						# download icon
+						imgUrl = contentItem[5]
+						imgFilename = os.path.join(DIR_CACHE, os.path.basename(imgUrl))
+						if not fileExist(imgFilename): 
+							if not fetchURL(imgUrl, imgFilename, isBinary=True):
+								imgFilename = ''
+					except:
+						imgFilename = ''
+					if imgFilename:
+						controlList.addItem(xbmcgui.ListItem(lbl1,lbl2,imgFilename,imgFilename))
+					else:
+						controlList.addItem(xbmcgui.ListItem(lbl1,lbl2))
 
 				self.contentFocusIdx = len(self.contentControls)-1	# list is last
 		except:
@@ -3318,14 +3335,16 @@ def updateScript(quite=False, notifyNotFound=False):
 #######################################################################################################################    
 # BEGIN !
 #######################################################################################################################
-makeScriptDataDir() 
+makeScriptDataDir()
+makeDir(DIR_CACHE)
 myscript = Football()
 if myscript.isReady():
 	myscript.doModal()
 del myscript
 
-debug("exiting script ...")
 # housekeep on exit
+debug("exiting script ...")
+removeDir(DIR_CACHE, force=True)
 deleteFile(os.path.join(DIR_HOME, "temp.xml"))
 deleteFile(os.path.join(DIR_HOME, "temp.html"))
 
