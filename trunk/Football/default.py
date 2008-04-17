@@ -803,7 +803,7 @@ class Football(xbmcgui.Window):
 					self.displayGalleryPhoto(url)
 				elif self.getGalleryPhotoLinks(guid):			# list of photos
 					self.clearContentControls()
-					self.drawContentList(__language__(358), width=350, font=FONT13, x=0)
+					self.drawContentList(__language__(358), width=350, x=0)
 					# force selection of 1st photo
 					self.contentSelected()
 				try:
@@ -831,7 +831,7 @@ class Football(xbmcgui.Window):
 						url = self.contentData[contentSelectedPos][2]
 						self.clearContentControls()
 						self.logoViewCLbl.setLabel(title)
-						self.drawContentList(__language__(359),width=680)
+						self.drawContentList(__language__(359))
 						self.MAINMENU_SELECTED = self.MAINMENU_OPT_606_THREAD
 					self.toggleNavListFocus(False)		# focus content
 
@@ -1449,13 +1449,14 @@ class Football(xbmcgui.Window):
 			except: pass
 
 		labelH = 30
-		self.logoLeagueCLbl = xbmcgui.ControlLabel(xpos, ypos, 0, labelH, title, FONT_SPECIAL_14, "0xFFFFFF00")
+		w = REZ_W - xpos - 100
+		self.logoLeagueCLbl = xbmcgui.ControlLabel(xpos, ypos, w, labelH, title, FONT_SPECIAL_14, "0xFFFFFF00")
 		self.addControl(self.logoLeagueCLbl)
 		self.logoLeagueCLbl.setAnimations([('WindowOpen', self.animHeaderWO), ('WindowClose', self.animHeaderWC)])
 
 		# TEAM_VIEW
 		teamViewSelectedID, teamViewSelectedItem = self.getNavListSelectedItem(self.TEAM_VIEW_KEY)
-		self.logoViewCLbl = xbmcgui.ControlLabel(xpos, ypos+labelH+5, self.contentW, 20, \
+		self.logoViewCLbl = xbmcgui.ControlLabel(xpos, ypos+labelH+5, w, 20, \
 												teamViewSelectedItem, FONT12, "0xFFFFFF00")
 		self.addControl(self.logoViewCLbl)
 		self.logoViewCLbl.setAnimations([('WindowOpen', self.animHeaderWO),('WindowClose', self.animHeaderWC)])
@@ -2394,20 +2395,26 @@ class Football(xbmcgui.Window):
 		dialogProgress.close()
 		if validWebPage(html):
 
-			try:
-				# split into sections
-				matches = parseDocList(html,'"story" href="(.*?)">(.*?)<.*?time">(.*?)<')
-				for match in matches:
-					# [link, title, time]
+			# split into sections
+			matches = parseDocList(html,'"story" href="(.*?)">(.*?)<.*?time">(.*?)<')
+			for match in matches:
+				# [link, title, time]
+				try:
 					link = match[0].strip()
-					title = decodeEntities(cleanHTML(match[1])).strip()
-					time = decodeEntities(match[2]).strip()
+					title = cleanHTML(decodeEntities(match[1]))
+					time = cleanHTML(decodeEntities(match[2]))
 					if link and title and time:
-						self.contentData.append([title, time, self.BBC_NEWS_URL_PREFIX + link,'',''])
-			except: pass
+						if not link.startswith('http'):
+							link = self.BBC_NEWS_URL_PREFIX + link
+						self.contentData.append([title, time, link,'',''])
+				except:
+					print "bad match", match
 
 		if not self.contentData:
-			self.contentData.append([__language__(353),""])
+			self.contentData.append([__language__(353),'','','',''])
+
+		self.drawContentList('',width=500)
+		self.toggleNavListFocus(False)		# switch to content
 
 		debug("< getInterviewLinks()")
 		return True
@@ -2580,9 +2587,9 @@ class Football(xbmcgui.Window):
 # AUDIO mms://wm.bbc.net.uk/news/media/avdb/sport_web/audio/9012da68002e708/bb/09012da68002e90f_16x9_bb.wma
 
 		success = False
-		dialog.create(__language__(302), __language__(306), url)
+		dialogProgress.create(__language__(302), __language__(306), url)
 		html = fetchURL(url)
-		dialog.close()
+		dialogProgress.close()
 		if validWebPage(html):
 
 			asxLink = searchRegEx(html, 'clipurl = "(.*?)"', re.MULTILINE+re.IGNORECASE+re.DOTALL)
@@ -2635,19 +2642,25 @@ class Football(xbmcgui.Window):
 		success = fetchURL(url, filename, isBinary=True)
 		dialogProgress.close()
 		if success:
+			# find controlList, get its width so we know how width to make photo
+			clist_w = 370
+			for ctrlRec in self.contentControls:
+				ctrl = ctrlRec[self.CONTENT_REC_CONTROL]
+				if isinstance(ctrl, xbmcgui.ControlList):
+					clist_w = ctrl.getWidth()
+					break
 			# remove last photo from contentControl
-			# contentCOntrol at this stahe will be TITLE, photos list - and maybe photo image
+			# contentCOntrol  will be TITLE, photos list - and maybe photo image
 			# remove image if exists
 			ctrl = self.contentControls[-1][self.CONTENT_REC_CONTROL] # get last ctrl on list
 			if isinstance(ctrl, xbmcgui.ControlImage):
 				debug("removing old image control")
 				self.removeControl(ctrl)
 				self.contentControls.pop()	# remove last element of list, which is our control image
-			w = 416
-			h = 300
-			x = self.contentX + 300
-			y = self.contentCenterY - (h/2)
-			ctrl = xbmcgui.ControlImage(x, y, w, h, filename)
+
+			w = REZ_W - clist_w
+			x = clist_w + 5
+			ctrl = xbmcgui.ControlImage(x, self.contentY, w, self.contentH, filename,aspectRatio=2)
 			self.addControl(ctrl)
 			self.contentControls.append([ctrl,None])
 		else:
@@ -2766,7 +2779,7 @@ class Football(xbmcgui.Window):
 
 
 ########################################################################################################################
-	def drawContentList(self, title1='', title2='',width=600, itemHeight=28, font='', x=-1):
+	def drawContentList(self, title1='', title2='',width=680, itemHeight=28, font='', x=-1):
 		debug("> drawContentList()")
 
 		try:
@@ -2783,7 +2796,7 @@ class Football(xbmcgui.Window):
 					# as specified
 					x = self.contentX + x
 				y = self.contentY
-				labelH = 20
+				labelH = 22
 				listH = self.contentH
 				if not font:
 					font = self.settings[self.SETTING_CONTENT_FONT]
@@ -2829,6 +2842,7 @@ class Football(xbmcgui.Window):
 					try:
 						# download icon
 						imgUrl = contentItem[5]
+						if not imgUrl: raise
 						imgFilename = os.path.join(DIR_CACHE, os.path.basename(imgUrl))
 						if not fileExist(imgFilename): 
 							if not fetchURL(imgUrl, imgFilename, isBinary=True):
@@ -2945,8 +2959,9 @@ class Football(xbmcgui.Window):
 
 			selectedItem = self.MAINMENU[selectedPos]
 			url = self.MAINMENU_URL[selectedItem]
-			self.clearContentControls()
-			self.logoViewCLbl.setLabel(selectedItem)
+			if selectedItem != self.MAINMENU_OPT_CONFIG_MENU:
+				self.clearContentControls()
+				self.logoViewCLbl.setLabel(selectedItem)
 
 			try:
 				if selectedItem == self.MAINMENU_OPT_CONFIG_MENU:
@@ -2960,10 +2975,10 @@ class Football(xbmcgui.Window):
 						break	# to view content
 				elif selectedItem == self.MAINMENU_OPT_5LIVE:
 					debug("self.MAINMENU_OPT_5LIVE")
-					success = playMedia(mediaLink)
+					success = playMedia(self.MAINMENU_URL[self.MAINMENU_OPT_5LIVE])
 				elif selectedItem == self.MAINMENU_OPT_5LIVEX:
 					debug("self.MAINMENU_OPT_5LIVEX")
-					success = playMedia(mediaLink)
+					success = playMedia(self.MAINMENU_URL[self.MAINMENU_OPT_5LIVE])
 				elif selectedItem == self.MAINMENU_OPT_PHOTO_GALLERY:
 					debug("self.MAINMENU_OPT_PHOTO_GALLERY")
 					if self.getPhotoGalley():
@@ -3053,13 +3068,12 @@ class Football(xbmcgui.Window):
 				menuContent = [__language__(500)]
 				for font in ALL_FONTS:
 					menuContent.append(font)
-				print "menuContent=", menuContent
 				selectDialog = DialogSelect()
 				selectDialog.setup(selectedItem, rows=len(menuContent), width=300)
 				selectedPosContent, action = selectDialog.ask(menuContent)
 				if selectedPosContent > 0:
 					self.settings[self.SETTING_CONTENT_FONT] = menuContent[selectedPosContent]
-					optReInit = INIT_NONE
+					saveFileObj(self.SETTINGS_FILENAME, self.settings)
 
 			if optReInit > reInit:
 				reInit = optReInit	# save highest reinit level
@@ -3209,7 +3223,7 @@ class LiveSportOnTV:
 		menuIcons = []
 		iconFN = self.ICON_FN.replace('$ID', str(ID))
 
-		regex = 'dt">(.*?)<.*?fx">(.*?)<.*?tt">(.*?)<.*?ch">(.*?)<'
+		regex = 'dt">(.*?)<.*?fx">(.*?)<.*?tt">(.*?)<.*?ch">(.*?)</td'
 		matches = parseDocList(html, regex, '>FIXTURE DATE','</table>' )
 		for match in matches:
 			date = cleanHTML(decodeEntities(match[0]))
@@ -3243,7 +3257,7 @@ class LiveSportOnTV:
 			dialogProgress.create(listTitle, "Downloading ...", title)
 			html = fetchURL(url)
 			dialogProgress.close()
-			if html and html != -1:
+			if html:
 				if find(url, 'rss') != -1:
 					menu, menuIcons = self.getSportDataRSS(html, ID)
 				else:
@@ -3252,7 +3266,7 @@ class LiveSportOnTV:
 					break
 
 		selectDialog = DialogSelect()
-		selectDialog.setup(listTitle, imageWidth=22,width=680, rows=len(menu), itemHeight=22, panel=DIALOG_PANEL)
+		selectDialog.setup(listTitle, imageWidth=24,width=710, rows=len(menu), itemHeight=24, panel=DIALOG_PANEL)
 		selectedPos,action = selectDialog.ask(menu, icons=menuIcons)
 		debug("< LiveSportOnTV.displaySport")
 

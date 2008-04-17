@@ -1,8 +1,10 @@
  Version     Date        Change
- v1.4.1      30-03-2008  Fix: Large change for code to use language string ID's not the string itself as was causing hangs.
+ v1.5        18-04-08    Fix: Large change for code to use language string ID's not the string itself as was causing hangs.
+                         Fix: Some scraping due to recent bbc site changes.
+                         Fix: Some MainMenu options (eg Five Live)
                          New: Maltese language translation (thanks Michel)
                          New: Setting option to set information font size.
- v1.4        18-03-2008  Fix: Data retrieval in several areas (all datasources) caused by web site html changes.
+ v1.4        18-03-08    Fix: Data retrieval in several areas (all datasources) caused by web site html changes.
                          New: Language support (German, Swedish incl. - More translations wanted!)
                          New: Script update support
                          New: Saves settings to UserData
