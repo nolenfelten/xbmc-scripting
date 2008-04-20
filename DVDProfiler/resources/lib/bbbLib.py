@@ -1031,10 +1031,10 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			print resp
 			showCookies()
 
-			content_type = resp["Content-Type"].lower()
-			# fail if expecting an image but not corrent type returned
-			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
-				raise "Not Binary"
+        content_type = resp["Content-Type"].lower()
+        # fail if expecting an image but not corrent type returned
+        if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+            raise "Not Binary"
 
 		opener.close()
 		del opener
