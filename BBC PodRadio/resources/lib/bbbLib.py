@@ -1031,10 +1031,10 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			print resp
 			showCookies()
 
-			content_type = resp["Content-Type"].lower()
-			# fail if expecting an image but not corrent type returned
-			if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
-				raise "Not Binary"
+		# fail if expecting an image but not corrent type returned
+		content_type = resp["Content-Type"].lower()
+		if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+			raise "Not Binary"
 
 		opener.close()
 		del opener
@@ -1114,7 +1114,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 				mode = "wb"
 			else:
 				mode = "w"
-			debug("writing data to file, mode=%s ..." % mode)
+			debug("writing to file, mode=%s ..." % mode)
 			try:
 				f = open(fn,mode)
 				f.write(data)
@@ -1131,7 +1131,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 				handleException()
 				data = None
 
-	success = (data != None and data != False)
+	success = (data != '' and data != None and data != False)
 	debug("< bbbLib.fetchCookieURL() %s" % success)
 	return data
 
