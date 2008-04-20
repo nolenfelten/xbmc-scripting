@@ -20,8 +20,8 @@ __scriptname__ = "BBC PodRadio"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/BBC%20PodRadio"
-__date__ = '26-03-2008'
-__version__ = "2.1"
+__date__ = '20-04-2008'
+__version__ = "2.1.1"
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
