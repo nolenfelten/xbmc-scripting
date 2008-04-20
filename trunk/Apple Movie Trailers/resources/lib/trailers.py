@@ -141,7 +141,7 @@ class Trailers:
                 elif ( count > 0 ):
                     percent = int( count * ( float( 100 ) / len( trailer_urls ) ) )
                     __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, len( trailer_urls ), )
-                    __line3__ = url[ 0 ]
+                    __line3__ = trailer_url[ 0 ]
                     dialog.update( percent, __line1__, __line2__, __line3__ )
                     if ( dialog.iscanceled() ): return False
                     else: return True
@@ -178,20 +178,20 @@ class Trailers:
                     if ( trailer_urls ):
                         idMovie_list = records.fetch( self.query[ "idMovie_by_genre_id" ], ( idGenre, ), all=True )
                         #commit = 0
-                        for cnt, url in enumerate( trailer_urls ):
+                        for cnt, trailer_url in enumerate( trailer_urls ):
                             if ( not _progress_dialog( cnt + 1 ) ): raise
                             #commit += 1
-                            record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ "movie_exists" ], ( trailer_url[ 0 ].upper(), ) )
                             if ( record is None ):
-                                idMovie = records.add( "movies", ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
+                                idMovie = records.add( "movies", ( trailer_url[ 0 ] , repr( [ trailer_url[ 1 ] ] ), ) )
                                 success = records.add( "genre_link_movie", ( idGenre, idMovie, ) )
                             else:
                                 # remove the trailer urls if refresh_trailers is true
                                 if ( refresh_trailers ):
-                                    urls = []
-                                    for url in record[ 1 ]:
-                                        urls += [ self.base_url + url ]
-                                    self.removeXML( urls )
+                                    url_list = []
+                                    for url2 in eval( record[ 1 ] ):
+                                        url_list += [ self.base_url + url2 ]
+                                    self.removeXML( url_list )
                                     ok = records.update( "movies", ( "trailer_urls", "date_added", ), ( None, None, record[ 0 ], ), "idMovie" )
                                 try:
                                     idMovie_list.remove( ( record[ 0 ], ) )
