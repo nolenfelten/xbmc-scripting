@@ -11,18 +11,16 @@ Changes:
 06-02-2008 Changed to update into same folder
 28-02-2008 removed a syntax error when not isSilent
 20-02-2008 Altered to save script backup into Q:\\scripts\\backups subfolder. Makes the scripts folder cleaner.
+20-04-2008 Fix makedir of backup folder.
 """
 
 import sys
 import os
 import xbmcgui, xbmc
 import urllib
-import socket
 import re
 import traceback
 from shutil import copytree, rmtree
-
-socket.setdefaulttimeout( 10 )
 
 class Update:
 	""" Update Class: used to update scripts from http://code.google.com/p/xbmc-scripting/ """
@@ -33,13 +31,20 @@ class Update:
 		self.base_url = "http://xbmc-scripting.googlecode.com/svn"
 		self.tags_url = "%s/tags/%s/" % ( self.base_url, self.script)
 		self.local_dir = 'Q:\\scripts\\' + script
-		self.local_backup_dir = 'Q:\\scripts\\backups\\' + script + "_backup"
+		backup_base_dir = 'Q:\\scripts\\backups'
+		self.local_backup_dir = backup_base_dir + '\\' + script + "_backup"
 
 		xbmc.output("script=" + script)
 		xbmc.output("base_url=" + self.base_url)
 		xbmc.output("tags_url=" + self.tags_url)
 		xbmc.output("local_dir=" + self.local_dir)
 		xbmc.output("local_backup_dir=" + self.local_backup_dir)
+
+		# make base backup dir
+		try:
+			os.makedirs(backup_base_dir)
+			xbmc.output("created dirs=%s" % backup_base_dir )
+		except: pass
 
 		self.dialog = xbmcgui.DialogProgress()
 			
@@ -65,7 +70,7 @@ class Update:
 								folders.append( ("%s/%s" % (folders[ 0 ], item)) )
 							else:
 								script_files.append( ("%s/%s" % (folders[ 0 ], item)).replace('//','/') )
-					else: 
+					else:
 						xbmc.output("no htmlsource found")
 						raise
 					folders = folders[1:]
