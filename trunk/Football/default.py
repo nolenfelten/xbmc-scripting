@@ -22,9 +22,9 @@ from threading import Thread
 
 # Script doc constants
 __scriptname__ = "Football"
-__version__ = '1.4.1'
+__version__ = '1.5'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '31-03-2008'
+__date__ = '20-04-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -691,7 +691,7 @@ class Football(xbmcgui.Window):
 		self.TEAM_VIEWS_MENU = [self.TEAM_VIEW_NEWS,self.TEAM_VIEW_FIX,self.TEAM_VIEW_RES,
 						   self.TEAM_VIEW_LIVE_TEXT,self.TEAM_VIEW_SQUAD]
 		self.TEAM_VIEW_DATA = {
-			self.NAV_LIST_ATTRIBS : [0, 0, 125, 120,''], # x,y,w,h,selectedItem
+			self.NAV_LIST_ATTRIBS : [0, 0, 140, 120,''], # x,y,w,h,selectedItem
 			self.NAV_LIST_MENU : [],
 			self.TEAM_VIEW_NEWS : 'http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/football/teams/$AZ/$TEAM/rss.xml',
 			self.TEAM_VIEW_FIX : 'http://news.bbc.co.uk/sport1/hi/football/teams/$AZ/$TEAM/fixtures/default.stm',
@@ -772,7 +772,7 @@ class Football(xbmcgui.Window):
 			debug("content control is a list")
 			contentSelectedPos = ctrl.getSelectedPosition()
 			contentSelectedItem = ctrl.getSelectedItem().getLabel()
-#			debug("contentSelectedPos=%s contentSelectedItem=%s" % (contentSelectedPos,contentSelectedItem))
+			debug("contentSelectedPos=%s contentSelectedItem=%s" % (contentSelectedPos,contentSelectedItem))
 
 		# MENU
 		if self.MAINMENU_SELECTED:
@@ -972,7 +972,7 @@ class Football(xbmcgui.Window):
 					name = id
 		except: pass
 #			handleException()
-		debug("< getNavListSelectedItem() id=%s name=%s" % (id, name))
+		debug("< getNavListSelectedItem() id=%s" % (id))
 		return id, name
 
 	########################################################################################################################
@@ -2042,18 +2042,17 @@ class Football(xbmcgui.Window):
 		debug("> getLeagueResultsSOCSTND()")
 
 		self.contentData = []
-		leagueSelectedItem = self.getNavListSelectedItem(self.LEAGUES_KEY)
+		leagueSelectedID, leagueSelectedItem = self.getNavListSelectedItem(self.LEAGUES_KEY)
 		dialogProgress.create(__language__(302), leagueSelectedItem, title)
-		html = fetchURL(url)
-		dialogProgress.close()
-		if validWebPage(html):
+		doc = fetchURL(url)
+		if validWebPage(doc):
 
 			# split into sections
-			tableSections = html.split('class="tstbl"')
+			tableSections = doc.split('class="tstbl"')
 			totalTableSections = len(tableSections)
-			debug("tableSections=%s" % totalTableSections)
+			debug("totalTableSections=%s" % totalTableSections)
 			if totalTableSections:
-				dialogProgress.create(__language__(302), __language__(300))
+				dialogProgress.update(0, __language__(300))
 
 				# get fixtures within each date
 				regex=''
@@ -2077,7 +2076,7 @@ class Football(xbmcgui.Window):
 						text = cleanHTML(decodeEntities(' '.join(match)))
 						self.contentData.append([text,''])
 
-				dialogProgress.close()
+		dialogProgress.close()
 
 		if not self.contentData:
 			self.contentData.append([__language__(353),""])
