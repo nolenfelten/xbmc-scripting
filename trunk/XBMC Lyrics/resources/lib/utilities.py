@@ -17,7 +17,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.8", )
+SETTINGS_VERSIONS = ( "1.5.9", )
 # base paths
 BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
 BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "settings.txt" ) )
