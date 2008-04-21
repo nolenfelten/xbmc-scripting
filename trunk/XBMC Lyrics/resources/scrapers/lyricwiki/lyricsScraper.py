@@ -71,7 +71,6 @@ class LyricsFetcher:
         url = self.base_url + "/%s:%s"
         artist = self._format_param( artist )
         song = self._format_param( song, False )
-        print url % ( artist, song, )
         lyrics = self._fetch_lyrics( url % ( artist, song, ) )
         # if no lyrics found try just artist for a list of songs
         if ( not lyrics ):
