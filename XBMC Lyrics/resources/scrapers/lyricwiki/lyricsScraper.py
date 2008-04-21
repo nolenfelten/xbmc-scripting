@@ -45,7 +45,7 @@ class _LyricsParser( SGMLParser ):
 
     def start_div( self, attrs ):
         for key, value in attrs:
-            if ( key == "id" and value == "lyric" ):
+            if ( key == "class" and value == "lyricbox" ):
                 self.lyrics_found = True
             else: self.lyrics_found = False
                 
@@ -63,7 +63,7 @@ class _LyricsParser( SGMLParser ):
 class LyricsFetcher:
     """ required: Fetcher Class for www.lyricwiki.org """
     def __init__( self ):
-        self.base_url = "http://www.lyricwiki.org"
+        self.base_url = "http://lyricwiki.org"
         self._set_exceptions()
         
     def get_lyrics( self, artist, song ):
@@ -71,6 +71,7 @@ class LyricsFetcher:
         url = self.base_url + "/%s:%s"
         artist = self._format_param( artist )
         song = self._format_param( song, False )
+        print url % ( artist, song, )
         lyrics = self._fetch_lyrics( url % ( artist, song, ) )
         # if no lyrics found try just artist for a list of songs
         if ( not lyrics ):
@@ -219,9 +220,9 @@ debugWrite = False
 
 if ( __name__ == "__main__" ):
     # used to test get_lyrics() 
-    artist = [ "The Charlie Daniels Band", "ABBA", "Jem","Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
-    song = [ "(What This World Needs Is) A Few More Rednecks", "S.O.S","24","Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
-    for cnt in range( 1 ):
+    artist = [ "Iron & Wine", "The Charlie Daniels Band", "ABBA", "Jem","Stealers Wheel","Paul McCartney & Wings","ABBA","AC/DC", "Tom Jones", "Kim Mitchell", "Ted Nugent", "Blue Öyster Cult", "The 5th Dimension", "Big & Rich", "Don Felder" ]
+    song = [ "On Your Wings", "(What This World Needs Is) A Few More Rednecks", "S.O.S","24","Stuck in the middle with you","Band on the run", "Dancing Queen", "T.N.T.", "She's A Lady", "Go for Soda", "Free-for-all", "(Don't Fear) The Reaper", "Age of Aquarius", "Save a Horse (Ride a Cowboy)", "Heavy Metal (Takin' a Ride)" ]
+    for cnt in range( 4,5 ):
         lyrics = LyricsFetcher().get_lyrics( artist[ cnt ], song[ cnt ] )
     
     # used to test get_lyrics_from_list() 
