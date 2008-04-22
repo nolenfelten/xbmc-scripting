@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '10-04-2008'
-__version__ = "1.5.2"
+__date__ = '22-04-2008'
+__version__ = "1.6"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -285,15 +285,15 @@ class Main:
 		return (archive_name, short_build_name)
 
 	######################################################################################
-	def _get_archive_info(self, filename):
+	def _get_archive_info(self, source):
 		""" parse local file or url to get build info """
-		xbmc.output( "_get_archive_info() %s" % filename)
+		xbmc.output( "_get_archive_info() %s" % source)
 		filenameInfo = ()
 		try:
-			archive_name = os.path.basename( filename )       # with ext
+			archive_name = os.path.basename( source )       		# with ext
 			found_build_date = searchRegEx(archive_name, '(\d+-\d+-\d+)') 
 			found_build_date_secs = time.mktime( time.strptime(found_build_date,"%Y-%m-%d") )
-			short_build_name = "T3CH_%s" % (found_build_date)
+			short_build_name = "T3CH_%s" % (found_build_date)		# used as installation folder name
 			filenameInfo = (archive_name, found_build_date, found_build_date_secs, short_build_name)
 		except:
 			xbmc.output("exception parsing filename")
@@ -313,8 +313,7 @@ class Main:
 		xbmc.output( "remote_short_build_name=" + remote_short_build_name)
 
 		selectDialog = xbmcgui.Dialog()
-		heading = "%s v%s (XBMC: %s %s): %s" % (__language__( 0 ), __version__, \
-												xbmc.getInfoLabel('System.BuildVersion'), \
+		heading = "%s v%s (XBMC: %s): %s" % (__language__( 0 ), __version__, \
 												xbmc.getInfoLabel('System.BuildDate'), \
 												__language__( 600 ))
 
@@ -382,6 +381,8 @@ class Main:
 			if not self.isSilent:
 				selectedIdx = selectDialog.select( heading, options )
 				xbmc.output("menu selectedIdx="+ str(selectedIdx))
+				if selectedIdx <= 0:		# quit
+					return
 				selectedOpt = options[selectedIdx]
 			else:
 				selectedOpt = self.opt_download											# force process
@@ -464,13 +465,13 @@ class Main:
 
 	######################################################################################
 	def _get_local_archive(self):
-		""" return latest T3CH archive found in install dir """
+		""" return latest T3CH archive found in install dir. Matches filenames of XBMC*YYYY-DD-MM*.<zip|rar> """
 		archive_file = ""
 		flist = []
 		try:
 			files = os.listdir( self.settings[ self.SETTING_UNRAR_PATH ] )
 			for f in files:
-				if searchRegEx(f, '(XBMC-SVN_\d+-\d+-\d+.*?(?:.rar|.zip))'):
+				if searchRegEx(f, '(XBMC.*?\d+-\d+-\d+.*?(?:.rar|.zip))'):
 					flist.append(f)
 
 			# sort to get latest
@@ -485,23 +486,31 @@ class Main:
 
 
 	######################################################################################
-	def _check_sfv(self, archive_filepath):
+	def _check_sfv(self, archive_local_filepath):
 		""" Download SFV for latest T3CH build, then check against RAR """
-		xbmc.output( "> _check_sfv() %s" % archive_filepath )
+		xbmc.output( "> _check_sfv()" )
 		success = False
-		entry_filename = os.path.basename( archive_filepath )
-		(entry_name, ext) = os.path.splitext( entry_filename )
 
-		for ftpUrl in self.FTP_URL_LIST:
-			url = "%s%s%s.sfv" % (ftpUrl, self.FTP_REPOSITORY_URL, entry_name)
-			doc = readURL( url, __language__( 502 ), self.isSilent )
-			if doc: break
+		# make full path + filename using remote archive filename
+		if self.archive_name and archive_local_filepath:
+			(split_name, split_ext) = os.path.splitext( self.archive_name )
 
-		if doc:
-			sfv = SFVCheck.SFVCheck(sfvDoc=doc)
-			success = sfv.check(entry_filename, archive_filepath)
+			# download remote sfv doc
+			for ftpUrl in self.FTP_URL_LIST:
+				url = "%s%s%s.sfv" % (ftpUrl, self.FTP_REPOSITORY_URL, split_name)
+				doc = readURL( url, __language__( 502 ), self.isSilent )
+				if doc: break
 
-		if not success:
+			if doc:
+				# compare against archive actual local filename, which may be diff. to remote filename
+				# due to being renamed cos of filename length.
+				xbmc.output("checking sfv entry for %s %s" % (split_name, archive_local_filepath))
+				sfv = SFVCheck.SFVCheck(sfvDoc=doc)
+				success = sfv.check(split_name, archive_local_filepath)	
+
+		if success == None:		# filename entry not found in SFV doc
+			success = dialogYesNo( __language__( 0 ), __language__( 320 ) )
+		elif not success:
 			dialogOK( __language__( 0 ), __language__(315) )
 		xbmc.output( "< _check_sfv() success=%s" % success)
 		return success
@@ -550,10 +559,17 @@ class Main:
 
 		success = False
 		try:
+			# ensure remote filename doesnt exceed xbox filesystem local filename length limit
+			if url and len(self.archive_name) > 42:		# xbox filename limit
+				archive_name = "%s.rar" % self.short_build_name.replace("T3CH", "XBMC")
+				xbmc.output("remote archive filename too long, renamed")
+			else:
+				archive_name = self.archive_name
+
 			# create work paths
 			extract_path = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.short_build_name)
 			xbmc.output( "extract_path= " + extract_path )
-			archive_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], self.archive_name )
+			archive_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], archive_name )
 			xbmc.output( "archive_file= " + archive_file )
 
 			# check enough hdd & ram space
@@ -1785,10 +1801,17 @@ try:
 except:
 	runMode = RUNMODE_NORMAL
 
-
 Main(runMode)
 
 xbmc.output("script exit and housekeeping")
+# clean up on exit
+moduleList = ['zipstream','SFVCheck']
+for m in moduleList:
+	try:
+		del sys.modules[m]
+		xbmc.output("removed module: " + m)
+	except: pass
+
 # remove globals
 try:
 	del dialogProgress

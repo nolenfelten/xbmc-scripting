@@ -9,7 +9,7 @@ import zlib, md5, struct, binascii, os
 import traceback
 
 __title__ = 'SFVCheck'
-__date__ = '31-01-2008'
+__date__ = '22-04-2008'
 
 class SFVCheck:
 	""" Contruct with SFV filename or SFV doc, then check(entry name, rar filename)"""
@@ -24,7 +24,8 @@ class SFVCheck:
 
 	def check(self, entry, archiveFilename):
 		"""  Given sfv entry name , compare crc with archive """
-		ok = False
+		ok = None		# entry not found
+		fcrc = 0
 		crc = self.getCRC(entry)
 		if crc:
 			ok, fcrc = compareOne(archiveFilename, crc)
