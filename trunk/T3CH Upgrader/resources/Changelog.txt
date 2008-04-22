@@ -1,6 +1,15 @@
 T3CH Upgrader Changelog:
 ========================
-v1.5.1 07/04/08
+v1.6 22/04/08 
+  Fix: Script update would hang whilst making a backup of itself to scripts\backups subfolder (update.py)
+  Change: Cope with T3CH build rar filenames being too long for xbox filesystem.
+  Change: Will prompt if to continue if archive filename entry not found in SFV doc.
+  Change: Main Menu will exit with Back instead of going into Settings Menu.
+  Change: Removed Build Version (not the build date) fro Menu title, so it fits better on non widescreen rez.
+  Change: Deletes some python modules from ram on exit.
+  Change: Script icon cropped, gives better drop shadow with some skins.
+  New: Check against two ftp servers instead of just one.
+v1.5.1
   Change: Self update changed to backup to subfolder 'Q:\scripts\backups'. Makes the scripts folder less cluttered.
   Updated: Skins tweaked (thanks to smuto)
   Updated: Most language files (thanks to smuto, bootsy, kottis)
