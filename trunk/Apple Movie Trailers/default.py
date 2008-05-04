@@ -37,3 +37,5 @@ __add_credits_r3__ = __language__( 2 )#"Translators name"
 # Start the main gui
 if __name__ == "__main__":
     import gui
+    sys.modules.clear()
+
