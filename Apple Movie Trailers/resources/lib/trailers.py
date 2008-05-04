@@ -119,6 +119,8 @@ class Trailers:
                     urls += [ self.base_url + url ]
                 self.removeXML( urls )
                 ok = records.update( "movies", ( "trailer_urls", "date_added", ), ( None, None, self.movies[ trailer ].idMovie, ), "idMovie", True )
+                ok = records.delete( "actor_link_movie", ( "idMovie", ), ( self.movies[ trailer ].idMovie, ) )
+                ok = records.delete( "studio_link_movie", ( "idMovie", ), ( self.movies[ trailer ].idMovie, ) )
             records.close()
             if ( len( trailers ) > 1 ):
                 _progress_dialog( -99 )
@@ -181,7 +183,7 @@ class Trailers:
                         for cnt, trailer_url in enumerate( trailer_urls ):
                             if ( not _progress_dialog( cnt + 1 ) ): raise
                             #commit += 1
-                            record = records.fetch( self.query[ "movie_exists" ], ( trailer_url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ "movie_exists" ], ( trailer_url[ 0 ], ) )
                             if ( record is None ):
                                 idMovie = records.add( "movies", ( trailer_url[ 0 ] , repr( [ trailer_url[ 1 ] ] ), ) )
                                 success = records.add( "genre_link_movie", ( idGenre, idMovie, ) )
@@ -193,6 +195,8 @@ class Trailers:
                                         url_list += [ self.base_url + url2 ]
                                     self.removeXML( url_list )
                                     ok = records.update( "movies", ( "trailer_urls", "date_added", ), ( None, None, record[ 0 ], ), "idMovie" )
+                                    ok = records.delete( "actor_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
+                                    ok = records.delete( "studio_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
                                 try:
                                     idMovie_list.remove( ( record[ 0 ], ) )
                                 except:
@@ -311,7 +315,7 @@ class Trailers:
                         self.categories += [ Category( id=idGenre, title=genre ) ]
                         for url_cnt, url in enumerate( trailer_urls ):
                             ok = _progress_dialog( cnt + 1, url_cnt + 1 )
-                            record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ].upper(), ) )
+                            record = records.fetch( self.query[ "movie_exists" ], ( url[ 0 ], ) )
                             if ( record is None ):
                                 idMovie = records.add( "movies", ( url[ 0 ] , repr( [ url[ 1 ] ] ), ) )
                             else: idMovie = record[ 0 ]
@@ -519,7 +523,7 @@ class Trailers:
                     actor = SetFontStyles[ i ].text.replace( "(The voice of)", "" ).title().strip()
                     if ( len( actor ) and not actor.startswith( "." ) and actor != "1:46" ) :
                         actors += [ ( actor, ) ]
-                        actor_id = records.fetch( self.query[ "actor_exists" ], ( actor.upper(), ) )
+                        actor_id = records.fetch( self.query[ "actor_exists" ], ( actor, ) )
                         if ( actor_id is None ): idActor = records.add( "actors", ( actor, ) )
                         else: idActor = actor_id[ 0 ]
                         records.add( "actor_link_movie", ( idActor, self.idMovie, ) )
@@ -539,7 +543,7 @@ class Trailers:
                 # -- studio --
                 studio = element.getiterator( self.ns( "PathElement" ) )[ 1 ].get( "displayName" ).strip()
                 if studio:
-                    studio_id = records.fetch( self.query[ "studio_exists" ], ( studio.upper(), ) )
+                    studio_id = records.fetch( self.query[ "studio_exists" ], ( studio, ) )
                     if ( studio_id is None ): idStudio = records.add( "studios", ( studio, ) )
                     else: idStudio = studio_id[ 0 ]
                     records.add( "studio_link_movie", ( idStudio, self.idMovie, ) )
