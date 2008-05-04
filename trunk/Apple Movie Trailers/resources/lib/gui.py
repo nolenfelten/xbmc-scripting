@@ -197,7 +197,7 @@ class GUI( xbmcgui.WindowXML ):
                 params = ( self.genres[category_id].id, )
             elif ( list_category == 2 ):
                 sql = self.query[ "movies_by_studio_name" ]
-                params = ( self.trailers.categories[category_id].title.upper(), )
+                params = ( self.trailers.categories[category_id].title, )
             elif ( list_category == 3 ):
                 sql = self.query[ "movies_by_actor_name" ]
                 names = self.actor.split( " " )[:2]
@@ -410,13 +410,13 @@ class GUI( xbmcgui.WindowXML ):
             list_category = 2
         elif ( self.main_category == ACTORS ): 
             list_category = 3
-            self.actor = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedItem().getLabel()
+            self.actor = unicode( self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedItem().getLabel(), "utf-8" )
         else: list_category = 1
         self.setCategory( genre, list_category )
 
     def getActorChoice( self ):
         choice = self.getControl( self.CONTROL_CAST_LIST ).getSelectedPosition()
-        self.actor = self.getControl( self.CONTROL_CAST_LIST ).getSelectedItem().getLabel()
+        self.actor = unicode( self.getControl( self.CONTROL_CAST_LIST ).getSelectedItem().getLabel(), "utf-8" )
         self.setCategory( choice, 3 )
 
     def _get_trailer_url( self, trailer ):

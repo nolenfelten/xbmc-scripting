@@ -180,44 +180,29 @@ class Database:
                 records.close()
                 return True
             except: return False
-
+        """
         def _update_version():
             records = Records()
             ok = records.update( "version", ( "version", ), ( __version__, 1, ), "idVersion", True )
             records.close()
             return ok
-        """
+        
         msg = ( _( 53 ), _( 54 ), )
-        """
-        if ( not 1 ):#version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", "pre-0.98.2", ) ):
+        if ( version in ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", "pre-0.99.4", "0.99.4", "pre-0.99.4a", ) ):
             try:
-                _progress_dialog()
-                ok = True
-                if ( version == "pre-0.97.1" ):
-                    ok = _update_table()
-                if ( not ok ): raise
-                if ( version == "pre-0.97.1" or version == "pre-0.97.2" ):
-                    ok = _update_records()
-                if ( not ok ): raise
-                if ( version == "pre-0.97.3" ):
-                    ok, updated = _update_completed()
-                    if ( updated ): complete = False
-                if ( version in ( "pre-0.97.1", "pre-0.97.2", "pre-0.97.3", "pre-0.97.4", "pre-0.97.5", "0.97.5", "pre-0.98", "pre-0.98.1", ) ):
-                    ok = _update_table_movies()
-                if ( not ok ): raise
-                ok = _update_records_poster()
-                if ( not ok ): raise
                 ok = _update_version()
                 if ( not ok ): raise
             except:
                 msg = ( _( 59 ), _( 46 ), )
-            _progress_dialog( -1 )
+            #_progress_dialog( -1 )
             if ( ok ): return ( __version__, complete )
-        """
-        xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
-        os.remove( BASE_DATABASE_PATH )
-        version, complete = self._create_database()
-        return ( __version__, complete )
+            else:
+                xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ], msg[ 2 ] )
+        else:
+            xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
+            os.remove( BASE_DATABASE_PATH )
+            version, complete = self._create_database()
+            return ( __version__, complete )
 
 
 class Tables( dict ):
@@ -366,7 +351,7 @@ class Query( dict ):
     "all sql statments. add as needed"
     def __init__( self ):
         #good sql statements
-        self[ "movie_by_movie_id" ]		= "SELECT movies.* FROM movies WHERE movies.idMovie=?;"
+        self[ "movie_by_movie_id" ]		= "SELECT * FROM movies WHERE idMovie=?;"
         self[ "studio_by_movie_id" ]		= "SELECT studios.studio FROM studio_link_movie, studios WHERE studio_link_movie.idStudio = studios.idStudio AND studio_link_movie.idMovie=?;"
         self[ "actors_by_movie_id" ]		= "SELECT actors.actor FROM actor_link_movie, actors WHERE actor_link_movie.idActor = actors.idActor AND actor_link_movie.idMovie=? ORDER BY actors.actor;"
 
@@ -375,7 +360,7 @@ class Query( dict ):
         self[ "movies_by_actor_id" ]		= "SELECT movies.* FROM movies, actor_link_movie WHERE actor_link_movie.idMovie=movies.idMovie AND actor_link_movie.idActor=? ORDER BY movies.title;"
 
         self[ "movies_by_genre_name" ]	= "SELECT movies.* FROM movies, genres, genre_link_movie WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie AND genres.genre=? ORDER BY movies.title;"
-        self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND upper(studios.studio)=? ORDER BY movies.title;"
+        self[ "movies_by_studio_name" ]= "SELECT movies.* FROM movies, studios, studio_link_movie WHERE studio_link_movie.idStudio=studios.idStudio AND studio_link_movie.idMovie=movies.idMovie AND studios.studio LIKE ? ORDER BY movies.title;"
         self[ "movies_by_actor_name" ]	= "SELECT movies.* FROM movies, actors, actor_link_movie WHERE actor_link_movie.idActor=actors.idActor AND actor_link_movie.idMovie=movies.idMovie AND actors.actor LIKE ? ORDER BY movies.title;"
 
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
@@ -384,16 +369,16 @@ class Query( dict ):
         self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre), count(movies.date_added) FROM genre_link_movie, genres, movies WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie GROUP BY genres.genre;"
         self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio), count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor), count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
-        self[ "rating_category_list" ]		= "SELECT movies.rating, count(movies.rating) FROM movies WHERE movies.rating IS NOT NULL AND movies.rating!='' GROUP BY rating;"
+        self[ "rating_category_list" ]		= "SELECT rating, count(rating) FROM movies WHERE rating IS NOT NULL AND rating!='' GROUP BY rating;"
 
         self[ "genre_table_list" ]			= "SELECT idGenre, genre, updated FROM genres ORDER BY genre;"
         self[ "genre_urls_by_genre_id" ]	= "SELECT urls FROM genres WHERE idGenre=?;"
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
 
-        self[ "movie_exists" ]				= "SELECT idMovie, urls FROM movies WHERE upper(title)=?;"
-        self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE upper(actor)=?;"
-        self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE upper(studio)=?;"
+        self[ "movie_exists" ]				= "SELECT idMovie, urls FROM movies WHERE title LIKE ?;"
+        self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE actor LIKE ?;"
+        self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE studio LIKE ?;"
 
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
