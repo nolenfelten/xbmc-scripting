@@ -93,7 +93,7 @@ class Main:
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
         # backslashes cause issues when passed in the url
-        self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
+        ##self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
 
     def _create_playlist( self ):
         # create a video playlist
@@ -139,7 +139,7 @@ class Main:
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
-        playlist.add( unicode( self.args.path, "utf-8" ), listitem )
+        playlist.add( self.args.path, listitem )
         # if there is a end of movie video add it
         if ( self.settings[ "end_presentation_videos" ] ):
             for path in self.settings[ "end_presentation_videos" ]:
