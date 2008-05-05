@@ -163,8 +163,11 @@ class Main:
                         actors += [ ( unicode( actor[ 0 ], "utf-8" ), unicode( actor[ 1 ], "utf-8" ), ) ]
                 except:
                     pass
-                # concatenate the file and path
-                fpath = item[ 0 ] + item[ 1 ]
+                # concatenate the file and path if not a rar:// file, if a rar:// just use file
+                if ( item[ 1 ].startswith( "rar://" ) ):
+                    fpath = item[ 1 ]
+                else:
+                    fpath = item[ 0 ] + item[ 1 ]
                 # add video to our list
                 ok = self._add_item( ( unicode( fpath, "utf-8" ), unicode( item[ 3 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), False, unicode( item[ 4 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 5 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), unicode( item[ 6 ].replace( "[[QUOTE]]", '"' ), "utf-8" ), item[ 7 ], item[ 8 ], unicode( item[ 9 ], "utf-8" ), item[ 10 ], item[ 11 ], item[ 12 ], item[ 13 ], item[ 14 ], item[ 15 ], item[ 16 ], item[ 17 ], unicode( item[ 18 ], "utf-8" ), item[ 19 ], item[ 20 ], unicode( item[ 21 ], "utf-8" ), actors ), len( items ) )
                 if ( not ok ): raise
@@ -265,9 +268,9 @@ class Main:
         ok = True
         add = True
         # backslashes cause issues when passed in the url, so replace them
-        url_path = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
+        #url_path = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
         # create our url
-        url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url_path, item[ 2 ], )
+        url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( item[ 0 ] ), item[ 2 ], )
         # handle folders differently
         if ( item[ 2 ] ):
             # if a folder.jpg exists use that for our thumbnail
