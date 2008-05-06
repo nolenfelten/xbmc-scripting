@@ -12,6 +12,7 @@
     <string id="100">Żball!</string>
     <string id="101">Selezzjoni għal dan il-kampjonat ma teżistiex</string>
     <string id="102">Ma nstab l-ebda nformazzjoni.[CR]Jista jkun inbidel is-sit!?</string>
+    <string id="103">Ma tistax tuża BBC embedded media player!</string>
 
     <!-- Prompt messages -->
     <string id="200">Kompjonati aġġornati qed jitniżżlu</string>
@@ -68,9 +69,10 @@
     <string id="522">Ara Changelog tal-iskript</string>
     <string id="523">Għażel Sors</string>
     <string id="524">Meta tibda niċċejjkja jekk l-iskript ġiex aġġornat?</string>
+    <string id="525">Font tal-Lista tal-kontenut</string>
 
     <!-- misc menu/prompts -->
-    <string id="530">Live Results</string>
+    <string id="530">Live Videprinter</string>
     <string id="531">Internazzjonali</string>
     <string id="532">Tazza UEFA</string>
     <string id="533">Tims</string>
