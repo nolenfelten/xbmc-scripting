@@ -2,7 +2,7 @@
 <!--Language file translated with Team XBMC Translator-->
 <!--Translator: smuto-->
 <!--Email: smuto.promyk@gmail.com-->
-<!--Date of translation: 03/19/2008-->
+<!--Date of translation: 05/05/2008-->
 <!--$Revision$-->
 <strings>
   <string id="0">T3CH Upgrader</string>
@@ -32,6 +32,9 @@
   <string id="315">Nieprawidłowość sum kontrolnych SFV[CR]Plik rar uszkodzony, konieczne ponowne ściąganie </string>
   <string id="316">Brak wolnego miejsca na dysku!</string>
   <string id="317">Za mało pamięci RAM, wypakowywanie może się nie udać.</string>
+  <string id="318">Problem z dostępem do serwerów FTP!</string>
+  <string id="319">Nie odnaleziono serwera!</string>
+  <string id="320">Nie odnaleziono pliku sum kontrolnych SFV[CR]Mimo wszystko chcesz wypakować archiwum?</string>
   <string id="400">Pobierz</string>
   <string id="401">Pomiń</string>
   <string id="402">Tak</string>
@@ -90,7 +93,7 @@
   <string id="617">Usuń starą wersję T3CH</string>
   <string id="618">Lista plików, które zawsze usuwasz </string>
   <string id="619">Aktualizuj skrypt</string>
-  <string id="620">Instaluj z zapisanego na dysku:</string>
+  <string id="620">Instaluj z dysku:</string>
   <string id="621">Instaluj archiwalną wersję z sieci</string>
   <string id="630">Dysk z plikiem startowym dasha:</string>
   <string id="631">Nazwa pliku startowego dasha:</string>
