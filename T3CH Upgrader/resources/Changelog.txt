@@ -1,5 +1,11 @@
 T3CH Upgrader Changelog:
 ========================
+v1.6.1 19/05/08
+  Change: Checks (and creates) settings unrar path exists. (eg. E:\apps)
+  Change: When checking SFV, if filename entry not found, does 2nd check for filename+ext
+  Change: Free RAM warning reduced to 31mb from 32mb.
+  Updated: Polish and Finnish language strings.
+  New: Incidious skin (for changelogs/readme's etc)
 v1.6 22/04/08 
   Fix: Script update would hang whilst making a backup of itself to scripts\backups subfolder (update.py)
   Change: Cope with T3CH build rar filenames being too long for xbox filesystem.

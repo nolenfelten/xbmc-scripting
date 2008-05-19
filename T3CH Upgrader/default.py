@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '22-04-2008'
-__version__ = "1.6"
+__date__ = '19-05-2008'
+__version__ = "1.6.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -84,7 +84,6 @@ class Main:
 
 		# init settings folder
 		self.SCRIPT_DATA_DIR = os.path.join( "T:\\script_data", __scriptname__ )
-		makeDir("T:\\script_data")
 		makeDir(self.SCRIPT_DATA_DIR)
 
 		# SETTINGS
@@ -155,10 +154,10 @@ class Main:
 			if forceReset or not self.settings.has_key( key ) or not self.settings[key]:
 				self.settings[key] = defaultValue
 				if not forceReset:
-					xbmc.output( "bad setting: " + key )
+					xbmc.output( "missing setting: " + key )
 					success = False
 
-		xbmc.output( "< _set_default_settings() success=" +str(success))
+		xbmc.output( "< _set_default_settings() success=%s" % success)
 		return success
 		
 	######################################################################################
@@ -321,9 +320,9 @@ class Main:
 			self.opt_exit = __language__(650)
 			self.opt_view_logs = __language__(611)
 			if remote_archive_name:
-				self.opt_download = "%s  %s"  % (__language__(612), remote_archive_name)			# download w/ rar name
+				self.opt_download = "%s  %s"  % (__language__(612), remote_archive_name)# download w/ rar name
 			else:
-				self.opt_download = "%s  %s"  % (__language__(612),__language__(517))			# no new build
+				self.opt_download = "%s  %s"  % (__language__(612),__language__(517))	# no new build
 			self.opt_maint_copy = __language__(615)
 			self.opt_maint_del = __language__(618)
 			self.opt_switch = __language__(616)
@@ -355,7 +354,6 @@ class Main:
 			return options
 
 		while True:
-			# if we have a local T3CH rar, add option to install from it.
 			# Only include found rar if not a result of a previous cancelled download, as may be partial.
 			local_archive_name = ''
 			local_short_build_name = ''
@@ -496,6 +494,7 @@ class Main:
 			(split_name, split_ext) = os.path.splitext( self.archive_name )
 
 			# download remote sfv doc
+			doc = ""
 			for ftpUrl in self.FTP_URL_LIST:
 				url = "%s%s%s.sfv" % (ftpUrl, self.FTP_REPOSITORY_URL, split_name)
 				doc = readURL( url, __language__( 502 ), self.isSilent )
@@ -506,7 +505,10 @@ class Main:
 				# due to being renamed cos of filename length.
 				xbmc.output("checking sfv entry for %s %s" % (split_name, archive_local_filepath))
 				sfv = SFVCheck.SFVCheck(sfvDoc=doc)
-				success = sfv.check(split_name, archive_local_filepath)	
+				success = sfv.check(split_name, archive_local_filepath)
+				if success == None:
+					# entry name not found, try with full name+ext
+					success = sfv.check(self.archive_name, archive_local_filepath)
 
 		if success == None:		# filename entry not found in SFV doc
 			success = dialogYesNo( __language__( 0 ), __language__( 320 ) )
@@ -541,7 +543,7 @@ class Main:
 		else:
 			# check free mem, warn if low, but can continue if OK'd
 			freememMb = xbmc.getFreeMem()
-			freeMemRecMb = 32		# above 40mb is a much better figure ! eg. 480p 16:9 == 42mb
+			freeMemRecMb = 31		# 31 seems ok, always rez dependant eg. 480p 16:9 == 42mb
 			xbmc.output( "Freemem=%sMB  Recommended=%sMB" % ( freememMb, freeMemRecMb ) )
 			if freememMb < freeMemRecMb:
 				msg = __language__( 531 ) % (freememMb, freeMemRecMb)
@@ -1549,6 +1551,10 @@ class Main:
 				if dialogYesNo(__language__(0), __language__( 637 ) + " ?"):
 					self._init_includes_excludes(forceReset=True)
 
+		# DO SOME POST SETTINGS MENU checks
+		# ensure unrar path exists
+		makeDir(self.settings[ self.SETTING_UNRAR_PATH ])
+
 		self._save_file_obj( self.SETTINGS_FILENAME, self.settings )
 
 
@@ -1644,7 +1650,7 @@ def handleException(title="", msg="", msg2=""):
 #################################################################################################################
 def makeDir( dir ):
 	try:
-		os.mkdir( dir )
+		os.makedirs(dir)
 		xbmc.output( "made dir: " + dir)
 	except: pass
 
