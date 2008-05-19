@@ -9,7 +9,7 @@ import zlib, md5, struct, binascii, os
 import traceback
 
 __title__ = 'SFVCheck'
-__date__ = '22-04-2008'
+__date__ = '19-05-2008'
 
 class SFVCheck:
 	""" Contruct with SFV filename or SFV doc, then check(entry name, rar filename)"""
@@ -44,22 +44,24 @@ class SFVCheck:
 	def parseSFVFiles(self, filename):
 		""" Get dict of entry = crc for all in sfv filename """
 		self.files = {}
-		try:
-			for line in file(filename).readlines():
-				if line[0] != ';':
+		for line in file(filename).readlines():
+			if line and line[0] != ';':
+				try:
 					self.files[line[:-9].strip()] = line[-9:].strip()
-			print "parseSfvFiles() ", self.files
-		except:
-			traceback.print_exc()
+				except:
+					traceback.print_exc()
+		print "parseSfvFiles() ", self.files
 		return self.files
 
 	def parseSFVDoc(self, doc):
 		""" Get dict of entry = crc for all in sfv doc """
 		self.files = {}
 		for line in doc.split('\n'):
-			print "line=" + line
 			if line and line[0] != ';':
-				self.files[line[:-9].strip()] = line[-9:].strip()
+				try:
+					self.files[line[:-9].strip()] = line[-9:].strip()
+				except:
+					traceback.print_exc()
 		print "parseSFVDoc() ", self.files
 		return self.files
 
