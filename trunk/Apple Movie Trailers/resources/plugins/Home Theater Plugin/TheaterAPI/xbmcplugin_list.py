@@ -75,14 +75,14 @@ class Main:
             if ( path.endswith( "\\" ) or path.endswith( "/" ) ):
                 path = path[ : -1 ]
             # add our path
-            fpaths += [ unquote_plus( path ) ]
+            fpaths += [ path ]
         return fpaths
 
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
-        # backslashes cause issues when passed in the url, so replace them
-        self.args.path = [ self.args.path.replace( "[[BACKSLASH]]", "\\" ) ]
+        # we want this to be a list
+        self.args.path = [ self.args.path ]
 
     def _get_items( self, path ):
         try:
@@ -188,7 +188,7 @@ class Main:
         try:
             items = []
             # get the directory listing
-            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
+            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( unquote_plus( path ), ) ).split( "\n" )
             # enumerate through our items list and add the full name to our entries list
             for entry in entries:
                 if ( entry ):
@@ -270,7 +270,7 @@ class Main:
         # backslashes cause issues when passed in the url, so replace them
         #url_path = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
         # create our url
-        url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( item[ 0 ] ), item[ 2 ], )
+        url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( quote_plus( item[ 0 ] ) ), item[ 2 ], )
         # handle folders differently
         if ( item[ 2 ] ):
             # if a folder.jpg exists use that for our thumbnail

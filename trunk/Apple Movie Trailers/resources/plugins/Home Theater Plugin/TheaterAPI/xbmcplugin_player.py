@@ -42,6 +42,7 @@ import os
 import xbmcplugin
 
 from random import randrange
+from urllib import unquote_plus
 
 from pysqlite2 import dbapi2 as sqlite
 
@@ -92,8 +93,8 @@ class Main:
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
-        # backslashes cause issues when passed in the url
-        ##self.args.path = self.args.path.replace( "[[BACKSLASH]]", "\\" )
+        # unquote path
+        self.args.path = unquote_plus( self.args.path )
 
     def _create_playlist( self ):
         # create a video playlist
