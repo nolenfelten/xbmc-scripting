@@ -188,7 +188,7 @@ class Database:
             return ok
         
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", "pre-0.99.4", "0.99.4", "pre-0.99.4a", ) ):
+        if ( version in ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", "pre-0.99.4", "0.99.4", "pre-0.99.4a", "pre-0.99.4b", ) ):
             try:
                 ok = _update_version()
                 if ( not ok ): raise
@@ -376,7 +376,7 @@ class Query( dict ):
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
 
-        self[ "movie_exists" ]				= "SELECT idMovie, urls FROM movies WHERE title LIKE ?;"
+        self[ "movie_exists" ]				= "SELECT idMovie, urls, trailer_urls FROM movies WHERE title LIKE ?;"
         self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE actor LIKE ?;"
         self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE studio LIKE ?;"
 
