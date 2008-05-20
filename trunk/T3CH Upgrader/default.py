@@ -398,9 +398,9 @@ class Main:
 					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
 					if self._process(url, True):
-						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
+						if dialogYesNo( __language__( 0 ), __language__( 512 )):		# reboot ?
 							xbmc.executebuiltin( "XBMC.Reboot" )
-						break																# stop
+						break
 					else:
 						self.isSilent = False											# failed, show menu
 			elif selectedOpt == self.opt_local:											# local archive install
@@ -408,9 +408,9 @@ class Main:
 					self.archive_name = local_archive_name
 					self.short_build_name = local_short_build_name
 					if self._process('', False):
-						if dialogYesNo( __language__( 0 ), __language__( 512 )):			# reboot ?
+						if dialogYesNo( __language__( 0 ), __language__( 512 )):		# reboot ?
 							xbmc.executebuiltin( "XBMC.Reboot" )
-						break																# stop
+						break
 			elif selectedOpt == self.opt_maint_copy:									# copy includes
 				self._maintain_includes()
 			elif selectedOpt == self.opt_maint_del:										# delete excludes
@@ -423,7 +423,7 @@ class Main:
 			elif selectedOpt == self.opt_update_script:									# update script
 				if self._update_script(False):											# never silent from config menu
 					xbmc.output("script updating ... closing current instance")
-					break											# stop script if updated
+					break
 			elif selectedOpt == self.opt_settings:										# settings
 				self._check_settings(forceSetup=True)
 
@@ -443,10 +443,10 @@ class Main:
 			# select
 			selectDialog = xbmcgui.Dialog()
 			selected = selectDialog.select( __language__( 205 ), buildsList )
-			if selected <= 0:						# quit
+			if selected <= 0:							# quit
 				break
 			
-			if selected == 1:						# web build archive
+			if selected == 1:							# web build archive
 				self._web_builds_menu()
 			else:
 				selectedBuildName = buildsList[selected]
@@ -908,25 +908,22 @@ class Main:
 			# compare keymapping.xml, always copy, but make backups
 			keymapFilename = "keymap.xml"
 			curr_build_userdata_path = "T:\\"
-			curr_build_userdata_file = os.path.join( "T:\\", keymapFilename)
+			curr_build_userdata_file = os.path.join( curr_build_userdata_path, keymapFilename)
 			xbmc.output( "curr_build_userdata_file= " + curr_build_userdata_file )
 
 			new_build_userdata_path = os.path.join( extract_path, "XBMC", "UserData")
 			new_build_userdata_file = os.path.join( new_build_userdata_path, keymapFilename)
 			xbmc.output( "new_build_userdata_file= " + new_build_userdata_file )
 
-			# backup new keymap as _new
-			copy(new_build_userdata_file, curr_build_userdata_file+"_new")
+			# backup curr keymap
+			xbmc.output("backup current keymap")
+			copy(curr_build_userdata_file, curr_build_userdata_file+"_bak")
 
-			# backup curr keymap as _old
-			copy(curr_build_userdata_file, curr_build_userdata_file+"_old")
-			xbmc.output("backup made of keymap _new and _old")
-
-			# if kemap.xml has changed, ask before copying
+			# if keymap.xml has changed, ask before copying
 			try:
-				if not filecmp.cmp( curr_build_userdata_file, new_build_userdata_file ):
-					if self.isSilent or not dialogYesNo( __language__( 0 ), __language__( 509 ) ):
-						# NO, keep new
+				if not filecmp.cmp( curr_build_userdata_file, new_build_userdata_file ):			# files different
+					if self.isSilent or not dialogYesNo( __language__( 0 ), __language__( 509 ) ):	# keep current ?
+						# NO, use new
 						# copy new Keymap to current, so it will be included in copytree
 						copy(new_build_userdata_file, curr_build_userdata_file)
 						xbmc.output("new keymap kept")
@@ -935,18 +932,25 @@ class Main:
 
 			# remove new build UserData
 			for checkCount in range(5):
-				xbmc.output("rmtree UserData checkCount="+str(checkCount))
+				xbmc.output("rmtree UserData checkCount=%i" % checkCount)
 				self._dialog_update( __language__(0), __language__( 510 ), time=2)
 				rmtree( new_build_userdata_path, ignore_errors=True )
 				time.sleep(2)	# give os chance to complete rmdir
 				if not os.path.isdir(new_build_userdata_path):
 					break
 
-			# copy current build to new build
+			# Copytree current UserData to new build
 			xbmc.output("copytree UserData")
 			self._dialog_update( __language__(0), __language__( 511 ), time=2) 
 			copytree( curr_build_userdata_path, new_build_userdata_path )
 			xbmc.output("copytree UserData done")
+
+			# restore backup of keymap.xml - so user can downgrade and still have their orig keymap file
+			xbmc.output("restore keymap in current build")
+			copy(curr_build_userdata_file+"_bak", curr_build_userdata_file)
+
+			xbmc.output("remove unwanted current keymap backup from new build")
+			deleteFile(new_build_userdata_file+"_bak")
 
 			return True
 		except:
