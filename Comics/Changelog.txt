@@ -1,4 +1,6 @@
  Ver    Date        Change
+ 1.5.2  24/05/08    Updated Libs, some minor changes.
+                    Added www.rockymagasin.se to MyComics.xml                    
  1.5.1  10/04/08    Updated: Language strings.
                     New: Comic feed for Little-gamers added to MyComics.xml
                     New: Finnish language translation.

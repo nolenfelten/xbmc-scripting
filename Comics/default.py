@@ -23,9 +23,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "Comics"
-__version__ = '1.5.1'
+__version__ = '1.5.2'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '20-04-2008'
+__date__ = '24-05-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -973,11 +973,12 @@ class Tapestry:
 		debug("> prefixURL() " + origURL)
 		newURL = origURL
 		if not origURL.startswith('http') and not origURL.startswith('www'):
-			debug ("  NO url prefix, get FEED prefix and add to URL")
 			url = self.feeds[self.lastFeedsPos].getElement(ELEMENT_LINK)
-			prefix = searchRegEx(url, REGEX_URL_PREFIX, re.MULTILINE + re.IGNORECASE)
+			if url[-1] != '/':
+				url += '/'
+			prefix = searchRegEx(url, REGEX_URL_PREFIX, re.IGNORECASE)
 			if prefix:
-				newURL = prefix + origURL
+				newURL = urljoin(prefix,origURL)
 		debug("< prefixURL() "+newURL)
 		return newURL
 
@@ -1134,23 +1135,24 @@ class MyComics:
 			errTxt = "Regular Expression(s) missing."
 			errTxt += "\nProvide: BOTH 'reItem' and 'reImage' if giving a page containing page links to images."
 			errTxt += "\nProvide: JUST 'reImage' if giving a page containing image."
-			errTxt += "\nSee script header for examples."
-			debug(errTxt)
+			errTxt += "\nSee script readme for examples."
 			messageOK("Comics - Error",errTxt)
 		else:
 			html = fetchURL(url)
 			if html:
-				debug("finding reItem matches")
+				debug("finding re matches")
 				findRe = re.compile(regex, re.MULTILINE + re.IGNORECASE)
 				matches = findRe.findall(html)
+				# must have title & link - so make title if missing one
 				for match in matches:
-					# must have title & link
-					if len(match) < 2:
-						debug("  ITEM ignored, not enough data in regex match")
-						continue
-					debug ("0: " + match[0] + "  1: " + match[1])
-					title = decodeEntities(match[1])
-					self.items.append(Items(title, match[0]))
+					if isinstance(match, str):
+						title = os.path.basename(match)
+						link = match
+					else:
+						link = match[0]
+						title = decodeEntities(match[1])
+
+					self.items.append(Items(title, link))
 					self.itemsList.append(title)
 
 		sz = len(self.itemsList)
@@ -1163,10 +1165,11 @@ class MyComics:
 		newURL = origURL
 		if not origURL.startswith('http') and not origURL.startswith('www'):
 			url = self.feeds[self.lastFeedsPos].getElement(ELEMENT_LINK)
-			debug ("  NO url prefix, get FEED prefix and add to URL " + url)
+			if url[-1] != '/':
+				url += '/'
 			prefix = searchRegEx(url, REGEX_URL_PREFIX, re.MULTILINE + re.IGNORECASE)
 			if prefix:
-				newURL = prefix + origURL	
+				newURL = urljoin(prefix,origURL)
 		debug("< prefixURL() "+newURL)
 		return newURL
 
