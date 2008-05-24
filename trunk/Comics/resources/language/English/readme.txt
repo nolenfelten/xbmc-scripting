@@ -34,7 +34,7 @@ Python XBMC script to view comics from RSS Feeds and/or HTML pages.
 
 
 Notes:
-  Script checks for an update on startup follow onscreeninstructions if new release found.
+  Script checks for an update on startup follow onscreen instructions if new release found.
 
 Contact me if you wish to provide additional Language translations or new Skin.
 
