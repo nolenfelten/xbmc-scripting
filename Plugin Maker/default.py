@@ -72,7 +72,7 @@ class Main:
         try:
             ok = True
             content_strings = ( "movies|tvshows|musicvideos", "music", )
-            text = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n<settings>\n\t<setting id="path" type="folder" source="%s" label="30000" default="%s" />\n\t<setting id="content" type="enum" values="%s" label="30010" default="%s" />\n\t<setting id="macaddress" type="text" label="30020" default="" />\n\t<setting id="sleeptime" type="enum" values="10|20|30|40|50|60" label="30030" default="2" enable="!eq(-1,)" />\n</settings>""" % ( plugin_type, sourcepath, content_strings[ plugin_type == "music" ], content_strings[ plugin_type == "music" ].split( "|" )[ 0 ] )
+            text = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n<settings>\n\t<setting id="path" type="folder" source="%s" label="30000" default="%s" />\n\t<setting id="content" type="enum" values="%s" label="30010" default="%s" />\n\t<setting id="macaddress" type="text" label="30020" default="" />\n\t<setting id="port" type="labelenum" values="135|136|137|138|139|445" label="30030" default="139" enable="!eq(-1,)" /><setting id="retries" type="enum" values="1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" label="30040" default="6" enable="!eq(-2,)" />\n</settings>""" % ( plugin_type, sourcepath, content_strings[ plugin_type == "music" ], content_strings[ plugin_type == "music" ].split( "|" )[ 0 ] )
             # write new settings file
             file_object = open( filepath, "w" )
             file_object.write( text )

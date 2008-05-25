@@ -50,7 +50,8 @@ class Main:
         self.settings[ "path" ] = self._get_path_list( xbmcplugin.getSetting( "path" ) )
         self.settings[ "content" ] = xbmcplugin.getSetting( "content" )
         self.settings[ "macaddress" ] = xbmcplugin.getSetting( "macaddress" )
-        self.settings[ "sleeptime" ] = ( 10000, 20000, 30000, 40000, 50000, 60000, )[ int( xbmcplugin.getSetting( "sleeptime" ) ) ]
+        self.settings[ "port" ] = int( xbmcplugin.getSetting( "port" ) )
+        self.settings[ "retries" ] = int( xbmcplugin.getSetting( "retries" ) ) + 1
         self.media_type = ( "video" in os.getcwd() )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
@@ -253,16 +254,14 @@ class Main:
             for mac in macs:
                 wol.WakeOnLan( mac )
             # enumerate thru the paths and check if a host exists and is awake
-            sleep = False
             for path in self.settings[ "path" ]:
-                ip = wol.CheckHost( path )
-                # if no ip we need to sleep
-                if ( ip == "" ):
-                    sleep = True
-                    break
-            # if not awake sleep
-            if ( sleep ):
-                xbmc.sleep( self.settings[ "sleeptime" ] )
+                # cycle thru and check if server is up
+                for retry in range( self.settings[ "retries" ] ):
+                    ip = wol.CheckHost( path, self.settings[ "port" ] )
+                    # if no ip we need to sleep
+                    if ( ip != "" ):
+                        break
+                    xbmc.sleep( 5000 )
 
 
 if ( __name__ == "__main__" ):
