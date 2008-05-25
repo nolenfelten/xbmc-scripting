@@ -15,7 +15,8 @@ def WakeOnLan(ethernet_address):
     try:
         # Construct a six-byte hardware address
         addr_byte = ethernet_address.split(':')
-        hw_addr = struct.pack('BBBBBB', int(addr_byte[0], 16),
+        hw_addr = struct.pack('BBBBBB',
+            int(addr_byte[0], 16),
             int(addr_byte[1], 16),
             int(addr_byte[2], 16),
             int(addr_byte[3], 16),
@@ -35,7 +36,7 @@ def WakeOnLan(ethernet_address):
         traceback.print_exc()
         return
 
-def CheckHost( path ):
+def CheckHost( path, port ):
     # if a smb path we check to see if host is awake
     if ( not path.startswith( "smb://" ) ): return True
     # get the host
@@ -45,15 +46,23 @@ def CheckHost( path ):
         hostname = hostname.split( "@" )[ 1 ]
     # check if computer is on
     try:
+        # get hosts ip address
         ip = socket.gethostbyname( hostname )
+        # try and connect to host's ip on supplied port
+        s = socket.socket()
+        s.settimeout ( 0.25 )
+        s.connect ( ( ip, port ) )
+        s.close()
+        # return ip
         return ip
     except:
         return ""
 
+
 if ( __name__ == "__main__" ):
     WakeOnLan( "##:##:##:##:##:##" )
     print "sent"
-    ip = CheckHost( "smb://SERVER/Movies/" )
+    ip = CheckHost( "smb://SERVER/Movies/", 139 )
     print "IP:", ip
 
 
