@@ -12,11 +12,13 @@ import xbmcplugin
 import datetime
 from urllib import quote_plus, unquote_plus
 
+from resources.lib import wol
+
 # plugin constants
 __plugin__ = "Plugin Maker"
 __author__ = "nuka1195"
-__credits__ = "Team XBMC"
-__version__ = "1.0"
+__credits__ = "Team XBMC/ozNick"
+__version__ = "1.1"
 
 
 class _Info:
@@ -28,13 +30,17 @@ class Main:
     # base paths
     BASE_CACHE_PATH = "P:\\Thumbnails"
 
+    # TODO: enable getSupportedMedia()
     # music media extensions
+    #MEDIA_EXT = ( xbmc.getSupportedMedia( "music" ), )
     MEDIA_EXT = ( ".nsv|.m4a|.flac|.aac|.strm|.pls|.rm|.mpa|.wav|.wma|.ogg|.mp3|.mp2|.m3u|.mod|.amf|.669|.dmf|.dsm|.far|.gdm|.imf|.it|.m15|.med|.okt|.s3m|.stm|.sfx|.ult|.uni|.xm|.sid|.ac3|.dts|.cue|.aif|.aiff|.wpl|.ape|.mac|.mpc|.mp+|.mpp|.shn|.zip|.rar|.wv|.nsf|.spc|.gym|.adplug|.adx|.dsp|.adp|.ymf|.ast|.afc|.hps|.xsp|.xwav|.waa|.wvs|.wam|.gcm|.idsp|.mpdsp|.mss|.spt|.rsd|.mid|.kar", )
     # video media extensions
+    #MEDIA_EXT += ( xbmc.getSupportedMedia( "video" ), )
     MEDIA_EXT += ( ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp", )
 
     def __init__( self ):
         self._get_settings()
+        self._send_wol()
         if ( sys.argv[ 2 ] ):
             self._parse_argv()
         self._get_items( self.args.path )
@@ -42,7 +48,9 @@ class Main:
     def _get_settings( self ):
         self.settings = {}
         self.settings[ "path" ] = self._get_path_list( xbmcplugin.getSetting( "path" ) )
-        self.settings[ "content" ] = ( "movies","music","tvshows", )[ int( xbmcplugin.getSetting( "content" ) ) ]
+        self.settings[ "content" ] = xbmcplugin.getSetting( "content" )
+        self.settings[ "macaddress" ] = xbmcplugin.getSetting( "macaddress" )
+        self.settings[ "sleeptime" ] = ( 10000, 20000, 30000, 40000, 50000, 60000, )[ int( xbmcplugin.getSetting( "sleeptime" ) ) ]
         self.media_type = ( "video" in os.getcwd() )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
@@ -63,14 +71,14 @@ class Main:
             if ( path.endswith( "\\" ) or path.endswith( "/" ) ):
                 path = path[ : -1 ]
             # add our path
-            fpaths += [ unquote_plus( path ) ]
+            fpaths += [ path ]
         return fpaths
 
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
         exec "self.args = _Info(%s)" % ( sys.argv[ 2 ][ 1 : ].replace( "&", ", " ), )
-        # backslashes cause issues when passed in the url
-        self.args.path = [ self.args.path.replace( "[[BACKSLASH]]", "\\" ) ]
+        # we want this to be a list
+        self.args.path = [ self.args.path ]
 
     def _get_items( self, path ):
         try:
@@ -100,7 +108,7 @@ class Main:
         try:
             items = []
             # get the directory listing
-            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
+            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( unquote_plus( path ), ) ).split( "\n" )
             # enumerate through our items list and add the full name to our entries list
             for entry in entries:
                 if ( entry ):
@@ -131,6 +139,7 @@ class Main:
         try:
             # parse item for title
             title, ext = os.path.splitext( os.path.basename( file_path ) )
+            # TODO: verify .zip can be a folder also
             # is this a folder?
             isFolder = ( ext == ".rar" or os.path.isdir( self._fix_stacked_path( file_path ) ) )
             # if it's a folder keep extension in title
@@ -144,7 +153,7 @@ class Main:
             return title, isMedia, isFolder
         except:
             # oops print error message
-            print repr( file_path )
+            ##print repr( file_path )
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return "", False, False
 
@@ -166,11 +175,11 @@ class Main:
         ok = True
         add = True
         # backslashes cause issues when passed in the url, so replace them
-        url = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
+        url = item[ 0 ]
         # if it is a folder handle it different
         if ( item[ 2 ] ):
             # create our url
-            url = '%s?path="%s"&isFolder=%d' % ( sys.argv[ 0 ], url, item[ 2 ], )
+            url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( quote_plus( url ) ), item[ 2 ], )
             # if a folder.jpg exists use that for our thumbnail
             #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
             #if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
@@ -200,7 +209,7 @@ class Main:
             except:
                 # oops print error message
                 add = False
-                print repr( item[ 1 ] )
+                ##print repr( item[ 1 ] )
                 print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
         if ( add ):
             # add the item to the media list
@@ -225,7 +234,7 @@ class Main:
             fpath = "/".join( share_string_list )
         # make the proper cache filename and path so duplicate caching is unnecessary
         filename = xbmc.getCacheThumbName( fpath )
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, ( "Music", "Video", )[ self.media_type ], filename[ 0 ], filename ) )
         # if the cached thumbnail does not exist check for a tbn file
         if ( not os.path.isfile( thumbnail ) ):
             # create filepath to a local tbn file
@@ -234,6 +243,27 @@ class Main:
             if ( not os.path.isfile( thumbnail.encode( "utf-8" ) ) ):
                 thumbnail = ""
         return thumbnail
+
+    def _send_wol( self ):
+        # send wol to mac(s)
+        if ( self.settings[ "macaddress" ] ):
+            # split our mac addresses
+            macs = self.settings[ "macaddress" ].split( "|" )
+            # enumerate thru the mac addresses and send wol
+            for mac in macs:
+                wol.WakeOnLan( mac )
+            # enumerate thru the paths and check if a host exists and is awake
+            sleep = False
+            for path in self.settings[ "path" ]:
+                ip = wol.CheckHost( path )
+                # if no ip we need to sleep
+                if ( ip == "" ):
+                    sleep = True
+                    break
+            # if not awake sleep
+            if ( sleep ):
+                xbmc.sleep( self.settings[ "sleeptime" ] )
+
 
 if ( __name__ == "__main__" ):
     Main()
