@@ -38,7 +38,7 @@ def WakeOnLan(ethernet_address):
 
 def CheckHost( path, port ):
     # if a smb path we check to see if host is awake
-    if ( not path.startswith( "smb://" ) ): return True
+    if ( not path.lower().startswith( "smb://" ) ): return True
     # get the host
     hostname = path.split( "/" )[ 2 ]
     # filter username/password
