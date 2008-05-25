@@ -2,7 +2,6 @@
 <strings>
     <string id="30000">Path or share to media</string>
     <string id="30010">Content type</string>
-    <string id="30011">Movies</string>
-    <string id="30012">Music</string>
-    <string id="30013">TV Shows</string>
+    <string id="30020">WOL mac addresses &quot;##:##:##:##:##&quot; (separate macs with |)</string>
+    <string id="30030">Delay after WOL command (seconds)</string>
 </strings>
