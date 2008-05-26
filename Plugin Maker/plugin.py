@@ -257,9 +257,9 @@ class Main:
             for path in self.settings[ "path" ]:
                 # cycle thru and check if server is up
                 for retry in range( self.settings[ "retries" ] ):
-                    ip = wol.CheckHost( path, self.settings[ "port" ] )
-                    # if no ip we need to sleep
-                    if ( ip != "" ):
+                    hostname = wol.CheckHost( path, self.settings[ "port" ] )
+                    # if no hostname we need to sleep
+                    if ( hostname != "" ):
                         break
                     xbmc.sleep( 5000 )
 
