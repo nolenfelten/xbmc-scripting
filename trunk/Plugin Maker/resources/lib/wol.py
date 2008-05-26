@@ -46,15 +46,13 @@ def CheckHost( path, port ):
         hostname = hostname.split( "@" )[ 1 ]
     # check if computer is on
     try:
-        # get hosts ip address
-        ip = socket.gethostbyname( hostname )
-        # try and connect to host's ip on supplied port
+        # try and connect to host on supplied port
         s = socket.socket()
         s.settimeout ( 0.25 )
-        s.connect ( ( ip, port ) )
+        s.connect ( ( hostname, port ) )
         s.close()
-        # return ip
-        return ip
+        # return with hostname
+        return hostname
     except:
         return ""
 
@@ -62,7 +60,7 @@ def CheckHost( path, port ):
 if ( __name__ == "__main__" ):
     WakeOnLan( "##:##:##:##:##:##" )
     print "sent"
-    ip = CheckHost( "smb://SERVER/Movies/", 139 )
-    print "IP:", ip
+    hostname = CheckHost( "smb://SERVER/Movies/", 139 )
+    print "Hostname:", hostname
 
 
