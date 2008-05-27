@@ -38,7 +38,7 @@
     <string id="224">Delete local collection files ?</string>
     <string id="225">XML Collection Initializing</string>
     <string id="226">Loading File, Keys and Filters</string>
-    <string id="227">Creating Flat File from XML (3/4 mins on large collections)</string>
+    <string id="227">Creating Flat File from XML ...</string>
     <string id="228">Saving Keys and Filters</string>
     <string id="229">Online Collection</string>
     <string id="230">Finding Alias: </string>
@@ -104,6 +104,7 @@
     <string id="432">IMDb</string>
     <string id="433">Alias</string>
     <string id="434">Filters</string>
+    <string id="435">Video</string>
 
     <!-- Main Menu options -->
     <string id="500">Exit</string>

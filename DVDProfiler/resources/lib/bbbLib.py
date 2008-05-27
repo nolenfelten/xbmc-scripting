@@ -18,7 +18,7 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '16-04-2008'
+__date__ = '23-05-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
@@ -155,13 +155,14 @@ FONT11 = 'font11'
 FONT12 = 'font12'
 FONT13 = 'font13'
 FONT14 = 'font14'
+FONT16 = 'font16'
 FONT18 = 'font18'
 FONT_SPECIAL_10 = 'special10'
 FONT_SPECIAL_11 = 'special11'
 FONT_SPECIAL_12 = 'special12'
 FONT_SPECIAL_13 = 'special13'
 FONT_SPECIAL_14 = 'special14'
-ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT18,FONT_SPECIAL_10,FONT_SPECIAL_11,FONT_SPECIAL_12,FONT_SPECIAL_13,FONT_SPECIAL_14,)
+ALL_FONTS = (FONT10,FONT11,FONT12,FONT13,FONT14,FONT16,FONT18,FONT_SPECIAL_10,FONT_SPECIAL_11,FONT_SPECIAL_12,FONT_SPECIAL_13,FONT_SPECIAL_14,)
 
 REGEX_URL_PREFIX = '^((?:http://|www).+?)[/?]'
 
@@ -184,7 +185,10 @@ def debug( value ):
 			print pad + str(value)
 			if value[0] == "<": debugIndentLvl -= 2
 		except:
-			print value
+			try:
+				print value
+			except:
+				print "Debug() Bad chars in string"
 
 #################################################################################################################
 def messageOK(title='', line1='', line2='',line3=''):
@@ -204,7 +208,7 @@ def handleException(txt=''):
 		text = ''
 		for l in list:
 			text += l
-		print text
+#		print text
 		messageOK(title, text)
 	except: pass
 
@@ -388,8 +392,8 @@ class FontAttr:
 	def __init__(self):
 		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
 		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
-		self.adjust = {'font10':-3, 'font11':-2, 'font12':-1, 'font13':-1, 'font14':0, 'font18':4, \
-					   'special10':-3, 'special11':-2, 'special12':-1, 'special13':0, 'special14':2}
+		self.adjust = {'font10':-4, 'font11':-3, 'font12':-3, 'font13':-2, 'font14':0, 'font18':4, \
+					   'special10':-3, 'special11':-2, 'special12':-2, 'special13':0, 'special14':2}
 
 		# base widths based on font14
 		self.width = [ \
@@ -1016,11 +1020,11 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 				opener.addheader(name, value)
 
 		if DEBUG:
-			print "safe_url=", safe_url
-			print "file=", file
-			print "params=", params
-			print "headers=", headers
-			print "isBinary=", isBinary
+			print "safe_url=%s" % safe_url
+			print "file=%s" % file
+			print "params=%s" % params
+			print "headers=%s" % headers
+			print "isBinary=%s" % isBinary
 
 		if params:
 			fn, resp = opener.retrieve(safe_url, file, _report_hook, data=params)
@@ -1031,10 +1035,10 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 			print resp
 			showCookies()
 
-        content_type = resp["Content-Type"].lower()
-        # fail if expecting an image but not corrent type returned
-        if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
-            raise "Not Binary"
+		content_type = resp["Content-Type"].lower()
+		# fail if expecting an image but not corrent type returned
+		if isBinary and (find(content_type,"image") == -1 and find(content_type,"audio") == -1):
+			raise "Not Binary"
 
 		opener.close()
 		del opener
@@ -1080,11 +1084,11 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 
 	try:
 		if DEBUG:
-			print "safe_url=", safe_url
-			print "fn=", fn
-			print "params=", params
-			print "headers=", headers
-			print "isBinary=", isBinary
+			print "safe_url=%s" % safe_url
+			print "fn=%s" % fn
+			print "params=%s" % params
+			print "headers=%s" % headers
+			print "isBinary=%s" % isBinary
 
 		if newRequest:
 			debug("create new Request")
@@ -1131,7 +1135,7 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 				handleException()
 				data = None
 
-	success = (data != None and data != False)
+	success = (data != '' and data != None and data != False)
 	debug("< bbbLib.fetchCookieURL() %s" % success)
 	return data
 
@@ -1140,8 +1144,8 @@ def fetchCookieURL(url, fn='', params=None, headers={}, isBinary=False, encodeUR
 def showCookies():
 	try:
 		for index, cookie in enumerate(cookiejar):
-			print index, '  :  ', cookie
-	except:
+			print "cookie %i = %s" % (index, cookie)
+	except: 
 		print "no cookiejar"
 
 
@@ -1178,15 +1182,15 @@ def findAllRegEx(data, regex, flags=re.MULTILINE+re.IGNORECASE+re.DOTALL):
 		sz = len(matchList)
 	else:
 		sz = 0
-	debug ("findAllRegEx() matches= " + str(sz))
+#	debug ("findAllRegEx() matches= " + str(sz))
 	return matchList
 
 #############################################################################################################
-def safeFilename(path):
+def safeFilename(path, replaceCh='_'):
 #	head, tail = os.path.split(path.replace( "\\", "/" ))
 	head, tail = os.path.split(path)
 	name, ext = os.path.splitext(tail)
-	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', '_', name) + ext)
+	return  os.path.join(head, re.sub(r'[\'\";:?*<>|+\\/,=!\.]', replaceCh, name) + ext)
 
 #################################################################################################################
 # Does a direct image URL exist in string ?
@@ -1418,8 +1422,8 @@ class RSSParser2:
 #				else:
 #					debug("Tag: %s No Data found" % (elTagName, )
 
-#			if DEBUG:
-#				print "%s %s" % (index, dict)
+			if DEBUG:
+				print "%s %s" % (index, dict)
 			objectsList.append(RSSNode(dict))
 
 		debug("< RSSParser2().__parseElements() No. objects= %s" % len(objectsList))
@@ -1561,3 +1565,7 @@ def playMedia(filename):
 			success = False
 	debug("< playMedia() success=%s" % success)
 	return success
+
+##############################################################################################################    
+def logFreeMem(msg=""):
+    debug( "Freemem=%sMB  %s" % (xbmc.getFreeMem(), msg))
