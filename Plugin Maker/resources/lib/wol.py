@@ -10,6 +10,8 @@
 import struct
 import socket
 
+from time import sleep
+
 
 def WakeOnLan(ethernet_address):
     try:
@@ -36,7 +38,7 @@ def WakeOnLan(ethernet_address):
         traceback.print_exc()
         return
 
-def CheckHost( path, port ):
+def CheckHost( path, port, retries=1 ):
     # if a smb path we check to see if host is awake
     if ( not path.lower().startswith( "smb://" ) ): return True
     # get the host
@@ -45,22 +47,23 @@ def CheckHost( path, port ):
     if ( "@" in hostname ):
         hostname = hostname.split( "@" )[ 1 ]
     # check if computer is on
-    try:
-        # try and connect to host on supplied port
-        s = socket.socket()
-        s.settimeout ( 0.25 )
-        s.connect ( ( hostname, port ) )
-        s.close()
-        # return with hostname
-        return hostname
-    except:
-        return ""
+    for retry in range( retries ):
+        try:
+            # try and connect to host on supplied port
+            s = socket.socket()
+            s.settimeout( 0.25 )
+            s.connect( ( hostname, port ) )
+            s.close()
+            return hostname, True
+        except:
+            sleep( 5 )
+    return hostname, False
 
 
 if ( __name__ == "__main__" ):
     WakeOnLan( "##:##:##:##:##:##" )
-    print "sent"
-    hostname = CheckHost( "smb://SERVER/Movies/", 139 )
-    print "Hostname:", hostname
+    print "WOL packet sent"
+    hostname, alive = CheckHost( "smb://SERVER/Movies/", 139, 5 )
+    print "Host '%s' is %salive:" % ( hostname, ( "not ", "", )[ alive == True ], )
 
 
