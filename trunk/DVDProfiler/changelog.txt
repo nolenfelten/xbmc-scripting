@@ -1,4 +1,5 @@
 Version     Date        Change
+ 1.6.1      26/05/08    Fix: Better handling of non-english XML and language.
  1.6        08/04/08    Change: Removed ClientCookie.py by using python 2.4 cookieLib instead.
                         Change: Self update improved.
                         Fix: IMDb

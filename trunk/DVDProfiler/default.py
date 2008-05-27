@@ -23,9 +23,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.6'
+__version__ = '1.6.1'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '08-04-2008'
+__date__ = '26-05-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -276,7 +276,7 @@ class DVDProfiler(xbmcgui.Window):
 		# check for script update
 		scriptUpdated = False
 		if self.settings[self.SETTING_CHECK_UPDATE]:	# check for update ?
-			scriptUpdated = updateScript(True, False)
+			scriptUpdated = updateScript(False, False)
 
 		if not scriptUpdated and self.startupMenu():
 			self.ready = True
@@ -1069,16 +1069,23 @@ class DVDProfiler(xbmcgui.Window):
 		#######################################################
 		# extract text from object which could be a list of lists of strings etc
 		def _getItemsText(key, joinCh=","):
-			text = ''
+			text = 'N/A'
 			try:
 				for item in self.dvdCollection.getDVDData(key):
-					if not isinstance(item,str):
+					if isinstance(item,list):
 						text = joinCh.join(item)
 					else:
-						text = item
+						if item.lower() == 'true':
+							text = __language__(350)		# yes
+						elif item.lower() == 'false':
+							text = __language__(351)		# no
+						else:
+							text = item
 			except:
-				text = 'N/A'
+				# missing key, ignore
+				pass
 			return text
+
 		#######################################################
 
 		xbmcgui.lock()
@@ -1133,8 +1140,8 @@ class DVDProfiler(xbmcgui.Window):
 		else:
 			debug("credits done OK")
 
-
 		# overview (also incorp additional information)
+		debug("build OVERVIEW")
 		self.overviewCTB.reset()
 		text = ''
 		try:
@@ -1174,7 +1181,7 @@ class DVDProfiler(xbmcgui.Window):
 			text += _getItemsText(self.dvdCollection.GENRE)
 		except: text += "N/A"
 
-		text += '\nVideo:  '
+		text += '\n%s:  ' % __language__(435)		# video
 		if not self.onlineAliasData:
 			try:
 				text += '%s: ' % __language__(408)
@@ -1229,6 +1236,7 @@ class DVDProfiler(xbmcgui.Window):
 			text += '\n%s:  ' % __language__(416)
 			text += _getItemsText(self.dvdCollection.LOCATION)
 		except: text += "N/A"
+
 
 		self.overviewCTB.setText(text)
 
@@ -1784,7 +1792,7 @@ class DVDCollectionXML:
 
 						# save genre, further split to individual unique genre list
 						if dvdDict.has_key(self.GENRE):
-#							debug("save genres")
+							debug("save genres")
 							keyData = dvdDict[self.GENRE]
 							for value in keyData:
 								genreList = value.split('~')
@@ -1796,6 +1804,7 @@ class DVDCollectionXML:
 
 						# save the tag as 'Location' if location contains data
 						if dvdDict.has_key(self.LOCATION):
+							debug("save LOCATION")
 							if dvdDict[self.LOCATION]:
 								try:
 									self.filterTags.index(self.LOCATION)
@@ -1810,7 +1819,7 @@ class DVDCollectionXML:
 
 						# save tags
 						if dvdDict.has_key(self.TAG):
-#							debug("save tags")
+							debug("save tags")
 							keyData = dvdDict[self.TAG]
 							for value in keyData:
 								try:
@@ -1819,6 +1828,7 @@ class DVDCollectionXML:
 									self.filterTags.append(value)
 
 						# save keys
+						debug("save keys")
 						rec = [dvdDict[self.SORTTITLE][0],dvdDict[self.ID][0]]
 						try:
 							rec.append(dvdDict[self.GENRE])
@@ -1829,7 +1839,6 @@ class DVDCollectionXML:
 							rec.append(dvdDict[self.TAG])
 						except:
 							rec.append([])
-
 						self.keys[int(collnum)] = rec
 
 			f.close()
@@ -1844,13 +1853,13 @@ class DVDCollectionXML:
 		try:
 			f = open(KEYS_FILE,'w')
 			if self.filterGenres:
-				f.write('genres|'+('~'.join(self.filterGenres))+'\n')
+				f.write(('genres|'+('~'.join(self.filterGenres))+'\n'))
 			if self.filterTags:
-				f.write('tags|'+('~'.join(self.filterTags))+'\n')
+				f.write(('tags|'+('~'.join(self.filterTags))+'\n'))
 			if self.keys:
 				for key,value in self.keys.items():
 					if isinstance(value, str):
-						f.write('keys|%s~%s\n' % (key,value))
+						f.write(('keys|%s~%s\n' % (key,value)))
 					else:
 						rec = 'keys|%s' % key
 						for item in value:
@@ -1859,7 +1868,7 @@ class DVDCollectionXML:
 							else:
 								rec += '~'+('^'.join(item))
 
-						f.write(rec+'\n')
+						f.write((rec+'\n'))
 			f.close()
 		except:
 			handleException("saveKeys()")
@@ -1921,7 +1930,7 @@ class DVDCollectionXML:
 				matches = regex.findall(line)
 				for key,value in matches:
 					keyCount = line.count(key+'|')		# how many of this key stored ?
-					subSplits = value.split('^')
+					subSplits = value.decode('latin-1','replace').split('^')
 					if not self.dvdDict.has_key(key):
 						if keyCount == 1:
 							self.dvdDict[key] = subSplits
@@ -2469,13 +2478,13 @@ class Filters(xbmcgui.WindowDialog):
 
 ######################################################################################
 def updateScript(quite=False, notifyNotFound=False):
-	xbmc.output( "> updateScript() quite=%s" %quite)
+	debug( "> updateScript() quite=%s" %quite)
 
 	updated = False
 	up = update.Update(__language__, __scriptname__)
 	version = up.getLatestVersion(quite)
-	xbmc.output("Current Version: " + __version__ + " Tag Version: " + version)
-	if version != "-1":
+	debug("Current Version: %s Tag Version: %s" % (__version__,version))
+	if version and version != "-1":
 		if __version__ < version:
 			if xbmcgui.Dialog().yesno( __language__(0), \
 								"%s %s %s." % ( __language__(1006), version, __language__(1002) ), \
@@ -2489,7 +2498,7 @@ def updateScript(quite=False, notifyNotFound=False):
 #		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
 
 	del up
-	xbmc.output( "< updateScript() updated=%s" % updated)
+	debug( "< updateScript() updated=%s" % updated)
 	return updated
 
 #############################################################################################

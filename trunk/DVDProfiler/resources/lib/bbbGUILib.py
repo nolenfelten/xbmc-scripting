@@ -8,7 +8,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbGUILib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-03-2008'
+__date__ = '23-05-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 from bbbLib import *
@@ -65,10 +65,11 @@ class DialogSelect(xbmcgui.WindowDialog):
 		self.lastAction = 0
 		self.useY = False
 		self.useX = False
+		self.isDelete = False
 
 	def setup(self, title='',width=430, height=490, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
 			  imageWidth=0,imageHeight=22, itemHeight=25, rows=0, \
-			  useY=False, useX=False, isDelete=False, panel='', banner=''):
+			  useY=False, useX=False, isDelete=False, panel='', banner='', font='font12'):
 		debug("> DialogSelect().setup() useY=%s useX=%s isDelete=%s" % (useY,useX,isDelete))
 
 		if not panel:
@@ -151,13 +152,13 @@ class DialogSelect(xbmcgui.WindowDialog):
 		except: pass
 		if not self.isDelete:
 			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
-											listW, listH, textColor=textColor, \
+											listW, listH, font, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, \
 											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
 		else:
 			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
-											listW, listH, textColor=textColor, \
+											listW, listH, font, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, buttonFocusTexture=LIST_HIGHLIGHT_FILENAME, \
 											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
@@ -166,14 +167,15 @@ class DialogSelect(xbmcgui.WindowDialog):
 		debug("< DialogSelect().setup()")
 
 	def onAction(self, action):
-		if not action:
+		if action == 0:
 			return
 #		debug("DialogSelect.onAction()")
 		self.lastAction = action
 		if action in [ACTION_BACK, ACTION_B]:
 			self.selectedPos = -1
 			self.close()
-		elif (action == ACTION_Y and self.useY) or (action == ACTION_X and self.useX):
+		elif (self.useY and action == ACTION_Y) or \
+			 (self.useX and action == ACTION_X):
 			self.selectedPos = self.menuCL.getSelectedPosition()
 			self.close()
 
@@ -213,7 +215,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 					# single string value
 					self.menuCL.addItem(xbmcgui.ListItem(opt.strip(), '', img, img))
 
-			if self.selectedPos > menuSZ:
+			if self.selectedPos >= menuSZ:
 				self.selectedPos = menuSZ-1
 			elif self.selectedPos < 0:
 				self.selectedPos = 0
@@ -282,9 +284,15 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 	def onControl(self, control):
 		pass
 
+######################################################################################
+def setDialogPanel(filename):
+    debug("bbbGUI().setDialogPanel() " + filename)
+    global DIALOG_PANEL
+    DIALOG_PANEL = filename
 
 ######################################################################################
 # establish default panel to use for dialogs
+global DIALOG_PANEL
 try:
     DIALOG_PANEL = sys.modules[ "__main__" ].DIALOG_PANEL
 except:
