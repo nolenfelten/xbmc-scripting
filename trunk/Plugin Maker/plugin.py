@@ -253,15 +253,10 @@ class Main:
             # enumerate thru the mac addresses and send wol
             for mac in macs:
                 wol.WakeOnLan( mac )
-            # enumerate thru the paths and check if a host exists and is awake
+            # enumerate thru the paths and check if a host exists and is alive
             for path in self.settings[ "path" ]:
-                # cycle thru and check if server is up
-                for retry in range( self.settings[ "retries" ] ):
-                    hostname = wol.CheckHost( path, self.settings[ "port" ] )
-                    # if no hostname we need to sleep
-                    if ( hostname != "" ):
-                        break
-                    xbmc.sleep( 5000 )
+                # check if computer is alive
+                hostname, alive = wol.CheckHost( path, self.settings[ "port" ], self.settings[ "retries" ] )
 
 
 if ( __name__ == "__main__" ):
