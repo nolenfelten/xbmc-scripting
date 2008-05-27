@@ -38,15 +38,15 @@ def WakeOnLan(ethernet_address):
         traceback.print_exc()
         return
 
-def CheckHost( path, port, retries=1 ):
+def CheckHost( path, port=139, retries=1 ):
     # if a smb path we check to see if host is awake
     if ( not path.lower().startswith( "smb://" ) ): return True
-    # get the host
+    # parse the computers hostname from path
     hostname = path.split( "/" )[ 2 ]
-    # filter username/password
+    # filter out username/password
     if ( "@" in hostname ):
         hostname = hostname.split( "@" )[ 1 ]
-    # check if computer is on
+    # check if host is alive, no more than number of retries
     for retry in range( retries ):
         try:
             # try and connect to host on supplied port
@@ -54,16 +54,22 @@ def CheckHost( path, port, retries=1 ):
             s.settimeout( 0.25 )
             s.connect( ( hostname, port ) )
             s.close()
+            # we return True since connection succeeded
             return hostname, True
         except:
+            # we sleep for 5 seconds before next retry
             sleep( 5 )
+    # we return False since connection failed
     return hostname, False
 
 
 if ( __name__ == "__main__" ):
-    WakeOnLan( "##:##:##:##:##:##" )
-    print "WOL packet sent"
-    hostname, alive = CheckHost( "smb://SERVER/Movies/", 139, 5 )
+    # send the WOL packet
+    mac_address = "##:##:##:##:##:##"
+    WakeOnLan( ethernet_address=mac_address )
+    print "WOL packet sent for %s" % ( mac_address, )
+    # check if host is alive
+    hostname, alive = CheckHost( path="smb://SERVER/Movies/", port=139, retries=5 )
     print "Host '%s' is %salive:" % ( hostname, ( "not ", "", )[ alive == True ], )
 
 
