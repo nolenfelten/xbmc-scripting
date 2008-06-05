@@ -233,6 +233,7 @@ class Main:
         try:
             # parse item for title
             title, ext = os.path.splitext( os.path.basename( file_path ) )
+            # TODO: verify .zip can be a folder also
             # is this a folder?
             isFolder = ( ext == ".rar" or os.path.isdir( self._fix_stacked_path( file_path ) ) )
             # if it's a folder keep extension in title
