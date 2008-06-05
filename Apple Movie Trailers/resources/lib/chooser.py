@@ -20,6 +20,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
+        xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
         xbmcgui.lock()
         self.controlId = 0
         self.base_path = os.path.join( BASE_RESOURCE_PATH, "skins" )

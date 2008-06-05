@@ -35,6 +35,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     CONTROL_LISTS_NOT = ( CONTROL_GENRE_LIST + 2, CONTROL_STUDIO_LIST + 2, CONTROL_ACTOR_LIST + 2, CONTROL_RATING_LIST + 2, CONTROL_QUALITY_LIST + 2, CONTROL_EXTRA_LIST + 2, )
 
     def __init__( self, *args, **kwargs ):
+        xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create( _( 106 ), _( 97 ), _( 1005 ) )
         xbmcgui.lock()

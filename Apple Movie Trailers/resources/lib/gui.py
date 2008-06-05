@@ -68,6 +68,7 @@ class GUI( xbmcgui.WindowXML ):
     CONTROL_CATEGORY_LIST_GROUP = 4000
     
     def __init__( self, *args, **kwargs ):
+        xbmcgui.WindowXML.__init__( self, *args, **kwargs )
         xbmcgui.lock()
         self.startup = True
         ##Enable once we figure out why it crashes sometimes#################################
@@ -741,7 +742,6 @@ class GUI( xbmcgui.WindowXML ):
         import credits
         force_fallback = self.skin != "Default"
         c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
-        c.doModal()
         del c
 
     def updateScript( self ):
@@ -859,7 +859,6 @@ class GUI( xbmcgui.WindowXML ):
         import showtimes
         force_fallback = self.skin != "Default"
         s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
-        s.doModal()
         del s
 
     def exitScript( self, restart=False ):
@@ -965,7 +964,7 @@ main()
 ## Thanks Thor918 for this class ##
 class MyPlayer( xbmc.Player ):
     def  __init__( self, *args, **kwargs ):
-        xbmc.Player.__init__( self )
+        xbmc.Player.__init__( self, *args, **kwargs )
         self.function = kwargs["function"]
 
     def onPlayBackStopped( self ):

@@ -18,6 +18,9 @@ class _TheaterListParser( SGMLParser ):
     """ 
         Parser Class: parses an html document for opening date 
     """
+    def __init__( self ):
+        SGMLParser.__init__( self )
+
     def reset( self ):
         SGMLParser.reset( self )
         self.theater_list = {}
@@ -53,6 +56,9 @@ class _OpeningDateParser( SGMLParser ):
     """ 
         Parser Class: parses an html document for opening date 
     """
+    def __init__( self ):
+        SGMLParser.__init__( self )
+
     def reset( self ):
         SGMLParser.reset( self )
         self.url = None
@@ -69,6 +75,9 @@ class _ShowtimesParser( SGMLParser ):
         - creates a key { theater: [#:##] }
         - formats date (dayofweek, month day, year)
     """
+    def __init__( self ):
+        SGMLParser.__init__( self )
+
     def reset( self ):
         SGMLParser.reset( self )
         self.theaters = {}

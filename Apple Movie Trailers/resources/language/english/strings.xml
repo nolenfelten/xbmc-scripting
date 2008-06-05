@@ -5,6 +5,7 @@
     <string id="2">Team AMT</string>
 
     <!-- Dialog Messages -->
+    <string id="36">Removing old xml files...</string>
     <string id="37">Refreshing genre information...</string>
     <string id="38">Refreshing genre and trailer information...</string>
     <string id="39">Play All</string>

@@ -341,7 +341,7 @@ class Trailers:
         try:
             if url[ : 7 ] != "http://":
                 url = self.base_url + url
-            is_special = genre in [ "Exclusives", "Newest" ]
+            is_special = genre in ( "Exclusives", "Newest", )
             next_url = url
             first_url = True
             trailer_dict = dict()
@@ -356,21 +356,24 @@ class Trailers:
                     #except:
                     #    source = self.cleanXML( source )
                     #    element = ET.fromstring( source )
-                        
+
                     lookup = "GotoURL"
                     if not is_special:
                         lookup = self.ns( lookup )
                     elements = element.getiterator( lookup )
                     # add next_url to the genre_urls list
                     genre_urls.append( next_url )
-                    if first_url:
-                        next_url = elements[0].get( "url" )
-                        first_url = False
-                    else:
-                        next_url = elements[2].get( "url" )
-                    if next_url[0] != "/":
-                        next_url = "/".join( url.split( "/" )[ : -1 ] + [ next_url ] )
-                    else:
+                    try:
+                        if first_url:
+                            next_url = elements[0].get( "url" )
+                            first_url = False
+                        else:
+                            next_url = elements[2].get( "url" )
+                        if next_url[0] != "/":
+                            next_url = "/".join( url.split( "/" )[ : -1 ] + [ next_url ] )
+                        else:
+                            next_url = None
+                    except:
                         next_url = None
                     for element in elements:
                         url2 = element.get( "url" )
@@ -381,15 +384,18 @@ class Trailers:
                             continue
                         if "/moviesxml/g" in url2:
                             continue
-                        if url2[ 0 ] != "/":
+                        if url2[ 0 ] != "/" and not url2.startswith( "http://" ):
                             continue
                         if url2 in trailer_dict.keys():
                             lookup = "b"
                             if not is_special:
                                 lookup = "B"
                                 lookup = self.ns( lookup )
-                            title = element.getiterator( lookup )[ 0 ].text.strip()#encode( "ascii", "ignore" )
-                            trailer_dict[ url2 ] =  title.strip()
+                            try:
+                                title = element.getiterator( lookup )[ 0 ].text.strip()#encode( "ascii", "ignore" )
+                                trailer_dict[ url2 ] =  title.strip()
+                            except:
+                                pass
                             continue
                         trailer_dict.update( { url2: title } )
                 except:
@@ -554,16 +560,16 @@ class Trailers:
                     else: idStudio = studio_id[ 0 ]
                     records.add( "studio_link_movie", ( idStudio, self.idMovie, ) )
                     self.studio = studio
-                
+
                 # -- rating --
                 temp_url = element.getiterator( self.ns( "PictureView" ) )[ 2 ].get( "url" )
                 if temp_url:
                     if "/mpaa" in temp_url:
-                        rating_url = fetcher.urlretrieve( temp_url )
+                        rating_url = fetcher.urlretrieve( self.base_url + temp_url )
                         if rating_url:
                             self.rating_url = os.path.basename( rating_url )
                             self.rating = os.path.split( temp_url )[ 1 ][ : -4 ].replace( "mpaa_", "" )
-                
+
                 # TODO: maybe parse the index xml file(s) for other trailer xml files, keeping as a list of lists, so user can select
                 # -- trailer urls --
                 # get all url xml files

@@ -21,6 +21,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
+        xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
         xbmcgui.lock()
         self.genres = kwargs[ "genres" ]
         self.skin = kwargs[ "skin" ]
@@ -346,7 +347,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
         import credits
         force_fallback = self.skin != "Default"
         c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
-        c.doModal()
         del c
 
     def _get_defaults( self ):

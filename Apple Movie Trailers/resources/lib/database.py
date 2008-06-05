@@ -21,6 +21,7 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 class Database:
     """ Main database class """
+
     def __init__( self, *args, **kwargs ):
         self.query = Query()
         self.db_version, self.complete = self._get_version()
@@ -95,12 +96,11 @@ class Database:
         return version, False
 
     def _convert_database( self, version, complete ):
-        """
         dialog = xbmcgui.DialogProgress()
         def _progress_dialog( count=0, total_count=None, movie=None ):
             __line1__ = _( 63 )
             if ( not count ):
-                dialog.create( _( 59 ), __line1__ )
+                dialog.create( _( 36 ), _( 67 ) )# _( 59 ), __line1__ )
             elif ( count > 0 ):
                 percent = int( count * ( float( 100 ) / total_count ) )
                 __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, total_count, )
@@ -110,7 +110,7 @@ class Database:
                 else: return True
             else:
                 dialog.close()
-
+        """
         def _update_table():
             try:
                 sql = "ALTER TABLE genres ADD updated text"
@@ -181,6 +181,19 @@ class Database:
                 return True
             except: return False
         """
+        def _remove_xmls():
+            _progress_dialog()
+            filenames = os.walk( BASE_DATA_PATH )
+            for filename in filenames:
+                for file in filename[ 2 ]:
+                    path = xbmc.translatePath( os.path.join( filename[ 0 ], file ) )
+                    if ( path.endswith( ".xml" ) ):
+                        try:
+                            os.remove( path )
+                        except:
+                            "could not remove:", path
+            _progress_dialog( -1 )
+
         def _update_version():
             records = Records()
             ok = records.update( "version", ( "version", ), ( __version__, 1, ), "idVersion", True )
@@ -188,7 +201,7 @@ class Database:
             return ok
         
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.99.2", "0.99.2", "pre-0.99.3", "0.99.3", "pre-0.99.4", "0.99.4", "pre-0.99.4a", "pre-0.99.4b", ) ):
+        if ( version in ( "pre-0.99.5a", ) ):
             try:
                 ok = _update_version()
                 if ( not ok ): raise
@@ -200,6 +213,7 @@ class Database:
                 xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ], msg[ 2 ] )
         else:
             xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
+            _remove_xmls()
             os.remove( BASE_DATABASE_PATH )
             version, complete = self._create_database()
             return ( __version__, complete )
@@ -207,6 +221,7 @@ class Database:
 
 class Tables( dict ):
     """ Database tables dictionary class """
+
     def __init__( self ):
         #{ column name, type, auto increment, index , index columns }
         self[ "version" ] = (
@@ -262,6 +277,7 @@ class Tables( dict ):
 
 class Records:
     "add, delete, update and fetch records"
+
     def __init__( self, *args, **kwargs ):
         self.tables = Tables()
         self.connect()
@@ -349,6 +365,7 @@ class Records:
 
 class Query( dict ):
     "all sql statments. add as needed"
+
     def __init__( self ):
         #good sql statements
         self[ "movie_by_movie_id" ]		= "SELECT * FROM movies WHERE idMovie=?;"
@@ -366,7 +383,7 @@ class Query( dict ):
         self[ "incomplete_movies" ]		= "SELECT * FROM movies WHERE trailer_urls IS NULL ORDER BY title;"
         self[ "version" ]						= "SELECT * FROM version;"
 
-        self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre), count(movies.date_added) FROM genre_link_movie, genres, movies WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie GROUP BY genres.genre;"
+        self[ "genre_category_list" ]		= "SELECT genres.idGenre, genres.genre, count(genre_link_movie.idGenre), count(movies.favorite) FROM genre_link_movie, genres, movies WHERE genre_link_movie.idGenre=genres.idGenre AND genre_link_movie.idMovie=movies.idMovie GROUP BY genres.genre;"
         self[ "studio_category_list" ]		= "SELECT studios.idStudio, studios.studio, count(studio_link_movie.idStudio), count(studio_link_movie.idStudio) FROM studio_link_movie, studios WHERE studio_link_movie.idStudio=studios.idStudio GROUP BY upper(studios.studio);"
         self[ "actor_category_list" ]		= "SELECT actors.idActor, actors.actor, count(actor_link_movie.idActor), count(actor_link_movie.idActor) FROM actor_link_movie, actors WHERE actor_link_movie.idActor=actors.idActor GROUP BY upper(actors.actor);"
         self[ "rating_category_list" ]		= "SELECT rating, count(rating) FROM movies WHERE rating IS NOT NULL AND rating!='' GROUP BY rating;"
@@ -383,7 +400,7 @@ class Query( dict ):
         self[ "favorites" ]						= "SELECT * FROM movies WHERE favorite=? ORDER BY title;"
         self[ "downloaded" ]					= "SELECT * FROM movies WHERE saved_location!=? ORDER BY title;"
         self[ "watched" ]						= "SELECT * FROM movies WHERE times_watched>? ORDER BY title;"
-        self[ "recently_added" ]			= "SELECT * FROM movies ORDER BY date_added DESC, title LIMIT 25;"
+        self[ "recently_added" ]			= "SELECT * FROM movies ORDER BY date_added DESC, title LIMIT 30;"
         self[ "multiple_trailers" ]			= "SELECT * FROM movies WHERE trailer_urls LIKE '%%), (%%' ORDER BY title;"
 
         self[ "hd_trailers" ]					= "SELECT * FROM movies WHERE trailer_urls LIKE ? ORDER BY title;"
