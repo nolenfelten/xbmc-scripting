@@ -289,7 +289,7 @@ class Settings:
             "shortcut3": FAVORITES,
             "refresh_newest": False,
             "videoplayer_displayresolution": 10,
-            "use_simple_search": False,
+            "use_simple_search": True,
             "match_whole_words": False,
             "showtimes_local": "33102",
             "showtimes_scraper": "Google",
