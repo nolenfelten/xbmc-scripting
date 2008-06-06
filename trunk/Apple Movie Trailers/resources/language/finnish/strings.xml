@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-   <!--  Finnish 28.3.2008 -->
+   <!--  Finnish 6.6.2008 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko 70</string>
     <!-- Dialog Messages -->
+  <string id="36">Poistetaan vanhoja xml-tiedostoja...</string>
   <string id="37">Päivitetään lajityyppi tietoja...</string>
   <string id="38">Päivitetään lajityyppi ja esittely tietoja...</string>
   <string id="39">Toista kaikki</string>
