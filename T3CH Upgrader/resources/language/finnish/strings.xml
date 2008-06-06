@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH XBMC-päivitys</string>
-    <!--  Finnish v.28.4.2008 -->
+    <!--  Finnish v.6.6.2008 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
     <string id="201">Käynnistyvän dashin nimi.</string>
@@ -27,13 +27,13 @@
     <string id="311">Lähde tiedostoa/kansiota ei löydy!</string>
     <string id="312">Purkupolkua ei löydy! Yritä uudelleen.</string>
     <string id="313">Rajoitettu tiedosto tai kansio!</string>
-    <string id="314">Purku kansio on jo olemassa, kirjoitetaanko päälle ?</string>
+    <string id="314">Purku kansio on jo olemassa, kirjoitetaanko sen päälle ?</string>
     <string id="315">RAR-paketin SFV tarkistusluvussa on virhe![CR]Paketti on mahdollisesti vioittunut, yritä ladata se uudelleen.</string>
     <string id="316">Asennus asemassa ei ole tarpeeksi tyhjää tilaa!</string>
     <string id="317">Vapaata muistia on liian vähän, paketin purku saattaa epäonnistua.</string>
-	<string id="318">Yhtään FTP-palvelinta ei ole käytettävissä!</string>
+    <string id="318">Yhtään FTP-palvelinta ei ole käytettävissä!</string>
     <string id="319">Verkosta ei löydy T3ch-pakettia!</string>
-    <string id="320">SFV tiedostonimeä ei löydy![Enter]Jatketaanko jokatapauksessa?</string>
+    <string id="320">SFV tiedostonimeä ei löydy![CR]Jatketaanko joka tapauksessa?</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Lataa</string>
@@ -46,25 +46,25 @@
     <string id="407">Muokkaa</string>
     <string id="408">Kansio</string>
     <string id="409">Tiedosto</string>
-    <string id="410">XBMC</string>
-    <string id="411">T3CH</string>
+    <string id="410">XBMC-ohjelma</string>
+    <string id="411">T3CH-paketti</string>
     <string id="412">Poista</string>
-    <string id="413">Peruuta</string>
+    <string id="413">Ei</string>
     <string id="414">Ohje</string>
     <string id="415">Muutokset</string>
 
     <!-- Status messages -->
     <string id="500">Nykyinen T3CH versio:</string>
     <string id="501">Haluatko ladata tämän version?</string>
-    <string id="502">Latauspaikka:</string>
+    <string id="502">Latausosoite:</string>
     <string id="503">Latauksen sijainti:</string>
     <string id="504">Purku sijainti:</string>
-    <string id="505">T3CH-paketti purettu:</string>
+    <string id="505">T3CH-paketti puretaan:</string>
     <string id="506">Selvitetään T3CH paketin sisältöä ...</string>
-    <string id="507">Aloitetaan nykyisten tiedostojen siirto T3CH-kansioon ?</string>
+    <string id="507">Siirretäänkö nykyiset tiedostot T3CH-kansioon ?</string>
     <string id="508">(UserData, skriptit, lisäkkeet, skini ...)</string>
-    <string id="509">Keymap.xml on erilainen, kopioidaanko sinun oma ?</string>
-    <string id="510">Poistetaan T3Ch UserData ...</string>
+    <string id="509">Keymap.xml on erilainen, kopioidaanko sinun käyttämä ?</string>
+    <string id="510">Poistetaan T3Ch:n UserData ...</string>
     <string id="511">Siirretään sinun UserData T3CH-kansioon ...</string>
     <string id="512">Asennus valmis. Haluatko uudelleenkäynnistää ?</string>
     <string id="514">Päivitetään dash käynnistysnimeä ...</string>
@@ -81,7 +81,7 @@
     <string id="525">Valitse tiedosto tai kansio ?</string>
     <string id="526">Uusi polku sisältyy ?</string>
     <string id="527">Uusi XBE sisältyy ?</string>
-    <string id="528">Poista T3CH asennuskopio?</string>
+    <string id="528">Poistetaanko T3CH:n asennuspaketti?</string>
     <string id="529">Varmista ja päivitä XBMC käynnistys tiedot ?[CR](Vaaditaan uutta pakettia asennettaessa)</string>
     <string id="530">Asemassa=%s  Tilaa=%sMB  Suositus=%sMB</string>
     <string id="531">Muistia vapaana=%sMB  Suositus=%sMB</string>
@@ -121,7 +121,7 @@
     <string id="652">Käytä näppäimistöä</string>
 
   <!-- Update messages -->  
-  <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
+  <string id="1000">Ohjelmasi on jo ajantasalla.</string>
   <string id="1001">Tarkistetaan päivityksiä...</string>
   <string id="1002">on uudempi</string>
   <string id="1003">Haluatko päivittää ohjelman?</string>
