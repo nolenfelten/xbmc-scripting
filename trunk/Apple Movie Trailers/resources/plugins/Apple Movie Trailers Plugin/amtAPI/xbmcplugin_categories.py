@@ -72,10 +72,12 @@ class Main:
             # user cancelled dialog or an error occurred
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
-        # if successful and user did not cancel, add all the required sort methods
+        # if successful and user did not cancel, set our sort orders, content and plugin category
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
+            # set content
+            xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
