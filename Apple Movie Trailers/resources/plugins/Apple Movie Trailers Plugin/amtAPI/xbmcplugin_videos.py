@@ -54,8 +54,6 @@ class Main:
                 trailers = self._genre_query()
             # fill media list
             ok = self._fill_media_list( trailers )
-            # set content
-            if (ok): xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
         except:
             # oops print error message
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
@@ -117,13 +115,20 @@ class Main:
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         records.close()
-        # if successful and user did not cancel, add all the required sort methods
+        # if successful and user did not cancel, set our sort orders, content and plugin category
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
+            # set content
+            xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+            try:
+                # set our plugin category
+                xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=self.args.genre )
+            except:
+                pass
         return ok
 
     def _get_trailer_url( self, idMovie, trailer_urls, saved_trailers ):
