@@ -191,7 +191,7 @@ class Database:
                         try:
                             os.remove( path )
                         except:
-                            "could not remove:", path
+                            print "could not remove:", path
             _progress_dialog( -1 )
 
         def _update_version():
