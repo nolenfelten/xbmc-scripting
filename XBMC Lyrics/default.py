@@ -46,3 +46,4 @@ if ( __name__ == "__main__" ):
     ui = gui.GUI( "script-%s-%s.xml" % ( __scriptname__.replace( " ", "_" ), window, ), BASE_RESOURCE_PATH, "Default" )
     ui.doModal()
     del ui
+    sys.modules.clear()
