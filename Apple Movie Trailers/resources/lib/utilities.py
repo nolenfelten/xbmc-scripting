@@ -90,7 +90,7 @@ def install_plugin( plugin=0 ):
     msg = ( 700 + ( 4 * plugin ) )
     if ( xbmcgui.Dialog().yesno( _( msg ), _( msg + 1 ), _( msg + 2 ), _( msg + 3 ), _( 712 ), _( 711 ), ) ):
         try:
-            title = "%s Plugin" % ( ( "Apple Movie Trailers", "Home Theater", )[ plugin ], )
+            title = ( "Apple Movie Trailers", "Home Theater", )[ plugin ]
             # get the thumbnail the user chooses
             thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title, "thumbnails", "thumbs", "default.tbn" ) ), heading=_( 710 ), dlg_type=2, mask=".tbn", use_thumbs=True )
             # create the progress dialog
