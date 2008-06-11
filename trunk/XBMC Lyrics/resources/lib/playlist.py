@@ -7,7 +7,7 @@ import xbmc
 # add all music paths here, no subdirectories needed
 MUSIC_PATH = ( "E:\\Music", "F:\\Music", )
 # add all music extensions wanted in lowercase
-MUSIC_EXT = ".nsv|.m4a|.flac|.aac|.strm|.pls|.rm|.mpa|.wav|.wma|.ogg|.mp3|.mp2|.m3u|.mod|.amf|.669|.dmf|.dsm|.far|.gdm|.imf|.it|.m15|.med|.okt|.s3m|.stm|.sfx|.ult|.uni|.xm|.sid|.ac3|.dts|.cue|.aif|.aiff|.wpl|.ape|.mac|.mpc|.mp+|.mpp|.shn|.zip|.rar|.wv|.nsf|.spc|.gym|.adplug|.adx|.dsp|.adp|.ymf|.ast|.afc|.hps|.xsp|.xwav|.waa|.wvs|.wam|.gcm|.idsp|.mpdsp|.mss|.spt|.rsd"
+MUSIC_EXT = xbmc.getSupportedMedia( "music" )
 # set to True to shuffle the playlist
 SHUFFLE = True
 
