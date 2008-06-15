@@ -1,10 +1,10 @@
 """
-    Home Theater Plugin: Module plays:
-    - # of optional coming attraction videos
-    - # of random trailers
-    - # of optional feature presentation videos
-    - selected video
-    - # of optional end of presentation videos
+    Player Module:
+    - plays # of optional coming attraction videos
+    - plays # of random trailers
+    - plays # of optional feature presentation videos
+    - plays selected video
+    - plays # of optional end of presentation videos
 """
 
 import xbmc
@@ -33,11 +33,11 @@ if ( xbmc.getInfoLabel( "ListItem.Rating" ) ):
 
 # create the progress dialog (we do it here so there is minimal delay with nothing displayed)
 import xbmcgui
+import sys
 pDialog = xbmcgui.DialogProgress()
-pDialog.create( "Movie Theater Plugin", "Choosing random trailers..." )
+pDialog.create( sys.modules[ "__main__" ].__plugin__, xbmc.getLocalizedString( 30500 )  )
 
 # main imports
-import sys
 import os
 import xbmcplugin
 
@@ -55,7 +55,7 @@ class _Info:
 class Main:
     # base paths
     BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
-    BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ ) )
+    BASE_DATA_PATH = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ )
 
     def __init__( self ):
         self._get_settings()
@@ -236,7 +236,7 @@ class Main:
         # check for a valid thumbnail
         thumbnail = ""
         if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
-            thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
+            thumbnail = xbmc.translatePath( os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] ) )
         else:
             thumbnail = self._get_thumbnail( trailer[ 3 ], trailer[ 0 ] )
         # set the default icon
