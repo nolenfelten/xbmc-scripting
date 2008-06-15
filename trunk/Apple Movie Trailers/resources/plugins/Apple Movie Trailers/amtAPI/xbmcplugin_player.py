@@ -53,7 +53,7 @@ class Main:
         # do we need to download the videos
         if ( self.settings[ "mode" ] > 0 ):
             # download the video
-            urls = self._download_video( urls )
+            urls = self._download_video()
         # play the video
         self._play_video( urls )
 
