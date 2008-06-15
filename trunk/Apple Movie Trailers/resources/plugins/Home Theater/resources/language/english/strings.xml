@@ -22,6 +22,8 @@
     <string id="30100">- Select trailers from newest only</string>
     <string id="30110">Player core</string>
 
+    <string id="30500">Choosing random trailers...</string>
+
     <string id="30600">Database not found!</string>
     <string id="30601">You need to install and run the main script.</string>
     <string id="30602">Would you like to run the main script?</string>

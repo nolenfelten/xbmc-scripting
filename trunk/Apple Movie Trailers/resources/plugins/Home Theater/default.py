@@ -7,13 +7,13 @@ import sys
 import xbmc
 
 # plugin constants
-__plugin__ = "Home Theater Plugin"
+__plugin__ = "Home Theater"
 __script__ = "Apple Movie Trailers"
 __author__ = "Nuka1195"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Apple%20Movie%20Trailers"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.2.3"
+__version__ = "1.2.4"
 
 # base paths
 BASE_PATH = os.getcwd().replace( ";", "" )

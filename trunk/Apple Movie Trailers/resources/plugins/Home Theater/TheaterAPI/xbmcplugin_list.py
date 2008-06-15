@@ -1,5 +1,5 @@
 """
-    Home Theater Plugin: Module creates a directory listing of videos and folders.
+    List module: creates a directory listing of videos and folders.
 """
 
 # main imports
@@ -23,7 +23,7 @@ class Main:
     BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
     # add all video extensions wanted in lowercase
-    VIDEO_EXT = ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp"
+    VIDEO_EXT = xbmc.getSupportedMedia( "video" )
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
