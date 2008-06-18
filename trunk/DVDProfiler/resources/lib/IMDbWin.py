@@ -175,7 +175,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 			self.picCI.setImage(fn)
 			self.picCI.setVisible(True)
 			if not imgTitle:
-				imgTitle = __language__(204)
+				imgTitle = __language__(989)
 			self.imageTitleCFL.reset()
 			self.imageTitleCFL.addLabel(imgTitle)
 
@@ -185,7 +185,6 @@ class IMDbWin(xbmcgui.WindowDialog):
 	#################################################################################################
 	def display(self, panel=''):
 		debug("> display()")
-
 		xbmcgui.lock()
 		imageTitleH = 15
 		
@@ -412,7 +411,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 			basename = basename[(l-30):]
 		return os.path.join(DIR_IMDB_CACHE, self.IMDB_PREFIX + basename), basename
 
-	def ask(self, title=''):
+	def ask(self, title='',panel=''):
 		debug("> IMDbWin.ask()")
 		url = ''
 		# loop till we find a title or user quits manual entry
@@ -428,7 +427,7 @@ class IMDbWin(xbmcgui.WindowDialog):
 				break
 
 		if self.movie and url:
-			self.display()
+			self.display(panel)
 			dialogProgress.create(__language__(987))
 			self.imdbGallery = IMDbGallery(url)
 			self.fetchImage()

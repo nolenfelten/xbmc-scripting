@@ -8,7 +8,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbGUILib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '23-05-2008'
+__date__ = '09-06-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 from bbbLib import *
@@ -65,22 +65,26 @@ class DialogSelect(xbmcgui.WindowDialog):
 		self.lastAction = 0
 		self.useY = False
 		self.useX = False
-		self.isDelete = False
+		self.isMove = False
 
 	def setup(self, title='',width=430, height=490, xpos=-1, ypos=-1, textColor='0xFFFFFFFF', \
 			  imageWidth=0,imageHeight=22, itemHeight=25, rows=0, \
-			  useY=False, useX=False, isDelete=False, panel='', banner='', font='font12'):
-		debug("> DialogSelect().setup() useY=%s useX=%s isDelete=%s" % (useY,useX,isDelete))
+			  useY=False, useX=False, isMove=False, panel='', banner='', font='font13', title2=''):
+		debug("> DialogSelect().setup() useY=%s useX=%s isMove=%s" % (useY,useX,isMove))
 
 		if not panel:
 			panel = DIALOG_PANEL
 		debug("panel=%s" % panel)
 		self.useY = useY
 		self.useX = useX
-		self.isDelete = isDelete
+		self.isMove = isMove
 		offsetLabelX = 15
 		offsetListX = 20
-		listW = width - offsetListX - 5
+
+		if width < 150:
+			width = 150
+
+		listW = width - offsetListX - 10
 		if imageHeight > itemHeight:
 			itemHeight = imageHeight
 
@@ -117,6 +121,8 @@ class DialogSelect(xbmcgui.WindowDialog):
 		bannerY = ypos + 10
 		titleY = bannerY + bannerH 
 		listY = titleY + titleH
+		defaultAnims = [('WindowOpen', 'effect=fade start=0 end=100 time=200'),
+						('WindowClose', 'effect=slide time=200 end=0,576 acceleration=1.1')]
 
 		try:
 			self.removeControl(self.panelCI)
@@ -124,12 +130,26 @@ class DialogSelect(xbmcgui.WindowDialog):
 		try:
 			self.panelCI = xbmcgui.ControlImage(xpos, ypos, width, height, panel)
 			self.addControl(self.panelCI)
+			self.panelCI.setAnimations(defaultAnims)
 		except: pass
 
+		
+		if title2:
+			x = xpos+offsetLabelX + listW
+			title2CL = xbmcgui.ControlLabel(x, titleY, listW, titleH, \
+										title2, FONT13, '0xFFFFFF00', alignment=XBFONT_RIGHT)
+			self.addControl(title2CL)
+			title2CL.setAnimations(defaultAnims)
+			titleAlignment = XBFONT_LEFT
+		else:
+			titleAlignment = XBFONT_CENTER_X
+
 		if title:
-			self.titleCL = xbmcgui.ControlLabel(xpos+offsetLabelX, titleY, listW, titleH, \
-												title, FONT13, '0xFFFFFF00', alignment=XBFONT_CENTER_X)
-			self.addControl(self.titleCL)
+			titleCL = xbmcgui.ControlLabel(xpos+offsetLabelX, titleY, listW, titleH, \
+										title, FONT13, '0xFFFFFF00', alignment=titleAlignment)
+			self.addControl(titleCL)
+			titleCL.setAnimations(defaultAnims)
+
 
 		if bannerH:
 			try:
@@ -139,6 +159,7 @@ class DialogSelect(xbmcgui.WindowDialog):
 				self.bannerCI = xbmcgui.ControlImage(xpos+offsetListX, bannerY,
 													listW, bannerH, banner, aspectRatio=2)
 				self.addControl(self.bannerCI)
+				self.bannerCI.setAnimations(defaultAnims)
 			except:
 				debug("failed to place banner")
 
@@ -150,50 +171,79 @@ class DialogSelect(xbmcgui.WindowDialog):
 		try:
 			self.removeControl(self.menuCL)
 		except: pass
-		if not self.isDelete:
+		if not self.isMove:
 			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
 											listW, listH, font, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, \
+#											buttonTexture=LIST_NOFOCUS_FILENAME, \
 											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
 		else:
 			self.menuCL = xbmcgui.ControlList(xpos+offsetListX, listY, \
 											listW, listH, font, textColor=textColor, \
 											imageWidth=imageWidth, imageHeight=imageHeight, \
 											itemHeight=itemHeight, buttonFocusTexture=LIST_HIGHLIGHT_FILENAME, \
+#											buttonTexture=LIST_NOFOCUS_FILENAME, \
 											itemTextXOffset=0, space=rowSpace, alignmentY=XBFONT_CENTER_Y)
 		self.addControl(self.menuCL)
 		self.menuCL.setPageControlVisible(False)
+		self.menuCL.setAnimations(defaultAnims)
+
 		debug("< DialogSelect().setup()")
 
 	def onAction(self, action):
-		if action == 0:
-			return
-#		debug("DialogSelect.onAction()")
-		self.lastAction = action
-		if action in [ACTION_BACK, ACTION_B]:
+		try:
+			actionID = action.getId()
+			buttonCode = action.getButtonCode()
+			if not actionID:
+				actionID = buttonCode
+		except: return
+		debug( "dialogSelect.onAction(): actionID=%i" % actionID )
+
+		self.lastAction = actionID
+		if actionID in EXIT_SCRIPT + CANCEL_DIALOG:
 			self.selectedPos = -1
 			self.close()
-		elif (self.useY and action == ACTION_Y) or \
-			 (self.useX and action == ACTION_X):
+		elif ((actionID in CLICK_Y or buttonCode in CLICK_Y) and self.useY) or \
+			 ((actionID in CLICK_X or buttonCode in CLICK_X) and self.useX):
 			self.selectedPos = self.menuCL.getSelectedPosition()
 			self.close()
+		elif self.isMove:
+			if actionID in MOVEMENT_UP:
+				item = self.menu.pop(self.selectedPos)
+				self.selectedPos -= 1
+				if self.selectedPos < 1 :	# skip over EXIT at pos 0
+					# move to end
+					self.selectedPos = len(self.menu)
+					self.menu.append(item)
+				else:
+					self.menu.insert(self.selectedPos, item)
+				self.setMenu()
+			elif actionID in MOVEMENT_DOWN:
+				item = self.menu.pop(self.selectedPos)
+				self.selectedPos += 1
+				if self.selectedPos > len(self.menu):	# allow for popped item
+					self.selectedPos = 1
+				self.menu.insert(self.selectedPos, item)
+				self.setMenu()
 
 	def onControl(self, control):
-		try:
-			self.selectedPos = self.menuCL.getSelectedPosition()
-		except: pass
+		if not control:
+			return
+		self.selectedPos = self.menuCL.getSelectedPosition()
+		print "onControl self.selectedPos=%s" % self.selectedPos
+		debug("DialogSelect onControl() QUIT")
 		self.close()
 
-	def setMenu(self, menu, icons=[]):
+	def setMenu(self):
 		debug("> DialogSelect.setMenu()")
 		self.menuCL.reset()
-		if menu:
-			menuSZ = len(menu)
+		if self.menu:
+			menuSZ = len(self.menu)
 			for idx in range(menuSZ):
-				opt = menu[idx]
+				opt = self.menu[idx]
 				try:
-					img = icons[idx]
+					img = self.icons[idx]
 				except:
 					img = ''
 
@@ -213,6 +263,8 @@ class DialogSelect(xbmcgui.WindowDialog):
 					self.menuCL.addItem(xbmcgui.ListItem(l1, l2, img, img))
 				else:
 					# single string value
+					if opt == None:
+						opt = ''
 					self.menuCL.addItem(xbmcgui.ListItem(opt.strip(), '', img, img))
 
 			if self.selectedPos >= menuSZ:
@@ -226,12 +278,14 @@ class DialogSelect(xbmcgui.WindowDialog):
 	def ask(self, menu, selectIdx=0, icons=[]):
 		debug ("> DialogSelect().ask() selectIdx=" +str(selectIdx))
 
+		self.icons = icons
+		self.menu = menu
 		self.selectedPos = selectIdx
-		self.setMenu(menu, icons)
+		self.setMenu()
 		self.setFocus(self.menuCL)
 		self.doModal()
 
-		debug ("< DialogSelect.ask() selectedPos: " + str(self.selectedPos) + " lastAction: " + str(self.lastAction))
+		debug ("< DialogSelect.ask() selectedPos=%s lastAction=%s" % (self.selectedPos,self.lastAction))
 		return self.selectedPos, self.lastAction
 
 #################################################################################################################
@@ -278,7 +332,13 @@ class TextBoxDialog(xbmcgui.WindowDialog):
 		debug( "< TextBoxDialog().ask()" )
 
 	def onAction(self, action):
-		if action in [ACTION_BACK, ACTION_B]:
+		try:
+			actionID = action.getId()
+			if not actionID:
+				actionID = action.getButtonCode()
+		except: return
+		debug( "TextBoxDialog onAction(): actionID=%i" % actionID )
+		if actionID in EXIT_SCRIPT + CANCEL_DIALOG:
 			self.close()
 
 	def onControl(self, control):

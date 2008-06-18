@@ -20,7 +20,7 @@
     <string id="201">Success</string>
     <string id="202">Failed</string>
     <string id="203">Complete</string>
-    <string id="204">Select image for slideshow</string>
+    <string id="204"></string>
     <string id="210">Movie Playback</string>
     <string id="211">Media Location not stored in XML</string>
     <string id="212">Failed to play from location:</string>
@@ -105,6 +105,7 @@
     <string id="433">Alias</string>
     <string id="434">Filters</string>
     <string id="435">Video</string>
+    <string id="436">Slot</string>
 
     <!-- Main Menu options -->
     <string id="500">Exit</string>
@@ -173,25 +174,27 @@
     <string id="965">Remote filename is missing!</string>
     <string id="966">No remote connection!</string>
     <string id="967">Checking for updated file ...</string>
-    <string id="968">Setup SMB now ?</string>
+    <string id="968">Setup SMB now?</string>
     <string id="969">SMB Path:</string>
     <string id="970">SMB IP:</string>
     <string id="971">Select An Existing XBMC SMB Path</string>
     <string id="972">Check SMB Connection</string>
-    <string id="973">Correct IP For PC Name: %s ?</string>
+    <string id="973">Correct IP For PC Name:</string>
     <string id="974">Invalid SMB path!</string>
     <string id="975">Invalid IP Format!</string>
+    <string id="976">Setup SMB</string>
 
     <!-- imdbWin lib -->
     <string id="980">IMDB Lookup</string>
     <string id="981">IMDb Manual Lookup</string>
     <string id="982">Searching IMDb ...</string>
     <string id="983">IMDb Search Failed</string>
-    <string id="984">Edit title ?</string>
+    <string id="984">Edit title?</string>
     <string id="985">Select Title</string>
     <string id="986">Downloading Image ...</string>
-    <string id="987">Downloading Photo Links ...</string>
+    <string id="987">Downloading Image Links ...</string>
     <string id="988">Downloading Slideshow ...</string>
+    <string id="989">View SlideShow</string>
 
     <!-- Update messages -->
     <string id="1000">Your version is up to date.</string>
