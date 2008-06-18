@@ -119,6 +119,13 @@ class DVDProfiler(xbmcgui.Window):
 		elif not self.settings:
 			self.settings = loadFileObj( self.SETTINGS_FILENAME, {} )
 
+		# old ver setting used language, delete file and reinit settings
+		try:
+			if self.settings[self.SETTING_START_MODE] not in ('0','1','2','3'):
+				self.settings[self.SETTING_START_MODE] = ""
+				debug("Old settings start_mode forced reset")
+		except: pass
+
 		# put default values into any settings that are missing
 		for key, defaultValue in self.SETTINGS_DEFAULTS.items():
 			if forceReset or not self.settings.has_key( key ) or self.settings[key] in [None,""]:
@@ -142,8 +149,8 @@ class DVDProfiler(xbmcgui.Window):
 			return
 
 		self.ready = False
-		if action == ACTION_BACK:
-			debug("ACTION_BACK")
+		if action in EXIT_SCRIPT:
+			debug("EXIT_SCRIPT")
 			self.close()
 
 		elif action in CONTEXT_MENU:
@@ -155,8 +162,8 @@ class DVDProfiler(xbmcgui.Window):
 						self.onAction(ACTION_B)
 					else:
 						self.reset()
-		elif action in (ACTION_X, ACTION_REMOTE_STOP):
-			debug("ACTION_X")
+		elif action in CLICK_X:
+			debug("CLICK_X")
 			if self.isOnlineOnly or self.onlineAliasData:
 				aliasData = ManageOnlineCollection().ask()
 				if aliasData:							# only action/save if alias selected
@@ -165,8 +172,8 @@ class DVDProfiler(xbmcgui.Window):
 						self.reset()
 			elif not self.onlineAliasData:
 				self.doFilters()
-		elif action in (ACTION_Y, ACTION_REMOTE_PAUSE):
-			debug("ACTION_Y")
+		elif action in CLICK_Y:
+			debug("CLICK_Y")
 			if not self.onlineAliasData:
 				colNo = self.lastCollNo
 			else:
@@ -174,10 +181,8 @@ class DVDProfiler(xbmcgui.Window):
 			title = self.dvdCollection.getDVDKey(colNo)[self.dvdCollection.KEYS_DATA_SORTTITLE]
 			win = IMDbWin().ask(title)
 			del win
-		elif action == ACTION_A:
-			debug("ACTION_A")
-		elif action == ACTION_B:			        # B btn
-			debug("ACTION_B")
+		elif action in CLICK_B:			        # B btn
+			debug("CLICK_B")
 			if not self.isOnlineOnly:
 				if self.selectedGenres or self.selectedTags:
 					self.selectedGenres = []
@@ -1420,7 +1425,7 @@ class DVDProfiler(xbmcgui.Window):
 		while True:
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
-			selectDialog.setup(__language__(502),width=350, rows=len(menu))
+			selectDialog.setup(__language__(502),width=450, rows=len(menu))
 			selectedPos, action = selectDialog.ask(menu, selectedPos)
 			if selectedPos <= 0:				# exit selected
 				break
@@ -2367,7 +2372,7 @@ class Filters(xbmcgui.WindowDialog):
 
 	##############################################################################################
 	def onAction(self, action):
-		if action in CANCEL_DIALOG:
+		if action in CANCEL_DIALOG + EXIT_SCRIPT:
 			self.close()
 
 	##############################################################################################
