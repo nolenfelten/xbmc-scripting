@@ -17,7 +17,7 @@ Changelog:
 09/07/07 Fix: Seach for title. caused by site change
 11/12/07 Fix: Scraping regex (see date comments)
 18/01/08 Fix: regex for Cast
-04/04/08 Fix: looks for Popuar and Exact matches
+04/04/08 Fix: looks for Popular and Exact matches
 """
 
 import os,sys,re,urllib,string, urlparse
@@ -34,7 +34,7 @@ reFlags = re.MULTILINE+re.IGNORECASE+re.DOTALL
 # full page RE
 titleReg        = '<title>(.*?)<'
 taglineReg      = '>Tagline:<.*?>([^<]*)'									# 11/12/07
-plotOutlineReg  = '>Plot (?:Outline|Summary):<.*?>([^<]*)'					# 11/12/07
+plotOutlineReg  = 'h5>Plot.*?:<.*?>(.*?)<'					                # 06/06/08
 yearReg         = 'Sections/Years/.*?>(.*?)<'
 ratingReg       = '<b>User Rating:</b>[^<]*<b>(.*?)<.*?">(.*?)<'			# 11/12/07
 runtimeReg      = '>Runtime:<.*?>([^<]*)'									# 11/12/07
@@ -74,7 +74,7 @@ galleryPageCountRE = re.compile(r'page=(\d+)', reFlags)
 
 class IMDb:
 	def __init__(self,url):
-		log("IMDb() " + url)
+		log("IMDb()")
 
 		NA = 'N/A'
 		self.Title           = NA
@@ -102,10 +102,9 @@ class IMDb:
 		self.Directors		= NA
 		self.Genres          = NA
 
-
 		page = readPage(url)
 		if not page:
-			return None
+			return
 
 		# FUL PAGE REGEX
 		log("do full page regex searches ...")
@@ -126,7 +125,7 @@ class IMDb:
 		# PLOT SUMMARY
 		matches = re.search(plotOutlineReg, page, reFlags)
 		if matches:
-			self.PlotOutline = clean(matches.group(1))
+			self.PlotOutline = clean(matches.group(1)).replace('full summary','')
 
 		# RATING
 		matches = re.search(ratingReg, page, reFlags)
@@ -151,7 +150,7 @@ class IMDb:
 		# AWARDS
 		matches = re.search(awardsReg, page, reFlags)
 		if matches:
-			self.Awards = clean(matches.group(1))
+			self.Awards = clean(matches.group(1)).replace('more','')
 
 		# RELEASE DATE
 		matches = re.search(releaseDateReg, page, reFlags)
@@ -161,7 +160,7 @@ class IMDb:
 		# USER COMMENT
 		matches = re.search(userCommentReg, page, reFlags)
 		if matches:
-			self.UserComment = clean(matches.group(1))
+			self.UserComment = clean(matches.group(1)).replace('more','')
 
 		# AKA
 		matches = re.search(akaReg, page, reFlags)
@@ -176,22 +175,22 @@ class IMDb:
 		# TRIVIA
 		matches = re.search(triviaReg, page, reFlags)
 		if matches:
-			self.Trivia = clean(matches.group(1))
+			self.Trivia = clean(matches.group(1)).replace('more','')
 
 		# GOOFS
 		matches = re.search(goofsReg, page, reFlags)
 		if matches:
-			self.Goofs = clean(matches.group(1))
+			self.Goofs = clean(matches.group(1)).replace('more','')
 
 		# SOUNDTRACK
 		matches = re.search(soundtrackReg, page, reFlags)
 		if matches:
-			self.Soundtrack = clean(matches.group(1))
+			self.Soundtrack = clean(matches.group(1)).replace('more','')
 
 		# SOUNDMIX
 		matches = re.search(soundMixReg, page, reFlags)
 		if matches:
-			self.SoundMix = clean(matches.group(1))
+			self.SoundMix = clean(matches.group(1)).replace('more','')
 
 		# POSTER PHOTO
 		matches = re.search(posterURLReg, page, reFlags)
@@ -238,30 +237,30 @@ class IMDb:
 			i+=1
 
 		if DEBUG:	# switch on for debug results
-			print "Title            =", self.Title
-			print "Tagline          =", self.Tagline   
-			print "PlotOutline      =", self.PlotOutline
-			print "Year             =", self.Year
-			print "Rating           =", self.Rating
-			print "Runtime          =", self.Runtime
-			print "Countries        =", self.Countries
-			print "Languages        =", self.Languages
-			print "Awards           =", self.Awards
-			print "ReleaseDate      =", self.ReleaseDate
-			print "UserComment      =", self.UserComment
-			print "AKA              =", self.AKA
-			print "Aspect           =", self.Aspect
-			print "Trivia           =", self.Trivia
-			print "Goofs            =", self.Goofs
-			print "Soundtrack       =", self.Soundtrack
-			print "SoundMix         =", self.SoundMix
-			print "PosterURL        =", self.PosterURL
-			print "Certs            =", self.Certs
-			print "Creators         =", self.Creators
-			print "Writers          =", self.Writers
-			print "Directors        =", self.Directors
-			print "Genres           =", self.Genres
-			print "Cast             =", self.Cast
+			print "Title            =%s" %  self.Title
+			print "Tagline          =%s" %  self.Tagline   
+			print "PlotOutline      =%s" %  self.PlotOutline
+			print "Year             =%s" %  self.Year
+			print "Rating           =%s" %  self.Rating
+			print "Runtime          =%s" %  self.Runtime
+			print "Countries        =%s" %  self.Countries
+			print "Languages        =%s" %  self.Languages
+			print "Awards           =%s" %  self.Awards
+			print "ReleaseDate      =%s" %  self.ReleaseDate
+			print "UserComment      =%s" %  self.UserComment
+			print "AKA              =%s" %  self.AKA
+			print "Aspect           =%s" %  self.Aspect
+			print "Trivia           =%s" %  self.Trivia
+			print "Goofs            =%s" %  self.Goofs
+			print "Soundtrack       =%s" %  self.Soundtrack
+			print "SoundMix         =%s" %  self.SoundMix
+			print "PosterURL        =%s" %  self.PosterURL
+			print "Certs            =%s" %  self.Certs
+			print "Creators         =%s" %  self.Creators
+			print "Writers          =%s" %  self.Writers
+			print "Directors        =%s" %  self.Directors
+			print "Genres           =%s" %  self.Genres
+			print "Cast             =%s" %  self.Cast
 
 
 ###########################################################################################################
@@ -276,16 +275,17 @@ class IMDbSearch:
 		except:
 			lookupStr = findStr.replace(' ','+')
 
-		self.SearchResults = []
+		self.SearchResults = None
 		url = 'http://www.imdb.com/find?s=tt&q=' + lookupStr
 		page = readPage(url)
 		if not page:
 			return
+		self.SearchResults = []
 
 		if string.find(page, 'No Matches') != -1:
 			log( "found 'No Matches'" )
 		elif string.find(page, '>Popular') != -1 or string.find(page, 'Exact Matches') != -1:
-			log( "found 'Popular' or 'Exact Matches'" )
+			log( "found 'Popular' and/or 'Exact Matches'" )
 			# title code, title, year
 			search = re.compile('href="/title/([t0-9]*)/">(.*?)</a> *\(([0-9]*)')		# updated 11/12/2007
 			matches = search.findall(page)
@@ -297,8 +297,9 @@ class IMDbSearch:
 					self.SearchResults.append((year, title, url))
 
 				# sort resul tuple into year reverse order
-				self.SearchResults.sort()
-				self.SearchResults.reverse()
+				if self.SearchResults:
+					self.SearchResults.sort()
+					self.SearchResults.reverse()
 			else:
 				log( "no matches on page" )
 		else:
@@ -436,7 +437,7 @@ def readPage(url, readLines=False):
 			log("page not found")
 	except:
 		log("urlopen() exception")
-
+		page = None
 	return page
 
 ###########################################################################################################

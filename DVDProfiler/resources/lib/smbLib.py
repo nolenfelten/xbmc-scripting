@@ -16,7 +16,7 @@ import xbmc, xbmcgui
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "smbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '07-04-2008'
+__date__ = '29-05-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 import smb, nmb
@@ -42,7 +42,7 @@ def smbConnect(hostIP, smbPath):
 	else:
 		dialogProgress.create(__language__(960), __language__(964))
 		remoteInfo = parseSMBPath(smbPath)
-		if DEBUG: print remoteInfo
+		if DEBUG: print "remoteInfo=", remoteInfo
 		if not remoteInfo:
 			messageOK(__language__(951), smbPath)
 		else:
@@ -54,10 +54,10 @@ def smbConnect(hostIP, smbPath):
 				messageOK(__language__(952), __language__(953),  pcname+" -> "+hostIP)
 			else:
 				useLogin = remote.is_login_required()
-				debug("useLogin = " + str(useLogin))
+				debug("useLogin = %s" % useLogin)
 				if useLogin:
 					if not user or not password:
-						messageOK(__language__(954), "%s / %s" % (user,password))
+						messageOK(__language__(954), "%s:%s" % (user,password))
 					else:
 						try:
 							remote.login(user, password, domain)
@@ -91,6 +91,7 @@ def getSMBFileSize(remote, remoteInfo, remoteFile):
         if DEBUG: print remoteInfo
         domain,user,password,pcname,service,dirPath,fileName = remoteInfo
         remotePath = "%s%s" % (dirPath,remoteFile)
+        debug("remotePath=%s" % remotePath)
         try:
             fileSize = remote.list_path(service, remotePath)[0].get_filesize()
         except:
@@ -160,7 +161,9 @@ def smbSendFile(remote, share, localPath, remotePath, silent=False):
 			dialogProgress.create(__language__(963), localPath, remotePath)
 
 		try:
+			debug("opening local file")
 			f = open(localPath, "rb")
+			debug("sending file to share")
 			remote.stor_file(share, remotePath, f.read)
 			f.close()
 			success = True
@@ -204,9 +207,8 @@ def isNewSMBFile(smbPath, localPath, remote=None, hostIP='', silent=False):
 			if not silent:
 				dialogProgress.create(__language__(967), remotePath)
 
-			try:
+			if fileExist(localPath):
 				localFileSecs = os.path.getmtime(localPath)
-			except: pass
 
 			# list files on SMB of remote filename, check modified timestamp
 			try:
@@ -286,11 +288,11 @@ def parseSMBPath(path):
 def getIPFromName(pcname):
 	debug("> getIPFromName() pcname=%s" % pcname)
 	ip = ''
-	dialogProgress.create(__language__(964))
+	dialogProgress.create(__language__(976), __language__(964))
 	try:
 		ip = nmb.NetBIOS().gethostbyname(pcname)[0].get_ip()
 		dialogProgress.close()
-		if not xbmcgui.Dialog().yesno(__language__(953), __language__(973) % pcname, "IP: %s" % ip):
+		if not xbmcgui.Dialog().yesno(__language__(973), pcname, ip):
 			ip = ''
 	except:
 		dialogProgress.close()
@@ -345,7 +347,7 @@ def selectSMB(currentValue=''):
 #################################################################################################################
 def isIP(host):
 	result = re.match('^\d+\.\d+\.\d+\.\d+$', host)
-	debug("isIP: " + host + " = " + str(result))
+	debug("isIP(): host=%s %s" % (host, result))
 	return result
 
 #################################################################################################################
@@ -364,12 +366,12 @@ def getSMBPathIP(smbPath, isSMBBasePathOnly=False):
 #		if smbPath[-1] not in ["\\","/"]: smbPath += '/'
 		
 		domain,user,password,pcname,share,dirPath,fileName = remoteInfo
-		if not isIP(pcname):											# is a PCNAME
+		if '.' not in pcname:										# PCNAME not an IP
 			ip = getIPFromName(pcname)								# discover IP
 		else:
 			messageOK(__language__(974),__language__(955),"eg. OFFICE")
 	else:
-		messageOK(__language__(951), __language__(966))
+		messageOK(__language__(974), __language__(950))
 		smbPath = ""
 
 	debug("< getSMBPathIP()")
@@ -390,4 +392,3 @@ def parseSMBBasePath(path):
 		return ('', '', '', m.group(1), '', '', '')
 
 	return None
-

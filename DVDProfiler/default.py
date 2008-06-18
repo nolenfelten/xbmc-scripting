@@ -1,8 +1,6 @@
 """
  Python XBMC script to view your DVDProfiler collection or somebody elses online collection.
 
- see readme.txt
- 
  THANKS:
  To everyone who's ever helped in anyway, or if I've used code from your own scripts, MUCH APPRECIATED!
 
@@ -11,7 +9,7 @@
 	CHANGELOG: see changelog.txt or view throu Settings Menu
 	README: see ..\resources\language\<language>\readme.txt or view throu Settings Menu
 
-    Additional support may be found on xboxmediacenter forum.	
+ Additional support may be found on xboxmediacenter forum.	
 """
 
 # Python 2.4 libs
@@ -23,9 +21,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.6.1'
+__version__ = '1.6.2'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '26-05-2008'
+__date__ = '18-06-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -943,19 +941,19 @@ class DVDProfiler(xbmcgui.Window):
 				if not sortAsc:
 					sortList.reverse()
 
-				# [collNo]
+				# [collnum]
 				for i in range(len(sortList)):
-					collNo = sortList[i]
-					title = self.dvdCollection.getDVDKey(collNo)[self.dvdCollection.KEYS_DATA_SORTTITLE]
+					collnum = sortList[i]
+					title = self.dvdCollection.getDVDKey(collnum)[self.dvdCollection.KEYS_DATA_SORTTITLE]
 					# check for Location in tags, then show icon
 					try:
-						tags = self.dvdCollection.getDVDKey(collNo)[self.dvdCollection.KEYS_DATA_TAGS]
+						tags = self.dvdCollection.getDVDKey(collnum)[self.dvdCollection.KEYS_DATA_TAGS]
 						idx = tags.index(self.dvdCollection.LOCATION)
 						img = FILM_FILENAME
 					except:
 						img = ''
-					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo), img, img))
-					if not self.onlineAliasData and collNo == self.lastCollNo:
+					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collnum), img, img))
+					if not self.onlineAliasData and collnum == self.lastCollNo:
 						selectedPos = i
 			else:
 				sortList = filterDict.items()
@@ -964,9 +962,9 @@ class DVDProfiler(xbmcgui.Window):
 				else:
 					sortList.sort(sortItemsDesc)
 
-				# [(collNo, ['sorttitle','id',title,genres,tags)]
+				# [(collnum, ['sorttitle','id',title,genres,tags)]
 				for i in range(len(sortList)):
-					collNo = sortList[i][0]
+					collnum = sortList[i][0]
 					title = sortList[i][1][self.dvdCollection.KEYS_DATA_SORTTITLE]
 					# check for Location in tags, then show icon
 					try:
@@ -975,8 +973,8 @@ class DVDProfiler(xbmcgui.Window):
 						img = FILM_FILENAME
 					except:
 						img = ''
-					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collNo), img, img))
-					if not self.onlineAliasData and collNo == self.lastCollNo:
+					self.titlesCL.addItem(xbmcgui.ListItem(title, str(collnum), img, img))
+					if not self.onlineAliasData and collnum == self.lastCollNo:
 						selectedPos = i
 
 #			if selectedPos >= len(filterDict):
@@ -997,11 +995,13 @@ class DVDProfiler(xbmcgui.Window):
 
 	##############################################################################################
 	def clearControls(self, clearTitles=False):
-		debug("> clearControls()")
+		debug("> clearControls() clearTitles=%s" % clearTitles)
 		self.title.setLabel('')
 #		self.coverCI.setImage(FRAME_NOFOCUS_FILENAME)
 		self.coverCI.setVisible(False)
 		self.overviewCTB.reset()
+		self.overviewCTB.setText('')
+		self.castCL.reset()
 		if clearTitles:
 			self.titlesCL.reset()
 			self.datasourceCL.setLabel('')
@@ -1047,15 +1047,14 @@ class DVDProfiler(xbmcgui.Window):
 		debug ("> showDVD()")
 
 		selectedPos = self.titlesCL.getSelectedPosition()
-		title = self.titlesCL.getSelectedItem().getLabel()
+#		title = self.titlesCL.getSelectedItem().getLabel()
 		collNum = self.titlesCL.getSelectedItem().getLabel2()
 		if not self.onlineAliasData:
 			self.lastCollNo = collNum
 		else:
 			self.lastOnlineCollNo = collNum
-		debug("selectedPos="+str(selectedPos) + \
-			  " collNum=" + collNum + " lastCollNo=" +str(self.lastCollNo) + \
-			  " lastOnlineCollNo=" +str(self.lastOnlineCollNo))
+		debug("selectedPos=%s collNum=%s lastCollNo=%s lastOnlineCollNo=%s" % \
+			  (selectedPos, collNum, self.lastCollNo, self.lastOnlineCollNo))
 
 		self.clearControls()
 
@@ -1069,7 +1068,6 @@ class DVDProfiler(xbmcgui.Window):
 		#######################################################
 		# extract text from object which could be a list of lists of strings etc
 		def _getItemsText(key, joinCh=","):
-			text = 'N/A'
 			try:
 				for item in self.dvdCollection.getDVDData(key):
 					if isinstance(item,list):
@@ -1083,17 +1081,16 @@ class DVDProfiler(xbmcgui.Window):
 							text = item
 			except:
 				# missing key, ignore
-				pass
+				text = notAvail
 			return text
 
 		#######################################################
 
 		xbmcgui.lock()
-		self.title.setLabel(title)
+		self.title.setLabel(self.dvdCollection.getDVDKey(collNum)[self.dvdCollection.KEYS_DATA_SORTTITLE])
 
 		# cast list
 		debug("build cast list")
-		self.castCL.reset()
 		self.castCL.addItem(xbmcgui.ListItem(__language__(417)))
 		self.castCL.addItem(xbmcgui.ListItem(__language__(418),__language__(419)))
 		try:
@@ -1144,14 +1141,23 @@ class DVDProfiler(xbmcgui.Window):
 		debug("build OVERVIEW")
 		self.overviewCTB.reset()
 		text = ''
-		try:
-			text += _getItemsText(self.dvdCollection.OVERVIEW)
-		except: text += "N/A"
+		notAvail = '-'
 
 		try:
-			text += '\n\n%s\n%s:  ' % (__language__(401), __language__(402))
+			text += _getItemsText(self.dvdCollection.OVERVIEW)
+		except: text += notAvail
+
+		text += '\n\n%s:  ' % __language__(401)    # additional information
+
+		# only show 'slot' if used
+		try:
+			text += '\n%s:  %s' % (__language__(436), _getItemsText(self.dvdCollection.SLOT))
+		except: pass
+
+		try:
+			text += '\n%s:  ' % __language__(402)
 			text += _getItemsText(self.dvdCollection.RATING)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(403)
@@ -1159,39 +1165,39 @@ class DVDProfiler(xbmcgui.Window):
 			if mins and mins != 'N/A' and find(mins,'min') == -1:
 				mins += ' mins'
 			text += mins
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(404)
 			text += _getItemsText(self.dvdCollection.REGION)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  '  % __language__(405)
 			text += _getItemsText(self.dvdCollection.PRODYEAR)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(406)
 			text += _getItemsText(self.dvdCollection.RELEASED)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(407)
 			text += _getItemsText(self.dvdCollection.GENRE)
-		except: text += "N/A"
+		except: text += notAvail
 
-		text += '\n%s:  ' % __language__(435)		# video
+		text += '\n%s: ' % __language__(435)		# video
 		if not self.onlineAliasData:
 			try:
-				text += '%s: ' % __language__(408)
+				text += ' %s: ' % __language__(408)
 				text += _getItemsText(self.dvdCollection.VIDEOFORMAT_ASPECT)
-			except: text += "N/A"
+			except: text += notAvail
 
 			try:
-				text += '%s: ' % __language__(409)
+				text += ' %s: ' % __language__(409)
 				text += _getItemsText(self.dvdCollection.VIDEOFORMAT_STD)
-			except: text += "N/A"
+			except: text += notAvail
 
 			try:
 				text += ' %s: ' % __language__(410)
@@ -1201,42 +1207,41 @@ class DVDProfiler(xbmcgui.Window):
 				else:
 					value = 'No'
 				text += value
-			except: text += "N/A"
+			except: text += notAvail
 		else:
 			try:
 				text += _getItemsText(self.dvdCollection.VIDEOFORMAT)
-			except: text += "N/A"
+			except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(411)
 			text += _getItemsText(self.dvdCollection.AUDIOFORMAT)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(412)
 			text += _getItemsText(self.dvdCollection.STUDIO)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(413)
 			text += _getItemsText(self.dvdCollection.REVIEW)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(414)
 			text += _getItemsText(self.dvdCollection.FEATURES)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(415)
 			text += _getItemsText(self.dvdCollection.EASTEREGGS)
-		except: text += "N/A"
+		except: text += notAvail
 
 		try:
 			text += '\n%s:  ' % __language__(416)
 			text += _getItemsText(self.dvdCollection.LOCATION)
-		except: text += "N/A"
-
+		except: text += notAvail
 
 		self.overviewCTB.setText(text)
 
@@ -1646,6 +1651,7 @@ class DVDCollectionXML:
 		DVDCollectionXML.REGION = 'Region'
 		DVDCollectionXML.REVIEW = 'Review'
 		DVDCollectionXML.LOCATION = 'Location'
+		DVDCollectionXML.SLOT = 'Slot'
 
 		DVDCollectionXML.GENRE_NONE = 'Unspecified genre'
 		self.dvdDict = {}
@@ -1699,7 +1705,8 @@ class DVDCollectionXML:
 						self.STUDIO : '<Studios>(.*?)</Studios>',
 						self.REGION : '<Region>(.*?)</Region>',
 						self.REVIEW : '<Review>(.*?)</Review>',
-						self.LOCATION : '<Location>(.*?)</Location>'
+						self.LOCATION : '<Location>(.*?)</Location>',
+						self.SLOT : '<Slot>(.*?)</Slot>'
 						}
 
 			# different re for each version
@@ -1788,11 +1795,10 @@ class DVDCollectionXML:
 							else:
 								rec += '~'+key+'|'+value
 
-						f.write(decodeEntities(rec).replace('\n',' ').strip()+'\n')
+						f.write(decodeEntities(rec) + '\n')
 
 						# save genre, further split to individual unique genre list
 						if dvdDict.has_key(self.GENRE):
-							debug("save genres")
 							keyData = dvdDict[self.GENRE]
 							for value in keyData:
 								genreList = value.split('~')
@@ -1828,7 +1834,6 @@ class DVDCollectionXML:
 									self.filterTags.append(value)
 
 						# save keys
-						debug("save keys")
 						rec = [dvdDict[self.SORTTITLE][0],dvdDict[self.ID][0]]
 						try:
 							rec.append(dvdDict[self.GENRE])
@@ -1859,7 +1864,7 @@ class DVDCollectionXML:
 			if self.keys:
 				for key,value in self.keys.items():
 					if isinstance(value, str):
-						f.write(('keys|%s~%s\n' % (key,value)))
+						f.write(('keys|%s~%s\n' % (key,decodeEntities(value))))
 					else:
 						rec = 'keys|%s' % key
 						for item in value:
@@ -1868,7 +1873,7 @@ class DVDCollectionXML:
 							else:
 								rec += '~'+('^'.join(item))
 
-						f.write((rec+'\n'))
+						f.write(decodeEntities(rec)+'\n')
 			f.close()
 		except:
 			handleException("saveKeys()")
@@ -1961,7 +1966,11 @@ class DVDCollectionXML:
 
 	##############################################################################################
 	def getDVDData(self, dataKey):
-		return self.dvdDict[dataKey]
+		try:
+			return self.dvdDict[dataKey]
+		except:
+			debug("unknown key: %s" % dataKey)
+			return ''
 
 	##############################################################################################
 	def getDVDKey(self, collnum):
@@ -2220,17 +2229,17 @@ class ManageOnlineCollection:
 
 		selectedPos = 0	# start on exit
 		users = self.load()
-		isDelete = False
+		isMove = False
 		while True:
 			aliasData = []
 			selectDialog = DialogSelect()
-			if isDelete:
+			if isMove:
 				title = "%s" % __language__(566)
 			else:
 				title = "%s - (A=%s, Y=%s, X=%s)" % \
 						(self.TITLE,__language__(565),__language__(560),__language__(563))
 			selectDialog.setup(title=title, width=500, rows=len(users), \
-								isDelete=isDelete, useX=True, useY=True)
+								isMove=isMove, useX=True, useY=True)
 			users.sort()
 
 			selectedPos, action = (selectDialog.ask(users, selectedPos))

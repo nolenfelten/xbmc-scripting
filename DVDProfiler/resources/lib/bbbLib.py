@@ -18,10 +18,11 @@ import cookielib
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "bbbLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '23-05-2008'
+__date__ = '09-06-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
+DEBUG = False
 
 # setup cookiejar
 cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
@@ -78,8 +79,8 @@ PAD_DPAD_LEFT                = 272
 PAD_DPAD_RIGHT               = 273
 PAD_START                    = 274
 PAD_BACK                     = 275
-PAD_LEFT_STICK          = 276
-PAD_RIGHT_STICK         = 277
+PAD_LEFT_STICK              = 276
+PAD_RIGHT_STICK             = 277
 PAD_LEFT_ANALOG_TRIGGER      = 278
 PAD_RIGHT_ANALOG_TRIGGER= 279
 PAD_LEFT_STICK_UP           = 280 # left thumb stick  directions
@@ -104,7 +105,7 @@ KEYBOARD_PLUS          = 61627
 KEYBOARD_PG_UP         = 61473 
 KEYBOARD_PG_DOWN        = 61474
 KEYBOARD_INSERT         = 61485
-KEYBOARD_X              = 61524
+KEYBOARD_X              = 61528
 KEYBOARD_A              = 61505
 KEYBOARD_B              = 61506
 KEYBOARD_Y              = 61529
@@ -117,9 +118,13 @@ KEYBOARD_DEL_BACK       = 61448
 
 
 # ACTION CODE GROUPS
-SELECT_ITEM = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
+CLICK_A = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
+CLICK_B = ( ACTION_B, PAD_B, KEYBOARD_B, )
+CLICK_X = ( ACTION_X, PAD_X, KEYBOARD_X, ACTION_REMOTE_STOP)
+CLICK_Y = ( ACTION_Y, PAD_Y, KEYBOARD_Y, )
+SELECT_ITEM = CLICK_A
 EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
-CANCEL_DIALOG = EXIT_SCRIPT + (ACTION_B, PAD_B, KEYBOARD_B, )
+CANCEL_DIALOG = CLICK_B
 CONTEXT_MENU = ( ACTION_WHITE, PAD_WHITE, ACTION_REMOTE_INFO, REMOTE_INFO, KEYBOARD_HOME, ACTION_REMOTE_STOP,)
 LEFT_STICK_CLICK = (ACTION_LEFT_STICK, PAD_LEFT_STICK, )
 RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
@@ -148,6 +153,8 @@ KBTYPE_NUMERIC = 0
 KBTYPE_DATE = 1
 KBTYPE_TIME = 2
 KBTYPE_IP = 3
+KBTYPE_SMB = 4      # not a real kbtype, just a common value
+KBTYPE_YESNO = 5    # not a real kbtype, just a common value
 
 # xbmc skin FONT NAMES
 FONT10 = 'font10'
@@ -174,7 +181,6 @@ REZ_H = 576
 #######################################################################################################################    
 # DEBUG - display indented information
 #######################################################################################################################    
-DEBUG = False
 debugIndentLvl = 0	# current indentation level
 def debug( value ):
 	global debugIndentLvl
@@ -391,9 +397,36 @@ def ErrorCode(e):
 class FontAttr:
 	def __init__(self):
 		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
+		self.rezAdjust = {0 : 2.65, 1 : 1.77}
+		self.fonts = {'font10': 9, 'font14':12, 'font18': 16, 'special12':11, 'special13':12, 'special14':13, 'special16':14, 'special18':14}
+		
+	def truncate(self, maxWidth, text, font, rez = 6):
+		try:
+			maxWidth *= self.rezAdjust[rez]
+		except: pass
+		try:
+			fontW =  self.fonts[font.lower()]
+		except:
+			fontW = 10
+		shortFontW = 2
+
+		for i in range(len(text), 0, -1):
+			newText = text[:i]
+			shortChCount = newText.count('i')+ newText.count('l') + newText.count('t') + newText.count(' ')
+			otherChCount = len(newText) - shortChCount
+			strW = (otherChCount * fontW) + (shortChCount * shortFontW)
+			if strW <= maxWidth:
+				break
+
+		return newText
+
+#################################################################################################################
+class FontAttr_old:
+	def __init__(self):
+		# w/s rez multiplier, 0 - 1080i (1920x1080), 1 - 720p (1280x720)
 		self.rezAdjust = {0 : 2.65, 1 : 1.77}	
-		self.adjust = {'font10':-4, 'font11':-3, 'font12':-3, 'font13':-2, 'font14':0, 'font18':4, \
-					   'special10':-3, 'special11':-2, 'special12':-2, 'special13':0, 'special14':2}
+		self.adjust = {'font10':-.2, 'font11':0, 'font12':.1, 'font13':.1, 'font14':.1, 'font16':1, 'font18':2, \
+					   'special10':-.1, 'special11':0, 'special12':2, 'special13':2.5, 'special14':3, 'special16':4, 'special18':5}
 
 		# base widths based on font14
 		self.width = [ \
@@ -432,8 +465,8 @@ class FontAttr:
 	def getTextWidth(self, txt, font):
 		len = 0
 		for c in txt:
-			len += self.getWidth(c, font) +1
-		return len
+			len += self.getWidth(c, font)
+		return int(len)
 
 	def truncate(self, maxWidth, text, font, rez = 6):
 		chCount = len(text)
@@ -992,7 +1025,7 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 
 	def _report_hook( count, blocksize, totalsize ):
 		# just update every x%
-		if count:
+		if count and totalsize:
 			percent = int( float( count * blocksize * 100) / totalsize )
 			if (percent % 5) == 0:
 				dialogProgress.update( percent )
@@ -1048,7 +1081,6 @@ def fetchURL(url, file='', params='', headers={}, isBinary=False, encodeURL=True
 	except "Not Binary":
 		debug("Returned Non Binary content")
 		data = False
-		success = False
 	except "Cancel":
 		debug("download cancelled")
 	except:
@@ -1543,9 +1575,18 @@ def installPlugin(pluginType, name='', checkOnly=True):
 def validMAC(mac):
     valid = False
     if mac and len(mac) >= 11 and len(mac) <= 17:
-        if find(mac,':') != -1 and len(mac.split(':')) == 6:
+        if ':' in mac:
+            ch = ':'
+        elif '-' in mac:
+            ch = '-'
+        elif '.' in mac:
+            ch = '.'
+        else:
+            ch = ''
+            debug("mac seperator missing")
+        if ch and len(mac.split(ch)) == 6:
             valid = True
-    debug("validMAC=%s" % validMAC)
+    debug("validMAC() %s" % valid)
     return valid
 
 ##############################################################################################################    

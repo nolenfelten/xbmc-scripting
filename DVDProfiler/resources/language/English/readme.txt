@@ -64,6 +64,7 @@ Define all the above makes a complete smb path to all the required parts.
    'F\Videos'   + 'Cars.avi'  to make 'F\Videos\Cars.avi'
 
  A BigBellyBilly script.  Special thanks to beta testers and language translators.  Much appreciated.
+ BigBellyBilly At gmail DOT com
  Enjoy!
 
  BBB
