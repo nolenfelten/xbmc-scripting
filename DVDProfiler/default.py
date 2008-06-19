@@ -21,9 +21,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.6.2'
+__version__ = '1.6.1'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-06-2008'
+__date__ = '19-06-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -107,7 +107,7 @@ class DVDProfiler(xbmcgui.Window):
 		# SETTINGS
 		self.reset()
 
-		debug("< DVDProfiler().init ready="+str(self.ready))
+		debug("< DVDProfiler().init ready=%s" % self.ready)
 
 	######################################################################################
 	def _initSettings( self, forceReset=False ):
@@ -121,7 +121,7 @@ class DVDProfiler(xbmcgui.Window):
 
 		# old ver setting used language, delete file and reinit settings
 		try:
-			if self.settings[self.SETTING_START_MODE] not in ('0','1','2','3'):
+			if self.settings[self.SETTING_START_MODE] not in (0,1,2,3):
 				self.settings[self.SETTING_START_MODE] = ""
 				debug("Old settings start_mode forced reset")
 		except: pass
@@ -284,6 +284,7 @@ class DVDProfiler(xbmcgui.Window):
 		if not scriptUpdated and self.startupMenu():
 			self.ready = True
 		else:
+			self.ready = False
 			self.close()
 		debug("< reset()")
 
@@ -324,8 +325,7 @@ class DVDProfiler(xbmcgui.Window):
 			if not success:
 				startMode = 0									# self.START_MODE_MENU
 
-
-		debug("< startupMenu() success="+str(success))
+		debug("< startupMenu() success=%s" % success)
 		return success
 
 	##############################################################################################
@@ -360,8 +360,10 @@ class DVDProfiler(xbmcgui.Window):
 
 		# final check
 		if success:
+			dialogProgress.create(__scriptname__, __language__(249))
 			self.setupDisplay()
 			self.setupTitles()
+			dialogProgress.close()
 		debug("< startup() success=%s" % success)
 		return success
 
@@ -1073,19 +1075,31 @@ class DVDProfiler(xbmcgui.Window):
 		#######################################################
 		# extract text from object which could be a list of lists of strings etc
 		def _getItemsText(key, joinCh=","):
+#			print "key=%s" % key
 			try:
-				for item in self.dvdCollection.getDVDData(key):
-					if isinstance(item,list):
-						text = joinCh.join(item)
+				data = self.dvdCollection.getDVDData(key)
+				if not data:
+					return notAvail
+
+#				print "type=%s data=%s" % (type(data), data)
+				if isinstance(data,list):
+					if isinstance(data[0], list):			# a list of lists
+						text = ''
+						for item in data:
+							text += joinCh.join(item)		# join elements of sublist
+							text += ';'
+						text = text[:-1]					# remove end ch
 					else:
-						if item.lower() == 'true':
-							text = __language__(350)		# yes
-						elif item.lower() == 'false':
-							text = __language__(351)		# no
-						else:
-							text = item
+						text = joinCh.join(data)
+				else:
+					if data.lower() == 'true':
+						text = __language__(350)			# yes
+					elif data.lower() == 'false':
+						text = __language__(351)			# no
+					else:
+						text = data
 			except:
-				# missing key, ignore
+				debug("_getItemsText() except doing key %s" % key)
 				text = notAvail
 			return text
 
@@ -1664,27 +1678,23 @@ class DVDCollectionXML:
 		self.filterGenres = []
 		self.filterTags = []
 
-
 		if fileExist(COLLECTION_FLAT_FILE) and fileExist(KEYS_FILE):
-			dialogProgress.create(__language__(225),__language__(226))
 			self.loadKeys()
 		elif fileExist(self.localCollectionFilename):
 			dialogProgress.create(__language__(225),__language__(227))
 			self.saveFlatFile()
-			dialogProgress.update(33,__language__(228))
+			dialogProgress.update(0,__language__(228))
 			self.saveKeys()
-			dialogProgress.update(66,__language__(228))
+			dialogProgress.close()
 
-		if self.keys:
-			dialogProgress.update(100,__language__(203))	# success
-		else:
-			dialogProgress.update(100,__language__(202))	# failed
+		if not self.keys:
+			messageOK(__language__(225), __language__(202))	# failed
 
 		if DEBUG:
 			print "filterGenres=", self.filterGenres
 			print "filterTags=", self.filterTags
 
-		dialogProgress.close()
+		debug("< DVDCollectionXML().__init__")
 
 
 	##############################################################################################
@@ -1706,10 +1716,9 @@ class DVDCollectionXML:
 						self.VIDEOFORMAT_ASPECT : '<FormatAspectRatio>(.*?)<',
 						self.VIDEOFORMAT_STD : '<FormatVideoStandard>(.*?)<',
 						self.VIDEOFORMAT_IS16x9 : '<Format16X9>(.*?)<',
-						self.AUDIOFORMAT : '<AudioFormat>(.*?)</AudioFormat>',
+						self.AUDIOFORMAT : '<AudioContent>(.*?)</.*?<AudioFormat>(.*?)</',
 						self.STUDIO : '<Studios>(.*?)</Studios>',
 						self.REGION : '<Region>(.*?)</Region>',
-						self.REVIEW : '<Review>(.*?)</Review>',
 						self.LOCATION : '<Location>(.*?)</Location>',
 						self.SLOT : '<Slot>(.*?)</Slot>'
 						}
@@ -1720,10 +1729,12 @@ class DVDCollectionXML:
 				self.regexDict[self.ACTORS] = '<Actor>.*?<FirstName>(.*?)</.*?<LastName>(.*?)</.*?(?:<Role>(.*?)|)</'
 				self.regexDict[self.CREDITS] =  '<Credit>.*?<FirstName>(.*?)<.*?<LastName>(.*?)<.*?<CreditSubtype>(.*?)<'
 				self.regexDict[self.TAG] =  '<FullyQualifiedName>(.*?)<'
+				self.regexDict[self.REVIEW] =  '<Review>(.*?)</Review>'
 			else:
 				self.regexDict[self.ACTORS] = '<Actor FirstName="(.*?)".*?LastName="(.*?)".*?Role="(.*?)"'
 				self.regexDict[self.CREDITS] =  '<Credit FirstName="(.*?)".*?LastName="(.*?)".*?CreditSubtype="(.*?)"'
 				self.regexDict[self.TAG] =  '<Tag Name.*?FullName="(.*?)"'
+				self.regexDict[self.REVIEW] =  '<Review (Film=.*?) (Video=.*?) (Audio=.*?) (Extras=.*?)/>'
 
 			fpDict = {}
 			f = open(COLLECTION_FLAT_FILE,'w')
@@ -1930,13 +1941,13 @@ class DVDCollectionXML:
 	# sets a dict of selected DVD from stored collection
 	##############################################################################################
 	def parseDVD(self, collNum):
-		debug("> parseDVD() collNum="+str(collNum))
+		debug("> parseDVD() collNum=%s" % collNum)
 
 		success = False
 		self.dvdDict = {}
 		regex = re.compile('(.*?)\|(.*?)(?:~|$)')
 		for line in open(COLLECTION_FLAT_FILE,'r'):
-			if line.startswith(self.COLLNUM+'|'+ collNum):
+			if line.startswith(self.COLLNUM+'|'+ collNum + '~'):
 				matches = regex.findall(line)
 				for key,value in matches:
 					keyCount = line.count(key+'|')		# how many of this key stored ?
@@ -1955,6 +1966,7 @@ class DVDCollectionXML:
 				break
 
 
+		print self.dvdDict
 		if self.dvdDict:
 			self.dvdDict[self.COLLNUM] = [collNum]
 			success = True
@@ -1974,7 +1986,7 @@ class DVDCollectionXML:
 		try:
 			return self.dvdDict[dataKey]
 		except:
-			debug("unknown key: %s" % dataKey)
+			debug("getDVDData() unknown key: %s" % dataKey)
 			return ''
 
 	##############################################################################################
@@ -2525,6 +2537,7 @@ makeDir(DIR_CACHE)
 myscript = DVDProfiler()
 if myscript.isReady():
 	myscript.doModal()
+#	dialogProgress.close()
 del myscript
 
 debug("exiting script ...")
