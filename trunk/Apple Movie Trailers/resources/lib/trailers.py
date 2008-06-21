@@ -452,7 +452,9 @@ class Trailers:
                 self.trailer_urls = []
                 self.old_trailer_urls = []
                 if ( movie[ 3 ] is not None ):
-                    self.old_trailer_urls = eval( movie[ 3 ][ 6 : ] )
+                    list_start = movie[ 3 ].find( "[" )
+                    list_end = movie[ 3 ].find( "]" )
+                    self.old_trailer_urls = eval( movie[ 3 ][ list_start : list_end + 1 ] )
                     self.old_trailer_urls.sort()
                 self.poster = ""
                 self.plot = ""
