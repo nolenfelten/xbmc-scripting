@@ -5,10 +5,13 @@
     <string id="2">Bali at xboxklub</string>
 
     <!-- Dialog Messages -->
+    <string id="36">Elavult XML fájlok eltávolítása...</string>
+    <string id="37">Műfaj információk frissítése...</string>
+    <string id="38">Műfaj és előzetes információk frissítse...</string>    
     <string id="39">Összes lejtászása</string>
     <string id="40">Információk frissítve, keresés aktív. (10-60 perc)</string>
     <string id="41">Műfaonkénti frissités. (1-5 perc)</string>
-    <string id="42">Műfaj információk frissítése...</string>
+    <string id="42"></string>
     <string id="43">Mentés az adatbázisba...</string>
     <string id="44">Adatbázis létrehozása...</string>
     <string id="45">Elavult XML fájlok eltávolítása...</string>
@@ -120,7 +123,7 @@
     <string id="215">Lejátszó felbontása</string>
     <string id="216">Showtime hely</string>
     <string id="217">Showtime scraper</string>
-    <string id="220">Pluginok installálása...</string>
+    <string id="218">Előzetese frissítése a műfajjal</string>
     
     <!-- Settings choices -->
     <string id="2020">Alacsony</string>
@@ -148,6 +151,7 @@
     <string id="252">Frissítés</string>
     <string id="253">Névjegy</string>
     <string id="254">Pluginok</string>
+    <string id="255">Alapértelmezés</string>
 
     <!-- Search buttons -->
     <string id="257">SQL mentés</string>
