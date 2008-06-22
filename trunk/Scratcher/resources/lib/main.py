@@ -71,9 +71,9 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                 def edit():
                     new_text = None
                     # show keyboard for user to change the text
-                    new_text = common.gui.dialog.keyboard( 
-                        original_text, 
+                    new_text = common.gui.dialog.getText( 
                         common.localize( 1004 )
+                        original_text, 
                     )
                     # perform the changes, assuming that the new text is not blank
                     #   or the same as the old text
@@ -126,8 +126,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     item = self.window.getListItem( new_id )
                     new_text = None
                     # show keyboard for user to change the text
-                    new_text = common.gui.dialog.keyboard( 
-                        '', 
+                    new_text = common.gui.dialog.getText( 
                         common.localize( 1004 )
                     )
                     if len( new_text ):

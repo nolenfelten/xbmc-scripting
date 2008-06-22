@@ -8,15 +8,19 @@ import base, dialog
 # script variables
 common = sys.modules['common']
 
-def keyboard( default = '', heading = '', hidden = False ):
+def _keyboard( default = '', heading = '', hidden = False ):
     '''Shows a keyboard and returns a value'''
     keyboard = xbmc.Keyboard( default, heading, hidden )
     keyboard.doModal()
     if ( keyboard.isConfirmed() ):
         return keyboard.getText()
     return default
+    
+def getText( heading = '', default = '', masked = False ):
+    '''Returns a text string from the user. Set masked for password entries.'''
+    return _keyboard( default, heading, hidden = masked )
 
-def numeric( default = '', heading = '', dlg_type = 3 ):
+def _numeric( default = '', heading = '', type = 3 ):
     '''
     Shows a numeric dialog and returns a value
         - 0 : ShowAndGetNumber        (default format: #)
@@ -27,6 +31,26 @@ def numeric( default = '', heading = '', dlg_type = 3 ):
     dialog = xbmcgui.Dialog()
     value = dialog.numeric( type, heading, default )
     return value
+
+def getDate( heading = '', default = '' ):
+    '''Displays a dialog to obtain a date from the user.'''
+    if not len( heading ): heading = 'Enter date [DD/MM/YYYY]:'
+    return _numeric( default, heading, type = 1 )
+
+def getIPAddress( heading = '', default = '' ):
+    '''Displays a dialog to obtain an ip address from the user.'''
+    if not len( heading ): heading = 'Enter an IP address:'
+    return _numeric( default, heading, type = 3 )
+
+def getNumber( heading = '', default = '' ):
+    '''Displays a dialog to obtain a number from the user.'''
+    if not len( heading ): heading = 'Enter a number:'
+    return _numeric( default, heading, type = 0 )
+
+def getTime( heading = '', default = '' ):
+    '''Displays a dialog to obtain a time from the user.'''
+    if not len( heading ): heading = 'Enter time [HH:MM]:'
+    return _numeric( default, heading, type = 2 )
 
 def browse( default = '', heading = '', dlg_type = 1, shares = 'files', mask = '', use_thumbs = False, treat_as_folder = False ):
     '''
