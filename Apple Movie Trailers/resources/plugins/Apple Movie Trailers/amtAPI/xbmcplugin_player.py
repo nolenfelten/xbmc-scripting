@@ -199,7 +199,7 @@ class Main:
                 # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
                 listitem = xbmcgui.ListItem( g_title, iconImage=icon, thumbnailImage=thumbnail )
                 # set the key information
-                listitem.setInfo( "video", { "Title": "%s%s" % ( g_title, ( "", " (%s %d)" % ( xbmc.getLocalizedString( 30504 ), count + 1, ) )[ len( filepaths ) > 1 ], ), "Genre": g_genre, "Studio": g_studio, "PlotOutline": g_plotoutline, "Year": g_year } )
+                listitem.setInfo( "video", { "Title": "%s%s" % ( g_title, ( "", " (%s %d)" % ( xbmc.getLocalizedString( 30504 ), count + 1, ) )[ len( filepaths ) > 1 ], ), "Genre": g_genre, "Studio": g_studio, "Plot": g_plotoutline, "PlotOutline": g_plotoutline, "Year": g_year } )
                 # add our item
                 playlist.add( filepath, listitem )
             # mark the video watched

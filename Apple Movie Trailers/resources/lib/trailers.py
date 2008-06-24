@@ -118,7 +118,7 @@ class Trailers:
                 for url in self.movies[ trailer ].urls:
                     urls += [ self.base_url + url ]
                 self.removeXML( urls )
-                ok = records.update( "movies", ( "trailer_urls", ), ( "UPDATE%s" % ( repr( self.movies[ trailer ].trailer_urls ), ), self.movies[ trailer ].idMovie, ), "idMovie", True )
+                ok = records.update( "movies", ( "date_added", ), ( "u%s" % ( self.movies[ trailer ].date_added, ), self.movies[ trailer ].idMovie, ), "idMovie", True )
                 ok = records.delete( "actor_link_movie", ( "idMovie", ), ( self.movies[ trailer ].idMovie, ) )
                 ok = records.delete( "studio_link_movie", ( "idMovie", ), ( self.movies[ trailer ].idMovie, ) )
             records.close()
@@ -166,14 +166,15 @@ class Trailers:
                 for url in urls:
                     original_filename = fetcher.make_cache_filename( url )
                     filename = local_fetcher.urlretrieve( url )
-
                     # if the files are different flag it
-                    new_trailers = not filecmp.cmp( filename, original_filename )
+                    new_trailers = False
+                    if ( filename is not None ):
+                        new_trailers = not filecmp.cmp( filename, original_filename )
                     if ( new_trailers ):
                         xbmc.executehttpapi( "FileCopy(%s,%s)" % ( filename, original_filename, ) )
                         #shutil.copy( filename, original_filename )
-                    os.remove( filename )
-                
+                    if ( filename is not None ):
+                        os.remove( filename )
                 if ( new_trailers or refresh_trailers ):
                     _progress_dialog()
                     trailer_urls, genre_urls = self.loadGenreInfo( title, urls[ 0 ] )
@@ -194,7 +195,7 @@ class Trailers:
                                     for url2 in eval( record[ 1 ] ):
                                         url_list += [ self.base_url + url2 ]
                                     self.removeXML( url_list )
-                                    ok = records.update( "movies", ( "trailer_urls", ), ( "UPDATE%s" % ( repr( record[ 2 ]  ), ), record[ 0 ], ), "idMovie" )
+                                    ok = records.update( "movies", ( "date_added", ), ( "u%s" % ( record[ 2 ], ), record[ 0 ], ), "idMovie" )
                                     ok = records.delete( "actor_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
                                     ok = records.delete( "studio_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
                                 try:
@@ -211,7 +212,7 @@ class Trailers:
                     success = records.update( "genres", ( "updated", ), ( updated_date, idGenre, ), "idGenre" )
                 success = records.commit()
         except:
-            pass
+            traceback.print_exc()
         success = records.commit()
         records.close()
         _progress_dialog( -99 )
@@ -375,6 +376,10 @@ class Trailers:
                             next_url = None
                     except:
                         next_url = None
+                    if next_url is not None:
+                        if ( not is_special and "/moviesxml/g" not in next_url ) or ( is_special and "/moviesxml/h" not in next_url ):
+                            next_url = None
+
                     for element in elements:
                         url2 = element.get( "url" )
                         title = None
@@ -452,9 +457,7 @@ class Trailers:
                 self.trailer_urls = []
                 self.old_trailer_urls = []
                 if ( movie[ 3 ] is not None ):
-                    list_start = movie[ 3 ].find( "[" )
-                    list_end = movie[ 3 ].find( "]" )
-                    self.old_trailer_urls = eval( movie[ 3 ][ list_start : list_end + 1 ] )
+                    self.old_trailer_urls = eval( movie[ 3 ] )
                     self.old_trailer_urls.sort()
                 self.poster = ""
                 self.plot = ""
@@ -479,6 +482,8 @@ class Trailers:
                 else:
                     self.saved = []
                 self.date_added = movie[ 14 ]
+                if ( self.date_added is not None ):
+                    self.date_added = self.date_added.replace( "u", "" )
                 self.actors = []
                 self.studio = ""
 
@@ -642,7 +647,7 @@ class Trailers:
             if ( movie_list ):
                 dialog_ok = True
                 for cnt, movie in enumerate( movie_list ):
-                    if ( movie[ 3 ] is None or movie[ 3 ].startswith( "UPDATE" ) ):
+                    if ( movie[ 3 ] is None or movie[ 14 ].startswith( "u" ) ):
                         movie = _load_movie_info( movie )
                         info_missing = True
                     else: movie = _get_actor_and_studio( movie )
