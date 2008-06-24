@@ -97,10 +97,10 @@ class Database:
 
     def _convert_database( self, version, complete ):
         dialog = xbmcgui.DialogProgress()
-        def _progress_dialog( count=0, total_count=None, movie=None ):
+        def _progress_dialog( count=0, total_count=None, movie=None, title="" ):
             __line1__ = _( 63 )
             if ( not count ):
-                dialog.create( _( 36 ), _( 67 ) )# _( 59 ), __line1__ )
+                dialog.create( title, _( 67 ) )# _( 59 ), __line1__ )
             elif ( count > 0 ):
                 percent = int( count * ( float( 100 ) / total_count ) )
                 __line2__ = "%s: (%d of %d)" % ( _( 88 ), count, total_count, )
@@ -154,24 +154,6 @@ class Database:
             records.close()
             return ok, updated
 
-        def _update_records():
-            try:
-                sql = "SELECT idMovie, title, trailer_urls FROM movies WHERE trailer_urls='[]' ORDER BY title;"
-                records = Records()
-                movies = records.fetch( sql, all=True )
-                total_count = len( movies )
-                for count, movie in enumerate( movies ):
-                    ok = _progress_dialog( count + 1, total_count, movie )
-                    ok = records.update( "movies", ( "trailer_urls", ), ( None, movie[ 0 ], ), "idMovie" )
-                    if ( not ok ): raise
-                    if ( ( float( count + 1) / 100 == int( ( count + 1 ) / 100) ) or ( ( count + 1 ) == total_count ) ):
-                        ok = records.commit()
-                records.close()
-                return True
-            except: 
-                records.close()
-                return False
-
         def _update_table_movies():
             try:
                 sql = "ALTER TABLE movies ADD saved_core integer"
@@ -181,8 +163,30 @@ class Database:
                 return True
             except: return False
         """
+        def _fix_trailer_urls():
+            try:
+                _progress_dialog( title=_( 68 ) )
+                sql = "SELECT idMovie, title, trailer_urls FROM movies WHERE trailer_urls IS NOT NULL ORDER BY title;"
+                records = Records()
+                movies = records.fetch( sql, all=True )
+                total_count = len( movies )
+                for count, movie in enumerate( movies ):
+                    ok = _progress_dialog( count + 1, total_count, movie )
+                    if ( "UPDATE" in movie[ 2 ] ):
+                        ok = records.update( "movies", ( "trailer_urls", ), ( None, movie[ 0 ], ), "idMovie" )
+                    if ( not ok ): raise
+                    if ( ( float( count + 1) / 100 == int( ( count + 1 ) / 100) ) or ( ( count + 1 ) == total_count ) ):
+                        ok = records.commit()
+                records.close()
+                _progress_dialog( -99 )
+                return True
+            except: 
+                records.close()
+                _progress_dialog( -99 )
+                return False
+
         def _remove_xmls():
-            _progress_dialog()
+            _progress_dialog( title=_( 36 ) )
             filenames = os.walk( BASE_DATA_PATH )
             for filename in filenames:
                 for file in filename[ 2 ]:
@@ -203,6 +207,8 @@ class Database:
         msg = ( _( 53 ), _( 54 ), )
         if ( version in ( "pre-0.99.5a", ) ):
             try:
+                ok = _fix_trailer_urls()
+                if ( not ok ): raise
                 ok = _update_version()
                 if ( not ok ): raise
             except:
@@ -393,7 +399,7 @@ class Query( dict ):
         self[ "idMovie_by_genre_id" ]		= "SELECT idMovie FROM genre_link_movie WHERE idGenre=?;"
         self[ "idMovie_in_genre" ]			= "SELECT * FROM genre_link_movie WHERE idGenre=? AND idMovie=?;"
 
-        self[ "movie_exists" ]				= "SELECT idMovie, urls, trailer_urls FROM movies WHERE title LIKE ?;"
+        self[ "movie_exists" ]				= "SELECT idMovie, urls, date_added FROM movies WHERE title LIKE ?;"
         self[ "actor_exists" ]				= "SELECT idActor FROM actors WHERE actor LIKE ?;"
         self[ "studio_exists" ]				= "SELECT idStudio FROM studios WHERE studio LIKE ?;"
 

@@ -244,7 +244,7 @@ class Main:
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "PlotOutline": trailer[ 5 ], "Rating": trailer[ 17 ], "Director": trailer[ 18 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "Plot": trailer[ 5 ], "PlotOutline": trailer[ 5 ], "Rating": trailer[ 17 ], "Director": trailer[ 18 ] } )
         return listitem
 
     def _get_thumbnail( self, item, url ):
