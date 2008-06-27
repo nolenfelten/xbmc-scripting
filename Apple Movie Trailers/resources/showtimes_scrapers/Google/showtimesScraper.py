@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Scraper for http://www.google.com/movies
 
@@ -134,7 +136,7 @@ class ShowtimesFetcher:
 
     def get_showtimes( self, movie, location ):
         """ *REQUIRED: Returns showtimes for each theater in your local """
-        movie = self._format_param( movie )
+        movie = self._format_param( movie.encode( "utf-8" ) )
         location = self._format_param( location )
         date, showtimes = self._fetch_showtimes( self.base_url + "/movies?q=%s&near=%s" % ( movie, location, ) )
         if ( showtimes is None or not showtimes ):
