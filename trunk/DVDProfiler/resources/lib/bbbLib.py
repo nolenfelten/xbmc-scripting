@@ -120,7 +120,7 @@ KEYBOARD_DEL_BACK       = 61448
 # ACTION CODE GROUPS
 CLICK_A = ( ACTION_A, PAD_A, KEYBOARD_A, KEYBOARD_RETURN, )
 CLICK_B = ( ACTION_B, PAD_B, KEYBOARD_B, )
-CLICK_X = ( ACTION_X, PAD_X, KEYBOARD_X, ACTION_REMOTE_STOP)
+CLICK_X = ( ACTION_X, PAD_X, KEYBOARD_X, ACTION_REMOTE_STOP, )
 CLICK_Y = ( ACTION_Y, PAD_Y, KEYBOARD_Y, )
 SELECT_ITEM = CLICK_A
 EXIT_SCRIPT = ( ACTION_BACK, PAD_BACK, REMOTE_BACK, KEYBOARD_ESC, )
@@ -131,6 +131,7 @@ RIGHT_STICK_CLICK = (ACTION_RIGHT_STICK, PAD_RIGHT_STICK, )
 MOVEMENT_DPAD = ( ACTION_MOVE_LEFT, ACTION_MOVE_RIGHT, ACTION_MOVE_UP, ACTION_MOVE_DOWN, )
 MOVEMENT_RIGHT_STICK = (PAD_RIGHT_STICK_UP, PAD_RIGHT_STICK_DOWN, PAD_RIGHT_STICK_LEFT, PAD_RIGHT_STICK_RIGHT, ACTION_RIGHT_STICK_UP,ACTION_RIGHT_STICK_DOWN,ACTION_RIGHT_STICK_LEFT,ACTION_RIGHT_STICK_RIGHT, )
 MOVEMENT_LEFT_STICK = (PAD_LEFT_STICK_UP, PAD_LEFT_STICK_DOWN, PAD_LEFT_STICK_LEFT, PAD_LEFT_STICK_RIGHT, )
+MOVEMENT_STICKS = MOVEMENT_RIGHT_STICK + MOVEMENT_LEFT_STICK
 MOVEMENT_SCROLL_UP = ( ACTION_LEFT_TRIGGER, PAD_LEFT_ANALOG_TRIGGER, ACTION_SCROLL_UP, KEYBOARD_PG_UP, PAD_LEFT_TRIGGER, ACTION_REMOTE_PREV_ITEM, )
 MOVEMENT_SCROLL_DOWN = ( ACTION_RIGHT_TRIGGER, PAD_RIGHT_ANALOG_TRIGGER, ACTION_SCROLL_DOWN, KEYBOARD_PG_DOWN, PAD_RIGHT_TRIGGER, ACTION_REMOTE_NEXT_ITEM, )
 MOVEMENT_SCROLL = MOVEMENT_SCROLL_UP + MOVEMENT_SCROLL_DOWN
@@ -224,14 +225,18 @@ def makeScriptDataDir():
 		scriptPath = os.path.join("T:\script_data", __scriptname__)
 		os.makedirs(scriptPath)
 		debug("makeScriptDataDir() created=%s" % scriptPath )
-	except: pass
+		return True
+	except:
+		return False
 
 #############################################################################################################
 def makeDir(dir):
 	try:
 		os.makedirs( dir )
 		debug("bbbLib.created dir: " + dir)
-	except: pass
+		return True
+	except:
+		return False
 
 #############################################################################################################
 def removeDir(dir, title="", msg="", msg2="", force=False):
@@ -1592,18 +1597,20 @@ def validMAC(mac):
 ##############################################################################################################    
 def playMedia(filename):
 	debug("> playMedia() " + filename)
-	success = True
+	success = False
 
 	try:
 		xbmc.Player().play(filename)
+		success = xbmc.Player().isPlaying()
 	except:
 		debug('xbmc.Player().play() failed trying xbmc.PlayMedia() ')
 		try:
 			cmd = 'xbmc.PlayMedia(%s)' % filename
 			xbmc.executebuiltin(cmd)
+			success = True
 		except:
 			handleException('xbmc.PlayMedia()')
-			success = False
+
 	debug("< playMedia() success=%s" % success)
 	return success
 

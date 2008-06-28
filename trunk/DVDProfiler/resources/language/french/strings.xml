@@ -5,26 +5,26 @@
     <!-- Browse dialog headings -->
 
     <!-- Error messages -->
-    <string id="100">Erreur pendant la sauvegarde de vos paramtres!</string>
-    <string id="101">Dmarrage en echec!</string>
-    <string id="102">Collection non trouve ou fichier [CR]XML d'export vide ?</string>
+    <string id="100">Erreur pendant la sauvegarde de vos paramètres!</string>
+    <string id="101">Démarrage en echec!</string>
+    <string id="102">Collection non trouvée ou fichier [CR]XML d'export vide ?</string>
     <string id="103">Ficher Collection Local manquant</string>
     <string id="104">-</string>
     <string id="105">Merci de configurer ou desactiver SMB</string>
     <string id="109">Online Alias inconnu: </string>
     <string id="110">Online Collection vide: </string>
-    <string id="111">Alias dupliqu!</string>
+    <string id="111">Alias dupliqué!</string>
 
     <!-- Status messages -->
     <string id="200">Merci de patienter ...</string>
-    <string id="201">Succs</string>
+    <string id="201">Succés</string>
     <string id="202">Echec</string>
-    <string id="203">Russi</string>
+    <string id="203">Réussi</string>
     <string id="204"></string>
     <string id="210">Movie Playback</string>
-    <string id="211">Localisation Media non enregistr dans le XML</string>
-    <string id="212">Impossible de lire  partir de la localisation:</string>
-    <string id="213">Menu Mode de Dmarrage</string>
+    <string id="211">Localisation Media non enregistré dans le XML</string>
+    <string id="212">Impossible de lire à partir de la localisation:</string>
+    <string id="213">Menu Mode de Démarrage</string>
     <string id="214">Reconfigurer SMB ?</string>
     <string id="215">Aller chercher la Collection via SMB</string>
     <string id="216">Aller chercher la jaquette Online</string>
@@ -37,28 +37,28 @@
     <string id="223">Supprimer les jaquettes locales ?</string>
     <string id="224">Supprimer les fichiers collection locaux ?</string>
     <string id="225">Initialisation XML Collection</string>
-    <string id="226">Chargement Fichier, Cls et Filtres</string>
-    <string id="227">Creation du fichier  plat depuis le XML ...</string>
-    <string id="228">Sauvegarde Cls et Filtres</string>
+    <string id="226">Chargement Fichier, Clés et Filtres</string>
+    <string id="227">Creation du fichier à plat depuis le XML ...</string>
+    <string id="228">Sauvegarde Clés et Filtres</string>
     <string id="229">Online Collection</string>
     <string id="230">Recherche Alias: </string>
     <string id="231">Recherche de la Collection Online: </string>
-    <string id="240">Media non trouv!</string>
+    <string id="240">Media non trouvé!</string>
     <string id="241">Entrer l'ALIAS de la collection</string>
     <string id="242">Host de la Collection Online ?</string>
-    <string id="243">Filtres - (Selectionner articles  activer ON/OFF)</string>
+    <string id="243">Filtres - (Selectionner articles à activer ON/OFF)</string>
     <string id="244">Tags: </string>
     <string id="245">Genres: </string>
     <string id="246">Tout selectionner</string>
-    <string id="247">Tout dselectionner</string>
-    <string id="248">Dsactiver les deux filtres</string>
+    <string id="247">Tout déselectionner</string>
+    <string id="248">Désactiver les deux filtres</string>
     <string id="249">Classer ...</string>
 
     <!-- script common messages -->
     <string id="300">Merci de patienter ...</string>
-    <string id="301">Succs</string>
+    <string id="301">Succés</string>
     <string id="302">Echec</string>
-    <string id="303">Tlchargement ...</string>
+    <string id="303">Téléchargement ...</string>
     <string id="304">Confirmer Suppression ?</string>
 
     <!-- Yes/No buttons -->
@@ -66,7 +66,7 @@
     <string id="351">Non</string>
     <string id="352">Dossier</string>
     <string id="353">Fichier</string>
-    <string id="354">Tlcharger</string>
+    <string id="354">Télécharger</string>
 
     <!-- Headings -->
     <string id="400">Overview</string>
@@ -122,10 +122,10 @@
     <string id="520">Initialiser la configuration</string>
     <string id="521">Voir Script Readme</string>
     <string id="522">Voir Script ChangeLog</string>
-    <string id="523">Mise  jour du Script</string>
-    <string id="524">Vrifier mise  jour du script au dmarrage?</string>
+    <string id="523">Mise à jour du Script</string>
+    <string id="524">Vérifier mise à jour du script au démarrage?</string>
     <string id="525">Purger Cache</string>
-    <string id="526">Mode de dmarrage:</string>
+    <string id="526">Mode de démarrage:</string>
     <string id="527">Configuration SMB</string>
     <string id="528">Mode Media Location</string>
 
@@ -138,13 +138,13 @@
     <string id="545">Nom du fichier Collection:</string>
     <string id="546">Dossier de la Collection:</string>
     <string id="547">Dossier Images:</string>
-    <string id="548">Vrifier la connection SMB</string>
+    <string id="548">Vérifier la connection SMB</string>
 
     <!-- Start Mode Menu Options -->
-    <string id="550">SMB ActivÃ©</string>
+    <string id="550">SMB Activé</string>
     <string id="551">Collection Locale</string>
     <string id="552">Alias Online</string>
-    <string id="553">Menu Mode de Dmarrage</string>
+    <string id="553">Menu Mode de Démarrage</string>
 
     <!-- Misc Menu Options Options -->
     <string id="560">Ajouter</string>
@@ -159,21 +159,21 @@
     <string id="950">Path SMB et/ou IP Host sont manquants!</string>
     <string id="951">Erreur SMB!</string>
     <string id="952">Connection SMB en echec!</string>
-    <string id="953">Vrifier que le PCName et IP sont corrects</string>
+    <string id="953">Vérifier que le PCName et IP sont corrects</string>
     <string id="954">Login SMB en echec!</string>
     <string id="955">Utiliser PCNAME et pas l'IP dans le path SMB!</string>
     <string id="956">Auto Discover IP SMB en echec!</string>
     <string id="957">Erreur recherche SMB!</string>
     <string id="958">Erreur d'Envoi SMB!</string>
-    <string id="959">SMB Installation incomplte!</string>
+    <string id="959">SMB Installation incomplète!</string>
     <string id="960">Connection SMB ...</string>
-    <string id="961">Connection SMB russie</string>
+    <string id="961">Connection SMB réussie</string>
     <string id="962">Recherche fichier SMB ...</string>
     <string id="963">Envoi fichier SMB ...</string>
     <string id="964">SMB Merci de patienter ...</string>
     <string id="965">Fichier distant est manquant!</string>
     <string id="966">Pas de connection distante!</string>
-    <string id="967">Vrification si fichier mis  jour ...</string>
+    <string id="967">Vérification si fichier mis à jour ...</string>
     <string id="968">Configurer SMB maintenant?</string>
     <string id="969">Path SMB:</string>
     <string id="970">IP SMB:</string>
@@ -191,26 +191,26 @@
     <string id="983">Echec recherche IMDb</string>
     <string id="984">Editer titre?</string>
     <string id="985">Selectionner Titre</string>
-    <string id="986">Tlchargement Image ...</string>
-    <string id="987">Tlchargement liens Image ...</string>
-    <string id="988">Tlchargement Diaporama ...</string>
+    <string id="986">Téléchargement Image ...</string>
+    <string id="987">Téléchargement liens Image ...</string>
+    <string id="988">Téléchargement Diaporama ...</string>
     <string id="989">Voir Diaporama</string>
 
     <!-- Update messages -->
-    <string id="1000">Votre version est  jour.</string>
+    <string id="1000">Votre version est à jour.</string>
     <string id="1001">Recherche des versions courantes...</string>
     <string id="1002">est nouveau</string>
-    <string id="1003">Voulez vous mettre  jour?</string>
+    <string id="1003">Voulez vous mettre à jour?</string>
     <string id="1004">Recherche liste fichier...</string>
     <string id="1005">Merci de patienter...</string>
     <string id="1006">Version</string>
     <string id="1007">Recherche:</string>
     <string id="1008">Path:</string>
     <string id="1009">Fichier:</string>
-    <string id="1010">Script mis  jour, va maintenant redmarrer.</string>
+    <string id="1010">Script mis à jour, va maintenant redémarrer.</string>
 
     <!-- Update error messages -->
-    <string id="1030">Pas de version trouve!</string>
-    <string id="1031">Il y a eu une erreur lors de la mise  jour du script!</string>
+    <string id="1030">Pas de version trouvée!</string>
+    <string id="1031">Il y a eu une erreur lors de la mise à jour du script!</string>
 
 </strings>
