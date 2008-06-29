@@ -18,7 +18,7 @@ from resources.lib import wol
 __plugin__ = "Plugin Maker"
 __author__ = "nuka1195"
 __credits__ = "Team XBMC/ozNick"
-__version__ = "1.1"
+__version__ = "1.2"
 
 
 class _Info:
@@ -29,14 +29,10 @@ class _Info:
 class Main:
     # base paths
     BASE_CACHE_PATH = "P:\\Thumbnails"
-
-    # TODO: enable getSupportedMedia()
     # music media extensions
-    #MEDIA_EXT = ( xbmc.getSupportedMedia( "music" ), )
-    MEDIA_EXT = ( ".nsv|.m4a|.flac|.aac|.strm|.pls|.rm|.mpa|.wav|.wma|.ogg|.mp3|.mp2|.m3u|.mod|.amf|.669|.dmf|.dsm|.far|.gdm|.imf|.it|.m15|.med|.okt|.s3m|.stm|.sfx|.ult|.uni|.xm|.sid|.ac3|.dts|.cue|.aif|.aiff|.wpl|.ape|.mac|.mpc|.mp+|.mpp|.shn|.zip|.rar|.wv|.nsf|.spc|.gym|.adplug|.adx|.dsp|.adp|.ymf|.ast|.afc|.hps|.xsp|.xwav|.waa|.wvs|.wam|.gcm|.idsp|.mpdsp|.mss|.spt|.rsd|.mid|.kar", )
+    MEDIA_EXT = ( xbmc.getSupportedMedia( "music" ), )
     # video media extensions
-    #MEDIA_EXT += ( xbmc.getSupportedMedia( "video" ), )
-    MEDIA_EXT += ( ".m4v|.3gp|.nsv|.ts|.ty|.strm|.pls|.rm|.rmvb|.m3u|.ifo|.mov|.qt|.divx|.xvid|.bivx|.vob|.nrg|.img|.iso|.pva|.wmv|.asf|.asx|.ogm|.m2v|.avi|.bin|.dat|.mpg|.mpeg|.mp4|.mkv|.avc|.vp3|.svq3|.nuv|.viv|.dv|.fli|.flv|.rar|.001|.wpl|.zip|.vdr|.dvr-ms|.xsp", )
+    MEDIA_EXT += ( xbmc.getSupportedMedia( "video" ), )
 
     def __init__( self ):
         self._get_settings()
@@ -182,13 +178,11 @@ class Main:
             # create our url
             url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( quote_plus( url ) ), item[ 2 ], )
             # if a folder.jpg exists use that for our thumbnail
-            #thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( title, ) )
-            #if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
+            thumbnail = os.path.join( item[ 0 ], "%s.jpg" % ( item[ 1 ], ) )
+            if ( not os.path.isfile( thumbnail ) ): thumbnail = ""
             icon = "DefaultFolder.png"
             # only need to add label and icon, setInfo() and addSortMethod() takes care of label2
             listitem=xbmcgui.ListItem( label=item[ 1 ], iconImage=icon )
-            # add the different infolabels we want to sort by
-            #listitem.setInfo( type=( "music", "video", )[ self.media_type ], infoLabels={ "Title": item[ 1 ] + " (%s)" % ( xbmc.getLocalizedString( 20334 ), ) } )
         else:
             # we only want the first path in a stack:// file item
             fpath = self._fix_stacked_path( item[ 0 ] )
