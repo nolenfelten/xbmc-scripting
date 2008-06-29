@@ -33,9 +33,8 @@ def WakeOnLan(ethernet_address):
         s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         s.sendto(msg, ('<broadcast>', 9))
         s.close()
-    except:
-        import traceback
-        traceback.print_exc()
+    except Exception, e:
+        print str(e)
         return
 
 def CheckHost( path, port=139, retries=1 ):
@@ -56,7 +55,7 @@ def CheckHost( path, port=139, retries=1 ):
             s.close()
             # we return True since connection succeeded
             return hostname, True
-        except:
+        except socket.error, e:
             # we sleep for 5 seconds before next retry
             sleep( 5 )
     # we return False since connection failed
@@ -71,5 +70,3 @@ if ( __name__ == "__main__" ):
     # check if host is alive
     hostname, alive = CheckHost( path="smb://SERVER/Movies/", port=139, retries=5 )
     print "Host '%s' is %salive:" % ( hostname, ( "not ", "", )[ alive == True ], )
-
-
