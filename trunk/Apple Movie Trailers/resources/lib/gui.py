@@ -528,7 +528,7 @@ class GUI( xbmcgui.WindowXML ):
                             else: s = selected
                             plot = ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ]
                             t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
-                            listitem.setInfo( "video", { "Title": t, "Year": self.trailers.movies[ trailer ].year, "PlotOutline": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
+                            listitem.setInfo( "video", { "Title": t, "Year": self.trailers.movies[ trailer ].year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
