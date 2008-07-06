@@ -197,7 +197,7 @@
 
     <!-- Plugin -->
     <string id="700">This plugin allows you to watch trailers from the videos media window. It still requires the script be installed and up to date for full functionality. It has it's own settings accessed from plugin settings.</string>
-    <string id="701">This plugin plays optional coming attraction video(s), feature presentation video(s) and 0 - 5 random trailers before playing the selected movie. Then optional end of feature presentation video(s). It still requires the script be installed and up to date for full functionality. It has it's own settings accessed from plugin settings.</string>
+    <string id="701">This plugin plays optional trivia quiz, coming attraction video(s), feature presentation video(s), rating video and 0 - 5 random trailers before playing the selected movie. Then optional end of feature presentation video(s). It still requires the script be installed and up to date for full functionality. It has it's own settings accessed from plugin settings.</string>
 
     <string id="710">Browse for thumbnail</string>
     <string id="711">Install</string>
