@@ -13,11 +13,12 @@ __author__ = "Nuka1195"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Apple%20Movie%20Trailers"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.2.4"
+__version__ = "1.3"
 
 # base paths
 BASE_PATH = os.getcwd().replace( ";", "" )
 BASE_DATABASE_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __script__, "AMT.db" ) )
+BASE_RESOURCE_PATH = os.path.join( BASE_PATH, "resources" )
 
 
 if ( __name__ == "__main__" ):

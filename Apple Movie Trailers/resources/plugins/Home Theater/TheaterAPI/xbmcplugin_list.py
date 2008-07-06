@@ -56,6 +56,11 @@ class Main:
         self.settings[ "limit_query" ] = xbmcplugin.getSetting( "limit_query" ) == "true"
         self.settings[ "rating" ] = int( xbmcplugin.getSetting( "rating" ) )
         self.settings[ "transparent_archives" ] = xbmc.executehttpapi( "getguisetting(1,filelists.unrollarchives)" ).replace("<li>","").lower() == "true"
+        self.PluginCategory = ( "", xbmc.getLocalizedString( 30700 ), )[ self.settings[ "use_db" ] ]
+        self.settings[ "fanart_image" ] = xbmcplugin.getSetting( "fanart_image" )
+        self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
+        self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
+        self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
 
@@ -91,13 +96,27 @@ class Main:
                 ok = self._get_videodb_list()
             else:
                 ok = self._get_list()
-            # if successful and user did not cancel, add all the required sort methods and set the content
+            # if successful and user did not cancel, set our sort orders, content, plugin category and fanart
             if ( ok ):
                 xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-                xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
                 xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
+                xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
+                if ( self.settings[ "use_db" ] ):
+                    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
+                    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR )
+                    #xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_GENRE )
+                    #xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING )
+                    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
                 # set content
                 xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+            try:
+                # set our plugin category
+                xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=self.PluginCategory )
+                # set our fanart from user setting
+                if ( self.settings[ "fanart_image" ] ):
+                    xbmcplugin.setPluginFanart( handle=int( sys.argv[ 1 ] ), image=self.settings[ "fanart_image" ], color1=self.settings[ "fanart_color1" ], color2=self.settings[ "fanart_color2" ], color3=self.settings[ "fanart_color3" ] )
+            except:
+                pass
         except:
             # oops print error message
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
@@ -302,7 +321,7 @@ class Main:
                 overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_RAR, xbmcgui.ICON_OVERLAY_ZIP, )[ item[ 0 ].endswith( ".rar" ) + ( 2 * item[ 0 ].endswith( ".zip" ) ) ]
                 overlay = ( overlay, xbmcgui.ICON_OVERLAY_WATCHED, )[ watched ]
                 # add the different infolabels we want to sort by
-                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Votes": item[ 6 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Watched": watched, "Runtime": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 20 ], "Cast": item[ 21 ] } )
+                listitem.setInfo( type="Video", infoLabels={ "Title": item[ 1 ], "Date": date, "Size": size, "Overlay": overlay, "Plot": item[ 3 ], "Plotoutline": item[ 4 ], "TagLine": item[ 5 ], "Votes": item[ 6 ], "Rating": float( item[ 7 ] ), "Writer": item[ 8 ], "Year": int( item[ 9 ] ), "Watched": watched, "Duration": item[ 13 ], "MPAA": item[ 14 ], "Genre": item[ 16 ], "Director": item[ 17 ], "Studio": item[ 20 ], "Cast": item[ 21 ] } )
             except:
                 # oops print error message
                 add = False

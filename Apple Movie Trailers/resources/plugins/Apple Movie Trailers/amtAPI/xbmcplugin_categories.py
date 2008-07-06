@@ -16,7 +16,8 @@ class Main:
     # base paths
     BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
     BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:\\skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
-    BASE_PLUGIN_THUMBNAIL_PATH = os.path.join( sys.modules[ "__main__" ].BASE_PATH, "thumbnails" )
+    # TODO: remove all references
+    #BASE_PLUGIN_THUMBNAIL_PATH = os.path.join( sys.modules[ "__main__" ].BASE_PATH, "thumbnails" )
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
@@ -72,25 +73,37 @@ class Main:
             # user cancelled dialog or an error occurred
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
-        # if successful and user did not cancel, set our sort orders, content and plugin category
+        # if successful and user did not cancel, set our sort orders, content and fanart
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
             # set content
             xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+            try:
+                # set our fanart from user setting
+                if ( xbmcplugin.getSetting( "fanart_genre" ) == "true" ):
+                    if ( xbmcplugin.getSetting( "fanart_genre_path" ) ):
+                        image_path = os.path.join( xbmcplugin.getSetting( "fanart_genre_path" ), "Genres.tbn" )
+                        if ( os.path.isfile ( image_path ) ):
+                            xbmcplugin.setPluginFanart( handle=int( sys.argv[ 1 ] ), image=image_path, color1=xbmcplugin.getSetting( "fanart_color1" ), color2=xbmcplugin.getSetting( "fanart_color2" ), color3=xbmcplugin.getSetting( "fanart_color3" ) )
+                elif ( xbmcplugin.getSetting( "fanart_image" ) ):
+                    xbmcplugin.setPluginFanart( handle=int( sys.argv[ 1 ] ), image=xbmcplugin.getSetting( "fanart_image" ), color1=xbmcplugin.getSetting( "fanart_color1" ), color2=xbmcplugin.getSetting( "fanart_color2" ), color3=xbmcplugin.getSetting( "fanart_color3" ) )
+            except:
+                pass
         # send notification we're finished, successfully or unsuccessfully
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
 
     def _get_thumbnail( self, title ):
         # create the full thumbnail path for skins directory
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( "*", "-" ).replace( " ", "-" ).lower() + ".tbn" ) )
+        thumbnail = xbmc.translatePath( os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( "*", "" ) + ".tbn" ) )
         # use a plugin custom thumbnail if a custom skin thumbnail does not exists
         if ( not os.path.isfile( thumbnail ) ):
+            # TODO: remove this block (no plans on supplying thumbnails)
             # create the full thumbnail path for plugin directory
-            thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( "*", "-" ).replace( " ", "-" ).lower() + ".tbn" ) )
+            #thumbnail = xbmc.translatePath( os.path.join( self.BASE_PLUGIN_THUMBNAIL_PATH, title.replace( "*", "" ) + ".tbn" ) )
             # use a default thumbnail if a custom thumbnail does not exists
-            if ( not os.path.isfile( thumbnail ) ):
-                thumbnail = ""
+            #if ( not os.path.isfile( thumbnail ) ):
+            thumbnail = ""
         return thumbnail
 
     def _fetch_records( self ):

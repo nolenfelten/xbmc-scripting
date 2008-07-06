@@ -18,6 +18,12 @@
     <string id="30060">Search matches whole words only</string> 
     <string id="30070">Mark trailers watched after viewed</string> 
     <string id="30080">Player core</string>
+    <string id="30100">Fanart image by genre</string>
+    <string id="30110">- Path to fanart</string>
+    <string id="30120">- Path to fanart image</string>
+    <string id="30130">Fanart color one (AARRGGBB)</string>
+    <string id="30140">Fanart color two (AARRGGBB)</string>
+    <string id="30150">Fanart color three (AARRGGBB)</string>
 
     <string id="30500">Downloading trailer</string>
     <string id="30501">Enter keywords: separate words with and/or/not</string>
