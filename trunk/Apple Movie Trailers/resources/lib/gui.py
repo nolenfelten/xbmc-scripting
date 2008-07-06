@@ -90,8 +90,7 @@ class GUI( xbmcgui.WindowXML ):
             self._set_startup_choices()
             self._set_startup_category()
             if ( INSTALL_PLUGIN ):
-                install_plugin()
-                install_plugin( 1 )
+                install_plugin( plugin=range( 0, 2 ), message=True)
 
     def _set_labels( self ):
         try:
@@ -478,7 +477,7 @@ class GUI( xbmcgui.WindowXML ):
         force_fallback = self.skin != "Default"
         choices = [ "%s %d%s - (%s)" % ( _( 99 ), c + 1, ( "", " - [HD]", )[ "720p.mov" in url or "1080p.mov" in url ], os.path.splitext( os.path.basename( url ) )[ 0 ] ) for c, url in enumerate( urls ) ]
         choices += [ _( 39 ) ]
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=-1, selection=0, list_control=1, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, descriptions=[ "" for x in range( len( choices ) ) ], original=-1, selection=0, list_control=1, title=title )
         selection = ch.selection
         del ch
         return selection

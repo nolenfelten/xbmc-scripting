@@ -78,6 +78,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._setup_skins()
         self._setup_videoplayer()
         self._setup_showtimes_scrapers()
+        self._setup_plugins()
 
     def _setup_startup_categories( self ):
         self.startup_categories = {}
@@ -106,7 +107,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.quality = ( _( 2020 ), _( 2021 ), _( 2022 ), "480p", "720p", "1080p" )
 
     def _setup_skins( self ):
-        """ special def for setting up scraper choices """
+        """ special def for setting up skin choices """
         self.skins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" ) )
         try: self.current_skin = self.skins.index( self.settings[ "skin" ] )
         except: self.current_skin = 0
@@ -116,6 +117,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.showtimes_scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "showtimes_scrapers" ) )
         try: self.current_showtimes_scraper = self.showtimes_scrapers.index( self.settings[ "showtimes_scraper" ] )
         except: self.current_showtimes_scraper = 0
+
+    def _setup_plugins( self ):
+        """ special def for setting up plugin installation choices """
+        self.plugins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "plugins" ) )
+        self.plugins.sort()
+        self.plugins += [ _( 799 ) ]
 
     def _setup_videoplayer( self ):
         self.videoplayer_displayresolutions = ( "1080i 16x9", "720p 16x9", "480p 4x3", "480p 16x9", "NTSC 4x3", "NTSC 16x9", "PAL 4x3", "PAL 16x9", "PAL60 4x3", "PAL60 16x9", _( 2110 ) )
@@ -127,9 +134,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.settings_refresh = ( "thumbnail_display", "fade_thumb", )
 
 ###### End of Special defs #####################################################
-    def _get_chooser( self, choices, original, selection, list_control, title ):
+    def _get_chooser( self, choices, descriptions, original, selection, list_control, title ):
         force_fallback = self.skin != "Default"
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, original=original, selection=selection, list_control=list_control, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, descriptions=descriptions, original=original, selection=selection, list_control=list_control, title=title )
         selection = ch.selection
         del ch
         return selection
@@ -186,7 +193,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #1 """
         try: original_selection = self.skins.index( self.settings_original[ "skin" ] )
         except: original_selection = 0
-        selection = self._get_chooser( self.skins, original_selection, self.current_skin, 0, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.skins, [ "" for x in range( len( self.skins ) ) ], original_selection, self.current_skin, 0, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.current_skin = selection
             self.settings[ "skin" ] = self.skins[ self.current_skin ]
@@ -194,14 +201,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting2( self ):
         """ changes settings #2 """
-        selection = self._get_chooser( self.quality, self.settings_original[ "trailer_quality" ], self.settings[ "trailer_quality" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.quality, [ "" for x in range( len( self.quality ) ) ], self.settings_original[ "trailer_quality" ], self.settings[ "trailer_quality" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "trailer_quality" ] = selection
             self._set_controls_values()
 
     def _change_setting3( self ):
         """ changes settings #3 """
-        selection = self._get_chooser( self.mode, self.settings_original[ "mode" ], self.settings[ "mode" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.mode, [ "" for x in range( len( self.mode ) ) ], self.settings_original[ "mode" ], self.settings[ "mode" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "mode" ] = selection
             self._set_controls_values()
@@ -219,7 +226,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting6( self ):
         """ changes settings #6 """
-        selection = self._get_chooser( self.thumbnail, self.settings_original[ "thumbnail_display" ], self.settings[ "thumbnail_display" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.thumbnail, [ "" for x in range( len( self.thumbnail ) ) ], self.settings_original[ "thumbnail_display" ], self.settings[ "thumbnail_display" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "thumbnail_display" ] = selection
             self._set_controls_values()
@@ -233,7 +240,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #8 """
         selection = self._get_category_from_setting( self.settings[ "startup_category_id" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "startup_category_id" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.startup_titles, [ "" for x in range( len( self.startup_titles ) ) ], original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "startup_category_id" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -242,7 +249,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #9 """
         selection = self._get_category_from_setting( self.settings[ "shortcut1" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut1" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.startup_titles, [ "" for x in range( len( self.startup_titles ) ) ], original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut1" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -251,7 +258,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #10 """
         selection = self._get_category_from_setting( self.settings[ "shortcut2" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut2" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.startup_titles, [ "" for x in range( len( self.startup_titles ) ) ], original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut2" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -260,7 +267,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #11 """
         selection = self._get_category_from_setting( self.settings[ "shortcut3" ] )
         original_selection = self._get_category_from_setting( self.settings_original[ "shortcut3" ] )
-        selection = self._get_chooser( self.startup_titles, original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.startup_titles, [ "" for x in range( len( self.startup_titles ) ) ], original_selection, selection, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "shortcut3" ] = self._get_setting_from_category( selection )
             self._set_controls_values()
@@ -282,7 +289,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _change_setting15( self ):
         """ changes settings #15 """
-        selection = self._get_chooser( self.videoplayer_displayresolutions, self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.videoplayer_displayresolutions, [ "" for x in range( len( self.videoplayer_displayresolutions ) ) ], self.settings_original[ "videoplayer_displayresolution" ], self.settings[ "videoplayer_displayresolution" ], 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.settings[ "videoplayer_displayresolution" ] = selection
             self._set_controls_values()
@@ -296,7 +303,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ changes settings #17 """
         try: original_selection = self.showtimes_scrapers.index( self.settings_original[ "showtimes_scraper" ] )
         except: original_selection = 0
-        selection = self._get_chooser( self.showtimes_scrapers, original_selection, self.current_showtimes_scraper, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
+        selection = self._get_chooser( self.showtimes_scrapers, [ "" for x in range( len( self.showtimes_scrapers ) ) ], original_selection, self.current_showtimes_scraper, 1, "%s %s" % ( _( 200 ), _( self.controlId ), ) )
         if ( selection is not None ):
             self.current_showtimes_scraper = selection
             self.settings[ "showtimes_scraper" ] = self.showtimes_scrapers[ self.current_showtimes_scraper ]
@@ -308,9 +315,17 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self._set_controls_values()
 
     def _install_plugin( self ):
-        selection = self._get_chooser( ( _( 700 ), _( 704 ), ), -1, 0, 1, "%s %s" % ( _( 200 ), _( 713 ), ) )
+        descriptions = [ _( x ) for x in range( 700, 700 + len( self.plugins ) - 1 ) ]
+        descriptions += [ _( 755 ) ]
+        selection = self._get_chooser( self.plugins, descriptions, -1, 0, 0, "%s %s" % ( _( 200 ), _( 713 ), ) )
         if ( selection is not None ):
-            install_plugin( selection )
+            if ( selection == len( self.plugins ) - 1 ):
+                first = 0
+                last = selection
+            else:
+                first = selection
+                last = selection + 1
+            install_plugin( range( first, last ) )
 
 ##### End of unique defs ######################################################
     

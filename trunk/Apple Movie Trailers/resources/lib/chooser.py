@@ -25,6 +25,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.controlId = 0
         self.base_path = os.path.join( BASE_RESOURCE_PATH, "skins" )
         self.choices = kwargs[ "choices" ]
+        self.descriptions = kwargs[ "descriptions" ]
         self.original = kwargs[ "original" ]
         self.selection = kwargs[ "selection" ]
         self.list_control = kwargs[ "list_control" ]
@@ -39,16 +40,18 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 500 ).setLabel( self.title )
         self.getControl( 502 ).setLabel( _( 231 ) )
         self._setup_list()
-        if ( self.list_control == 0 ):
+        if ( self.list_control == 0 and self.descriptions[ 0 ] == "" ):
             self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )
 
     def _setup_list( self ):
         self.getControl( 502 ).setVisible( False )
         self.getControl( 503 ).setVisible( self.list_control == 0 )
         self.getControl( 504 ).setVisible( self.list_control == 1 )
+        self.getControl( 505 ).setVisible( self.list_control == 0 and self.descriptions[ 0 ] != "" )
         self.getControl( 503 + self.list_control ).reset()
         for count, choice in enumerate( self.choices ):
-            self.getControl( 503 + self.list_control ).addItem( choice )
+            listitem = xbmcgui.ListItem( choice, self.descriptions[ count ] )
+            self.getControl( 503 + self.list_control ).addItem( listitem )
             if ( count == self.original ):
                 self.getControl( 503 + self.list_control ).selectItem( count )
                 self.getControl( 503 + self.list_control ).getSelectedItem().select( True )
@@ -74,7 +77,5 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def onAction( self, action ):
         if ( action in ACTION_CANCEL_DIALOG ):
             self._close_dialog()
-        #elif ( self.controlId in ( 503, 504, ) and action.getButtonCode() in SELECT_ITEM ):
-        #    self._close_dialog( self.getControl( self.controlId ).getSelectedPosition() )
-        elif ( self.controlId == 503 ):
+        elif ( self.list_control == 0 and self.descriptions[ 0 ] == "" ):
             self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )

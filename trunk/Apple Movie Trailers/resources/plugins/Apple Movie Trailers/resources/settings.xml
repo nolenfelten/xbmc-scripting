@@ -11,4 +11,12 @@
     <setting id="whole_words" type="bool" label="30060" default="false" />
     <!--setting type="sep" />
     <setting id="player_core" type="enum" values="MPlayer|DVDPlayer" label="30080" default="0" /-->
+    <setting type="sep" />
+    <setting id="fanart_genre" type="bool" label="30100" default="false" />
+    <setting id="fanart_genre_path" type="folder" source="pictures" label="30110"  enable="eq(-1,true)" default="" />
+    <setting id="fanart_image" type="pictures" label="30120"  enable="eq(-2,false)" default="" />
+    <setting id="fanart_color1" type="text" label="30130" enable="!eq(-1,) | eq(-3,true)" default="" />
+    <setting id="fanart_color2" type="text" label="30140" enable="!eq(-2,) | eq(-4,true)" default="" />
+    <setting id="fanart_color3" type="text" label="30150" enable="!eq(-3,) | eq(-5,true)" default="" />
+
 </settings>

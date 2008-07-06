@@ -205,10 +205,11 @@ class Database:
             return ok
         
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.99.5a", ) ):
+        if ( version in ( "pre-0.99.5a", "pre-0.99.5b", ) ):
             try:
-                ok = _fix_trailer_urls()
-                if ( not ok ): raise
+                if ( version == "pre-0.99.5a" ):
+                    ok = _fix_trailer_urls()
+                    if ( not ok ): raise
                 ok = _update_version()
                 if ( not ok ): raise
             except:

@@ -44,7 +44,7 @@
             <info>Skin.String(AMT-chooser-thumbfolder)</info>
             <timeperimage>2000</timeperimage>
             <fadetime>500</fadetime>
-            <visible>!Control.IsVisible(504)</visible>
+            <visible>!Control.IsVisible(504) + !Control.IsVisible(505)</visible>
             <animation effect="fade" time="200">VisibleChange</animation>
 			<aspectratio>keep</aspectratio>
         </control>
@@ -226,5 +226,14 @@
 			<showonepage>false</showonepage>
 			<visible>Control.IsVisible(504)</visible>
 		</control>
+		<!-- ** Required ** Do not change <id> or <type> -->
+        <control type="textbox" id="505">
+            <posx>215</posx>
+            <posy>40</posy>
+            <width>200</width>
+            <height>224</height>
+            <font>font10</font>
+            <info>Container(503).ListItem.Label2</info>
+        </control>
 	</controls>
 </window>

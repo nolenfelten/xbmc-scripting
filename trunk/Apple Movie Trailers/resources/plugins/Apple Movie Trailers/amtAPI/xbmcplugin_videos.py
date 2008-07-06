@@ -43,7 +43,13 @@ class Main:
         self.settings[ "download_path" ] = xbmcplugin.getSetting( "download_path" )
         self.settings[ "mark_watched" ] = xbmcplugin.getSetting( "mark_watched" ) == "true"
         self.settings[ "whole_words" ] = xbmcplugin.getSetting( "whole_words" ) == "true"
-        ##self.settings[ "player_core" ] = int( xbmcplugin.getSetting( "player_core" ) )
+        #self.settings[ "player_core" ] = int( xbmcplugin.getSetting( "player_core" ) )
+        self.settings[ "fanart_genre" ] = xbmcplugin.getSetting( "fanart_genre" ) == "true"
+        self.settings[ "fanart_genre_path" ] = xbmcplugin.getSetting( "fanart_genre_path" )
+        self.settings[ "fanart_image" ] = xbmcplugin.getSetting( "fanart_image" )
+        self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
+        self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
+        self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
 
     def get_videos( self ):
         try:
@@ -115,7 +121,7 @@ class Main:
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         records.close()
-        # if successful and user did not cancel, set our sort orders, content and plugin category
+        # if successful and user did not cancel, set our sort orders, content, plugin category and fanart
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING )
@@ -127,6 +133,15 @@ class Main:
             try:
                 # set our plugin category
                 xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=self.args.genre )
+                # set our fanart from user setting
+                if ( self.settings[ "fanart_genre" ] ):
+                    # use an image named after the current genre
+                    if ( self.settings[ "fanart_genre_path" ] ):
+                        image_path = os.path.join( self.settings[ "fanart_genre_path" ], self.args.genre + ".tbn" )
+                        if ( os.path.isfile ( image_path ) ):
+                            xbmcplugin.setPluginFanart( handle=int( sys.argv[ 1 ] ), image=image_path, color1=self.settings[ "fanart_color1" ], color2=self.settings[ "fanart_color2" ], color3=self.settings[ "fanart_color3" ] )
+                elif ( self.settings[ "fanart_image" ] ):
+                    xbmcplugin.setPluginFanart( handle=int( sys.argv[ 1 ] ), image=self.settings[ "fanart_image" ], color1=self.settings[ "fanart_color1" ], color2=self.settings[ "fanart_color2" ], color3=self.settings[ "fanart_color3" ] )
             except:
                 pass
         return ok

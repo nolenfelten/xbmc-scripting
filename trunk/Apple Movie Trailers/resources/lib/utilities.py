@@ -17,7 +17,7 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-DATABASE_VERSIONS = ( "pre-0.99.5b", )
+DATABASE_VERSIONS = ( "pre-0.99.5c", )
 SETTINGS_VERSIONS = DATABASE_VERSIONS
 # special categories
 GENRES = -1
@@ -85,70 +85,80 @@ def _create_base_paths():
     return new
 INSTALL_PLUGIN = _create_base_paths()
 
-def install_plugin( plugin=0 ):
-    # get the correct plugin message block start
-    msg = ( 700 + ( 4 * plugin ) )
-    if ( xbmcgui.Dialog().yesno( _( msg ), _( msg + 1 ), _( msg + 2 ), _( msg + 3 ), _( 712 ), _( 711 ), ) ):
-        try:
-            title = ( "Apple Movie Trailers", "Home Theater", )[ plugin ]
-            # get the thumbnail the user chooses
-            thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title, "thumbnails", "thumbs", "default.tbn" ) ), heading=_( 710 ), dlg_type=2, mask=".tbn", use_thumbs=True )
-            # create the progress dialog
-            dialog = xbmcgui.DialogProgress()
-            dialog.create( _( msg ) )
-            dialog.update(-1, _( 725 ), "", _( 67 ) )
-            from shutil import copytree, rmtree, copyfile
-            # the main plugin path to install to
-            plugin_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title ) )
-            # path where plugin is copied from
-            plugin_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", title ) )
-            # we need pysqlite2 for database access
-            pysqlite2_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title, "pysqlite2" ) )
-            # path where pysqlite2 is copied from
-            pysqlite2_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
-            # remove an existing install if it exists
-            if ( os.path.isdir( plugin_install_path ) ):
-                rmtree( plugin_install_path )
-            # copy our main directory
-            copytree( plugin_copy_path, plugin_install_path )
-            # copy pysqlite2
-            copytree( pysqlite2_copy_path, pysqlite2_install_path )
-            # default.tbn install path
-            thumbnail_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title, "default.tbn" ) )
-            # folder.jpg install path (probably not needed)
-            folderjpg_install_path = xbmc.translatePath( os.path.join( "Q:\\plugins", "video", title, "folder.jpg" ) )
-            # get the cached thumb name
-            cached_thumbnail = xbmc.getCacheThumbName( os.path.join( "Q:\\plugins", "video", title + "\\" ) )
-            # cached thumb path (we delete the existing, so our plugin re-caches the new thumb)
-            cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", cached_thumbnail ) )
-            # get the root cached thumb name
-            root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/"+ title + "/" )
-            # root cached thumb path (deleting does not work, so we overwrite the existing)
-            root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", root_cached_thumbnail ) )
-            # copy default.tbn
-            copyfile( thumbnail_copy_path, thumbnail_install_path )
-            # copy folder.jpg (probably not needed)
-            copyfile( thumbnail_copy_path, folderjpg_install_path )
-            # copy default.tbn for our root folder (deleting never refreshes it)
-            copyfile( thumbnail_copy_path, root_cached_thumbnail_path )
-            # delete our cached thumbnail
-            if ( os.path.isfile( cached_thumbnail_path ) ):
-                os.remove( cached_thumbnail_path )
-            dialog.close()
-            # TODO: enable this once webserver does not need to be running
-            """
-            # add the bookmark to sources.xml
-            addbookmark = xbmcgui.Dialog().yesno( _( msg ), _( 723 ), _( 724 ), "", _( 712 ), _( 714 ) )
-            if ( addbookmark ):
-                xbmc.executehttpapi( "Config(addbookmark,video,%s,plugin://video/%s/)" % ( title, title, ) )
-            else:
-            """
-            # inform user of installation procedure for plugin
-            ok = xbmcgui.Dialog().ok( _( msg ), _( 720 ), _( 721 ), _( 722 ) )
-        except:
-            # oops notify user an error occurred
-            dialog.close()
-            ok = xbmcgui.Dialog().ok( _( msg ), _( 730 ) )
+def install_plugin( plugin_list, message=False ):
+    # setup the plugins to install
+    plugins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "plugins" ) )
+    plugins.sort()
+    ok = True
+    for plugin in plugin_list:
+        # get the correct plugin message block start
+        if ( message ):
+            ok = xbmcgui.Dialog().yesno( plugins[ plugin ], _( 750 ), "", "", _( 712 ), _( 711 ), )
+        if ( ok ):
+            try:
+                # TODO: change this to U:
+                # we use "U:\\" for linux, windows and osx for platform mode
+                drive = ( "Q:\\", "Q:\\", )[ os.environ.get( "OS", "xbox" ) == "xbox" ]
+                # get the thumbnail the user chooses
+                thumbnail_copy_path = get_browse_dialog( default=xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", plugins[ plugin ], "thumbnails", "thumbs", "default.tbn" ) ), heading="%s - %s" % ( _( 710 ), plugins[ plugin ], ), dlg_type=2, mask=".tbn", use_thumbs=True )
+                # create the progress dialog
+                dialog = xbmcgui.DialogProgress()
+                dialog.create( plugins[ plugin ] )
+                dialog.update(-1, _( 725 ), "", _( 67 ) )
+                from shutil import copytree, rmtree, copyfile
+                # the main plugin path to install to
+                plugin_install_path = xbmc.translatePath( os.path.join( drive + "plugins", "video", plugins[ plugin ] ) )
+                # path where plugin is copied from
+                plugin_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "plugins", plugins[ plugin ] ) )
+                # we need pysqlite2 for database access
+                pysqlite2_install_path = xbmc.translatePath( os.path.join( drive + "plugins", "video", plugins[ plugin ], "pysqlite2" ) )
+                # path where pysqlite2 is copied from
+                pysqlite2_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
+                # remove an existing install if it exists
+                if ( os.path.isdir( plugin_install_path ) ):
+                    rmtree( plugin_install_path )
+                # copy our main directory
+                copytree( plugin_copy_path, plugin_install_path )
+                # copy pysqlite2
+                copytree( pysqlite2_copy_path, pysqlite2_install_path )
+                # default.tbn install path
+                thumbnail_install_path = xbmc.translatePath( os.path.join( drive + "plugins", "video", plugins[ plugin ], "default.tbn" ) )
+                # folder.jpg install path (probably not needed)
+                folderjpg_install_path = xbmc.translatePath( os.path.join( drive + "plugins", "video", plugins[ plugin ], "folder.jpg" ) )
+                # get the cached thumb name
+                cached_thumbnail = xbmc.getCacheThumbName( os.path.join( drive + "plugins", "video", plugins[ plugin ] + "\\" ) )
+                # cached thumb path (we delete the existing, so our plugin re-caches the new thumb)
+                cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", cached_thumbnail ) )
+                # get the root cached thumb name
+                root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/"+ plugins[ plugin ] + "/" )
+                # root cached thumb path (deleting does not work, so we overwrite the existing)
+                root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", root_cached_thumbnail ) )
+                # copy default.tbn
+                copyfile( thumbnail_copy_path, thumbnail_install_path )
+                # copy folder.jpg (probably not needed)
+                copyfile( thumbnail_copy_path, folderjpg_install_path )
+                # copy default.tbn for our root folder (deleting never refreshes it)
+                copyfile( thumbnail_copy_path, root_cached_thumbnail_path )
+                # delete our cached thumbnail
+                if ( os.path.isfile( cached_thumbnail_path ) ):
+                    os.remove( cached_thumbnail_path )
+                dialog.close()
+                # TODO: enable this once webserver does not need to be running
+                """
+                # add the bookmark to sources.xml
+                addbookmark = xbmcgui.Dialog().yesno( plugins[ plugin ], _( 723 ), _( 724 ), "", _( 712 ), _( 714 ) )
+                if ( addbookmark ):
+                    xbmc.executehttpapi( "Config(addbookmark,video,%s,plugin://video/%s/)" % ( plugins[ plugin ], plugins[ plugin ], ) )
+                else:
+                """
+            except:
+                # oops notify user an error occurred
+                dialog.close()
+                ok = xbmcgui.Dialog().ok( plugins[ plugin ], _( 730 ) )
+                return
+    if ( ok ):
+        # inform user of installation procedure for plugin
+        ok = xbmcgui.Dialog().ok( plugins[ plugin ], _( 720 ), _( 721 ), _( 722 ) )
 
 def get_keyboard( default="", heading="", hidden=False ):
     """ shows a keyboard and returns a value """

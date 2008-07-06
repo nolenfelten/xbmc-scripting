@@ -196,15 +196,8 @@
     <string id="603">Location</string>
 
     <!-- Plugin -->
-    <string id="700">Apple Movie Trailers</string>
-    <string id="701">This plugin allows you to watch trailers</string>
-    <string id="702">from the videos window.</string>
-    <string id="703">Would you like to install this plugin?</string>
-
-    <string id="704">Home Theater</string>
-    <string id="705">This plugin plays a number of random trailers</string>
-    <string id="706">before playing the selected movie.</string>
-    <string id="707">Would you like to install this plugin?</string>
+    <string id="700">This plugin allows you to watch trailers from the videos media window. It still requires the script be installed and up to date for full functionality. It has it's own settings accessed from plugin settings.</string>
+    <string id="701">This plugin plays optional coming attraction video(s), feature presentation video(s) and 0 - 5 random trailers before playing the selected movie. Then optional end of feature presentation video(s). It still requires the script be installed and up to date for full functionality. It has it's own settings accessed from plugin settings.</string>
 
     <string id="710">Browse for thumbnail</string>
     <string id="711">Install</string>
@@ -222,6 +215,11 @@
     <string id="725">Installing plugin...</string>
 
     <string id="730">There was an error installing plugin!</string>
+
+    <string id="750">Would you like to install this plugin?</string>
+    <string id="755">This will install all the plugins.</string>
+
+    <string id="799">All plugins</string>
     
     <!-- Credits -->
     <string id="900">Version</string>
