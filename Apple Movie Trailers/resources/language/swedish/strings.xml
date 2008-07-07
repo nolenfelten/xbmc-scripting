@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="0">Apple Movie Trailers</string>
-  <string id="1">Xbox Media Center</string>
+  <string id="1">Xbmc Media Center</string>
   <string id="2">blittan</string>
+  <string id="36">Tar bort gamla xml filer...</string>
   <string id="37">Uppdaterar genreinformation...</string>
   <string id="38">Uppdaterar genre- och trailer-information...</string>
   <string id="39">Spela alla</string>
@@ -152,14 +153,8 @@
   <string id="601">Hittar showtimes, vg vänta...</string>
   <string id="602">Datum</string>
   <string id="603">Plats</string>
-  <string id="700">Apple Movie Trailers instick</string>
-  <string id="701">Detta instick gör det möjligt att se trailers</string>
-  <string id="702">från filmfönstret.</string>
-  <string id="703">Vill du installera insticket?</string>
-  <string id="704">Movie Theater Plugin</string>
-  <string id="705">Detta instick spelar ett antal slumpmässiga trailers</string>
-  <string id="706">före den valda filmen.</string>
-  <string id="707">Vill du installera insticket?</string>
+  <string id="700">Detta instick tillåter dig se på trailers från Filmfönstret. Det kräver dock fortfarande skriptet att vara installerat och uppdaterat för att fungera fullt ut. Det har sina egna inställningar i insticksinställningarna.</string>
+  <string id="701">Detta instick spelar en valfri frågesport, kommande film trailer, framtida presentation, klassificeringsvideo och 0 - 5 slumpmässiga trailers före spelandet av den valda filmen. Efter det ett valfritt slut på den framtida presentationen. Det kräver fortfaranade skriptet att vara installerat och uppdaterat för full funktion. Det har sina egna inställningar i insticksinställningarna.</string>
   <string id="710">Bläddra efter miniatyr</string>
   <string id="711">Installera</string>
   <string id="712">Hoppa över</string>
@@ -172,6 +167,9 @@
   <string id="724">instick i din sources.xml fil?</string>
   <string id="725">Installerar instick</string>
   <string id="730">Ett fel uppstod under installeringen av instick!</string>
+  <string id="750">Vill du installera detta instick?</string>
+  <string id="755">Detta installerar alla instick.</string>
+  <string id="799">Alla instick</string>
   <string id="900">Version</string>
   <string id="901">Team:</string>
   <string id="902">Annat:</string>
