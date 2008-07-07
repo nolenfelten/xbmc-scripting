@@ -19,7 +19,7 @@
 			<texture>amt-background-bottom.png</texture>
 		</control>
 		<control type="label">
-			<description>xbox media center label</description>
+			<description>xbmc media center label</description>
 			<posx>200</posx>
 			<posy>43</posy>
 			<align>right</align>
