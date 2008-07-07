@@ -93,7 +93,7 @@ class Trivia( xbmcgui.WindowXML ):
             questions = []
             clues = []
             answers = []
-            # enumerate through our entries list and add the items in ther proper order question, clue, answer
+            # enumerate through our entries list and separate question, clue, answer
             for entry in entries:
                 if ( entry.lower().endswith( ".jpg" ) ):
                     # fix path
@@ -107,7 +107,7 @@ class Trivia( xbmcgui.WindowXML ):
                     # question
                     else:
                         questions += [ file_path ]
-            # group the appropriate slides into their own list
+            # group the appropriate slides into their own list and order them question, clue, answer
             slides = []
             for count, question in enumerate( questions ):
                 slide = []
