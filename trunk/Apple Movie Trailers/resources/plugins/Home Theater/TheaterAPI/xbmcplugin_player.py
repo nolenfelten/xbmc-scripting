@@ -140,9 +140,6 @@ class Trivia( xbmcgui.WindowXML ):
         try:
             # replace <li>
             path = path.replace( "<li>", "" )
-            # remove slash at end
-            if ( path.endswith( "/" ) or path.endswith( "\\" ) ):
-                path = path[ : -1 ]
             # make it a unicode object
             path = unicode( path, "utf-8" )
         except:
