@@ -18,11 +18,11 @@
 			<texture>contentpanel.png</texture>
 		</control>
 		<control type="label" id="1">
-			<description>xbox media center label</description>
+			<description>xbmc media center label</description>
 			<posx>200</posx>
 			<posy>43</posy>
 			<align>right</align>
-			<label>xbox media center</label>
+			<label>xbmc media center</label>
 			<font>special12</font>
 		</control>
 		<control type="label" id="1">
