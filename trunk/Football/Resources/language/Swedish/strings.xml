@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <strings>
     <string id="0">Fotboll</string>
-    <string id="100">Error!</string>
+    <!-- Error messages -->
+    <string id="100">Fel!</string>
     <string id="101">Val ej tillgängligt för denna liga!</string>
     <string id="102">Ingen information.[CR]Websidan kan vara ändrad!?</string>
     <string id="103">BBC's egna mediaspelare stödjs inte än!</string>
+    <!-- Prompt messages -->
     <string id="200">Laddar ner uppdaterade ligor.</string>
+    <!-- Yes/No buttons -->
+    <!-- script common messages -->
     <string id="300">Vänta ...</string>
     <string id="301">Klart</string>
     <string id="302">Laddar ner ...</string>
@@ -14,8 +18,10 @@
     <string id="305">RSS Feed ...</string>
     <string id="306">Medialänk ...</string>
     <string id="307">Fotolänk ...</string>
+    <!-- datasources -->
     <string id="330">BBC Sport (UK - Indepth)</string>
     <string id="331">SoccerStand.com  (Intl - Scores)</string>
+    <!-- titles -->
     <string id="350">Resultat:</string>
     <string id="351">Live Text:</string>
     <string id="352">Uppdateras varannan minut.</string>
@@ -37,16 +43,20 @@
     <string id="368">(Profil tillgänglig)</string>
     <string id="369">Välj tävling</string>
     <string id="370">Välj tabell</string>
+    <!-- menu options -->
     <string id="500">Avsluta</string>
     <string id="501">Meny</string>
     <string id="503">Visa LäsMig</string>
-    <string id="504">Visa Script Ändringar</string>
+    <string id="504">Visa Skript-ändringar</string>
     <string id="505">Inställningar</string>
-    <string id="520">Rensa lag I ligan</string>
+    <!-- settings options -->
+    <string id="520">Rensa lag i ligan</string>
     <string id="521">Visa LäsMig</string>
     <string id="522">Visa Script Ändringar</string>
     <string id="523">Välj datakälla</string>
     <string id="524">Söka efter uppdatering av script vid start?</string>
+    <string id="525">Innehållslistetypsnitt</string>
+    <!-- misc menu/prompts -->
     <string id="530">Live Results</string>
     <string id="531">Internationellt</string>
     <string id="532">UEFA Cup</string>
@@ -106,8 +116,9 @@
     <string id="586">Schweiz</string>
     <string id="587">Turkiet</string>
     <string id="588">Afrika</string>
+    <!-- Update messages -->
     <string id="1000">Din version är den senaste.</string>
-    <string id="1001">Kontrollerar uppdateringar för script...</string>
+    <string id="1001">Kontrollerar uppdateringar för skript...</string>
     <string id="1002">Är nyare</string>
     <string id="1003">Vill du updatera?</string>
     <string id="1004">Hämtar filer...</string>
@@ -116,7 +127,8 @@
     <string id="1007">Hämtar:</string>
     <string id="1008">Sökväg:</string>
     <string id="1009">Fil:</string>
-    <string id="1010">Script uppdaterat, startar om</string>
+    <string id="1010">Skript uppdaterat, startar om</string>
+    <!-- Update error messages -->
     <string id="1030">Ingen ny version hittades!</string>
     <string id="1031">Uppdatering misslyckades!</string>
 </strings>

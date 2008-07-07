@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">Serier</string>
-
     <!-- Error messages -->
     <string id="100">Fel!</string>
     <string id="101">Kunde inte öppna filen!</string>
@@ -11,39 +10,33 @@
     <string id="105">Inga bilder funna i feeden!</string>
     <string id="106">Inga serier i källan!</string>
     <string id="107">Inga upplagor tillgängliga för serien!</string>
-    <string id="108">Hittade inga bilder!</string>
-
+    <string id="108">Hittade inga bildlänkar!</string>
     <!-- Status messages -->
     <string id="200">Letar feeds ...</string>
     <string id="201">Laddar ner feed ...</string>
     <string id="202">Laddar ner bild ...</string>
     <string id="203">Serie: </string>
     <string id="204">Upplaga: </string>
-
     <!-- script common messages -->
     <string id="300">Vänligen vänta ...</string>
     <string id="301">Lyckades</string>
     <string id="302">Laddar ner ...</string>
-
+    <string id="303">Skrapar HTML ...</string>
     <!-- Yes/No buttons -->
     <string id="350">Ja</string>
     <string id="351">Nej</string>
-
     <!-- Dialog titles -->
     <string id="400">Källa: </string>
-
     <!-- menu options -->
     <string id="500">Avsluta</string>
     <string id="501">Meny</string>
-    <string id="503">Visa Script Readme</string>
-    <string id="504">Visa Script ChangeLog</string>
-
+    <string id="503">Visa Skript Readme</string>
+    <string id="504">Visa Skript ChangeLog</string>
     <!-- misc menu/prompts -->
     <string id="560">Välj seriekälla</string>
     <string id="561">Välj helskärm</string>
     <string id="562">Helskärm</string>
     <string id="563">Välj</string>
-
     <!-- Update messages -->
     <string id="1000">Din version är aktuell.</string>
     <string id="1001">Hämtar nuvarande taggade versioner...</string>
@@ -56,8 +49,6 @@
     <string id="1008">Sökväg:</string>
     <string id="1009">Fil:</string>
     <string id="1010">Din nya version sparades som:</string>
-    <string id="1011">Använd filhanteraren för att ta bort gamla versioner</string>
-
     <!-- Update error messages -->
     <string id="1030">Inga taggade versioner hittades!</string>
     <string id="1031">Ett fel uppstod vid uppdatering av skriptet!</string>
