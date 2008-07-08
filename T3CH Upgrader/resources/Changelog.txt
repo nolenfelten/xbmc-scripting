@@ -1,5 +1,8 @@
 T3CH Upgrader Changelog:
 ========================
+v1.6.2 07/07/08
+  New: Vision2 skin added (thanks smuto)
+  Updated: Swedish strings.
 v1.6.1 19/05/08
   Change: Checks (and creates) settings unrar path exists. (eg. E:\apps)
   Change: When checking SFV, if filename entry not found, does 2nd check for filename+ext
