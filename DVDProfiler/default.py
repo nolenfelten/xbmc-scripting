@@ -21,9 +21,9 @@ from shutil import rmtree
 
 # Script doc constants
 __scriptname__ = "DVDProfiler"
-__version__ = '1.6.1'
+__version__ = '1.6.2'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '08-07-2008'
+__date__ = '09-07-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -58,6 +58,8 @@ BASE_URL_INVOS = "www.invelos.com"
 NOIMAGE_FILENAME = os.path.join( DIR_GFX , 'noimage.png' )
 TICK_FILENAME = os.path.join( DIR_GFX , 'tick.png' )
 FILM_FILENAME = os.path.join( DIR_GFX , 'film.png' )
+
+QUIT_SCRIPT = -1
 
 #################################################################################################################
 class DVDProfiler(xbmcgui.Window):
@@ -155,7 +157,10 @@ class DVDProfiler(xbmcgui.Window):
 
 		elif action in CONTEXT_MENU:
 			debug("CONTEXT_MENU")
-			if self.mainMenu():             # restart ?
+			success = self.mainMenu()             # restart ?
+			if success == QUIT_SCRIPT:
+				self.close()
+			elif success:
 				if not self.startup():
 					if self.onlineAliasData:		# gforce back from online alias
 						self.ready = True
@@ -1437,7 +1442,7 @@ class DVDProfiler(xbmcgui.Window):
 		# show this dialog and wait until it's closed
 		selectedPos = 0
 		restart = False
-		while True:
+		while restart == False:
 			menu = _makeMenu()
 			selectDialog = DialogSelect()
 			selectDialog.setup(__language__(502),width=450, rows=len(menu))
@@ -1453,10 +1458,13 @@ class DVDProfiler(xbmcgui.Window):
 				saveFileObj(self.SETTINGS_FILENAME, self.settings)
 			elif selectedOpt == OPT_UPDATE_SCRIPT:
 				if updateScript(False, True):							# never silent from config menu
-					dialogOK(__language__(0),__language__(1010))
-					# restart script after update
-					xbmc.executebuiltin('XBMC.RunScript(%s)'%(os.path.join(DIR_HOME, 'default.py')))
-					sys.exit(0)	# end current instance
+					xbmc.output("update issued - exit script")
+#					dialogOK(__language__(0), __language__(1010))
+#					xbmc.executebuiltin('XBMC.RunScript(%s)'%(os.path.join(DIR_HOME, 'default.py')))
+#					sys.exit(0)	# end current instance
+					restart = QUIT_SCRIPT
+				else:
+					print "user chosen NOT to update script"
 			elif selectedOpt == OPT_CLEAR_CACHE:
 				restart = self.clearCache()
 			elif selectedOpt == OPT_START_MODE:
@@ -2503,12 +2511,12 @@ class Filters(xbmcgui.WindowDialog):
 		return selectedGenres, selectedTags
 
 ######################################################################################
-def updateScript(quite=False, notifyNotFound=False):
-	debug( "> updateScript() quite=%s" %quite)
+def updateScript(silent=False, notifyNotFound=False):
+	debug( "> updateScript() silent=%s" %silent)
 
 	updated = False
 	up = update.Update(__language__, __scriptname__)
-	version = up.getLatestVersion(quite)
+	version = up.getLatestVersion(silent)
 	debug("Current Version: %s Tag Version: %s" % (__version__,version))
 	if version and version != "-1":
 		if __version__ < version:
@@ -2520,7 +2528,7 @@ def updateScript(quite=False, notifyNotFound=False):
 				up.issueUpdate(version)
 		elif notifyNotFound:
 			dialogOK(__language__(0), __language__(1000))
-#	elif not quite:
+#	elif not silent:
 #		dialogOK(__language__(0), __language__(1030))				# no tagged ver found
 
 	del up

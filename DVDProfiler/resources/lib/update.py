@@ -123,6 +123,7 @@ class Update:
 		xbmc.output("> Update().issueUpdate() version=%s" % version)
 		path = os.path.join(self.local_backup_dir, 'resources\\lib\\update.py')
 		command = 'XBMC.RunScript(%s,%s,%s)'%(path, self.script.replace('%20',' '), version)
+		xbmc.output("cmd="+ command)
 		xbmc.executebuiltin(command)
 		xbmc.output("< Update().issueUpdate() done")
 	
@@ -192,8 +193,9 @@ class Update:
 
 if __name__ == "__main__":
 	xbmc.output("update.py running from __main__")
+	xbmc.output("sys.argv=%s" % sys.argv)
 	if len(sys.argv) != 3:
-		xbmcgui.Dialog().ok("Update error",  "Not enough arguments were passed for update")
+		xbmcgui.Dialog().ok("Update error",  "Not enough arguments were passed for update, Language and scriptname required")
 		sys.exit(1)
 	up = Update(language.Language().localized,sys.argv[1])
 	up.removeOriginal()
