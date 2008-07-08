@@ -110,8 +110,20 @@ class Main:
                     # set an overlay if one is practical
                     overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in url or "1080p.mov" in url ]
                     overlay = ( overlay, xbmcgui.ICON_OVERLAY_WATCHED, )[ watched ]
+                    # release date and year
+                    try:
+                        parts = trailer[ 9 ].split( " " )
+                        year = int( parts[ 2 ] )
+                        day = int( parts[ 1 ][ : -3 ] )
+                        month = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ].index( parts[ 0 ] ) + 1
+                        release_date = "%02d-%02d-%04d" % ( day, month, year, )
+                    except:
+                        release_date = ""
+                        year = 0
                     # add the different infolabels we want to sort by
-                    listitem.setInfo( type="Video", infoLabels={ "Watched": watched, "Overlay": overlay, "Duration": trailer[ 6 ], "MPAA": rating, "Plot": plot, "Plotoutline": plot, "Title": trailer[ 1 ], "Year": trailer[ 9 ], "Genre": genre, "Studio": studio, "Cast": cast } )
+                    listitem.setInfo( type="Video", infoLabels={ "Watched": watched, "Date": release_date, "Overlay": overlay, "Duration": trailer[ 6 ], "MPAA": rating, "Plot": plot, "Plotoutline": plot, "Title": trailer[ 1 ], "Year": year, "Genre": genre, "Studio": studio, "Cast": cast } )
+                    # set release date property
+                    listitem.setProperty( "releasedate", trailer[ 9 ] )
                     # add the item to the media list
                     ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, totalItems=len(trailers) )
                     # if user cancels, call raise to exit loop
@@ -124,6 +136,7 @@ class Main:
         # if successful and user did not cancel, set our sort orders, content, plugin category and fanart
         if ( ok ):
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+            xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
             xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR )

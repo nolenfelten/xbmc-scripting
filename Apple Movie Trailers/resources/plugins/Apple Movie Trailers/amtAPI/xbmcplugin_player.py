@@ -16,6 +16,8 @@ g_mpaa_rating = xbmc.getInfoLabel( "ListItem.MPAA" )
 g_thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
 # set our plotoutline
 g_plotoutline = unicode( xbmc.getInfoLabel( "ListItem.PlotOutline" ), "utf-8" )
+# set our released date
+g_releasedate = xbmc.getInfoLabel( "ListItem.Property(releasedate)" )
 # set our year
 g_year = 0
 if ( xbmc.getInfoLabel( "ListItem.Year" ) ):
@@ -200,6 +202,8 @@ class Main:
                 listitem = xbmcgui.ListItem( g_title, iconImage=icon, thumbnailImage=thumbnail )
                 # set the key information
                 listitem.setInfo( "video", { "Title": "%s%s" % ( g_title, ( "", " (%s %d)" % ( xbmc.getLocalizedString( 30504 ), count + 1, ) )[ len( filepaths ) > 1 ], ), "Genre": g_genre, "Studio": g_studio, "Plot": g_plotoutline, "PlotOutline": g_plotoutline, "Year": g_year } )
+                # set release date property
+                listitem.setProperty( "releasedate", g_releasedate )
                 # add our item
                 playlist.add( filepath, listitem )
             # mark the video watched
