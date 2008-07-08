@@ -35,7 +35,7 @@ class Movie:
         - runtime (string - movie runtime)
         - rating (string - movie rating)
         - rating_url (string - path to rating image file)
-        - year (integer - year of movie)
+        - release_date (text - date in theaters)
         - watched (integer - number of times watched)
         - watched_date (string - last watched date)
         - favorite (integer - 1=favorite)
@@ -463,7 +463,7 @@ class Trailers:
                 self.plot = ""
                 self.rating = ""
                 self.rating_url = ""
-                self.year = 0
+                self.release_date = ""
                 self.runtime = ""
                 if ( movie[ 10 ] ):
                     self.times_watched = movie[ 10 ]
@@ -527,13 +527,10 @@ class Trailers:
                     plot = plot.replace( "\n", " " )
                     self.plot = plot
                 
-                # -- year --
-                year = element.getiterator( self.ns( "SetFontStyle" ) )[ 3 ].text.strip()
-                if year and "In Theaters:" in year:
-                    try:
-                        self.year = int( year[ -5 : ] )
-                    except:
-                        pass
+                # -- release date --
+                release_date = element.getiterator( self.ns( "SetFontStyle" ) )[ 3 ].text.strip()
+                if release_date and "In Theaters:" in release_date:
+                    self.release_date = release_date.split( ":" )[ 1 ].strip()
 
                 # -- actors --
                 SetFontStyles = element.getiterator( self.ns( "SetFontStyle" ) )
@@ -625,7 +622,7 @@ class Trailers:
                 print "Trailer XML %s: %s is %s" % ( self.idMovie, repr( url ), ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
 
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.runtime,
-                            self.rating, self.rating_url, self.year, self.times_watched, self.last_watched, self.favorite,
+                            self.rating, self.rating_url, self.release_date, self.times_watched, self.last_watched, self.favorite,
                             repr( self.saved ), date_added, self.actors, self.studio, )
             success = records.update( "movies", ( 2, 15, ), ( info_list[ 2 : 15 ] ) + ( self.idMovie, ), "idMovie" )
             return info_list
@@ -673,7 +670,7 @@ class Trailers:
                                 runtime = movie[6],
                                 rating = movie[7],
                                 rating_url = rating_url,
-                                year = movie[9],
+                                release_date = movie[9],
                                 watched = movie[10],
                                 watched_date = movie[11],
                                 favorite = movie[12],

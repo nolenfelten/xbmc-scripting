@@ -243,7 +243,7 @@ class Main:
         # if there is a trailer intro video add it
         if ( self.settings[ "coming_attraction_videos" ] ):
             # create our trailer record
-            trailer = ( self.settings[ "coming_attraction_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "coming_attraction_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "coming_attraction_videos" ], "", "", "", "", "", 0, "", "", "", "", "", "", "Coming Attractions Intro", 0.0, "", )
+            trailer = ( self.settings[ "coming_attraction_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "coming_attraction_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "coming_attraction_videos" ], "", "", "", "", "", "0 0 0", "", "", "", "", "", "", "Coming Attractions Intro", 0.0, "", )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
@@ -266,7 +266,7 @@ class Main:
         # if there is a movie intro video add it
         if ( self.settings[ "feature_presentation_videos" ] ):
             # create our trailer record
-            trailer = ( self.settings[ "feature_presentation_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "feature_presentation_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "feature_presentation_videos" ], "", "", "", "", "", 0, "", "", "", "", "", "", "Feature Presentation Intro", 0.0, "", )
+            trailer = ( self.settings[ "feature_presentation_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "feature_presentation_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "feature_presentation_videos" ], "", "", "", "", "", "0 0 0", "", "", "", "", "", "", "Feature Presentation Intro", 0.0, "", )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
@@ -278,7 +278,7 @@ class Main:
             # if a rating exists add it
             if ( os.path.isfile( rating_path ) ):
                 # create our trailer record
-                trailer = ( rating_path, os.path.splitext( os.path.basename( rating_path ) )[ 0 ], "", rating_path, "", "", "", "", "", 0, "", "", "", "", "", "", "MPAA Rating", 0.0, "", )
+                trailer = ( rating_path, os.path.splitext( os.path.basename( rating_path ) )[ 0 ], "", rating_path, "", "", "", "", "", "0 0 0", "", "", "", "", "", "", "MPAA Rating", 0.0, "", )
                 # create the listitem and fill the infolabels
                 listitem = self._get_listitem( trailer )
                 # add our item to the playlist
@@ -288,7 +288,7 @@ class Main:
         if ( not g_genre ):
             genre = "Feature Presentation"
         # add the selected video to our playlist
-        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", g_year, "", "", "", "", "", g_studio, genre, g_rating, g_director, )
+        trailer = ( sys.argv[ 0 ] + sys.argv[ 2 ], g_title, "", self.args.path, g_thumbnail, g_plotoutline, "", "", "", "0 0 %d" % g_year, "", "", "", "", "", g_studio, genre, g_rating, g_director, )
         # create the listitem and fill the infolabels
         listitem = self._get_listitem( trailer )
         # add our item to the playlist
@@ -296,7 +296,7 @@ class Main:
         # if there is a end of movie video add it
         if ( self.settings[ "end_presentation_videos" ] ):
             # create our trailer record
-            trailer = ( self.settings[ "end_presentation_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "end_presentation_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "end_presentation_videos" ], "", "", "", 0, "", 0, "", "", "", "", "", "", "End of Feature Presentation", 0.0, "", )
+            trailer = ( self.settings[ "end_presentation_videos" ], os.path.splitext( os.path.basename( unicode( self.settings[ "end_presentation_videos" ], "utf-8" ) ) )[ 0 ], "", self.settings[ "end_presentation_videos" ], "", "", "", "", "", "0 0 0", "", "", "", "", "", "", "End of Feature Presentation", 0.0, "", )
             # create the listitem and fill the infolabels
             listitem = self._get_listitem( trailer )
             # add our item to the playlist
@@ -407,8 +407,16 @@ class Main:
         icon = "DefaultVideo.png"
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = xbmcgui.ListItem( trailer[ 1 ], iconImage=icon, thumbnailImage=thumbnail )
+        # release date and year
+        try:
+            parts = trailer[ 9 ].split( " " )
+            year = int( parts[ 2 ] )
+        except:
+            year = 0
         # add the different infolabels we want to sort by
-        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "year": trailer[ 9 ], "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "Plot": trailer[ 5 ], "PlotOutline": trailer[ 5 ], "Rating": trailer[ 17 ], "Director": trailer[ 18 ] } )
+        listitem.setInfo( type="Video", infoLabels={ "Title": trailer[ 1 ], "Year": year, "Studio": trailer[ 15 ], "Genre": trailer[ 16 ], "Plot": trailer[ 5 ], "PlotOutline": trailer[ 5 ], "Rating": trailer[ 17 ], "Director": trailer[ 18 ] } )
+        # set release date property
+        listitem.setProperty( "releasedate", trailer[ 9 ] )
         return listitem
 
     def _get_thumbnail( self, item, url ):
@@ -469,7 +477,7 @@ class Main:
                 # update the record with our new values
                 ok = records.update( update_sql, ( times_watched, last_watched, idMovie, ) )
             # close the database
-            db.close()
+            records.close()
         except:
             # oops print error message
             print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )

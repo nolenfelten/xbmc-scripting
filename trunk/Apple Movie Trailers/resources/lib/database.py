@@ -153,7 +153,6 @@ class Database:
                 if ( ok ): updated = True
             records.close()
             return ok, updated
-
         def _update_table_movies():
             try:
                 sql = "ALTER TABLE movies ADD saved_core integer"
@@ -205,11 +204,14 @@ class Database:
             return ok
         
         msg = ( _( 53 ), _( 54 ), )
-        if ( version in ( "pre-0.99.5a", "pre-0.99.5b", ) ):
+        """
+        if ( version in ( "pre-0.99.5a", "pre-0.99.5b", "pre-0.99.5c", ) ):
             try:
                 if ( version == "pre-0.99.5a" ):
                     ok = _fix_trailer_urls()
                     if ( not ok ): raise
+                #if ( version in ( "pre-0.99.5a", "pre-0.99.5b", "pre-0.99.5c", ) ):
+                #    _update_table_movies()
                 ok = _update_version()
                 if ( not ok ): raise
             except:
@@ -219,8 +221,11 @@ class Database:
             else:
                 xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ], msg[ 2 ] )
         else:
+        """
+        if 1:
             xbmcgui.Dialog().ok( __scriptname__, msg[ 1 ] )
-            _remove_xmls()
+            if ( version not in ( "pre-0.99.5a", "pre-0.99.5b", "pre-0.99.5c", ) ):
+                _remove_xmls()
             os.remove( BASE_DATABASE_PATH )
             version, complete = self._create_database()
             return ( __version__, complete )
@@ -261,7 +266,7 @@ class Tables( dict ):
             ( "runtime", "text", "", "", "" ),
             ( "rating", "text", "", "", "" ),
             ( "rating_url", "text", "", "", "" ),
-            ( "year", "integer", "", "", "" ),
+            ( "release_date", "text", "", "", "" ),
             ( "times_watched", "integer", "", "", "" ),
             ( "last_watched", "text", "", "", "" ),
             ( "favorite", "integer", "", "", "" ),

@@ -271,7 +271,19 @@ class GUI( xbmcgui.WindowXML ):
                         list_item.select( movie.favorite )
                         plot = ( movie.plot, _( 400 ), )[ not movie.plot ]
                         overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in repr( movie.trailer_urls ) or "1080p.mov" in repr( movie.trailer_urls ) ]
-                        list_item.setInfo( "video", { "Title": movie.title, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating } )
+                        # release date and year
+                        try:
+                            parts = movie.release_date.split( " " )
+                            year = int( parts[ 2 ] )
+                            day = int( parts[ 1 ][ : -3 ] )
+                            month = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ].index( parts[ 0 ] ) + 1
+                            release_date = "%02d-%02d-%04d" % ( day, month, year, )
+                        except:
+                            release_date = ""
+                            year = 0
+                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio } )
+                        # set release date property
+                        list_item.setProperty( "releasedate", movie.release_date )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
@@ -527,7 +539,11 @@ class GUI( xbmcgui.WindowXML ):
                             else: s = selected
                             plot = ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ]
                             t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
-                            listitem.setInfo( "video", { "Title": t, "Year": self.trailers.movies[ trailer ].year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
+                            try:
+                                year = int( self.trailers.movies[ trailer ].release_date[ -5 : ] )
+                            except:
+                                year = 0
+                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
@@ -563,10 +579,10 @@ class GUI( xbmcgui.WindowXML ):
     def showContextMenu( self ):
         if ( self.controlId == self.CONTROL_CATEGORY_LIST or self.controlId == self.CONTROL_CAST_LIST ):
             selection = self.getControl( self.controlId ).getSelectedPosition()
-            controlId= self.controlId
+            #controlId= self.controlId
         else:
             selection = self.getCurrentListPosition()
-            controlId = self.CONTROL_TRAILER_LIST_START
+        controlId = self.getFocusId()#self.CONTROL_TRAILER_LIST_START
         x, y = self.getControl( controlId ).getPosition()
         w = self.getControl( controlId ).getWidth()
         h = self.getControl( controlId ).getHeight()# - self.getControl( controlId ).getItemHeight()
