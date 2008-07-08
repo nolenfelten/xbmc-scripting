@@ -10,7 +10,7 @@
     <string id="102">Collection not retrieved or[CR]XML export file is empty ?</string>
     <string id="103">Local Collection file missing</string>
     <string id="104">-</string>
-    <string id="105">Please configure or Disable SMB</string>
+    <string id="105">Please Configure or Disable SMB</string>
     <string id="109">Unknown Online Alias: </string>
     <string id="110">Empty Online Collection: </string>
     <string id="111">Duplicate Alias!</string>

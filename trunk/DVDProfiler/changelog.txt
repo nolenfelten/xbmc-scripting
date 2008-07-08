@@ -1,7 +1,7 @@
 Version     Date        Change
- 1.6.1      18/06/08    Fix: Better handling of non-english XML and language.
+ 1.6.1      08/07/08    Fix: Better handling of non-english XML and language.
                         Fix: Better decoding of non-ascii characters.
-                        Change: IMDb scraping updated.
+                        Updated: IMDb scraping and improved image handling.
                         New: XML item <slot> added to DVD Information.
                         New: French language added (thanks jeepcook).
  1.6        08/04/08    Change: Removed ClientCookie.py by using python 2.4 cookieLib instead.
