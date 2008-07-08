@@ -132,7 +132,7 @@ def smbFetchFile(smbPath, localPath, remote=None, hostIP='', silent=True):
 				remote.retr_file(service, remotePath, f.write)
 				f.close()
 			except smb.SessionError, ex:
-				handleExceptionSMB(ex, __language__(951))
+				handleExceptionSMB(ex, __language__(951), remotePath)
 			except:
 				handleException()
 			else:
@@ -168,7 +168,7 @@ def smbSendFile(remote, share, localPath, remotePath, silent=False):
 			f.close()
 			success = True
 		except smb.SessionError, ex:
-			handleExceptionSMB(ex, __language__(951))
+			handleExceptionSMB(ex, __language__(951), remotePath)
 		except:
 			messageOK(__language__(951), remotePath, localPath)
 			handleException()
@@ -226,24 +226,27 @@ def isNewSMBFile(smbPath, localPath, remote=None, hostIP='', silent=False):
 	return newFileFound
 
 ###############################################################################################################
-def handleExceptionSMB(ex, title):
+def handleExceptionSMB(ex, title, msg=""):
 	print "handleExceptionSMB()"
 	try:
-		errCodeStr = "Err Codes: " + str(ex[1]) + ", " + str(ex[2])
+		xbmcgui.unlock()
+	except: pass
+	try:
+		t = "%s ErrCodes: %s, %s" % (title, ex[1], ex[2])
 		if ex[1] == 1 and ex[2] == 2:			# file not found
-			messageOK(title,errCodeStr,"Remote file not found.")
+			messageOK(t,msg,"Remote file not found.")
 		elif ex[1] == 1 and ex[2] == 3:
-			messageOK(title,errCodeStr,"Directory invalid","Please correct SMB Path")
+			messageOK(t,msg,"Directory invalid","Please correct SMB Path")
 		elif ex[1] == 1 and ex[2] == 5:			# Access denied
-			messageOK(title,errCodeStr,"Remote file Access Denied.","Check remote Permissions/User/Password are correct.")
+			messageOK(t,msg,"Remote file Access Denied.","Check remote Permissions/User/Password are correct.")
 		elif ex[1] == 1 and ex[2] == 15:
-			messageOK(title,errCodeStr,"Invalid drive specified.","Please correct SMB Path.")
+			messageOK(t,msg,"Invalid drive specified.","Please correct SMB Path.")
 		elif ex[1] == 1 and ex[2] == 32:
-			messageOK(title,errCodeStr,"Share mode can't be granted.","Please check remote share.")
+			messageOK(t,msg,"Share mode can't be granted.","Please check remote share.")
 		elif ex[1] == 1 and ex[2] == 67:
-			messageOK(title,errCodeStr,"Invalid Share Name.","Please correct SMB Path.")
+			messageOK(t,msg,"Invalid Share Name.","Please correct SMB Path.")
 		else:									# trap other SMB err
-			messageOK(title,errCodeStr, "UnTrapped error codes, Check smb.h for definition.")
+			messageOK(t, msg,"UnTrapped error codes, Check smb.h for definition.")
 	except:
 		handleException("handleExceptionSMB()")
 

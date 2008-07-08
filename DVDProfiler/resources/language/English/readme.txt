@@ -8,22 +8,28 @@
  SETUP:
  1) Unpack into xbox scripts folder, keeping folder structure intact (important)
  2) Enabled Sharing on C:\Program Files\InterVocative Software\DVD Profiler
- 3) Export collection as a XML file to:
-        C:\Program Files\InterVocative Software\DVD Profiler\EXPORT\collection.xml
+ 3) Export collection as a XML file to a SMB (share) location:
+        eg C:\Program Files\InterVocative Software\DVD Profiler\EXPORT\collection.xml
+        or (recommended)
+        eg My Documents\DVD Profiler\EXPORT
  4) run script
 
  SMB SETUP:
  1) Define the base part of SMB upto PCNAME
    eg. smb://<user>:<pass>@PCNAME/
 
- 2) Entere the shared folder for DVD Profiler
+ 2) Enter the share name for DVD Profiler.
+    eg DVD Profiler
  3) Enter the subfolder from the DVDProfiler share, thats holds the collection.xml
     eg EXPORT
  4) Enter the subfolder from the DVDProfiler share, thats holds the cover images
     eg IMAGES
+    or for DVD Profiler v3 its default is:
+       Databases\Default\IMAGES
  5) Enter the name of the exported collection xml file
+    eg. Collection.xml
 
-Define all the above makes a complete smb path to all the required parts.
+Defining all the above makes a complete smb path to all the required parts.
   eg. smb://<user>:<pass>@PCNAME/DVDProfiler/EXPORTS/collection.xml
 
  6) If you have media files defined in the v3 XML location tag, then you need

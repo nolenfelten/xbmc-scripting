@@ -22,7 +22,7 @@ __date__ = '09-06-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 DIR_HOME = sys.modules[ "__main__" ].DIR_HOME
-DEBUG = True
+DEBUG = False
 
 # setup cookiejar
 cookiejar = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods

@@ -23,7 +23,7 @@ from shutil import rmtree
 __scriptname__ = "DVDProfiler"
 __version__ = '1.6.1'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '19-06-2008'
+__date__ = '08-07-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -403,6 +403,7 @@ class DVDProfiler(xbmcgui.Window):
 			self.remote, remoteInfo = smbConnect(self.settings[self.SETTING_SMB_PC_IP], smbPath)
 			if self.remote and remoteInfo:
 				smbPath = self.makeDVDProSMBPath()
+				# if no collecttin file, or newer exists, fetch from SMB
 				if not fileExist(self.localCollectionFilename) or \
 						isNewSMBFile(smbPath, self.localCollectionFilename, \
 							self.remote, self.settings[self.SETTING_SMB_PC_IP]):
@@ -420,7 +421,7 @@ class DVDProfiler(xbmcgui.Window):
 					self.settings[self.SETTING_SMB_USE] = False
 					break
 
-		debug("< startupSMB() success="+str(success))
+		debug("< startupSMB() success=%s" % success)
 		return success
 
 	##############################################################################################
@@ -1966,7 +1967,6 @@ class DVDCollectionXML:
 				break
 
 
-		print self.dvdDict
 		if self.dvdDict:
 			self.dvdDict[self.COLLNUM] = [collNum]
 			success = True
