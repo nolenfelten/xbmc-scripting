@@ -8,6 +8,12 @@ Nuka1195
 
 import sys
 import os
+
+try:
+    import xbmc
+except:
+    pass
+
 from sgmllib import SGMLParser
 import urllib
 import datetime
@@ -133,6 +139,10 @@ class ShowtimesFetcher:
     """
     def __init__( self ):
         self.base_url = "http://www.google.com"
+        try:
+            self.date_format = xbmc.getRegion( "datelong" ).replace( "DDDD", "%A" ).replace( "MMMM", "%B" ).replace( "D", "%d" ).replace( "YYYY", "%Y" )
+        except:
+            self.date_format = "%A, %B %d, %Y"
 
     def get_showtimes( self, movie, location ):
         """ *REQUIRED: Returns showtimes for each theater in your local """
@@ -143,13 +153,13 @@ class ShowtimesFetcher:
             theaters = self._get_theater_list( self.base_url + "/movies?near=%s" % ( location, ) )
             return None, theaters
         else:
-            date = datetime.date( int( date.split( "-" )[ 0 ] ), int( date.split( "-" )[ 1 ] ), int( date.split( "-" )[ 2 ] ) ).strftime( "%A, %B %d, %Y" )
+            date = datetime.date( int( date.split( "-" )[ 0 ] ), int( date.split( "-" )[ 1 ] ), int( date.split( "-" )[ 2 ] ) ).strftime( self.date_format )
             return date, showtimes
     
     def get_selection( self, url ):
         """ *REQUIRED: Returns movies for the selected theater """
         date, showtimes = self._fetch_showtimes( url )
-        date = datetime.date( int( date.split( "-" )[ 0 ] ), int( date.split( "-" )[ 1 ] ), int( date.split( "-" )[ 2 ] ) ).strftime( "%A, %B %d, %Y" )
+        date = datetime.date( int( date.split( "-" )[ 0 ] ), int( date.split( "-" )[ 1 ] ), int( date.split( "-" )[ 2 ] ) ).strftime( self.date_format )
         return date, showtimes
 
     def _fetch_showtimes( self, url ):
