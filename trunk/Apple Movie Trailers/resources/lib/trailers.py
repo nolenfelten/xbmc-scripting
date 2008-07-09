@@ -195,6 +195,7 @@ class Trailers:
                                     for url2 in eval( record[ 1 ] ):
                                         url_list += [ self.base_url + url2 ]
                                     self.removeXML( url_list )
+                                    date_added = ( "", record[ 2 ], )[ record[ 2 ] is not None ]
                                     ok = records.update( "movies", ( "date_added", ), ( "u%s" % ( record[ 2 ], ), record[ 0 ], ), "idMovie" )
                                     ok = records.delete( "actor_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
                                     ok = records.delete( "studio_link_movie", ( "idMovie", ), ( record[ 0 ], ) )
@@ -484,6 +485,8 @@ class Trailers:
                 self.date_added = movie[ 14 ]
                 if ( self.date_added is not None ):
                     self.date_added = self.date_added.replace( "u", "" )
+                else:
+                    self.date_added = datetime.date.today()
                 self.actors = []
                 self.studio = ""
 
@@ -618,7 +621,6 @@ class Trailers:
                 if ( self.trailer_urls == self.old_trailer_urls ):
                     date_added = self.date_added
             except:
-                #traceback.print_exc()
                 print "Trailer XML %s: %s is %s" % ( self.idMovie, repr( url ), ( "missing", "corrupt" )[ os.path.isfile( fetcher.make_cache_filename( url ) ) ] )
 
             info_list = ( self.idMovie, self.title, repr( self.urls ), repr( self.trailer_urls ), self.poster, self.plot, self.runtime,
@@ -644,7 +646,7 @@ class Trailers:
             if ( movie_list ):
                 dialog_ok = True
                 for cnt, movie in enumerate( movie_list ):
-                    if ( movie[ 3 ] is None or movie[ 14 ].startswith( "u" ) ):
+                    if ( movie[ 3 ] is None or movie[ 14 ] is None or movie[ 14 ].startswith( "u" ) ):
                         movie = _load_movie_info( movie )
                         info_missing = True
                     else: movie = _get_actor_and_studio( movie )
