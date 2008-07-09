@@ -39,7 +39,6 @@ except:
 class GUI( xbmcgui.WindowXML ):
     # control id's
     CONTROL_TITLE_LABEL = 20
-    CONTROL_CATEGORY_LABEL = 30
     CONTROL_BUTTON_GROUP_START = 103
     CONTROL_BUTTON_GROUP_END = 109
     CONTROL_TRAILER_LIST_START = 50
@@ -95,7 +94,6 @@ class GUI( xbmcgui.WindowXML ):
     def _set_labels( self ):
         try:
             self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( __scriptname__ )
-            self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( "" )
             self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "" )
             for button_id in range( self.CONTROL_BUTTON_GROUP_START, self.CONTROL_BUTTON_GROUP_END + 1 ):
                 self.getControl( button_id ).setLabel( _( button_id ) )
@@ -221,6 +219,7 @@ class GUI( xbmcgui.WindowXML ):
     
     def showCategories( self, sql, params=None, choice=0, force_update=False ):
         try:
+            self.setCategoryLabel()
             if ( sql != self.sql_category or params != self.params_category or force_update ):
                 #self.list_control_pos[ self.list_category ] = choice
                 self.trailers.getCategories( sql, params )
@@ -240,6 +239,7 @@ class GUI( xbmcgui.WindowXML ):
                             thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                         count = "(%d)" % ( category.count, )
                         list_item = xbmcgui.ListItem( title, count, thumbnail, thumbnail )
+                        list_item.setInfo( "video", { "Genre": self.category } )
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
@@ -249,6 +249,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def showTrailers( self, sql, params=None, choice=0, force_update=False ):
         try:
+            self.setCategoryLabel()
             if ( sql != self.sql or params != self.params or force_update ):
                 #self.list_control_pos[ self.list_category ] = choice
                 if ( force_update != 2 ):
@@ -281,7 +282,7 @@ class GUI( xbmcgui.WindowXML ):
                         except:
                             release_date = ""
                             year = 0
-                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio } )
+                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": self.category } )
                         # set release date property
                         list_item.setProperty( "releasedate", movie.release_date )
                         self.addItem( list_item )
@@ -312,7 +313,7 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.lock()
         self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( category )
         self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( not category )
-        self.setCategoryLabel()
+        #self.setCategoryLabel()
         xbmcgui.unlock()
         self.showPlotCastControls( category )
         self.setFocus( self.getControl( ( self.CONTROL_CATEGORY_LIST_GROUP, self.CONTROL_TRAILER_LIST_GROUP, )[ not category ] ) )
@@ -360,7 +361,7 @@ class GUI( xbmcgui.WindowXML ):
                 category = self.trailers.categories[ self.category_id ].title
             elif ( self.list_category == 1 ):
                 category = self.genres[ self.category_id ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
-        self.getControl( self.CONTROL_CATEGORY_LABEL ).setLabel( category )#.encode( "utf-8" ) )
+        self.category = category
 
     def _set_count_label( self, list_control ):
         separator = ( _( 96 ) )
@@ -543,7 +544,7 @@ class GUI( xbmcgui.WindowXML ):
                                 year = int( self.trailers.movies[ trailer ].release_date[ -5 : ] )
                             except:
                                 year = 0
-                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.getControl( self.CONTROL_CATEGORY_LABEL ).getLabel() } )
+                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.category } )
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
