@@ -1,6 +1,7 @@
 <window>
 	<animation effect="fade" time="200">WindowOpen</animation>
 	<animation effect="fade" time="0">WindowClose</animation>
+    <allowoverlays>false</allowoverlays>
 	<coordinates>
 		<system>1</system>
 		<posx>0</posx>

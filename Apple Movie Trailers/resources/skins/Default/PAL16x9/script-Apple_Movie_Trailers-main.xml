@@ -37,16 +37,29 @@
 			<font>special13</font>
 			<textcolor>FFFFFFFF</textcolor>
 		</control>
-		<!-- ** Required ** Do not change id or type-->
-		<control type="label" id="30">
+
+        <control type="label">
 			<description>Category Label</description>
 			<posx>650</posx>
 			<posy>43</posy>
 			<width>300</width>
 			<align>right</align>
-            <label></label>
+            <info>ListItem.Genre</info>
 			<font>special13</font>
 			<textcolor>FFFFFFFF</textcolor>
+            <visible>Control.IsVisible(3000)</visible>
+		</control>
+
+        <control type="label">
+			<description>Category Label</description>
+			<posx>650</posx>
+			<posy>43</posy>
+			<width>300</width>
+			<align>right</align>
+            <info>Container(60).ListItem.Genre</info>
+			<font>special13</font>
+			<textcolor>FFFFFFFF</textcolor>
+            <visible>!Control.IsVisible(3000)</visible>
 		</control>
 
         <control type="group">
