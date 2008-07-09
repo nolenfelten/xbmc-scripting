@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-   <!--  Finnish 6.6.2008 -->
+   <!--  Finnish 9.7.2008 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">XBMC</string>
   <string id="2">Mikko 70</string>
@@ -169,7 +169,7 @@
 
   <!-- Plot/Cast Error Information -->
   <string id="400">*Tälle nimikkeelle ei löydy juonta.</string>
-  <string id="401">*Näyttelijä luetteloa ei löydy tälle nimikkeelle.</string>
+  <string id="401">*Näyttelijäluetteloa ei löydy tälle nimikkeelle.</string>
  
   <!-- Context Menu -->
   <string id="501">Katso esittely</string>
@@ -196,16 +196,9 @@
   <string id="603">Sijainti</string> 
   
   <!-- Plugin -->
-  <string id="700">Apple Movie Trailer-lisäke</string>
-  <string id="701">Tätä lisäkettä käytettäessä voidaan</string>
-  <string id="702">esittelyjä katsoa suoraan Video-ikkunassa.</string>
-  <string id="703">Haluatko asentaa lisäkkeen?</string>
+  <string id="700">Tämä lisäke antaa sinun katsoa esittely videoita media ikkunasta. Se vaatii kuitenkin päivitetyn skriptin asennuksen. Sillä on kuitenkin omat asetukset lisäkkeen asetuksissa.</string>
+  <string id="701">Tämä lisäke antaa sinun pelata tietovisailua, tulevia esittelyvideoita, ominaisuuksien esittely videoita, arvioida videota ja katsoa 0-5 satunnaista videota ennen elokuvan toistoa. Lisäksi voit valita elokuvan loppuun esittely videoiden toiston. Se vaatii kuitenkin päivitetyn skriptin asennuksen. Sillä on kuitenkin omat asetukset lisäkkeen asetuksissa</string>
   
-  <string id="704">Movie Theater-lisäke</string>
-  <string id="705">Tämä lisäke toistaa satunnaisia esittelyjä</string>
-  <string id="706">ennen valittua elokuvaa.</string>
-  <string id="707">Haluatko asentaa lisäkkeen?</string>
-
   <string id="710">Valitse pienoiskuvake</string>
   <string id="711">Asenna</string>
   <string id="712">Ohita</string>
@@ -222,6 +215,11 @@
   <string id="725">Asennetaan lisäke...</string>
   
   <string id="730">Lisäkkeen asennus epäonnistui!</string>
+
+  <string id="750">Haluatko asentaa tämän lisäkkeen?</string>
+  <string id="755">Tästä voidaan asentaa kaikki lisäkkeet.</string>
+
+  <string id="799">Kaikki lisäkkeet</string>
 
   <!-- Credits -->
   <string id="900">Versio</string>
@@ -252,6 +250,4 @@
   <!-- Update error messages -->
   <string id="1030">Uutta versiota ei löytynyt!</string>
   <string id="1031">Päivitys ei onnistunut!</string>
-
-
 </strings>
