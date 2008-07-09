@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">XBMC Lyrics</string>
-	<string id="1">Xbox Media Center</string>
-    <string id="2">Mikko</string>
-	<!-- 1.5.8          5.4.2008 Finnish -->
+	<string id="1">xbmc Media Center</string>
+    <string id="2">Mikko 70</string>
+	<!--   9.7.2008 Finnish   -->
  	<!-- User Messages -->
     <string id="100">Poikkeus</string>
     <string id="101">Tiedosto</string>
