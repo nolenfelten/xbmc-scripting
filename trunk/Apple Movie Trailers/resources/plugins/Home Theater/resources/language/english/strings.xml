@@ -30,7 +30,7 @@
     <string id="30210">&#32;&#32;- End of trivia music</string>
     <string id="30220">- Select only unwatched trailers</string>
     <string id="30230">Rating videos path</string>
-    <string id="30240">- Trivia music volume (percent of master)</string>
+    <string id="30240">&#32;&#32;- Trivia music volume (percent of master)</string>
 
     <string id="30500">Choosing random trailers...</string>
     <string id="30510">Randomizing trivia quiz slides...</string>
