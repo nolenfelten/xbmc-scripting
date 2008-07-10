@@ -18,7 +18,8 @@
     <setting id="trivia_total_time" type="enum" values="0|5|10|15|20|25|30" enable="!eq(-1,)" label="30170" default="3" />
     <setting id="trivia_slide_time" type="enum" values="10|15|20|25|30|45|60" enable="!eq(-2,)" label="30180" default="2" />
     <setting id="trivia_music" type="music" enable="!eq(-3,)" label="30190" default="" />
-    <setting id="trivia_end_image" type="pictures" enable="!eq(-4,)" label="30200" default="" />
+    <setting id="trivia_music_volume" type="labelenum" enable="!eq(-4,)" values="10%|20%|30%|40%|50%|60%|70%|80%|90%|100%" label="30240" default="50%" />
+    <setting id="trivia_end_image" type="pictures" enable="!eq(-5,)" label="30200" default="" />
     <setting id="trivia_end_music" type="music" enable="!eq(-1,)" label="30210" default="" />
     <setting type="sep" />
     <setting id="rating_videos_path" type="folder" source="video" label="30230" default="" />
