@@ -67,6 +67,7 @@ class Trivia( xbmcgui.WindowXML ):
         self.exiting = False
         self.playlist = kwargs[ "playlist" ]
         self.trivia_music = kwargs[ "trivia_music" ]
+        self.volume_percent = kwargs[ "trivia_music_volume" ]
         self.slide_time = kwargs[ "trivia_slide_time" ]
         self.trivia_end_image = kwargs[ "trivia_end_image" ]
         self.trivia_end_music = kwargs[ "trivia_end_music" ]
@@ -76,11 +77,17 @@ class Trivia( xbmcgui.WindowXML ):
     def onInit( self ):
         pDialog.close()
         self._next_slide()
-        self._start_music( self.trivia_music )
+        self._start_music()
 
-    def _start_music( self, trivia_music ):
-        if ( trivia_music ):
-            xbmc.Player().play( trivia_music )
+    def _start_music( self ):
+        # get the current volume
+        self.current_volume = int( xbmc.executehttpapi( "GetVolume" ).replace( "<li>", "" ) )
+        # calculate the volume
+        volume = self.current_volume * ( float( self.volume_percent ) / 100 )
+        # set the volume percent from settings
+        xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( volume, ) )
+        if ( self.trivia_music ):
+            xbmc.Player().play( self.trivia_music )
 
     def _get_slides( self, slide_path ):
         from random import randrange
@@ -171,6 +178,8 @@ class Trivia( xbmcgui.WindowXML ):
             self.global_timer.cancel()
         if ( self.slide_timer is not None ):
             self.slide_timer.cancel()
+        # set the volume back to original
+        xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( self.current_volume, ) )
         if ( self.trivia_end_image ):
             self.getControl( 100 ).setImage( self.trivia_end_image )
             if ( self.trivia_end_music ):
@@ -179,7 +188,7 @@ class Trivia( xbmcgui.WindowXML ):
         # TODO: enable player core when XBMC supports it for playlists
         xbmc.Player().play( self.playlist )# self.settings[ "player_core" ]
         # TODO: verify this does NOT cause problems
-        xbmc.sleep( 200 )
+        #xbmc.sleep( 200 )
         self.close()
 
     def onClick( self, controlId ):
@@ -191,7 +200,7 @@ class Trivia( xbmcgui.WindowXML ):
     def onAction( self, action ):
         if ( action in self.ACTION_EXIT_SCRIPT and not self.exiting ):
             self.exit_script()
-        elif ( action in self.ACTION_NEXT_SLIDE ):
+        elif ( action in self.ACTION_NEXT_SLIDE and not self.exiting ):
             self._next_slide()
 
 
@@ -222,6 +231,7 @@ class Main:
         self.settings[ "trivia_total_time" ] = ( 0, 5, 10, 15, 20, 25, 30, )[ int( xbmcplugin.getSetting( "trivia_total_time" ) ) ]
         self.settings[ "trivia_slide_time" ] = ( 10, 15, 20, 25, 30, 45, 60 )[ int( xbmcplugin.getSetting( "trivia_slide_time" ) ) ]
         self.settings[ "trivia_music" ] = xbmcplugin.getSetting( "trivia_music" )
+        self.settings[ "trivia_music_volume" ] = int( xbmcplugin.getSetting( "trivia_music_volume" ).replace( "%", "" ) )
         self.settings[ "trivia_end_image" ] = xbmcplugin.getSetting( "trivia_end_image" )
         self.settings[ "trivia_end_music" ] = xbmcplugin.getSetting( "trivia_end_music" )
         self.settings[ "rating_videos_path" ] = xbmcplugin.getSetting( "rating_videos_path" )
@@ -307,7 +317,7 @@ class Main:
         if ( playlist and not pDialog.iscanceled() ):
             # if trive path an time play the trivia slides
             if ( self.settings[ "trivia_path" ] and self.settings[ "trivia_total_time" ] ):
-                ui = Trivia( "plugin-%s-trivia.xml" % ( sys.modules[ "__main__" ].__plugin__.replace( " ", "_" ), ), sys.modules[ "__main__" ].BASE_RESOURCE_PATH, "default", False, trivia_path=self.settings[ "trivia_path" ], trivia_total_time=self.settings[ "trivia_total_time" ], trivia_slide_time=self.settings[ "trivia_slide_time" ], trivia_music=self.settings[ "trivia_music" ], trivia_end_image=self.settings[ "trivia_end_image" ], trivia_end_music=self.settings[ "trivia_end_music" ], playlist=playlist )
+                ui = Trivia( "plugin-%s-trivia.xml" % ( sys.modules[ "__main__" ].__plugin__.replace( " ", "_" ), ), sys.modules[ "__main__" ].BASE_RESOURCE_PATH, "default", False, trivia_path=self.settings[ "trivia_path" ], trivia_total_time=self.settings[ "trivia_total_time" ], trivia_slide_time=self.settings[ "trivia_slide_time" ], trivia_music=self.settings[ "trivia_music" ], trivia_end_image=self.settings[ "trivia_end_image" ], trivia_end_music=self.settings[ "trivia_end_music" ], trivia_music_volume=self.settings[ "trivia_music_volume" ], playlist=playlist )
                 ui.doModal()
                 del ui
                 xbmc.executebuiltin( "XBMC.ActivateWindow(2005)" )
