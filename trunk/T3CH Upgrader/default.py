@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '19-05-2008'
-__version__ = "1.6.1"
+__date__ = '14-07-2008'
+__version__ = "1.6.2"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -347,7 +347,7 @@ class Main:
 			if not local_archive_name:
 				options.remove(self.opt_local)
 
-			# remove Update Script option if check enabled done startup
+			# remove Update Script option if check enabled at startup
 			if self.settings[self.SETTING_CHECK_SCRIPT_UPDATE_STARTUP] == __language__(402): # yes
 				options.remove(self.opt_update_script)
 
@@ -397,17 +397,24 @@ class Main:
 				if remote_archive_name:
 					self.archive_name = remote_archive_name
 					self.short_build_name = remote_short_build_name
-					if self._process(url, True):
-						if dialogYesNo( __language__( 0 ), __language__( 512 )):		# reboot ?
-							xbmc.executebuiltin( "XBMC.Reboot" )
-						break
+					# ask if to just DL or DL & install ?
+					downloadOnly = dialogYesNo( __language__( 0 ), __language__( 533 ), \
+						yesButton=__language__( 400 ), noButton=__language__( 416 ))
+
+					if self._process(url, True, downloadOnly):
+						if not downloadOnly:
+							if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 512 )):		# reboot ?
+								xbmc.executebuiltin( "XBMC.Reboot" )
+							break
 					else:
 						self.isSilent = False											# failed, show menu
+					if self.isSilent:
+						break
 			elif selectedOpt == self.opt_local:											# local archive install
 				if local_archive_name:
 					self.archive_name = local_archive_name
 					self.short_build_name = local_short_build_name
-					if self._process('', False):
+					if self._process('', False, False):
 						if dialogYesNo( __language__( 0 ), __language__( 512 )):		# reboot ?
 							xbmc.executebuiltin( "XBMC.Reboot" )
 						break
@@ -518,18 +525,13 @@ class Main:
 		return success
 
 	######################################################################################
-	# remoteInstall: if downloading requires DL space + unrar space, else just unrar space
+	# processAction: 0 = Download & install, 1 = Install Existing, 2 = Download only
 	######################################################################################
-	def _check_free_mem(self, remoteInstall=True):
+	def _check_free_mem(self, driveSpaceRequiredMb=180, ramCheck=True):
 		""" check installation drive has enough freespace and enough free ram """
-		xbmc.output( "> _check_free_mem() remoteInstall="+str(remoteInstall))
+		xbmc.output( "> _check_free_mem() driveSpaceRequiredMb=%s ramCheck=%s" % (driveSpaceRequiredMb, ramCheck))
 
 		success = False
-		if remoteInstall:
-			driveSpaceRequiredMb = 180		# Mb, rar + install space
-		else:
-			driveSpaceRequiredMb = 120		# Mb, install only space
-			
 		drive = os.path.splitdrive( self.settings[self.SETTING_UNRAR_PATH] )[0][0]	# eg C from (C:, path)
 		drive_freespace_info = xbmc.getInfoLabel('System.Freespace(%s)' % drive)
 
@@ -540,8 +542,11 @@ class Main:
 		if drive_freespaceMb < driveSpaceRequiredMb:
 			msg = __language__(530)  % (drive, drive_freespaceMb, driveSpaceRequiredMb)
 			dialogOK(__language__(0), __language__(316), msg, isSilent=False, time=5)
+		elif not ramCheck:
+			# DL only, no RAM check required
+			success = True
 		else:
-			# check free mem, warn if low, but can continue if OK'd
+			# warn if low, but can continue if OK'd
 			freememMb = xbmc.getFreeMem()
 			freeMemRecMb = 31		# 31 seems ok, always rez dependant eg. 480p 16:9 == 42mb
 			xbmc.output( "Freemem=%sMB  Recommended=%sMB" % ( freememMb, freeMemRecMb ) )
@@ -551,13 +556,13 @@ class Main:
 			else:
 				success = True
 
-		xbmc.output( "< _check_free_mem() success="+str(success))
+		xbmc.output( "< _check_free_mem() success=%s" % success)
 		return success
 
 	######################################################################################
-	def _process( self, url='', useSFV=True ):
-		""" Extract and Install new T3CH build, from a url or local archive """
-		xbmc.output( "> _process() url=" + url)
+	def _process( self, url='', useSFV=True, downloadOnly=False ):
+		""" Download, Extract and Install new T3CH build, from a url or local archive """
+		xbmc.output( "> _process() url=%s useSFV=%s downloadOnly=%s" % (url, useSFV, downloadOnly))
 
 		success = False
 		try:
@@ -574,9 +579,17 @@ class Main:
 			archive_file = os.path.join( self.settings[ self.SETTING_UNRAR_PATH ], archive_name )
 			xbmc.output( "archive_file= " + archive_file )
 
-			# check enough hdd & ram space
-			remoteInstall = (url != '')
-			if not self._check_free_mem(remoteInstall):
+			# determine which mem (RAM / hdd) check to do according to process action
+			ramCheck = True
+			if downloadOnly:
+				driveSpaceRequiredMb = 60		# DL only hdd space
+				ramCheck = False
+			elif url:
+				driveSpaceRequiredMb = 180		# DL & unpack, install hdd space
+			else:
+				driveSpaceRequiredMb = 120		# local archive unpack, install
+
+			if not downloadOnly and not self._check_free_mem(driveSpaceRequiredMb, ramCheck):
 				xbmc.output("< _process() success=False")
 				return False
 
@@ -590,8 +603,10 @@ class Main:
 			else:
 				have_file = fileExist(archive_file)
 
-			xbmc.output( "have_file="+str(have_file))
-			if have_file:
+			xbmc.output( "have_file=%s" % have_file)
+			if downloadOnly:
+				success = True
+			elif have_file:
 				if self._extract( archive_file, extract_path ):
 
 					if self.isSilent or dialogYesNo( __language__( 0 ), __language__( 507 ), __language__( 508 ), "" ):
@@ -624,7 +639,7 @@ class Main:
 						deleteFile(archive_file)					# remove RAR
 		except:
 			handleException("process()")
-		xbmc.output("< _process() success=" +str(success))
+		xbmc.output("< _process() success=%s" % success)
 		return success
 
 	######################################################################################
@@ -1686,7 +1701,7 @@ def searchRegEx(data, regex, flags=re.IGNORECASE):
 
 ######################################################################################
 def readURL( url, msg='', isSilent=False):
-	xbmc.output( "readURL() " + url )
+	xbmc.output( "readURL() isSilent=%s %s" % (isSilent,url))
 
 	if not isSilent:
 		root, name = os.path.split(url)
