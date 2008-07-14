@@ -52,6 +52,7 @@
     <string id="413">Cancel</string>
     <string id="414">Readme</string>
     <string id="415">Changelog</string>
+    <string id="416">Install</string>
 
     <!-- Status messages -->
     <string id="500">The current T3CH build is:</string>
@@ -86,6 +87,7 @@
     <string id="530">Drive=%s  Freespace=%sMB  Required=%sMB</string>
     <string id="531">Freemem=%sMB  Recommended=%sMB</string>
     <string id="532">Continue ?</string>
+    <string id="533">Download Only or Download and Install ?</string>
   
     <!-- Menu Titles -->
     <string id="600">Main Menu</string>
