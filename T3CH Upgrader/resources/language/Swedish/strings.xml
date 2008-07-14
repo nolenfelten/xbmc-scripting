@@ -46,6 +46,7 @@
   <string id="413">Avbryt</string>
   <string id="414">LäsMig</string>
   <string id="415">Ändringslogg</string>
+  <string id="416">Installera</string>
   <string id="500">Nuvarande T3CH version är</string>
   <string id="501">Vill du ladda ner denna version?</string>
   <string id="502">Laddar ner dokument från:</string>
@@ -78,6 +79,7 @@
   <string id="530">Enhet=%s  Ledigt utrymme=%sMB  Krav=%sMB</string>
   <string id="531">Ledigt minne=%sMB  Rekommenderat=%sMB</string>
   <string id="532">Fortsätt ?</string>
+  <string id="533">Ladda endast ner eller ladda ner och installera ?</string>
   <string id="600">Huvudmeny</string>
   <string id="601">Inställningsmeny</string>
   <string id="610">Inställningar</string>
