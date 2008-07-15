@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">T3CH XBMC-päivitys</string>
-    <!--  Finnish v.6.6.2008 -->
+    <!--  Finnish v.15.7.2008 -->
     <!-- Browse dialog headings -->
     <string id="200">Asennuspolku (esim. E:\apps)</string>
-    <string id="201">Käynnistyvän dashin nimi.</string>
+    <string id="201">Käynnistyvän dashin nimi:</string>
     <string id="202">Valitse käynnistyvä asema:</string>
     <string id="203">Valitse tiedosto:</string>
     <string id="204">Valitse polku:</string>
@@ -52,15 +52,16 @@
     <string id="413">Ei</string>
     <string id="414">Ohje</string>
     <string id="415">Muutokset</string>
+    <string id="416">Asenna</string>
 
     <!-- Status messages -->
-    <string id="500">Nykyinen T3CH versio:</string>
+    <string id="500">Nykyinen T3CH-versio:</string>
     <string id="501">Haluatko ladata tämän version?</string>
     <string id="502">Latausosoite:</string>
     <string id="503">Latauksen sijainti:</string>
     <string id="504">Purku sijainti:</string>
-    <string id="505">T3CH-paketti puretaan:</string>
-    <string id="506">Selvitetään T3CH paketin sisältöä ...</string>
+    <string id="505">T3CH-paketti purettiin:</string>
+    <string id="506">Selvitetään T3CH-paketin sisältöä ...</string>
     <string id="507">Siirretäänkö nykyiset tiedostot T3CH-kansioon ?</string>
     <string id="508">(UserData, skriptit, lisäkkeet, skini ...)</string>
     <string id="509">Keymap.xml on erilainen, kopioidaanko sinun käyttämä ?</string>
@@ -86,6 +87,7 @@
     <string id="530">Asemassa=%s  Tilaa=%sMB  Suositus=%sMB</string>
     <string id="531">Muistia vapaana=%sMB  Suositus=%sMB</string>
     <string id="532">Jatketaanko ?</string>
+    <string id="533">Pelkkä lataus vai lataus ja asennus ?</string>
     
     <!-- Menu Titles -->
     <string id="600">Päävalikko</string>
