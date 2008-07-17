@@ -8,6 +8,7 @@ USAGE:
  run default.py
 
 At startup Main Menu will indicate the availability of a new T3CH build.
+Selecting option Download: <build_name> will start the process.
 
 Pre Installation Settings:
 --------------------------
@@ -86,17 +87,19 @@ It can startup in three modes:
 # NORMAL = Interactive prompt driven
 
 The required mode needs to be edited into autoexec.py executebuiltin.  The script comes with it set to NOTIFY
+eg.
+xbmc.executebuiltin("XBMC.RunScript(Q:\\scripts\\T3CH Upgrader\\default.py, NOTIFY)")
 
 
 Known Problems:
 ---------------
-XBMC free RAM of less than ~ 32mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution.
+XBMC free RAM of less than ~ 31mb *may* cause unrar to fail.  If this happens, try lowering XBMC screen resolution to NTSC 4:3
 
 If you're stuck, post in the appropiate forum at http://www.xboxmediacenter.com/forum/
 
 
 Written By BigBellyBilly
 
-Thanks to others for ideas, testing, graphics ... VERY MUCH APPRECIATED !
+Thanks to others for ideas, testing, graphics, language translations, skins ... VERY MUCH APPRECIATED !
 
 bigbellybilly AT gmail DOT com
