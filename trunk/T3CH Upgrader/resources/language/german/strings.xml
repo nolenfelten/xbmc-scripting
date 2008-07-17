@@ -88,7 +88,7 @@
     <string id="530">Laufwerk=%s  Freier Speicher=%sMB  Benötigt=%sMB</string>
     <string id="531">Freemem=%sMB  Empfohlen=%sMB</string>
     <string id="532">Fortfahren?</string>
-    <string id="533">Nur runterladen oder runterladen & installieren?</string>
+    <string id="533">Nur runterladen oder runterladen und installieren?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
