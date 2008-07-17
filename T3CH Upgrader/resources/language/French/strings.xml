@@ -28,6 +28,8 @@
     <string id="312">Le repertoire de destination n'existe pas!  Réessayez.</string>
     <string id="313">Fichier ou dossier restreint/inaccessible!</string>
     <string id="314">Le dossier de destination existe déjà, Recouvrez?</string>
+    <string id="319">Construction de Web n'a pas trouvé !</string>
+    <string id="320">SFV l'entrée de nom de fichier non trouvée[CR]Continuent de toute façon ?</string>
 
     <!-- Yes/No buttons -->
     <string id="400">Télécharger</string>
@@ -44,6 +46,8 @@
     <string id="411">T3CH</string>
     <string id="412">Supprimer</string>
     <string id="413">Annuler</string>
+    <string id="414">Lu me</string>
+    <string id="416">Installer</string>
 
     <!-- Status messages -->
     <string id="500">La dernière version T3CH est:</string>
@@ -75,6 +79,8 @@
     <string id="526">Nouvelle arborescence existante ?</string>
     <string id="527">Nouvel XBE Existant ?</string>
     <string id="528">Supprimer le RAR ?</string>
+    <string id="532">Continuez</string>
+    <string id="533">Telecharger seulement ou Telecharger et Installer ?</string>
 
     <!-- Menu Titles -->
     <string id="600">Menu principal</string>
@@ -90,6 +96,7 @@
     <string id="618">Liste des données à supprimer</string>
     <string id="619">Mettre à jour T3CH_Upgrader</string>
     <string id="620">Installer depuis le RAR local:</string>
+    <string id="621">Installez la vieille construction du Web</string>
 
     <!-- Settings Options -->
     <string id="630">Lecteur du raccourci vers le Dash:</string>
@@ -101,6 +108,7 @@
     <string id="636">Réinitialiser les paramètres par défaut</string>
     <string id="637">Réinitialiser la liste personnalisée des copies et suppressions</string>
     <string id="638">Demander avant d'effacer le RAR?</string>
+    <string id="639">Manuscrit Readme/Changelog de vue</string>
 
     <!-- Misc Menu Options Options -->
     <string id="650">Sortir</string>
