@@ -53,6 +53,7 @@
     <string id="413">Abbrechen</string>
     <string id="414">Readme</string>
     <string id="415">Changelog</string>
+    <string id="416">Installieren</string>
 
     <!-- Status messages -->
     <string id="500">Aktuelles T3CH Build:</string>
@@ -83,10 +84,11 @@
     <string id="526">Neuer Pfad vorhanden?</string>
     <string id="527">Neue XBE vorhanden?</string>
     <string id="528">RAR löschen?</string>
-    <string id="529">Backup und Update der XBMC Bootverknüpfung erstellen ?[CR](Erforderlich um das neue Build zu starten)</string>
+    <string id="529">Backup und Update der XBMC Bootverknüpfung erstellen?[CR](Erforderlich um das neue Build zu starten)</string>
     <string id="530">Laufwerk=%s  Freier Speicher=%sMB  Benötigt=%sMB</string>
     <string id="531">Freemem=%sMB  Empfohlen=%sMB</string>
     <string id="532">Fortfahren?</string>
+    <string id="533">Nur runterladen oder runterladen & installieren?</string>
 
     <!-- Menu Titles -->
     <string id="600">Hauptmenü</string>
