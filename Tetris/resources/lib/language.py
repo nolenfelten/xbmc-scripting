@@ -1,42 +1,67 @@
 """
-    Language Class:
-    Is used to translate a language file like Xbox Media Center's language files.
-    Originally Coded by Rockstar, Recoded by Donno :D
+Language module
+
+Nuka1195
 """
-import xbmc, re, os ,sys
+
+import os
+import xbmc
+import xml.dom.minidom
+
 
 class Language:
+    """ Language Class: creates a dictionary of localized strings { int: string } """
     def __init__( self ):
-        module_dir = os.path.dirname( sys.modules['language'].__file__ )
-        cwd = os.path.join( os.path.dirname( module_dir ), 'language' )
-        self.strings = {}
-        temp_strings = []
-        language = xbmc.getLanguage().lower()
-        language_path = os.path.join( cwd, language, 'strings.xml' )
-        if ( not os.path.isfile( language_path ) ):
-            language = 'english'
-            language_path = os.path.join( cwd, language, 'strings.xml' )
+        """ initializer """
+        # language folder
+        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        # get the current language
+        language = self._get_language( base_path )
+        # create strings dictionary
+        self._create_localized_dict( base_path, language )
         
-        try:
-            f = open( language_path, 'r' )
-            temp_strings = f.read()
-            f.close()
-            pattern = '<string id="(.*?)">(.*?)</string>'
-            strings = re.findall(pattern, temp_strings)
-            for item in strings:
-                self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
-        
-            if ( language != 'english' ):
-                language_path = os.path.join( cwd, 'english', 'strings.xml' )
-                f = open( language_path, 'r' )
-                temp_strings = f.read()
-                f.close()
-                strings = re.findall(pattern, temp_strings)
-                for item in strings:
-                    if ( not self.strings.has_key(int( item[0] ) ) ):
-                        self.strings[int( item[0] )] = unicode( item[1], 'utf-8' ).replace( '&amp;', '&' ).replace( '&lt;', '<' ).replace( '&gt;', '>' )
-        except:
-            print "ERROR: Language file %s can't be opened" % ( language_path, )
+    def _get_language( self, base_path ):
+        """ returns the current language if a strings.xml file exists else returns english """
+        # get the current users language setting
+        language = xbmc.getLanguage()
+        # if no strings.xml file exists, default to english
+        if ( not os.path.isfile( os.path.join( base_path, language, "strings.xml" ) ) ):
+            language = "English"
+        return language
 
-    def string( self, code ):
-        return self.strings.get( int( code ), str( code ) )
+    def _create_localized_dict( self, base_path, language ):
+        """ initializes self.strings and calls _parse_strings_file """
+        # localized strings dictionary
+        self.strings = {}
+        # add localized strings
+        self._parse_strings_file( os.path.join( base_path, language, "strings.xml" ) )
+        # fill-in missing strings with english strings
+        if ( language != "english" ):
+            self._parse_strings_file( os.path.join( base_path, "english", "strings.xml" ) )
+        
+    def _parse_strings_file( self, language_path ):
+        """ adds localized strings to self.strings dictionary """
+        try:
+            # load and parse strings.xml file
+            doc = xml.dom.minidom.parse( language_path )
+            # make sure this is a valid <strings> xml file
+            root = doc.documentElement
+            if ( not root or root.tagName != "strings" ): raise
+            # parse and resolve each <string id="#"> tag
+            strings = root.getElementsByTagName( "string" )
+            for string in strings:
+                # convert id attribute to an integer
+                string_id = int( string.getAttribute( "id" ) )
+                # if a valid id add it to self.strings dictionary
+                if ( string_id not in self.strings and string.hasChildNodes() ):
+                    self.strings[ string_id ] = string.firstChild.nodeValue
+        except:
+            # print the error message to the log and debug window
+            xbmc.output( "ERROR: Language file %s can't be parsed!" % ( language_path, ) )
+        # clean-up document object
+        try: doc.unlink()
+        except: pass
+
+    def localized( self, code ):
+        """ returns the localized string if it exists """
+        return self.strings.get( code, "Invalid Id %d" % ( code, ) )
