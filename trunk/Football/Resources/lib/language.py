@@ -2,40 +2,31 @@
 Language module
 
 Nuka1195
-24/01/2008 Some changes by BigBellyBilly
 """
 
-import os, sys
+import os
 import xbmc
 import xml.dom.minidom
 
+
 class Language:
     """ Language Class: creates a dictionary of localized strings { int: string } """
-    LANGUAGE_DIR_NAME = 'language'
-    STRINGS_FILENAME = 'strings.xml'
-    DEFAULT_LANG = 'english'
-    
     def __init__( self ):
         """ initializer """
         # language folder
-        base_path = self.get_base_path()
+        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
         # get the current language
         language = self._get_language( base_path )
         # create strings dictionary
         self._create_localized_dict( base_path, language )
-
-    def get_base_path( self ):
-        """ returns full language base path """
-        module_dir = os.path.dirname( sys.modules['language'].__file__ )
-        return os.path.join( os.path.dirname( module_dir ), Language.LANGUAGE_DIR_NAME )
-
+        
     def _get_language( self, base_path ):
         """ returns the current language if a strings.xml file exists else returns english """
         # get the current users language setting
-        language = xbmc.getLanguage().lower()
+        language = xbmc.getLanguage()
         # if no strings.xml file exists, default to english
-        if ( not os.path.isfile( os.path.join( base_path, language, Language.STRINGS_FILENAME ) ) ):
-            language = Language.DEFAULT_LANG
+        if ( not os.path.isfile( os.path.join( base_path, language, "strings.xml" ) ) ):
+            language = "English"
         return language
 
     def _create_localized_dict( self, base_path, language ):
@@ -43,10 +34,10 @@ class Language:
         # localized strings dictionary
         self.strings = {}
         # add localized strings
-        self._parse_strings_file( os.path.join( base_path, language, Language.STRINGS_FILENAME ) )
+        self._parse_strings_file( os.path.join( base_path, language, "strings.xml" ) )
         # fill-in missing strings with english strings
-        if ( language != Language.DEFAULT_LANG ):
-            self._parse_strings_file( os.path.join( base_path, Language.DEFAULT_LANG, Language.STRINGS_FILENAME ) )
+        if ( language != "english" ):
+            self._parse_strings_file( os.path.join( base_path, "english", "strings.xml" ) )
         
     def _parse_strings_file( self, language_path ):
         """ adds localized strings to self.strings dictionary """
@@ -73,4 +64,4 @@ class Language:
 
     def localized( self, code ):
         """ returns the localized string if it exists """
-        return self.strings.get( code, "Invailid Id %d" % ( code, ) )
+        return self.strings.get( code, "Invalid Id %d" % ( code, ) )

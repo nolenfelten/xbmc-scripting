@@ -23,10 +23,10 @@ class Language:
     def _get_language( self, base_path ):
         """ returns the current language if a strings.xml file exists else returns english """
         # get the current users language setting
-        language = xbmc.getLanguage().lower()
+        language = xbmc.getLanguage()
         # if no strings.xml file exists, default to english
         if ( not os.path.isfile( os.path.join( base_path, language, "strings.xml" ) ) ):
-            language = "english"
+            language = "English"
         return language
 
     def _create_localized_dict( self, base_path, language ):

@@ -20,13 +20,13 @@ class Language:
         def load(self,thepath):
             self.strings = {}
             tempstrings = []
-            language = xbmc.getLanguage().lower()
+            language = xbmc.getLanguage()
             if ( not os.path.isfile( os.path.join( thepath,language,"strings.xml" ) ) ):
-                language = "english"
+                language = "English"
             self.strings = {}
             self._parse_strings_file( os.path.join( thepath,language,"strings.xml" ) )
-            if ( language != "english" ):
-                self._parse_strings_file( os.path.join( thepath, "english", "strings.xml" ) )
+            if ( language != "English" ):
+                self._parse_strings_file( os.path.join( thepath, "English", "strings.xml" ) )
 
 
         def _parse_strings_file( self, language_path ):
