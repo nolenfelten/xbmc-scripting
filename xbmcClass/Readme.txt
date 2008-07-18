@@ -1,3 +1,7 @@
+OBSOLETE, Use Nuka1195's language.lib insted. Code remains for reference purposes.
+----------------------------------------------------------------------------------
+
+
 XBMC Class
 Last updated: December 14th 2006
 
