@@ -68,8 +68,8 @@ resourcesPath = os.path.join( os.getcwd().replace( ";", "" ), 'resources' )
 GFXPath = os.path.join( resourcesPath, 'gfx' )
 SoundPath = os.path.join( resourcesPath, 'sounds' )
 
-sys.path.append( os.path.join( resourcesPath, 'Lib' ) )
-sys.path.append( os.path.join( resourcesPath, 'Lib', '_xmlplus.zip' ) )
+sys.path.append( os.path.join( resourcesPath, 'lib' ) )
+sys.path.append( os.path.join( resourcesPath, 'lib', '_xmlplus.zip' ) )
 
 try:
     reload(PTconfigmgr)
