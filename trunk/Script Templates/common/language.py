@@ -11,6 +11,8 @@ import xml.dom.minidom
 
 class Language:
     """ Language Class: creates a dictionary of localized strings { int: string } """
+    DEFAULT_LANGUAGE = "English"
+
     def __init__( self ):
         """ initializer """
         # language folder
@@ -21,12 +23,12 @@ class Language:
         self._create_localized_dict( base_path, language )
         
     def _get_language( self, base_path ):
-        """ returns the current language if a strings.xml file exists else returns english """
+        """ returns the current language if a strings.xml file exists else returns default language """
         # get the current users language setting
-        language = xbmc.getLanguage().lower()
-        # if no strings.xml file exists, default to english
+        language = xbmc.getLanguage()
+        # if no strings.xml file exists, use default language
         if ( not os.path.isfile( os.path.join( base_path, language, "strings.xml" ) ) ):
-            language = "english"
+            language = self.DEFAULT_LANGUAGE
         return language
 
     def _create_localized_dict( self, base_path, language ):
@@ -35,9 +37,9 @@ class Language:
         self.strings = {}
         # add localized strings
         self._parse_strings_file( os.path.join( base_path, language, "strings.xml" ) )
-        # fill-in missing strings with english strings
-        if ( language != "english" ):
-            self._parse_strings_file( os.path.join( base_path, "english", "strings.xml" ) )
+        # fill-in missing strings with default language strings
+        if ( language != self.DEFAULT_LANGUAGE ):
+            self._parse_strings_file( os.path.join( base_path, self.DEFAULT_LANGUAGE, "strings.xml" ) )
         
     def _parse_strings_file( self, language_path ):
         """ adds localized strings to self.strings dictionary """
@@ -62,7 +64,6 @@ class Language:
         try: doc.unlink()
         except: pass
 
-    def localized( self, code, strict = False ):
-        """ returns the localized string if it exists; set strict to raise an error when not found """
-        if strict: return self.strings[code]
-        else: return self.strings.get( code, "Invalid Id %d" % ( code, ) )
+    def localized( self, code ):
+        """ returns the localized string if it exists """
+        return self.strings.get( code, "Invalid Id %d" % ( code, ) )
