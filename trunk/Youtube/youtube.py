@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
  Copyright (c) 2007 Daniel Svensson, <dsvensson@gmail.com>
 
@@ -72,13 +73,15 @@ class YouTube:
 		# pattern to match login status
 		self.login_pattern = re.compile('Log In')
 
+		self.search_pattern = re.compile('<a\shref=\"\/watch\?v=([^\"]+)\".+?title=\"([^\"]+)\"', re.MULTILINE)
+
 		# various urls
 		self.base_url = 'http://www.youtube.com'
 		self.api_url = self.base_url + '/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s'
 		self.feed_url = self.base_url + '/rss/global/%s.rss'
 		self.stream_url = self.base_url + '/get_video?video_id=%s&t=%s'
 		self.video_url = self.base_url + '/?v=%s'
-		self.search_url = self.base_url + '/rss/search/%s.rss'
+		self.search_url = self.base_url + '/results?search_type=&search_query=%s'
 		self.user_url = self.base_url + '/rss/user/%s/videos.rss'
 		self.confirm_url = self.base_url + '/verify_age?next_url=/watch?v=%s'
 		self.ajax_url = self.base_url + '/watch_ajax'
@@ -131,6 +134,23 @@ class YouTube:
 
 		return list
 
+	def do_search(self, url):
+
+		data = self.retrieve(url)
+		print data
+
+		list = []
+		i = 0
+		for match in self.search_pattern.findall(data):
+			i = 1 - i
+			if i == 1:
+				id = match[0]
+				title = match[1]
+				list.append((title, id))
+
+		return list
+
+
 	def get_user_videos(self, user):
 		"""Assemble user videos url and return a (desc, id) list."""
 
@@ -148,7 +168,7 @@ class YouTube:
 
 		friendly_term = escape(term).replace(' ', '+')
 		url = self.search_url % friendly_term
-		return self.get_rss(url)
+		return self.do_search(url)
 
 
 	def call_method(self, method, param):
@@ -157,7 +177,7 @@ class YouTube:
 
 		data = self.retrieve(url)
 		return elementtree.ElementTree.XML(data)
-	
+
 
 	def get_video_list(self, method, param):
 		"""Return a list of (desc, id) pairs from the REST result."""
@@ -387,14 +407,13 @@ if __name__ == '__main__':
 		sys.stderr.flush()
 		if done == size:
 			print '\r'
-	
+
 	def filter_confirm(udata):
 		return True
-	
+
 	yt.set_report_hook(report)
 
 	try:
-		"""
 		print "User Profile (sneseglarn):"
 		print yt.get_user_profile('sneseglarn')
 		print "------------------------------------------"
@@ -425,7 +444,6 @@ if __name__ == '__main__':
 		print "Videos from User ('sneseglarn')"
 		print yt.get_user_videos('sneseglarn')
 		print "------------------------------------------"
-		"""
 
 		if len(sys.argv) == 3:
 			print "Login status"
@@ -439,14 +457,15 @@ if __name__ == '__main__':
 			print "------------------------------------------"
 			print "Video Url from filtered Id ('M23If6Sqe-Q')"
 			yt.set_filter_hook(filter_confirm)
-			print yt.get_video_url('M23If6Sqe-Q')
+			print yt.get_video_url('BzYOrldilP4')
+#			print yt.get_video_url('M23If6Sqe-Q')
 			print "------------------------------------------"
 			print "Add Video to Favorites ('M23If6Sqe-Q')"
-			print yt.user_add_favorite('M23If6Sqe-Q')
-
-	except DownloadError, e:
+			#print yt.user_add_favorite('BzYOrldilP4')
+			print yt.search('nirvana')
+	except xbmcutils.net.DownloadError, e:
 		print "download failed: %s" % e
-	except DownloadAbort, e:
+	except xbmcutils.net.DownloadAbort, e:
 		print "download aborted: %s " % e
 	except VideoStreamError, e:
 		print "could not get video url for %s" % e
