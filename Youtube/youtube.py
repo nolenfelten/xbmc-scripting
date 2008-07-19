@@ -81,7 +81,8 @@ class YouTube:
 		self.feed_url = self.base_url + '/rss/global/%s.rss'
 		self.stream_url = self.base_url + '/get_video?video_id=%s&t=%s&fmt=18'
 		self.video_url = self.base_url + '/?v=%s'
-		self.search_url = self.base_url + '/results?search_type=&search_query=%s'
+		self.search_url = 'http://gdata.youtube.com/feeds/api/videos?vq=%s&max-results=20&alt=rss'
+
 		self.user_url = self.base_url + '/rss/user/%s/videos.rss'
 		self.confirm_url = self.base_url + '/verify_age?next_url=/watch?v=%s'
 		self.ajax_url = self.base_url + '/watch_ajax'
@@ -134,23 +135,6 @@ class YouTube:
 
 		return list
 
-	def do_search(self, url):
-
-		data = self.retrieve(url)
-		print data
-
-		list = []
-		i = 0
-		for match in self.search_pattern.findall(data):
-			i = 1 - i
-			if i == 1:
-				id = match[0]
-				title = match[1]
-				list.append((title, id))
-
-		return list
-
-
 	def get_user_videos(self, user):
 		"""Assemble user videos url and return a (desc, id) list."""
 
@@ -168,7 +152,7 @@ class YouTube:
 
 		friendly_term = escape(term).replace(' ', '+')
 		url = self.search_url % friendly_term
-		return self.do_search(url)
+		return self.get_rss(url)
 
 
 	def call_method(self, method, param):
