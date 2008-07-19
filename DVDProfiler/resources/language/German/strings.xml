@@ -24,7 +24,7 @@
     <string id="201">Erfolgreich</string>
     <string id="202">Fehlgeschlagen</string>
     <string id="203">Komplett</string>
-    <string id="204"></string>
+    <string id="204">Bild für Slideshow auswählen</string>
     <string id="210">Video Wiedergabe</string>
     <string id="211">Media Adresse nicht in XML gespeichert</string>
     <string id="212">Fehler beim Abspielen von:</string>
@@ -195,7 +195,6 @@
     <string id="986">Downloading Bild ...</string>
     <string id="987">Downloading Foto Links ...</string>
     <string id="988">Downloading Slideshow ...</string>
-    <string id="989">Bild für Slideshow auswählen</string>
 
     <!-- Update messages -->
     <string id="1000">Deine Version ist aktuell.</string>
