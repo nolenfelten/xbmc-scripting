@@ -79,7 +79,7 @@ class YouTube:
 		self.base_url = 'http://www.youtube.com'
 		self.api_url = self.base_url + '/api2_rest?method=%s&dev_id=k1jPjdICyu0&%s'
 		self.feed_url = self.base_url + '/rss/global/%s.rss'
-		self.stream_url = self.base_url + '/get_video?video_id=%s&t=%s'
+		self.stream_url = self.base_url + '/get_video?video_id=%s&t=%s&fmt=18'
 		self.video_url = self.base_url + '/?v=%s'
 		self.search_url = self.base_url + '/results?search_type=&search_query=%s'
 		self.user_url = self.base_url + '/rss/user/%s/videos.rss'
