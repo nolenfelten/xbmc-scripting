@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <!--  21.7.2008 Finnish   -->
+    <!--  22.7.2008 Finnish   -->
     <string id="0">DVDProfiler</string>
 
     <!-- Browse dialog headings -->
@@ -131,7 +131,7 @@
     <string id="528">Paikallinen median sijainti</string>
 
     <!-- SMB Menu Options -->
-    <string id="540">Käytetään SMB-yhteyttä ?</string>
+    <string id="540">SMB-yhteys käytössä</string>
     <string id="541">SMB-polku:</string>
     <string id="542">PC:n IP (Tietokoneen osoite):</string>
     <string id="543">DVDProfiler jakokansio:</string>
@@ -145,7 +145,7 @@
     <string id="550">SMB käytössä</string>
     <string id="551">Paikallinen kokoelma</string>
     <string id="552">Verkko nimi</string>
-    <string id="553">Aloitus muoto</string>
+    <string id="553">Aloitus valikko</string>
 
     <!-- Misc Menu Options Options -->
     <string id="560">Lisää</string>
@@ -157,10 +157,10 @@
     <string id="566">(Poista: Korosta ja paina A)</string>
 
     <!-- smbLib -->
-    <string id="950">SMB-polku ja/tai isännän IP puuttuu!</string>
+    <string id="950">SMB polku ja/tai isännän IP-osoite puuttuu!</string>
     <string id="951">SMB virhe!</string>
     <string id="952">SMB yhteys epäonnistui!</string>
-    <string id="953">tarkista PC:n nimi ja IP osoite</string>
+    <string id="953">tarkista PC:n nimi ja IP-osoite</string>
     <string id="954">SMB kirjautuminen epäonnistui!</string>
     <string id="955">PC:n osoite ei ole käytössä SMB polussa!</string>
     <string id="956">SMB automaattinen IP määritys epäonnistui!</string>
