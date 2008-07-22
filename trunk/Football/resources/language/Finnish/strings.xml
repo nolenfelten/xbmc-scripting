@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <!--  Finnish 22.7.2008 -->
+    <!--  Finnish 23.7.2008 -->
     <string id="0">Football</string>
 
     <!-- Error messages -->
     <string id="100">Virhe!</string>
     <string id="101">Valinta ei ole käytettävissä tälle liigalle!</string>
-    <string id="102">Ei tietoja.[CR]Sivusto on saattanut muuttua!?</string>
-    <string id="103">BBC embedded media player not yet supported!</string>
+    <string id="102">Ei tietoja saatavilla.[CR]Sivusto on saattanut muuttua!?</string>
+    <string id="103">BBC mediasoitinta ei tueta tällä hetkellä!</string>
 
     <!-- Prompt messages -->
     <string id="200">Päivitetyt liigat valmiina ladattavaksi.</string>
@@ -30,7 +30,7 @@
 
     <!-- titles -->
     <string id="350">TULOS:</string>
-    <string id="351">Suora teksti:</string>
+    <string id="351">Tapahtumat tekstinä:</string>
     <string id="352">Päivitetään joka 2. minuutti</string>
     <string id="353">Ei tietoja.</string>
     <string id="354">Näytä taulu alhaalla</string>
@@ -44,10 +44,10 @@
     <string id="362">Pelaaja (Joukkue)</string>
     <string id="363">Maalit</string>
     <string id="364">(Ryhmä NO.) pelaaja</string>
-    <string id="365">Valitse väittely valinta</string>
+    <string id="365">Väittely valinta</string>
     <string id="366">Valitse kohde</string>
     <string id="367">Valitse kuvagalleria</string>
-    <string id="368">(Profile available)</string>
+    <string id="368">(Profiili käytössä)</string>
     <string id="369">Valitse peli</string>
     <string id="370">Valitse taulu</string>
 
@@ -64,7 +64,7 @@
     <string id="522">Näytä muutokset</string>
     <string id="523">Valitse tietolähde</string>
     <string id="524">Tarkista päivitykset käynnistyessä?</string>
-    <string id="525">Sisällön fontti</string>
+    <string id="525">Tekstin fontti</string>
 
     <!-- misc menu/prompts -->
     <string id="530">Tämänhetkiset tulokset</string>
@@ -73,14 +73,14 @@
     <string id="533">Joukkueet</string>
     <string id="534">Taulu</string>
     <string id="535">Uutiset</string>
-    <string id="536">Kalusto</string>
+    <string id="536">Ottelut</string>
     <string id="537">Tulokset</string>
     <string id="538">Tämänhetkiset maalit</string>
     <string id="539">Parhaat maalintekijät</string>
     <string id="540">Club uutiset</string>
-    <string id="541">Club kalusto</string>
+    <string id="541">Club ottelut</string>
     <string id="542">Club tulokset</string>
-    <string id="543">Suora teksti</string>
+    <string id="543">Tapahtumat tekstinä</string>
     <string id="544">Club ryhmä</string>
     <string id="545">Kuvagalleria</string>
     <string id="546">Katso Football Focus</string>
