@@ -3,19 +3,20 @@
 	<include>shutdown-ani</include>
 	<controls>
 		<include>background</include>
+
 		<control type="image">
 			<description>Settings Logo</description>
-			<posx>455</posx>
-			<posy>10</posy>
-			<width>85</width>
-			<height>85</height>
+			<posx>475</posx>
+			<posy>5</posy>
+			<width>48</width>
+			<height>37</height>
 			<aspectratio aligny="bottom">keep</aspectratio>
-			<texture>t3chu-logo.png</texture>
+			<texture>script-logo.png</texture>
 		</control>
 		<control type="label" id="3">
 			<description>description label</description>
-			<posx>535</posx>
-			<posy>40</posy>
+			<posx>100</posx>
+			<posy>7</posy>
 			<label></label>
 			<font>font20</font>
 			<textcolor>button-text</textcolor>
@@ -23,21 +24,21 @@
 		<control type="image">
 			<description>background image</description>
 			<posx>10</posx>
-			<posy>120</posy>
+			<posy>55</posy>
 			<width>700</width>
-			<height>430</height>
+			<height>505</height>
 			<texture border="20">button-menu-background.png</texture>
 		</control>
 		<control type="textbox" id="5">
 			<description>textarea</description>
 			<posx>20</posx>
-			<posy>125</posy>
-			<width>670</width>
-			<height>405</height>
+			<posy>58</posy>
+			<width>655</width>
+			<height>472</height>
 			<font>font12</font>
 			<textcolor>button-text</textcolor>
-			<spinposx>655</spinposx>
-			<spinposy>405</spinposy>
+			<spinposx>646</spinposx>
+			<spinposy>482</spinposy> 
 		</control>
 	</controls>
 </window>

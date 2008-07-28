@@ -31,7 +31,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '14-07-2008'
+__date__ = '28-07-2008'
 __version__ = "1.6.2"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -53,7 +53,7 @@ dialogProgress = xbmcgui.DialogProgress()
 
 EXIT_SCRIPT = ( 9, 10, 247, 275, 61467, )
 CANCEL_DIALOG = EXIT_SCRIPT + ( 216, 257, 61448, )
-TEXTBOX_XML_FILENAME = "script-T3CH_Upgrader-textbox.xml"
+TEXTBOX_XML_FILENAME = "script-bbb-textbox.xml"
 
 class Parser( SGMLParser ):
 	def reset( self ):
