@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '28-07-2008'
-__version__ = "1.6.2"
+__date__ = '29-07-2008'
+__version__ = "1.7"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -918,59 +918,35 @@ class Main:
 	######################################################################################
 	def _copy_user_data(self, extract_path):
 		xbmc.output( "_copy_user_data() " + extract_path )
+		success = False
 
 		try:
-			# compare keymapping.xml, always copy, but make backups
-			keymapFilename = "keymap.xml"
 			curr_build_userdata_path = "T:\\"
-			curr_build_userdata_file = os.path.join( curr_build_userdata_path, keymapFilename)
-			xbmc.output( "curr_build_userdata_file= " + curr_build_userdata_file )
-
 			new_build_userdata_path = os.path.join( extract_path, "XBMC", "UserData")
-			new_build_userdata_file = os.path.join( new_build_userdata_path, keymapFilename)
-			xbmc.output( "new_build_userdata_file= " + new_build_userdata_file )
-
-			# backup curr keymap
-			xbmc.output("backup current keymap")
-			copy(curr_build_userdata_file, curr_build_userdata_file+"_bak")
-
-			# if keymap.xml has changed, ask before copying
-			try:
-				if not filecmp.cmp( curr_build_userdata_file, new_build_userdata_file ):			# files different
-					if self.isSilent or not dialogYesNo( __language__( 0 ), __language__( 509 ) ):	# keep current ?
-						# NO, use new
-						# copy new Keymap to current, so it will be included in copytree
-						copy(new_build_userdata_file, curr_build_userdata_file)
-						xbmc.output("new keymap kept")
-			except:
-				xbmc.output( "keymap missing=" + new_build_userdata_file )
 
 			# remove new build UserData
-			for checkCount in range(5):
+			checkMAX = 5
+			for checkCount in range(checkMAX):
 				xbmc.output("rmtree UserData checkCount=%i" % checkCount)
-				self._dialog_update( __language__(0), __language__( 510 ), time=2)
+				percent = int( checkCount * 100.0 / checkMAX )
+				self._dialog_update( __language__(0), __language__( 510 ), pct=percent, time=2)
 				rmtree( new_build_userdata_path, ignore_errors=True )
 				time.sleep(2)	# give os chance to complete rmdir
 				if not os.path.isdir(new_build_userdata_path):
 					break
 
 			# Copytree current UserData to new build
-			xbmc.output("copytree UserData")
-			self._dialog_update( __language__(0), __language__( 511 ), time=2) 
-			copytree( curr_build_userdata_path, new_build_userdata_path )
-			xbmc.output("copytree UserData done")
-
-			# restore backup of keymap.xml - so user can downgrade and still have their orig keymap file
-			xbmc.output("restore keymap in current build")
-			copy(curr_build_userdata_file+"_bak", curr_build_userdata_file)
-
-			xbmc.output("remove unwanted current keymap backup from new build")
-			deleteFile(new_build_userdata_file+"_bak")
-
-			return True
+			try:
+				xbmc.output("copytree UserData")
+				self._dialog_update( __language__(0), __language__( 511 ), time=2) 
+				copytree( curr_build_userdata_path, new_build_userdata_path )
+				xbmc.output("copytree UserData done")
+				success = true
+			except:
+				dialogOK("Copy UserData Error","Failed to copytree:", curr_build_userdata_path, new_build_userdata_path)
 		except:
 			handleException("_copy_user_data()", __language__( 306 ))
-		return False
+		return success
 
 
 	######################################################################################
@@ -1721,7 +1697,12 @@ def readURL( url, msg='', isSilent=False):
 
 #################################################################################################################
 def fileExist(filename):
-	return os.path.exists(filename)
+	exist = False
+	try:
+		if os.path.isfile(filename) and os.path.getsize(filename) > 0:
+			exist = True
+	except: pass
+	return exist
 
 #################################################################################################################
 class TextBoxDialogXML( xbmcgui.WindowXML ):

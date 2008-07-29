@@ -1,8 +1,9 @@
 T3CH Upgrader Changelog:
 ========================
-v1.6.2 07/07/08
+v1.7 29/07/08
   Changed: Language subfolder names (Capitalised)
   Changed: Renamed textbox xml file and associated logo to more generic filenames.
+  Changed: Accomodates new location of keymap.xml to system.
   Updated: Language strings.
   New: Vision2 skin added (thanks smuto)
   New: Menu option "Download: <build_name>" now also prompts for 'Download Only' or 'Download and Install'.
