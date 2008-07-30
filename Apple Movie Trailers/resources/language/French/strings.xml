@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="0">Apple Movie Trailers</string>
-    <string id="1">Xbox Media Center</string>
+    <string id="1">xbmc Media Center</string>
     <string id="2">Team AMT</string>
 
     <!-- Dialog Messages -->
+	<string id="36">Suppression des anciens fichiers xml...</string>
+    <string id="37">Rafraichissement des infos genre...</string>
+    <string id="38">Rafraichissement des infos film et genre...</string>
     <string id="39">Tout lire</string>
     <string id="40">Toutes les infos sont récupérées. (10 - 60 minutes)</string>
     <string id="41">Info récupérée par genre. (1 - 5 minutes)</string>
-    <string id="42">Mise à jour infos par genre...</string>
+    <string id="42"></string>
     <string id="43">Chargement des enregistrement dans la base de données...</string>
     <string id="44">Création de la base de données...</string>
     <string id="45">Suppression des anciens xml Genre...</string>
@@ -68,9 +71,9 @@
     <string id="99">Trailer</string>
 
     <!-- Buttons -->
-    <string id="103">Genres</string>
-    <string id="104">Studios</string>
-    <string id="105">Acteurs</string>
+    <string id="103">Genre</string>
+    <string id="104">Studio</string>
+    <string id="105">Acteur</string>
     <string id="106">Rechercher</string>
     <string id="107">Paramètres</string>
     <string id="108">Afficher crédits</string>
@@ -81,7 +84,7 @@
     <string id="115">Acteur</string>
     <string id="116">Vote</string>
     <string id="117">Qualitée du Trailer</string>
-    <string id="118">Extra</string>
+    <string id="118">Avancés</string>
 
     <string id="150">Nouveautés</string>
     <string id="151">Exclusivités</string>
@@ -119,7 +122,7 @@
     <string id="215">Résolution du lecteur Vidéo</string>
     <string id="216">Séances localité</string>
     <string id="217">Séances scraper</string>
-    <string id="220">Installer plugins...</string>
+    <string id="218">Rafraîchir les trailers par genre</string>
     
     <!-- Settings choices -->
     <string id="2020">Petite</string>
@@ -131,7 +134,7 @@
     <string id="2050">Affiche de Film</string>
     <string id="2051">Vignette générique</string>
     <string id="2052">Aucune</string>
-    <string id="2110">Ne pas changer</string>
+    <string id="2110">Normale</string>
 
     <!-- Settings error messages -->
     <string id="230">Une erreur est survenue lors de la sauvegarde de vos paramètres!</string>
@@ -147,6 +150,7 @@
     <string id="252">Mise à jour</string>
     <string id="253">Credits</string>
     <string id="254">Extensions</string>
+	<string id="255">Défaut</string>
 
     <!-- Search buttons -->
     <string id="257">Sauver SQL</string>
@@ -192,15 +196,8 @@
     <string id="603">Localité</string>
 
     <!-- Plugin -->
-    <string id="700">Apple Movie Trailers Plugin</string>
-    <string id="701">Ce plugin vous permet de regarder des</string>
-    <string id="702">bandes-annonces depuis la section Vidéo de XBMC.</string>
-    <string id="703">Souhaitez-vous installer cette extension ?</string>
-
-    <string id="704">Movie Theater Plugin</string>
-    <string id="705">Ce plugin va jouer une série de bandes annonces</string>
-    <string id="706">avant de débuter le film selectionné.</string>
-    <string id="707">Souhaitez-vous installer cette extension ?</string>
+    <string id="700">Cette extension vous permet de regarder des bandes annonces depuis la fenêtre des médias vidéos. Ceci nécessite que cette extension soit installée et à jour pour une utilisation optimale. Elle dispose de ses propres paramètres accessibles depuis la page de configuration du plugin.</string>
+    <string id="701">Cette extension vous permet de jouer à des quizz, de visionner des présentations, de noter les films et de lire aléatoirement quelques bandes-annonces avant le début de votre film. Ceci nécessite que cette extension soit installée et à jour pour une utilisation optimale. Elle dispose de ses propres paramètres accessibles depuis la page de configuration du plugin.</string>
 
     <string id="710">Sélectionnez une vignette</string>
     <string id="711">Installer</string>
@@ -210,12 +207,19 @@
 
     <string id="720">Pensez à ajouter la source du plugin depuis</string>
     <string id="721">la vue fichier. En mode Bibliotheque aucune</string>
-    <string id="722">étape supplémentaire n'est nécessaire.</string>
+    <string id="722">étapes supplémentaires n'est nécessaire.</string>
 
     <string id="723">Voulez-vous ajouter un raccourci pour cette</string>
     <string id="724">extension à votre fichier sources.xml ?</string>
 
+	<string id="725">Installation du plugin...</string>
+
     <string id="730">Une erreur est survenue lors de l'installation du plugin !</string>
+	
+	<string id="750">Souhaitez-vous installer cette extension ?</string>
+    <string id="755">Ceci va installer tous les plugins.</string>
+	
+	<string id="799">Tous les plugins</string>
     
     <!-- Credits -->
     <string id="900">Version</string>
