@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-   <!--  Finnish 11.7.2008 -->
+   <!--  Finnish 31.7.2008 -->
   <string id="0">Apple Movie Trailers</string>
   <string id="1">xbmc media center</string>
   <string id="2">Mikko 70</string>
@@ -69,11 +69,11 @@
   <string id="97">Muodostetaan hakutaulukkoa.</string>
   <string id="98">Poistetaan vanhojen esittelyjen xml-tiedostoja...</string>
   <string id="99">Esittely</string>
-  
+
   <!-- Buttons -->
-  <string id="103">Lajityypit</string>
-  <string id="104">Studiot</string>
-  <string id="105">Näyttelijät</string>
+  <string id="103">Lajityyppi</string>
+  <string id="104">Studio</string>
+  <string id="105">Näyttelijä</string>
   <string id="106">Etsi</string>
   <string id="107">Asetukset</string>
   <string id="108">Tekijät</string>
@@ -85,7 +85,7 @@
   <string id="116">Ikäraja</string>
   <string id="117">Esittelyn laatu</string>
   <string id="118">Lisäasetukset</string>
-     
+
   <string id="150">Uusimmat</string>
   <string id="151">Erinomaiset</string>
   <string id="152">Suosikit</string>
@@ -102,7 +102,7 @@
   <string id="163">Katsotut</string>
   <string id="164">Viimeksi lisätyt</string>
   <string id="165">Usea esittely</string>
-  
+
   <!-- Settings labels -->
   <string id="200">Valitse:</string>
   <string id="201">Ulkoasu</string>
@@ -151,7 +151,7 @@
   <string id="253">Tekijät</string>
   <string id="254">Asenna lisäke</string>
   <string id="255">Oletukset</string>
-  
+
    <!-- Search buttons -->
   <string id="257">Tallenna SQL</string>
   <string id="258">Tyhjennä SQL</string>
@@ -170,7 +170,7 @@
   <!-- Plot/Cast Error Information -->
   <string id="400">*Tälle nimikkeelle ei löydy juonta.</string>
   <string id="401">*Näyttelijäluetteloa ei löydy tälle nimikkeelle.</string>
- 
+
   <!-- Context Menu -->
   <string id="501">Katso esittely</string>
   <string id="502">Lisää suosikkeihin</string>
@@ -194,11 +194,11 @@
   <string id="601">Etsitään esityksiä, odota hetki...</string>
   <string id="602">Päivä</string>
   <string id="603">Sijainti</string> 
-  
+
   <!-- Plugin -->
   <string id="700">Tämä lisäke antaa sinun katsoa esittely videoita media ikkunasta. Se vaatii kuitenkin päivitetyn skriptin asennuksen. Sillä on kuitenkin omat asetukset lisäkkeen asetuksissa.</string>
-  <string id="701">Tämä lisäke antaa sinun pelata tietovisailua, tulevia esittelyvideoita, ominaisuuksien esittely videoita, arvioida videota ja katsoa 0-5 satunnaista videota ennen elokuvan toistoa. Lisäksi voit valita elokuvan loppuun esittely videoiden toiston. Se vaatii kuitenkin päivitetyn skriptin asennuksen. Sillä on kuitenkin omat asetukset lisäkkeen asetuksissa</string>
-  
+  <string id="701">Tämä lisäke antaa sinun pelata tietovisailua, tulevia esittelyvideoita, ominaisuuksien esittelyvideoita, arvioida videota ja katsoa 0-5 satunnaista videota ennen elokuvan toistoa. Lisäksi voit valita elokuvan loppuun esittely videoiden toiston. Se vaatii kuitenkin päivitetyn skriptin asennuksen. Sillä on kuitenkin omat asetukset lisäkkeen asetuksissa</string>
+
   <string id="710">Valitse pienoiskuvake</string>
   <string id="711">Asenna</string>
   <string id="712">Ohita</string>
@@ -233,7 +233,7 @@
   <string id="912">Grafiikka &amp; ulkoasu</string>
   <string id="913">Käytettävyys</string>
   <string id="914">Kielitiedosto</string>
-  
+
   <!-- Update messages -->
   <string id="1000">Sinun ohjelmasi on ajantasalla.</string>
   <string id="1001">Tarkistetaan uusinta versiota...</string>
