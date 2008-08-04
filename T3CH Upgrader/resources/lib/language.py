@@ -2,32 +2,43 @@
 Language module
 
 Nuka1195
+Some mods by BBB:
+  Defined STRINGS_FILENAME, DEFAULT_LANGUAGE
+  Added get_base_path() so external scripts can discover the current language path.
+
 """
 
-import os
+import os, sys
 import xbmc
 import xml.dom.minidom
 
 
 class Language:
     """ Language Class: creates a dictionary of localized strings { int: string } """
+    LANGUAGE_DIR_NAME = 'language'
+    STRINGS_FILENAME = 'strings.xml'
     DEFAULT_LANGUAGE = "English"
 
     def __init__( self ):
         """ initializer """
         # language folder
-        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        base_path = self.get_base_path()
         # get the current language
         language = self._get_language( base_path )
         # create strings dictionary
         self._create_localized_dict( base_path, language )
-        
+
+    def get_base_path( self ):
+        """ returns full language base path """
+        module_dir = os.path.dirname( sys.modules['language'].__file__ )
+        return os.path.join( os.path.dirname( module_dir ), Language.LANGUAGE_DIR_NAME )
+
     def _get_language( self, base_path ):
         """ returns the current language if a strings.xml file exists else returns default language """
         # get the current users language setting
         language = xbmc.getLanguage()
         # if no strings.xml file exists, use default language
-        if ( not os.path.isfile( os.path.join( base_path, language, "strings.xml" ) ) ):
+        if ( not os.path.isfile( os.path.join( base_path, language, Language.STRINGS_FILENAME ) ) ):
             language = self.DEFAULT_LANGUAGE
         return language
 
@@ -36,10 +47,10 @@ class Language:
         # localized strings dictionary
         self.strings = {}
         # add localized strings
-        self._parse_strings_file( os.path.join( base_path, language, "strings.xml" ) )
+        self._parse_strings_file( os.path.join( base_path, language, Language.STRINGS_FILENAME ) )
         # fill-in missing strings with default language strings
         if ( language != self.DEFAULT_LANGUAGE ):
-            self._parse_strings_file( os.path.join( base_path, self.DEFAULT_LANGUAGE, "strings.xml" ) )
+            self._parse_strings_file( os.path.join( base_path, Language.DEFAULT_LANGUAGE, Language.STRINGS_FILENAME ) )
         
     def _parse_strings_file( self, language_path ):
         """ adds localized strings to self.strings dictionary """
@@ -57,6 +68,7 @@ class Language:
                 # if a valid id add it to self.strings dictionary
                 if ( string_id not in self.strings and string.hasChildNodes() ):
                     self.strings[ string_id ] = string.firstChild.nodeValue
+            xbmc.output( "Language file parsed successfully: %s" % language_path)
         except:
             # print the error message to the log and debug window
             xbmc.output( "ERROR: Language file %s can't be parsed!" % ( language_path, ) )
