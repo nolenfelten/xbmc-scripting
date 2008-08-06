@@ -19,10 +19,10 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
-        xbmcgui.lock()
         self.doModal()
 
     def onInit( self ):
+        xbmcgui.lock()
         self._show_credits()
         xbmcgui.unlock()
 
