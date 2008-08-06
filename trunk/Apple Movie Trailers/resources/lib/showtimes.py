@@ -21,12 +21,12 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
-        xbmcgui.lock()
         self.title = kwargs[ "title" ]
         self.location = kwargs[ "location" ]
         self.doModal()
 
     def onInit( self ):
+        xbmcgui.lock()
         self._show_dialog()
         xbmcgui.unlock()
         self._get_showtimes()

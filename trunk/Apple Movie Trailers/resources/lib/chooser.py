@@ -21,7 +21,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
-        xbmcgui.lock()
         self.controlId = 0
         self.base_path = os.path.join( BASE_RESOURCE_PATH, "skins" )
         self.choices = kwargs[ "choices" ]
@@ -34,7 +33,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def onInit( self ):
         self.show_chooser()
-        xbmcgui.unlock()
 
     def show_chooser( self ):
         self.getControl( 500 ).setLabel( self.title )
@@ -44,6 +42,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )
 
     def _setup_list( self ):
+        xbmcgui.lock()
         self.getControl( 502 ).setVisible( False )
         self.getControl( 503 ).setVisible( self.list_control == 0 )
         self.getControl( 504 ).setVisible( self.list_control == 1 )
@@ -57,6 +56,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 self.getControl( 503 + self.list_control ).getSelectedItem().select( True )
         self.getControl( 503 + self.list_control ).selectItem( self.selection )
         self.setFocus( self.getControl( 503 + self.list_control ) )
+        xbmcgui.unlock()
 
     def _get_thumb( self, choice ):
         xbmc.executebuiltin( "Skin.SetString(AMT-chooser-thumbfolder,%s)" % ( os.path.join( self.base_path, choice, "media", "thumbs" ), ) )

@@ -22,11 +22,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
     """ Settings module: used for changing settings """
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
-        xbmcgui.lock()
         self.genres = kwargs[ "genres" ]
         self.skin = kwargs[ "skin" ]
 
     def onInit( self ):
+        xbmcgui.lock()
         self._get_settings()
         self._set_labels()
         self._set_functions()

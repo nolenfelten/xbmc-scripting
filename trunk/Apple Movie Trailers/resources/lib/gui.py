@@ -68,7 +68,6 @@ class GUI( xbmcgui.WindowXML ):
     
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXML.__init__( self, *args, **kwargs )
-        xbmcgui.lock()
         self.startup = True
         ##Enable once we figure out why it crashes sometimes#################################
         ##self.videoplayer_resolution = int( xbmc.executehttpapi( "getguisetting(0,videoplayer.displayresolution)" ).replace("<li>","") )
@@ -84,7 +83,6 @@ class GUI( xbmcgui.WindowXML ):
             self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
             self._set_labels()
-            xbmcgui.unlock()
             self._setup_variables()
             self._set_startup_choices()
             self._set_startup_category()

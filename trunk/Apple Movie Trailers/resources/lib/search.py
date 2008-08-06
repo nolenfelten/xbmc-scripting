@@ -38,9 +38,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
         self.dialog = xbmcgui.DialogProgress()
         self.dialog.create( _( 106 ), _( 97 ), _( 1005 ) )
-        xbmcgui.lock()
 
     def onInit( self ):
+        xbmcgui.lock()
         self._set_labels()
         self._clear_variables()
         self._set_functions()
