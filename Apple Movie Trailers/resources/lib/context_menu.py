@@ -20,10 +20,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.WindowXMLDialog.__init__( self, *args, **kwargs )
         self.area = kwargs[ "area" ]
         self.labels = kwargs[ "labels" ]
+        xbmcgui.lock()
         self.doModal()
 
     def onInit( self ):
-        xbmcgui.lock()
         self.show_context_menu()
         xbmcgui.unlock()
 
