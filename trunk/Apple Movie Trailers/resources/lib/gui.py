@@ -80,7 +80,7 @@ class GUI( xbmcgui.WindowXML ):
     def onInit( self ):
         if ( self.startup ):
             self.startup = False
-            self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
+            #self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
             self._set_labels()
             self._setup_variables()
@@ -88,6 +88,9 @@ class GUI( xbmcgui.WindowXML ):
             self._set_startup_category()
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
+        else:
+            self.showTrailers( self.sql, self.params, force_update=2 )
+
 
     def _set_labels( self ):
         try:
@@ -254,8 +257,6 @@ class GUI( xbmcgui.WindowXML ):
                     updated = self.trailers.getMovies( sql, params )
                     if ( updated ):
                         self.sql_category = ""
-                ##else:
-                ##    choice = self.list_control_pos[ self.list_category ]
                 xbmcgui.lock()
                 self.sql = sql
                 self.params = params
