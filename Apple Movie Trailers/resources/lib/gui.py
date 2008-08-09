@@ -29,8 +29,8 @@ try:
             exec "from %s import *" % module
         else:
             exec "import %s" % module
-except:
-    print sys.exc_info()[ 1 ]
+except Exception, e:
+    print str( e )
     _progress_dialog( -1 )
     xbmcgui.Dialog().ok( __scriptname__, _( 81 ) )
     raise
@@ -89,8 +89,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
-            self.showTrailers( self.sql, self.params, force_update=2 )
-
+            self.showTrailers( self.sql, self.params, self.trailer, force_update=2 )
 
     def _set_labels( self ):
         try:
@@ -496,16 +495,16 @@ class GUI( xbmcgui.WindowXML ):
 
     def playTrailer( self ):
         try:
-            trailer = self.getCurrentListPosition()
-            if ( len( self.trailers.movies[ trailer ].trailer_urls ) ):
-                items = self._get_trailer_url( trailer )
+            self.trailer = self.getCurrentListPosition()
+            if ( len( self.trailers.movies[ self.trailer ].trailer_urls ) ):
+                items = self._get_trailer_url( self.trailer )
                 if ( items ):
                     playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
                     playlist.clear()
                     for count, ( title, url, selected ) in enumerate( items ):
                         LOG( LOG_DEBUG, self.__class__.__name__, "[url: %s]", repr( url ) )
                         filename = None
-                        for saved in self.trailers.movies[ trailer ].saved:
+                        for saved in self.trailers.movies[ self.trailer ].saved:
                             #if ( title in saved[ 0 ] ):
                             if ( url == saved[ 1 ] ):
                                 filename = saved[ 0 ]
@@ -521,33 +520,33 @@ class GUI( xbmcgui.WindowXML ):
                                 filename = url
                             else:
                                 if ( self.settings[ "mode" ] == 1 ):
-                                    if ( not self.check_cache( self.trailers.movies[ trailer ].title ) ):
+                                    if ( not self.check_cache( self.trailers.movies[ self.trailer ].title ) ):
                                         self.flat_cache = ()
                                     fetcher = cacheurl.HTTPProgressSave( save_title=title, clear_cache_folder=not self.flat_cache )
                                     filename = fetcher.urlretrieve( url )
                                     if ( filename and not self.check_cache( filename, 1 ) ):
-                                        self.flat_cache += ( ( self.trailers.movies[ trailer ].title, filename, ), )
+                                        self.flat_cache += ( ( self.trailers.movies[ self.trailer ].title, filename, ), )
                                 elif ( self.settings[ "mode" ] >= 2 ):
                                     fetcher = cacheurl.HTTPProgressSave( self.settings[ "save_folder" ], title )
                                     filename = fetcher.urlretrieve( url )
                                     if ( filename is not None ):
-                                        poster = ( self.trailers.movies[ trailer ].poster, "amt-blank-poster.png", )[ not self.trailers.movies[ trailer ].poster ]
-                                        self.saveThumbnail( filename, trailer, poster )
+                                        poster = ( self.trailers.movies[ self.trailer ].poster, "amt-blank-poster.png", )[ not self.trailers.movies[ self.trailer ].poster ]
+                                        self.saveThumbnail( filename, self.trailer, poster )
                         if ( filename is not None ):
-                            listitem = xbmcgui.ListItem( self.trailers.movies[ trailer ].title, thumbnailImage=self.trailers.movies[ trailer ].poster )
+                            listitem = xbmcgui.ListItem( self.trailers.movies[ self.trailer ].title, thumbnailImage=self.trailers.movies[ self.trailer ].poster )
                             if ( len( items ) > 1 ): s = count + 1
                             else: s = selected
-                            plot = ( self.trailers.movies[ trailer ].plot, _( 400 ), )[ not self.trailers.movies[ trailer ].plot ]
-                            t = "%s%s" % ( self.trailers.movies[ trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ trailer ].trailer_urls ) > 1 ] )
+                            plot = ( self.trailers.movies[ self.trailer ].plot, _( 400 ), )[ not self.trailers.movies[ self.trailer ].plot ]
+                            t = "%s%s" % ( self.trailers.movies[ self.trailer ].title, ( "", " (%s %d)" % ( _( 99 ), s, ), )[ len( self.trailers.movies[ self.trailer ].trailer_urls ) > 1 ] )
                             try:
-                                year = int( self.trailers.movies[ trailer ].release_date[ -5 : ] )
+                                year = int( self.trailers.movies[ self.trailer ].release_date[ -5 : ] )
                             except:
                                 year = 0
-                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ trailer ].studio, "Genre": self.category } )
+                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ self.trailer ].studio, "Genre": self.category } )
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
-                        self.markAsWatched( self.trailers.movies[ trailer ].watched + 1, trailer )
+                        self.markAsWatched( self.trailers.movies[ self.trailer ].watched + 1, self.trailer )
                         self._set_video_resolution()
                         ##xbmc.Player( self.core ).play( playlist )
                         xbmc.Player().play( playlist )
