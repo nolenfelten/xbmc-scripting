@@ -14,6 +14,8 @@ __svn_revision__ = 0
 # Shared resources
 BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+env = ( os.environ.get( "OS", "win32" ), "win32", )[ os.environ.get( "OS", "win32" ) == "xbox" ]
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "platform_libraries", env ) )
 import language
 __language__ = language.Language().localized
 
