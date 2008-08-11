@@ -61,21 +61,6 @@ LOG_ERROR, LOG_INFO, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 def _create_base_paths():
     """ creates the base folders """
     new = False
-    # copy the proper libraries
-    environment = os.environ.get( "OS", "xbox" )
-    if ( environment == "Linux" or environment == "OS X" ):
-        ext = ".so"
-    else:
-        environment = "win32"
-        ext = ".pyd"
-    pil_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib", "PIL", "_imaging" + ext ) )
-    sql_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "lib", "pysqlite2", "_sqlite" + ext ) )
-    if ( not os.path.isfile( pil_path ) or not os.path.isfile( sql_path ) ):
-        platform_pil_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "platform libraries", environment, "_imaging" + ext ) )
-        platform_sql_path = xbmc.translatePath( os.path.join( os.getcwd().replace( ";", "" ), "resources", "platform libraries", environment, "_sqlite" + ext ) )
-        from shutil import copyfile
-        copyfile( platform_pil_path, pil_path )
-        copyfile( platform_sql_path, sql_path )
     # create the main cache and database paths
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
@@ -112,7 +97,8 @@ def install_plugin( plugin_list, message=False ):
                 # we need pysqlite2 for database access
                 pysqlite2_install_path = xbmc.translatePath( os.path.join( drive + "plugins", "video", plugins[ plugin ], "pysqlite2" ) )
                 # path where pysqlite2 is copied from
-                pysqlite2_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "lib", "pysqlite2" ) )
+                env = ( os.environ.get( "OS", "win32" ), "win32", )[ os.environ.get( "OS", "win32" ) == "xbox" ]
+                pysqlite2_copy_path = xbmc.translatePath( os.path.join( BASE_RESOURCE_PATH, "platform_libraries", env, "pysqlite2" ) )
                 # remove an existing install if it exists
                 if ( os.path.isdir( plugin_install_path ) ):
                     rmtree( plugin_install_path )
