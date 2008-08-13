@@ -1,8 +1,10 @@
 T3CH Upgrader Changelog:
 ========================
-v1.7 29/07/08
+v1.7 13/08/08
+  Change:  Hardcoded 'includes' list entry plugins\\" changed to specify each subfolder eg. "plugins\music\\" (new builds include more subfolders so copy was failing - see localCopy() also)
+  Updated: localCopy() to not stop copying on first failure. Better checking of existing subfolders and files.
   Changed: Language subfolder names (Capitalised)
-  Changed: Renamed textbox xml file and associated logo to more generic filenames.
+  Changed: Renamed textbox xml file and associated logo to use more generic filenames.
   Changed: Accomodates new location of keymap.xml to system.
   Updated: Language strings.
   New: Vision2 skin added (thanks smuto)

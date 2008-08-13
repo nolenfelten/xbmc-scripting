@@ -31,7 +31,7 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '29-07-2008'
+__date__ = '13-08-2008'
 __version__ = "1.7"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
@@ -312,7 +312,7 @@ class Main:
 		xbmc.output( "remote_short_build_name=" + remote_short_build_name)
 
 		selectDialog = xbmcgui.Dialog()
-		heading = "%s v%s (XBMC: %s): %s" % (__language__( 0 ), __version__, \
+		heading = "%s v%s (XBMC:%s): %s" % (__language__( 0 ), __version__, \
 												xbmc.getInfoLabel('System.BuildDate'), \
 												__language__( 600 ))
 
@@ -644,45 +644,59 @@ class Main:
 
 	######################################################################################
 	def _init_includes_excludes(self, forceReset=False):
-		xbmc.output("_init_includes_excludes()")
+		xbmc.output("_init_includes_excludes() forceReset=%s" % forceReset)
 
+		self.includes = []
+		self.excludes = []
 		if forceReset:
 			deleteFile( self.INCLUDES_FILENAME )
 			deleteFile( self.EXCLUDES_FILENAME )
+		else:
+			if fileExist(self.INCLUDES_FILENAME):
+				self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
+			if fileExist(self.EXCLUDES_FILENAME):
+				self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
 
-		# if not exist we can setup using default includes & excludes files/folders
-		setupIncludes = not fileExist(self.INCLUDES_FILENAME)
-		setupExcludes = not fileExist(self.EXCLUDES_FILENAME)
-		
-		self.includes = self._load_file_obj( self.INCLUDES_FILENAME, [] )
-		self.excludes = self._load_file_obj( self.EXCLUDES_FILENAME, [] )
-
-		# setup additional Custom Copies/Delete if files dont exist
-		if setupIncludes:
-			self._hardcoded_includes()
+		changed = self._hardcoded_includes()		# ensure mandatory include folders
+		# remove old bad include paths
+		try:
+			self.includes.remove("plugins\\")
+			xbmc.output("includes; removed 'plugins\\'")
+			changed = True
+		except: pass
+		if forceReset or changed:
 			self._save_file_obj(self.INCLUDES_FILENAME, self.includes)
-		if setupExcludes:
-			self._hardcoded_excludes()
+
+		changed = self._hardcoded_excludes()
+		if forceReset or changed:
 			self._save_file_obj(self.EXCLUDES_FILENAME, self.excludes)
 
 	######################################################################################
 	def _hardcoded_includes(self):
 		""" Additional files/folders for post installation copying. All relative to Q:\ """
 		xbmc.output("_hardcoded_includes()")
+		changed = False
 		# add if not already included
-		srcList = [ "skin\\", "screensavers\\", "scripts\\", "plugins\\", "system\\profiles.xml" ]
+		srcList = [ "skin\\", "screensavers\\", "scripts\\", "plugins\\videos", "plugins\\pictures", \
+					"plugins\\music", "plugins\\programs", "system\\profiles.xml" ]
+		# ensure hardcoded in includes
 		for src in srcList:
 			if src not in self.includes:
 				self.includes.append(src)
+				changed = True
+		return changed
 
 	######################################################################################
 	def _hardcoded_excludes(self):
 		""" Additional files/folders for post installation deleting. All relative to extract_path\\XBMC """
 		xbmc.output("_hardcoded_excludes()")
+		changed = False
 		srcList = [ "..\\_tools", "..\\win32", "..\\Changelog.txt", "..\\copying.txt", "..\\keymapping.txt" ]
 		for src in srcList:
 			if src not in self.excludes:
 				self.excludes.append(src)
+				changed = True
+		return changed
 
 	######################################################################################
 	def _get_latest_version( self ):
@@ -937,11 +951,11 @@ class Main:
 
 			# Copytree current UserData to new build
 			try:
-				xbmc.output("copytree UserData")
+				xbmc.output("copytree UserData %s -> %s" % (curr_build_userdata_path,new_build_userdata_path) )
 				self._dialog_update( __language__(0), __language__( 511 ), time=2) 
 				copytree( curr_build_userdata_path, new_build_userdata_path )
 				xbmc.output("copytree UserData done")
-				success = true
+				success = True
 			except:
 				dialogOK("Copy UserData Error","Failed to copytree:", curr_build_userdata_path, new_build_userdata_path)
 		except:
@@ -1559,44 +1573,65 @@ class Main:
 
 
 ######################################################################################
+# copies a folder or file to dest.
+# If dest exists, not overwritten unlexx overwrite = True
+######################################################################################
 def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
-	xbmc.output( "localCopy() " + src_path)
+	xbmc.output( "localCopy() %s -> %s overwrite=%s" % (src_path, dest_path, overwrite))
 
 	try:	
 		if not os.path.exists(src_path):
-			if not isSilent:
-				dialogOK(__language__( 0 ), __language__( 311 ), src_path)
-			return False
+			xbmc.output("src_path not exist, stop")
+			return
 
 		# make dest root folder otherwise copytree will fail
 		makeDir( os.path.dirname(dest_path) )
 
 		if os.path.isfile(src_path):
-			copy( src_path, dest_path )
+			# FILE
+			if overwrite or not fileExist(dest_path):
+				try:
+					xbmc.output( "isFile; copy file: %s -> %s" % (src_path, dest_path))
+					copy( src_path, dest_path )
+				except:
+					handleException("localCopy() FILE COPY", src_path, dest_path )
+			else:
+				xbmc.output( "isFile; dest file exists, ignored: " + dest_path)
 		else:
-			# dir
+			# DIR
 			files = os.listdir(src_path)
-			TOTAL = len(files)
-			xbmc.output("isdir; file count= " +str(TOTAL))
-			count = 0
+			xbmc.output("isdir; file count=%s" % len(files))
 			for f in files:
-				count += 1
 				src_file = os.path.join( src_path, f )
 				dest_file = os.path.join( dest_path, f )
 
-				if overwrite or not fileExist( dest_file ):
+				try:
 					if os.path.isdir( src_file ):
-						# copy directory
-						xbmc.output( "copytree dir: " + src_file)
-						copytree( src_file, dest_file )
+						do_copy = True
+						if os.path.isdir( dest_file ):					# does dest dir exist ?
+							if overwrite:								# overwrite if requested
+								xbmc.output("isDir; overwrite; remove existing: " + dest_file)
+								os.rmdir(dest_file)
+								time.sleep(2)
+							else:
+								do_copy = False
+
+						if do_copy:
+							# copy directory
+							xbmc.output("isDir; copytree dir: %s -> %s" % (src_file, dest_file))
+							copytree( src_file, dest_file )
+						else:
+							xbmc.output("isDir; dest dir exists, ignored: " + dest_file)
 					else:
-						# copy file
-						xbmc.output( "copy file: " + src_file)
-						copy( src_file, dest_file )
-				else:
-					xbmc.output( "exists, ignored: " + src_file)
+						if overwrite or not fileExist( dest_file ):
+							xbmc.output( "isDir; copy file: %s -> %s" % (src_file, dest_file))
+							copy( src_file, dest_file )
+						else:
+							xbmc.output("isDir; dest file exists, ignored: " + dest_file)
+				except:
+					handleException("localCopy() DIR COPY", src_file, dest_file )
 	except:
-		handleException("copyFolder()", src_path, dest_path )
+		handleException("localCopy() Unhandled", src_path, dest_path )
 
 
 #################################################################################################################
