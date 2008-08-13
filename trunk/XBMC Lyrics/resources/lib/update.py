@@ -101,7 +101,7 @@ class Update:
         try:
             for cnt, url in enumerate( script_files ):
                 items = os.path.split( url )
-                path = items[ 0 ].replace( "/tags/%s/" % ( __scriptname__.replace( " ", "%20" ), ), "Q:\\scripts\\%s_v" % ( __scriptname__, ) ).replace( "/", "\\" ).replace( "%20", " " )
+                path = items[ 0 ].replace( "/tags/%s/" % ( __scriptname__.replace( " ", "%20" ), ), "Q:/scripts/%s_v" % ( __scriptname__, ) ).replace( "%20", " " )
                 file = items[ 1 ].replace( "%20", " " )
                 pct = int( ( float( cnt ) / len( script_files ) ) * 100 )
                 self.dialog.update( pct, "%s %s" % ( _( 1007 ), url, ), "%s %s" % ( _( 1008 ), path, ), "%s %s" % ( _( 1009 ), file, ) )
@@ -112,7 +112,7 @@ class Update:
             raise
         else:
             self.dialog.close()
-            xbmcgui.Dialog().ok( __scriptname__, _( 1010 ), "Q:\\scripts\\%s_v%s\\" % ( __scriptname__, version, ) )
+            xbmcgui.Dialog().ok( __scriptname__, _( 1010 ), "Q:/scripts/%s_v%s/" % ( __scriptname__, version, ) )
             
     def _get_html_source( self, url ):
         """ fetch the SVN html source """

@@ -5,7 +5,7 @@ import os
 import xbmc
 
 # add all music paths here, no subdirectories needed
-MUSIC_PATH = ( "E:\\Music", "F:\\Music", )
+MUSIC_PATH = ( "E:/Music", "F:/Music", )
 # add all music extensions wanted in lowercase
 MUSIC_EXT = xbmc.getSupportedMedia( "music" )
 # set to True to shuffle the playlist

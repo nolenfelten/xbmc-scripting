@@ -17,10 +17,10 @@ __version__ = sys.modules[ "__main__" ].__version__
 __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 
 # comapatble versions
-SETTINGS_VERSIONS = ( "1.5.9", )
+SETTINGS_VERSIONS = ( "1.6.0", )
 # base paths
-BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
-BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", __scriptname__, "settings.txt" ) )
+BASE_DATA_PATH = os.path.join( "T:/script_data", os.getcwd() )
+BASE_SETTINGS_PATH = os.path.join( "P:/script_data", os.getcwd(), "settings.txt" )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special button codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -88,7 +88,7 @@ def LOG( status, format, *args ):
 def show_credits():
     """ shows a credit window """
     import resources.lib.credits as credits
-    c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
+    c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), "Default" )
     c.doModal()
     del c
 
@@ -150,7 +150,7 @@ class Settings:
             "show_viz": True,
             "use_filename": False,
             "filename_format": 0,
-            "music_path": "f:\\music",
+            "music_path": "",
             "shuffle": True,
             "compatible": False,
             "use_extension": True,
