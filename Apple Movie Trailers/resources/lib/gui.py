@@ -386,7 +386,10 @@ class GUI( xbmcgui.WindowXML ):
                 self.setCurrentListPosition( len( self.trailers.movies ) - 1 )
                 trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ trailer ].favorite )
-            self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
+            if ( xbmc.skinHasImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ trailer ].rating, ) ) ):
+                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ trailer ].rating, ) )
+            else:
+                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
             self.cast_exists = ( len( self.trailers.movies[ trailer ].cast ) > 0 )
