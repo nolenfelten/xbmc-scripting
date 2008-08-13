@@ -87,10 +87,10 @@ class LyricsFetcher:
         """ Sets exceptions for formatting artist """
         try:
             if ( __name__ == "__main__" ):
-                ex_path = os.path.join( os.getcwd().replace( ";", "" ), "exceptions.txt" )
+                ex_path = os.path.join( os.getcwd(), "exceptions.txt" )
             else:
                 name = __name__.replace( "resources.scrapers.", "" ).replace( ".lyricsScraper", "" )
-                ex_path = xbmc.translatePath( os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__scriptname__, "scrapers", name, "exceptions.txt" ) )
+                ex_path = os.path.join( "T:/script_data", os.getcwd(), "scrapers", name, "exceptions.txt" )
             ex_file = open( ex_path, "r" )
             self.exceptions = eval( ex_file.read() )
             ex_file.close()
@@ -117,12 +117,12 @@ class LyricsFetcher:
             if ( not debug ):
                 usock = urllib.urlopen( url )
             else:
-                usock = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "r" )
+                usock = open( os.path.join( os.getcwd(), "lyrics_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite)
             if ( debugWrite ):
-                file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "lyrics_source.txt" ), "w" )
+                file_object = open( os.path.join( os.getcwd(), "lyrics_source.txt" ), "w" )
                 file_object.write( htmlSource )
                 file_object.close()
             # Parse htmlSource for lyrics
@@ -141,12 +141,12 @@ class LyricsFetcher:
             if ( not debug ):
                 usock = urllib.urlopen( url % ( artist, ) )
             else:
-                usock = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "r" )
+                usock = open( os.path.join( os.getcwd(), "songs_source.txt" ), "r" )
             htmlSource = usock.read()
             usock.close()
             # Save htmlSource to a file for testing scraper (if debugWrite)
             if ( debugWrite ):
-                file_object = open( os.path.join( os.getcwd().replace( ";", "" ), "songs_source.txt" ), "w" )
+                file_object = open( os.path.join( os.getcwd(), "songs_source.txt" ), "w" )
                 file_object.write( htmlSource )
                 file_object.close()
             # Parse htmlSource for song links

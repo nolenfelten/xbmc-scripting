@@ -238,7 +238,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         import resources.lib.playlist as playlist
         playlist = playlist.create_playlist( ( self.settings[ "music_path" ], ), self.settings[ "shuffle" ] )
         xbmc.Player().play( playlist )
-        xbmc.executebuiltin( "RunScript(%s)" % os.path.join( os.getcwd().replace( ";", "" ), "default.py" ) )
+        xbmc.executebuiltin( "RunScript(%s)" % os.path.join( os.getcwd(), "default.py" ) )
         
     def _get_defaults( self ):
         """ resets values to defaults """

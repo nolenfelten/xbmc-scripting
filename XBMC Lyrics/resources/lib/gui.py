@@ -171,7 +171,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def change_settings( self ):
         import resources.lib.settings as settings
-        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, "Default" )
+        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), "Default" )
         settings.doModal()
         ok = False
         if ( settings.changed ):
@@ -203,7 +203,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def exit_script( self, restart=False ):
         if ( self.Timer is not None ): self.Timer.cancel()
         self.close()
-        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd(), "default.py" ), ) )
 
     def onClick( self, controlId ):
         if ( controlId == 120 ):

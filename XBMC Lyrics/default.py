@@ -10,13 +10,12 @@ __author__ = "XBMC Lyrics Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Lyrics"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "1.5.9"
+__version__ = "1.6.0"
 __svn_revision__ = 0
 
 # Shared resources 
-BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
-import resources.lib.language as language
-__language__ = language.Language().localized
+BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
+__language__ = xbmc.Language( os.getcwd() ).getLocalizedString
 
 # Main team credits 
 __credits_l1__ = __language__( 910 )#"Head Developer & Coder"
@@ -43,7 +42,7 @@ if ( __name__ == "__main__" ):
     else:
         import resources.lib.settings as gui
         window = "settings"
-    ui = gui.GUI( "script-%s-%s.xml" % ( __scriptname__.replace( " ", "_" ), window, ), BASE_RESOURCE_PATH, "Default" )
+    ui = gui.GUI( "script-%s-%s.xml" % ( __scriptname__.replace( " ", "_" ), window, ), os.getcwd(), "Default" )
     ui.doModal()
     del ui
     sys.modules.clear()
