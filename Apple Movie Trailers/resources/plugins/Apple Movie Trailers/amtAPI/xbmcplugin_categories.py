@@ -14,14 +14,13 @@ from pysqlite2 import dbapi2 as sqlite
 
 class Main:
     # base paths
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-    BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:\\skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
+    BASE_SKIN_THUMBNAIL_PATH = os.path.join( "Q:/skin", xbmc.getSkinDir(), "media", sys.modules[ "__main__" ].__plugin__ )
     # TODO: remove all references
     #BASE_PLUGIN_THUMBNAIL_PATH = os.path.join( sys.modules[ "__main__" ].BASE_PATH, "thumbnails" )
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( self.BASE_DATABASE_PATH ) ):
+        if ( not os.path.isfile( xbmcplugin.getSetting( "amt_db" ) ) ):
             self._launch_script()
         else:
             self.get_categories()
@@ -34,9 +33,9 @@ class Main:
         # no database was found so notify XBMC we're finished, false so no blank list is shown
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
+        if ( os.path.isfile( os.path.join( "Q:/scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, msg1, msg3 ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( "Q:/scripts", sys.modules[ "__main__" ].__script__, "default.py" ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, msg1, msg2, sys.modules[ "__main__" ].__svn_url__ )
 
@@ -95,7 +94,7 @@ class Main:
 
     def _get_thumbnail( self, title ):
         # create the full thumbnail path for skins directory
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( "*", "" ) + ".tbn" ) )
+        thumbnail = os.path.join( self.BASE_SKIN_THUMBNAIL_PATH, title.replace( "*", "" ) + ".tbn" )
         # use a plugin custom thumbnail if a custom skin thumbnail does not exists
         if ( not os.path.isfile( thumbnail ) ):
             # TODO: remove this block (no plans on supplying thumbnails)
@@ -107,21 +106,18 @@ class Main:
         return thumbnail
 
     def _fetch_records( self ):
-        records = Records()
+        records = Records( xbmcplugin.getSetting( "amt_db" ) )
         result = records.fetch( Query()[ "genres" ] )
         records.close()
         return result
 
 
 class Records:
-    # base paths
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-
     def __init__( self, *args, **kwargs ):
-        self.connect()
+        self.connect( kwargs[ "amt_db" ] )
 
-    def connect( self ):
-        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
+    def connect( self, db ):
+        self.db = sqlite.connect( db )
         self.cursor = self.db.cursor()
     
     def close( self ):

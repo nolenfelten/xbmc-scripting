@@ -41,14 +41,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _set_labels( self ):
         try:
-            self.getControl( 20 ).setLabel( __scriptname__ )
+            #self.getControl( 20 ).setLabel( __scriptname__ )
             self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
-            self.getControl( 250 ).setLabel( _( 250 ) )
-            self.getControl( 251 ).setLabel( _( 251 ) )
-            self.getControl( 252 ).setLabel( _( 252 ) )
-            self.getControl( 253 ).setLabel( _( 253 ) )
-            self.getControl( 254 ).setLabel( _( 254 ) )
-            self.getControl( 255 ).setLabel( _( 255 ) )
+            #self.getControl( 250 ).setLabel( _( 250 ) )
+            #self.getControl( 251 ).setLabel( _( 251 ) )
+            #self.getControl( 252 ).setLabel( _( 252 ) )
+            #self.getControl( 253 ).setLabel( _( 253 ) )
+            #self.getControl( 254 ).setLabel( _( 254 ) )
+            #self.getControl( 255 ).setLabel( _( 255 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
@@ -108,19 +108,19 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def _setup_skins( self ):
         """ special def for setting up skin choices """
-        self.skins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "skins" ) )
+        self.skins = os.listdir( os.path.join( BASE_RESOURCE_PATH, "skins" ) )
         try: self.current_skin = self.skins.index( self.settings[ "skin" ] )
         except: self.current_skin = 0
 
     def _setup_showtimes_scrapers( self ):
         """ special def for setting up scraper choices """
-        self.showtimes_scrapers = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "showtimes_scrapers" ) )
+        self.showtimes_scrapers = os.listdir( os.path.join( BASE_RESOURCE_PATH, "showtimes_scrapers" ) )
         try: self.current_showtimes_scraper = self.showtimes_scrapers.index( self.settings[ "showtimes_scraper" ] )
         except: self.current_showtimes_scraper = 0
 
     def _setup_plugins( self ):
         """ special def for setting up plugin installation choices """
-        self.plugins = os.listdir( os.path.join( os.getcwd().replace( ";", "" ), "resources", "plugins" ) )
+        self.plugins = os.listdir( os.path.join( BASE_RESOURCE_PATH, "plugins" ) )
         self.plugins.sort()
         self.plugins += [ _( 799 ) ]
 
@@ -157,32 +157,32 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.getControl( 201 ).setLabel( _( 201 ), label2=self.settings[ "skin" ] )
-            self.getControl( 202 ).setLabel( _( 202 ), label2=self.quality[ self.settings[ "trailer_quality" ] ] )
-            self.getControl( 203 ).setLabel( _( 203 ), label2=self.mode[ self.settings[ "mode" ] ] )
-            self.getControl( 204 ).setLabel( _( 204 ), label2=self.settings[ "save_folder" ] )
+            self.getControl( 201 ).setLabel( self.getControl( 201 ).getLabel(), label2=self.settings[ "skin" ] )
+            self.getControl( 202 ).setLabel( self.getControl( 202 ).getLabel(), label2=self.quality[ self.settings[ "trailer_quality" ] ] )
+            self.getControl( 203 ).setLabel( self.getControl( 203 ).getLabel(), label2=self.mode[ self.settings[ "mode" ] ] )
+            self.getControl( 204 ).setLabel( self.getControl( 204 ).getLabel(), label2=self.settings[ "save_folder" ] )
             self.getControl( 204 ).setEnabled( self.settings[ "mode" ] >= 1 )
-            self.getControl( 205 ).setLabel( _( 205 ) )
+            #self.getControl( 205 ).setLabel( _( 205 ) )
             self.getControl( 205 ).setSelected( self.settings[ "auto_play_all" ] )
-            self.getControl( 206 ).setLabel( _( 206 ), label2=self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
-            self.getControl( 207 ).setLabel( _( 207 ) )
+            self.getControl( 206 ).setLabel( self.getControl( 206 ).getLabel(), label2=self.thumbnail[ self.settings[ "thumbnail_display" ] ] )
+            #self.getControl( 207 ).setLabel( _( 207 ) )
             self.getControl( 207 ).setSelected( self.settings[ "fade_thumb" ] )
             self.getControl( 207 ).setEnabled( self.settings[ "thumbnail_display" ] == 0 )
-            self.getControl( 208 ).setLabel( _( 208 ), label2=self.startup_categories[ self.settings[ "startup_category_id" ] ] )
-            self.getControl( 209 ).setLabel( _( 209 ), label2=self.startup_categories[ self.settings[ "shortcut1" ] ] )
-            self.getControl( 210 ).setLabel( _( 210 ), label2=self.startup_categories[ self.settings[ "shortcut2" ] ] )
-            self.getControl( 211 ).setLabel( _( 211 ), label2=self.startup_categories[ self.settings[ "shortcut3" ] ] )
-            self.getControl( 212 ).setLabel( _( 212 ) )
+            self.getControl( 208 ).setLabel( self.getControl( 208 ).getLabel(), label2=self.startup_categories[ self.settings[ "startup_category_id" ] ] )
+            self.getControl( 209 ).setLabel( self.getControl( 209 ).getLabel(), label2=self.startup_categories[ self.settings[ "shortcut1" ] ] )
+            self.getControl( 210 ).setLabel( self.getControl( 210 ).getLabel(), label2=self.startup_categories[ self.settings[ "shortcut2" ] ] )
+            self.getControl( 211 ).setLabel( self.getControl( 211 ).getLabel(), label2=self.startup_categories[ self.settings[ "shortcut3" ] ] )
+            #self.getControl( 212 ).setLabel( _( 212 ) )
             self.getControl( 212 ).setSelected( self.settings[ "refresh_newest" ] )
-            self.getControl( 213 ).setLabel( _( 213 ) )
+            #self.getControl( 213 ).setLabel( _( 213 ) )
             self.getControl( 213 ).setSelected( self.settings[ "use_simple_search" ] )
-            self.getControl( 214 ).setLabel( _( 214 ) )
+            #self.getControl( 214 ).setLabel( _( 214 ) )
             self.getControl( 214 ).setSelected( self.settings[ "match_whole_words" ] )
             self.getControl( 214 ).setEnabled( self.settings[ "use_simple_search" ] )
-            self.getControl( 215 ).setLabel( _( 215 ), label2=self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
-            self.getControl( 216 ).setLabel( _( 216 ), label2= self.settings[ "showtimes_local" ] )
-            self.getControl( 217 ).setLabel( _( 217 ), label2=self.settings[ "showtimes_scraper" ] )
-            self.getControl( 218 ).setLabel( _( 218 ) )
+            self.getControl( 215 ).setLabel( self.getControl( 215 ).getLabel(), label2=self.videoplayer_displayresolutions[ self.settings[ "videoplayer_displayresolution" ] ] )
+            self.getControl( 216 ).setLabel( self.getControl( 216 ).getLabel(), label2= self.settings[ "showtimes_local" ] )
+            self.getControl( 217 ).setLabel( self.getControl( 217 ).getLabel(), label2=self.settings[ "showtimes_scraper" ] )
+            #self.getControl( 218 ).setLabel( _( 218 ) )
             self.getControl( 218 ).setSelected( self.settings[ "refresh_trailers" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )
         except:

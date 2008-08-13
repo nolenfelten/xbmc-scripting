@@ -20,17 +20,16 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
+    BASE_CACHE_PATH = os.path.join( "P:/Thumbnails", "Video" )
     # add all video extensions wanted in lowercase
     VIDEO_EXT = xbmc.getSupportedMedia( "video" )
 
     def __init__( self ):
+        self._get_settings()
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( self.BASE_DATABASE_PATH ) ):
+        if ( not os.path.isfile( self.settings[ "amt_db" ] ) ):
             self._launch_script()
         else:
-            self._get_settings()
             if ( sys.argv[ 2 ] ):
                 self._parse_argv()
             self._get_items( self.args.path )
@@ -43,9 +42,9 @@ class Main:
         # no database was found so notify XBMC we're finished, false so no blank list is shown
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
+        if ( os.path.isfile( os.path.join( "Q://scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, msg1, msg3 ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( "Q://scripts", sys.modules[ "__main__" ].__script__, "default.py" ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, msg1, msg2, sys.modules[ "__main__" ].__svn_url__ )
 
@@ -61,6 +60,7 @@ class Main:
         self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
         self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
         self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
+        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
 
@@ -287,8 +287,6 @@ class Main:
     def _add_item( self, item, total ):
         ok = True
         add = True
-        # backslashes cause issues when passed in the url, so replace them
-        #url_path = item[ 0 ].replace( "\\", "[[BACKSLASH]]" )
         # create our url
         url = '%s?path=%s&isFolder=%d' % ( sys.argv[ 0 ], repr( quote_plus( item[ 0 ] ) ), item[ 2 ], )
         # handle folders differently
@@ -350,7 +348,7 @@ class Main:
             fpath = "/".join( share_string_list )
         # make the proper cache filename and path so duplicate caching is unnecessary
         filename = xbmc.getCacheThumbName( fpath )
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+        thumbnail = os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename )
         # if the cached thumbnail does not exist check for a tbn file
         if ( not os.path.isfile( thumbnail ) ):
             # create filepath to a local tbn file

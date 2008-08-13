@@ -206,8 +206,8 @@ class Trivia( xbmcgui.WindowXML ):
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
-    BASE_DATA_PATH = os.path.join( "T:\\script_data", sys.modules[ "__main__" ].__script__ )
+    BASE_CACHE_PATH = os.path.join( "P:/Thumbnails", "Video" )
+    BASE_DATA_PATH = os.path.join( "T:/script_data", sys.modules[ "__main__" ].__script__ )
 
     def __init__( self ):
         self._get_settings()
@@ -238,6 +238,7 @@ class Main:
         self.settings[ "coming_attraction_videos" ] = xbmcplugin.getSetting( "coming_attraction_videos" )
         self.settings[ "feature_presentation_videos" ] = xbmcplugin.getSetting( "feature_presentation_videos" )
         self.settings[ "end_presentation_videos" ] = xbmcplugin.getSetting( "end_presentation_videos" )
+        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
 
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
@@ -317,7 +318,7 @@ class Main:
         if ( playlist and not pDialog.iscanceled() ):
             # if trive path an time play the trivia slides
             if ( self.settings[ "trivia_path" ] and self.settings[ "trivia_total_time" ] ):
-                ui = Trivia( "plugin-%s-trivia.xml" % ( sys.modules[ "__main__" ].__plugin__.replace( " ", "_" ), ), sys.modules[ "__main__" ].BASE_RESOURCE_PATH, "default", False, trivia_path=self.settings[ "trivia_path" ], trivia_total_time=self.settings[ "trivia_total_time" ], trivia_slide_time=self.settings[ "trivia_slide_time" ], trivia_music=self.settings[ "trivia_music" ], trivia_end_image=self.settings[ "trivia_end_image" ], trivia_end_music=self.settings[ "trivia_end_music" ], trivia_music_volume=self.settings[ "trivia_music_volume" ], playlist=playlist )
+                ui = Trivia( "plugin-%s-trivia.xml" % ( sys.modules[ "__main__" ].__plugin__.replace( " ", "_" ), ), os.getcwd(), "default", False, trivia_path=self.settings[ "trivia_path" ], trivia_total_time=self.settings[ "trivia_total_time" ], trivia_slide_time=self.settings[ "trivia_slide_time" ], trivia_music=self.settings[ "trivia_music" ], trivia_end_image=self.settings[ "trivia_end_image" ], trivia_end_music=self.settings[ "trivia_end_music" ], trivia_music_volume=self.settings[ "trivia_music_volume" ], playlist=playlist )
                 ui.doModal()
                 del ui
                 xbmc.executebuiltin( "XBMC.ActivateWindow(2005)" )
@@ -330,7 +331,7 @@ class Main:
 
     def _fetch_records( self ):
         try:
-            records = Records()
+            records = Records( amt_db=self.settings[ "amt_db" ] )
             # select only trailers with valid trailer urls
             sql = """
                         SELECT movies.*, studios.studio, genres.genre  
@@ -410,7 +411,7 @@ class Main:
         # check for a valid thumbnail
         thumbnail = ""
         if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
-            thumbnail = xbmc.translatePath( os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] ) )
+            thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
         else:
             thumbnail = self._get_thumbnail( trailer[ 3 ], trailer[ 0 ] )
         # set the default icon
@@ -433,11 +434,11 @@ class Main:
         # All these steps are necessary for the differnt caching methods of XBMC
         # make the proper cache filename and path so duplicate caching is unnecessary
         filename = xbmc.getCacheThumbName( item )
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+        thumbnail = os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename )
         # if the cached thumbnail does not exist create the thumbnail based on url
         if ( not os.path.isfile( thumbnail ) ):
             filename = xbmc.getCacheThumbName( url )
-            thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
+            thumbnail = os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename )
             # if the cached thumbnail does not exist create the thumbnail based on filepath.tbn
             if ( not os.path.isfile( thumbnail ) ):
                 # create filepath to a local tbn file
@@ -473,7 +474,7 @@ class Main:
     def _mark_watched( self, idMovie ):
         try:
             # our database object
-            records = Records()
+            records = Records( amt_db=self.settings[ "amt_db" ] )
             # needed sql commands
             fetch_sql = "SELECT times_watched FROM movies WHERE idMovie=?;"
             update_sql = "UPDATE movies SET times_watched=?, last_watched=? WHERE idMovie=?;"
@@ -494,14 +495,11 @@ class Main:
 
 
 class Records:
-    # base paths
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-
     def __init__( self, *args, **kwargs ):
-        self.connect()
+        self.connect( kwargs[ "amt_db" ] )
 
-    def connect( self ):
-        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
+    def connect( self, db ):
+        self.db = sqlite.connect( db )
         self.cursor = self.db.cursor()
 
     def commit( self ):

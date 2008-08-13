@@ -8,16 +8,17 @@ __author__ = "Apple Movie Trailers (AMT) Team"
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/Apple%20Movie%20Trailers"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
-__version__ = "pre-0.99.6"
+__version__ = "pre-0.99.7"
 __svn_revision__ = 0
 
 # Shared resources
-BASE_RESOURCE_PATH = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+# append the proper platforms folder to our path, xbox is the same as win32
 env = ( os.environ.get( "OS", "win32" ), "win32", )[ os.environ.get( "OS", "win32" ) == "xbox" ]
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "platform_libraries", env ) )
-import language
-__language__ = language.Language().localized
+# create our language object
+__language__ = xbmc.Language( os.getcwd() ).getLocalizedString
 
 # Main team credits
 __credits_l1__ = __language__( 910 )#"Head Developer & Coder"
@@ -38,6 +39,7 @@ __add_credits_r3__ = __language__( 2 )#"Translators name"
 
 # Start the main gui
 if __name__ == "__main__":
+    # main window
     import gui
+    # clear all modules
     sys.modules.clear()
-

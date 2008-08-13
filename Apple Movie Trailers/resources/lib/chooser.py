@@ -36,7 +36,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def show_chooser( self ):
         self.getControl( 500 ).setLabel( self.title )
-        self.getControl( 502 ).setLabel( _( 231 ) )
+        #self.getControl( 502 ).setLabel( _( 231 ) )
         self._setup_list()
         if ( self.list_control == 0 and self.descriptions[ 0 ] == "" ):
             self._get_thumb( self.choices[ self.getControl( 503 ).getSelectedPosition() ] )
