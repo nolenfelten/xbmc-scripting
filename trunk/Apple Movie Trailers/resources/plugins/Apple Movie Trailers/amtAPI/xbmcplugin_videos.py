@@ -22,7 +22,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_DATA_PATH = sys.modules[ "__main__" ].BASE_DATA_PATH
+    BASE_DATA_PATH = os.path.join( "T:/script_data", sys.modules[ "__main__" ].__script__ )
 
     def __init__( self ):
         self._get_settings()
@@ -50,6 +50,7 @@ class Main:
         self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
         self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
         self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
+        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
 
     def get_videos( self ):
         try:
@@ -82,7 +83,7 @@ class Main:
 
     def _fill_media_list( self, trailers ):
         try:
-            records = Records()
+            records = Records( self.settings[ "amt_db" ] )
             ok = True
             # enumerate through the list of trailers and add the item to the media list
             for trailer in trailers:
@@ -92,7 +93,7 @@ class Main:
                     # check for a valid thumbnail
                     thumbnail = ""
                     if ( trailer[ 4 ] and trailer[ 4 ] is not None ):
-                        thumbnail = xbmc.translatePath( os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] ) )
+                        thumbnail = os.path.join( self.BASE_DATA_PATH, ".cache", trailer[ 4 ][ 0 ], trailer[ 4 ] )
                     # set the default icon
                     icon = "DefaultVideo.png"
                     # if a rating exists format it
@@ -274,14 +275,11 @@ class Main:
         return default
 
 class Records:
-    # base paths
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
-
     def __init__( self, *args, **kwargs ):
-        self.connect()
+        self.connect( kwargs[ "amt_db" ] )
 
-    def connect( self ):
-        self.db = sqlite.connect( self.BASE_DATABASE_PATH )
+    def connect( self, db ):
+        self.db = sqlite.connect( db )
         self.db.create_function( "regexp", 2, self.regexp )
         self.cursor = self.db.cursor()
     

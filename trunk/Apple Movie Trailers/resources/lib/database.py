@@ -189,7 +189,7 @@ class Database:
             filenames = os.walk( BASE_DATA_PATH )
             for filename in filenames:
                 for file in filename[ 2 ]:
-                    path = xbmc.translatePath( os.path.join( filename[ 0 ], file ) )
+                    path = os.path.join( filename[ 0 ], file )
                     if ( path.endswith( ".xml" ) ):
                         try:
                             os.remove( path )

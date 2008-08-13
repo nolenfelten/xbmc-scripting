@@ -35,6 +35,7 @@
 			<posy>43</posy>
 			<align>left</align>
 			<font>special13</font>
+            <label>SCRIPT0</label>
 			<textcolor>FFFFFFFF</textcolor>
 		</control>
 
@@ -44,22 +45,9 @@
 			<posy>43</posy>
 			<width>300</width>
 			<align>right</align>
-            <info>ListItem.Genre</info>
+            <info>Container.Property(Category)</info>
 			<font>special13</font>
 			<textcolor>FFFFFFFF</textcolor>
-            <visible>Control.IsVisible(3000)</visible>
-		</control>
-
-        <control type="label">
-			<description>Category Label</description>
-			<posx>650</posx>
-			<posy>43</posy>
-			<width>300</width>
-			<align>right</align>
-            <info>Container(60).ListItem.Genre</info>
-			<font>special13</font>
-			<textcolor>FFFFFFFF</textcolor>
-            <visible>!Control.IsVisible(3000)</visible>
 		</control>
 
         <control type="group">
@@ -129,6 +117,7 @@
 				<posy>157</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>$INFO[Container.Property(Shortcut1)]</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -149,6 +138,7 @@
 				<posy>194</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>$INFO[Container.Property(Shortcut2)]</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -169,6 +159,7 @@
 				<posy>231</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>$INFO[Container.Property(Shortcut3)]</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -189,6 +180,7 @@
 				<posy>268</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT103</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -209,6 +201,7 @@
 				<posy>305</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT104</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -229,6 +222,7 @@
 				<posy>342</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT105</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -249,6 +243,7 @@
 				<posy>379</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT106</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -269,6 +264,7 @@
 				<posy>416</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT107</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -289,6 +285,7 @@
 				<posy>453</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT108</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -310,6 +307,7 @@
 				<posy>490</posy>
 				<width>160</width>
 				<height>33</height>
+                <label>SCRIPT109</label>
 				<texturefocus>amt-button-focus.png</texturefocus>
 				<texturenofocus>amt-button-nofocus.png</texturenofocus>
 				<font>font13</font>
@@ -659,7 +657,7 @@
 				<posx>490</posx>
 				<posy>335</posy>
 				<align>right</align>
-				<label>-</label>
+				<label></label>
 				<font>font10</font>
 				<textcolor>CCFFFFFF</textcolor>
                 <animation effect="slide" time="0" end="135,203" condition="Control.IsVisible(51)">Conditional</animation>

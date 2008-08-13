@@ -58,7 +58,7 @@
 			<align>center</align>
 			<font>font10</font>
 			<textcolor>DDced8da</textcolor>
-			<label>-</label>
+            <label>SCRIPT231</label>
 		</control>
 		<!-- ** Required ** Do not change <id> or <type> -->
 		<control type="list" id="503">

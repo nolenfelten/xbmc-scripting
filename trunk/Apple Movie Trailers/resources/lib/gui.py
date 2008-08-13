@@ -82,23 +82,14 @@ class GUI( xbmcgui.WindowXML ):
             self.startup = False
             #self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
-            self._set_labels()
             self._setup_variables()
             self._set_startup_choices()
             self._set_startup_category()
+            self.set_shortcut_properties()
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
-            self.showTrailers( self.sql, self.params, self.trailer, force_update=2 )
-
-    def _set_labels( self ):
-        try:
-            self.getControl( self.CONTROL_TITLE_LABEL ).setLabel( __scriptname__ )
-            self.getControl( self.CONTROL_CATEGORY_LIST_COUNT ).setLabel( "" )
-            for button_id in range( self.CONTROL_BUTTON_GROUP_START, self.CONTROL_BUTTON_GROUP_END + 1 ):
-                self.getControl( button_id ).setLabel( _( button_id ) )
-        except:
-            pass
+            self.showTrailers( self.sql, self.params, self.trailer, 2 )
 
     def _get_settings( self ):
         self.settings = Settings().get_settings()
@@ -154,7 +145,6 @@ class GUI( xbmcgui.WindowXML ):
         self.main_category = GENRES
         self.genres = self.trailers.categories
         self.current_display = [ [ GENRES , 0 ], [ 0, 1 ] ]
-        self.setShortcutLabels()
 
     def _set_startup_category( self ):
         startup_button = "Shortcut1"
@@ -235,11 +225,11 @@ class GUI( xbmcgui.WindowXML ):
                             title = category.title
                         thumbnail = "amt-generic-%s%s.png" % ( ( "genre", "studio", "actor", )[ abs( self.category_id ) - 1 ], ( "-i", "", )[ category.completed ], )
                         if ( self.main_category == ACTORS ):
-                            actor_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) ) )
+                            actor_path = os.path.join( "P:/Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + category.title )[ 0 ], xbmc.getCacheThumbName( "actor" + category.title ) )
                             thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                         count = "(%d)" % ( category.count, )
                         list_item = xbmcgui.ListItem( title, count, thumbnail, thumbnail )
-                        list_item.setInfo( "video", { "Genre": self.category } )
+                        ##list_item.setInfo( "video", { "Genre": self.category } )
                         list_item.select( not category.completed )
                         self.getControl( self.CONTROL_CATEGORY_LIST ).addItem( list_item )
                     self._set_selection( self.CONTROL_CATEGORY_LIST, choice )#self.list_control_pos[ self.list_category ] )
@@ -311,7 +301,6 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.lock()
         self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( category )
         self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( not category )
-        #self.setCategoryLabel()
         xbmcgui.unlock()
         self.showPlotCastControls( category )
         self.setFocus( self.getControl( ( self.CONTROL_CATEGORY_LIST_GROUP, self.CONTROL_TRAILER_LIST_GROUP, )[ not category ] ) )
@@ -360,6 +349,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( self.list_category == 1 ):
                 category = self.genres[ self.category_id ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) )
         self.category = category
+        self.setProperty( "Category", self.category )
 
     def _set_count_label( self, list_control ):
         separator = ( _( 96 ) )
@@ -396,7 +386,7 @@ class GUI( xbmcgui.WindowXML ):
             thumbnail = "amt-generic-%sactor.png" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
             if ( self.cast_exists ):
                 for actor in self.trailers.movies[ trailer ].cast:
-                    actor_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) ) )
+                    actor_path = os.path.join( "P:/Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) )
                     actor_thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                     actual_icon = ( "", actor_thumbnail, )[ actor_thumbnail != thumbnail ]
                     self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", actual_icon, actor_thumbnail ) )
@@ -491,7 +481,7 @@ class GUI( xbmcgui.WindowXML ):
         force_fallback = self.skin != "Default"
         choices = [ "%s %d%s - (%s)" % ( _( 99 ), c + 1, ( "", " - [HD]", )[ "720p.mov" in url or "1080p.mov" in url ], os.path.splitext( os.path.basename( url ) )[ 0 ] ) for c, url in enumerate( urls ) ]
         choices += [ _( 39 ) ]
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, descriptions=[ "" for x in range( len( choices ) ) ], original=-1, selection=0, list_control=1, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback, choices=choices, descriptions=[ "" for x in range( len( choices ) ) ], original=-1, selection=0, list_control=1, title=title )
         selection = ch.selection
         del ch
         return selection
@@ -637,7 +627,7 @@ class GUI( xbmcgui.WindowXML ):
             labels += ( _( 550 ), )
             functions += ( self.force_full_update, )
         force_fallback = self.skin != "Default"
-        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, area=( x, y, w, h, ), labels=labels )
+        cm = context_menu.GUI( "script-%s-context.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback, area=( x, y, w, h, ), labels=labels )
         if ( cm.selection is not None ):
             functions[ cm.selection ]()
         del cm
@@ -699,7 +689,7 @@ class GUI( xbmcgui.WindowXML ):
         else:
             import search
             force_fallback = self.skin != "Default"
-            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+            s = search.GUI( "script-%s-search.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback )
             s.doModal()
             if ( s.query ):
                 self.search_sql = s.query
@@ -710,7 +700,7 @@ class GUI( xbmcgui.WindowXML ):
     def changeSettings( self ):
         import settings
         force_fallback = self.skin != "Default"
-        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, skin=self.skin, genres=self.genres )
+        settings = settings.GUI( "script-%s-settings.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback, skin=self.skin, genres=self.genres )
         settings.doModal()
         if ( settings.changed ):
             self._get_settings()
@@ -718,14 +708,12 @@ class GUI( xbmcgui.WindowXML ):
             if ( settings.restart ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 271 ), _( 270 ) )
             if ( not ok ):
-                self.setShortcutLabels()
+                self.set_shortcut_properties()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
-                    self._set_labels()
                     self.sql_category = ""
                     trailer = self.getCurrentListPosition()
                     self.showTrailers( self.sql, self.params, choice=trailer, force_update=2 )
                 elif ( settings.refresh ):
-                    self._set_labels()
                     self.sql = ""
                     genre = self.getControl( self.CONTROL_CATEGORY_LIST ).getSelectedPosition()
                     self.showCategories( self.sql_category, self.params_category, choice=genre, force_update=2 )
@@ -733,32 +721,18 @@ class GUI( xbmcgui.WindowXML ):
             else: self.exitScript( True )
         del settings
 
-    def setShortcutLabels( self ):
-        for s in range( 3 ):
-            if ( self.settings[ "shortcut%d" % ( s + 1, ) ] == FAVORITES ):
-                self.getControl( 100 + s ).setLabel( _( 152 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == DOWNLOADED ):
-                self.getControl( 100 + s ).setLabel( _( 153 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == HD_TRAILERS ):
-                self.getControl( 100 + s ).setLabel( _( 160 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == NO_TRAILER_URLS ):
-                self.getControl( 100 + s ).setLabel( _( 161 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == CUSTOM_SEARCH ):
-                self.getControl( 100 + s ).setLabel( _( 162 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == WATCHED ):
-                self.getControl( 100 + s ).setLabel( _( 163 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == RECENTLY_ADDED ):
-                self.getControl( 100 + s ).setLabel( _( 164 ) )
-            elif ( self.settings[ "shortcut%d" % ( s + 1, ) ] == MULTIPLE_TRAILERS ):
-                self.getControl( 100 + s ).setLabel( _( 165 ) )
-            else:
-                self.getControl( 100 + s ).setLabel( self.genres[ self.settings[ "shortcut%d" % ( s + 1, ) ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) )
+    def set_shortcut_properties( self ):
+        shortcuts = { FAVORITES: _( 152 ), DOWNLOADED: _( 153 ), HD_TRAILERS: _( 160 ), NO_TRAILER_URLS: _( 161 ),
+                            CUSTOM_SEARCH: _( 162 ), WATCHED: _( 163 ), RECENTLY_ADDED: _( 164 ), MULTIPLE_TRAILERS: _( 165 ), }
+        self.setProperty( "shortcut1", shortcuts.get( self.settings[ "shortcut1" ], self.genres[ self.settings[ "shortcut1" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
+        self.setProperty( "shortcut2", shortcuts.get( self.settings[ "shortcut2" ], self.genres[ self.settings[ "shortcut2" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
+        self.setProperty( "shortcut3", shortcuts.get( self.settings[ "shortcut3" ], self.genres[ self.settings[ "shortcut3" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
 
     def showCredits( self ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback )
         del c
 
     def updateScript( self ):
@@ -875,14 +849,14 @@ class GUI( xbmcgui.WindowXML ):
         trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
         import showtimes
         force_fallback = self.skin != "Default"
-        s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
+        s = showtimes.GUI( "script-%s-showtimes.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback, title=self.trailers.movies[ trailer ].title, location=self.settings[ "showtimes_local" ] )
         del s
 
     def exitScript( self, restart=False ):
         ##if ( self.Timer is not None ): self.Timer.cancel()
         self._set_video_resolution( True )
         self.close()
-        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd().replace( ";", "" ), "default.py" ), ) )
+        if ( restart ): xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( os.getcwd(), "default.py" ), ) )
 
     def onClick( self, controlId ):
         try:
@@ -971,7 +945,7 @@ def main():
     _progress_dialog( len( modules ) + 1, _( 55 ) )
     settings = Settings().get_settings()
     force_fallback = settings[ "skin" ] != "Default"
-    ui = GUI( "script-%s-main.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, settings[ "skin" ], force_fallback )
+    ui = GUI( "script-%s-main.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), settings[ "skin" ], force_fallback )
     _progress_dialog( -1 )
     ui.doModal()
     del ui

@@ -43,8 +43,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:\\Thumbnails", "Video" )
-    BASE_DATABASE_PATH = sys.modules[ "__main__" ].BASE_DATABASE_PATH
+    BASE_CACHE_PATH = os.path.join( "P:/Thumbnails", "Video" )
 
     def __init__( self ):
         self._get_settings()
@@ -68,6 +67,7 @@ class Main:
         self.settings[ "mode" ] = int( xbmcplugin.getSetting( "mode" ) )
         self.settings[ "download_path" ] = xbmcplugin.getSetting( "download_path" )
         self.settings[ "mark_watched" ] = xbmcplugin.getSetting( "mark_watched" ) == "true"
+        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
         ##self.settings[ "player_core" ] = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ int( xbmcplugin.getSetting( "player_core" ) ) ]
 
     def _download_video( self ):
@@ -85,7 +85,7 @@ class Main:
                 # split and insert the trailer number if more than one
                 filepath = "%s%s" % ( title, ( "", "_%d" % ( count + 1, ), )[ multiple ], )
                 # folder to save to
-                dirname = "Z:\\"
+                dirname = "Z:/"
                 if ( not self.settings[ "download_path" ].startswith( "smb://" ) ):
                     dirname = self.settings[ "download_path" ]
                 # get a valid filepath
@@ -95,7 +95,7 @@ class Main:
                     filepath = os.path.join( self.settings[ "download_path" ], os.path.basename( filepath ) )
                 else:
                     if ( self.settings[ "mode" ] == 1 ):
-                        filepath = "Z:\\AMT_Video_%d%s" % ( count, ext, )
+                        filepath = "Z:/AMT_Video_%d%s" % ( count, ext, )
                     # set our display message
                     self.msg = "%s %d of %d" % ( xbmc.getLocalizedString( 30500 ), count + 1, len( urls ), )
                     # fetch the video
@@ -222,7 +222,7 @@ class Main:
             fetch_sql = "SELECT times_watched FROM movies WHERE idMovie=?;"
             update_sql = "UPDATE movies SET times_watched=?, last_watched=? WHERE idMovie=?;"
             # connect to the database
-            db = sqlite.connect( self.BASE_DATABASE_PATH )
+            db = sqlite.connect( self.settings[ "amt_db" ] )
             # get our cursor object
             cursor = db.cursor()
             # we fetch the times watched so we can increment by one

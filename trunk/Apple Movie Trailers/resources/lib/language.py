@@ -16,7 +16,7 @@ class Language:
     def __init__( self ):
         """ initializer """
         # language folder
-        base_path = os.path.join( os.getcwd().replace( ";", "" ), "resources", "language" )
+        base_path = os.path.join( os.getcwd(), "resources", "language" )
         # get the current language
         language = self._get_language( base_path )
         # create strings dictionary
