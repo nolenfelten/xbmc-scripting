@@ -10,7 +10,7 @@ import xbmc
 import xbmcgui
 import threading
 
-resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
+resource_path = os.path.join( os.getcwd(), "resources" )
 sys.path.append( os.path.join( resource_path, "lib" ) )
 
 import wrt54g
@@ -245,6 +245,7 @@ class Start( threading.Thread ):
 
 
 if ( __name__ == "__main__" ):
-    ui = GUI( "script-KCP-main.xml", resource_path, "Default" )
+    ui = GUI( "script-KCP-main.xml", os.getcwd(), "Default" )
     ui.doModal()
     del ui
+    sys.modules.clear()
