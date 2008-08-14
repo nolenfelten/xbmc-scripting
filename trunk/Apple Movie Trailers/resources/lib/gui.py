@@ -85,11 +85,11 @@ class GUI( xbmcgui.WindowXML ):
             self._setup_variables()
             self._set_startup_choices()
             self._set_startup_category()
-            self.set_shortcut_properties()
+            self._set_shortcut_properties()
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
-            self.set_shortcut_properties()
+            self._set_shortcut_properties()
             self.showTrailers( self.sql, self.params, self.trailer, 2 )
 
     def _get_settings( self ):
@@ -709,7 +709,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( settings.restart ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 271 ), _( 270 ) )
             if ( not ok ):
-                self.set_shortcut_properties()
+                self._set_shortcut_properties()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
                     self.sql_category = ""
                     trailer = self.getCurrentListPosition()
@@ -722,7 +722,7 @@ class GUI( xbmcgui.WindowXML ):
             else: self.exitScript( True )
         del settings
 
-    def set_shortcut_properties( self ):
+    def _set_shortcut_properties( self ):
         shortcuts = { FAVORITES: _( 152 ), DOWNLOADED: _( 153 ), HD_TRAILERS: _( 160 ), NO_TRAILER_URLS: _( 161 ),
                             CUSTOM_SEARCH: _( 162 ), WATCHED: _( 163 ), RECENTLY_ADDED: _( 164 ), MULTIPLE_TRAILERS: _( 165 ), }
         self.setProperty( "shortcut1", shortcuts.get( self.settings[ "shortcut1" ], self.genres[ self.settings[ "shortcut1" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
