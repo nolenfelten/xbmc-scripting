@@ -20,7 +20,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = os.path.join( "P:/Thumbnails", "Video" )
+    BASE_CACHE_PATH = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Video" ) )
     # add all video extensions wanted in lowercase
     VIDEO_EXT = xbmc.getSupportedMedia( "video" )
 
@@ -42,9 +42,9 @@ class Main:
         # no database was found so notify XBMC we're finished, false so no blank list is shown
         xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=False )
         # ask to run script to create the database
-        if ( os.path.isfile( os.path.join( "Q://scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ):
+        if ( os.path.isfile( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ) ) ):
             if ( xbmcgui.Dialog().yesno( sys.modules[ "__main__" ].__plugin__, msg1, msg3 ) ):
-                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( os.path.join( "Q://scripts", sys.modules[ "__main__" ].__script__, "default.py" ), ) )
+                xbmc.executebuiltin( "XBMC.RunScript(%s)" % ( xbmc.translatePath( os.path.join( "Q:\\scripts", sys.modules[ "__main__" ].__script__, "default.py" ) ), ) )
         else:
             ok = xbmcgui.Dialog().ok( sys.modules[ "__main__" ].__plugin__, msg1, msg2, sys.modules[ "__main__" ].__svn_url__ )
 
