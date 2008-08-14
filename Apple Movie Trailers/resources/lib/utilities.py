@@ -32,9 +32,9 @@ RECENTLY_ADDED = -11
 MULTIPLE_TRAILERS = -12
 CUSTOM_SEARCH = -99
 # base paths
-BASE_DATA_PATH = os.path.join( "T:/script_data", __scriptname__ )
-BASE_SETTINGS_PATH = os.path.join( "P:/script_data", os.path.basename( os.getcwd() ), "settings.txt" )
-BASE_DATABASE_PATH = os.path.join( "P:/script_data", os.path.basename( os.getcwd() ), "AMT.db" )
+BASE_DATA_PATH = xbmc.translatePath( os.path.join( "T:\\script_data", __scriptname__ ) )
+BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.path.basename( os.getcwd() ), "settings.txt" ) )
+BASE_DATABASE_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.path.basename( os.getcwd() ), "AMT.db" ) )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special button codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -82,7 +82,7 @@ def install_plugin( plugin_list, message=False ):
         if ( ok ):
             try:
                 # we use "U:/" for linux, windows and osx for platform mode
-                drive = ( "U:/", "Q:/", )[ os.environ.get( "OS", "xbox" ) == "xbox" ]
+                drive = ( "U:\\", "Q:\\", )[ os.environ.get( "OS", "xbox" ) == "xbox" ]
                 # get the thumbnail the user chooses
                 thumbnail_copy_path = get_browse_dialog( default=os.path.join( BASE_RESOURCE_PATH, "plugins", plugins[ plugin ], "thumbnails", "thumbs", "default.tbn" ), heading="%s - %s" % ( _( 710 ), plugins[ plugin ], ), dlg_type=2, mask=".tbn", use_thumbs=True )
                 # create the progress dialog
