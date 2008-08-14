@@ -113,11 +113,11 @@ def install_plugin( plugin_list, message=False ):
                 # get the cached thumb name
                 cached_thumbnail = xbmc.getCacheThumbName( os.path.join( drive + "plugins", "video", plugins[ plugin ] + "\\" ) )
                 # cached thumb path (we delete the existing, so our plugin re-caches the new thumb)
-                cached_thumbnail_path = os.path.join( "P:/Thumbnails", "Programs", cached_thumbnail )
+                cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", cached_thumbnail ) )
                 # get the root cached thumb name
                 root_cached_thumbnail = xbmc.getCacheThumbName( "plugin://video/"+ plugins[ plugin ] + "/" )
                 # root cached thumb path (deleting does not work, so we overwrite the existing)
-                root_cached_thumbnail_path = os.path.join( "P:/Thumbnails", "Programs", root_cached_thumbnail )
+                root_cached_thumbnail_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Programs", root_cached_thumbnail ) )
                 # copy default.tbn
                 copyfile( thumbnail_copy_path, thumbnail_install_path )
                 # copy folder.jpg (probably not needed)
@@ -274,7 +274,7 @@ class Settings:
             "skin": "Default",
             "trailer_quality": 2,
             "mode": 0,
-            "save_folder": "Q:/",
+            "save_folder": xbmc.translatePath( "Q:\\" ),
             "thumbnail_display": 0,
             "fade_thumb": True,
             "startup_category_id": 10,
