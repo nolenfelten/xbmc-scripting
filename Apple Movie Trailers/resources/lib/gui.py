@@ -89,6 +89,7 @@ class GUI( xbmcgui.WindowXML ):
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
+            self.set_shortcut_properties()
             self.showTrailers( self.sql, self.params, self.trailer, 2 )
 
     def _get_settings( self ):
