@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-<!-- Finnish 31.7.2008 -->
+<!-- Finnish 14.8.2008 -->
     <string id="30000">Käytä kirjastoa luetteloinnissa</string>
     <string id="30010">- Rajoita esittelyt elokuvan tyylin ja MPAA-luokituksen mukaan</string>
     <string id="30020">Polku tai videoiden sijainti</string>
@@ -32,6 +32,7 @@
     <string id="30220">- Valitse vain katsomattomista esittelyistä</string>
     <string id="30230">Arvosteltujen videoiden polku</string>
     <string id="30240">&#32;&#32;- Tietovisailun äänenvoimakkuus (% asetetusta)</string>
+    <string id="30250">- Apple Movie Trailer tietokannan polku</string>
 
     <string id="30500">Valitaan satunnainen esittely...</string>
     <string id="30510">Arvotaan tietovisailu kuvia...</string>
@@ -40,5 +41,12 @@
     <string id="30601">Sinun täytyy asentaa ja käynnistää pääskripti.</string>
     <string id="30602">Haluatko käynnistää pääskriptin?</string>
 
-   <string id="30700">Kirjasto</string>
+    <string id="30700">Kirjasto</string>
+    <string id="30800">Lapsilukko</string>
+    <string id="30801">Lähteen valvonta</string>
+    <string id="30802">Elokuvaesittelyt</string>
+    <string id="30803">Tietovisa</string>
+    <string id="30804">Muut videot</string>
+    <string id="30805">Valinnainen fanitaide</string>
+    <string id="30805">Soittimen ydin</string>
 </strings>
