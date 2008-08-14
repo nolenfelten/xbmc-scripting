@@ -81,7 +81,7 @@ def install_plugin( plugin_list, message=False ):
             ok = xbmcgui.Dialog().yesno( plugins[ plugin ], _( 750 ), "", "", _( 712 ), _( 711 ), )
         if ( ok ):
             try:
-                # we use "U:/" for linux, windows and osx for platform mode
+                # we use "U:\\" for linux, windows and osx for platform mode
                 drive = ( "U:\\", "Q:\\", )[ os.environ.get( "OS", "xbox" ) == "xbox" ]
                 # get the thumbnail the user chooses
                 thumbnail_copy_path = get_browse_dialog( default=os.path.join( BASE_RESOURCE_PATH, "plugins", plugins[ plugin ], "thumbnails", "thumbs", "default.tbn" ), heading="%s - %s" % ( _( 710 ), plugins[ plugin ], ), dlg_type=2, mask=".tbn", use_thumbs=True )
