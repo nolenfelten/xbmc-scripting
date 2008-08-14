@@ -90,7 +90,7 @@ class LyricsFetcher:
                 ex_path = os.path.join( os.getcwd(), "exceptions.txt" )
             else:
                 name = __name__.replace( "resources.scrapers.", "" ).replace( ".lyricsScraper", "" )
-                ex_path = os.path.join( "T:/script_data", os.getcwd(), "scrapers", name, "exceptions.txt" )
+                ex_path = xbmc.translatePath( os.path.join( "P:\\script_data", os.getcwd(), "scrapers", name, "exceptions.txt" ) )
             ex_file = open( ex_path, "r" )
             self.exceptions = eval( ex_file.read() )
             ex_file.close()
