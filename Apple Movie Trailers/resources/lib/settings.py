@@ -136,7 +136,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 ###### End of Special defs #####################################################
     def _get_chooser( self, choices, descriptions, original, selection, list_control, title ):
         force_fallback = self.skin != "Default"
-        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback, choices=choices, descriptions=descriptions, original=original, selection=selection, list_control=list_control, title=title )
+        ch = chooser.GUI( "script-%s-chooser.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback, choices=choices, descriptions=descriptions, original=original, selection=selection, list_control=list_control, title=title )
         selection = ch.selection
         del ch
         return selection
@@ -361,7 +361,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ shows a credit window """
         import credits
         force_fallback = self.skin != "Default"
-        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), BASE_RESOURCE_PATH, self.skin, force_fallback )
+        c = credits.GUI( "script-%s-credits.xml" % ( __scriptname__.replace( " ", "_" ), ), os.getcwd(), self.skin, force_fallback )
         del c
 
     def _get_defaults( self ):
