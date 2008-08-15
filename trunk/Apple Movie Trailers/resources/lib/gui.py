@@ -269,7 +269,7 @@ class GUI( xbmcgui.WindowXML ):
                         except:
                             release_date = ""
                             year = 0
-                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": self.category } )
+                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": movie.genres } )
                         # set release date property
                         list_item.setProperty( "releasedate", movie.release_date )
                         self.addItem( list_item )
@@ -534,7 +534,7 @@ class GUI( xbmcgui.WindowXML ):
                                 year = int( self.trailers.movies[ self.trailer ].release_date[ -5 : ] )
                             except:
                                 year = 0
-                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ self.trailer ].studio, "Genre": self.category } )
+                            listitem.setInfo( "video", { "Title": t, "Year": year, "PlotOutline": plot, "Plot": plot, "Studio": self.trailers.movies[ self.trailer ].studio, "Genre": self.trailers.movies[ self.trailer ].genres } )
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):

@@ -43,6 +43,7 @@ class Movie:
         - date_added (text - date the trailer was added to the database)
         - cast (list - list of actors)
         - studio (string - movies studio)
+        - genre (string - movies genres)
     """
     def __init__( self, *args, **kwargs ):
         self.__dict__.update( kwargs )
@@ -637,7 +638,14 @@ class Trailers:
             if ( studio is not None ): movie += ( studio[ 0 ], )
             else: movie += ( "", )
             return movie
-            
+
+        def _get_genres( movie ):
+            genre_list = records.fetch( self.query[ "genres_by_movie_id" ], ( movie[ 0 ], ), all=True )
+            if ( genre_list is not None ):
+                movie += ( " / ".join( [ genre[ 0 ] for genre in genre_list ] ), )
+            else: movie += ( "", )
+            return movie
+
         try:
             _progress_dialog()
             records = database.Records()
@@ -650,6 +658,7 @@ class Trailers:
                         movie = _load_movie_info( movie )
                         info_missing = True
                     else: movie = _get_actor_and_studio( movie )
+                    movie = _get_genres( movie )
                     if ( info_missing ):
                         if ( float( cnt + 1 ) / 100 == int( ( cnt + 1 ) / 100 ) or ( cnt + 1 ) == len( movie_list ) or not dialog_ok ):
                             commit = True
@@ -679,7 +688,8 @@ class Trailers:
                                 saved = eval( movie[13] ),
                                 date_added = movie[14],
                                 cast = movie[15],
-                                studio = movie[16]
+                                studio = movie[16],
+                                genres = movie[17]
                                 )
                             ]
 

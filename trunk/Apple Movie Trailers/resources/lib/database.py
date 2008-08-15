@@ -434,3 +434,11 @@ class Query( dict ):
                                                         ON genre_link_movie.idGenre=genres.idGenre
                                                         WHERE %s ORDER BY title;
                                                         """ 
+
+        self[ "genres_by_movie_id" ]		= """
+                                                        SELECT genres.genre 
+                                                        FROM movies, genres, genre_link_movie 
+                                                        WHERE movies.idMovie=? 
+                                                        AND genre_link_movie.idMovie=movies.idMovie 
+                                                        AND genre_link_movie.idGenre=genres.idGenre;
+                                                    """
