@@ -15,8 +15,6 @@ __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/XBMC%20Changelog"
 __credits__ = "XBMC TEAM, freenode/#xbmc-scripting"
 __version__ = "1.1.1"
 
-resource_path = os.path.join( os.getcwd().replace( ";", "" ), "resources" )
-
 
 class GUI( xbmcgui.WindowXML ):
     ACTION_EXIT_SCRIPT = ( 9, 10, )
@@ -54,6 +52,6 @@ class GUI( xbmcgui.WindowXML ):
             self.close()
 
 if ( __name__ == "__main__" ):
-    ui = GUI( "script-XBMC_Changelog-main.xml", resource_path, "Default" )
+    ui = GUI( "script-XBMC_Changelog-main.xml", os.getcwd(), "Default" )
     ui.doModal()
     del ui
