@@ -76,20 +76,18 @@ class GUI( xbmcgui.WindowXML ):
         self._get_settings()
         self._get_showtimes_scraper()
         self._get_custom_sql()
-        
+        self._setup_variables()
+        self._set_startup_choices()
+
     def onInit( self ):
+        self._set_shortcut_properties()
         if ( self.startup ):
             self.startup = False
-            #self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( False )
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
-            self._setup_variables()
-            self._set_startup_choices()
             self._set_startup_category()
-            self._set_shortcut_properties()
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
-            self._set_shortcut_properties()
             self.showTrailers( self.sql, self.params, self.trailer, 2 )
 
     def _get_settings( self ):
