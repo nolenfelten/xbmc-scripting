@@ -110,6 +110,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.getControl( 207 ).setLabel( self.getControl( 207 ).getLabel(), label2=self.filename_format[ self.settings[ "filename_format" ] ] )
             self.getControl( 208 ).setLabel( self.getControl( 208 ).getLabel(), label2=self.settings[ "music_path" ] )
             self.getControl( 209 ).setSelected( self.settings[ "shuffle" ] )
+            self.getControl( 209 ).setEnabled( self.settings[ "music_path" ] != "" )
             self.getControl( 210 ).setSelected( self.settings[ "compatible" ] )
             self.getControl( 210 ).setEnabled( self.settings[ "save_lyrics" ] )
             self.getControl( 211 ).setSelected( self.settings[ "use_extension" ] )
