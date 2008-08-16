@@ -37,19 +37,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def _set_labels( self ):
         xbmcgui.lock()
         try:
-            self.getControl( 20 ).setLabel( __scriptname__ )
             self.getControl( 30 ).setLabel( "%s: %s-%s" % ( _( 1006 ), __version__, __svn_revision__, ) )
-            self.getControl( 250 ).setLabel( _( 250 ) )
-            self.getControl( 251 ).setLabel( _( 251 ) )
-            self.getControl( 252 ).setLabel( _( 252 ) )
-            self.getControl( 253 ).setLabel( _( 253 ) )
-            self.getControl( 254 ).setLabel( _( 254 ) )
-            self.getControl( 255 ).setLabel( _( 255 ) )
             ## setEnabled( False ) if not used
             #self.getControl( 253 ).setVisible( False )
             #self.getControl( 253 ).setEnabled( False )
-            #for x in range( 1, len( self.settings ) ):
-            #    self.getControl( 200 + x ).setLabel( _( 200 + x ) )
         except: pass
         xbmcgui.unlock()
 
@@ -109,25 +100,18 @@ class GUI( xbmcgui.WindowXMLDialog ):
         """ sets the value labels """
         xbmcgui.lock()
         try:
-            self.getControl( 201 ).setLabel( _( 201 ), label2=self.scrapers_title[ self.current_scraper ] )
-            self.getControl( 202 ).setLabel( _( 202 ) )
+            self.getControl( 201 ).setLabel( self.getControl( 201 ).getLabel(), label2=self.scrapers_title[ self.current_scraper ] )
             self.getControl( 202 ).setSelected( self.settings[ "save_lyrics" ] )
-            self.getControl( 203 ).setLabel( _( 203 ), label2=self.settings[ "lyrics_path" ] )
+            self.getControl( 203 ).setLabel( self.getControl( 203 ).getLabel(), label2=self.settings[ "lyrics_path" ] )
             self.getControl( 203 ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.getControl( 204 ).setLabel( _( 204 ) )
             self.getControl( 204 ).setSelected( self.settings[ "smooth_scrolling" ] )
-            self.getControl( 205 ).setLabel( _( 205 ) )
             self.getControl( 205 ).setSelected( self.settings[ "show_viz" ] )
-            self.getControl( 206 ).setLabel( _( 206 ) )
             self.getControl( 206 ).setSelected( self.settings[ "use_filename" ] )
-            self.getControl( 207 ).setLabel( _( 207 ), label2=self.filename_format[ self.settings[ "filename_format" ] ] )
-            self.getControl( 208 ).setLabel( _( 208 ), label2=self.settings[ "music_path" ] )
-            self.getControl( 209 ).setLabel( _( 209 ) )
+            self.getControl( 207 ).setLabel( self.getControl( 207 ).getLabel(), label2=self.filename_format[ self.settings[ "filename_format" ] ] )
+            self.getControl( 208 ).setLabel( self.getControl( 208 ).getLabel(), label2=self.settings[ "music_path" ] )
             self.getControl( 209 ).setSelected( self.settings[ "shuffle" ] )
-            self.getControl( 210 ).setLabel( _( 210 ) )
             self.getControl( 210 ).setSelected( self.settings[ "compatible" ] )
             self.getControl( 210 ).setEnabled( self.settings[ "save_lyrics" ] )
-            self.getControl( 211 ).setLabel( _( 211 ) )
             self.getControl( 211 ).setSelected( self.settings[ "use_extension" ] )
             self.getControl( 211 ).setEnabled( self.settings[ "save_lyrics" ] )
             self.getControl( 250 ).setEnabled( self.settings_original != self.settings )

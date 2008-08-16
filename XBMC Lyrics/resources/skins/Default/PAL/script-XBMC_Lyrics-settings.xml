@@ -36,7 +36,7 @@
 			<align>left</align>
 			<font>special13</font>
 			<textcolor>DDced8da</textcolor>
-			<label>-</label>
+			<label>SCRIPT0</label>
             <animation effect="fade" time="200">WindowOpen</animation>
             <animation effect="fade" time="200">WindowClose</animation>
 		</control>
@@ -95,7 +95,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT201</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -120,7 +120,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT202</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -139,7 +139,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT203</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -156,7 +156,7 @@
                 <posy>0</posy>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT210</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -175,7 +175,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT211</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -202,7 +202,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT204</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -221,7 +221,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT205</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -248,7 +248,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT206</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -267,7 +267,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT207</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -292,7 +292,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT208</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -309,7 +309,7 @@
                 <height>30</height>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT209</label>
                 <font>font13</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>10</textoffsetx>
@@ -334,7 +334,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT250</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
@@ -355,7 +355,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT251</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <textoffsetx>17</textoffsetx>
@@ -375,7 +375,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT252</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
@@ -397,7 +397,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT253</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
@@ -418,7 +418,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT255</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
@@ -439,7 +439,7 @@
                 <height>32</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <label>-</label>
+                <label>SCRIPT254</label>
                 <font>font10</font>
                 <textcolor>ffffffff</textcolor>
                 <disabledcolor>60ffffff</disabledcolor>
