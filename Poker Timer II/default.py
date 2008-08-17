@@ -396,7 +396,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.progressBarCount = int(float(self.messageW) / (4 + (self.padSize == 2)))
 
     def addControls(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.pad = xbmcgui.ControlImage(self.offScreenX + self.padX, self.padY, self.padW, self.padH, os.path.join( GFXPath, self.PadImageName ), "", 0)
         self.addControl(self.pad)
 
@@ -523,7 +523,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.aHide.setVisible(not self.autoHide)
 
     def setAnteStatus(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.ANTE[self.LEVEL])
         l = len(s)
@@ -541,7 +541,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def setSmBlindStatus(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.SM_BLIND[self.LEVEL])
         l = len(s)
@@ -558,7 +558,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
 
     def setBigBlindStatus(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = returnStringAmount(self.BIG_BLIND[self.LEVEL])
         l = len(s)
@@ -575,7 +575,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def setLevelStatus(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         m = self.offScreenX * self.START_SCRIPT
         s = str(int(self.LEVEL))
         l = len(s)
@@ -591,7 +591,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def resetTimer(self, time):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         for x in range(4):
             for y in range(10):
                 self.TimeImage[x * 10 + y].setVisible(False)
@@ -604,7 +604,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def setBegin(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.highlight.setVisible(False)
         self.statusMessageSuccess.reset()
         self.statusMessageSuccess.addLabel(self.msg[1])
@@ -616,7 +616,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.LEVEL = 0
         xbmcgui.unlock()
         self.setStatus()
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.START_SCRIPT = True
         self.colon.setVisible(True)
         self.resetTimer(self.LEVEL_TIME[self.LEVEL])
@@ -692,7 +692,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.setTimers()
 
     def setTimers(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.RT2 = str('%02d%02d' % (self.LEVEL_TIME[self.LEVEL], self.BREAK_TIME[self.LEVEL]))
 
         self.TimeImage[0 + int(self.RT1[0])].setVisible(False)
@@ -709,7 +709,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
 
     def setAmountsPos(self, a):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         if a:
             self.padOffsetX += a
             for x in range(4):
@@ -727,7 +727,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
 
     def setChips(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         for x in range(1,6):
             self.ChipImage[x].setImage(os.path.join( GFXPath, self.CHIP_IMAGE[x] ) )
             if self.CHIP_AMT[x]:
@@ -740,7 +740,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         xbmcgui.unlock()
         
     def setChip(self, a):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         if a:
             self.CHIP_IMAGE_NUMBER += a
             self.CHIP_IMAGE[self.CHIP] = 'Chip%d.png' % ( self.CHIP_IMAGE_NUMBER, )
@@ -934,7 +934,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                 self.setBigAmount(-1)
 
     def setHighlightPos(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.highlight.setVisible(False)
 
         if self.ACTIVE_CONTROL >= 7 and self.ACTIVE_CONTROL <= 11:
@@ -1069,7 +1069,7 @@ class windowOverlay(xbmcgui.WindowDialog):
                             elif y == 9:
                                 self.blinkTimer(True, t2)
 
-                xbmcgui.lock()
+                #xbmcgui.lock()
                 t = str('%02d%02d' % (int(float(seconds - cnt) / 60), int(float(seconds - cnt) % 60)))
                 self.TimeImage[int(t2[0])].setVisible(False)
                 self.TimeImage[int(t[0])].setVisible(True)
@@ -1096,7 +1096,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.TIMER_RUNNING = False
 
     def blinkTimer(self, a, t2):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.TimeImage[int(t2[0])].setVisible(a)
         self.TimeImage[10 + int(t2[1])].setVisible(a)
         self.TimeImage[20 + int(t2[2])].setVisible(a)
@@ -1105,7 +1105,7 @@ class windowOverlay(xbmcgui.WindowDialog):
 
     def notifyStartLevel(self):
         thread.start_new_thread(playAlarm, (self.StartLevelAlarm,))
-        xbmc.sleep(self.StartLevelAlarmTime)
+        sleep(float(self.StartLevelAlarmTime) / 1000 )
         #playAlarm(self.StartLevelAlarm, self.StartLevelAlarmTime)
         self.setFocus(self.Button)
 
@@ -1154,7 +1154,7 @@ class windowOverlay(xbmcgui.WindowDialog):
         self.HIDING_PANEL = False
 
     def set_panel(self, m):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.pad.setPosition(m + self.padX, self.padY)
         self.padArrows.setPosition(m + self.padX, self.padY)
 
@@ -1226,7 +1226,7 @@ class windowOverlay(xbmcgui.WindowDialog):
             self.close()
     
     def toggleMovePad(self):
-        xbmcgui.lock()
+        #xbmcgui.lock()
         self.MOVE_PAD = not self.MOVE_PAD
         self.padArrows.setVisible(self.MOVE_PAD)
         self.statusMessageSuccess.reset()
