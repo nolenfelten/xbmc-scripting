@@ -139,8 +139,6 @@ def install_plugin( plugin_list, message=False ):
             except:
                 # oops notify user an error occurred
                 dialog.close()
-                import traceback
-                traceback.print_exc()
                 ok = xbmcgui.Dialog().ok( plugins[ plugin ], _( 730 ) )
                 return
     if ( ok ):
