@@ -39,21 +39,23 @@ class Main:
         return value
 
     def create_plugin( self, path, plugin_type ):
-        plugin = os.path.join( os.getcwd().replace( ";", "" ), "plugin.py" )
+        plugin = os.path.join( os.getcwd(), "plugin.py" )
         basename = unquote_plus( path )
         if ( path.startswith( "multipath://" ) ):
             basename = os.path.basename( basename[ : -2 ] )
         else:
             basename = os.path.basename( basename[ : -1 ] )
         plugin_name = self.get_keyboard( default=basename + " plugin", heading="Enter plugin name" )
-        plugin_path = os.path.join( "Q:\\plugins", plugin_type, plugin_name )
+        # we use "U:\\" for linux, windows and osx for platform mode
+        root = xbmc.translatePath( ( "U:\\plugins", "Q:\\plugins", )[ os.environ.get( "OS", "xbox" ) == "xbox" ] )
+        plugin_path = os.path.join( root, plugin_type, plugin_name )
         if ( not os.path.isdir( plugin_path ) ):
             os.makedirs( plugin_path )
         try:
             # TODO: copy a generic thumb also or browse for thumb
             # TODO: remove an old plugin with same name
             shutil.copy( plugin, os.path.join( plugin_path, "default.py" ) )
-            shutil.copytree( os.path.join( os.getcwd().replace( ";", "" ), "resources" ), os.path.join( plugin_path, "resources" ) )
+            shutil.copytree( os.path.join( os.getcwd(), "resources" ), os.path.join( plugin_path, "resources" ) )
             ok = self.create_settings( os.path.join( plugin_path, "resources", "settings.xml" ), path, plugin_type )
             if ( not ok ): raise
         except:
