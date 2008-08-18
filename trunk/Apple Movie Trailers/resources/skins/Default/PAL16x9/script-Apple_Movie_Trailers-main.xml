@@ -106,7 +106,7 @@
 				<aligny>center</aligny>
 				<onleft>70</onleft>
 				<onright>50</onright>
-				<onup>109</onup>
+				<onup>170</onup>
 				<ondown>100</ondown>
 				<enable>Control.IsVisible(3000)</enable>
 			</control>
@@ -318,11 +318,57 @@
 				<onleft>70</onleft>
 				<onright>50</onright>
 				<onup>108</onup>
-				<ondown>2</ondown>
+				<ondown>175</ondown>
 				<onclick>-</onclick>
                 <visible>false</visible>
 			</control>
-		</control>
+        <!-- ** Required ** Do not change id or type-->
+        <control type="button" id="175">
+            <description>Plot Button</description>
+            <posx>0</posx>
+            <posy>453</posy>
+            <width>160</width>
+            <height>33</height>
+            <label>SCRIPT166</label>
+            <texturefocus>amt-button-focus.png</texturefocus>
+            <texturenofocus>amt-button-nofocus.png</texturenofocus>
+            <font>font13</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <disabledcolor>60ffffff</disabledcolor>
+            <textoffsetx>17</textoffsetx>
+            <aligny>center</aligny>
+            <onleft>70</onleft>
+            <onright>50</onright>
+            <onup>109</onup>
+            <ondown>170</ondown>
+            <onclick>-</onclick>
+            <enable>Control.IsVisible(3000)</enable>
+            <visible>!IsEmpty(Container.Property(showinfo))</visible>
+        </control>
+        <!-- ** Required ** Do not change id or type-->
+        <control type="button" id="170">
+            <description>Cast Button</description>
+            <posx>0</posx>
+            <posy>453</posy>
+            <width>160</width>
+            <height>33</height>
+            <label>SCRIPT157</label>
+            <texturefocus>amt-button-focus.png</texturefocus>
+            <texturenofocus>amt-button-nofocus.png</texturenofocus>
+            <font>font13</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <disabledcolor>60ffffff</disabledcolor>
+            <textoffsetx>17</textoffsetx>
+            <aligny>center</aligny>
+            <onleft>70</onleft>
+            <onright>50</onright>
+            <onup>175</onup>
+            <ondown>2</ondown>
+            <onclick>-</onclick>
+            <enable>Control.IsVisible(3000)</enable>
+            <visible>IsEmpty(Container.Property(showinfo))</visible>
+        </control>
+    </control>
 		
         <!-- Trailer list controls -->
         <!-- ** Required ** Do not change id or type-->
@@ -854,55 +900,6 @@
             </control>
         </control>
 
-        <!-- ** Required ** Do not change id or type-->
-        <control type="button" id="175">
-            <description>Plot Button</description>
-            <label>215</label>
-            <posx>200</posx>
-            <posy>350</posy>
-            <width>32</width>
-            <height>32</height>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <font>font13</font>
-            <textcolor>00FFFFFF</textcolor>
-            <shadowcolor>00FFFFFF</shadowcolor>
-            <disabledcolor>60ffffff</disabledcolor>
-            <textoffsetx>17</textoffsetx>
-            <align>center</align>
-            <aligny>center</aligny>
-            <onleft>2050</onleft>
-            <onright>70</onright>
-            <onup>2050</onup>
-            <ondown>70</ondown>
-            <onclick>-</onclick>
-            <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
-        </control>
-        <!-- ** Required ** Do not change id or type-->
-        <control type="button" id="170">
-            <description>Cast Button</description>
-            <label>216</label>
-            <posx>200</posx>
-            <posy>350</posy>
-            <width>32</width>
-            <height>32</height>
-            <texturefocus>-</texturefocus>
-            <texturenofocus>-</texturenofocus>
-            <font>font13</font>
-            <textcolor>00FFFFFF</textcolor>
-            <shadowcolor>00FFFFFF</shadowcolor>
-            <disabledcolor>60ffffff</disabledcolor>
-            <textoffsetx>17</textoffsetx>
-            <align>center</align>
-            <aligny>center</aligny>
-            <onleft>2050</onleft>
-            <onright>2075</onright>
-            <onup>2050</onup>
-            <ondown>2075</ondown>
-            <onclick>-</onclick>
-            <visible>Control.IsVisible(50) + Control.IsVisible(3000)</visible>
-        </control>
-
         <control type="group">
 			<animation effect="slide" time="300" start="600,0" end="0,0" acceleration="-1">WindowOpen</animation>
 			<animation effect="slide" time="200" start="0,0" end="600,0" acceleration="1.1">WindowClose</animation>
@@ -911,7 +908,7 @@
                 <description>background image</description>
                 <posx>190</posx>
                 <posy>385</posy>
-                <width>330</width>
+                <width>280</width>
                 <height>145</height>
                 <texture>amt-scrollbar-bg.png</texture>
                 <colordiffuse>90FFFFFF</colordiffuse>
@@ -921,7 +918,7 @@
 				<description>Trailer Plot</description>
 				<posx>195</posx>
 				<posy>387</posy>
-				<width>320</width>
+				<width>270</width>
 				<height>141</height>
 				<font>font13</font>
                 <align>justify</align>
@@ -936,11 +933,11 @@
 				<texturedown>amt-scroll-down.png</texturedown>
 				<textureupfocus>amt-scroll-up-focus.png</textureupfocus>
 				<texturedownfocus>amt-scroll-down-focus.png</texturedownfocus>
-				<visible allowhiddenfocus="false">Control.IsVisible(170)</visible>
+				<visible allowhiddenfocus="false">Control.IsVisible(3000)</visible>
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Up Arrow</description>
-                <posx>525</posx>
+                <posx>475</posx>
                 <posy>385</posy>
                 <width>12</width>
                 <height>16</height>
@@ -950,7 +947,7 @@
 				<visible>Control.IsVisible(75)</visible>
             </control>
 			<control type="scrollbar" id="2075">
-				<posx>525</posx>
+				<posx>475</posx>
 				<posy>401</posy>
 				<width>12</width>
 				<height>113</height>
@@ -967,7 +964,7 @@
 			</control>
             <control type="button">
                 <description>Trailer List Scrollbar Down Arrow</description>
-                <posx>525</posx>
+                <posx>475</posx>
                 <posy>514</posy>
                 <width>12</width>
                 <height>16</height>
@@ -976,12 +973,86 @@
                 <onclick>PageDown(2075)</onclick>
 				<visible>Control.IsVisible(75)</visible>
             </control>
+            <control type="group">
+                <description>Other info</description>
+				<posx>495</posx>
+				<posy>385</posy>
+				<width>210</width>
+				<height>145</height>
+				<visible allowhiddenfocus="false">Control.IsVisible(3000) + Control.IsVisible(170)</visible>
+                <control type="image">
+                    <description>background image</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>210</width>
+                    <height>145</height>
+                    <texture>amt-scrollbar-bg.png</texture>
+                    <colordiffuse>90FFFFFF</colordiffuse>
+                </control>
+                <control type="label">
+                    <posx>5</posx>
+                    <posy>0</posy>
+                    <width>200</width>
+                    <height>36</height>
+                    <font>font10</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <wrapmultiline>true</wrapmultiline>
+                    <label>[B]$LOCALIZE[SCRIPT114]:[/B] $INFO[ListItem.Studio]</label>
+                </control>
+                <control type="label">
+                    <posx>5</posx>
+                    <posy>40</posy>
+                    <width>200</width>
+                    <height>36</height>
+                    <font>font10</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <wrapmultiline>true</wrapmultiline>
+                    <label>[B]$LOCALIZE[SCRIPT113]:[/B] $INFO[ListItem.Genre]</label>
+                </control>
+                <control type="label">
+                    <posx>5</posx>
+                    <posy>80</posy>
+                    <width>200</width>
+                    <height>18</height>
+                    <font>font10</font>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <label>[B]$LOCALIZE[SCRIPT167]:[/B] $INFO[ListItem.Property(ReleaseDate)]</label>
+                </control>
+                <control type="label">
+                    <posx>5</posx>
+                    <posy>100</posy>
+                    <width>200</width>
+                    <height>18</height>
+                    <font>font10</font>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <label>[B]$LOCALIZE[SCRIPT163]:[/B] ($INFO[ListItem.ProgramCount])   $INFO[ListItem.Property(WatchedDate)]</label>
+                </control>
+                <control type="label">
+                    <posx>5</posx>
+                    <posy>120</posy>
+                    <width>200</width>
+                    <height>18</height>
+                    <font>font10</font>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <align>left</align>
+                    <label>[B]$LOCALIZE[SCRIPT168]:[/B] $INFO[ListItem.Property(DateAdded)]</label>
+                </control>
+            </control>
             <!-- ** Required ** Do not change id or type-->
 			<control type="list" id="70">
                 <description>Cast List</description>
-				<posx>545</posx>
+				<posx>495</posx>
 				<posy>385</posy>
-				<width>150</width>
+				<width>200</width>
 				<height>145</height>
 				<onleft>2075</onleft>
 				<onright>60</onright>
@@ -990,10 +1061,10 @@
 				<viewtype label="535">list</viewtype>
 				<pagecontrol>2070</pagecontrol>
 				<scrolltime>200</scrolltime>
-				<visible allowhiddenfocus="false">Control.IsVisible(75)</visible>
+				<visible allowhiddenfocus="false">Control.IsVisible(3000) + Control.IsVisible(175)</visible>
 				<itemlayout height="29">
 					<control type="image">
-						<width>150</width>
+						<width>200</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -1009,7 +1080,7 @@
 					<control type="label">
 						<posx>22</posx>
 						<posy>3</posy>
-						<width>123</width>
+						<width>173</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
@@ -1021,7 +1092,7 @@
 				</itemlayout>
 				<focusedlayout height="29">
 					<control type="image">
-						<width>150</width>
+						<width>200</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -1029,7 +1100,7 @@
 						<texture>amt-list-nofocus.png</texture>
 					</control>
 					<control type="image">
-						<width>150</width>
+						<width>200</width>
 						<height>29</height>
 						<posx>0</posx>
 						<posy>0</posy>
@@ -1046,7 +1117,7 @@
 					<control type="label">
 						<posx>22</posx>
 						<posy>3</posy>
-						<width>123</width>
+						<width>173</width>
 						<height>22</height>
 						<font>font13</font>
 						<aligny>center</aligny>
