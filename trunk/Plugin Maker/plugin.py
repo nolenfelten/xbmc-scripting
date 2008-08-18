@@ -28,7 +28,7 @@ class _Info:
 
 class Main:
     # base paths
-    BASE_CACHE_PATH = "P:\\Thumbnails"
+    BASE_CACHE_PATH = xbmc.translatePath( "P:\\Thumbnails" )
     # music media extensions
     MEDIA_EXT = ( xbmc.getSupportedMedia( "music" ), )
     # video media extensions
@@ -229,7 +229,7 @@ class Main:
             fpath = "/".join( share_string_list )
         # make the proper cache filename and path so duplicate caching is unnecessary
         filename = xbmc.getCacheThumbName( fpath )
-        thumbnail = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, ( "Music", "Video", )[ self.media_type ], filename[ 0 ], filename ) )
+        thumbnail = os.path.join( self.BASE_CACHE_PATH, ( "Music", "Video", )[ self.media_type ], filename[ 0 ], filename )
         # if the cached thumbnail does not exist check for a tbn file
         if ( not os.path.isfile( thumbnail ) ):
             # create filepath to a local tbn file
