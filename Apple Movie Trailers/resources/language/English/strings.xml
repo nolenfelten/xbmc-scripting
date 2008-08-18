@@ -102,6 +102,9 @@
     <string id="163">Watched</string>
     <string id="164">Recently Added</string>
     <string id="165">Multiple Trailers</string>
+    <string id="166">Movie Info</string>
+    <string id="167">In Theaters</string>
+    <string id="168">Date Added</string>
 
     <!-- Settings labels -->
     <string id="200">Choose:</string>

@@ -81,6 +81,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def onInit( self ):
         self._set_shortcut_properties()
+        self._set_info_properties()
         if ( self.startup ):
             self.startup = False
             self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( False )
@@ -117,7 +118,7 @@ class GUI( xbmcgui.WindowXML ):
         self.flat_cache = ()
         self.sql = ""
         self.params = None
-        self.display_cast = False
+        self.display_info = False
         ##self.dummy()
         ##self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_MPLAYER, function=self.myPlayerChanged )
         self.update_method = 0
@@ -261,17 +262,24 @@ class GUI( xbmcgui.WindowXML ):
                         overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ "720p.mov" in repr( movie.trailer_urls ) or "1080p.mov" in repr( movie.trailer_urls ) ]
                         # release date and year
                         try:
-                            parts = movie.release_date.split( " " )
-                            year = int( parts[ 2 ] )
-                            day = int( parts[ 1 ][ : -3 ] )
-                            month = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ].index( parts[ 0 ] ) + 1
-                            release_date = "%02d-%02d-%04d" % ( day, month, year, )
+                            year = int( movie.release_date[ -5 ] )
                         except:
-                            release_date = ""
                             year = 0
-                        list_item.setInfo( "video", { "Title": movie.title, "Date": release_date, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": movie.genres } )
+                        date_added = "%s-%s-%s" % ( movie.date_added[ 8 : ], movie.date_added[ 5 : 7 ], movie.date_added[ : 4 ], )
+                        list_item.setInfo( "video", { "Title": movie.title, "Date": date_added, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": movie.genres, "Count": movie.watched } )
+
+                        format = xbmc.getRegion( "datelong" ).replace( "DDDD, ", "" ).replace( "MMMM", "%B" ).replace( "D", "%d" ).replace( "YYYY", "%Y" )
+                        # set date added property
+                        date_added = datetime.date( int( movie.date_added[ : 4 ] ), int( movie.date_added[ 5 : 7 ] ), int( movie.date_added[ 8 : ] ) ).strftime( format )
+                        list_item.setProperty( "dateadded", date_added )
                         # set release date property
                         list_item.setProperty( "releasedate", movie.release_date )
+                        # set watched date property
+                        try:
+                            watched_date = datetime.date( int( movie.watched_date[ : 4 ] ), int( movie.watched_date[ 5 : 7 ] ), int( movie.watched_date[ 8 : ] ) ).strftime( format )
+                        except:
+                            watched_date = ""
+                        list_item.setProperty( "watcheddate", watched_date )
                         self.addItem( list_item )
                     self._set_selection( self.CONTROL_TRAILER_LIST_START, choice + ( choice == -1 ) )
                 else: self.clearTrailerInfo()
@@ -301,19 +309,15 @@ class GUI( xbmcgui.WindowXML ):
         self.getControl( self.CONTROL_CATEGORY_LIST_GROUP ).setVisible( category )
         self.getControl( self.CONTROL_TRAILER_LIST_GROUP ).setVisible( not category )
         xbmcgui.unlock()
-        self.showPlotCastControls( category )
+        #self.showPlotCastControls( category )
         self.setFocus( self.getControl( ( self.CONTROL_CATEGORY_LIST_GROUP, self.CONTROL_TRAILER_LIST_GROUP, )[ not category ] ) )
-            
-    def showPlotCastControls( self, category ):
-        xbmcgui.lock()
-        self.getControl( self.CONTROL_PLOT_BUTTON ).setVisible( self.display_cast and not category )
-        self.getControl( self.CONTROL_CAST_BUTTON ).setVisible( not self.display_cast and not category )
-        xbmcgui.unlock()
-            
-    def togglePlotCast( self ):
-        self.display_cast = not self.display_cast
-        self.showPlotCastControls( False )
-        if ( self.display_cast ): self.setFocus( self.getControl( self.CONTROL_PLOT_BUTTON ) )
+
+
+    def _toggle_trailer_info( self ):
+        self.display_info = not self.display_info
+        self._set_info_properties()
+        xbmc.sleep( 20 )
+        if ( self.display_info ): self.setFocus( self.getControl( self.CONTROL_PLOT_BUTTON ) )
         else: self.setFocus( self.getControl( self.CONTROL_CAST_BUTTON ) )
 
     def setCategoryLabel( self ):
@@ -391,7 +395,7 @@ class GUI( xbmcgui.WindowXML ):
                     self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( actor[ 0 ], "", actual_icon, actor_thumbnail ) )
             else: 
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", "", thumbnail ) )
-            self.showPlotCastControls( False )
+            #self.showPlotCastControls( False )
             self.showOverlays( trailer )
         except:
             LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
@@ -708,6 +712,7 @@ class GUI( xbmcgui.WindowXML ):
                 ok = xbmcgui.Dialog().yesno( __scriptname__, _( 240 ), "", _( 241 ), _( 271 ), _( 270 ) )
             if ( not ok ):
                 self._set_shortcut_properties()
+                self._set_info_properties()
                 if ( settings.refresh and self.category_id not in ( GENRES, STUDIOS, ACTORS, ) ):
                     self.sql_category = ""
                     trailer = self.getCurrentListPosition()
@@ -726,6 +731,9 @@ class GUI( xbmcgui.WindowXML ):
         self.setProperty( "shortcut1", shortcuts.get( self.settings[ "shortcut1" ], self.genres[ self.settings[ "shortcut1" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
         self.setProperty( "shortcut2", shortcuts.get( self.settings[ "shortcut2" ], self.genres[ self.settings[ "shortcut2" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
         self.setProperty( "shortcut3", shortcuts.get( self.settings[ "shortcut3" ], self.genres[ self.settings[ "shortcut3" ] ].title.replace( "Newest", _( 150 ) ).replace( "Exclusives", _( 151 ) ) ) )
+
+    def _set_info_properties( self ):
+        self.setProperty( "showinfo", ( "", "1", )[ self.display_info ] )
 
     def showCredits( self ):
         """ shows a credit window """
@@ -880,7 +888,7 @@ class GUI( xbmcgui.WindowXML ):
             elif ( controlId == 109 ):
                 self.updateScript()
             elif ( controlId in ( self.CONTROL_PLOT_BUTTON, self.CONTROL_CAST_BUTTON ) ):
-                self.togglePlotCast()
+                self._toggle_trailer_info()
             ##elif ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
             ##    self.playTrailer()
             elif ( controlId == self.CONTROL_CATEGORY_LIST ):
