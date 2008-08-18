@@ -135,7 +135,7 @@ COORD_PAL_16X9   = 7
 COORD_PAL60_4X3  = 8 
 COORD_PAL60_16X9 = 9 
 
-ROOT_DIR = os.getcwd()[:-1]+'\\'    
+ROOT_DIR = os.getcwd()+'\\'    
 IMAGE_DIR = ROOT_DIR+"resources\\themes\\modern\\images\\"
 SOUND_DIR = ROOT_DIR+"resources\\themes\\modern\\sounds\\"
 

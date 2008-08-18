@@ -32,7 +32,7 @@ try:
 except Exception:
 	pass
 if DO_LOGGING:
-	LOG_FILE = open(os.getcwd()[:-1]+"\\scorelog.txt",'w')
+	LOG_FILE = open(os.getcwd()+"\\scorelog.txt",'w')
 def LOG(message):
 	if DO_LOGGING:
 		LOG_FILE.write(str(message)+"\n")
