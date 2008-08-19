@@ -20,7 +20,7 @@ class Main:
 
     def __init__( self ):
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( xbmcplugin.getSetting( "amt_db" ) ) ):
+        if ( not os.path.isfile( xbmcplugin.getSetting( "amt_db_path" ) ) ):
             self._launch_script()
         else:
             self.get_categories()
@@ -106,7 +106,7 @@ class Main:
         return thumbnail
 
     def _fetch_records( self ):
-        records = Records( xbmcplugin.getSetting( "amt_db" ) )
+        records = Records( amt_db_path=xbmcplugin.getSetting( "amt_db_path" ) )
         result = records.fetch( Query()[ "genres" ] )
         records.close()
         return result
@@ -114,7 +114,7 @@ class Main:
 
 class Records:
     def __init__( self, *args, **kwargs ):
-        self.connect( kwargs[ "amt_db" ] )
+        self.connect( kwargs[ "amt_db_path" ] )
 
     def connect( self, db ):
         self.db = sqlite.connect( db )

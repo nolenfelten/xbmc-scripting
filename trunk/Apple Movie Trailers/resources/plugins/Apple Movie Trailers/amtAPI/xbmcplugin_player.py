@@ -67,7 +67,7 @@ class Main:
         self.settings[ "mode" ] = int( xbmcplugin.getSetting( "mode" ) )
         self.settings[ "download_path" ] = xbmcplugin.getSetting( "download_path" )
         self.settings[ "mark_watched" ] = xbmcplugin.getSetting( "mark_watched" ) == "true"
-        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
+        self.settings[ "amt_db_path" ] = xbmcplugin.getSetting( "amt_db_path" )
         ##self.settings[ "player_core" ] = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ int( xbmcplugin.getSetting( "player_core" ) ) ]
 
     def _download_video( self ):
@@ -222,7 +222,7 @@ class Main:
             fetch_sql = "SELECT times_watched FROM movies WHERE idMovie=?;"
             update_sql = "UPDATE movies SET times_watched=?, last_watched=? WHERE idMovie=?;"
             # connect to the database
-            db = sqlite.connect( self.settings[ "amt_db" ] )
+            db = sqlite.connect( self.settings[ "amt_db_path" ] )
             # get our cursor object
             cursor = db.cursor()
             # we fetch the times watched so we can increment by one

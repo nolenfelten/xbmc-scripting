@@ -50,7 +50,7 @@ class Main:
         self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
         self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
         self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
-        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
+        self.settings[ "amt_db_path" ] = xbmcplugin.getSetting( "amt_db_path" )
 
     def get_videos( self ):
         try:
@@ -83,7 +83,7 @@ class Main:
 
     def _fill_media_list( self, trailers ):
         try:
-            records = Records( self.settings[ "amt_db" ] )
+            records = Records( amt_db_path=self.settings[ "amt_db_path" ] )
             ok = True
             # enumerate through the list of trailers and add the item to the media list
             for trailer in trailers:
@@ -209,7 +209,7 @@ class Main:
         return url
 
     def _fetch_records( self, query, params=None ):
-        records = Records()
+        records = Records( amt_db_path=self.settings[ "amt_db_path" ] )
         result = records.fetch( query, params )
         records.close()
         return result
@@ -276,7 +276,7 @@ class Main:
 
 class Records:
     def __init__( self, *args, **kwargs ):
-        self.connect( kwargs[ "amt_db" ] )
+        self.connect( kwargs[ "amt_db_path" ] )
 
     def connect( self, db ):
         self.db = sqlite.connect( db )
