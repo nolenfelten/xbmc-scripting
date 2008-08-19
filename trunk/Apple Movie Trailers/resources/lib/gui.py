@@ -113,6 +113,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def _setup_variables( self ):
         self.trailers = trailers.Trailers()
+        self.trailer = 0
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
         self.flat_cache = ()
