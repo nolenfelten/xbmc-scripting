@@ -1,5 +1,7 @@
 T3CH Upgrader Changelog:
 ========================
+v1.7.1 18/08/08
+  Fix: Potential copytree failure due to dest root not existing.
 v1.7 13/08/08
   Change:  Hardcoded 'includes' list entry plugins\\" changed to specify each subfolder eg. "plugins\music\\" (new builds include more subfolders so copy was failing - see localCopy() also)
   Updated: localCopy() to not stop copying on first failure. Better checking of existing subfolders and files.
