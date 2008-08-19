@@ -89,7 +89,9 @@ class GUI( xbmcgui.WindowXML ):
             if ( INSTALL_PLUGIN ):
                 install_plugin( plugin=range( 0, 2 ), message=True)
         else:
-            self.showTrailers( self.sql, self.params, self.trailer, 2 )
+            if ( self.trailer >= 0 ):
+                self.markAsWatched( self.trailers.movies[ self.trailer ].watched + 1, self.trailer )            
+            self.showTrailers( self.sql, self.params, self.trailer_pos, 2 )
 
     def _get_settings( self ):
         self.settings = Settings().get_settings()
@@ -113,7 +115,6 @@ class GUI( xbmcgui.WindowXML ):
 
     def _setup_variables( self ):
         self.trailers = trailers.Trailers()
-        self.trailer = 0
         self.query= database.Query()
         self.skin = self.settings[ "skin" ]
         self.flat_cache = ()
@@ -240,6 +241,7 @@ class GUI( xbmcgui.WindowXML ):
 
     def showTrailers( self, sql, params=None, choice=0, force_update=False ):
         try:
+            self.trailer = -1
             self.setCategoryLabel()
             if ( sql != self.sql or params != self.params or force_update ):
                 #self.list_control_pos[ self.list_category ] = choice
@@ -268,7 +270,6 @@ class GUI( xbmcgui.WindowXML ):
                             year = 0
                         date_added = "%s-%s-%s" % ( movie.date_added[ 8 : ], movie.date_added[ 5 : 7 ], movie.date_added[ : 4 ], )
                         list_item.setInfo( "video", { "Title": movie.title, "Date": date_added, "Overlay": overlay, "Plot": plot, "MPAA": movie.rating, "Year": year, "Studio": movie.studio, "Genre": movie.genres, "Count": movie.watched } )
-
                         format = xbmc.getRegion( "datelong" ).replace( "DDDD, ", "" ).replace( "MMMM", "%B" ).replace( "D", "%d" ).replace( "YYYY", "%Y" )
                         # set date added property
                         date_added = datetime.date( int( movie.date_added[ : 4 ] ), int( movie.date_added[ 5 : 7 ] ), int( movie.date_added[ 8 : ] ) ).strftime( format )
@@ -372,22 +373,22 @@ class GUI( xbmcgui.WindowXML ):
     def showTrailerInfo( self ):
         xbmcgui.lock()
         try:
-            trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+            self.trailer_pos = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
             #hack until panel control is a native python control
-            if ( trailer == -1 ): 
+            if ( self.trailer_pos == -1 ): 
                 self.setCurrentListPosition( len( self.trailers.movies ) - 1 )
-                trailer = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
-            self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ trailer ].favorite )
-            if ( xbmc.skinHasImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ trailer ].rating, ) ) ):
-                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ trailer ].rating, ) )
+                self.trailer_pos = self._set_count_label( self.CONTROL_TRAILER_LIST_START )
+            self.getControl( self.CONTROL_TRAILER_TITLE_LABEL ).setEnabled( not self.trailers.movies[ self.trailer_pos ].favorite )
+            if ( xbmc.skinHasImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ self.trailer_pos ].rating, ) ) ):
+                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( "%s/%s.png" % ( __scriptname__, self.trailers.movies[ self.trailer_pos ].rating, ) )
             else:
-                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ trailer ].rating_url )
+                self.getControl( self.CONTROL_OVERLAY_RATING ).setImage( self.trailers.movies[ self.trailer_pos ].rating_url )
             # Cast
             self.getControl( self.CONTROL_CAST_LIST ).reset()
-            self.cast_exists = ( len( self.trailers.movies[ trailer ].cast ) > 0 )
-            thumbnail = "amt-generic-%sactor.png" % ( "no", "" )[ self.trailers.movies[ trailer ].cast != [] ]
+            self.cast_exists = ( len( self.trailers.movies[ self.trailer_pos ].cast ) > 0 )
+            thumbnail = "amt-generic-%sactor.png" % ( "no", "" )[ self.trailers.movies[ self.trailer_pos ].cast != [] ]
             if ( self.cast_exists ):
-                for actor in self.trailers.movies[ trailer ].cast:
+                for actor in self.trailers.movies[ self.trailer_pos ].cast:
                     actor_path = xbmc.translatePath( os.path.join( "P:\\Thumbnails", "Video", xbmc.getCacheThumbName( "actor" + actor[ 0 ] )[ 0 ], xbmc.getCacheThumbName( "actor" + actor[ 0 ] ) ) )
                     actor_thumbnail = ( thumbnail, actor_path, )[ os.path.isfile( actor_path ) ]
                     actual_icon = ( "", actor_thumbnail, )[ actor_thumbnail != thumbnail ]
@@ -395,7 +396,7 @@ class GUI( xbmcgui.WindowXML ):
             else: 
                 self.getControl( self.CONTROL_CAST_LIST ).addItem( xbmcgui.ListItem( _( 401 ), "", "", thumbnail ) )
             #self.showPlotCastControls( False )
-            self.showOverlays( trailer )
+            self.showOverlays( self.trailer_pos )
         except:
             LOG( LOG_ERROR, self.__class__.__name__, "[%s]", sys.exc_info()[ 1 ] )
         xbmcgui.unlock()
@@ -541,7 +542,6 @@ class GUI( xbmcgui.WindowXML ):
                             LOG( LOG_DEBUG, self.__class__.__name__, "[filename: %s]", repr( filename ) )
                             playlist.add( filename, listitem )
                     if ( len( playlist ) ):
-                        self.markAsWatched( self.trailers.movies[ self.trailer ].watched + 1, self.trailer )
                         self._set_video_resolution()
                         ##xbmc.Player( self.core ).play( playlist )
                         xbmc.Player().play( playlist )
@@ -652,9 +652,6 @@ class GUI( xbmcgui.WindowXML ):
         if ( success ):
             self.trailers.movies[ trailer ].watched = watched
             self.trailers.movies[ trailer ].watched_date = str( date )
-            thumbnail, poster = self._get_thumbnail( self.trailers.movies[ trailer ] )
-            self.getListItem( trailer ).setThumbnailImage( thumbnail )
-            self.showOverlays( trailer )
         else:
             LOG( LOG_ERROR, self.__class__.__name__, "[failed]" )
 
@@ -889,8 +886,8 @@ class GUI( xbmcgui.WindowXML ):
                 self.updateScript()
             elif ( controlId in ( self.CONTROL_PLOT_BUTTON, self.CONTROL_CAST_BUTTON ) ):
                 self._toggle_trailer_info()
-            ##elif ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
-            ##    self.playTrailer()
+            elif ( self.CONTROL_TRAILER_LIST_START <= controlId <= self.CONTROL_TRAILER_LIST_END ):
+                self.playTrailer()
             elif ( controlId == self.CONTROL_CATEGORY_LIST ):
                 self.getTrailerGenre()
             elif ( controlId == self.CONTROL_CAST_LIST and self.cast_exists ):
@@ -917,8 +914,8 @@ class GUI( xbmcgui.WindowXML ):
                 if ( self.CONTROL_TRAILER_LIST_START <= self.controlId <= self.CONTROL_TRAILER_LIST_END ):
                     if ( action in ACTION_CONTEXT_MENU ):
                         self.showContextMenu()
-                    elif ( action in ACTION_SELECT_ITEM ):
-                        self.playTrailer()
+                    ##elif ( action in ACTION_SELECT_ITEM ):
+                    ##    self.playTrailer()
                     ###############################################################
                     elif ( action.getButtonCode() in ( 262, 263, ) or action in ACTION_MOVEMENT ):
                         self.showTrailerInfo()
