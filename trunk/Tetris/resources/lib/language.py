@@ -64,6 +64,6 @@ class Language:
         try: doc.unlink()
         except: pass
 
-    def localized( self, code ):
+    def string( self, code ):
         """ returns the localized string if it exists """
         return self.strings.get( code, "Invalid Id %d" % ( code, ) )
