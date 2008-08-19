@@ -238,7 +238,7 @@ class Main:
         self.settings[ "coming_attraction_videos" ] = xbmcplugin.getSetting( "coming_attraction_videos" )
         self.settings[ "feature_presentation_videos" ] = xbmcplugin.getSetting( "feature_presentation_videos" )
         self.settings[ "end_presentation_videos" ] = xbmcplugin.getSetting( "end_presentation_videos" )
-        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
+        self.settings[ "amt_db_path" ] = xbmcplugin.getSetting( "amt_db_path" )
 
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
@@ -331,7 +331,7 @@ class Main:
 
     def _fetch_records( self ):
         try:
-            records = Records( amt_db=self.settings[ "amt_db" ] )
+            records = Records( amt_db_path=self.settings[ "amt_db_path" ] )
             # select only trailers with valid trailer urls
             sql = """
                         SELECT movies.*, studios.studio, genres.genre  
@@ -474,7 +474,7 @@ class Main:
     def _mark_watched( self, idMovie ):
         try:
             # our database object
-            records = Records( amt_db=self.settings[ "amt_db" ] )
+            records = Records( amt_db_path=self.settings[ "amt_db_path" ] )
             # needed sql commands
             fetch_sql = "SELECT times_watched FROM movies WHERE idMovie=?;"
             update_sql = "UPDATE movies SET times_watched=?, last_watched=? WHERE idMovie=?;"
@@ -496,7 +496,7 @@ class Main:
 
 class Records:
     def __init__( self, *args, **kwargs ):
-        self.connect( kwargs[ "amt_db" ] )
+        self.connect( kwargs[ "amt_db_path" ] )
 
     def connect( self, db ):
         self.db = sqlite.connect( db )

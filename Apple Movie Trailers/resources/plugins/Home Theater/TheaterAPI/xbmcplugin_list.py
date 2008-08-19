@@ -27,7 +27,7 @@ class Main:
     def __init__( self ):
         self._get_settings()
         # if no database was found we need to run the script to create it.
-        if ( not os.path.isfile( self.settings[ "amt_db" ] ) ):
+        if ( not os.path.isfile( self.settings[ "amt_db_path" ] ) ):
             self._launch_script()
         else:
             if ( sys.argv[ 2 ] ):
@@ -60,7 +60,7 @@ class Main:
         self.settings[ "fanart_color1" ] = xbmcplugin.getSetting( "fanart_color1" )
         self.settings[ "fanart_color2" ] = xbmcplugin.getSetting( "fanart_color2" )
         self.settings[ "fanart_color3" ] = xbmcplugin.getSetting( "fanart_color3" )
-        self.settings[ "amt_db" ] = xbmcplugin.getSetting( "amt_db" )
+        self.settings[ "amt_db_path" ] = xbmcplugin.getSetting( "amt_db_path" )
         # we need to set self.args.path
         self.args = _Info( path=self.settings[ "path" ] )
 
