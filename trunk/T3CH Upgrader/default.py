@@ -31,8 +31,8 @@ __scriptname__ = "T3CH Upgrader"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
 __url__ = "http://code.google.com/p/xbmc-scripting/"
 __svn_url__ = "http://xbmc-scripting.googlecode.com/svn/trunk/T3CH%20Upgrader"
-__date__ = '13-08-2008'
-__version__ = "1.7"
+__date__ = '18-08-2008'
+__version__ = "1.7.1"
 xbmc.output( __scriptname__ + " Version: " + __version__  + " Date: " + __date__)
 
 # Shared resources
@@ -1584,14 +1584,13 @@ def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 			xbmc.output("src_path not exist, stop")
 			return
 
-		# make dest root folder otherwise copytree will fail
-		makeDir( os.path.dirname(dest_path) )
+		# make dest root dir
+		makeDir( dest_path )
 
 		if os.path.isfile(src_path):
 			# FILE
 			if overwrite or not fileExist(dest_path):
 				try:
-					xbmc.output( "isFile; copy file: %s -> %s" % (src_path, dest_path))
 					copy( src_path, dest_path )
 				except:
 					handleException("localCopy() FILE COPY", src_path, dest_path )
@@ -1602,8 +1601,8 @@ def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 			files = os.listdir(src_path)
 			xbmc.output("isdir; file count=%s" % len(files))
 			for f in files:
-				src_file = os.path.join( src_path, f )
-				dest_file = os.path.join( dest_path, f )
+				src_file = xbmc.makeLegalFilename(os.path.join( src_path, f ))
+				dest_file = xbmc.makeLegalFilename(os.path.join( dest_path, f ))
 
 				try:
 					if os.path.isdir( src_file ):
@@ -1624,7 +1623,6 @@ def localCopy(src_path, dest_path, isSilent=False, overwrite=False):
 							xbmc.output("isDir; dest dir exists, ignored: " + dest_file)
 					else:
 						if overwrite or not fileExist( dest_file ):
-							xbmc.output( "isDir; copy file: %s -> %s" % (src_file, dest_file))
 							copy( src_file, dest_file )
 						else:
 							xbmc.output("isDir; dest file exists, ignored: " + dest_file)
@@ -1682,7 +1680,9 @@ def makeDir( dir ):
 	try:
 		os.makedirs(dir)
 		xbmc.output( "made dir: " + dir)
-	except: pass
+		return True
+	except:
+		return False
 
 #################################################################################################################
 def deleteFile( file_name ):
@@ -1734,7 +1734,7 @@ def readURL( url, msg='', isSilent=False):
 def fileExist(filename):
 	exist = False
 	try:
-		if os.path.isfile(filename) and os.path.getsize(filename) > 0:
+		if os.path.exists(filename) and os.path.getsize(filename) > 0:
 			exist = True
 	except: pass
 	return exist
