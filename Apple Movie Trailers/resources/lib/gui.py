@@ -295,7 +295,6 @@ class GUI( xbmcgui.WindowXML ):
         else:
             thumbnail = ( ( movie.thumbnail, movie.thumbnail_watched )[ movie.watched and self.settings[ "fade_thumb" ] ], "amt-generic-trailer%s.png" % ( ( "", "-w", )[ movie.watched > 0 ], ), "", )[ self.settings[ "thumbnail_display" ] ]
         return thumbnail, poster
-        
 
     def _set_selection( self, list_control, pos=0 ):
         if ( list_control == self.CONTROL_TRAILER_LIST_START ): 
@@ -312,7 +311,6 @@ class GUI( xbmcgui.WindowXML ):
         xbmcgui.unlock()
         #self.showPlotCastControls( category )
         self.setFocus( self.getControl( ( self.CONTROL_CATEGORY_LIST_GROUP, self.CONTROL_TRAILER_LIST_GROUP, )[ not category ] ) )
-
 
     def _toggle_trailer_info( self ):
         self.display_info = not self.display_info
@@ -653,6 +651,7 @@ class GUI( xbmcgui.WindowXML ):
         success = self.trailers.updateRecord( "movies", ( "times_watched", "last_watched", ), ( watched, date, self.trailers.movies[ trailer ].idMovie, ), "idMovie" )
         if ( success ):
             self.trailers.movies[ trailer ].watched = watched
+            self.trailers.movies[ trailer ].watched_date = str( date )
             thumbnail, poster = self._get_thumbnail( self.trailers.movies[ trailer ] )
             self.getListItem( trailer ).setThumbnailImage( thumbnail )
             self.showOverlays( trailer )
