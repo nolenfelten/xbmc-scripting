@@ -9,7 +9,7 @@
     <string id="203">Select File:</string>
     <string id="204">Select Path:</string>
     <string id="205">Select T3CH:</string>
-    <string id="206">Delete old T3CH:</string>
+    <string id="206">Delete T3CH Build:</string>
     <string id="207">Enter filename:</string>
 
     <!-- Error messages -->
@@ -77,7 +77,7 @@
     <string id="520">Switch to NEW Now ?</string>
     <string id="521">(Manual rename required otherwise)</string>
     <string id="522">Extraction finished. Checking for path ...</string>
-    <string id="523">Delete old T3CH Build ?</string>
+    <string id="523">Delete T3CH Build ?</string>
     <string id="524">Please wait ...</string>
     <string id="525">Select File or Folder ?</string>
     <string id="526">New Path Exists ?</string>
@@ -90,7 +90,7 @@
     <string id="533">Download Only or Download and Install ?</string>
   
     <!-- Menu Titles -->
-    <string id="600">Main Menu</string>
+    <string id="600">Menu</string>
     <string id="601">Settings Menu</string>
 
     <!-- Menu options -->
@@ -99,7 +99,7 @@
     <string id="612">Download:</string>
     <string id="615">Maintain Copy Data List</string>
     <string id="616">Switch To Another T3CH</string>
-    <string id="617">Delete An Old T3CH</string>
+    <string id="617">Delete A T3CH Build</string>
     <string id="618">Maintain Delete Data List</string>
     <string id="619">Check For Script Update</string>
     <string id="620">Install From Local:</string>
