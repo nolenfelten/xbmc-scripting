@@ -366,9 +366,11 @@ def parseDocList(doc, regex, startStr='', endStr=''):
 
 #################################################################################################################
 # look for html between < and > chars and remove it
-def cleanHTML(data):
+def cleanHTML(data, breaksToNewline=False):
 	if not data: return ""
 	try:
+		if breaksToNewline:
+			data = data.replace('<br>','\n').replace('<p>','\n')
 		reobj = re.compile('<.+?>', re.IGNORECASE+re.DOTALL+re.MULTILINE)
 		return (re.sub(reobj, '', data)).strip()
 	except:

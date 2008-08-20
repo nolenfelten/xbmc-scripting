@@ -30,7 +30,7 @@ from smbLib import enterSMB
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __title__ = "mytvLib"
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '18-08-2008'
+__date__ = '20-08-2008'
 xbmc.output("Imported From: " + __scriptname__ + " title: " + __title__ + " Date: " + __date__)
 
 # script specific paths
@@ -787,7 +787,7 @@ def importDataSource(modFilename=''):
 		if not dataSource:
 			messageOK(__language__(111), __language__(115))
 		elif changedDS:
-			clearCache(True)	                                    # force cache clear
+			deleteCacheFiles(0)	                                    # force cache clear
 			prefSP = None
 			if hasattr(dataSource, 'getPreferredSaveProgramme'):
 				prefSP = dataSource.getPreferredSaveProgramme()
@@ -846,7 +846,7 @@ def selectDataSource():
 		if currModFilename == modFilename:
 			modFilename = False
 		else:
-			clearCache(True)	# force
+			deleteCacheFiles(0)
 			config.setSystem(config.KEY_SYSTEM_DATASOURCE, modFilename)
 
 			# clear SP

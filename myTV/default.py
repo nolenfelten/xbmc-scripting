@@ -29,7 +29,7 @@ import gc
 __scriptname__ = "myTV"
 __version__ = '1.18'
 __author__ = 'BigBellyBilly [BigBellyBilly@gmail.com]'
-__date__ = '19-08-2008'
+__date__ = '20-08-2008'
 xbmc.output(__scriptname__ + " Version: " + __version__ + " Date: " + __date__)
 
 # Shared resources
@@ -3977,6 +3977,7 @@ class ConfigMenu:
 				# force exit if updating script
 				if done and self.menu[selectedPos][0] == __language__(554):         # update script
 					# restart script after update
+					deleteCacheFiles(0)
 					xbmc.executebuiltin('XBMC.RunScript(%s)'%(os.path.join(DIR_HOME, 'default.py')))
 					sys.exit(0)	                                                    # end current instance
 			else:
