@@ -1,5 +1,6 @@
 <window>
-	<defaultcontrol>1200</defaultcontrol>
+<!--	<defaultcontrol>1200</defaultcontrol> -->
+	<allowoverlays>true</allowoverlays>
 	<controls>
 		<control type="group">
 			<visible>!Window.Previous(home)</visible>
@@ -19,6 +20,7 @@
 			<visible>true</visible>
 			<animation effect="slide" time="200" start="0,-65" acceleration="-1.1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
 			<animation effect="slide" time="200" end="0,-65" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<animation effect="fade" time="200" start="100" end="50" condition="!Control.IsEnabled(1000)">conditional</animation>
 
 			<control type="image" id="1010">
 				<description>LOGO image control</description>
@@ -91,10 +93,11 @@
 			<posy>435</posy>
 			<height>136</height>
 			<width>580</width>
-			<visible>!Control.IsVisible(1200)</visible>
-			<animation effect="slide" time="200" end="0,136" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-			<animation effect="slide" time="200" start="0,136" acceleration="-1.1" condition="!Skin.HasSetting(animated)">Visible</animation>  
-			<animation effect="slide" time="200" end="0,136" acceleration="1.1" condition="!Skin.HasSetting(animated)">Hidden</animation> 
+			<visible>!Control.IsVisible(1200) + Control.IsEnabled(1000)</visible>
+			<animation effect="slide" time="200" end="0,140" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<animation effect="slide" time="200" start="0,140" acceleration="-1.1" condition="!Skin.HasSetting(animated)">Visible</animation>
+			<animation effect="slide" time="200" end="0,140" acceleration="1.1" condition="!Skin.HasSetting(animated)">Hidden</animation>
+			<animation effect="fade" time="200" start="100" end="50" condition="!Control.IsEnabled(1000)">conditional</animation>
 
 			<!--  CHANNELS -->
 			<control type="list" id="1110">
@@ -226,7 +229,7 @@
 						<posy>0</posy>
 						<width>130</width>
 						<height>29</height>
-						<font>special12</font>
+						<font>special11</font>
 						<aligny>center</aligny>
 						<selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>FF000000</textcolor>
@@ -256,7 +259,7 @@
 						<posy>0</posy>
 						<width>130</width>
 						<height>29</height>
-						<font>special12</font>
+						<font>special11</font>
 						<aligny>center</aligny>
 						<selectedcolor>66FFe2ff43</selectedcolor>
 						<textcolor>FFFFFF00</textcolor>
@@ -330,7 +333,7 @@
 						<posy>0</posy>
 						<width>60</width>
 						<height>29</height>
-						<font>special12</font>
+						<font>special11</font>
 						<aligny>center</aligny>
 						<selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>FF000000</textcolor>
@@ -360,7 +363,7 @@
 						<posy>0</posy>
 						<width>60</width>
 						<height>29</height>
-						<font>special12</font>
+						<font>special11</font>
 						<aligny>center</aligny>
 						<selectedcolor>FFe2ff43</selectedcolor>
 						<textcolor>FFFFFF00</textcolor>
@@ -437,16 +440,16 @@
 
 		</control><!-- end group footer outer -->
 
-
-		<!-- FOOTER BUTTON GROUP NAV LISTS -->
+		<!-- FOOTER BUTTON GROUP -->
 		<control type="group" id="1200">
 			<posx>75</posx>
 			<posy>540</posy>
 			<height>30</height>
 			<visible>true</visible>
-			<animation effect="slide" time="200" start="0,30" acceleration="-1.1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
-			<animation effect="slide" time="200" end="0,30" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
-			<animation effect="slide" time="200" end="0,30"acceleration="1.1" condition="!Control.IsVisible(1200)">conditional</animation>
+			<animation effect="slide" time="200" start="0,40" acceleration="-1.1" condition="!Skin.HasSetting(animated)">WindowOpen</animation>
+			<animation effect="slide" time="200" end="0,40" acceleration="1.1" condition="!Skin.HasSetting(animated)">WindowClose</animation>
+			<animation effect="slide" time="200" end="0,40"acceleration="1.1" condition="!Control.IsVisible(1200)">conditional</animation>
+			<animation effect="fade" time="200" start="100" end="50" condition="!Control.IsEnabled(1000)">conditional</animation>
 
 			<control type="image">
 				<description>A button control</description>
@@ -458,13 +461,14 @@
 				<texture>abutton.png</texture>
 				<aspectratio>keep</aspectratio>
 			</control>
-			<control type="label">
+			<control type="label" id="1203">
+				<description>A button label</description>
 				<posx>40</posx>
 				<posy>10</posy>
 				<width>110</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>Select/View</label>
+				<label></label>
 				<align>left</align>
 			</control>
 
@@ -480,13 +484,15 @@
 				<aspectratio>keep</aspectratio>
 			</control>
 			<control type="label" id="1201">
+				<description>B button label</description>
 				<posx>160</posx>
 				<posy>10</posy>
 				<width>110</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>HD Channels</label>
+				<label></label>
 				<align>left</align>
+				<visible>Control.IsVisible(1202)</visible>
 			</control>
 
 			<control type="image">
@@ -499,13 +505,14 @@
 				<texture>xbutton.png</texture>
 				<aspectratio>keep</aspectratio>
 			</control>
-			<control type="label">
+			<control type="label" id="1204">
+				<description>X button label</description>
 				<posx>280</posx>
 				<posy>10</posy>
 				<width>110</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>Nav Lists</label>
+				<label></label>
 				<align>left</align>
 			</control>
 
@@ -519,13 +526,14 @@
 				<texture>ybutton.png</texture>
 				<aspectratio>keep</aspectratio>
 			</control>
-			<control type="label">
+			<control type="label" id="1205">
+				<description>Y button label</description>
 				<posx>400</posx>
 				<posy>10</posy>
 				<width>60</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>IMDb</label>
+				<label></label>
 				<align>left</align>
 			</control>
 
@@ -539,13 +547,14 @@
 				<texture>whitebutton.png</texture>
 				<aspectratio>keep</aspectratio>
 			</control>
-			<control type="label">
+			<control type="label" id="1206">
+				<description>white button label</description>
 				<posx>480</posx>
 				<posy>10</posy>
 				<width>60</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>Menu</label>
+				<label></label>
 				<align>left</align>
 			</control>
 
@@ -559,13 +568,14 @@
 				<texture>backbutton.png</texture>
 				<aspectratio>keep</aspectratio>
 			</control>
-			<control type="label">
+			<control type="label" id="1207">
+				<description>BACK button label</description>
 				<posx>560</posx>
 				<posy>10</posy>
 				<width>60</width>
 				<height>25</height>
 				<font>font10</font>
-				<label>Exit</label>
+				<label></label>
 				<align>left</align>
 			</control>
 
@@ -574,6 +584,7 @@
 
 		<!-- EPG OUTER GROUP HOLDING CHANNEL NAMES GROUP, CHANNEL PROGRAMMES GROUP-->
 		<control type="group" id="1300">
+			<animation effect="fade" time="200" start="100" end="50" condition="!Control.IsEnabled(1000)">conditional</animation>
 			<posx>90</posx>
 			<posy>77</posy>
 			<height>430</height>
