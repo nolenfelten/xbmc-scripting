@@ -278,7 +278,7 @@
 
 		<control type="group">
 			<visible>Control.isVisible(1120)</visible>
-			<!-- SCROLL BAR FOR CHANNELS LIST -->
+			<!-- SCROLL BAR FOR DAY LIST -->
 			<control type="button">
 				<posx>400</posx>
 				<posy>5</posy>
@@ -382,7 +382,7 @@
 
 		<control type="group">
 			<visible>Control.isVisible(1130)</visible>
-			<!-- SCROLL BAR FOR CHANNELS LIST -->
+			<!-- SCROLL BAR FOR HOUR LIST -->
 			<control type="button">
 				<posx>500</posx>
 				<posy>5</posy>

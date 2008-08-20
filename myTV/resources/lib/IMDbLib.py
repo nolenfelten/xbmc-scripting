@@ -17,7 +17,7 @@ Changelog:
 09/07/07 Fix: Seach for title. caused by site change
 11/12/07 Fix: Scraping regex (see date comments)
 18/01/08 Fix: regex for Cast
-04/04/08 Fix: looks for Popular and Exact matches
+20/08/08 Fix: looks for Popular and Exact matches
 """
 
 import os,sys,re,urllib,string, urlparse
@@ -300,6 +300,16 @@ class IMDbSearch:
 				if self.SearchResults:
 					self.SearchResults.sort()
 					self.SearchResults.reverse()
+			else:
+				log( "no matches on page" )
+		elif string.find(page, '<h1>'+findStr) or string.find(page, '>User Rating:<'):
+			log("exact match")
+			search = re.compile('/Years/([0-9]*).*?/title/([t0-9]*)/', re.DOTALL + re.MULTILINE + re.IGNORECASE)
+			matches = search.findall(page)
+			if matches:
+				year = matches[0][0]
+				url = "http://www.imdb.com/title/%s/" % (matches[0][1])
+				self.SearchResults.append((year, findStr, url))
 			else:
 				log( "no matches on page" )
 		else:
