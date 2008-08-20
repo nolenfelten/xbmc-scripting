@@ -142,17 +142,14 @@ class ListingData:
 					debug("bad prog %s" % prog)
 					continue
 
-				genre = searchRegEx(prog, RE_PROG_CATEGORY, reFLAGS)
-				schedLink = decodeEntities(searchRegEx(prog, RE_PROG_ADD, reFLAGS))
-
 				progList.append( {
 						TVData.PROG_STARTTIME : time.mktime(time.strptime(start[:DATE_TIME_SZ],"%Y%m%d%H%M")),	# 24hr
 						TVData.PROG_ENDTIME : time.mktime(time.strptime(stop[:DATE_TIME_SZ],"%Y%m%d%H%M")),
 						TVData.PROG_TITLE : cleanHTML(decodeEntities(searchRegEx(prog, RE_PROG_TITLE, reFLAGS))),
 						TVData.PROG_SUBTITLE : cleanHTML(decodeEntities(searchRegEx(prog, RE_PROG_SUBTITLE, reFLAGS))),
-						TVData.PROG_GENRE : genre,
-						TVData.PROG_DESC : cleanHTML(decodeEntities(searchRegEx(prog, RE_PROG_DESC, reFLAGS))),
-						TVData.PROG_SCHEDLINK : schedLink
+						TVData.PROG_GENRE : searchRegEx(prog, RE_PROG_CATEGORY, reFLAGS),
+						TVData.PROG_DESC : cleanHTML(decodeEntities(searchRegEx(prog, RE_PROG_DESC, reFLAGS)), breaksToNewline=True),
+						TVData.PROG_SCHEDLINK : decodeEntities(searchRegEx(prog, RE_PROG_ADD, reFLAGS))
 					} )
 
 				progCount += 1
