@@ -19,8 +19,8 @@ __svn_revision__ = sys.modules[ "__main__" ].__svn_revision__
 # comapatble versions
 SETTINGS_VERSIONS = ( "1.6.0", )
 # base paths
-BASE_DATA_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.getcwd() ) )
-BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.getcwd(), "settings.txt" ) )
+BASE_DATA_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.path.basename( os.getcwd() ) ) )
+BASE_SETTINGS_PATH = xbmc.translatePath( os.path.join( "P:\\script_data", os.path.basename( os.getcwd() ), "settings.txt" ) )
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special button codes
 SELECT_ITEM = ( 11, 256, 61453, )
@@ -47,8 +47,6 @@ def _create_base_paths():
     """ creates the base folders """
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
-    if ( not os.path.isdir( os.path.dirname( BASE_SETTINGS_PATH ) ) ):
-        os.makedirs( os.path.dirname( BASE_SETTINGS_PATH ) )
 _create_base_paths()
 
 def get_keyboard( default="", heading="", hidden=False ):
