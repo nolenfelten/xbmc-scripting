@@ -72,7 +72,7 @@ class ScriptWindow( common.gui.BaseScriptWindow ):
                     new_text = None
                     # show keyboard for user to change the text
                     new_text = common.gui.dialog.getText( 
-                        common.localize( 1004 )
+                        common.localize( 1004 ),
                         original_text, 
                     )
                     # perform the changes, assuming that the new text is not blank
